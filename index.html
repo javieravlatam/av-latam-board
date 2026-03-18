@@ -45,7 +45,7 @@ h1 span{color:var(--leaf2);}
 .divider{width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--border),transparent);margin:0 auto 48px;}
 
 /* CARDS GRID */
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:860px;width:100%;margin-bottom:48px;}
+.cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;max-width:1200px;width:100%;margin-bottom:48px;}
 
 /* DASHBOARD CARD */
 .dcard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;cursor:pointer;text-decoration:none;display:block;transition:all .3s cubic-bezier(.25,.8,.25,1);position:relative;overflow:hidden;}
@@ -89,11 +89,14 @@ h1 span{color:var(--leaf2);}
 .dc-btn{font-size:11px;font-weight:700;padding:8px 18px;border-radius:8px;font-family:var(--mono);letter-spacing:.5px;transition:all .2s;}
 .btn-g{background:rgba(122,182,72,.15);border:1px solid rgba(122,182,72,.3);color:var(--leaf2);}
 .btn-b{background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);color:var(--blue);}
-.dcard:hover .btn-g{background:rgba(122,182,72,.25);}
-.dcard:hover .btn-b{background:rgba(96,165,250,.18);}
+.dcard.jp::before{background:linear-gradient(135deg,rgba(180,138,255,.04),transparent);}
+.dcard.jp:hover{border-color:rgba(180,138,255,.4);}
+.btn-p{background:rgba(180,138,255,.1);border:1px solid rgba(180,138,255,.25);color:#b48aff;}
+.dcard.jp:hover .btn-p{background:rgba(180,138,255,.2);}
+.feat-p{background:rgba(180,138,255,.1);color:#b48aff;}
 
 /* SEPARATOR CARD */
-.sep-card{background:rgba(10,20,14,.5);border:1px solid var(--border);border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;max-width:860px;width:100%;}
+.sep-card{background:rgba(10,20,14,.5);border:1px solid var(--border);border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;max-width:1200px;width:100%;}
 .sep-items{display:flex;gap:24px;}
 .sep-item{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);font-family:var(--mono);}
 .sep-dot{width:6px;height:6px;border-radius:50%;}
@@ -226,9 +229,41 @@ h1 span{color:var(--leaf2);}
       </div>
     </a>
 
-  </div>
+    <!-- PANEL JEFES DE PAÍS -->
+    <a class="dcard jp" href="Panel_Jefes_Index.html">
+      <div class="dc-top">
+        <div class="dc-icon" style="background:rgba(180,138,255,.15);color:#b48aff;">🌎</div>
+        <span class="dc-arrow">↗</span>
+      </div>
+      <div class="dc-tag" style="color:#b48aff;">Para Jefes Comerciales</div>
+      <div class="dc-title">Panel Jefes de País</div>
+      <div class="dc-desc">Vista de gestión comercial por país con semáforos de vendedores, comparativo real vs reportado, mix de productos y recomendaciones accionables.</div>
+      <div class="dc-stats">
+        <div class="dstat">
+          <div class="dstat-label">Países activos</div>
+          <div class="dstat-val" style="color:#b48aff;">CL · PE · EC</div>
+        </div>
+        <div class="dstat">
+          <div class="dstat-label">Margen Grupo</div>
+          <div class="dstat-val g">82.5%</div>
+        </div>
+        <div class="dstat">
+          <div class="dstat-label">RTCs críticos</div>
+          <div class="dstat-val" style="color:var(--red)">4 alerta</div>
+        </div>
+      </div>
+      <div class="dc-footer">
+        <div class="dc-features">
+          <span class="dc-feat feat-p">Por País</span>
+          <span class="dc-feat feat-p">Semáforos</span>
+          <span class="dc-feat feat-m">Alertas</span>
+          <span class="dc-feat feat-m">Insights</span>
+        </div>
+        <span class="dc-btn btn-p">Ver →</span>
+      </div>
+    </a>
 
-  <!-- STATUS BAR -->
+  </div>
   <div class="sep-card">
     <div class="sep-items">
       <div class="sep-item"><div class="live-dot"></div>Corte Chile: 07 Marzo 2026</div>
