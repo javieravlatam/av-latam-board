@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Panel Comercial · Jefes de País · AV Latam</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+/* ── BASE SHARED CSS ──────────────────────────── */
+:root {
+  --bg:#0c0e12;--surface:#131620;--card:#191d28;--border:#252a38;--border2:#1e2333;
+  --white:#f0f2f8;--muted:#7c849e;--faint:#444c66;
+  --green:#4ade80;--amber:#fbbf24;--red:#f87171;
+  --cl:#00d4ff;--cl2:#00a8c8;--cl-d:rgba(0,212,255,.09);
+  --pe:#f5a623;--pe2:#c4841a;--pe-d:rgba(245,166,35,.09);
+  --ec:#6ee87c;--ec2:#4ab857;--ec-d:rgba(110,232,124,.09);
+  --gr:#b48aff;--gr2:#8c5cf0;--gr-d:rgba(180,138,255,.09);
+  --ac:var(--cl);--ac2:var(--cl2);--ac-d:var(--cl-d);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;font-size:13px;line-height:1.5;}
+
+/* HEADER */
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:0 44px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--ac) 0%,transparent 50%);opacity:.5;}
+.hbrand{display:flex;align-items:center;gap:10px;}
+.hlogo{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:#000;flex-shrink:0;}
+.hname{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;letter-spacing:-.3px;}
+.hsub{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px;}
+.hnav{display:flex;align-items:center;gap:6px;}
+.hlink{font-size:10px;color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:4px;border:1px solid var(--border);letter-spacing:.5px;transition:all .2s;white-space:nowrap;}
+.hlink:hover{color:var(--ac);border-color:var(--ac);}
+.hlink.act{color:var(--ac);border-color:var(--ac);background:var(--ac-d);}
+.hchip{font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);letter-spacing:.5px;white-space:nowrap;}
+.hchip strong{color:var(--ac);}
+
+/* LAYOUT */
+.wrap{padding:24px 44px 48px;}
+.slabel{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--faint);font-weight:600;margin:22px 0 11px;display:flex;align-items:center;gap:10px;}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border2);}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.g21{display:grid;grid-template-columns:1.65fr 1fr;gap:11px;}
+.g12{display:grid;grid-template-columns:1fr 1.65fr;gap:11px;}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:18px 20px;}
+.card-t{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;}
+.eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--faint);font-weight:600;margin-bottom:2px;}
+.ctitle{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;letter-spacing:-.2px;}
+
+/* KPI */
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s;}
+.kpi:hover{border-color:var(--ac);}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--ac),transparent);opacity:0;transition:opacity .2s;}
+.kpi:hover::before{opacity:1;}
+.klbl{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--faint);margin-bottom:7px;font-weight:600;}
+.kval{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-1px;line-height:1;}
+.ksub{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:5px;}
+.kbadge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600;margin-top:7px;}
+.kb-g{background:rgba(74,222,128,.1);color:var(--green);}
+.kb-a{background:rgba(251,191,36,.1);color:var(--amber);}
+.kb-r{background:rgba(248,113,113,.1);color:var(--red);}
+.kb-b{background:var(--ac-d);color:var(--ac);}
+
+/* TAGS */
+.tag{font-size:9px;padding:3px 8px;border-radius:4px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;}
+.tg{background:rgba(74,222,128,.1);color:var(--green);}
+.ta{background:rgba(251,191,36,.1);color:var(--amber);}
+.tr{background:rgba(248,113,113,.1);color:var(--red);}
+.tb{background:var(--ac-d);color:var(--ac);}
+
+/* SEMÁFORO */
+.srow{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:7px;border:1px solid var(--border2);background:rgba(255,255,255,.015);margin-bottom:7px;transition:background .15s;}
+.srow:last-child{margin-bottom:0;}
+.srow:hover{background:rgba(255,255,255,.035);}
+.sleft{display:flex;align-items:center;gap:9px;}
+.sname{font-size:12px;font-weight:500;}
+.sdet{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:1px;}
+.sright{display:flex;align-items:center;gap:8px;}
+.sval{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;text-align:right;}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dg{background:var(--green);box-shadow:0 0 5px var(--green);}
+.da{background:var(--amber);box-shadow:0 0 5px var(--amber);}
+.dr{background:var(--red);box-shadow:0 0 5px var(--red);}
+.dn{background:var(--faint);}
+
+/* PROGRESS */
+.prow{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
+.plbl{font-size:11px;color:var(--white);width:125px;flex-shrink:0;font-weight:500;}
+.pbar{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+.pfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .8s cubic-bezier(.4,0,.2,1);}
+.ppct{font-family:'DM Mono',monospace;font-size:10px;width:36px;text-align:right;flex-shrink:0;}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;margin-top:12px;}
+.tbl th{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);padding:0 10px 8px;text-align:right;border-bottom:1px solid var(--border2);font-weight:600;}
+.tbl th:first-child{text-align:left;}
+.tbl td{padding:9px 10px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);border-bottom:1px solid var(--border2);text-align:right;vertical-align:middle;}
+.tbl td:first-child{text-align:left;color:var(--white);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:rgba(255,255,255,.02);}
+.vg{color:var(--green)!important;}.va{color:var(--amber)!important;}.vr{color:var(--red)!important;}.vh{color:var(--white)!important;font-weight:500!important;}
+
+/* ALERTAS */
+.alrt{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border-radius:7px;border:1px solid;font-size:11.5px;line-height:1.5;margin-bottom:7px;}
+.alrt:last-child{margin-bottom:0;}
+.alrt-r{background:rgba(248,113,113,.05);border-color:rgba(248,113,113,.2);}
+.alrt-a{background:rgba(251,191,36,.04);border-color:rgba(251,191,36,.2);}
+.alrt-g{background:rgba(74,222,128,.04);border-color:rgba(74,222,128,.2);}
+.alrt strong{font-weight:600;}
+
+/* INSIGHTS */
+.ins-item{padding:11px 13px;border-radius:7px;background:rgba(255,255,255,.02);border-left:3px solid var(--ac);font-size:11.5px;line-height:1.6;color:var(--muted);margin-bottom:8px;}
+.ins-item:last-child{margin-bottom:0;}
+.ins-item strong{color:var(--white);}
+.itag{display:inline;font-size:9px;background:var(--ac-d);color:var(--ac);padding:2px 6px;border-radius:3px;margin-right:5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
+
+/* MIX */
+.mrow{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+.mrow:last-child{margin-bottom:0;}
+.mname{font-size:11px;color:var(--white);width:115px;flex-shrink:0;font-weight:500;}
+.mbar{flex:1;height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;}
+.mfill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--ac),var(--ac2));}
+.mval{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);width:46px;text-align:right;flex-shrink:0;}
+.mmgn{font-family:'DM Mono',monospace;font-size:10px;width:38px;text-align:right;flex-shrink:0;}
+
+/* GAUGE */
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;padding:8px 0 4px;}
+.gauge-ring{position:relative;width:96px;height:96px;}
+.gauge-ring svg{transform:rotate(-90deg);}
+.gauge-ring circle{fill:none;stroke-width:7;stroke-linecap:round;}
+.g-track{stroke:rgba(255,255,255,.06);}
+.g-fill{stroke:var(--ac);transition:stroke-dashoffset .8s ease;}
+.gauge-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.gauge-pct{font-family:'Syne',sans-serif;font-weight:800;font-size:19px;letter-spacing:-1px;}
+.gauge-sub{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.8px;}
+
+/* FOOTER */
+.footer{padding:12px 44px;border-top:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;}
+.fnote{font-size:10px;color:var(--faint);}
+.fdisclaim{font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.15);color:var(--amber);}
+
+/* TRENDS */
+.trend{display:flex;align-items:flex-end;gap:5px;height:52px;padding:0 2px;margin-top:10px;}
+.tcol{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
+.tbar{width:100%;border-radius:2px 2px 0 0;background:var(--ac);min-height:3px;}
+.tlbl{font-family:'DM Mono',monospace;font-size:9px;color:var(--faint);}
+
+/* ANIMATIONS */
+.card,.kpi{animation:fadeUp .35s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* RESPONSIVE */
+@media(max-width:1100px){.g5{grid-template-columns:repeat(3,1fr);}.g21,.g12{grid-template-columns:1fr;}}
+@media(max-width:768px){.hdr,.wrap,.footer{padding-left:14px;padding-right:14px;}.g5,.g4,.g3,.g2,.g21,.g12{grid-template-columns:1fr;}.hnav{display:none;}}
+body{display:flex;flex-direction:column;min-height:100vh;}
+.landing{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;}
+.landing-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;letter-spacing:-1.5px;text-align:center;margin-bottom:6px;}
+.landing-sub{font-size:12px;color:var(--muted);text-align:center;margin-bottom:48px;letter-spacing:.5px;}
+.cards-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;width:100%;max-width:780px;}
+@media(max-width:600px){.cards-grid{grid-template-columns:1fr;}}
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px 30px;text-decoration:none;display:flex;flex-direction:column;gap:14px;transition:all .25s;position:relative;overflow:hidden;}
+.pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--pc),transparent);opacity:0;transition:opacity .25s;}
+.pcard:hover{border-color:var(--pc);transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.4);}
+.pcard:hover::before{opacity:1;}
+.pcard-flag{font-size:36px;line-height:1;}
+.pcard-body{display:flex;flex-direction:column;gap:4px;}
+.pcard-name{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.5px;color:var(--pc);}
+.pcard-desc{font-size:11px;color:var(--muted);line-height:1.6;}
+.pcard-stats{display:flex;gap:14px;margin-top:4px;}
+.pstat{display:flex;flex-direction:column;gap:2px;}
+.pstat-val{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--white);}
+.pstat-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);}
+.pcard-arrow{position:absolute;right:22px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--pc);opacity:0;transition:opacity .2s;}
+.pcard:hover .pcard-arrow{opacity:1;}
+.pcard-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;margin-top:2px;width:fit-content;}
+.badge-act{background:rgba(74,222,128,.1);color:#4ade80;}
+.badge-pend{background:rgba(255,255,255,.05);color:var(--faint);}
+.general-card{grid-column:1/-1;}
+.back-sm{font-size:10px;color:var(--muted);text-decoration:none;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:4px;border:1px solid var(--border);margin-bottom:28px;transition:all .2s;}
+.back-sm:hover{color:var(--ac);border-color:var(--ac);}
+</style>
+</head>
+<body>
+<div class="hdr" style="--ac:var(--gr);--ac2:var(--gr2);">
+  <div class="hbrand">
+    <div class="hlogo" style="background:linear-gradient(135deg,var(--gr),var(--gr2));color:#fff;">AV</div>
+    <div>
+      <div class="hname">Panel Comercial · Jefes de País</div>
+      <div class="hsub">AV Grupo Latam · 2026</div>
+    </div>
+  </div>
+  <div class="hnav">
+    <a href="index.html" class="hlink">← Volver a Inicio</a>
+    <div class="hchip">Corte <strong>16/03/2026</strong></div>
+    <div class="hchip">Uso interno · No incluye costos</div>
+  </div>
+</div>
+
+<div class="landing">
+  <a href="index.html" class="back-sm">← Plataforma principal</a>
+  <div class="landing-title">Selecciona tu Vista</div>
+  <div class="landing-sub">Panel exclusivo para jefes comerciales · Datos consolidados por país · Ene–Mar 2026</div>
+
+  <div class="cards-grid">
+
+    <!-- GENERAL -->
+    <a href="Panel_General_AV_2026.html" class="pcard general-card" style="--pc:var(--gr);">
+      <div class="pcard-flag">🌎</div>
+      <div class="pcard-body">
+        <div class="pcard-name">Vista General · Grupo Latam</div>
+        <div class="pcard-desc">Consolidado de todos los países. KPIs de grupo, comparación Chile vs Perú, tendencias, alertas cruzadas y recomendaciones estratégicas.</div>
+        <div class="pcard-stats">
+          <div class="pstat"><div class="pstat-val">USD 292.7K</div><div class="pstat-lbl">Ventas Grupo</div></div>
+          <div class="pstat"><div class="pstat-val" style="color:#4ade80;">82.5%</div><div class="pstat-lbl">Margen Grupo</div></div>
+          <div class="pstat"><div class="pstat-val" style="color:#fbbf24;">85.2%</div><div class="pstat-lbl">Cumplimiento</div></div>
+        </div>
+        <div class="pcard-badge badge-act">✓ Datos al 16/03/2026</div>
+      </div>
+      <div class="pcard-arrow">→</div>
+    </a>
+
+    <!-- CHILE -->
+    <a href="Panel_Chile_AV_2026.html" class="pcard" style="--pc:var(--cl);">
+      <div class="pcard-flag">🇨🇱</div>
+      <div class="pcard-body">
+        <div class="pcard-name">Chile</div>
+        <div class="pcard-desc">Desempeño completo equipo Chile. Semáforo por vendedor, cumplimiento vs ppto, mix de productos, alertas cobranza SII y pipeline.</div>
+        <div class="pcard-stats">
+          <div class="pstat"><div class="pstat-val">CLP 156.9M</div><div class="pstat-lbl">Ventas YTD</div></div>
+          <div class="pstat"><div class="pstat-val" style="color:#fbbf24;">93.8%</div><div class="pstat-lbl">Cumplimiento</div></div>
+          <div class="pstat"><div class="pstat-val" style="color:#4ade80;">73.8%</div><div class="pstat-lbl">Margen</div></div>
+        </div>
+        <div class="pcard-badge badge-act">✓ Datos al 13/03/2026</div>
+      </div>
+      <div class="pcard-arrow">→</div>
+    </a>
+
+    <!-- PERÚ -->
+    <a href="Panel_Peru_AV_2026.html" class="pcard" style="--pc:var(--pe);">
+      <div class="pcard-flag">🇵🇪</div>
+      <div class="pcard-body">
+        <div class="pcard-name">Perú</div>
+        <div class="pcard-desc">Análisis completo equipo Perú. Semáforo RTCs, pipeline Marzo, cartera RVR Agro, mix Vecasil/Regalia y alertas críticas de cobranza.</div>
+        <div class="pcard-stats">
+          <div class="pstat"><div class="pstat-val">USD 162.3K</div><div class="pstat-lbl">Ventas YTD</div></div>
+          <div class="pstat"><div class="pstat-val" style="color:#f87171;">76.1%</div><div class="pstat-lbl">Cumplimiento</div></div>
+          <div class="pstat"><div class="pstat-val" style="color:#4ade80;">89.5%</div><div class="pstat-lbl">Margen</div></div>
+        </div>
+        <div class="pcard-badge badge-act">✓ Datos al 16/03/2026</div>
+      </div>
+      <div class="pcard-arrow">→</div>
+    </a>
+
+    <!-- ECUADOR -->
+    <a href="Panel_Ecuador_AV_2026.html" class="pcard" style="--pc:var(--ec);opacity:.7;">
+      <div class="pcard-flag">🇪🇨</div>
+      <div class="pcard-body">
+        <div class="pcard-name">Ecuador</div>
+        <div class="pcard-desc">Dashboard en construcción. Estructura lista. Se activa con datos de ventas Q2 2026. IC Fertilizantes ya disponible como referencia competitiva.</div>
+        <div class="pcard-stats">
+          <div class="pstat"><div class="pstat-val" style="color:var(--faint);">—</div><div class="pstat-lbl">Ventas YTD</div></div>
+          <div class="pstat"><div class="pstat-val" style="color:var(--faint);">—</div><div class="pstat-lbl">Cumplimiento</div></div>
+          <div class="pstat"><div class="pstat-val" style="color:var(--faint);">—</div><div class="pstat-lbl">Margen</div></div>
+        </div>
+        <div class="pcard-badge badge-pend">⚙ En desarrollo · Q2 2026</div>
+      </div>
+      <div class="pcard-arrow">→</div>
+    </a>
+
+  </div>
+</div>
+
+<div class="footer" style="justify-content:center;">
+  <div class="fnote" style="text-align:center;">AV Grupo Latam · Panel Comercial Jefes de País · Solo uso interno · No incluye costos ni información confidencial de producción</div>
+</div>
+</body>
+</html>
