@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Executive Board View — AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <style>
 :root{
   --bg:#0D1F15;--surface:#132A1A;--surface2:#1A3522;--card:#16271D;
@@ -216,6 +214,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);font-s
   .htitle h1{font-size:13px;}
 }
 </style>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 </head>
 <body>
 
@@ -290,7 +293,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);font-s
         <div><div class="ceyebrow">Tendencia Mensual</div><div class="cq">¿Estamos creciendo según plan?</div></div>
         <span class="tag ta">Ene–Mar · Real vs Ppto</span>
       </div>
-      <div class="cbox" style="min-height:230px"><canvas id="cTendencia"></canvas></div>
+      <div style="position:relative;height:240px;width:100%;"><canvas id="cTendencia"></canvas></div>
       <div class="ins ia">Chile ✅ cerró T1 en <strong>100.7% del ppto (CLP 168,3M)</strong>, liderado por Caroca con 162.3% YTD y Marzo al 220% del ppto. Perú Marzo <strong>USD 59,8K — mejor mes del año</strong>, L. Aguirre generó USD 29,4K sin presupuesto asignado. <strong>Q2: consolidar Chile, asignar ppto Aguirre, recuperar Infante en Perú.</strong></div>
     </div>
     <div class="card">
@@ -524,224 +527,177 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);font-s
   </div>
 
   
-<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border2,#1e2333);">
-  <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#444c66;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px;">Ventas vs Presupuesto · Chile<span style="flex:1;height:1px;background:#1e2333;"></span></div>
-  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
-    <div style="display:flex;gap:14px;font-size:11px;flex-wrap:wrap;">
-      <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:9px;border-radius:2px;background:#00a8c8;display:inline-block;"></span>Ventas</span>
-      <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;border-top:2px dashed #f87171;display:inline-block;"></span>Ppto</span>
-      <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;background:#4ade80;display:inline-block;"></span>Cumpl.%</span>
-    </div>
-    <select id="cl-vend-sel" style="font-size:11px;padding:4px 8px;border-radius:6px;background:#191d28;color:#f0f2f8;border:1px solid #252a38;">
-      <option value="todos">Equipo completo</option>
-      <option value="caroca">J. Caroca</option>
-      <option value="laratro">P. Laratro</option>
-      <option value="velasquez">F. Velásquez</option>
-      <option value="encina">R. Encina</option>
-      <option value="veverka">I. Veverka</option>
-      <option value="munoz">V. Muñoz</option>
-    </select>
-  </div>
-  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;" id="cl-vc-cards"></div>
-  <div style="position:relative;width:100%;height:220px;"><canvas id="cl-vc-chart"></canvas></div>
-  <div style="margin-top:14px;" id="cl-vc-rank"></div>
-</div>
+
+
 <script>
-(function(){
-var CLD={
-  todos:{label:"Equipo Chile",ventas:[88.7,35.7,44.0],ppto:[84.8,42.8,43.2],color:"#00a8c8"},
-  caroca:{label:"J. Caroca",ventas:[15.3,6.4,31.9],ppto:[12.5,6.0,14.5],color:"#4ade80"},
-  laratro:{label:"P. Laratro",ventas:[37.0,10.4,2.8],ppto:[36.0,10.6,7.5],color:"#00a8c8"},
-  velasquez:{label:"F. Velásquez",ventas:[14.5,9.9,3.5],ppto:[14.9,11.5,6.5],color:"#fbbf24"},
-  encina:{label:"R. Encina",ventas:[13.5,7.3,4.8],ppto:[14.2,7.5,7.5],color:"#b48aff"},
-  veverka:{label:"I. Veverka",ventas:[6.2,0.9,1.0],ppto:[6.0,6.0,6.0],color:"#f87171"},
-  munoz:{label:"V. Muñoz",ventas:[2.2,0.8,0.0],ppto:[1.2,1.2,1.2],color:"#7c849e"}
+var CL={
+  todos:{v:[88.7,35.7,44.0],p:[84.8,42.8,43.2],c:"#00a8c8"},
+  caroca:{v:[15.3,6.4,31.9],p:[12.5,6.0,14.5],c:"#4ade80"},
+  laratro:{v:[37.0,10.4,2.8],p:[36.0,10.6,7.5],c:"#00a8c8"},
+  velasquez:{v:[14.5,9.9,3.5],p:[14.9,11.5,6.5],c:"#fbbf24"},
+  encina:{v:[13.5,7.3,4.8],p:[14.2,7.5,7.5],c:"#b48aff"},
+  veverka:{v:[6.2,0.9,1.0],p:[6.0,6.0,6.0],c:"#f87171"},
+  munoz:{v:[2.2,0.8,0.0],p:[1.2,1.2,1.2],c:"#7c849e"}
 };
-var CLR=[
-  {name:"J. Caroca",ytd:53.6,ppto:33.0,pct:162.3,color:"#4ade80"},
-  {name:"P. Laratro",ytd:50.2,ppto:54.1,pct:92.9,color:"#00a8c8"},
-  {name:"R. Encina",ytd:25.5,ppto:29.2,pct:87.5,color:"#b48aff"},
-  {name:"F. Velásquez",ytd:27.9,ppto:32.9,pct:84.8,color:"#fbbf24"},
-  {name:"I. Veverka",ytd:8.1,ppto:18.0,pct:45.2,color:"#f87171"},
-  {name:"V. Muñoz",ytd:3.0,ppto:null,pct:null,color:"#7c849e"}
+var CL_R=[
+  {n:"J. Caroca",y:53.6,p:33.0,t:162.3,c:"#4ade80"},{n:"P. Laratro",y:50.2,p:54.1,t:92.9,c:"#00a8c8"},
+  {n:"R. Encina",y:25.5,p:29.2,t:87.5,c:"#b48aff"},{n:"F. Velásquez",y:27.9,p:32.9,t:84.8,c:"#fbbf24"},
+  {n:"I. Veverka",y:8.1,p:18.0,t:45.2,c:"#f87171"},{n:"V. Muñoz",y:3.0,p:null,t:null,c:"#7c849e"}
 ];
-var months=["Enero","Febrero","Marzo"];
-var clChart=null;
-function pct(v,p){return p>0?Math.round(v/p*100):0;}
-function sc(p){return p>=100?"#4ade80":p>=80?"#fbbf24":"#f87171";}
-function sb(p){return p>=100?"rgba(74,222,128,.12)":p>=80?"rgba(251,191,36,.12)":"rgba(248,113,113,.12)";}
-function clCards(k){
-  var d=CLD[k];
-  var tv=d.ventas.reduce(function(a,b){return a+b;},0);
-  var tp=d.ppto.reduce(function(a,b){return a+b;},0);
-  var tp2=pct(tv,tp);
-  var cards=[
-    {l:"Ventas YTD",v:"CLP "+tv.toFixed(1)+"M",p:null},
-    {l:"Ppto YTD",v:"CLP "+tp.toFixed(1)+"M",p:null},
-    {l:"Cumpl. T1",v:tp2+"%",p:tp2},
-    {l:"Marzo",v:"CLP "+d.ventas[2].toFixed(1)+"M",p:pct(d.ventas[2],d.ppto[2])}
-  ];
-  document.getElementById("cl-vc-cards").innerHTML=cards.map(function(c){
-    return'<div style="background:rgba(255,255,255,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;">'+
-    '<div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c.l+'</div>'+
-    '<div style="font-family:Syne,sans-serif;font-size:16px;font-weight:800;color:'+(c.p!=null?sc(c.p):"#f0f2f8")+';">'+c.v+'</div></div>';
-  }).join("");
-}
-function clBuildChart(k){
-  var d=CLD[k];
-  var ps=d.ventas.map(function(v,i){return pct(v,d.ppto[i]);});
-  if(clChart) clChart.destroy();
-  clChart=new Chart(document.getElementById("cl-vc-chart"),{
-    data:{labels:months,datasets:[
-      {type:"bar",data:d.ventas,backgroundColor:d.color+"99",borderColor:d.color,borderWidth:1,yAxisID:"y",order:2},
-      {type:"line",data:d.ppto,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,tension:0,yAxisID:"y",order:1},
-      {type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,
-      interaction:{mode:"index",intersect:false},
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" CLP "+c.raw.toFixed(1)+"M";}}}},
-      scales:{
-        y:{position:"left",grid:{color:"rgba(255,255,255,.05)"},ticks:{callback:function(v){return v+"M";},color:"#7c849e",font:{size:10}}},
-        y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},
-        x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}
-      }}
-  });
-}
-function clRank(){
+function clC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
+function clB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
+function clP(v,p){return p>0?Math.round(v/p*100):0;}
+function clDraw(k){
+  var d=CL[k],tv=0,tp=0;
+  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
+  var tc=clP(tv,tp);
+  document.getElementById("cl-kpis").innerHTML=[["Ventas YTD","CLP "+tv.toFixed(1)+"M",null],["Ppto YTD","CLP "+tp.toFixed(1)+"M",null],["Cumpl. T1",tc+"%",tc],["Marzo","CLP "+d.v[2].toFixed(1)+"M",clP(d.v[2],d.p[2])]].map(function(c){return'<div style="background:rgba(255,255,255,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?clC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
+  var w=document.getElementById("cl-wrap");
+  w.innerHTML="<canvas></canvas>";
+  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(clP(d.v[i],d.p[i]));}
+  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2},{type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1},{type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" CLP "+Number(c.raw).toFixed(1)+"M";}}}},scales:{y:{position:"left",grid:{color:"rgba(255,255,255,.05)"},ticks:{callback:function(v){return v+"M";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
   var mx=54.1;
-  document.getElementById("cl-vc-rank").innerHTML=CLR.map(function(r){
-    var bw=Math.min(100,r.ytd/mx*100);
-    var pc2=r.ppto?Math.min(100,r.ppto/mx*100):0;
-    var badge=r.pct!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+sb(r.pct)+';color:'+sc(r.pct)+';">'+r.pct+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';
-    return'<div style="margin-bottom:8px;">'+
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">'+
-    '<span style="font-size:11px;color:#f0f2f8;font-weight:500;">'+r.name+'</span>'+
-    '<div style="display:flex;align-items:center;gap:6px;">'+
-    '<span style="font-size:10px;color:#7c849e;">CLP '+r.ytd+'M</span>'+badge+'</div></div>'+
-    '<div style="position:relative;height:6px;background:rgba(255,255,255,.06);border-radius:3px;">'+
-    '<div style="height:100%;width:'+bw+'%;background:'+r.color+';border-radius:3px;"></div>'+
-    (r.ppto?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pc2+'%;border-radius:1px;"></div>':"")+
-    '</div></div>';
-  }).join("");
+  document.getElementById("cl-rank").innerHTML=CL_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+clB(r.t)+';color:'+clC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:11px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:#7c849e;">CLP '+r.y+'M</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(255,255,255,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
 }
-function clUpdate(k){clCards(k);clBuildChart(k);}
-if(!window.Chart){var s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js";s.onload=function(){clUpdate("todos");clRank();};document.head.appendChild(s);}
-else{clUpdate("todos");clRank();}
-document.getElementById("cl-vend-sel").addEventListener("change",function(e){clUpdate(e.target.value);});
-})();
+clDraw("todos");
+</script>
+
+<script>
+var PE={
+  todos:{v:[73.5,39.4,59.8],p:[51.7,58.5,63.0],c:"#c4841a"},
+  atalaya:{v:[30.1,9.0,20.0],p:[18.0,18.0,18.0],c:"#4ade80"},
+  navarro:{v:[26.3,7.7,0.0],p:[11.8,11.8,11.8],c:"#f5a623"},
+  aguirre:{v:[0.0,6.5,29.4],p:[0,0,0],c:"#b48aff"},
+  infante:{v:[16.5,16.2,9.8],p:[37.8,37.8,37.8],c:"#f87171"},
+  gonzalez:{v:[0.6,0.0,0.1],p:[2.0,2.0,2.0],c:"#7c849e"},
+  valladares:{v:[0.0,0.0,0.6],p:[2.9,2.9,2.9],c:"#7c849e"}
+};
+var PE_R=[
+  {n:"O. Atalaya",y:59.1,p:53.7,t:110.2,c:"#4ade80"},{n:"L. Aguirre",y:35.9,p:null,t:null,c:"#b48aff"},
+  {n:"O. Infante",y:42.5,p:114.9,t:37.0,c:"#f87171"},{n:"N. Navarro",y:34.0,p:35.4,t:96.2,c:"#f5a623"},
+  {n:"A. González",y:0.7,p:6.0,t:17.4,c:"#7c849e"},{n:"P. Valladares",y:0.6,p:5.7,t:10.5,c:"#7c849e"}
+];
+function peC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
+function peB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
+function peP(v,p){return p>0?Math.round(v/p*100):0;}
+function peDraw(k){
+  var d=PE[k],tv=0,tp=0;
+  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
+  var tc=tp>0?peP(tv,tp):null;
+  document.getElementById("pe-kpis").innerHTML=[["Ventas YTD","USD "+tv.toFixed(1)+"K",null],["Ppto YTD",tp>0?"USD "+tp.toFixed(1)+"K":"Sin ppto",null],["Cumpl. T1",tc!=null?tc+"%":"—",tc],["Marzo","USD "+d.v[2].toFixed(1)+"K",d.p[2]>0?peP(d.v[2],d.p[2]):null]].map(function(c){return'<div style="background:rgba(255,255,255,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?peC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
+  var w=document.getElementById("pe-wrap");
+  w.innerHTML="<canvas></canvas>";
+  var hasPp=d.p.some(function(v){return v>0;});
+  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(d.p[i]>0?peP(d.v[i],d.p[i]):null);}
+  var ds=[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2}];
+  if(hasPp){ds.push({type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1});ds.push({type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0});}
+  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" USD "+Number(c.raw).toFixed(1)+"K";}}}},scales:{y:{position:"left",grid:{color:"rgba(255,255,255,.05)"},ticks:{callback:function(v){return v+"K";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
+  var mx=59.1;
+  document.getElementById("pe-rank").innerHTML=PE_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+peB(r.t)+';color:'+peC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:11px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:#7c849e;">USD '+r.y.toFixed(1)+'K</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(255,255,255,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
+}
+peDraw("todos");
 </script>
 
 <div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border2,#1e2333);">
-  <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#444c66;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px;">Ventas vs Presupuesto · Perú<span style="flex:1;height:1px;background:#1e2333;"></span></div>
-  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
-    <div style="display:flex;gap:14px;font-size:11px;flex-wrap:wrap;">
-      <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:9px;border-radius:2px;background:#c4841a;display:inline-block;"></span>Ventas</span>
-      <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;border-top:2px dashed #f87171;display:inline-block;"></span>Ppto</span>
-      <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;background:#4ade80;display:inline-block;"></span>Cumpl.%</span>
-    </div>
-    <select id="pe-vend-sel" style="font-size:11px;padding:4px 8px;border-radius:6px;background:#191d28;color:#f0f2f8;border:1px solid #252a38;">
-      <option value="todos">Equipo completo</option>
-      <option value="atalaya">O. Atalaya</option>
-      <option value="navarro">N. Navarro</option>
-      <option value="aguirre">L. Aguirre</option>
-      <option value="infante">O. Infante</option>
-      <option value="gonzalez">A. González</option>
-      <option value="valladares">P. Valladares</option>
-    </select>
+<div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#444c66;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px;">Ventas vs Presupuesto &middot; Chile<span style="flex:1;height:1px;background:#1e2333;"></span></div>
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+  <div style="display:flex;gap:14px;font-size:11px;flex-wrap:wrap;">
+    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:9px;border-radius:2px;background:#00a8c8;display:inline-block;"></span>Ventas</span>
+    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;border-top:2px dashed #f87171;display:inline-block;"></span>Ppto</span>
+    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;background:#4ade80;display:inline-block;"></span>Cumpl.%</span>
   </div>
-  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;" id="pe-vc-cards"></div>
-  <div style="position:relative;width:100%;height:220px;"><canvas id="pe-vc-chart"></canvas></div>
-  <div style="margin-top:14px;" id="pe-vc-rank"></div>
+  <select onchange="clDraw(this.value)" style="font-size:11px;padding:4px 8px;border-radius:6px;background:#191d28;color:#f0f2f8;border:1px solid #252a38;">
+    <option value="todos">Equipo completo</option><option value="caroca">J. Caroca</option><option value="laratro">P. Laratro</option><option value="velasquez">F. Velásquez</option><option value="encina">R. Encina</option><option value="veverka">I. Veverka</option><option value="munoz">V. Muñoz</option>
+  </select>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;" id="cl-kpis"></div>
+<div id="cl-wrap" style="position:relative;width:100%;height:220px;"></div>
+<div style="margin-top:14px;" id="cl-rank"></div>
 </div>
 <script>
-(function(){
-var PED={
-  todos:{label:"Equipo Perú",ventas:[73.5,39.4,59.8],ppto:[51.7,58.4,63.0],color:"#c4841a"},
-  atalaya:{label:"O. Atalaya",ventas:[30.1,9.0,20.0],ppto:[18.0,18.0,18.0],color:"#4ade80"},
-  navarro:{label:"N. Navarro",ventas:[26.3,7.7,0.0],ppto:[11.8,11.8,11.8],color:"#f5a623"},
-  aguirre:{label:"L. Aguirre",ventas:[0.0,6.5,29.4],ppto:[0,0,0],color:"#b48aff"},
-  infante:{label:"O. Infante",ventas:[16.5,16.2,9.8],ppto:[37.8,37.8,37.8],color:"#f87171"},
-  gonzalez:{label:"A. González",ventas:[0.6,0.0,0.1],ppto:[2.0,2.0,2.0],color:"#7c849e"},
-  valladares:{label:"P. Valladares",ventas:[0.0,0.0,0.6],ppto:[2.9,2.9,2.9],color:"#7c849e"}
+var CL={
+  todos:{v:[88.7,35.7,44.0],p:[84.8,42.8,43.2],c:"#00a8c8"},
+  caroca:{v:[15.3,6.4,31.9],p:[12.5,6.0,14.5],c:"#4ade80"},
+  laratro:{v:[37.0,10.4,2.8],p:[36.0,10.6,7.5],c:"#00a8c8"},
+  velasquez:{v:[14.5,9.9,3.5],p:[14.9,11.5,6.5],c:"#fbbf24"},
+  encina:{v:[13.5,7.3,4.8],p:[14.2,7.5,7.5],c:"#b48aff"},
+  veverka:{v:[6.2,0.9,1.0],p:[6.0,6.0,6.0],c:"#f87171"},
+  munoz:{v:[2.2,0.8,0.0],p:[1.2,1.2,1.2],c:"#7c849e"}
 };
-var PER=[
-  {name:"O. Atalaya",ytd:59.1,ppto:53.7,pct:110.2,color:"#4ade80"},
-  {name:"L. Aguirre",ytd:35.9,ppto:null,pct:null,color:"#b48aff"},
-  {name:"O. Infante",ytd:42.5,ppto:114.9,pct:37.0,color:"#f87171"},
-  {name:"N. Navarro",ytd:34.0,ytdP:35.4,pct:96.2,color:"#f5a623"},
-  {name:"A. González",ytd:0.7,ppto:6.0,pct:17.4,color:"#7c849e"},
-  {name:"P. Valladares",ytd:0.6,ppto:5.7,pct:10.5,color:"#7c849e"}
+var CL_R=[
+  {n:"J. Caroca",y:53.6,p:33.0,t:162.3,c:"#4ade80"},{n:"P. Laratro",y:50.2,p:54.1,t:92.9,c:"#00a8c8"},
+  {n:"R. Encina",y:25.5,p:29.2,t:87.5,c:"#b48aff"},{n:"F. Velásquez",y:27.9,p:32.9,t:84.8,c:"#fbbf24"},
+  {n:"I. Veverka",y:8.1,p:18.0,t:45.2,c:"#f87171"},{n:"V. Muñoz",y:3.0,p:null,t:null,c:"#7c849e"}
 ];
-var months=["Enero","Febrero","Marzo"];
-var peChart=null;
-function pct(v,p){return p>0?Math.round(v/p*100):0;}
-function sc(p){return p>=100?"#4ade80":p>=80?"#fbbf24":"#f87171";}
-function sb(p){return p>=100?"rgba(74,222,128,.12)":p>=80?"rgba(251,191,36,.12)":"rgba(248,113,113,.12)";}
-function peCards(k){
-  var d=PED[k];
-  var tv=d.ventas.reduce(function(a,b){return a+b;},0);
-  var tp=d.ppto.reduce(function(a,b){return a+b;},0);
-  var tp2=tp>0?pct(tv,tp):null;
-  document.getElementById("pe-vc-cards").innerHTML=[
-    {l:"Ventas YTD",v:"USD "+tv.toFixed(1)+"K",p:null},
-    {l:"Ppto YTD",v:tp>0?"USD "+tp.toFixed(1)+"K":"Sin ppto",p:null},
-    {l:"Cumpl. T1",v:tp2!=null?tp2+"%":"—",p:tp2},
-    {l:"Marzo",v:"USD "+d.ventas[2].toFixed(1)+"K",p:d.ppto[2]>0?pct(d.ventas[2],d.ppto[2]):null}
-  ].map(function(c){
-    return'<div style="background:rgba(255,255,255,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;">'+
-    '<div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c.l+'</div>'+
-    '<div style="font-family:Syne,sans-serif;font-size:16px;font-weight:800;color:'+(c.p!=null?sc(c.p):"#f0f2f8")+';">'+c.v+'</div></div>';
-  }).join("");
+function clC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
+function clB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
+function clP(v,p){return p>0?Math.round(v/p*100):0;}
+function clDraw(k){
+  var d=CL[k],tv=0,tp=0;
+  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
+  var tc=clP(tv,tp);
+  document.getElementById("cl-kpis").innerHTML=[["Ventas YTD","CLP "+tv.toFixed(1)+"M",null],["Ppto YTD","CLP "+tp.toFixed(1)+"M",null],["Cumpl. T1",tc+"%",tc],["Marzo","CLP "+d.v[2].toFixed(1)+"M",clP(d.v[2],d.p[2])]].map(function(c){return'<div style="background:rgba(255,255,255,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?clC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
+  var w=document.getElementById("cl-wrap");
+  w.innerHTML="<canvas></canvas>";
+  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(clP(d.v[i],d.p[i]));}
+  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2},{type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1},{type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" CLP "+Number(c.raw).toFixed(1)+"M";}}}},scales:{y:{position:"left",grid:{color:"rgba(255,255,255,.05)"},ticks:{callback:function(v){return v+"M";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
+  var mx=54.1;
+  document.getElementById("cl-rank").innerHTML=CL_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+clB(r.t)+';color:'+clC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:11px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:#7c849e;">CLP '+r.y+'M</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(255,255,255,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
 }
-function peBuildChart(k){
-  var d=PED[k];
-  var hasPpto=d.ppto.some(function(v){return v>0;});
-  var ps=d.ventas.map(function(v,i){return d.ppto[i]>0?pct(v,d.ppto[i]):null;});
-  if(peChart) peChart.destroy();
-  var ds=[
-    {type:"bar",data:d.ventas,backgroundColor:d.color+"99",borderColor:d.color,borderWidth:1,yAxisID:"y",order:2}
-  ];
-  if(hasPpto){
-    ds.push({type:"line",data:d.ppto,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,tension:0,yAxisID:"y",order:1});
-    ds.push({type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0});
-  }
-  peChart=new Chart(document.getElementById("pe-vc-chart"),{
-    data:{labels:months,datasets:ds},
-    options:{responsive:true,maintainAspectRatio:false,
-      interaction:{mode:"index",intersect:false},
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" USD "+c.raw.toFixed(1)+"K";}}}},
-      scales:{
-        y:{position:"left",grid:{color:"rgba(255,255,255,.05)"},ticks:{callback:function(v){return v+"K";},color:"#7c849e",font:{size:10}}},
-        y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},
-        x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}
-      }}
-  });
-}
-function peRank(){
-  var mx=59.1;
-  document.getElementById("pe-vc-rank").innerHTML=PER.map(function(r){
-    var bw=Math.min(100,r.ytd/mx*100);
-    var pptoV=r.ppto||r.ytdP;
-    var pc2=pptoV?Math.min(100,pptoV/mx*100):0;
-    var badge=r.pct!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+sb(r.pct)+';color:'+sc(r.pct)+';">'+r.pct+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';
-    return'<div style="margin-bottom:8px;">'+
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">'+
-    '<span style="font-size:11px;color:#f0f2f8;font-weight:500;">'+r.name+'</span>'+
-    '<div style="display:flex;align-items:center;gap:6px;">'+
-    '<span style="font-size:10px;color:#7c849e;">USD '+r.ytd.toFixed(1)+'K</span>'+badge+'</div></div>'+
-    '<div style="position:relative;height:6px;background:rgba(255,255,255,.06);border-radius:3px;">'+
-    '<div style="height:100%;width:'+bw+'%;background:'+r.color+';border-radius:3px;"></div>'+
-    (pptoV?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pc2+'%;border-radius:1px;"></div>':"")+
-    '</div></div>';
-  }).join("");
-}
-function peUpdate(k){peCards(k);peBuildChart(k);}
-if(!window.Chart){var s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js";s.onload=function(){peUpdate("todos");peRank();};document.head.appendChild(s);}
-else{peUpdate("todos");peRank();}
-document.getElementById("pe-vend-sel").addEventListener("change",function(e){peUpdate(e.target.value);});
-})();
+clDraw("todos");
 </script>
 
+<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border2,#1e2333);">
+<div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#444c66;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px;">Ventas vs Presupuesto &middot; Perú<span style="flex:1;height:1px;background:#1e2333;"></span></div>
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+  <div style="display:flex;gap:14px;font-size:11px;flex-wrap:wrap;">
+    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:9px;border-radius:2px;background:#c4841a;display:inline-block;"></span>Ventas</span>
+    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;border-top:2px dashed #f87171;display:inline-block;"></span>Ppto</span>
+    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;background:#4ade80;display:inline-block;"></span>Cumpl.%</span>
+  </div>
+  <select onchange="peDraw(this.value)" style="font-size:11px;padding:4px 8px;border-radius:6px;background:#191d28;color:#f0f2f8;border:1px solid #252a38;">
+    <option value="todos">Equipo completo</option><option value="atalaya">O. Atalaya</option><option value="navarro">N. Navarro</option><option value="aguirre">L. Aguirre</option><option value="infante">O. Infante</option><option value="gonzalez">A. González</option><option value="valladares">P. Valladares</option>
+  </select>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;" id="pe-kpis"></div>
+<div id="pe-wrap" style="position:relative;width:100%;height:220px;"></div>
+<div style="margin-top:14px;" id="pe-rank"></div>
+</div>
+<script>
+var PE={
+  todos:{v:[73.5,39.4,59.8],p:[51.7,58.5,63.0],c:"#c4841a"},
+  atalaya:{v:[30.1,9.0,20.0],p:[18.0,18.0,18.0],c:"#4ade80"},
+  navarro:{v:[26.3,7.7,0.0],p:[11.8,11.8,11.8],c:"#f5a623"},
+  aguirre:{v:[0.0,6.5,29.4],p:[0,0,0],c:"#b48aff"},
+  infante:{v:[16.5,16.2,9.8],p:[37.8,37.8,37.8],c:"#f87171"},
+  gonzalez:{v:[0.6,0.0,0.1],p:[2.0,2.0,2.0],c:"#7c849e"},
+  valladares:{v:[0.0,0.0,0.6],p:[2.9,2.9,2.9],c:"#7c849e"}
+};
+var PE_R=[
+  {n:"O. Atalaya",y:59.1,p:53.7,t:110.2,c:"#4ade80"},{n:"L. Aguirre",y:35.9,p:null,t:null,c:"#b48aff"},
+  {n:"O. Infante",y:42.5,p:114.9,t:37.0,c:"#f87171"},{n:"N. Navarro",y:34.0,p:35.4,t:96.2,c:"#f5a623"},
+  {n:"A. González",y:0.7,p:6.0,t:17.4,c:"#7c849e"},{n:"P. Valladares",y:0.6,p:5.7,t:10.5,c:"#7c849e"}
+];
+function peC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
+function peB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
+function peP(v,p){return p>0?Math.round(v/p*100):0;}
+function peDraw(k){
+  var d=PE[k],tv=0,tp=0;
+  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
+  var tc=tp>0?peP(tv,tp):null;
+  document.getElementById("pe-kpis").innerHTML=[["Ventas YTD","USD "+tv.toFixed(1)+"K",null],["Ppto YTD",tp>0?"USD "+tp.toFixed(1)+"K":"Sin ppto",null],["Cumpl. T1",tc!=null?tc+"%":"—",tc],["Marzo","USD "+d.v[2].toFixed(1)+"K",d.p[2]>0?peP(d.v[2],d.p[2]):null]].map(function(c){return'<div style="background:rgba(255,255,255,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?peC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
+  var w=document.getElementById("pe-wrap");
+  w.innerHTML="<canvas></canvas>";
+  var hasPp=d.p.some(function(v){return v>0;});
+  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(d.p[i]>0?peP(d.v[i],d.p[i]):null);}
+  var ds=[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2}];
+  if(hasPp){ds.push({type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1});ds.push({type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0});}
+  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" USD "+Number(c.raw).toFixed(1)+"K";}}}},scales:{y:{position:"left",grid:{color:"rgba(255,255,255,.05)"},ticks:{callback:function(v){return v+"K";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
+  var mx=59.1;
+  document.getElementById("pe-rank").innerHTML=PE_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+peB(r.t)+';color:'+peC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:11px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:#7c849e;">USD '+r.y.toFixed(1)+'K</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(255,255,255,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
+}
+peDraw("todos");
+</script>
 <!-- STRATEGIC -->
   <div class="slabel" style="margin-top:4px">Análisis Estratégico · Vista para Tomar Decisiones</div>
   <div class="sgrid">
@@ -782,6 +738,7 @@ document.getElementById("pe-vend-sel").addEventListener("change",function(e){peU
 </div>
 
 <script>
+window.addEventListener('load',function(){
 Chart.register(ChartDataLabels);
 Chart.defaults.font.family="'Inter',sans-serif";
 Chart.defaults.font.size=11;
@@ -796,10 +753,10 @@ const grid='rgba(42,69,53,0.6)';
 new Chart(document.getElementById('cTendencia'),{
   type:'line',
   data:{labels:['Enero','Febrero','Marzo'],datasets:[
-    {label:'Chile Real (MCLP)',data:[92.5,35.8,28.5],borderColor:LEAF,backgroundColor:'rgba(122,182,72,0.08)',borderWidth:2.5,pointRadius:7,pointBackgroundColor:LEAF,pointBorderColor:'#0D1F15',pointBorderWidth:2,tension:0.35,fill:true,yAxisID:'yCL'},
-    {label:'Chile Ppto',data:[83.6,41.6,42.0],borderColor:LEAF,borderDash:[7,4],borderWidth:1.5,pointRadius:4,pointBackgroundColor:'#0D1F15',pointBorderColor:LEAF,pointBorderWidth:2,tension:0.35,fill:false,yAxisID:'yCL'},
-    {label:'Perú Real (KUSD)',data:[73.5,39.4,49.4],borderColor:BLUE,backgroundColor:'rgba(96,165,250,0.07)',borderWidth:2.5,pointRadius:7,pointBackgroundColor:BLUE,pointBorderColor:'#0D1F15',pointBorderWidth:2,tension:0.35,fill:true,yAxisID:'yPE'},
-    {label:'Perú Ppto',data:[51.7,58.5,103.2],borderColor:BLUE,borderDash:[7,4],borderWidth:1.5,pointRadius:4,pointBackgroundColor:'#0D1F15',pointBorderColor:BLUE,pointBorderWidth:2,tension:0.35,fill:false,yAxisID:'yPE'},
+    {label:'Chile Real (MCLP)',data:[88.7,35.7,44.0],borderColor:LEAF,backgroundColor:'rgba(122,182,72,0.08)',borderWidth:2.5,pointRadius:7,pointBackgroundColor:LEAF,pointBorderColor:'#0D1F15',pointBorderWidth:2,tension:0.35,fill:true,yAxisID:'yCL'},
+    {label:'Chile Ppto',data:[84.8,42.8,43.2],borderColor:LEAF,borderDash:[7,4],borderWidth:1.5,pointRadius:4,pointBackgroundColor:'#0D1F15',pointBorderColor:LEAF,pointBorderWidth:2,tension:0.35,fill:false,yAxisID:'yCL'},
+    {label:'Perú Real (KUSD)',data:[73.5,39.4,59.8],borderColor:BLUE,backgroundColor:'rgba(96,165,250,0.07)',borderWidth:2.5,pointRadius:7,pointBackgroundColor:BLUE,pointBorderColor:'#0D1F15',pointBorderWidth:2,tension:0.35,fill:true,yAxisID:'yPE'},
+    {label:'Perú Ppto',data:[51.7,58.5,63.0],borderColor:BLUE,borderDash:[7,4],borderWidth:1.5,pointRadius:4,pointBackgroundColor:'#0D1F15',pointBorderColor:BLUE,pointBorderWidth:2,tension:0.35,fill:false,yAxisID:'yPE'},
   ]},
   options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
     plugins:{
@@ -907,6 +864,7 @@ bullet('bPeru', [
   {name:'A. Gonzalez',   flag:'🇵🇪', real:600,    ppto:4000},
   {name:'P. Valladares', flag:'🇵🇪', real:0,      ppto:5646},
 ]);
+}); // end window.load
 </script>
 </body>
 </html>
