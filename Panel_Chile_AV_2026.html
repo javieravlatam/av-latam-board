@@ -6,21 +6,9 @@
 <title>Panel Chile · AV 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
-/* ── BASE SHARED CSS ──────────────────────────── */
-:root {
-  --bg:#0c0e12;--surface:#131620;--card:#191d28;--border:#252a38;--border2:#1e2333;
-  --white:#f0f2f8;--muted:#7c849e;--faint:#444c66;
-  --green:#4ade80;--amber:#fbbf24;--red:#f87171;
-  --cl:#00d4ff;--cl2:#00a8c8;--cl-d:rgba(0,212,255,.09);
-  --pe:#f5a623;--pe2:#c4841a;--pe-d:rgba(245,166,35,.09);
-  --ec:#6ee87c;--ec2:#4ab857;--ec-d:rgba(110,232,124,.09);
-  --gr:#b48aff;--gr2:#8c5cf0;--gr-d:rgba(180,138,255,.09);
-  --ac:var(--cl);--ac2:var(--cl2);--ac-d:var(--cl-d);
-}
+:root{--bg:#0c0e12;--surface:#131620;--card:#191d28;--border:#252a38;--border2:#1e2333;--white:#f0f2f8;--muted:#7c849e;--faint:#444c66;--green:#4ade80;--amber:#fbbf24;--red:#f87171;--cl:#00d4ff;--cl2:#00a8c8;--cl-d:rgba(0,212,255,.09);--pe:#f5a623;--pe2:#c4841a;--pe-d:rgba(245,166,35,.09);--ec:#6ee87c;--ec2:#4ab857;--ec-d:rgba(110,232,124,.09);--gr:#b48aff;--gr2:#8c5cf0;--gr-d:rgba(180,138,255,.09);--ac:var(--cl);--ac2:var(--cl2);--ac-d:var(--cl-d);}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;font-size:13px;line-height:1.5;}
-
-/* HEADER */
 .hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:0 44px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--ac) 0%,transparent 50%);opacity:.5;}
 .hbrand{display:flex;align-items:center;gap:10px;}
@@ -33,25 +21,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
 .hlink.act{color:var(--ac);border-color:var(--ac);background:var(--ac-d);}
 .hchip{font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);letter-spacing:.5px;white-space:nowrap;}
 .hchip strong{color:var(--ac);}
-
-/* LAYOUT */
 .wrap{padding:24px 44px 48px;}
 .slabel{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--faint);font-weight:600;margin:22px 0 11px;display:flex;align-items:center;gap:10px;}
 .slabel::after{content:'';flex:1;height:1px;background:var(--border2);}
 .g5{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;}
-.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
 .g21{display:grid;grid-template-columns:1.65fr 1fr;gap:11px;}
-.g12{display:grid;grid-template-columns:1fr 1.65fr;gap:11px;}
-
-/* CARDS */
 .card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:18px 20px;}
 .card-t{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;}
 .eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--faint);font-weight:600;margin-bottom:2px;}
 .ctitle{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;letter-spacing:-.2px;}
-
-/* KPI */
 .kpi{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s;}
 .kpi:hover{border-color:var(--ac);}
 .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--ac),transparent);opacity:0;transition:opacity .2s;}
@@ -64,15 +44,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
 .kb-a{background:rgba(251,191,36,.1);color:var(--amber);}
 .kb-r{background:rgba(248,113,113,.1);color:var(--red);}
 .kb-b{background:var(--ac-d);color:var(--ac);}
-
-/* TAGS */
 .tag{font-size:9px;padding:3px 8px;border-radius:4px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;}
 .tg{background:rgba(74,222,128,.1);color:var(--green);}
 .ta{background:rgba(251,191,36,.1);color:var(--amber);}
 .tr{background:rgba(248,113,113,.1);color:var(--red);}
 .tb{background:var(--ac-d);color:var(--ac);}
-
-/* SEMÁFORO */
 .srow{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:7px;border:1px solid var(--border2);background:rgba(255,255,255,.015);margin-bottom:7px;transition:background .15s;}
 .srow:last-child{margin-bottom:0;}
 .srow:hover{background:rgba(255,255,255,.035);}
@@ -86,15 +62,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
 .da{background:var(--amber);box-shadow:0 0 5px var(--amber);}
 .dr{background:var(--red);box-shadow:0 0 5px var(--red);}
 .dn{background:var(--faint);}
-
-/* PROGRESS */
 .prow{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
 .plbl{font-size:11px;color:var(--white);width:125px;flex-shrink:0;font-weight:500;}
 .pbar{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
 .pfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .8s cubic-bezier(.4,0,.2,1);}
 .ppct{font-family:'DM Mono',monospace;font-size:10px;width:36px;text-align:right;flex-shrink:0;}
-
-/* TABLE */
 .tbl{width:100%;border-collapse:collapse;margin-top:12px;}
 .tbl th{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);padding:0 10px 8px;text-align:right;border-bottom:1px solid var(--border2);font-weight:600;}
 .tbl th:first-child{text-align:left;}
@@ -103,22 +75,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
 .tbl tr:last-child td{border-bottom:none;}
 .tbl tr:hover td{background:rgba(255,255,255,.02);}
 .vg{color:var(--green)!important;}.va{color:var(--amber)!important;}.vr{color:var(--red)!important;}.vh{color:var(--white)!important;font-weight:500!important;}
-
-/* ALERTAS */
 .alrt{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border-radius:7px;border:1px solid;font-size:11.5px;line-height:1.5;margin-bottom:7px;}
 .alrt:last-child{margin-bottom:0;}
 .alrt-r{background:rgba(248,113,113,.05);border-color:rgba(248,113,113,.2);}
 .alrt-a{background:rgba(251,191,36,.04);border-color:rgba(251,191,36,.2);}
 .alrt-g{background:rgba(74,222,128,.04);border-color:rgba(74,222,128,.2);}
 .alrt strong{font-weight:600;}
-
-/* INSIGHTS */
 .ins-item{padding:11px 13px;border-radius:7px;background:rgba(255,255,255,.02);border-left:3px solid var(--ac);font-size:11.5px;line-height:1.6;color:var(--muted);margin-bottom:8px;}
 .ins-item:last-child{margin-bottom:0;}
 .ins-item strong{color:var(--white);}
 .itag{display:inline;font-size:9px;background:var(--ac-d);color:var(--ac);padding:2px 6px;border-radius:3px;margin-right:5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
-
-/* MIX */
 .mrow{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
 .mrow:last-child{margin-bottom:0;}
 .mname{font-size:11px;color:var(--white);width:115px;flex-shrink:0;font-weight:500;}
@@ -126,8 +92,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
 .mfill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--ac),var(--ac2));}
 .mval{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);width:46px;text-align:right;flex-shrink:0;}
 .mmgn{font-family:'DM Mono',monospace;font-size:10px;width:38px;text-align:right;flex-shrink:0;}
-
-/* GAUGE */
 .gauge-wrap{display:flex;flex-direction:column;align-items:center;padding:8px 0 4px;}
 .gauge-ring{position:relative;width:96px;height:96px;}
 .gauge-ring svg{transform:rotate(-90deg);}
@@ -137,37 +101,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
 .gauge-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .gauge-pct{font-family:'Syne',sans-serif;font-weight:800;font-size:19px;letter-spacing:-1px;}
 .gauge-sub{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.8px;}
-
-/* FOOTER */
 .footer{padding:12px 44px;border-top:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;}
 .fnote{font-size:10px;color:var(--faint);}
 .fdisclaim{font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.15);color:var(--amber);}
-
-/* TRENDS */
-.trend{display:flex;align-items:flex-end;gap:5px;height:52px;padding:0 2px;margin-top:10px;}
-.tcol{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
-.tbar{width:100%;border-radius:2px 2px 0 0;background:var(--ac);min-height:3px;}
-.tlbl{font-family:'DM Mono',monospace;font-size:9px;color:var(--faint);}
-
-/* ANIMATIONS */
 .card,.kpi{animation:fadeUp .35s ease both;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:1100px){.g5{grid-template-columns:repeat(3,1fr);}.g21{grid-template-columns:1fr;}}
+@media(max-width:768px){.hdr,.wrap,.footer{padding-left:14px;padding-right:14px;}.g5,.g3,.g2,.g21{grid-template-columns:1fr;}.hnav{display:none;}}
 
-/* RESPONSIVE */
-@media(max-width:1100px){.g5{grid-template-columns:repeat(3,1fr);}.g21,.g12{grid-template-columns:1fr;}}
-@media(max-width:768px){.hdr,.wrap,.footer{padding-left:14px;padding-right:14px;}.g5,.g4,.g3,.g2,.g21,.g12{grid-template-columns:1fr;}.hnav{display:none;}}
 :root{--ac:var(--cl);--ac2:var(--cl2);--ac-d:var(--cl-d);}
 </style>
 </head>
 <body>
-
 <div class="hdr">
   <div class="hbrand">
     <div class="hlogo">AV</div>
-    <div>
-      <div class="hname">Panel Comercial · 🇨🇱 Chile</div>
-      <div class="hsub">Jefe Comercial · Ene–Mar 2026</div>
-    </div>
+    <div><div class="hname">Panel Comercial · 🇨🇱 Chile</div><div class="hsub">Jefe Comercial · Ene–Mar 2026</div></div>
   </div>
   <div class="hnav">
     <a href="Panel_Jefes_Index.html" class="hlink">← Países</a>
@@ -175,191 +124,112 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
     <a href="Panel_Chile_AV_2026.html" class="hlink act">🇨🇱 Chile</a>
     <a href="Panel_Peru_AV_2026.html" class="hlink">🇵🇪 Perú</a>
     <a href="Panel_Ecuador_AV_2026.html" class="hlink">🇪🇨 Ecuador</a>
-    <div class="hchip">Corte <strong>13/03/2026</strong></div>
+    <div class="hchip">Corte <strong>22/03/2026</strong></div>
   </div>
 </div>
-
 <div class="wrap">
 
-  <!-- KPIs -->
-  <div class="slabel">KPIs Principales · Chile</div>
-  <div class="g5">
-    <div class="kpi">
-      <div class="klbl">Ventas YTD</div>
-      <div class="kval" style="color:var(--cl);">CLP 157M</div>
-      <div class="ksub">vs ppto CLP 167.2M</div>
-      <div class="kbadge kb-a">93.8% cumplimiento</div>
-    </div>
-    <div class="kpi">
-      <div class="klbl">Volumen vendido</div>
-      <div class="kval">28,714 L</div>
-      <div class="ksub">690 transacciones</div>
-      <div class="kbadge kb-g">6 RTCs activos</div>
-    </div>
-    <div class="kpi">
-      <div class="klbl">Precio prom./L</div>
-      <div class="kval">CLP 4,401</div>
-      <div class="ksub">Ponderado por volumen</div>
-      <div class="kbadge kb-g">Mix mejorando</div>
-    </div>
-    <div class="kpi">
-      <div class="klbl">Margen estimado</div>
-      <div class="kval" style="color:var(--cl);">73.8%</div>
-      <div class="ksub">CLP 91.4M sobre ventas</div>
-      <div class="kbadge kb-a">↑ Mejora mensual</div>
-    </div>
-    <div class="kpi">
-      <div class="klbl">Brecha vs ppto</div>
-      <div class="kval" style="color:var(--amber);">CLP −10M</div>
-      <div class="ksub">6.2% bajo objetivo</div>
-      <div class="kbadge kb-a">Recuperable Q2</div>
-    </div>
-  </div>
-
-  <!-- SEMÁFORO + GAUGE -->
-  <div class="slabel">Desempeño por Vendedor</div>
-  <div class="g21">
-    <div class="card">
-      <div class="card-t">
-        <div><div class="eyebrow">Semáforo RTC</div><div class="ctitle">Desempeño por Vendedor</div></div>
-        <span class="tag ta">Corte 13/03</span>
-      </div>
-      <div style="margin-top:12px;">
-        <div class="srow">
-          <div class="sleft"><span style="font-size:14px;">⭐</span><div><div class="sname">J. Caroca</div><div class="sdet">Metropolitana · CLP 41.1M YTD</div></div></div>
-          <div class="sright"><div class="sval" style="color:var(--green);">124.5%</div><div class="dot dg"></div></div>
-        </div>
-        <div class="srow">
-          <div class="sleft"><span style="font-size:14px;">🔵</span><div><div class="sname">P. Laratro</div><div class="sdet">Norte · CLP 52.9M YTD · 43% de cartera</div></div></div>
-          <div class="sright"><div class="sval" style="color:var(--amber);">97.8%</div><div class="dot da"></div></div>
-        </div>
-        <div class="srow">
-          <div class="sleft"><span style="font-size:14px;">🔵</span><div><div class="sname">F. Velásquez</div><div class="sdet">Sur · CLP 28.1M YTD</div></div></div>
-          <div class="sright"><div class="sval" style="color:var(--amber);">85.6%</div><div class="dot da"></div></div>
-        </div>
-        <div class="srow">
-          <div class="sleft"><span style="font-size:14px;">🔵</span><div><div class="sname">R. Encina</div><div class="sdet">Centro · CLP 24.5M YTD</div></div></div>
-          <div class="sright"><div class="sval" style="color:var(--amber);">83.8%</div><div class="dot da"></div></div>
-        </div>
-        <div class="srow">
-          <div class="sleft"><span style="font-size:14px;">🔴</span><div><div class="sname">I. Veverka</div><div class="sdet">Sur-Austral · CLP 7.1M YTD · sin ventas Marzo</div></div></div>
-          <div class="sright"><div class="sval" style="color:var(--red);">39.6%</div><div class="dot dr"></div></div>
-        </div>
-        <div class="srow">
-          <div class="sleft"><span style="font-size:14px;">🟡</span><div><div class="sname">V. Muñoz</div><div class="sdet">Sin presupuesto asignado · CLP 2.96M</div></div></div>
-          <div class="sright"><div class="sval" style="color:var(--muted);">s/p</div><div class="dot dn"></div></div>
-        </div>
-      </div>
-      <div style="margin-top:12px;padding:10px 12px;background:rgba(0,212,255,.05);border-radius:7px;border:1px solid rgba(0,212,255,.15);font-size:11px;color:var(--muted);">
-        <strong style="color:var(--cl);">🎯 Palanca clave:</strong> Modelo Caroca (productos alto margen + seguimiento técnico). Replicar en Encina y Velásquez acelera cierre de brecha YTD.
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="eyebrow">Cumplimiento YTD</div>
-      <div class="ctitle">Avance Mensual</div>
-      <div class="gauge-wrap" style="margin:10px 0 4px;">
-        <div class="gauge-ring">
-          <svg width="96" height="96" viewBox="0 0 96 96">
-            <circle class="g-track" cx="48" cy="48" r="40" stroke-dasharray="251" stroke-dashoffset="0"/>
-            <circle class="g-fill" cx="48" cy="48" r="40" stroke-dasharray="251" stroke-dashoffset="15.7"/>
-          </svg>
-          <div class="gauge-c"><div class="gauge-pct" style="color:var(--cl);">93.8%</div><div class="gauge-sub">YTD</div></div>
-        </div>
-      </div>
-      <div style="margin-top:4px;">
-        <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green)!important;"></div></div><div class="ppct" style="color:var(--green);">110.7%</div></div>
-        <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:86.1%"></div></div><div class="ppct" style="color:var(--amber);">86.1%</div></div>
-        <div class="prow"><div class="plbl">Marzo (13/03)</div><div class="pbar"><div class="pfill" style="width:68%"></div></div><div class="ppct" style="color:var(--amber);">68.0%</div></div>
-      </div>
-      <div style="margin-top:10px;padding:9px 12px;background:rgba(0,212,255,.05);border-radius:7px;border:1px solid rgba(0,212,255,.12);">
-        <div style="font-size:9px;font-weight:700;color:var(--cl);letter-spacing:.5px;margin-bottom:3px;">MARGEN MENSUAL</div>
-        <div style="display:flex;justify-content:space-around;margin-top:6px;">
-          <div style="text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--amber);">72.0%</div><div style="font-size:9px;color:var(--faint);">ENE</div></div>
-          <div style="color:var(--border);align-self:center;">→</div>
-          <div style="text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--amber);">73.7%</div><div style="font-size:9px;color:var(--faint);">FEB</div></div>
-          <div style="color:var(--border);align-self:center;">→</div>
-          <div style="text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:var(--green);">84.7%</div><div style="font-size:9px;color:var(--faint);">MAR</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- COMPARATIVO + ALERTAS -->
-  <div class="slabel">Comparativo Real vs Reportado · Alertas</div>
-  <div class="g2">
-    <div class="card">
-      <div class="card-t">
-        <div><div class="eyebrow">Auditoría Información</div><div class="ctitle">Real Sistema vs Reporte Equipo</div></div>
-        <span class="tag ta">1 brecha</span>
-      </div>
-      <table class="tbl">
-        <thead><tr><th>Indicador</th><th>Sistema</th><th>Reportado</th><th>Δ</th><th>Estado</th></tr></thead>
-        <tbody>
-          <tr><td>Ventas Feb total</td><td class="vh">CLP 35.8M</td><td>CLP 35.8M</td><td class="vg">0%</td><td><span class="tag tg">✓ OK</span></td></tr>
-          <tr><td>Cum. Ene-Feb</td><td class="vh">102.2%</td><td>102.2%</td><td class="vg">0%</td><td><span class="tag tg">✓ OK</span></td></tr>
-          <tr><td>Velásquez Feb</td><td class="vh">86.1%</td><td>86.1%</td><td class="vg">0%</td><td><span class="tag tg">✓ OK</span></td></tr>
-          <tr><td>Veverka YTD</td><td class="vh">39.6%</td><td>Sin reporte</td><td class="vr">Gap</td><td><span class="tag ta">Sin dato</span></td></tr>
-          <tr><td>Clientes bloq. SII</td><td class="vh">3 clientes</td><td>No mencionado</td><td class="vr">Gap</td><td><span class="tag tr">Alerta</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="card">
-      <div class="card-t">
-        <div><div class="eyebrow">Alertas Comerciales</div><div class="ctitle">Situaciones de Acción Inmediata</div></div>
-        <span class="tag tr">2 críticas</span>
-      </div>
-      <div style="margin-top:12px;">
-        <div class="alrt alrt-r"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🔴</span><div><strong>I. Veverka — 39.6% YTD.</strong> Brecha CLP 10.9M. Sin ventas en Marzo. Plan de recuperación + acompañamiento técnico inmediato.</div></div>
-        <div class="alrt alrt-r"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🔴</span><div><strong>SII bloquea cobranza.</strong> Seminario Agrícola, Loma Larga y Fortunato. Gestión tributaria previa a extensión de crédito.</div></div>
-        <div class="alrt alrt-a"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🟡</span><div><strong>Concentración P. Laratro.</strong> 43% de cartera en un RTC. Riesgo si hay rotación. Distribuir cartera en Q2.</div></div>
-        <div class="alrt alrt-a"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🟡</span><div><strong>Marzo al 68%</strong> del objetivo al 13/03. Requiere aceleración fuerte segunda quincena.</div></div>
-        <div class="alrt alrt-g"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🟢</span><div><strong>J. Caroca 124.5%.</strong> CLP 19.4M en Marzo. Modelo a documentar y replicar en el equipo.</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MIX + INSIGHTS -->
-  <div class="slabel">Mix de Productos · Insights Comerciales</div>
-  <div class="g21">
-    <div class="card">
-      <div class="card-t">
-        <div><div class="eyebrow">Top Productos por Volumen</div><div class="ctitle">Mix Estratégico Chile 2026</div></div>
-        <span class="tag tb">Margen visible</span>
-      </div>
-      <div style="margin:12px 0 8px;display:grid;grid-template-columns:115px 1fr 50px 42px;gap:9px;padding-bottom:6px;border-bottom:1px solid var(--border2);">
-        <span style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);font-weight:600;">Producto</span>
-        <span style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);font-weight:600;">Volumen</span>
-        <span style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);font-weight:600;text-align:right;">CLP/L</span>
-        <span style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);font-weight:600;text-align:right;">Mgn%</span>
-      </div>
-      <div class="mrow"><div class="mname">AV MOVE</div><div class="mbar"><div class="mfill" style="width:100%;"></div></div><div class="mval">7,541</div><div class="mmgn" style="color:var(--amber);">77.2%</div></div>
-      <div class="mrow"><div class="mname">AV SILFORTE</div><div class="mbar"><div class="mfill" style="width:80%;"></div></div><div class="mval">9,875</div><div class="mmgn" style="color:var(--green);">86.0%</div></div>
-      <div class="mrow"><div class="mname">AV HUMIC ROOT</div><div class="mbar"><div class="mfill" style="width:70%;"></div></div><div class="mval">2,424</div><div class="mmgn" style="color:var(--amber);">67.5%</div></div>
-      <div class="mrow"><div class="mname">AV ROOT MAX</div><div class="mbar"><div class="mfill" style="width:65%;"></div></div><div class="mval">8,346</div><div class="mmgn" style="color:var(--green);">80.9%</div></div>
-      <div class="mrow"><div class="mname">AV AMIN SUGAR</div><div class="mbar"><div class="mfill" style="width:55%;"></div></div><div class="mval">4,403</div><div class="mmgn" style="color:var(--amber);">60.5%</div></div>
-      <div class="mrow"><div class="mname">AV PLUS POTASIO</div><div class="mbar"><div class="mfill" style="width:42%;"></div></div><div class="mval">3,530</div><div class="mmgn" style="color:var(--amber);">72.7%</div></div>
-      <div class="mrow"><div class="mname">AV BALANCE ⭐</div><div class="mbar"><div class="mfill" style="width:30%;"></div></div><div class="mval">13,351</div><div class="mmgn" style="color:var(--green);">96.7%</div></div>
-      <div class="mrow"><div class="mname">AV CYTO PRIME ⭐</div><div class="mbar"><div class="mfill" style="width:22%;"></div></div><div class="mval">16,893</div><div class="mmgn" style="color:var(--green);">90.6%</div></div>
-      <div style="margin-top:10px;font-size:10px;color:var(--faint);font-style:italic;">⭐ Productos de mayor margen y menor volumen actual — oportunidad de crecimiento sin costo adicional.</div>
-    </div>
-    <div class="card">
-      <div class="eyebrow">Insights Comerciales</div>
-      <div class="ctitle">Recomendaciones Accionables</div>
-      <div style="margin-top:12px;">
-        <div class="ins-item"><span class="itag">Oportunidad</span><strong>AV BALANCE (96.7%) y AV CYTO PRIME (90.6%)</strong> son los productos de mayor margen. Bajo volumen actual. Priorizar en plan de visitas Q2 para subir su participación en mix.</div>
-        <div class="ins-item"><span class="itag">Acción</span><strong>I. Veverka requiere intervención directa.</strong> Brecha CLP 10.9M. Replicar modelo Caroca: combinar visita técnica con oferta de productos premium (AV SILFORTE, AV ROOT MAX) en clientes actuales.</div>
-        <div class="ins-item"><span class="itag">Mix</span>Desplazar gradualmente mix de <strong>AV MOVE</strong> (77% margen, mayor volumen) hacia <strong>AV SILFORTE + AV BALANCE</strong> mejora el margen grupo sin reducir tickets.</div>
-        <div class="ins-item"><span class="itag">Tendencia</span>El margen mensual mejora consistentemente: <strong>72% → 73.7% → 84.7%</strong>. El equipo está aprendiendo a vender mejor. Formalizar incentivo por mix de producto alto margen en Q2.</div>
-        <div class="ins-item"><span class="itag">Cobranza</span>Clientes bloqueados SII deben resolver situación tributaria antes de recibir nuevos despachos. No extender crédito a <strong>Seminario, Loma Larga ni Fortunato</strong> hasta regularización.</div>
-      </div>
-    </div>
-  </div>
-
+<div class="slabel">KPIs Principales · Chile al 22/03/2026</div>
+<div class="g5">
+  <div class="kpi"><div class="klbl">Ventas YTD</div><div class="kval" style="color:var(--cl);">CLP 168.3M</div><div class="ksub">Ppto CLP 167.2M</div><div class="kbadge kb-g">✅ 100.7% — superó ppto</div></div>
+  <div class="kpi"><div class="klbl">Ventas Marzo</div><div class="kval" style="color:var(--cl);">CLP 44.0M</div><div class="ksub">Ppto CLP 43.2M</div><div class="kbadge kb-g">✅ 101.8% sobre ppto</div></div>
+  <div class="kpi"><div class="klbl">Margen estimado YTD</div><div class="kval" style="color:var(--cl);">73.8%</div><div class="ksub">CLP 91.4M sobre ventas</div><div class="kbadge kb-a">↑ Mejora mensual</div></div>
+  <div class="kpi"><div class="klbl">Cartera total</div><div class="kval" style="color:var(--amber);">CLP 37.4M</div><div class="ksub">66% vencida · CLP 24.7M</div><div class="kbadge kb-a">↓ Mejoró vs anterior</div></div>
+  <div class="kpi"><div class="klbl">RTCs sobre 100%</div><div class="kval" style="color:var(--green);">2</div><div class="ksub">Caroca 162.3% · YTD OK</div><div class="kbadge kb-g">Mejor mes del año</div></div>
 </div>
 
+<div class="slabel">Desempeño por Vendedor</div>
+<div class="g21">
+  <div class="card">
+    <div class="card-t"><div><div class="eyebrow">Semáforo RTC · Acumulado T1</div><div class="ctitle">Desempeño Ene–Mar 2026 · Chile</div></div><span class="tag tg">Corte 22/03</span></div>
+    <div style="margin-top:12px;">
+      <div class="srow"><div class="sleft"><span style="font-size:14px;">🏆</span><div><div class="sname">J. Caroca</div><div class="sdet">YTD CLP 53.6M · Mar 220% ppto</div></div></div><div class="sright"><div class="sval" style="color:var(--green);">162.3%</div><div class="dot dg"></div></div></div>
+      <div class="srow"><div class="sleft"><span style="font-size:14px;">🔵</span><div><div class="sname">P. Laratro</div><div class="sdet">YTD CLP 50.2M · Mar 37.7% ppto</div></div></div><div class="sright"><div class="sval" style="color:var(--amber);">92.9%</div><div class="dot da"></div></div></div>
+      <div class="srow"><div class="sleft"><span style="font-size:14px;">🔵</span><div><div class="sname">R. Encina</div><div class="sdet">YTD CLP 25.5M · Mar 63.5%</div></div></div><div class="sright"><div class="sval" style="color:var(--amber);">87.5%</div><div class="dot da"></div></div></div>
+      <div class="srow"><div class="sleft"><span style="font-size:14px;">🔵</span><div><div class="sname">F. Velásquez</div><div class="sdet">YTD CLP 27.9M · Mar 53.2%</div></div></div><div class="sright"><div class="sval" style="color:var(--amber);">84.8%</div><div class="dot da"></div></div></div>
+      <div class="srow"><div class="sleft"><span style="font-size:14px;">🔴</span><div><div class="sname">I. Veverka</div><div class="sdet">YTD CLP 8.1M · Mar solo 16.8%</div></div></div><div class="sright"><div class="sval" style="color:var(--red);">45.2%</div><div class="dot dr"></div></div></div>
+      <div class="srow"><div class="sleft"><span style="font-size:14px;">🟡</span><div><div class="sname">V. Muñoz</div><div class="sdet">Sin ppto · YTD CLP 2.96M · Mar /bin/sh</div></div></div><div class="sright"><div class="sval" style="color:var(--muted);">s/p</div><div class="dot dn"></div></div></div>
+    </div>
+    <div style="margin-top:12px;padding:10px 12px;background:rgba(74,222,128,.06);border-radius:7px;border:1px solid rgba(74,222,128,.2);font-size:11px;color:var(--muted);"><strong style="color:var(--green);">🏆 Hito:</strong> Chile cerró T1 sobre 100% YTD por primera vez en 2026. Caroca con CLP 31.9M en Marzo (220%) fue el driver principal.</div>
+  </div>
+  <div class="card">
+    <div class="eyebrow">Cumplimiento Mensual</div><div class="ctitle">Avance vs Presupuesto</div>
+    <div class="gauge-wrap" style="margin:10px 0 4px;">
+      <div class="gauge-ring">
+        <svg width="96" height="96" viewBox="0 0 96 96">
+          <circle class="g-track" cx="48" cy="48" r="40" stroke-dasharray="251" stroke-dashoffset="0"/>
+          <circle class="g-fill" cx="48" cy="48" r="40" stroke-dasharray="251" stroke-dashoffset="0" style="stroke:var(--green);"/>
+        </svg>
+        <div class="gauge-c"><div class="gauge-pct" style="color:var(--green);">100.7%</div><div class="gauge-sub">YTD ✅</div></div>
+      </div>
+    </div>
+    <div style="margin-top:4px;">
+      <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:100%;"></div></div><div class="ppct" style="color:var(--green);">104.6%</div></div>
+      <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:83.3%;"></div></div><div class="ppct" style="color:var(--amber);">83.3%</div></div>
+      <div class="prow"><div class="plbl">Marzo ✅</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green)!important;"></div></div><div class="ppct" style="color:var(--green);">101.8%</div></div>
+      <div class="prow"><div class="plbl">YTD ✅</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green)!important;"></div></div><div class="ppct" style="color:var(--green);">100.7%</div></div>
+    </div>
+    <div style="margin-top:8px;padding:9px 12px;background:rgba(0,212,255,.05);border-radius:7px;border:1px solid rgba(0,212,255,.12);">
+      <div style="font-size:9px;font-weight:700;color:var(--cl);letter-spacing:.5px;margin-bottom:4px;">MARGEN MENSUAL</div>
+      <div style="display:flex;justify-content:space-around;">
+        <div style="text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--amber);">72.0%</div><div style="font-size:9px;color:var(--faint);">ENE</div></div>
+        <div style="color:var(--border);align-self:center;">→</div>
+        <div style="text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--amber);">73.7%</div><div style="font-size:9px;color:var(--faint);">FEB</div></div>
+        <div style="color:var(--border);align-self:center;">→</div>
+        <div style="text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:var(--green);">84.7%</div><div style="font-size:9px;color:var(--faint);">MAR</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slabel">Cartera por Cobrar · Chile al 22/03/2026</div>
+<div class="g2">
+  <div class="card">
+    <div class="card-t"><div><div class="eyebrow">Aging CxC</div><div class="ctitle">Por Vendedor · CLP</div></div><span class="tag ta">66% vencida</span></div>
+    <table class="tbl">
+      <thead><tr><th>Vendedor</th><th>Total CxC</th><th>Vencida</th><th>%</th></tr></thead>
+      <tbody>
+        <tr><td>P. Laratro</td><td class="vh">CLP 16,146,249</td><td class="va">CLP 10,231,985</td><td class="va">63.4%</td></tr>
+        <tr><td>J. Caroca</td><td class="vh">CLP 15,316,346</td><td class="vr">CLP 11,488,154</td><td class="vr">75.0%</td></tr>
+        <tr><td>F. Velásquez</td><td class="vh">CLP  2,523,395</td><td class="va">CLP  1,547,000</td><td class="va">61.3%</td></tr>
+        <tr><td>R. Encina</td><td class="vh">CLP  2,167,515</td><td class="vg">CLP    467,920</td><td class="vg">21.6%</td></tr>
+        <tr><td>I. Veverka</td><td class="vh">CLP    409,360</td><td class="va">CLP    123,760</td><td class="va">30.2%</td></tr>
+        <tr><td>Otros</td><td class="vh">CLP    815,274</td><td class="vr">CLP    815,274</td><td class="vr">100%</td></tr>
+        <tr><td style="font-weight:700;color:var(--white);">TOTAL</td><td class="vh" style="font-weight:700;">CLP 37,378,139</td><td class="vr" style="font-weight:700;">CLP 24,674,093</td><td class="vr" style="font-weight:700;">66.0%</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+      <div style="text-align:center;padding:8px;border-radius:7px;background:rgba(255,255,255,.02);border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--amber);">CLP 9.6M</div><div style="font-size:9px;color:var(--faint);margin-top:2px;">+30 días</div></div>
+      <div style="text-align:center;padding:8px;border-radius:7px;background:rgba(255,255,255,.02);border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--red);">CLP 5.7M</div><div style="font-size:9px;color:var(--faint);margin-top:2px;">+60 días</div></div>
+      <div style="text-align:center;padding:8px;border-radius:7px;background:rgba(74,222,128,.04);border:1px solid rgba(74,222,128,.15);"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--green);">CLP 0</div><div style="font-size:9px;color:var(--faint);margin-top:2px;">+90 días ✅</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-t"><div><div class="eyebrow">Clientes Críticos</div><div class="ctitle">Deudas que requieren acción</div></div><span class="tag tr">4 urgentes</span></div>
+    <div style="margin-top:12px;">
+      <div class="alrt alrt-r"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🔴</span><div><strong>GOYASERVICE SPA — CLP 4,194,750 · 78 días mora.</strong> Mayor deuda vencida. Caroca. Sin pago hace 2+ meses. Gestión legal urgente.</div></div>
+      <div class="alrt alrt-r"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🔴</span><div><strong>RIO DIUTO SPA — CLP 2,856,000 · 51 días mora.</strong> Caroca. Requiere plan de pago formal esta semana.</div></div>
+      <div class="alrt alrt-r"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🔴</span><div><strong>SOC. AG. SANTA TERESA — CLP 3,500,000 · 15 días.</strong> Laratro. Monto alto, vence pronto. Contacto inmediato.</div></div>
+      <div class="alrt alrt-a"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🟡</span><div><strong>AGRICOLA RIBERA LTDA — CLP 1,473,696 · 66 días.</strong> Caroca. Acercarse a acuerdo de pago.</div></div>
+      <div class="alrt alrt-g"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🟢</span><div><strong>Sin deuda +90 días.</strong> Primera vez en el año sin cartera en tramo más crítico. Mejora en gestión de cobro.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="slabel">Insights Comerciales · Q2 2026</div>
+<div class="card">
+  <div class="card-t"><div><div class="eyebrow">Análisis ejecutivo</div><div class="ctitle">Recomendaciones accionables para Q2</div></div><span class="tag tg">Actualizado 22/03</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;">
+    <div class="ins-item"><span class="itag">Hito</span><strong>Chile cerró T1 sobre 100% YTD.</strong> El driver fue J. Caroca (CLP 31.9M en Marzo, 220% ppto). Sin embargo esto enmascara que Veverka (45%), Velásquez (85%) y Encina (87%) siguen con brecha estructural que debe corregirse en Q2.</div>
+    <div class="ins-item"><span class="itag">Urgente</span><strong>I. Veverka en 45.2% YTD.</strong> Su Marzo fue de solo CLP 1M vs ppto CLP 6M (16.8%). Requiere plan de intervención directo, acompañamiento técnico semanal y revisión de cartera de clientes para Q2.</div>
+    <div class="ins-item"><span class="itag">Cartera</span><strong>Caroca concentra la mayor deuda vencida</strong> (CLP 11.5M, 75% de su CxC). Goyaservice (78 días) y Rio Diuto (51 días) son urgentes. Paradoja: mejor vendedor = mayor riesgo de cobro. Revisar límite de crédito por cliente.</div>
+    <div class="ins-item"><span class="itag">Q2</span><strong>P. Laratro cayó a CLP 2.8M en Marzo</strong> (37.7%). Necesita reactivar cartera de clientes. Tiene la mayor CxC total (CLP 16.1M) — gestión de cobro es prioridad antes de nuevos despachos.</div>
+  </div>
+</div>
+
+</div>
 <div class="footer">
-  <div class="fnote">AV Chile · Ventas al 13/03/2026 · Maestro Producción 2026 · TC 950 CLP/USD · Solo uso interno</div>
+  <div class="fnote">AV Chile · Ventas 22/03/2026 · CxC 22/03/2026 · Maestro Producción 2026 · TC 950 CLP/USD</div>
   <div class="fdisclaim">⚠ Margen estimado — no incluye costos operativos ni logística</div>
 </div>
 </body>

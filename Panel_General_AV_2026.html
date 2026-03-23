@@ -5,22 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Panel General · Grupo Latam · AV 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<style>
-/* ── BASE SHARED CSS ──────────────────────────── */
-:root {
-  --bg:#0c0e12;--surface:#131620;--card:#191d28;--border:#252a38;--border2:#1e2333;
-  --white:#f0f2f8;--muted:#7c849e;--faint:#444c66;
-  --green:#4ade80;--amber:#fbbf24;--red:#f87171;
-  --cl:#00d4ff;--cl2:#00a8c8;--cl-d:rgba(0,212,255,.09);
-  --pe:#f5a623;--pe2:#c4841a;--pe-d:rgba(245,166,35,.09);
-  --ec:#6ee87c;--ec2:#4ab857;--ec-d:rgba(110,232,124,.09);
-  --gr:#b48aff;--gr2:#8c5cf0;--gr-d:rgba(180,138,255,.09);
-  --ac:var(--cl);--ac2:var(--cl2);--ac-d:var(--cl-d);
-}
+<style>:root{--bg:#0c0e12;--surface:#131620;--card:#191d28;--border:#252a38;--border2:#1e2333;--white:#f0f2f8;--muted:#7c849e;--faint:#444c66;--green:#4ade80;--amber:#fbbf24;--red:#f87171;--cl:#00d4ff;--cl2:#00a8c8;--cl-d:rgba(0,212,255,.09);--pe:#f5a623;--pe2:#c4841a;--pe-d:rgba(245,166,35,.09);--ec:#6ee87c;--ec2:#4ab857;--ec-d:rgba(110,232,124,.09);--gr:#b48aff;--gr2:#8c5cf0;--gr-d:rgba(180,138,255,.09);--ac:var(--cl);--ac2:var(--cl2);--ac-d:var(--cl-d);}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;font-size:13px;line-height:1.5;}
-
-/* HEADER */
 .hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:0 44px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--ac) 0%,transparent 50%);opacity:.5;}
 .hbrand{display:flex;align-items:center;gap:10px;}
@@ -33,25 +20,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
 .hlink.act{color:var(--ac);border-color:var(--ac);background:var(--ac-d);}
 .hchip{font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);letter-spacing:.5px;white-space:nowrap;}
 .hchip strong{color:var(--ac);}
-
-/* LAYOUT */
 .wrap{padding:24px 44px 48px;}
 .slabel{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--faint);font-weight:600;margin:22px 0 11px;display:flex;align-items:center;gap:10px;}
 .slabel::after{content:'';flex:1;height:1px;background:var(--border2);}
 .g5{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;}
-.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
 .g21{display:grid;grid-template-columns:1.65fr 1fr;gap:11px;}
-.g12{display:grid;grid-template-columns:1fr 1.65fr;gap:11px;}
-
-/* CARDS */
 .card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:18px 20px;}
 .card-t{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;}
 .eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--faint);font-weight:600;margin-bottom:2px;}
 .ctitle{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;letter-spacing:-.2px;}
-
-/* KPI */
 .kpi{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s;}
 .kpi:hover{border-color:var(--ac);}
 .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--ac),transparent);opacity:0;transition:opacity .2s;}
@@ -64,15 +43,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
 .kb-a{background:rgba(251,191,36,.1);color:var(--amber);}
 .kb-r{background:rgba(248,113,113,.1);color:var(--red);}
 .kb-b{background:var(--ac-d);color:var(--ac);}
-
-/* TAGS */
 .tag{font-size:9px;padding:3px 8px;border-radius:4px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;}
 .tg{background:rgba(74,222,128,.1);color:var(--green);}
 .ta{background:rgba(251,191,36,.1);color:var(--amber);}
 .tr{background:rgba(248,113,113,.1);color:var(--red);}
 .tb{background:var(--ac-d);color:var(--ac);}
-
-/* SEMÁFORO */
 .srow{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:7px;border:1px solid var(--border2);background:rgba(255,255,255,.015);margin-bottom:7px;transition:background .15s;}
 .srow:last-child{margin-bottom:0;}
 .srow:hover{background:rgba(255,255,255,.035);}
@@ -86,15 +61,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
 .da{background:var(--amber);box-shadow:0 0 5px var(--amber);}
 .dr{background:var(--red);box-shadow:0 0 5px var(--red);}
 .dn{background:var(--faint);}
-
-/* PROGRESS */
 .prow{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
 .plbl{font-size:11px;color:var(--white);width:125px;flex-shrink:0;font-weight:500;}
 .pbar{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
 .pfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .8s cubic-bezier(.4,0,.2,1);}
 .ppct{font-family:'DM Mono',monospace;font-size:10px;width:36px;text-align:right;flex-shrink:0;}
-
-/* TABLE */
 .tbl{width:100%;border-collapse:collapse;margin-top:12px;}
 .tbl th{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);padding:0 10px 8px;text-align:right;border-bottom:1px solid var(--border2);font-weight:600;}
 .tbl th:first-child{text-align:left;}
@@ -103,22 +74,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
 .tbl tr:last-child td{border-bottom:none;}
 .tbl tr:hover td{background:rgba(255,255,255,.02);}
 .vg{color:var(--green)!important;}.va{color:var(--amber)!important;}.vr{color:var(--red)!important;}.vh{color:var(--white)!important;font-weight:500!important;}
-
-/* ALERTAS */
 .alrt{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border-radius:7px;border:1px solid;font-size:11.5px;line-height:1.5;margin-bottom:7px;}
 .alrt:last-child{margin-bottom:0;}
 .alrt-r{background:rgba(248,113,113,.05);border-color:rgba(248,113,113,.2);}
 .alrt-a{background:rgba(251,191,36,.04);border-color:rgba(251,191,36,.2);}
 .alrt-g{background:rgba(74,222,128,.04);border-color:rgba(74,222,128,.2);}
 .alrt strong{font-weight:600;}
-
-/* INSIGHTS */
 .ins-item{padding:11px 13px;border-radius:7px;background:rgba(255,255,255,.02);border-left:3px solid var(--ac);font-size:11.5px;line-height:1.6;color:var(--muted);margin-bottom:8px;}
 .ins-item:last-child{margin-bottom:0;}
 .ins-item strong{color:var(--white);}
 .itag{display:inline;font-size:9px;background:var(--ac-d);color:var(--ac);padding:2px 6px;border-radius:3px;margin-right:5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
-
-/* MIX */
 .mrow{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
 .mrow:last-child{margin-bottom:0;}
 .mname{font-size:11px;color:var(--white);width:115px;flex-shrink:0;font-weight:500;}
@@ -126,8 +91,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
 .mfill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--ac),var(--ac2));}
 .mval{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);width:46px;text-align:right;flex-shrink:0;}
 .mmgn{font-family:'DM Mono',monospace;font-size:10px;width:38px;text-align:right;flex-shrink:0;}
-
-/* GAUGE */
 .gauge-wrap{display:flex;flex-direction:column;align-items:center;padding:8px 0 4px;}
 .gauge-ring{position:relative;width:96px;height:96px;}
 .gauge-ring svg{transform:rotate(-90deg);}
@@ -137,260 +100,141 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
 .gauge-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .gauge-pct{font-family:'Syne',sans-serif;font-weight:800;font-size:19px;letter-spacing:-1px;}
 .gauge-sub{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.8px;}
-
-/* FOOTER */
 .footer{padding:12px 44px;border-top:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;}
 .fnote{font-size:10px;color:var(--faint);}
 .fdisclaim{font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.15);color:var(--amber);}
-
-/* TRENDS */
-.trend{display:flex;align-items:flex-end;gap:5px;height:52px;padding:0 2px;margin-top:10px;}
-.tcol{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
-.tbar{width:100%;border-radius:2px 2px 0 0;background:var(--ac);min-height:3px;}
-.tlbl{font-family:'DM Mono',monospace;font-size:9px;color:var(--faint);}
-
-/* ANIMATIONS */
 .card,.kpi{animation:fadeUp .35s ease both;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:1100px){.g5{grid-template-columns:repeat(3,1fr);}.g21{grid-template-columns:1fr;}}
+@media(max-width:768px){.hdr,.wrap,.footer{padding-left:14px;padding-right:14px;}.g5,.g3,.g2,.g21{grid-template-columns:1fr;}.hnav{display:none;}}
 
-/* RESPONSIVE */
-@media(max-width:1100px){.g5{grid-template-columns:repeat(3,1fr);}.g21,.g12{grid-template-columns:1fr;}}
-@media(max-width:768px){.hdr,.wrap,.footer{padding-left:14px;padding-right:14px;}.g5,.g4,.g3,.g2,.g21,.g12{grid-template-columns:1fr;}.hnav{display:none;}}
 :root{--ac:var(--gr);--ac2:var(--gr2);--ac-d:var(--gr-d);}
-.pfill-pe{background:linear-gradient(90deg,var(--pe),var(--pe2))!important;}
-.pfill-cl{background:linear-gradient(90deg,var(--cl),var(--cl2))!important;}
-.country-box{border-radius:10px;padding:14px 16px;border:1px solid;}
+.cbox{border-radius:10px;padding:14px 16px;border:1px solid;}
 .cbox-cl{background:var(--cl-d);border-color:rgba(0,212,255,.2);}
 .cbox-pe{background:var(--pe-d);border-color:rgba(245,166,35,.2);}
-.cbox-title{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;margin-bottom:10px;}
 </style>
 </head>
 <body>
-
 <div class="hdr">
   <div class="hbrand">
     <div class="hlogo" style="background:linear-gradient(135deg,#b48aff,#8c5cf0);color:#fff;">AV</div>
-    <div>
-      <div class="hname">Vista General · Grupo Latam</div>
-      <div class="hsub">Panel Comercial Jefes · 2026</div>
-    </div>
+    <div><div class="hname">Vista General · Grupo Latam</div><div class="hsub">Panel Comercial Jefes · 2026</div></div>
   </div>
   <div class="hnav">
     <a href="Panel_Jefes_Index.html" class="hlink">← Países</a>
-    <a href="Panel_General_AV_2026.html" class="hlink">🌎 General</a>
+    <a href="Panel_General_AV_2026.html" class="hlink act">🌎 General</a>
     <a href="Panel_Chile_AV_2026.html" class="hlink">🇨🇱 Chile</a>
     <a href="Panel_Peru_AV_2026.html" class="hlink">🇵🇪 Perú</a>
     <a href="Panel_Ecuador_AV_2026.html" class="hlink">🇪🇨 Ecuador</a>
-    <div class="hchip act" style="background:var(--gr-d);border-color:var(--gr);color:var(--gr);">🌎 General activo</div>
-    <div class="hchip">Corte <strong>16/03/2026</strong></div>
+    <div class="hchip">Chile <strong>22/03</strong> · Perú <strong>20/03</strong></div>
   </div>
 </div>
-
 <div class="wrap">
 
-  <!-- KPIs GRUPO -->
-  <div class="slabel">KPIs Consolidados · Grupo Latam Ene–Mar 2026</div>
-  <div class="g5">
-    <div class="kpi" style="--ac:#b48aff;--ac2:#8c5cf0;">
-      <div class="klbl">Ventas Grupo YTD</div>
-      <div class="kval" style="color:#b48aff;">USD 292.7K</div>
-      <div class="ksub">CLP 156.9M + USD 162.3K</div>
-      <div class="kbadge" style="background:rgba(180,138,255,.1);color:#b48aff;">2 países activos</div>
-    </div>
-    <div class="kpi">
-      <div class="klbl">Margen Bruto Grupo</div>
-      <div class="kval" style="color:var(--green);">82.5%</div>
-      <div class="ksub">USD 241.5K sobre ventas</div>
-      <div class="kbadge kb-g">↑ Mejora mensual</div>
-    </div>
-    <div class="kpi">
-      <div class="klbl">Cumplimiento Grupo</div>
-      <div class="kval" style="color:var(--amber);">85.2%</div>
-      <div class="ksub">Ponderado Chile+Perú</div>
-      <div class="kbadge kb-a">Recuperable Q2</div>
-    </div>
-    <div class="kpi">
-      <div class="klbl">Volumen Total</div>
-      <div class="kval">41,094 L</div>
-      <div class="ksub">28,714 CL + 12,380 PE</div>
-      <div class="kbadge kb-b">729 transacciones</div>
-    </div>
-    <div class="kpi">
-      <div class="klbl">RTCs críticos</div>
-      <div class="kval" style="color:var(--red);">4</div>
-      <div class="ksub">Por debajo de 40% YTD</div>
-      <div class="kbadge kb-r">Acción urgente</div>
-    </div>
+<div class="slabel">KPIs Consolidados · Grupo Latam Ene–Mar 2026</div>
+<div class="g5">
+  <div class="kpi" style="--ac:#b48aff;--ac2:#8c5cf0;--ac-d:rgba(180,138,255,.09);">
+    <div class="klbl">Ventas Grupo YTD</div>
+    <div class="kval" style="color:#b48aff;">USD 349.9K</div>
+    <div class="ksub">CLP 168.3M + USD 172.8K</div>
+    <div class="kbadge" style="background:rgba(180,138,255,.1);color:#b48aff;">2 países activos</div>
   </div>
-
-  <!-- COMPARATIVO PAÍSES -->
-  <div class="slabel">Comparativo Chile vs Perú</div>
-  <div class="g2">
-
-    <!-- Chile resumen -->
-    <div class="card">
-      <div class="card-t">
-        <div><div class="eyebrow">🇨🇱 Chile</div><div class="ctitle">Desempeño YTD · Al 13/03/2026</div></div>
-        <span class="tag ta">93.8%</span>
-      </div>
-      <div style="margin:14px 0 10px;">
-        <div class="prow"><div class="plbl">Ventas YTD</div><div class="pbar"><div class="pfill" style="width:93.8%;"></div></div><div class="ppct" style="color:var(--amber);">CLP 157M</div></div>
-        <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green)!important;"></div></div><div class="ppct" style="color:var(--green);">110.7%</div></div>
-        <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:86.1%;"></div></div><div class="ppct" style="color:var(--amber);">86.1%</div></div>
-        <div class="prow"><div class="plbl">Marzo (al 13)</div><div class="pbar"><div class="pfill" style="width:68%;"></div></div><div class="ppct" style="color:var(--amber);">68.0%</div></div>
-      </div>
-      <div class="g2" style="gap:8px;">
-        <div class="country-box cbox-cl">
-          <div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Margen YTD</div>
-          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--cl);">73.8%</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:2px;">CLP 91.4M</div>
-        </div>
-        <div class="country-box cbox-cl">
-          <div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">RTCs OK / Total</div>
-          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--white);">1 <span style="font-size:14px;color:var(--faint);">/ 5</span></div>
-          <div style="font-size:10px;color:var(--muted);margin-top:2px;">Solo Caroca en verde</div>
-        </div>
-      </div>
-      <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tg">J. Caroca 124.5%</span>
-        <span class="tag ta">P. Laratro 97.8%</span>
-        <span class="tag tr">I. Veverka 39.6%</span>
-      </div>
-    </div>
-
-    <!-- Perú resumen -->
-    <div class="card">
-      <div class="card-t">
-        <div><div class="eyebrow">🇵🇪 Perú</div><div class="ctitle">Desempeño YTD · Al 16/03/2026</div></div>
-        <span class="tag tr">76.1%</span>
-      </div>
-      <div style="margin:14px 0 10px;">
-        <div class="prow"><div class="plbl">Ventas YTD</div><div class="pbar"><div class="pfill pfill-pe" style="width:76.1%;"></div></div><div class="ppct" style="color:var(--amber);">USD 162K</div></div>
-        <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill pfill-pe" style="width:100%;background:var(--green)!important;"></div></div><div class="ppct" style="color:var(--green);">142.2%</div></div>
-        <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill pfill-pe" style="width:67%;"></div></div><div class="ppct" style="color:var(--amber);">67.4%</div></div>
-        <div class="prow"><div class="plbl">Marzo (al 16)</div><div class="pbar"><div class="pfill pfill-pe" style="width:47.9%;"></div></div><div class="ppct" style="color:var(--red);">47.9%</div></div>
-      </div>
-      <div class="g2" style="gap:8px;">
-        <div class="country-box cbox-pe">
-          <div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Margen YTD</div>
-          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--pe);">89.5%</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:2px;">USD 145.2K</div>
-        </div>
-        <div class="country-box cbox-pe">
-          <div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">RTCs OK / Total</div>
-          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--white);">1 <span style="font-size:14px;color:var(--faint);">/ 6</span></div>
-          <div style="font-size:10px;color:var(--muted);margin-top:2px;">Solo Atalaya en verde</div>
-        </div>
-      </div>
-      <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tg">O. Atalaya 110%</span>
-        <span class="tag tr">O. Infante 33.8%</span>
-        <span class="tag tr">P. Valladares 3.5%</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- TENDENCIA MENSUAL GRUPO -->
-  <div class="slabel">Tendencia Mensual · Margen Grupo</div>
-  <div class="g3">
-    <div class="card">
-      <div class="eyebrow">Enero 2026</div>
-      <div class="ctitle" style="color:var(--amber);">79.6% margen grupo</div>
-      <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);">
-          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);">🇨🇱 Chile</div>
-          <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--cl);margin:4px 0;">72.0%</div>
-          <div style="font-size:10px;color:var(--muted);">CLP 82.5M</div>
-        </div>
-        <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);">
-          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);">🇵🇪 Perú</div>
-          <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--pe);margin:4px 0;">88.6%</div>
-          <div style="font-size:10px;color:var(--muted);">USD 73.5K</div>
-        </div>
-      </div>
-      <div style="margin-top:10px;padding:8px;background:rgba(251,191,36,.05);border-radius:6px;border:1px solid rgba(251,191,36,.15);font-size:10px;color:var(--muted);">Perú con Enero excepcional: 142% vs ppto</div>
-    </div>
-    <div class="card">
-      <div class="eyebrow">Febrero 2026</div>
-      <div class="ctitle" style="color:var(--green);">82.8% margen grupo</div>
-      <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);">
-          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);">🇨🇱 Chile</div>
-          <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--cl);margin:4px 0;">73.7%</div>
-          <div style="font-size:10px;color:var(--muted);">CLP 27.6M</div>
-        </div>
-        <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);">
-          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);">🇵🇪 Perú</div>
-          <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--pe);margin:4px 0;">89.5%</div>
-          <div style="font-size:10px;color:var(--muted);">USD 39.4K</div>
-        </div>
-      </div>
-      <div style="margin-top:10px;padding:8px;background:rgba(74,222,128,.04);border-radius:6px;border:1px solid rgba(74,222,128,.15);font-size:10px;color:var(--muted);">↑ Mejora respecto a Enero en ambos países</div>
-    </div>
-    <div class="card">
-      <div class="eyebrow">Marzo 2026 (parcial)</div>
-      <div class="ctitle" style="color:var(--green);">89.4% margen grupo</div>
-      <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);">
-          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);">🇨🇱 Chile</div>
-          <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--cl);margin:4px 0;">84.7%</div>
-          <div style="font-size:10px;color:var(--muted);">CLP 13.8M</div>
-        </div>
-        <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);">
-          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);">🇵🇪 Perú</div>
-          <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--pe);margin:4px 0;">90.8%</div>
-          <div style="font-size:10px;color:var(--muted);">USD 49.4K</div>
-        </div>
-      </div>
-      <div style="margin-top:10px;padding:8px;background:rgba(74,222,128,.04);border-radius:6px;border:1px solid rgba(74,222,128,.15);font-size:10px;color:var(--muted);">⭐ Mejor mes del año. Mix desplazándose a productos premium.</div>
-    </div>
-  </div>
-
-  <!-- ALERTAS CRUZADAS + INSIGHTS ESTRATÉGICOS -->
-  <div class="slabel">Alertas Cruzadas · Grupo</div>
-  <div class="g2">
-    <div class="card">
-      <div class="card-t">
-        <div><div class="eyebrow">Alertas Consolidadas</div><div class="ctitle">Prioridades de Dirección Comercial</div></div>
-        <span class="tag tr">5 críticas</span>
-      </div>
-      <div style="margin-top:12px;">
-        <div class="alrt alrt-r"><span style="font-size:14px;flex-shrink:0;">🔴</span><div><strong>I. Veverka (CL) + O. Infante (PE) + P. Valladares (PE)</strong> — 3 RTCs bajo el 40% YTD. Patrón repetido: ausencia de acompañamiento técnico-comercial. Plan de intervención grupal necesario.</div></div>
-        <div class="alrt alrt-r"><span style="font-size:14px;flex-shrink:0;">🔴</span><div><strong>RVR Agro Perú — USD 185K.</strong> 58.5% de toda la cartera peruana en un cliente. Riesgo sistémico. No reportado por el equipo. Decisión de directorio requerida antes de nuevos despachos.</div></div>
-        <div class="alrt alrt-r"><span style="font-size:14px;flex-shrink:0;">🔴</span><div><strong>SII Chile bloquea 3 clientes.</strong> Seminario, Loma Larga y Fortunato. Impacto en cobranza Q2. Gestión tributaria urgente como condición para extender crédito.</div></div>
-        <div class="alrt alrt-a"><span style="font-size:14px;flex-shrink:0;">🟡</span><div><strong>Marzo en riesgo en ambos países.</strong> Chile al 68% (al 13/03) y Perú al 47.9% (al 16/03). Si no se activa el pipeline confirmado (USD 48K Perú), Q1 cerrará con brecha significativa.</div></div>
-        <div class="alrt alrt-a"><span style="font-size:14px;flex-shrink:0;">🟡</span><div><strong>Concentración de vendedores estrella.</strong> Chile depende de Laratro (43% cartera) y Perú de Atalaya. Riesgo organizacional si hay ausencia o rotación en estos roles.</div></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-t">
-        <div><div class="eyebrow">Insights Estratégicos</div><div class="ctitle">Recomendaciones para Jefes Comerciales</div></div>
-      </div>
-      <div style="margin-top:12px;">
-        <div class="ins-item" style="border-left-color:#b48aff;">
-          <span class="itag" style="background:var(--gr-d);color:var(--gr);">Grupo</span>
-          El margen mejora <strong>mes a mes en ambos países</strong> (72%→73.7%→84.7% Chile; 88.6%→89.5%→90.8% Perú). El equipo está mejorando el mix de productos sin instrucción explícita. <strong>Formalizar este criterio</strong> como política de gestión.
-        </div>
-        <div class="ins-item" style="border-left-color:#b48aff;">
-          <span class="itag" style="background:var(--gr-d);color:var(--gr);">Modelo</span>
-          <strong>J. Caroca (CL) y O. Atalaya (PE)</strong> superan el 100% de cumplimiento. Ambos comparten foco en productos de margen alto y seguimiento técnico. <strong>Documentar y replicar</strong> su metodología al resto del equipo.
-        </div>
-        <div class="ins-item" style="border-left-color:#b48aff;">
-          <span class="itag" style="background:var(--gr-d);color:var(--gr);">Mix</span>
-          <strong>AV BALANCE (97%), AV CYTO PRIME (91%) y Regalia MAX (97%)</strong> son los productos de mayor margen en el portafolio binacional. El plan comercial Q2 debería priorizar activamente estos SKUs en ambos mercados.
-        </div>
-        <div class="ins-item" style="border-left-color:#b48aff;">
-          <span class="itag" style="background:var(--gr-d);color:var(--gr);">Sinergia</span>
-          Perú genera <strong>mayor margen relativo</strong> pero menor volumen que Chile. La transferencia de know-how de mix de productos desde Perú hacia Chile (y viceversa en volumen) puede acelerar la rentabilidad grupo en Q2-Q3.
-        </div>
-      </div>
-    </div>
-  </div>
-
+  <div class="kpi"><div class="klbl">Margen Bruto Grupo</div><div class="kval" style="color:var(--green);">82.5%</div><div class="ksub">USD 241.5K sobre ventas</div><div class="kbadge kb-g">↑ Mejora mensual</div></div>
+  <div class="kpi"><div class="klbl">Chile YTD</div><div class="kval" style="color:var(--green);">100.7%</div><div class="ksub">CLP 168.3M · Superó ppto ✅</div><div class="kbadge kb-g">Hito T1</div></div>
+  <div class="kpi"><div class="klbl">Perú YTD</div><div class="kval" style="color:var(--amber);">81.0%</div><div class="ksub">USD 172.8K · vs ppto 213.4K</div><div class="kbadge kb-a">↑ Mejora vs 76.1%</div></div>
+  <div class="kpi"><div class="klbl">RTCs críticos</div><div class="kval" style="color:var(--red);">4</div><div class="ksub">Veverka · Infante · Val. · Gon.</div><div class="kbadge kb-r">Plan Q2 urgente</div></div>
 </div>
 
+<div class="slabel">Comparativo Chile vs Perú · T1 2026</div>
+<div class="g2">
+  <div class="card">
+    <div class="card-t"><div><div class="eyebrow">🇨🇱 Chile · Al 22/03/2026</div><div class="ctitle">✅ Cerró T1 sobre presupuesto</div></div><span class="tag tg">100.7%</span></div>
+    <div style="margin:14px 0 10px;">
+      <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:100%;"></div></div><div class="ppct" style="color:var(--green);">104.6%</div></div>
+      <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:83.3%;"></div></div><div class="ppct" style="color:var(--amber);">83.3%</div></div>
+      <div class="prow"><div class="plbl">Marzo ✅</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green)!important;"></div></div><div class="ppct" style="color:var(--green);">101.8%</div></div>
+      <div class="prow"><div class="plbl">YTD ✅</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green)!important;"></div></div><div class="ppct" style="color:var(--green);">100.7%</div></div>
+    </div>
+    <div class="g2" style="gap:8px;">
+      <div class="cbox cbox-cl"><div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Margen YTD</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--cl);">73.8%</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">CLP 91.4M</div></div>
+      <div class="cbox cbox-cl"><div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Cartera vencida</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--amber);">66%</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">CLP 24.7M de 37.4M</div></div>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
+      <span class="tag tg">J. Caroca 162.3%</span><span class="tag ta">P. Laratro 92.9%</span><span class="tag tr">I. Veverka 45.2%</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-t"><div><div class="eyebrow">🇵🇪 Perú · Al 20/03/2026</div><div class="ctitle">↑ Mejorando — Marzo fue el mejor mes</div></div><span class="tag ta">81.0%</span></div>
+    <div style="margin:14px 0 10px;">
+      <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green)!important;"></div></div><div class="ppct" style="color:var(--green);">142.2%</div></div>
+      <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:67.4%;background:linear-gradient(90deg,var(--pe),var(--pe2))!important;"></div></div><div class="ppct" style="color:var(--amber);">67.4%</div></div>
+      <div class="prow"><div class="plbl">Marzo</div><div class="pbar"><div class="pfill" style="width:94.3%;background:linear-gradient(90deg,var(--pe),var(--pe2))!important;"></div></div><div class="ppct" style="color:var(--amber);">94.3%</div></div>
+      <div class="prow"><div class="plbl">YTD</div><div class="pbar"><div class="pfill" style="width:81%;background:linear-gradient(90deg,var(--pe),var(--pe2))!important;"></div></div><div class="ppct" style="color:var(--amber);">81.0%</div></div>
+    </div>
+    <div class="g2" style="gap:8px;">
+      <div class="cbox cbox-pe"><div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Margen YTD</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--pe);">89.5%</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">USD 145.2K</div></div>
+      <div class="cbox cbox-pe"><div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Marzo</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--white);">USD 59.8K</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Mejor mes del año</div></div>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
+      <span class="tag tg">O. Atalaya 110%</span><span class="tag tg">L. Aguirre USD 35.9K s/p</span><span class="tag tr">O. Infante 37%</span>
+    </div>
+  </div>
+</div>
+
+<div class="slabel">Tendencia Margen Mensual · Grupo</div>
+<div class="g3">
+  <div class="card">
+    <div class="eyebrow">Enero 2026</div><div class="ctitle" style="color:var(--amber);">79.6% margen grupo</div>
+    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);">🇨🇱 Chile</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--cl);margin:4px 0;">72.0%</div><div style="font-size:10px;color:var(--muted);">CLP 88.7M</div></div>
+      <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);">🇵🇪 Perú</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--pe);margin:4px 0;">88.6%</div><div style="font-size:10px;color:var(--muted);">USD 73.5K</div></div>
+    </div>
+    <div style="margin-top:8px;padding:8px;background:rgba(74,222,128,.04);border-radius:6px;border:1px solid rgba(74,222,128,.15);font-size:10px;color:var(--muted);">Perú excelente: 142% vs ppto</div>
+  </div>
+  <div class="card">
+    <div class="eyebrow">Febrero 2026</div><div class="ctitle" style="color:var(--amber);">82.8% margen grupo</div>
+    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);">🇨🇱 Chile</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--cl);margin:4px 0;">73.7%</div><div style="font-size:10px;color:var(--muted);">CLP 35.7M</div></div>
+      <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);">🇵🇪 Perú</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--pe);margin:4px 0;">89.5%</div><div style="font-size:10px;color:var(--muted);">USD 39.4K</div></div>
+    </div>
+    <div style="margin-top:8px;padding:8px;background:rgba(74,222,128,.04);border-radius:6px;border:1px solid rgba(74,222,128,.15);font-size:10px;color:var(--muted);">↑ Mejora en ambos países</div>
+  </div>
+  <div class="card">
+    <div class="eyebrow">Marzo 2026</div><div class="ctitle" style="color:var(--green);">89.4% margen grupo ⭐</div>
+    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);">🇨🇱 Chile</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--cl);margin:4px 0;">84.7%</div><div style="font-size:10px;color:var(--muted);">CLP 44.0M ✅</div></div>
+      <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);">🇵🇪 Perú</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--pe);margin:4px 0;">90.8%</div><div style="font-size:10px;color:var(--muted);">USD 59.8K ⭐</div></div>
+    </div>
+    <div style="margin-top:8px;padding:8px;background:rgba(74,222,128,.06);border-radius:6px;border:1px solid rgba(74,222,128,.2);font-size:10px;color:var(--muted);">⭐ Mejor mes del año. Chile sobre ppto. Perú mejor mes.</div>
+  </div>
+</div>
+
+<div class="slabel">Alertas Cruzadas · Insights Estratégicos</div>
+<div class="g2">
+  <div class="card">
+    <div class="card-t"><div><div class="eyebrow">Alertas Consolidadas</div><div class="ctitle">Prioridades Dirección Comercial Q2</div></div><span class="tag tr">4 críticas</span></div>
+    <div style="margin-top:12px;">
+      <div class="alrt alrt-g"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🏆</span><div><strong>Chile superó el 100% YTD por primera vez.</strong> Caroca en 162%, Marzo en 101.8%. Hito positivo que debe consolidarse en Q2 sin depender de un solo vendedor.</div></div>
+      <div class="alrt alrt-r"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🔴</span><div><strong>Veverka (CL 45%) + Infante (PE 37%) + Valladares (PE 10%).</strong> 3 RTCs críticos en 2 países. Plan de intervención grupal con metodología Caroca/Atalaya.</div></div>
+      <div class="alrt alrt-r"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🔴</span><div><strong>Cartera Chile: CLP 24.7M vencida (66%).</strong> Goyaservice (78d, CLP 4.2M) y Rio Diuto (51d, CLP 2.9M) son los más urgentes. Caroca concentra el mayor riesgo de cobro.</div></div>
+      <div class="alrt alrt-a"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🟡</span><div><strong>L. Aguirre (Perú) sin presupuesto asignado.</strong> Generó USD 35.9K YTD siendo la 3era por volumen. Incorporarla formalmente al semáforo con objetivo Q2.</div></div>
+      <div class="alrt alrt-a"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🟡</span><div><strong>Perú: brecha de USD 40.6K vs ppto.</strong> Infante y González no muestran recuperación sostenida. Q2 necesita decisiones estructurales sobre estos RTCs.</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="eyebrow">Insights Estratégicos</div><div class="ctitle">Recomendaciones para Jefes Comerciales</div>
+    <div style="margin-top:12px;">
+      <div class="ins-item" style="border-left-color:#b48aff;"><span class="itag" style="background:var(--gr-d);color:var(--gr);">Grupo</span>El margen mejora <strong>mes a mes en ambos países</strong>: Ene 79.6% → Feb 82.8% → Mar 89.4%. El equipo está mejorando el mix de forma orgánica. Formalizar incentivo por productos premium en Q2.</div>
+      <div class="ins-item" style="border-left-color:#b48aff;"><span class="itag" style="background:var(--gr-d);color:var(--gr);">Modelo</span><strong>Caroca (CL 162%) y Atalaya (PE 110%)</strong> superan el 100%. Ambos combinan seguimiento técnico con foco en productos premium. Documentar y transferir su metodología al equipo.</div>
+      <div class="ins-item" style="border-left-color:#b48aff;"><span class="itag" style="background:var(--gr-d);color:var(--gr);">Cartera</span>Chile: sin deuda +90 días por primera vez en el año. La gestión de cobro mejora pero Caroca concentra CLP 15.3M en CxC total — revisar límite individual de crédito.</div>
+      <div class="ins-item" style="border-left-color:#b48aff;"><span class="itag" style="background:var(--gr-d);color:var(--gr);">Q2 foco</span>Perú Marzo (USD 59.8K) es el nuevo benchmark mensual. Si Aguirre (USD 29.4K) recibe ppto y recursos, Perú puede llegar al 95% en Q2. La palanca está en activar ese potencial.</div>
+    </div>
+  </div>
+</div>
+
+</div>
 <div class="footer">
-  <div class="fnote">AV Grupo Latam · Panel General · Corte Chile 13/03 · Perú 16/03/2026 · TC ref. 950 CLP/USD · Solo uso interno</div>
+  <div class="fnote">AV Grupo Latam · Chile 22/03 · Perú 20/03/2026 · TC 950 CLP/USD · Solo uso interno</div>
   <div class="fdisclaim">⚠ No incluye costos internos ni información confidencial de producción</div>
 </div>
 </body>
