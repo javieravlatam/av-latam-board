@@ -227,6 +227,113 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
   </div>
 </div>
 
+
+<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border2,#1e2333);">
+  <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#444c66;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px;">Ventas vs Presupuesto · Chile<span style="flex:1;height:1px;background:#1e2333;"></span></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+    <div style="display:flex;gap:14px;font-size:11px;flex-wrap:wrap;">
+      <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:9px;border-radius:2px;background:#00a8c8;display:inline-block;"></span>Ventas</span>
+      <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;border-top:2px dashed #f87171;display:inline-block;"></span>Ppto</span>
+      <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;background:#4ade80;display:inline-block;"></span>Cumpl.%</span>
+    </div>
+    <select id="cl-vend-sel" style="font-size:11px;padding:4px 8px;border-radius:6px;background:#191d28;color:#f0f2f8;border:1px solid #252a38;">
+      <option value="todos">Equipo completo</option>
+      <option value="caroca">J. Caroca</option>
+      <option value="laratro">P. Laratro</option>
+      <option value="velasquez">F. Velásquez</option>
+      <option value="encina">R. Encina</option>
+      <option value="veverka">I. Veverka</option>
+      <option value="munoz">V. Muñoz</option>
+    </select>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;" id="cl-vc-cards"></div>
+  <div style="position:relative;width:100%;height:220px;"><canvas id="cl-vc-chart"></canvas></div>
+  <div style="margin-top:14px;" id="cl-vc-rank"></div>
+</div>
+<script>
+(function(){
+var CLD={
+  todos:{label:"Equipo Chile",ventas:[88.7,35.7,44.0],ppto:[84.8,42.8,43.2],color:"#00a8c8"},
+  caroca:{label:"J. Caroca",ventas:[15.3,6.4,31.9],ppto:[12.5,6.0,14.5],color:"#4ade80"},
+  laratro:{label:"P. Laratro",ventas:[37.0,10.4,2.8],ppto:[36.0,10.6,7.5],color:"#00a8c8"},
+  velasquez:{label:"F. Velásquez",ventas:[14.5,9.9,3.5],ppto:[14.9,11.5,6.5],color:"#fbbf24"},
+  encina:{label:"R. Encina",ventas:[13.5,7.3,4.8],ppto:[14.2,7.5,7.5],color:"#b48aff"},
+  veverka:{label:"I. Veverka",ventas:[6.2,0.9,1.0],ppto:[6.0,6.0,6.0],color:"#f87171"},
+  munoz:{label:"V. Muñoz",ventas:[2.2,0.8,0.0],ppto:[1.2,1.2,1.2],color:"#7c849e"}
+};
+var CLR=[
+  {name:"J. Caroca",ytd:53.6,ppto:33.0,pct:162.3,color:"#4ade80"},
+  {name:"P. Laratro",ytd:50.2,ppto:54.1,pct:92.9,color:"#00a8c8"},
+  {name:"R. Encina",ytd:25.5,ppto:29.2,pct:87.5,color:"#b48aff"},
+  {name:"F. Velásquez",ytd:27.9,ppto:32.9,pct:84.8,color:"#fbbf24"},
+  {name:"I. Veverka",ytd:8.1,ppto:18.0,pct:45.2,color:"#f87171"},
+  {name:"V. Muñoz",ytd:3.0,ppto:null,pct:null,color:"#7c849e"}
+];
+var months=["Enero","Febrero","Marzo"];
+var clChart=null;
+function pct(v,p){return p>0?Math.round(v/p*100):0;}
+function sc(p){return p>=100?"#4ade80":p>=80?"#fbbf24":"#f87171";}
+function sb(p){return p>=100?"rgba(74,222,128,.12)":p>=80?"rgba(251,191,36,.12)":"rgba(248,113,113,.12)";}
+function clCards(k){
+  var d=CLD[k];
+  var tv=d.ventas.reduce(function(a,b){return a+b;},0);
+  var tp=d.ppto.reduce(function(a,b){return a+b;},0);
+  var tp2=pct(tv,tp);
+  var cards=[
+    {l:"Ventas YTD",v:"CLP "+tv.toFixed(1)+"M",p:null},
+    {l:"Ppto YTD",v:"CLP "+tp.toFixed(1)+"M",p:null},
+    {l:"Cumpl. T1",v:tp2+"%",p:tp2},
+    {l:"Marzo",v:"CLP "+d.ventas[2].toFixed(1)+"M",p:pct(d.ventas[2],d.ppto[2])}
+  ];
+  document.getElementById("cl-vc-cards").innerHTML=cards.map(function(c){
+    return'<div style="background:rgba(255,255,255,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;">'+
+    '<div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c.l+'</div>'+
+    '<div style="font-family:Syne,sans-serif;font-size:16px;font-weight:800;color:'+(c.p!=null?sc(c.p):"#f0f2f8")+';">'+c.v+'</div></div>';
+  }).join("");
+}
+function clBuildChart(k){
+  var d=CLD[k];
+  var ps=d.ventas.map(function(v,i){return pct(v,d.ppto[i]);});
+  if(clChart) clChart.destroy();
+  clChart=new Chart(document.getElementById("cl-vc-chart"),{
+    data:{labels:months,datasets:[
+      {type:"bar",data:d.ventas,backgroundColor:d.color+"99",borderColor:d.color,borderWidth:1,yAxisID:"y",order:2},
+      {type:"line",data:d.ppto,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,tension:0,yAxisID:"y",order:1},
+      {type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      interaction:{mode:"index",intersect:false},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" CLP "+c.raw.toFixed(1)+"M";}}}},
+      scales:{
+        y:{position:"left",grid:{color:"rgba(255,255,255,.05)"},ticks:{callback:function(v){return v+"M";},color:"#7c849e",font:{size:10}}},
+        y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},
+        x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}
+      }}
+  });
+}
+function clRank(){
+  var mx=54.1;
+  document.getElementById("cl-vc-rank").innerHTML=CLR.map(function(r){
+    var bw=Math.min(100,r.ytd/mx*100);
+    var pc2=r.ppto?Math.min(100,r.ppto/mx*100):0;
+    var badge=r.pct!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+sb(r.pct)+';color:'+sc(r.pct)+';">'+r.pct+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';
+    return'<div style="margin-bottom:8px;">'+
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">'+
+    '<span style="font-size:11px;color:#f0f2f8;font-weight:500;">'+r.name+'</span>'+
+    '<div style="display:flex;align-items:center;gap:6px;">'+
+    '<span style="font-size:10px;color:#7c849e;">CLP '+r.ytd+'M</span>'+badge+'</div></div>'+
+    '<div style="position:relative;height:6px;background:rgba(255,255,255,.06);border-radius:3px;">'+
+    '<div style="height:100%;width:'+bw+'%;background:'+r.color+';border-radius:3px;"></div>'+
+    (r.ppto?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pc2+'%;border-radius:1px;"></div>':"")+
+    '</div></div>';
+  }).join("");
+}
+function clUpdate(k){clCards(k);clBuildChart(k);}
+if(!window.Chart){var s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js";s.onload=function(){clUpdate("todos");clRank();};document.head.appendChild(s);}
+else{clUpdate("todos");clRank();}
+document.getElementById("cl-vend-sel").addEventListener("change",function(e){clUpdate(e.target.value);});
+})();
+</script>
 </div>
 <div class="footer">
   <div class="fnote">AV Chile · Ventas 22/03/2026 · CxC 22/03/2026 · Maestro Producción 2026 · TC 950 CLP/USD</div>
