@@ -2,760 +2,616 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Executive Board View — AV Latam 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#0D1F15;--surface:#132A1A;--surface2:#1A3522;--card:#16271D;
-  --border:#2A4535;--border2:#1E3528;--forest:#1E3A2F;--moss:#2D5A3D;
-  --leaf:#7AB648;--leaf2:#9FCC6B;
-  --white:#F0F4F1;--muted:#7A9E86;--faint:#4A7059;--ink:#E8F0EA;
-  --red:#F87171;--red2:#EF4444;--red-bg:rgba(239,68,68,0.12);--red-brd:rgba(239,68,68,0.25);
-  --amber:#FBB040;--amb-bg:rgba(251,176,64,0.12);--amb-brd:rgba(251,176,64,0.25);
-  --blue:#60A5FA;--blue2:#3B82F6;--blu-bg:rgba(96,165,250,0.12);--blu-brd:rgba(96,165,250,0.25);
-  --grn-bg:rgba(122,182,72,0.12);--grn-brd:rgba(122,182,72,0.25);
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);font-size:13px;-webkit-font-smoothing:antialiased;}
-
-/* HEADER */
-.header{background:var(--surface);padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:relative;}
-.back-btn{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:1px;text-transform:uppercase;padding:5px 10px;border-radius:4px;border:1px solid var(--border);transition:all .2s;}
-.back-btn:hover{color:var(--leaf2);border-color:var(--leaf3);}
-.header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--leaf),var(--leaf2),transparent);}
-.hlogo img{height:44px;width:auto;opacity:.92;filter:brightness(1.1);}
-.htitle{position:absolute;left:50%;transform:translateX(-50%);text-align:center;}
-.htitle h1{font-family:'Playfair Display',serif;font-size:20px;color:var(--white);letter-spacing:-.3px;}
-.htitle p{font-size:11px;color:var(--faint);margin-top:3px;}
-.hmeta{text-align:right;}
-.hmeta .cut{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:1.5px;}
-.hmeta .ctry{font-size:13px;color:var(--muted);margin-top:4px;font-weight:500;}
-
-/* ALERTS */
-.alerts{background:#090F0B;padding:0 48px;height:42px;display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--border2);overflow:hidden;}
-.atag{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--faint);white-space:nowrap;flex-shrink:0;}
-.asep{width:1px;height:18px;background:var(--border);flex-shrink:0;}
-.pill{display:flex;align-items:center;gap:6px;padding:3px 12px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap;flex-shrink:0;}
-.pr{background:var(--red-bg);color:var(--red);border:1px solid var(--red-brd);}
-.pa{background:var(--amb-bg);color:var(--amber);border:1px solid var(--amb-brd);}
-.dot{width:5px;height:5px;border-radius:50%;animation:blink 2s infinite;flex-shrink:0;}
-.dr{background:var(--red);} .da{background:var(--amber);}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
-
-/* LAYOUT */
-.main{padding:24px 48px 44px;}
-.grid{display:grid;gap:14px;margin-bottom:14px;}
-.g2{grid-template-columns:1fr 1fr;}
-.g3{grid-template-columns:5fr 3fr 3fr;}
-.g21{grid-template-columns:2fr 1fr;}
-.gcol{display:flex;flex-direction:column;gap:14px;}
-
-/* KPI */
-.kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;}
-.kpi{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px 14px;position:relative;overflow:hidden;transition:border-color .2s;}
-.kpi:hover{border-color:var(--leaf);box-shadow:0 0 20px rgba(122,182,72,.1);}
-.kacc{position:absolute;top:0;left:0;right:0;height:2px;}
-.klabel{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);margin-bottom:9px;}
-.kval{font-family:'Playfair Display',serif;font-size:26px;line-height:1;letter-spacing:-.5px;}
-.ksub{font-size:11px;color:var(--muted);margin-top:5px;}
-.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;margin-top:7px;}
-.bg{background:var(--grn-bg);color:var(--leaf2);border:1px solid var(--grn-brd);}
-.ba{background:var(--amb-bg);color:var(--amber);border:1px solid var(--amb-brd);}
-.br{background:var(--red-bg);color:var(--red);border:1px solid var(--red-brd);}
-
-/* CARD */
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;}
-.ctop{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;}
-.ceyebrow{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);font-weight:600;}
-.cq{font-family:'Playfair Display',serif;font-size:15px;color:var(--white);margin:4px 0 13px;line-height:1.3;}
-.tag{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;white-space:nowrap;}
-.td{background:rgba(74,112,89,0.2);color:var(--muted);border:1px solid var(--border);}
-.tr{background:var(--red-bg);color:var(--red);border:1px solid var(--red-brd);}
-.ta{background:var(--amb-bg);color:var(--amber);border:1px solid var(--amb-brd);}
-.tg{background:var(--grn-bg);color:var(--leaf2);border:1px solid var(--grn-brd);}
-.tb{background:var(--blu-bg);color:var(--blue);border:1px solid var(--blu-brd);}
-.cbox{flex:1;position:relative;}
-
-/* INSIGHT */
-.ins{margin-top:12px;padding:10px 13px;border-radius:8px;font-size:11.5px;line-height:1.65;}
-.id{background:rgba(122,182,72,0.07);border-left:2px solid var(--leaf);color:var(--muted);}
-.ir{background:var(--red-bg);border-left:2px solid var(--red2);color:rgba(248,113,113,0.85);}
-.ia{background:var(--amb-bg);border-left:2px solid var(--amber);color:rgba(251,176,64,0.85);}
-.ib{background:var(--blu-bg);border-left:2px solid var(--blue2);color:rgba(96,165,250,0.85);}
-.ins strong{color:var(--white);}
-
-/* BULLET */
-.blist{display:flex;flex-direction:column;gap:9px;margin-top:2px;}
-.brow{display:flex;align-items:center;gap:9px;}
-.bflag{font-size:12px;flex-shrink:0;}
-.bname{width:112px;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}
-.btrack{flex:1;height:8px;background:var(--border);border-radius:4px;position:relative;overflow:hidden;}
-.bfill{height:100%;border-radius:4px;}
-.btarget{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,0.2);border-radius:1px;}
-.bpct{width:42px;font-size:11.5px;font-weight:700;text-align:right;flex-shrink:0;}
-
-/* COUNTRY CARDS */
-.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:2px;}
-.ccard{padding:14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);}
-.cflag{font-size:22px;margin-bottom:7px;}
-.cname{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);}
-.cval{font-family:'Playfair Display',serif;font-size:21px;margin:4px 0 2px;}
-.cdet{font-size:11px;color:var(--muted);margin-bottom:9px;}
-.prow{display:flex;justify-content:space-between;font-size:10px;color:var(--faint);margin-bottom:3px;}
-.ptrack{height:6px;background:var(--border);border-radius:4px;overflow:hidden;}
-.pfill{height:100%;border-radius:4px;}
-
-/* TOP LIST */
-.tlist{display:flex;flex-direction:column;gap:3px;margin-top:2px;}
-.trow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border2);}
-.trow:last-child{border-bottom:none;}
-.trank{width:20px;height:20px;border-radius:50%;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.r1{background:var(--leaf);color:#0D1F15;} .r2{background:var(--moss);color:var(--white);}
-.r3{background:var(--forest);color:var(--white);} .rn{background:var(--border);color:var(--muted);}
-.tname{flex:1;font-size:12px;color:var(--muted);}
-.tbar{width:80px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;flex-shrink:0;}
-.tbfill{height:100%;border-radius:3px;}
-.tval{font-size:12px;font-weight:600;color:var(--white);min-width:50px;text-align:right;}
-.tpct{font-size:11px;min-width:36px;text-align:right;}
-
-/* AGING */
-.aging-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;margin-top:4px;}
-.donut-wrap{position:relative;display:flex;align-items:center;justify-content:center;min-height:190px;}
-.dcenter{position:absolute;text-align:center;pointer-events:none;}
-.dpct{font-family:'Playfair Display',serif;font-size:28px;line-height:1;}
-.dlbl{font-size:10px;color:var(--faint);margin-top:2px;}
-.arows{display:flex;flex-direction:column;justify-content:center;}
-.arow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border2);}
-.arow:last-child{border-bottom:none;}
-.adot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.albl{flex:1;font-size:11.5px;color:var(--muted);}
-.abar{width:60px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;flex-shrink:0;}
-.abfill{height:100%;border-radius:3px;}
-.ausd{font-size:12px;font-weight:600;color:var(--white);min-width:70px;text-align:right;}
-.apct{font-size:11px;color:var(--faint);min-width:34px;text-align:right;}
-
-/* FACTORING */
-.frow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border2);}
-.frow:last-child{border-bottom:none;}
-.fname{flex:1;font-size:12px;color:var(--muted);}
-.fbar{width:88px;height:7px;background:var(--border);border-radius:4px;overflow:hidden;}
-.fbfill{height:100%;border-radius:4px;background:var(--amber);}
-.fval{font-size:13px;font-weight:700;color:var(--white);min-width:62px;text-align:right;}
-.fpct{font-size:11px;color:var(--faint);min-width:30px;text-align:right;}
-
-/* PENDING */
-.pending{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--surface2);border-radius:10px;border:1px dashed var(--border);padding:20px;text-align:center;gap:6px;min-height:130px;}
-.picon{font-size:26px;opacity:.5;} .ptitle{font-size:12px;font-weight:600;color:var(--faint);}
-.pdesc{font-size:11px;color:var(--faint);max-width:170px;line-height:1.5;}
-.preq{margin-top:8px;padding:9px 12px;background:rgba(255,255,255,.03);border-radius:7px;font-size:11px;color:var(--faint);border:1px solid var(--border);text-align:left;width:100%;}
-
-/* STRATEGIC */
-.sgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:14px;}
-.sc{border-radius:12px;padding:18px;}
-.sr{background:var(--red-bg);border:1px solid var(--red-brd);}
-.sa{background:var(--amb-bg);border:1px solid var(--amb-brd);}
-.sg{background:var(--grn-bg);border:1px solid var(--grn-brd);}
-.stitle{font-size:12px;font-weight:700;margin-bottom:10px;}
-.sitem{display:flex;align-items:flex-start;gap:7px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:11.5px;line-height:1.4;color:var(--muted);}
-.sitem:last-child{border-bottom:none;}
-.sitem strong{color:var(--white);}
-.sdot{width:5px;height:5px;border-radius:50%;margin-top:5px;flex-shrink:0;}
-
-.slabel{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--faint);font-weight:600;margin-bottom:11px;}
-
-/* FOOTER */
-.footer{margin:0 48px;padding:14px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
-.fnote{font-size:10.5px;color:var(--faint);}
-.fbrand img{height:24px;width:auto;opacity:.5;filter:brightness(2);}
-
-/* ── RESPONSIVE ─────────────────────────────────────────────── */
-@media(max-width:960px){
-  .grid.g21{grid-template-columns:1fr;}
-  .grid.g2{grid-template-columns:1fr;}
-  .grid.g3{grid-template-columns:1fr 1fr;}
-  .kpi-strip{grid-template-columns:repeat(3,1fr);}
-  .cgrid{grid-template-columns:1fr 1fr;}
-}
-@media(max-width:640px){
-  .header{padding:14px 16px;flex-wrap:wrap;gap:10px;height:auto;}
-  .htitle h1{font-size:15px;}
-  .htitle p{font-size:10px;}
-  .hmeta{flex-direction:column;align-items:flex-end;gap:4px;}
-  .cut,.ctry{font-size:9px;}
-  .alerts{padding:8px 14px;gap:6px;flex-wrap:wrap;}
-  .pill{font-size:9px;padding:3px 8px;}
-  .main{padding:12px 14px 40px;}
-  .kpi-strip{grid-template-columns:1fr 1fr;gap:8px;}
-  .kpi{padding:12px 12px;}
-  .kval{font-size:20px;}
-  .ksub{font-size:9px;}
-  .badge{font-size:8px;}
-  .grid.g21,.grid.g2,.grid.g3{grid-template-columns:1fr;gap:12px;}
-  .card{padding:14px;}
-  .cq{font-size:12px;}
-  .cgrid{grid-template-columns:1fr;}
-  .ccard{padding:12px;}
-  .cval{font-size:18px;}
-  .brow{grid-template-columns:22px 110px 1fr 44px;gap:5px;}
-  .bname{font-size:10px;}
-  /* Panel lateral ocultar en móvil o simplificar */
-  .grid.g3 .card:last-child{display:none;}
-  .grid.g3{grid-template-columns:1fr 1fr;}
-  .ins{font-size:10px;}
-  .footer{margin:0 14px;flex-direction:column;gap:4px;align-items:flex-start;}
-  .fnote{font-size:9px;}
-}
-@media(max-width:420px){
-  .kpi-strip{grid-template-columns:1fr 1fr;}
-  .kval{font-size:17px;}
-  .grid.g3{grid-template-columns:1fr;}
-  .alerts{display:none;}
-  .htitle h1{font-size:13px;}
-}
-</style>
-
-
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Executive Board View · AV Latam · 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0D1F15;--surface:#132A1A;--surface2:#1A3522;--card:#16271D;
+  --leaf:#7AB648;--leaf2:#9FCC6B;--leaf3:#4A8C2A;--leaf4:#2D5A1B;
+  --amber:#FBB040;--red:#F87171;--blue:#60A5FA;--blue2:#3B82F6;
+  --muted:#7A9E86;--border:#2A4535;--white:#F0F4F1;
+  --text:#C8E6C9;--text2:#A5C8A8;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;font-size:13px;}
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--leaf),var(--leaf2),transparent);}
+.hbrand{display:flex;align-items:center;gap:12px;}
+.hlogo img{height:36px;filter:brightness(1.2);}
+.htitle{font-size:15px;font-weight:600;letter-spacing:-.3px;}
+.hsub{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+.hnav{display:flex;align-items:center;gap:8px;}
+.hlink{font-size:10px;color:var(--muted);text-decoration:none;padding:5px 12px;border-radius:5px;border:1px solid var(--border);letter-spacing:.5px;transition:all .2s;white-space:nowrap;}
+.hlink:hover{color:var(--leaf);border-color:var(--leaf);}
+.cut{font-family:'Courier New',monospace;font-size:10px;padding:4px 10px;border-radius:4px;background:rgba(74,140,42,.15);border:1px solid rgba(74,140,42,.3);color:var(--leaf2);}
+
+.wrap{padding:28px 48px 56px;}
+.slabel{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);font-weight:600;margin:24px 0 12px;display:flex;align-items:center;gap:10px;}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ── KPIs ── */
+.kgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:4px;}
+.kcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;}
+.kcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--leaf),transparent);}
+.klbl{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px;font-weight:600;}
+.kval{font-size:24px;font-weight:700;letter-spacing:-1px;line-height:1;}
+.ksub{font-size:10px;color:var(--muted);margin-top:6px;}
+.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:12px;font-size:10px;font-weight:600;margin-top:8px;}
+.bg{background:rgba(74,222,128,.12);color:#4ade80;}
+.ba{background:rgba(251,176,64,.12);color:var(--amber);}
+.br{background:rgba(248,113,113,.12);color:var(--red);}
+.bb{background:rgba(96,165,250,.12);color:var(--blue);}
+
+/* ── GRID ── */
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:14px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;}
+.ctop{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
+.ceyebrow{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:3px;font-weight:600;}
+.cq{font-size:14px;font-weight:600;letter-spacing:-.2px;}
+.tag{font-size:9px;padding:3px 8px;border-radius:4px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+.ta{background:rgba(251,176,64,.12);color:var(--amber);}
+.tg{background:rgba(74,222,128,.12);color:#4ade80;}
+.tr{background:rgba(248,113,113,.12);color:var(--red);}
+.td{background:rgba(96,165,250,.12);color:var(--blue);}
+.cbox{flex:1;position:relative;}
+
+/* ── SEMÁFORO ── */
+.srow{display:flex;align-items:center;padding:9px 12px;border-radius:8px;background:rgba(255,255,255,.02);border:1px solid var(--border);margin-bottom:7px;gap:10px;}
+.srow:last-child{margin-bottom:0;}
+.flag{font-size:13px;flex-shrink:0;}
+.sinfo{flex:1;}
+.sname{font-size:12px;font-weight:500;}
+.sdet{font-size:10px;color:var(--muted);margin-top:1px;}
+.sright{display:flex;align-items:center;gap:8px;}
+.spct{font-size:13px;font-weight:600;min-width:42px;text-align:right;}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dg{background:#4ade80;box-shadow:0 0 5px #4ade80;}
+.da{background:var(--amber);box-shadow:0 0 5px var(--amber);}
+.dr{background:var(--red);box-shadow:0 0 5px var(--red);}
+.dn{background:var(--muted);}
+
+/* ── PAÍS CARDS ── */
+.pcard{background:rgba(255,255,255,.025);border-radius:10px;padding:16px 18px;border:1px solid var(--border);}
+.pcard.gr{border-color:rgba(74,140,42,.4);}
+.pcard.am{border-color:rgba(251,176,64,.35);}
+.pname{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.cval{font-size:26px;font-weight:700;letter-spacing:-1px;}
+.cdet{font-size:10px;color:var(--muted);margin-top:3px;}
+.prow{display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-top:8px;}
+.ptrack{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:4px;overflow:hidden;}
+.pfill{height:100%;border-radius:2px;}
+
+/* ── INSIGHTS ── */
+.ins{padding:10px 14px;border-radius:8px;border-left:3px solid;font-size:12px;line-height:1.6;margin-bottom:8px;color:var(--text2);}
+.ins:last-child{margin-bottom:0;}
+.ig{background:rgba(74,140,42,.08);border-color:var(--leaf);}
+.ia{background:rgba(251,176,64,.07);border-color:var(--amber);}
+.ir{background:rgba(248,113,113,.07);border-color:var(--red);}
+.id{background:rgba(96,165,250,.07);border-color:var(--blue);}
+.ins strong{font-weight:600;color:var(--white);}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;margin-top:10px;}
+.tbl th{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:0 10px 8px;text-align:right;border-bottom:1px solid var(--border);font-weight:600;}
+.tbl th:first-child{text-align:left;}
+.tbl td{padding:8px 10px;font-size:11px;color:var(--text2);border-bottom:1px solid rgba(42,69,53,.5);text-align:right;}
+.tbl td:first-child{text-align:left;font-weight:500;color:var(--white);}
+.tbl tr:last-child td{border-bottom:none;}
+.cv{color:#4ade80;font-weight:600;}
+.ca{color:var(--amber);font-weight:600;}
+.cr{color:var(--red);font-weight:600;}
+
+/* ── FOOTER ── */
+.footer{margin:0 48px;padding:14px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.fnote{font-size:10px;color:var(--muted);}
+.fbrand img{height:22px;opacity:.5;}
+
+@media(max-width:1100px){.kgrid{grid-template-columns:repeat(3,1fr);}.g21,.g2,.g3{grid-template-columns:1fr;}}
+@media(max-width:768px){.hdr,.wrap,.footer{padding-left:14px;padding-right:14px;}.kgrid{grid-template-columns:repeat(2,1fr);}.hnav{display:none;}}
+</style>
 </head>
 <body>
 
-<div class="header">
-  <div style="display:flex;align-items:center;gap:14px;">
-    <a class="back-btn" href="index.html">← Inicio</a>
-    <div class="hlogo"><img src="data:image/png;base64,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" alt="AV Grupo Latam"></div>
+<div class="hdr">
+  <div class="hbrand">
+    <div class="hlogo"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 36'%3E%3Crect width='80' height='36' rx='6' fill='%232D5A1B'/%3E%3Ctext x='40' y='25' text-anchor='middle' font-family='Inter' font-weight='700' font-size='18' fill='%239FCC6B'%3EAV%3C/text%3E%3C/svg%3E" alt="AV"></div>
+    <div><div class="htitle">Executive Board View · Grupo Latam</div><div class="hsub">Dirección General · Q1 2026</div></div>
   </div>
-  <div class="htitle">
-    <h1>Executive Board View</h1>
-    <p>Desempeño Comercial 2026 · Visión Estratégica para Directorio</p>
-  </div>
-  <div class="hmeta">
-    <div class="cut">Corte al 22 Marzo 2026</div>
-    <div class="ctry">🇨🇱 Chile &nbsp;·&nbsp; 🇵🇪 Perú &nbsp;·&nbsp; Ene–Mar 2026</div>
+  <div class="hnav">
+    <a href="index.html" class="hlink">← Inicio</a>
+    <a href="Dashboard_Comercial_AV_Latam_2026.html" class="hlink">Dashboard</a>
+    <a href="Panel_Jefes_Index.html" class="hlink">Panel Jefes</a>
+    <div class="cut">Corte: Chile 28/03 · Perú 27/03/2026</div>
   </div>
 </div>
 
-<div class="alerts">
-  <span class="atag">⚡ Alertas</span><div class="asep"></div>
-  <div class="pill pr"><div class="dot dr"></div>Chile: 55.8% cartera vencida — CLP 24,7M en riesgo activo</div>
-  <div class="pill pr"><div class="dot dr"></div>Perú: 48% cartera vencida — USD 58.396 · USD 41.511 con +180d</div>
-  <div class="pill pr"><div class="dot dr"></div>Perú YTD: 81.0% vs ppto — brecha USD 40,6K</div>
-  <div class="pill pa"><div class="dot da"></div>Chile YTD: 100.7% ✅ — superó presupuesto</div>
+<div class="wrap">
+
+<!-- ── KPIs TOP ── -->
+<div class="slabel">KPIs Ejecutivos · Grupo Latam Ene–Mar 2026</div>
+<div class="kgrid">
+  <div class="kcard">
+    <div class="klbl">Ventas Grupo YTD</div>
+    <div class="kval" style="color:var(--leaf2);">USD 373.2K</div>
+    <div class="ksub">CLP 173,2M + USD 190,9K</div>
+    <div class="badge ba">89.5% ppto YTD</div>
+  </div>
+  <div class="kcard">
+    <div class="klbl">Chile YTD</div>
+    <div class="kval" style="color:var(--leaf);">CLP 173M</div>
+    <div class="ksub">Ppto CLP 167,2M · ✅ 103.6%</div>
+    <div class="badge bg">✅ 103.6% cumplimiento</div>
+  </div>
+  <div class="kcard">
+    <div class="klbl">Perú YTD</div>
+    <div class="kval" style="color:var(--amber);">USD 190,9K</div>
+    <div class="ksub">Ppto USD 213,4K · 89.5%</div>
+    <div class="badge ba">89.5% cumplimiento</div>
+  </div>
+  <div class="kcard">
+    <div class="klbl">Cartera Vencida Chile</div>
+    <div class="kval" style="color:var(--red);">CLP 24,7M</div>
+    <div class="ksub">66% vencida · Corte 22/03</div>
+    <div class="badge br">Gestión urgente</div>
+  </div>
+  <div class="kcard">
+    <div class="klbl">Cartera Vencida Perú</div>
+    <div class="kval" style="color:var(--amber);">USD 13,3K</div>
+    <div class="ksub">4.2% del total · PAODISA crítico</div>
+    <div class="badge ba">Monitoreo activo</div>
+  </div>
 </div>
 
-<div class="main">
-
-  <!-- KPIs -->
-  <div class="kpi-strip">
-    <div class="kpi">
-      <div class="kacc" style="background:linear-gradient(90deg,var(--leaf),var(--leaf2))"></div>
-      <div class="klabel">Ventas Latam YTD</div>
-      <div class="kval" style="color:var(--leaf2)"> USD 350K</div>
-      <div class="ksub">CLP 168,3M + USD 172,8K</div>
-      <div class="badge ba">81.0% ppto YTD</div>
+<!-- ── ROW 1: Tendencia + País ── -->
+<div class="slabel">Análisis de Desempeño</div>
+<div class="g21" style="margin-bottom:14px;">
+  <div class="card">
+    <div class="ctop">
+      <div><div class="ceyebrow">Tendencia Mensual</div><div class="cq">¿Estamos creciendo según plan?</div></div>
+      <span class="tag ta">Ene–Mar · Real vs Ppto</span>
     </div>
-    <div class="kpi">
-      <div class="kacc" style="background:var(--leaf)"></div>
-      <div class="klabel">Chile YTD</div>
-      <div class="kval" style="color:var(--leaf)"> CLP 168M</div>
-      <div class="ksub">Ppto CLP 167,2M · ✅ 100.7%</div>
-      <div class="badge ba">✅ 100.7% cumplimiento</div>
-    </div>
-    <div class="kpi">
-      <div class="kacc" style="background:var(--red2)"></div>
-      <div class="klabel">Perú YTD</div>
-      <div class="kval" style="color:var(--amber)">USD 172,8K</div>
-      <div class="ksub">Ppto USD 213,4K · 81.0%</div>
-      <div class="badge br">81.0% cumplimiento</div>
-    </div>
-    <div class="kpi">
-      <div class="kacc" style="background:var(--red2)"></div>
-      <div class="klabel">Cartera Vencida Chile</div>
-      <div class="kval" style="color:var(--red)">CLP 24,7M</div>
-      <div class="ksub">66% vencida · Corte 22/03</div>
-      <div class="badge br">Gestión urgente</div>
-    </div>
-    <div class="kpi">
-      <div class="kacc" style="background:var(--red2)"></div>
-      <div class="klabel">Cartera Vencida Perú</div>
-      <div class="kval" style="color:var(--red)">USD 58K</div>
-      <div class="ksub">48% del total · 34% con +180d</div>
-      <div class="badge br">Decisión requerida</div>
-    </div>
+    <div class="cbox" style="min-height:240px;margin-top:12px;"><canvas id="cTendencia"></canvas></div>
+    <div class="ins ia" style="margin-top:12px;">Chile ✅ cerró T1 en <strong>103.6% del ppto (CLP 173,2M)</strong>, liderado por Caroca con 162.3% YTD y Marzo al 220%. Perú <strong>USD 78,0K en Marzo — nuevo récord</strong> — nuevo récord del año. L. Aguirre generó USD 29,4K sin presupuesto. <strong>Q2: consolidar Chile, formalizar Aguirre, recuperar RTCs Perú.</strong></div>
   </div>
-
-  <!-- ROW 1: Tendencia + País -->
-  <div class="grid g21">
-    <div class="card">
-      <div class="ctop">
-        <div><div class="ceyebrow">Tendencia Mensual</div><div class="cq">¿Estamos creciendo según plan?</div></div>
-        <span class="tag ta">Ene–Mar · Real vs Ppto</span>
-      </div>
-      <div style="position:relative;height:240px;width:100%;"><canvas id="cTendencia"></canvas></div>
-      <div class="ins ia">Chile ✅ cerró T1 en <strong>100.7% del ppto (CLP 168,3M)</strong>, liderado por Caroca con 162.3% YTD y Marzo al 220% del ppto. Perú Marzo <strong>USD 59,8K — mejor mes del año</strong>, L. Aguirre generó USD 29,4K sin presupuesto asignado. <strong>Q2: consolidar Chile, asignar ppto Aguirre, recuperar Infante en Perú.</strong></div>
+  <div class="card">
+    <div class="ctop">
+      <div><div class="ceyebrow">Performance por País</div><div class="cq">¿Qué país performa mejor?</div></div>
+      <span class="tag td">TC 950 CLP/USD</span>
     </div>
-    <div class="card">
-      <div class="ctop">
-        <div><div class="ceyebrow">Performance por País</div><div class="cq">¿Qué país performa mejor?</div></div>
-        <span class="tag td">TC 950 CLP/USD</span>
+    <div style="margin-top:14px;">
+      <div class="pcard gr" style="margin-bottom:10px;">
+        <div class="pname">🇨🇱 Chile</div>
+        <div class="cval" style="color:var(--leaf);">USD 177K</div>
+        <div class="cdet">CLP 173,2M equiv.</div>
+        <div class="prow"><span>YTD</span><span style="font-weight:700;color:var(--leaf)">103.6%</span></div>
+        <div class="ptrack"><div class="pfill" style="width:100%;background:var(--leaf);"></div></div>
+        <div class="prow" style="margin-top:6px;"><span>Vs año completo</span><span>15.1%</span></div>
+        <div class="ptrack"><div class="pfill" style="width:15%;background:var(--leaf3);"></div></div>
       </div>
-      <div class="cgrid">
-        <div class="ccard" style="border-top:2px solid var(--leaf)">
-          <div class="cflag">🇨🇱</div><div class="cname">Chile</div>
-          <div class="cval" style="color:var(--leaf)">USD 141K</div>
-          <div class="cdet">CLP 168,3M equiv.</div>
-          <div class="prow"><span>YTD</span><span style="font-weight:700;color:var(--leaf)">100.7%</span></div>
-          <div class="ptrack"><div class="pfill" style="width:100%;background:var(--leaf)"></div></div>
-          <div class="prow" style="margin-top:8px"><span>Vs año completo</span><span>15.1%</span></div>
-          <div class="ptrack"><div class="pfill" style="width:15.1%;background:var(--leaf2);opacity:.6"></div></div>
-        </div>
-        <div class="ccard" style="border-top:2px solid var(--red2)">
-          <div class="cflag">🇵🇪</div><div class="cname">Perú</div>
-          <div class="cval" style="color:var(--red)">USD 172,8K</div>
-          <div class="cdet">Facturación directa</div>
-          <div class="prow"><span>YTD</span><span style="font-weight:700;color:var(--amber)">81.0%</span></div>
-          <div class="ptrack"><div class="pfill" style="width:81%;background:var(--amber)"></div></div>
-          <div class="prow" style="margin-top:8px"><span>Vs año completo</span><span>12.7%</span></div>
-          <div class="ptrack"><div class="pfill" style="width:12.7%;background:var(--red);opacity:.5"></div></div>
-        </div>
+      <div class="pcard am">
+        <div class="pname">🇵🇪 Perú</div>
+        <div class="cval" style="color:var(--amber);">USD 190,9K</div>
+        <div class="cdet">Facturación directa</div>
+        <div class="prow"><span>YTD</span><span style="font-weight:700;color:var(--amber)">89.5%</span></div>
+        <div class="ptrack"><div class="pfill" style="width:89.5%;background:var(--amber);"></div></div>
+        <div class="prow" style="margin-top:6px;"><span>Vs año completo</span><span>13.2%</span></div>
+        <div class="ptrack"><div class="pfill" style="width:13%;background:#c4701a;"></div></div>
       </div>
-      <div class="ins ib" style="margin-top:12px">Perú lidera en USD absoluto pero con mayor brecha. Ticket promedio Perú: <strong>USD 3.218/factura</strong>. Mayor potencial de recuperación Q2 activando RTCs rezagados.</div>
     </div>
+    <div class="ins id" style="margin-top:10px;">Perú <strong>lidera en USD absoluto</strong> y tiene el mejor margen del grupo (89.5%). Ticket promedio Perú: <strong>USD 3.400/factura</strong>. Mayor potencial de recuperación Q2 activando RTCs rezagados.</div>
   </div>
-
-  <!-- ROW 2: Cumplimiento RTC -->
-  <div class="grid g2">
-    <div class="card">
-      <div class="ctop">
-        <div><div class="ceyebrow">Cumplimiento YTD · Chile</div><div class="cq">¿Dónde está el riesgo en Chile?</div></div>
-        <span class="tag tg">5 RTCs activos</span>
-      </div>
-      <div class="blist" id="bChile"></div>
-      <div class="ins id"><strong>J. Caroca 162.3% YTD</strong> — CLP 31,9M solo en Marzo (220% ppto). P. Laratro 92.9%, R. Encina 87.5%, F. Velásquez 84.8% con brecha. <strong>I. Veverka 45.2%</strong> requiere plan de recuperación Q2.</div>
-    </div>
-    <div class="card">
-      <div class="ctop">
-        <div><div class="ceyebrow">Cumplimiento YTD · Perú</div><div class="cq">¿Dónde está el riesgo en Perú?</div></div>
-        <span class="tag tr">3 RTCs críticos</span>
-      </div>
-      <div class="blist" id="bPeru"></div>
-      <div class="ins ir"><strong>O. Infante 13.4%</strong> y <strong>P. Valladares 0% en Marzo</strong> requieren intervención directa. Solo L. Aguirre con tendencia positiva.</div>
-    </div>
-  </div>
-
-  <!-- ROW 3: Productos + Concentración -->
-  <div class="grid g3">
-    <div class="card">
-      <div class="ctop">
-        <div><div class="ceyebrow">Mix de Productos · Latam</div><div class="cq">¿Qué producto es crítico?</div></div>
-        <span class="tag td">Top 8 · 🇨🇱 + 🇵🇪</span>
-      </div>
-      <div class="cbox" style="min-height:230px"><canvas id="cProductos"></canvas></div>
-      <div class="ins id"><strong>AV SILFORTE</strong> estrella regional: líder Perú (USD 56.302) y top 3 Chile. <strong>REGALIA MAXX</strong> exclusivo Perú — oportunidad entrada Chile.</div>
-    </div>
-    <div class="card">
-      <div class="ctop">
-        <div><div class="ceyebrow">Concentración · Chile</div><div class="cq">¿Hay riesgo de concentración?</div></div>
-        <span class="tag ta">Top 5 RTCs ventas</span>
-      </div>
-      <div class="tlist">
-        <div class="trow"><div class="trank r1">1</div><div class="tname">F. Velasquez</div><div class="tbar"><div class="tbfill" style="width:100%;background:var(--leaf)"></div></div><div class="tval">51,2M</div><div class="tpct" style="color:var(--red);font-weight:700">39%</div></div>
-        <div class="trow"><div class="trank r2">2</div><div class="tname">P. Laratro</div><div class="tbar"><div class="tbfill" style="width:40%;background:var(--moss)"></div></div><div class="tval">20,2M</div><div class="tpct" style="color:var(--muted)">15.5%</div></div>
-        <div class="trow"><div class="trank r3">3</div><div class="tname">J. Caroca</div><div class="tbar"><div class="tbfill" style="width:25%;background:var(--forest)"></div></div><div class="tval">12,7M</div><div class="tpct" style="color:var(--muted)">9.8%</div></div>
-        <div class="trow"><div class="trank rn">4</div><div class="tname">R. Encina</div><div class="tbar"><div class="tbfill" style="width:22%;background:var(--border)"></div></div><div class="tval">11,1M</div><div class="tpct" style="color:var(--muted)">8.5%</div></div>
-        <div class="trow"><div class="trank rn">5</div><div class="tname">I. Veverka</div><div class="tbar"><div class="tbfill" style="width:7%;background:var(--border)"></div></div><div class="tval">3,6M</div><div class="tpct" style="color:var(--muted)">2.7%</div></div>
-      </div>
-      <div class="ins ia"><strong>1 RTC = 39%</strong> de ventas Chile. Top 3 = 64%. Riesgo de concentración moderado-alto.</div>
-    </div>
-    <div class="card">
-      <div class="ctop">
-        <div><div class="ceyebrow">Concentración · Perú</div><div class="cq">¿Hay riesgo de concentración?</div></div>
-        <span class="tag tr">Top 5 clientes</span>
-      </div>
-      <div class="tlist">
-        <div class="trow"><div class="trank r1">1</div><div class="tname">AMFRESH PERU</div><div class="tbar"><div class="tbfill" style="width:100%;background:var(--blue2)"></div></div><div class="tval">23.1K</div><div class="tpct" style="color:var(--red);font-weight:700">19%</div></div>
-        <div class="trow"><div class="trank r2">2</div><div class="tname">CORP. ESAN</div><div class="tbar"><div class="tbfill" style="width:72%;background:#2563EB"></div></div><div class="tval">16.6K</div><div class="tpct" style="color:var(--muted)">13.7%</div></div>
-        <div class="trow"><div class="trank" style="background:var(--red2);color:#fff">3</div><div class="tname">PAODISA ⚠️</div><div class="tbar"><div class="tbfill" style="width:47%;background:var(--red2)"></div></div><div class="tval">10.9K</div><div class="tpct" style="color:var(--red)">8.9%</div></div>
-        <div class="trow"><div class="trank rn">4</div><div class="tname">BOMAREA</div><div class="tbar"><div class="tbfill" style="width:43%;background:#1D4ED8"></div></div><div class="tval">10.0K</div><div class="tpct" style="color:var(--muted)">8.2%</div></div>
-        <div class="trow"><div class="trank rn">5</div><div class="tname">AGROFER MJ</div><div class="tbar"><div class="tbfill" style="width:41%;background:#1E3A8A"></div></div><div class="tval">9.5K</div><div class="tpct" style="color:var(--muted)">7.8%</div></div>
-      </div>
-      <div class="ins ir"><strong>PAODISA vencida +509 días</strong>. Top 2 = 32.7% cartera. Concentración alta con riesgo activo.</div>
-    </div>
-  </div>
-
-  <!-- ROW 4: AGING LATAM — Chile + Perú lado a lado -->
-  <div class="grid g2">
-
-    <!-- AGING CHILE ✅ NUEVO -->
-    <div class="card">
-      <div class="ctop">
-        <div><div class="ceyebrow">Cartera por Cobrar · Chile</div><div class="cq">¿Cuál es el riesgo financiero en Chile?</div></div>
-        <span class="tag tr">55.8% VENCIDO · CLP</span>
-      </div>
-      <div class="aging-wrap">
-        <div class="donut-wrap">
-          <canvas id="cAgingChile"></canvas>
-          <div class="dcenter"><div class="dpct" style="color:var(--red)">55.8%</div><div class="dlbl">Vencido</div></div>
-        </div>
-        <div class="arows">
-          <div class="arow"><div class="adot" style="background:#7AB648"></div><div class="albl">Por vencer</div><div class="abar"><div class="abfill" style="width:100%;background:#7AB648"></div></div><div class="ausd">CLP 44,9M</div><div class="apct">44.2%</div></div>
-          <div class="arow"><div class="adot" style="background:#FCD34D"></div><div class="albl">1–30 días</div><div class="abar"><div class="abfill" style="width:60%;background:#FCD34D"></div></div><div class="ausd">CLP 27,0M</div><div class="apct">26.6%</div></div>
-          <div class="arow"><div class="adot" style="background:#F97316"></div><div class="albl">31–60 días</div><div class="abar"><div class="abfill" style="width:48%;background:#F97316"></div></div><div class="ausd">CLP 21,5M</div><div class="apct">21.1%</div></div>
-          <div class="arow" style="background:rgba(239,68,68,0.08);border-radius:6px;padding:6px 5px;margin:2px 0;">
-            <div class="adot" style="background:#B91C1C"></div>
-            <div class="albl" style="font-weight:700;color:var(--red)">61–90 días ⚠️</div>
-            <div class="abar"><div class="abfill" style="width:18%;background:#B91C1C"></div></div>
-            <div class="ausd" style="color:var(--red);font-weight:700">CLP 8,2M</div><div class="apct" style="color:var(--red)">8.0%</div>
-          </div>
-          <div class="arow" style="background:rgba(255,255,255,0.03);border-radius:6px;padding:6px 5px;">
-            <div class="adot" style="background:var(--muted)"></div>
-            <div class="albl" style="font-weight:700;color:var(--white)">TOTAL</div>
-            <div class="abar"></div>
-            <div class="ausd" style="font-weight:700">CLP 101,6M</div><div class="apct" style="font-weight:700">100%</div>
-          </div>
-        </div>
-      </div>
-      <div class="ins ia">Mayor exposición: <strong>LOMA LARGA CLP 22,5M</strong> y <strong>P. LARATRO concentra 43%</strong> de la cartera Chile. Máximo vencimiento: 85 días. <strong>Sin facturas +180d</strong> — perfil de riesgo mejor que Perú.</div>
-    </div>
-
-    <!-- AGING PERÚ -->
-    <div class="card">
-      <div class="ctop">
-        <div><div class="ceyebrow">Cartera por Cobrar · Perú</div><div class="cq">¿Cuál es el riesgo financiero en Perú?</div></div>
-        <span class="tag tr">48% VENCIDO · USD</span>
-      </div>
-      <div class="aging-wrap">
-        <div class="donut-wrap">
-          <canvas id="cAgingPeru"></canvas>
-          <div class="dcenter"><div class="dpct" style="color:var(--red)">48%</div><div class="dlbl">Vencido</div></div>
-        </div>
-        <div class="arows">
-          <div class="arow"><div class="adot" style="background:#7AB648"></div><div class="albl">Por vencer</div><div class="abar"><div class="abfill" style="width:100%;background:#7AB648"></div></div><div class="ausd">USD 63.191</div><div class="apct">52.0%</div></div>
-          <div class="arow"><div class="adot" style="background:#FCD34D"></div><div class="albl">1–30 días</div><div class="abar"><div class="abfill" style="width:7%;background:#FCD34D"></div></div><div class="ausd">USD 4.133</div><div class="apct">3.4%</div></div>
-          <div class="arow"><div class="adot" style="background:#F97316"></div><div class="albl">31–60 días</div><div class="abar"><div class="abfill" style="width:3%;background:#F97316"></div></div><div class="ausd">USD 1.650</div><div class="apct">1.4%</div></div>
-          <div class="arow"><div class="adot" style="background:#EF4444"></div><div class="albl">61–90 días</div><div class="abar"><div class="abfill" style="width:2%;background:#EF4444"></div></div><div class="ausd">USD 1.290</div><div class="apct">1.1%</div></div>
-          <div class="arow"><div class="adot" style="background:#B91C1C"></div><div class="albl">91–180 días</div><div class="abar"><div class="abfill" style="width:16%;background:#B91C1C"></div></div><div class="ausd">USD 9.812</div><div class="apct">8.1%</div></div>
-          <div class="arow" style="background:rgba(239,68,68,0.08);border-radius:6px;padding:6px 5px;margin:2px 0;">
-            <div class="adot" style="background:#7F1D1D"></div>
-            <div class="albl" style="font-weight:700;color:var(--red)">+180 días ⚠️</div>
-            <div class="abar"><div class="abfill" style="width:66%;background:#7F1D1D"></div></div>
-            <div class="ausd" style="color:var(--red);font-weight:700">USD 41.511</div><div class="apct" style="color:var(--red);font-weight:700">34.1%</div>
-          </div>
-          <div class="arow" style="background:rgba(255,255,255,0.03);border-radius:6px;padding:6px 5px;">
-            <div class="adot" style="background:var(--muted)"></div>
-            <div class="albl" style="font-weight:700;color:var(--white)">TOTAL</div>
-            <div class="abar"></div>
-            <div class="ausd" style="font-weight:700">USD 121.587</div><div class="apct" style="font-weight:700">100%</div>
-          </div>
-        </div>
-      </div>
-      <div class="ins ir"><strong>USD 41.511 con +180 días</strong> — alto riesgo incobrabilidad. PAODISA (Jul 2024, 509 días). <strong>Requiere decisión de directorio</strong> sobre provisión o acción legal.</div>
-    </div>
-  </div>
-
-  <!-- ROW 5: Cartera por vendedor Chile + Factoring Perú + Margen -->
-  <div class="grid g21">
-    <div class="card">
-      <div class="ctop">
-        <div><div class="ceyebrow">Cartera por Vendedor · Chile</div><div class="cq">¿Quién concentra el riesgo de cobro?</div></div>
-        <span class="tag ta">AV + AGLM · CLP</span>
-      </div>
-      <div class="tlist">
-        <div class="trow"><div class="trank r1">1</div><div class="tname">P. Laratro</div><div class="tbar"><div class="tbfill" style="width:100%;background:var(--amber)"></div></div><div class="tval">44,2M</div><div class="tpct" style="color:var(--red);font-weight:700">43.4%</div></div>
-        <div class="trow"><div class="trank r2">2</div><div class="tname">F. Riffo</div><div class="tbar"><div class="tbfill" style="width:45%;background:#F97316"></div></div><div class="tval">20,0M</div><div class="tpct" style="color:var(--muted)">19.7%</div></div>
-        <div class="trow"><div class="trank r3">3</div><div class="tname">J. Caroca</div><div class="tbar"><div class="tbfill" style="width:30%;background:var(--moss)"></div></div><div class="tval">13,4M</div><div class="tpct" style="color:var(--muted)">13.2%</div></div>
-        <div class="trow"><div class="trank rn">4</div><div class="tname">J.P. Neira</div><div class="tbar"><div class="tbfill" style="width:16%;background:var(--border)"></div></div><div class="tval">7,3M</div><div class="tpct" style="color:var(--muted)">7.2%</div></div>
-        <div class="trow"><div class="trank rn">5</div><div class="tname">R. Encina</div><div class="tbar"><div class="tbfill" style="width:9%;background:var(--border)"></div></div><div class="tval">4,0M</div><div class="tpct" style="color:var(--muted)">3.9%</div></div>
-      </div>
-      <div class="ins ia"><strong>P. Laratro concentra 43%</strong> de la cartera Chile — CLP 44,2M. F. Riffo incluye AGRÍCOLA DEL NORTE (CLP 10,5M, vencida 10 días). Gestión de cobro prioritaria en estos 2 vendedores.</div>
-    </div>
-
-    <div class="gcol">
-      <div class="card" style="flex:1">
-        <div class="ctop">
-          <div><div class="ceyebrow">Factoring · Perú</div><div class="cq">¿Qué está cedido a SUPRA?</div></div>
-          <span class="tag ta">USD 196.841</span>
-        </div>
-        <div style="margin-top:4px">
-          <div class="frow"><div class="fname"><strong style="color:var(--white)">RVR AGRO S.R.L.</strong></div><div class="fbar"><div class="fbfill" style="width:100%"></div></div><div class="fval">USD 185.1K</div><div class="fpct">94%</div></div>
-          <div class="frow"><div class="fname">SOC. AGRÍC. DROKASA</div><div class="fbar"><div class="fbfill" style="width:6%"></div></div><div class="fval">USD 11.8K</div><div class="fpct">6%</div></div>
-        </div>
-        <div class="ins ia"><strong>RVR AGRO = 94%</strong> del factoring. Monitorear cumplimiento pago a SUPRA para evitar contingencias de flujo.</div>
-      </div>
-
-      <div class="card" style="flex:1">
-        <div class="ctop">
-          <div><div class="ceyebrow">Margen Consolidado</div><div class="cq">¿Crecemos rentable?</div></div>
-          <span class="tag tg">Activo</span>
-        </div>
-        <div class="ins" style="background:rgba(122,182,72,.07);border-left:3px solid var(--leaf2);margin-bottom:10px;padding:8px 12px">
-          <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);margin-bottom:4px">Margen Bruto Grupo YTD · Base+40% Fábrica</div>
-          <div style="font-family:'Playfair Display',serif;font-size:26px;color:var(--leaf2);letter-spacing:-.5px">82.5%</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">USD 241.5K margen / USD 292.7K ventas</div>
-        </div>
-        <div class="cgrid" style="grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-          <div style="background:var(--surface);border-radius:8px;padding:10px 12px;border:1px solid var(--border)">
-            <div class="cflag" style="font-size:16px;margin-bottom:4px">🇨🇱</div>
-            <div style="font-size:10px;color:var(--faint);margin-bottom:2px">Chile — CLP</div>
-            <div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--amber)">73.8%</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:3px">CLP 91.4M / 123.9M</div>
-          </div>
-          <div style="background:var(--surface);border-radius:8px;padding:10px 12px;border:1px solid var(--border)">
-            <div class="cflag" style="font-size:16px;margin-bottom:4px">🇵🇪</div>
-            <div style="font-size:10px;color:var(--faint);margin-bottom:2px">Perú — USD</div>
-            <div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--leaf2)">89.5%</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:3px">USD 145.2K / 172.8K</div>
-          </div>
-        </div>
-        <div class="tlist" style="margin-top:4px">
-          <div class="prow" style="border-bottom:1px solid var(--border);padding-bottom:5px;margin-bottom:4px">
-            <span style="font-size:10px;color:var(--faint);font-weight:600;letter-spacing:.5px">MES</span>
-            <span style="font-size:10px;color:var(--faint);font-weight:600;letter-spacing:.5px">🇨🇱 Chile</span>
-            <span style="font-size:10px;color:var(--faint);font-weight:600;letter-spacing:.5px">🇵🇪 Perú</span>
-            <span style="font-size:10px;color:var(--faint);font-weight:600;letter-spacing:.5px">Grupo</span>
-          </div>
-          <div class="prow"><span>Enero</span><span style="color:var(--amber)">72.0%</span><span style="color:var(--leaf2)">88.6%</span><span style="color:var(--amber)">79.6%</span></div>
-          <div class="prow"><span>Febrero</span><span style="color:var(--amber)">73.7%</span><span style="color:var(--leaf2)">89.5%</span><span style="color:var(--leaf2)">82.8%</span></div>
-          <div class="prow"><span>Marzo</span><span style="color:var(--leaf2)">84.7%</span><span style="color:var(--leaf2)">90.8%</span><span style="color:var(--leaf2)">89.4%</span></div>
-          <div class="prow" style="border-top:1px solid var(--border);padding-top:5px;margin-top:3px;font-weight:600"><span style="color:var(--leaf)">YTD</span><span style="color:var(--amber)">73.8%</span><span style="color:var(--leaf2)">89.5%</span><span style="color:var(--leaf2)">82.5%</span></div>
-        </div>
-        <div style="font-size:9px;color:var(--faint);margin-top:8px;border-top:1px solid var(--border);padding-top:6px">Costo = Maestro Producción 2026 × 1.40 · TC 950 · Solo prods. con costo mapeado</div>
-      </div>
-    </div>
-  </div>
-
-  
-
-
-<script>
-var CL={
-  todos:{v:[88.7,35.7,44.0],p:[84.8,42.8,43.2],c:"#00a8c8"},
-  caroca:{v:[15.3,6.4,31.9],p:[12.5,6.0,14.5],c:"#4ade80"},
-  laratro:{v:[37.0,10.4,2.8],p:[36.0,10.6,7.5],c:"#00a8c8"},
-  velasquez:{v:[14.5,9.9,3.5],p:[14.9,11.5,6.5],c:"#fbbf24"},
-  encina:{v:[13.5,7.3,4.8],p:[14.2,7.5,7.5],c:"#b48aff"},
-  veverka:{v:[6.2,0.9,1.0],p:[6.0,6.0,6.0],c:"#f87171"},
-  munoz:{v:[2.2,0.8,0.0],p:[1.2,1.2,1.2],c:"#7c849e"}
-};
-var CL_R=[
-  {n:"J. Caroca",y:53.6,p:33.0,t:162.3,c:"#4ade80"},{n:"P. Laratro",y:50.2,p:54.1,t:92.9,c:"#00a8c8"},
-  {n:"R. Encina",y:25.5,p:29.2,t:87.5,c:"#b48aff"},{n:"F. Velásquez",y:27.9,p:32.9,t:84.8,c:"#fbbf24"},
-  {n:"I. Veverka",y:8.1,p:18.0,t:45.2,c:"#f87171"},{n:"V. Muñoz",y:3.0,p:null,t:null,c:"#7c849e"}
-];
-function clC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
-function clB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
-function clP(v,p){return p>0?Math.round(v/p*100):0;}
-function clDraw(k){
-  var d=CL[k],tv=0,tp=0;
-  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
-  var tc=clP(tv,tp);
-  document.getElementById("cl-kpis").innerHTML=[["Ventas YTD","CLP "+tv.toFixed(1)+"M",null],["Ppto YTD","CLP "+tp.toFixed(1)+"M",null],["Cumpl. T1",tc+"%",tc],["Marzo","CLP "+d.v[2].toFixed(1)+"M",clP(d.v[2],d.p[2])]].map(function(c){return'<div style="background:rgba(255,255,255,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?clC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
-  var w=document.getElementById("cl-wrap");
-  w.innerHTML="<canvas></canvas>";
-  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(clP(d.v[i],d.p[i]));}
-  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2},{type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1},{type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" CLP "+Number(c.raw).toFixed(1)+"M";}}}},scales:{y:{position:"left",grid:{color:"rgba(255,255,255,.05)"},ticks:{callback:function(v){return v+"M";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
-  var mx=54.1;
-  document.getElementById("cl-rank").innerHTML=CL_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+clB(r.t)+';color:'+clC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:11px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:#7c849e;">CLP '+r.y+'M</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(255,255,255,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
-}
-clDraw("todos");
-</script>
-
-<script>
-var PE={
-  todos:{v:[73.5,39.4,59.8],p:[51.7,58.5,63.0],c:"#c4841a"},
-  atalaya:{v:[30.1,9.0,20.0],p:[18.0,18.0,18.0],c:"#4ade80"},
-  navarro:{v:[26.3,7.7,0.0],p:[11.8,11.8,11.8],c:"#f5a623"},
-  aguirre:{v:[0.0,6.5,29.4],p:[0,0,0],c:"#b48aff"},
-  infante:{v:[16.5,16.2,9.8],p:[37.8,37.8,37.8],c:"#f87171"},
-  gonzalez:{v:[0.6,0.0,0.1],p:[2.0,2.0,2.0],c:"#7c849e"},
-  valladares:{v:[0.0,0.0,0.6],p:[2.9,2.9,2.9],c:"#7c849e"}
-};
-var PE_R=[
-  {n:"O. Atalaya",y:59.1,p:53.7,t:110.2,c:"#4ade80"},{n:"L. Aguirre",y:35.9,p:null,t:null,c:"#b48aff"},
-  {n:"O. Infante",y:42.5,p:114.9,t:37.0,c:"#f87171"},{n:"N. Navarro",y:34.0,p:35.4,t:96.2,c:"#f5a623"},
-  {n:"A. González",y:0.7,p:6.0,t:17.4,c:"#7c849e"},{n:"P. Valladares",y:0.6,p:5.7,t:10.5,c:"#7c849e"}
-];
-function peC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
-function peB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
-function peP(v,p){return p>0?Math.round(v/p*100):0;}
-function peDraw(k){
-  var d=PE[k],tv=0,tp=0;
-  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
-  var tc=tp>0?peP(tv,tp):null;
-  document.getElementById("pe-kpis").innerHTML=[["Ventas YTD","USD "+tv.toFixed(1)+"K",null],["Ppto YTD",tp>0?"USD "+tp.toFixed(1)+"K":"Sin ppto",null],["Cumpl. T1",tc!=null?tc+"%":"—",tc],["Marzo","USD "+d.v[2].toFixed(1)+"K",d.p[2]>0?peP(d.v[2],d.p[2]):null]].map(function(c){return'<div style="background:rgba(255,255,255,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?peC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
-  var w=document.getElementById("pe-wrap");
-  w.innerHTML="<canvas></canvas>";
-  var hasPp=d.p.some(function(v){return v>0;});
-  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(d.p[i]>0?peP(d.v[i],d.p[i]):null);}
-  var ds=[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2}];
-  if(hasPp){ds.push({type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1});ds.push({type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0});}
-  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" USD "+Number(c.raw).toFixed(1)+"K";}}}},scales:{y:{position:"left",grid:{color:"rgba(255,255,255,.05)"},ticks:{callback:function(v){return v+"K";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
-  var mx=59.1;
-  document.getElementById("pe-rank").innerHTML=PE_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+peB(r.t)+';color:'+peC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:11px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:#7c849e;">USD '+r.y.toFixed(1)+'K</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(255,255,255,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
-}
-peDraw("todos");
-</script>
-
-<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border2,#1e2333);">
-<div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#444c66;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px;">Ventas vs Presupuesto &middot; Chile<span style="flex:1;height:1px;background:#1e2333;"></span></div>
-<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
-  <div style="display:flex;gap:14px;font-size:11px;flex-wrap:wrap;">
-    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:9px;border-radius:2px;background:#00a8c8;display:inline-block;"></span>Ventas</span>
-    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;border-top:2px dashed #f87171;display:inline-block;"></span>Ppto</span>
-    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;background:#4ade80;display:inline-block;"></span>Cumpl.%</span>
-  </div>
-  <select onchange="clDraw(this.value)" style="font-size:11px;padding:4px 8px;border-radius:6px;background:#191d28;color:#f0f2f8;border:1px solid #252a38;">
-    <option value="todos">Equipo completo</option><option value="caroca">J. Caroca</option><option value="laratro">P. Laratro</option><option value="velasquez">F. Velásquez</option><option value="encina">R. Encina</option><option value="veverka">I. Veverka</option><option value="munoz">V. Muñoz</option>
-  </select>
 </div>
-<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;" id="cl-kpis"></div>
-<div id="cl-wrap" style="position:relative;width:100%;height:220px;"></div>
-<div style="margin-top:14px;" id="cl-rank"></div>
-</div>
-<script>
-var CL={
-  todos:{v:[88.7,35.7,44.0],p:[84.8,42.8,43.2],c:"#00a8c8"},
-  caroca:{v:[15.3,6.4,31.9],p:[12.5,6.0,14.5],c:"#4ade80"},
-  laratro:{v:[37.0,10.4,2.8],p:[36.0,10.6,7.5],c:"#00a8c8"},
-  velasquez:{v:[14.5,9.9,3.5],p:[14.9,11.5,6.5],c:"#fbbf24"},
-  encina:{v:[13.5,7.3,4.8],p:[14.2,7.5,7.5],c:"#b48aff"},
-  veverka:{v:[6.2,0.9,1.0],p:[6.0,6.0,6.0],c:"#f87171"},
-  munoz:{v:[2.2,0.8,0.0],p:[1.2,1.2,1.2],c:"#7c849e"}
-};
-var CL_R=[
-  {n:"J. Caroca",y:53.6,p:33.0,t:162.3,c:"#4ade80"},{n:"P. Laratro",y:50.2,p:54.1,t:92.9,c:"#00a8c8"},
-  {n:"R. Encina",y:25.5,p:29.2,t:87.5,c:"#b48aff"},{n:"F. Velásquez",y:27.9,p:32.9,t:84.8,c:"#fbbf24"},
-  {n:"I. Veverka",y:8.1,p:18.0,t:45.2,c:"#f87171"},{n:"V. Muñoz",y:3.0,p:null,t:null,c:"#7c849e"}
-];
-function clC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
-function clB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
-function clP(v,p){return p>0?Math.round(v/p*100):0;}
-function clDraw(k){
-  var d=CL[k],tv=0,tp=0;
-  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
-  var tc=clP(tv,tp);
-  document.getElementById("cl-kpis").innerHTML=[["Ventas YTD","CLP "+tv.toFixed(1)+"M",null],["Ppto YTD","CLP "+tp.toFixed(1)+"M",null],["Cumpl. T1",tc+"%",tc],["Marzo","CLP "+d.v[2].toFixed(1)+"M",clP(d.v[2],d.p[2])]].map(function(c){return'<div style="background:rgba(255,255,255,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?clC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
-  var w=document.getElementById("cl-wrap");
-  w.innerHTML="<canvas></canvas>";
-  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(clP(d.v[i],d.p[i]));}
-  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2},{type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1},{type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" CLP "+Number(c.raw).toFixed(1)+"M";}}}},scales:{y:{position:"left",grid:{color:"rgba(255,255,255,.05)"},ticks:{callback:function(v){return v+"M";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
-  var mx=54.1;
-  document.getElementById("cl-rank").innerHTML=CL_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+clB(r.t)+';color:'+clC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:11px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:#7c849e;">CLP '+r.y+'M</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(255,255,255,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
-}
-clDraw("todos");
-</script>
 
-<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border2,#1e2333);">
-<div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#444c66;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px;">Ventas vs Presupuesto &middot; Perú<span style="flex:1;height:1px;background:#1e2333;"></span></div>
-<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
-  <div style="display:flex;gap:14px;font-size:11px;flex-wrap:wrap;">
-    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:9px;border-radius:2px;background:#c4841a;display:inline-block;"></span>Ventas</span>
-    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;border-top:2px dashed #f87171;display:inline-block;"></span>Ppto</span>
-    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;background:#4ade80;display:inline-block;"></span>Cumpl.%</span>
+<!-- ── ROW 2: RTCs + Productos ── -->
+<div class="g21" style="margin-bottom:14px;">
+  <div class="card">
+    <div class="ctop">
+      <div><div class="ceyebrow">Semáforo Comercial</div><div class="cq">Estado del equipo · Grupo Latam</div></div>
+      <span class="tag tg">10 RTCs activos</span>
+    </div>
+    <div style="margin-top:12px;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);">🇨🇱 Chile</div>
+      <div class="srow"><span class="flag">🏆</span><div class="sinfo"><div class="sname">J. Caroca</div><div class="sdet">CLP 53,6M · Marzo 220% ppto</div></div><div class="sright"><div class="spct" style="color:#4ade80;">162.3%</div><div class="dot dg"></div></div></div>
+      <div class="srow"><span class="flag">🔵</span><div class="sinfo"><div class="sname">P. Laratro</div><div class="sdet">CLP 50,2M · CxC CLP 16,1M</div></div><div class="sright"><div class="spct" style="color:var(--amber);">92.9%</div><div class="dot da"></div></div></div>
+      <div class="srow"><span class="flag">🔵</span><div class="sinfo"><div class="sname">R. Encina</div><div class="sdet">CLP 25,5M · Mejora sostenida</div></div><div class="sright"><div class="spct" style="color:var(--amber);">87.5%</div><div class="dot da"></div></div></div>
+      <div class="srow"><span class="flag">🔵</span><div class="sinfo"><div class="sname">F. Velásquez</div><div class="sdet">CLP 27,9M · Marzo débil 53%</div></div><div class="sright"><div class="spct" style="color:var(--amber);">84.8%</div><div class="dot da"></div></div></div>
+      <div class="srow"><span class="flag">🔴</span><div class="sinfo"><div class="sname">I. Veverka</div><div class="sdet">CLP 8,1M · Solo 16.8% en Marzo</div></div><div class="sright"><div class="spct" style="color:var(--red);">45.2%</div><div class="dot dr"></div></div></div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:10px 0 8px;padding-top:8px;border-top:1px solid var(--border);">🇵🇪 Perú</div>
+      <div class="srow"><span class="flag">⭐</span><div class="sinfo"><div class="sname">O. Atalaya</div><div class="sdet">USD 59,1K · Modelo del equipo</div></div><div class="sright"><div class="spct" style="color:#4ade80;">110.2%</div><div class="dot dg"></div></div></div>
+      <div class="srow"><span class="flag">🔵</span><div class="sinfo"><div class="sname">N. Navarro</div><div class="sdet">USD 34,0K · Sin ventas Marzo</div></div><div class="sright"><div class="spct" style="color:var(--amber);">96.2%</div><div class="dot da"></div></div></div>
+      <div class="srow"><span class="flag">🟣</span><div class="sinfo"><div class="sname">L. Aguirre</div><div class="sdet">USD 36,2K · Sin ppto — incorporar Q2</div></div><div class="sright"><div class="spct" style="color:var(--muted);">s/p</div><div class="dot dn"></div></div></div>
+      <div class="srow"><span class="flag">🔴</span><div class="sinfo"><div class="sname">O. Infante</div><div class="sdet">USD 60,3K · 52.6% · Mejoró Marzo</div></div><div class="sright"><div class="spct" style="color:var(--red);">52.6%</div><div class="dot dr"></div></div></div>
+      <div class="srow"><span class="flag">🔴</span><div class="sinfo"><div class="sname">A. González / P. Valladares</div><div class="sdet">USD 696 / USD 600 · Críticos</div></div><div class="sright"><div class="spct" style="color:var(--red);">&lt;20%</div><div class="dot dr"></div></div></div>
+    </div>
   </div>
-  <select onchange="peDraw(this.value)" style="font-size:11px;padding:4px 8px;border-radius:6px;background:#191d28;color:#f0f2f8;border:1px solid #252a38;">
-    <option value="todos">Equipo completo</option><option value="atalaya">O. Atalaya</option><option value="navarro">N. Navarro</option><option value="aguirre">L. Aguirre</option><option value="infante">O. Infante</option><option value="gonzalez">A. González</option><option value="valladares">P. Valladares</option>
-  </select>
+  <div class="card">
+    <div class="ctop">
+      <div><div class="ceyebrow">Mix de Productos</div><div class="cq">Top productos por país</div></div>
+      <span class="tag tg">Margen estimado</span>
+    </div>
+    <div class="cbox" style="min-height:240px;margin-top:12px;"><canvas id="cProductos"></canvas></div>
+  </div>
 </div>
-<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;" id="pe-kpis"></div>
-<div id="pe-wrap" style="position:relative;width:100%;height:220px;"></div>
-<div style="margin-top:14px;" id="pe-rank"></div>
+
+<!-- ── ROW 3: Cartera ── -->
+<div class="slabel">Cartera por Cobrar · Análisis de Riesgo</div>
+<div class="g2" style="margin-bottom:14px;">
+  <div class="card">
+    <div class="ctop">
+      <div><div class="ceyebrow">🇨🇱 Aging Chile · Al 22/03/2026</div><div class="cq">CLP 37,4M total · 66% vencida</div></div>
+      <span class="tag tr">Acción requerida</span>
+    </div>
+    <div style="display:flex;gap:14px;margin-top:14px;">
+      <div style="flex:0 0 140px;height:140px;position:relative;"><canvas id="cAgingChile"></canvas></div>
+      <div style="flex:1;">
+        <table class="tbl" style="margin-top:0;">
+          <thead><tr><th>Cliente</th><th>Días</th><th>CLP</th></tr></thead>
+          <tbody>
+            <tr><td>Goyaservice SPA</td><td class="cr">78d</td><td class="cr">4,194,750</td></tr>
+            <tr><td>Rio Diuto SPA</td><td class="ca">51d</td><td class="ca">2,856,000</td></tr>
+            <tr><td>Soc.Ag.Santa Teresa</td><td class="ca">15d</td><td class="ca">3,500,000</td></tr>
+            <tr><td>Ag.Ribera Ltda.</td><td class="ca">66d</td><td class="ca">1,473,696</td></tr>
+            <tr><td>Ganafrut SPA</td><td>9d</td><td>2,687,972</td></tr>
+          </tbody>
+        </table>
+        <div class="ins ig" style="margin-top:10px;font-size:11px;">✅ Sin deuda +90 días. Goyaservice (78d) y Rio Diuto (51d) son prioritarios. <strong>J. Caroca concentra CLP 15,3M</strong> — revisar política de crédito.</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctop">
+      <div><div class="ceyebrow">🇵🇪 Cartera Perú · Al 24/03/2026</div><div class="cq">USD 313,9K total · 4.2% vencida</div></div>
+      <span class="tag td">Bajo riesgo</span>
+    </div>
+    <div style="display:flex;gap:14px;margin-top:14px;">
+      <div style="flex:0 0 140px;height:140px;position:relative;"><canvas id="cAgingPeru"></canvas></div>
+      <div style="flex:1;">
+        <table class="tbl" style="margin-top:0;">
+          <thead><tr><th>Cliente</th><th>USD</th></tr></thead>
+          <tbody>
+            <tr><td>RVR AGRO S.R.L.</td><td style="color:var(--leaf);">185,080</td></tr>
+            <tr><td>BOMAREA S.R.L.</td><td>20,000</td></tr>
+            <tr><td>Corp. ESAN E&amp;F</td><td>16,634</td></tr>
+            <tr><td>Soc. Ag. Drokasa</td><td>11,760</td></tr>
+            <tr><td>PAODISA S.A. ⚠</td><td class="ca">10,874</td></tr>
+          </tbody>
+        </table>
+        <div class="ins id" style="margin-top:10px;font-size:11px;">RVR AGRO representa el <strong>59% de la cartera</strong>. PAODISA tiene deuda desde 2024 — requiere gestión. El 95.8% restante está al día.</div>
+      </div>
+    </div>
+  </div>
 </div>
-<script>
-var PE={
-  todos:{v:[73.5,39.4,59.8],p:[51.7,58.5,63.0],c:"#c4841a"},
-  atalaya:{v:[30.1,9.0,20.0],p:[18.0,18.0,18.0],c:"#4ade80"},
-  navarro:{v:[26.3,7.7,0.0],p:[11.8,11.8,11.8],c:"#f5a623"},
-  aguirre:{v:[0.0,6.5,29.4],p:[0,0,0],c:"#b48aff"},
-  infante:{v:[16.5,16.2,9.8],p:[37.8,37.8,37.8],c:"#f87171"},
-  gonzalez:{v:[0.6,0.0,0.1],p:[2.0,2.0,2.0],c:"#7c849e"},
-  valladares:{v:[0.0,0.0,0.6],p:[2.9,2.9,2.9],c:"#7c849e"}
-};
-var PE_R=[
-  {n:"O. Atalaya",y:59.1,p:53.7,t:110.2,c:"#4ade80"},{n:"L. Aguirre",y:35.9,p:null,t:null,c:"#b48aff"},
-  {n:"O. Infante",y:42.5,p:114.9,t:37.0,c:"#f87171"},{n:"N. Navarro",y:34.0,p:35.4,t:96.2,c:"#f5a623"},
-  {n:"A. González",y:0.7,p:6.0,t:17.4,c:"#7c849e"},{n:"P. Valladares",y:0.6,p:5.7,t:10.5,c:"#7c849e"}
-];
-function peC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
-function peB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
-function peP(v,p){return p>0?Math.round(v/p*100):0;}
-function peDraw(k){
-  var d=PE[k],tv=0,tp=0;
-  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
-  var tc=tp>0?peP(tv,tp):null;
-  document.getElementById("pe-kpis").innerHTML=[["Ventas YTD","USD "+tv.toFixed(1)+"K",null],["Ppto YTD",tp>0?"USD "+tp.toFixed(1)+"K":"Sin ppto",null],["Cumpl. T1",tc!=null?tc+"%":"—",tc],["Marzo","USD "+d.v[2].toFixed(1)+"K",d.p[2]>0?peP(d.v[2],d.p[2]):null]].map(function(c){return'<div style="background:rgba(255,255,255,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?peC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
-  var w=document.getElementById("pe-wrap");
-  w.innerHTML="<canvas></canvas>";
-  var hasPp=d.p.some(function(v){return v>0;});
-  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(d.p[i]>0?peP(d.v[i],d.p[i]):null);}
-  var ds=[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2}];
-  if(hasPp){ds.push({type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1});ds.push({type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0});}
-  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" USD "+Number(c.raw).toFixed(1)+"K";}}}},scales:{y:{position:"left",grid:{color:"rgba(255,255,255,.05)"},ticks:{callback:function(v){return v+"K";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
-  var mx=59.1;
-  document.getElementById("pe-rank").innerHTML=PE_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+peB(r.t)+';color:'+peC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:11px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:#7c849e;">USD '+r.y.toFixed(1)+'K</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(255,255,255,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
-}
-peDraw("todos");
-</script>
-<!-- STRATEGIC -->
-  <div class="slabel" style="margin-top:4px">Análisis Estratégico · Vista para Tomar Decisiones</div>
-  <div class="sgrid">
-    <div class="sc sr">
-      <div class="stitle" style="color:var(--red)">🔴 Riesgo Financiero</div>
-      <div class="sitem"><div class="sdot" style="background:var(--red)"></div><div>Chile: <strong>55.8% cartera vencida</strong> — CLP 24,7M</div></div>
-      <div class="sitem"><div class="sdot" style="background:var(--red)"></div><div>Perú: <strong>48% vencida</strong> — USD 41.511 con +180 días</div></div>
-      <div class="sitem"><div class="sdot" style="background:var(--red)"></div><div>PAODISA Perú sin cobro desde <strong>Jul 2024</strong> (+509d)</div></div>
-      <div class="sitem"><div class="sdot" style="background:var(--red)"></div><div>Chile: LOMA LARGA <strong>CLP 22,5M</strong> en cartera activa</div></div>
-      <div class="sitem"><div class="sdot" style="background:var(--red)"></div><div>Factoring SUPRA Perú: <strong>USD 196.841</strong> pendiente</div></div>
-      <div class="sitem" style="border:none"><div class="sdot" style="background:var(--red)"></div><div><strong>→ Requiere decisión de directorio</strong></div></div>
+
+<!-- ── STRATEGIC INSIGHTS ── -->
+<div class="slabel">Análisis Estratégico</div>
+<div class="g2">
+  <div class="card">
+    <div class="ctop"><div><div class="ceyebrow">Fortalezas Q1</div><div class="cq">Lo que está funcionando</div></div><span class="tag tg">Mantener</span></div>
+    <div style="margin-top:12px;">
+      <div class="ins ig"><strong>Chile superó el 100% YTD por primera vez en 2026.</strong> J. Caroca (162.3%) y Marzo en 101.8% fueron los drivers. El equipo chileno demostró que puede cerrar el trimestre sobre meta.</div>
+      <div class="ins ig"><strong>Perú tiene el mejor margen del Grupo: 89.5%.</strong> Cuando el equipo vende, vende bien. Regalia MAX (97% margen) y Vecasil Forte (88%) son los productos ancla.</div>
+      <div class="ins ig"><strong>Perú Marzo récord: USD 65,6K.</strong> Fue el mejor mes del año y supera al anterior máximo de Enero (USD 73,5K en tendencia). L. Aguirre con USD 29,4K sin objetivo formal.</div>
+      <div class="ins ig"><strong>Sin deuda +90 días en Chile.</strong> Primera vez en el año. La gestión de cobro mejora aunque la concentración en Caroca es un riesgo.</div>
     </div>
-    <div class="sc sa">
-      <div class="stitle" style="color:var(--amber)">🟡 Riesgo Comercial</div>
-      <div class="sitem"><div class="sdot" style="background:var(--amber)"></div><div>Perú YTD: <strong>81.0%</strong> — brecha USD 40,6K vs ppto</div></div>
-      <div class="sitem"><div class="sdot" style="background:var(--amber)"></div><div>O. Infante Perú: <strong>13.4%</strong> cumplimiento YTD</div></div>
-      <div class="sitem"><div class="sdot" style="background:var(--amber)"></div><div>P. Valladares Perú: <strong>0%</strong> en Marzo</div></div>
-      <div class="sitem"><div class="sdot" style="background:var(--leaf)"></div><div>Chile Marzo: <strong>CLP 28,5M vs 42M</strong> ppto (68%, al 13/03)</div></div>
-      <div class="sitem"><div class="sdot" style="background:var(--amber)"></div><div>P. Laratro: <strong>43%</strong> cartera Chile — concentración alta</div></div>
-      <div class="sitem" style="border:none"><div class="sdot" style="background:var(--amber)"></div><div><strong>→ Plan de acción Q2 urgente</strong></div></div>
+  </div>
+  <div class="card">
+    <div class="ctop"><div><div class="ceyebrow">Riesgos y Plan Q2</div><div class="cq">Lo que necesita acción</div></div><span class="tag tr">Urgente</span></div>
+    <div style="margin-top:12px;">
+      <div class="ins ir"><strong>3 RTCs Perú bajo 45% YTD.</strong> Infante (42%), González (17%), Valladares (10%). Plan individual por zona con acompañamiento técnico desde Abril. Metodología Atalaya como modelo.</div>
+      <div class="ins ia"><strong>L. Aguirre sin presupuesto Q2.</strong> Generó USD 35,9K sin objetivo formal. Asignar meta, recursos y visibilidad oficial en el semáforo. Potencial real de USD 100K+ anuales.</div>
+      <div class="ins ir"><strong>Goyaservice (78d, CLP 4,2M) y Rio Diuto (51d, CLP 2,9M).</strong> Caroca concentra el mayor riesgo de cobro de Chile. Revisar límite de crédito individual y activar gestión legal.</div>
+      <div class="ins ia"><strong>Veverka (Chile) 45.2% YTD.</strong> Marzo fue solo CLP 1M vs ppto CLP 6M. Requiere plan de recuperación con revisión de cartera de clientes y acompañamiento técnico semanal.</div>
     </div>
-    <div class="sc sg">
-      <div class="stitle" style="color:var(--leaf2)">🟢 Fortalezas y Oportunidades</div>
-      <div class="sitem"><div class="sdot" style="background:var(--leaf)"></div><div>Margen grupo <strong>82.5% YTD</strong> — estructura de costos sólida</div></div>
-      <div class="sitem"><div class="sdot" style="background:var(--leaf)"></div><div>Perú margen <strong>89.5%</strong> — mejor rentabilidad del grupo</div></div>
-      <div class="sitem"><div class="sdot" style="background:var(--leaf)"></div><div>Chile Marzo <strong>84.7%</strong> — mejora mensual sostenida</div></div>
-      <div class="sitem"><div class="sdot" style="background:var(--leaf)"></div><div>Chile YTD: <strong>100.7%</strong> · J. Caroca 162.3% YTD · Marzo 220%</div></div>
-      <div class="sitem"><div class="sdot" style="background:var(--leaf)"></div><div><strong>AV BALANCE 96.7%</strong> y AV SILFORTE 86% — productos estrella</div></div>
-      <div class="sitem" style="border:none"><div class="sdot" style="background:var(--leaf)"></div><div><strong>→ Acelerar sinergia Latam Q2–Q3</strong></div></div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     SECCIÓN CEO: VISIÓN REPORTADA vs REALIDAD AJUSTADA
+     ══════════════════════════════════════════════════════ -->
+<div class="slabel" style="margin-top:32px;">Análisis CEO · Rentabilidad Real vs Reportada · Chile Q1 2026</div>
+
+<div class="card" style="margin-bottom:14px;border-color:rgba(248,113,113,.25);">
+  <div class="ctop">
+    <div>
+      <div class="ceyebrow">05 · Informe Director Comercial</div>
+      <div class="cq" style="font-size:17px;">Lo que creemos que pasa &nbsp;≠&nbsp; Lo que realmente está pasando</div>
     </div>
+    <span class="tag tr">⚠ 7 puntos bajo meta</span>
+  </div>
+
+  <!-- ── BARRA DE CONTRASTE SUPERIOR ── -->
+  <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:0;margin:18px 0 20px;border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+    <div style="background:rgba(74,140,42,.08);padding:18px 22px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:var(--leaf2);text-transform:uppercase;margin-bottom:8px;">Lo que reportamos</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.7;">
+        Margen Bruto Chile Q1: <strong style="color:var(--leaf2);font-size:15px;">62.2%</strong><br>
+        Ventas vs Ppto: <strong style="color:var(--leaf2);">103.6% ✅</strong><br>
+        Caroca 162.3% · Laratro 97% · Encina 93.5%<br>
+        <em style="color:var(--muted);">→ Lectura: trimestre exitoso, equipo en control</em>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;padding:0 20px;background:rgba(0,0,0,.15);">
+      <div style="text-align:center;">
+        <div style="font-size:28px;color:var(--red);line-height:1;">≠</div>
+        <div style="font-size:8px;color:var(--muted);letter-spacing:1px;margin-top:4px;">BRECHA</div>
+      </div>
+    </div>
+    <div style="background:rgba(248,113,113,.07);padding:18px 22px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:var(--red);text-transform:uppercase;margin-bottom:8px;">Lo que realmente pasa</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.7;">
+        Margen Neto Real Chile Q1: <strong style="color:var(--red);font-size:15px;">17.9%</strong><br>
+        Meta corporativa: <strong style="color:var(--amber);">25%</strong> → Gap: <strong style="color:var(--red);">-7.1pp (CLP 12.2M faltante)</strong><br>
+        Solo 1 de 5 RTCs cumple la meta · Veverka destruye capital<br>
+        <em style="color:var(--muted);">→ Lectura: Chile subsidia pérdidas con un solo vendedor</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TABLA PRINCIPAL POR RTC ── -->
+  <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">
+    Chile · Contraste por RTC · Q1 2026 · Meta corporativa: 25% margen neto real
+  </div>
+
+  <div style="overflow-x:auto;">
+  <table style="width:100%;border-collapse:collapse;font-size:11px;">
+    <thead>
+      <tr style="background:var(--surface2);">
+        <th style="padding:8px 12px;text-align:left;color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:700;">RTC</th>
+        <th style="padding:8px 12px;text-align:right;color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:700;">Venta Q1</th>
+        <th style="padding:8px 12px;text-align:center;background:rgba(74,140,42,.08);color:var(--leaf2);font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:700;">Margen Bruto<br>Reportado</th>
+        <th style="padding:8px 12px;text-align:center;background:rgba(248,113,113,.08);color:var(--red);font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:700;">Margen Neto<br>Real (con RTC)</th>
+        <th style="padding:8px 12px;text-align:center;color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:700;">Gap vs<br>Meta 25%</th>
+        <th style="padding:8px 12px;text-align:center;color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:700;">Ratio Gasto<br>x $1 vendido</th>
+        <th style="padding:8px 12px;text-align:center;color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:700;">Estado Real</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Caroca -->
+      <tr style="background:rgba(74,140,42,.06);border-bottom:1px solid rgba(42,69,53,.5);">
+        <td style="padding:10px 12px;color:var(--white);font-weight:600;">J. Caroca</td>
+        <td style="padding:10px 12px;text-align:right;color:var(--text2);">CLP 53.8M</td>
+        <td style="padding:10px 12px;text-align:center;background:rgba(74,140,42,.05);color:var(--leaf2);font-weight:600;">61.8%</td>
+        <td style="padding:10px 12px;text-align:center;background:rgba(74,140,42,.05);color:#4ade80;font-weight:700;font-size:14px;">39.2%</td>
+        <td style="padding:10px 12px;text-align:center;color:#4ade80;font-weight:700;">+14.2pp ✅</td>
+        <td style="padding:10px 12px;text-align:center;color:#4ade80;font-weight:600;">$0.11</td>
+        <td style="padding:10px 12px;text-align:center;">
+          <span style="background:rgba(74,222,128,.12);color:#4ade80;font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;">REFERENTE</span>
+        </td>
+      </tr>
+      <!-- Laratro -->
+      <tr style="background:rgba(251,176,64,.04);border-bottom:1px solid rgba(42,69,53,.5);">
+        <td style="padding:10px 12px;color:var(--white);font-weight:600;">P. Laratro</td>
+        <td style="padding:10px 12px;text-align:right;color:var(--text2);">CLP 52.5M</td>
+        <td style="padding:10px 12px;text-align:center;background:rgba(74,140,42,.05);color:var(--leaf2);font-weight:600;">64.2%</td>
+        <td style="padding:10px 12px;text-align:center;background:rgba(251,176,64,.06);color:var(--amber);font-weight:700;font-size:14px;">19.6%</td>
+        <td style="padding:10px 12px;text-align:center;color:var(--amber);font-weight:700;">-5.4pp ⚠</td>
+        <td style="padding:10px 12px;text-align:center;color:var(--amber);font-weight:600;">$0.44<br><span style="font-size:8px;color:var(--muted);">(Enero: $0.17 → Marzo: $0.70)</span></td>
+        <td style="padding:10px 12px;text-align:center;">
+          <span style="background:rgba(251,176,64,.12);color:var(--amber);font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;">BAJO META</span>
+        </td>
+      </tr>
+      <!-- Encina -->
+      <tr style="background:rgba(251,176,64,.02);border-bottom:1px solid rgba(42,69,53,.5);">
+        <td style="padding:10px 12px;color:var(--white);font-weight:600;">R. Encina</td>
+        <td style="padding:10px 12px;text-align:right;color:var(--text2);">CLP 27.1M</td>
+        <td style="padding:10px 12px;text-align:center;background:rgba(74,140,42,.05);color:var(--leaf2);font-weight:600;">64.3%</td>
+        <td style="padding:10px 12px;text-align:center;background:rgba(251,176,64,.06);color:var(--amber);font-weight:700;font-size:14px;">21.9%</td>
+        <td style="padding:10px 12px;text-align:center;color:var(--amber);font-weight:700;">-3.1pp ⚠</td>
+        <td style="padding:10px 12px;text-align:center;color:var(--amber);font-weight:600;">$0.31<br><span style="font-size:8px;color:var(--leaf2);">+Camioneta Mayo↑</span></td>
+        <td style="padding:10px 12px;text-align:center;">
+          <span style="background:rgba(251,176,64,.12);color:var(--amber);font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;">TÉCNICO / ESCALA</span>
+        </td>
+      </tr>
+      <!-- Velasquez -->
+      <tr style="background:rgba(248,113,113,.04);border-bottom:1px solid rgba(42,69,53,.5);">
+        <td style="padding:10px 12px;color:var(--white);font-weight:600;">F. Velásquez</td>
+        <td style="padding:10px 12px;text-align:right;color:var(--text2);">CLP 29.0M</td>
+        <td style="padding:10px 12px;text-align:center;background:rgba(74,140,42,.05);color:var(--leaf2);font-weight:600;">52.1%</td>
+        <td style="padding:10px 12px;text-align:center;background:rgba(248,113,113,.08);color:var(--red);font-weight:700;font-size:14px;">2.8%</td>
+        <td style="padding:10px 12px;text-align:center;color:var(--red);font-weight:700;">-22.2pp 🔴</td>
+        <td style="padding:10px 12px;text-align:center;color:var(--red);font-weight:600;">$0.44<br><span style="font-size:8px;color:var(--red);">(Marzo: $0.87)</span></td>
+        <td style="padding:10px 12px;text-align:center;">
+          <span style="background:rgba(248,113,113,.15);color:var(--red);font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;">CRÍTICO · 60 días</span>
+        </td>
+      </tr>
+      <!-- Veverka -->
+      <tr style="background:rgba(248,113,113,.07);border-bottom:1px solid rgba(42,69,53,.5);">
+        <td style="padding:10px 12px;color:var(--white);font-weight:600;">I. Veverka</td>
+        <td style="padding:10px 12px;text-align:right;color:var(--text2);">CLP 8.8M</td>
+        <td style="padding:10px 12px;text-align:center;background:rgba(74,140,42,.05);color:var(--leaf2);font-weight:600;">68.3%</td>
+        <td style="padding:10px 12px;text-align:center;background:rgba(248,113,113,.12);color:var(--red);font-weight:700;font-size:14px;">-28.7%</td>
+        <td style="padding:10px 12px;text-align:center;color:var(--red);font-weight:700;">-53.7pp ❌</td>
+        <td style="padding:10px 12px;text-align:center;color:var(--red);font-weight:600;">$2.40<br><span style="font-size:8px;color:var(--red);">(Feb: destrucción)</span></td>
+        <td style="padding:10px 12px;text-align:center;">
+          <span style="background:rgba(248,113,113,.2);color:#ff6b6b;font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;">INVIABLE · FUSIÓN</span>
+        </td>
+      </tr>
+      <!-- TOTAL -->
+      <tr style="background:rgba(0,0,0,.2);">
+        <td style="padding:10px 12px;color:var(--white);font-weight:700;font-size:12px;">CHILE TOTAL</td>
+        <td style="padding:10px 12px;text-align:right;color:var(--white);font-weight:700;">CLP 171.2M</td>
+        <td style="padding:10px 12px;text-align:center;background:rgba(74,140,42,.08);color:var(--leaf2);font-weight:700;font-size:13px;">62.2%</td>
+        <td style="padding:10px 12px;text-align:center;background:rgba(248,113,113,.1);color:var(--red);font-weight:700;font-size:16px;">17.9%</td>
+        <td style="padding:10px 12px;text-align:center;color:var(--red);font-weight:700;font-size:13px;">-7.1pp vs meta</td>
+        <td style="padding:10px 12px;text-align:center;color:var(--amber);font-weight:700;">$0.44</td>
+        <td style="padding:10px 12px;text-align:center;">
+          <span style="background:rgba(248,113,113,.15);color:var(--red);font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px;letter-spacing:.5px;">META NO ALCANZADA</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- ── REGLA SIMPLE ── -->
+  <div style="margin-top:16px;padding:12px 16px;background:rgba(251,176,64,.07);border-radius:8px;border:1px solid rgba(251,176,64,.2);display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+    <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:var(--amber);text-transform:uppercase;flex-shrink:0;">Regla de lectura rápida</div>
+    <div style="font-size:12px;color:var(--white);">El margen bruto <strong style="color:var(--leaf2);">sobreestima la realidad en ~40 puntos porcentuales.</strong> Un RTC con 64% de margen bruto genera en promedio <strong style="color:var(--amber);">~20% de margen neto real</strong> cuando se cargan todos sus costos operativos.</div>
   </div>
 
 </div>
+
+<!-- ── FILA: P&L REAL + INSIGHTS ── -->
+<div class="g21" style="margin-bottom:14px;">
+
+  <div class="card">
+    <div class="ctop">
+      <div><div class="ceyebrow">P&L Real Chile Q1 · Con Todos los Costos RTC</div><div class="cq">Lo que el directorio necesita ver</div></div>
+      <span class="tag tr">Meta: 25% neto</span>
+    </div>
+    <div style="margin-top:14px;">
+      <!-- Barra visual del P&L -->
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px;"><span>Venta Neta Total</span><span style="color:var(--white);font-weight:600;">CLP 171.2M · 100%</span></div>
+        <div style="height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;"><div style="height:100%;width:100%;background:var(--leaf3);border-radius:4px;"></div></div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px;"><span>Margen Bruto</span><span style="color:var(--leaf2);font-weight:600;">CLP 106.5M · 62.2% ← Lo que reportamos</span></div>
+        <div style="height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;"><div style="height:100%;width:62.2%;background:var(--leaf);border-radius:4px;"></div></div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px;"><span>Gastos Operativos (SG&A · sueldos, viáticos, camionetas)</span><span style="color:var(--red);font-weight:600;">-CLP 75.8M · 44.3%</span></div>
+        <div style="height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;"><div style="height:100%;width:44.3%;background:var(--red);border-radius:4px;opacity:.7;"></div></div>
+      </div>
+      <div style="margin-bottom:8px;padding:10px 14px;background:rgba(248,113,113,.08);border-radius:8px;border:1px solid rgba(248,113,113,.2);">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:9px;color:var(--red);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;">EBITDA Real (Utilidad Neta)</div>
+            <div style="font-size:22px;font-weight:700;color:var(--amber);">CLP 30.6M</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:28px;font-weight:800;color:var(--red);">17.9%</div>
+            <div style="font-size:10px;color:var(--muted);">vs meta 25%</div>
+            <div style="font-size:11px;font-weight:700;color:var(--red);">Faltan CLP 12.2M</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:8px 12px;background:rgba(74,140,42,.08);border-radius:6px;border:1px solid rgba(74,140,42,.15);">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:3px;font-weight:600;">Aporte de Caroca al resultado</div>
+        <div style="font-size:12px;color:var(--leaf2);">Aportó el <strong style="font-size:15px;">55%</strong> de la utilidad total · CLP ~16.8M de los CLP 30.6M</div>
+        <div style="font-size:10px;color:var(--red);margin-top:3px;">⚠ Sin Caroca, Chile cierra en <strong>margen neto negativo</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctop"><div><div class="ceyebrow">5 Insights para el Directorio</div><div class="cq">Decisiones que requieren acción</div></div></div>
+    <div style="margin-top:12px;">
+
+      <div style="padding:10px 13px;border-radius:7px;border-left:3px solid var(--red);background:rgba(248,113,113,.06);margin-bottom:9px;">
+        <div style="font-size:10px;font-weight:700;color:var(--red);margin-bottom:3px;">1 · Dependencia Crítica</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.5;">Un solo RTC genera el 55% de la utilidad. <strong style="color:var(--white);">Si Caroca baja, Chile entra en pérdida.</strong> Este es el mayor riesgo no visible en los dashboards actuales.</div>
+      </div>
+
+      <div style="padding:10px 13px;border-radius:7px;border-left:3px solid var(--amber);background:rgba(251,176,64,.05);margin-bottom:9px;">
+        <div style="font-size:10px;font-weight:700;color:var(--amber);margin-bottom:3px;">2 · El Margen Bruto Engaña</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.5;">62.2% de margen bruto → solo 17.9% neto real. <strong style="color:var(--white);">Los KPIs actuales no muestran el impacto de la estructura fija.</strong> Necesitamos el P&L por zona en cada reporte.</div>
+      </div>
+
+      <div style="padding:10px 13px;border-radius:7px;border-left:3px solid var(--red);background:rgba(248,113,113,.06);margin-bottom:9px;">
+        <div style="font-size:10px;font-weight:700;color:var(--red);margin-bottom:3px;">3 · Dos Zonas Destruyen Capital</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.5;">Veverka (-28.7%) y Velásquez (2.8%) <strong style="color:var(--white);">no cubren su costo operativo.</strong> CEO propone ultimátum de 60 días: alcanzar 25% o fusionar zonas. El directorio debe autorizar.</div>
+      </div>
+
+      <div style="padding:10px 13px;border-radius:7px;border-left:3px solid var(--amber);background:rgba(251,176,64,.05);margin-bottom:9px;">
+        <div style="font-size:10px;font-weight:700;color:var(--amber);margin-bottom:3px;">4 · La Camioneta de Encina es una Apuesta</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.5;">+$550K en Mayo eleva su piso de venta de $6.3M a <strong style="color:var(--white);">$10.2M/mes.</strong> Si no lo logra, la camioneta destruye valor. El directorio debe exigir un plan concreto.</div>
+      </div>
+
+      <div style="padding:10px 13px;border-radius:7px;border-left:3px solid var(--leaf);background:rgba(74,140,42,.05);margin-bottom:0;">
+        <div style="font-size:10px;font-weight:700;color:var(--leaf2);margin-bottom:3px;">5 · El Producto No Es el Problema</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.5;">Chile tiene 62.2% de margen bruto — <strong style="color:var(--white);">extraordinario para la industria.</strong> El problema es la falta de masa crítica para diluir sueldos fijos. Solución: volumen, no precio.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── FILA: DECISIONES + PERÚ NOTA ── -->
+<div class="g3" style="margin-bottom:14px;">
+  <div class="card" style="grid-column:span 2;">
+    <div class="ctop"><div><div class="ceyebrow">Resoluciones CEO para aprobación del Directorio</div><div class="cq">Q2 2026 · Acciones con fecha</div></div></div>
+    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div style="padding:10px 13px;border-radius:7px;background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.2);">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
+          <span style="background:var(--red);color:white;font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;">60 DÍAS</span>
+          <span style="font-size:10px;font-weight:700;color:var(--white);">Ultimátum Veverka + Velásquez</span>
+        </div>
+        <div style="font-size:10px;color:var(--text2);">Alcanzar 25% margen neto real o <strong style="color:var(--red);">fusión de zonas para reducir costos fijos.</strong></div>
+      </div>
+      <div style="padding:10px 13px;border-radius:7px;background:rgba(251,176,64,.06);border:1px solid rgba(251,176,64,.2);">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
+          <span style="background:var(--amber);color:#000;font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;">INMEDIATO</span>
+          <span style="font-size:10px;font-weight:700;color:var(--white);">Plan de choque Encina</span>
+        </div>
+        <div style="font-size:10px;color:var(--text2);">Facturar $10.2M/mes desde Mayo para absorber camioneta. <strong style="color:var(--amber);">Sin plan concreto, no autorizar camioneta.</strong></div>
+      </div>
+      <div style="padding:10px 13px;border-radius:7px;background:rgba(248,113,113,.05);border:1px solid rgba(248,113,113,.15);">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
+          <span style="background:rgba(248,113,113,.3);color:var(--red);font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;">PERMANENTE</span>
+          <span style="font-size:10px;font-weight:700;color:var(--white);">Prohibición descuentos commodity</span>
+        </div>
+        <div style="font-size:10px;color:var(--text2);">Sin descuentos en AV AMIN SUGAR y similares. <strong style="color:var(--red);">Drenan el margen neto de RTCs con estructura alta.</strong></div>
+      </div>
+      <div style="padding:10px 13px;border-radius:7px;background:rgba(74,140,42,.06);border:1px solid rgba(74,140,42,.15);">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
+          <span style="background:var(--leaf3);color:white;font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;">Q2 FOCO</span>
+          <span style="font-size:10px;font-weight:700;color:var(--white);">Distribuir el modelo Caroca</span>
+        </div>
+        <div style="font-size:10px;color:var(--text2);">Documentar y transferir metodología de Caroca al equipo. <strong style="color:var(--leaf2);">Reducir dependencia de un solo RTC.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctop"><div><div class="ceyebrow">🇵🇪 Perú · Nota del Análisis</div><div class="cq">Análisis RTC pendiente</div></div></div>
+    <div style="margin-top:12px;">
+      <div style="padding:10px 13px;border-radius:7px;background:rgba(251,176,64,.06);border:1px solid rgba(251,176,64,.2);margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:700;color:var(--amber);margin-bottom:4px;">Margen bruto reportado: 89.5%</div>
+        <div style="font-size:10px;color:var(--text2);">Perú no tiene análisis RTC del CEO disponible aún. Estimación conservadora ajustando costos:</div>
+        <div style="margin-top:8px;font-size:11px;color:var(--white);">Margen neto estimado: <strong style="color:var(--amber);font-size:14px;">~70–75%</strong></div>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px;">Estructura más ligera: sin camionetas confirmadas · Salarios menores · Sin análisis de viáticos</div>
+      </div>
+      <div style="padding:10px 13px;border-radius:7px;background:rgba(74,140,42,.06);border:1px solid rgba(74,140,42,.15);margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:700;color:var(--leaf2);margin-bottom:3px;">Ventaja estructural de Perú</div>
+        <div style="font-size:10px;color:var(--text2);">Perú no tiene el "efecto estructura" de Chile. <strong style="color:var(--leaf2);">La cartera CxC es 95.8% al día</strong> vs 66% vencida en Chile. Menor riesgo operativo.</div>
+      </div>
+      <div style="padding:8px 12px;border-radius:6px;background:rgba(255,255,255,.03);border:1px solid var(--border2);font-size:10px;color:var(--muted);">
+        ✦ Recomendación: solicitar al director Perú el mismo formato de P&L por RTC aplicado a Chile para Q2.
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ══════ FIN SECCIÓN CEO ══════ -->
 
 <div class="footer">
-  <div class="fnote">Chile: Ventas_22-03 + Morosidad_05-03-2026 · Perú: Ventas_20-03 + CxC_22-03-2026 · Márgenes: Maestro Producción 2026 × 1.40 · TC 950 CLP/USD</div>
-  <div class="fbrand"><img src="data:image/png;base64,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" alt="AV Latam"></div>
+  <div class="fnote">Chile: Ventas_28-03 + CxC_22-03-2026 · Perú: Ventas_27-03 + CxC_24-03-2026 · Márgenes: Maestro Producción 2026 × 1.40 · TC 950 CLP/USD</div>
+  <div class="fbrand">AV Grupo Latam · 2026</div>
 </div>
 
 <script>
-window.addEventListener('load',function(){
 Chart.register(ChartDataLabels);
 Chart.defaults.font.family="'Inter',sans-serif";
 Chart.defaults.font.size=11;
-Chart.defaults.color='#4A7059';
+Chart.defaults.color='#7A9E86';
 
-const LEAF='#7AB648',LEAF2='#9FCC6B',MOSS='#2D5A3D',FOREST='#1E3A2F';
-const RED='#F87171',AMBER='#FBB040',BLUE='#60A5FA',BLUE2='#3B82F6';
-const MUTED='#7A9E86',BORDER='#2A4535',WHITE='#F0F4F1';
-const grid='rgba(42,69,53,0.6)';
+var LEAF='#7AB648',LEAF2='#9FCC6B',AMBER='#FBB040',BLUE='#60A5FA',BLUE2='#3B82F6';
+var RED='#F87171',MUTED='#7A9E86',BORDER='rgba(42,69,53,0.6)',WHITE='#F0F4F1';
 
-// TENDENCIA
+// ── TENDENCIA ──
 new Chart(document.getElementById('cTendencia'),{
   type:'line',
   data:{labels:['Enero','Febrero','Marzo'],datasets:[
-    {label:'Chile Real (MCLP)',data:[88.7,35.7,44.0],borderColor:LEAF,backgroundColor:'rgba(122,182,72,0.08)',borderWidth:2.5,pointRadius:7,pointBackgroundColor:LEAF,pointBorderColor:'#0D1F15',pointBorderWidth:2,tension:0.35,fill:true,yAxisID:'yCL'},
+    {label:'Chile Real (MCLP)',data:[88.2,35.7,49.3],borderColor:LEAF,backgroundColor:'rgba(122,182,72,0.08)',borderWidth:2.5,pointRadius:7,pointBackgroundColor:LEAF,pointBorderColor:'#0D1F15',pointBorderWidth:2,tension:0.35,fill:true,yAxisID:'yCL'},
     {label:'Chile Ppto',data:[84.8,42.8,43.2],borderColor:LEAF,borderDash:[7,4],borderWidth:1.5,pointRadius:4,pointBackgroundColor:'#0D1F15',pointBorderColor:LEAF,pointBorderWidth:2,tension:0.35,fill:false,yAxisID:'yCL'},
-    {label:'Perú Real (KUSD)',data:[73.5,39.4,59.8],borderColor:BLUE,backgroundColor:'rgba(96,165,250,0.07)',borderWidth:2.5,pointRadius:7,pointBackgroundColor:BLUE,pointBorderColor:'#0D1F15',pointBorderWidth:2,tension:0.35,fill:true,yAxisID:'yPE'},
+    {label:'Perú Real (KUSD)',data:[73.5,39.4,78.0],borderColor:BLUE,backgroundColor:'rgba(96,165,250,0.07)',borderWidth:2.5,pointRadius:7,pointBackgroundColor:BLUE,pointBorderColor:'#0D1F15',pointBorderWidth:2,tension:0.35,fill:true,yAxisID:'yPE'},
     {label:'Perú Ppto',data:[51.7,58.5,63.0],borderColor:BLUE,borderDash:[7,4],borderWidth:1.5,pointRadius:4,pointBackgroundColor:'#0D1F15',pointBorderColor:BLUE,pointBorderWidth:2,tension:0.35,fill:false,yAxisID:'yPE'},
   ]},
   options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
@@ -766,23 +622,19 @@ new Chart(document.getElementById('cTendencia'),{
     },
     scales:{
       x:{grid:{display:false},border:{display:false},ticks:{color:MUTED}},
-      yCL:{position:'left',grid:{color:grid},border:{display:false},ticks:{callback:v=>v+'M',color:LEAF}},
+      yCL:{position:'left',grid:{color:BORDER},border:{display:false},ticks:{callback:v=>v+'M',color:LEAF}},
       yPE:{position:'right',grid:{display:false},border:{display:false},ticks:{callback:v=>v+'K',color:BLUE}}
     }
   }
 });
 
-// PRODUCTOS
+// ── PRODUCTOS ──
 new Chart(document.getElementById('cProductos'),{
   type:'bar',
-  data:{labels:['AV SILFORTE','AV MOVE','REGALIA MAXX','AV HUMIC ROOT','AV ROOT MAX','AV PLUS POT.','AV MAX FULVIC','AV ALGAP 30'],
+  data:{labels:['AV SILFORTE','AV MOVE','REGALIA MAXX','AV ROOT MAX','AV PLUS POT.','VECASIL FORTE','AV ALGAP 30'],
     datasets:[
-      {label:'🇨🇱 Chile (MCLP)',data:[12.2,23.1,0,15.9,10.3,7.0,5.5,5.0],
-       backgroundColor:ctx=>{const g=ctx.chart.ctx.createLinearGradient(0,0,140,0);g.addColorStop(0,FOREST);g.addColorStop(1,LEAF);return g;},
-       borderRadius:4,borderSkipped:false,barThickness:9},
-      {label:'🇵🇪 Perú (KUSD×0.1)',data:[5.6,0,4.9,0,1.2,0,0,0],
-       backgroundColor:ctx=>{const g=ctx.chart.ctx.createLinearGradient(0,0,80,0);g.addColorStop(0,'#1E3A8A');g.addColorStop(1,BLUE);return g;},
-       borderRadius:4,borderSkipped:false,barThickness:9},
+      {label:'🇨🇱 Chile (MCLP)',data:[12.2,23.1,0,10.3,7.0,0,5.0],backgroundColor:ctx=>{var g=ctx.chart.ctx.createLinearGradient(0,0,140,0);g.addColorStop(0,'#1E3A2F');g.addColorStop(1,LEAF);return g;},borderRadius:4,borderSkipped:false,barThickness:9},
+      {label:'🇵🇪 Perú (KUSD×0.1)',data:[0,0,9.5,1.2,0,15.6,0],backgroundColor:ctx=>{var g=ctx.chart.ctx.createLinearGradient(0,0,80,0);g.addColorStop(0,'#1E3A8A');g.addColorStop(1,BLUE);return g;},borderRadius:4,borderSkipped:false,barThickness:9},
     ]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
     plugins:{
@@ -791,80 +643,45 @@ new Chart(document.getElementById('cProductos'),{
       tooltip:{backgroundColor:'rgba(13,31,21,0.96)',titleColor:WHITE,bodyColor:MUTED,padding:10,cornerRadius:8}
     },
     scales:{
-      x:{grid:{color:grid},border:{display:false},ticks:{callback:v=>v+'M',color:MUTED}},
+      x:{grid:{color:BORDER},border:{display:false},ticks:{callback:v=>v+'M',color:MUTED}},
       y:{grid:{display:false},border:{display:false},ticks:{color:MUTED}}
     }
   }
 });
 
-// AGING CHILE
+// ── AGING CHILE ──
 new Chart(document.getElementById('cAgingChile'),{
   type:'doughnut',
-  data:{labels:['Por vencer','1–30d','31–60d','61–90d'],
-    datasets:[{data:[44958474,27034528,21496541,8157915],
+  data:{labels:['Al día','1–30d','31–60d','61–90d'],
+    datasets:[{data:[12704046,9627708,5668446,1377939],
       backgroundColor:['#7AB648','#FCD34D','#F97316','#B91C1C'],
       borderWidth:3,borderColor:'#0D1F15',hoverOffset:8}]},
   options:{responsive:true,maintainAspectRatio:false,cutout:'70%',
-    animation:{animateRotate:true,duration:1200},
     plugins:{
       legend:{display:false},
-      datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>5000000,formatter:v=>(v/101647458*100).toFixed(0)+'%',color:'#fff',font:{size:10,weight:'700'}},
+      datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>3000000,formatter:v=>(v/37378139*100).toFixed(0)+'%',color:'#fff',font:{size:10,weight:'700'}},
       tooltip:{backgroundColor:'rgba(13,31,21,0.96)',titleColor:WHITE,bodyColor:MUTED,padding:10,cornerRadius:8,
-        callbacks:{label:ctx=>' CLP '+(ctx.raw/1000000).toFixed(1)+'M · '+(ctx.raw/101647458*100).toFixed(1)+'%'}}
+        callbacks:{label:ctx=>' CLP '+(ctx.raw/1000000).toFixed(1)+'M · '+(ctx.raw/37378139*100).toFixed(1)+'%'}}
     }
   }
 });
 
-// AGING PERÚ
+// ── AGING PERÚ ──
 new Chart(document.getElementById('cAgingPeru'),{
   type:'doughnut',
-  data:{labels:['Por vencer','1–30d','31–60d','61–90d','91–180d','+180d'],
-    datasets:[{data:[63191,4133,1650,1290,9812,41511],
-      backgroundColor:['#7AB648','#FCD34D','#F97316','#EF4444','#B91C1C','#7F1D1D'],
+  data:{labels:['Al día','Vencida'],
+    datasets:[{data:[300606,13341],
+      backgroundColor:['#60A5FA','#F97316'],
       borderWidth:3,borderColor:'#0D1F15',hoverOffset:8}]},
   options:{responsive:true,maintainAspectRatio:false,cutout:'70%',
-    animation:{animateRotate:true,duration:1200},
     plugins:{
       legend:{display:false},
-      datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>4000,formatter:v=>(v/121587*100).toFixed(0)+'%',color:'#fff',font:{size:10,weight:'700'}},
+      datalabels:{display:true,formatter:(v,ctx)=>(v/313947*100).toFixed(0)+'%',color:'#fff',font:{size:10,weight:'700'}},
       tooltip:{backgroundColor:'rgba(13,31,21,0.96)',titleColor:WHITE,bodyColor:MUTED,padding:10,cornerRadius:8,
-        callbacks:{label:ctx=>' USD '+ctx.raw.toLocaleString('es')+' · '+(ctx.raw/121587*100).toFixed(1)+'%'}}
+        callbacks:{label:ctx=>' USD '+(ctx.raw).toLocaleString()+' · '+(ctx.raw/313947*100).toFixed(1)+'%'}}
     }
   }
 });
-
-// BULLET CHARTS
-function bullet(id, items) {
-  const el = document.getElementById(id);
-  items.forEach(({name, flag, real, ppto}) => {
-    const pct = ppto > 0 ? (real / ppto) : 0;
-    const fw = Math.min(pct * 100, 100);
-    const c = pct >= 0.9 ? '#7AB648' : pct >= 0.5 ? '#FBB040' : '#F87171';
-    el.innerHTML += '<div class="brow">'
-      + '<div class="bflag">' + flag + '</div>'
-      + '<div class="bname">' + name + '</div>'
-      + '<div class="btrack"><div class="bfill" style="width:' + fw + '%;background:' + c + '"></div>'
-      + '<div class="btarget" style="left:33.3%"></div></div>'
-      + '<div class="bpct" style="color:' + c + '">' + (pct*100).toFixed(0) + '%</div>'
-      + '</div>';
-  });
-}
-
-bullet('bChile', [
-  {name:'J. Caroca',    flag:'🇨🇱', real:41085803, ppto:33000000},
-  {name:'P. Laratro',   flag:'🇨🇱', real:52921715, ppto:54100000},
-  {name:'F. Velasquez', flag:'🇨🇱', real:28143500, ppto:32859982},
-  {name:'R. Encina',    flag:'🇨🇱', real:24479762, ppto:29200000},
-  {name:'I. Veverka',   flag:'🇨🇱', real: 7130000, ppto:18000000},
-]);
-bullet('bPeru', [
-  {name:'L. Aguirre',    flag:'🇵🇪', real:60867,  ppto:35370},
-  {name:'O. Atalaya',    flag:'🇵🇪', real:49071,  ppto:53634},
-  {name:'O. Infante',    flag:'🇵🇪', real:34265,  ppto:114735},
-  {name:'A. Gonzalez',   flag:'🇵🇪', real:600,    ppto:4000},
-  {name:'P. Valladares', flag:'🇵🇪', real:0,      ppto:5646},
-]);
-}); // end window.load
 </script>
 </body>
 </html>
