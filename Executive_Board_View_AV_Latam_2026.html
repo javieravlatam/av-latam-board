@@ -2,683 +2,941 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Executive Board View · AV Latam · 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Executive Board View · AV Latam 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --bg:#0D1F15;--surface:#132A1A;--surface2:#1A3522;--card:#16271D;
-  --leaf:#7AB648;--leaf2:#9FCC6B;--leaf3:#4A8C2A;--leaf4:#2D5A1B;
-  --amber:#FBB040;--red:#F87171;--blue:#60A5FA;--blue2:#3B82F6;
-  --muted:#7A9E86;--border:#2A4535;--white:#F0F4F1;
-  --text:#C8E6C9;--text2:#A5C8A8;
-}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;font-size:13px;}
-.hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
-.hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--leaf),var(--leaf2),transparent);}
-.hbrand{display:flex;align-items:center;gap:12px;}
-.hlogo img{height:36px;filter:brightness(1.2);}
-.htitle{font-size:15px;font-weight:600;letter-spacing:-.3px;}
-.hsub{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
-.hnav{display:flex;align-items:center;gap:8px;}
-.hlink{font-size:10px;color:var(--muted);text-decoration:none;padding:5px 12px;border-radius:5px;border:1px solid var(--border);letter-spacing:.5px;transition:all .2s;white-space:nowrap;}
-.hlink:hover{color:var(--leaf);border-color:var(--leaf);}
-.cut{font-family:'Courier New',monospace;font-size:10px;padding:4px 10px;border-radius:4px;background:rgba(74,140,42,.15);border:1px solid rgba(74,140,42,.3);color:var(--leaf2);}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #080e09;
+    --surface: #0f1a10;
+    --surface2: #162118;
+    --surface3: #1c2b1e;
+    --green: #7AB648;
+    --green-dim: #5a8a35;
+    --green-glow: rgba(122,182,72,0.15);
+    --amber: #F5A623;
+    --red: #E74C3C;
+    --red-dark: #C0392B;
+    --text: #e8f0e9;
+    --text-dim: #8fa892;
+    --text-muted: #5a7060;
+    --border: rgba(122,182,72,0.18);
+    --border-dim: rgba(122,182,72,0.08);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
 
-.wrap{padding:28px 48px 56px;}
-.slabel{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);font-weight:600;margin:24px 0 12px;display:flex;align-items:center;gap:10px;}
-.slabel::after{content:'';flex:1;height:1px;background:var(--border);}
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(180deg, #0c1a0d 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .header-left { display: flex; align-items: center; gap: 18px; }
+  .logo-mark {
+    width: 40px; height: 40px;
+    background: var(--green);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; color: var(--bg); letter-spacing: 1px;
+  }
+  .header-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--green); }
+  .header-sub { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; }
+  .header-corte { text-align: right; }
+  .corte-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+  .corte-date { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--green); }
 
-/* ── KPIs ── */
-.kgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:4px;}
-.kcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;}
-.kcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--leaf),transparent);}
-.klbl{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px;font-weight:600;}
-.kval{font-size:24px;font-weight:700;letter-spacing:-1px;line-height:1;}
-.ksub{font-size:10px;color:var(--muted);margin-top:6px;}
-.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:12px;font-size:10px;font-weight:600;margin-top:8px;}
-.bg{background:rgba(74,222,128,.12);color:#4ade80;}
-.ba{background:rgba(251,176,64,.12);color:var(--amber);}
-.br{background:rgba(248,113,113,.12);color:var(--red);}
-.bb{background:rgba(96,165,250,.12);color:var(--blue);}
+  /* ── LAYOUT ── */
+  .page { max-width: 1400px; margin: 0 auto; padding: 24px 32px 48px; }
 
-/* ── GRID ── */
-.g21{display:grid;grid-template-columns:2fr 1fr;gap:14px;}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;}
-.ctop{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
-.ceyebrow{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:3px;font-weight:600;}
-.cq{font-size:14px;font-weight:600;letter-spacing:-.2px;}
-.tag{font-size:9px;padding:3px 8px;border-radius:4px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
-.ta{background:rgba(251,176,64,.12);color:var(--amber);}
-.tg{background:rgba(74,222,128,.12);color:#4ade80;}
-.tr{background:rgba(248,113,113,.12);color:var(--red);}
-.td{background:rgba(96,165,250,.12);color:var(--blue);}
-.cbox{flex:1;position:relative;}
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px; letter-spacing: 3px;
+    color: var(--green); text-transform: uppercase;
+    border-left: 3px solid var(--green);
+    padding-left: 12px; margin: 32px 0 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title span { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 1px; font-weight: 400; }
 
-/* ── SEMÁFORO ── */
-.srow{display:flex;align-items:center;padding:9px 12px;border-radius:8px;background:rgba(255,255,255,.02);border:1px solid var(--border);margin-bottom:7px;gap:10px;}
-.srow:last-child{margin-bottom:0;}
-.flag{font-size:13px;flex-shrink:0;}
-.sinfo{flex:1;}
-.sname{font-size:12px;font-weight:500;}
-.sdet{font-size:10px;color:var(--muted);margin-top:1px;}
-.sright{display:flex;align-items:center;gap:8px;}
-.spct{font-size:13px;font-weight:600;min-width:42px;text-align:right;}
-.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.dg{background:#4ade80;box-shadow:0 0 5px #4ade80;}
-.da{background:var(--amber);box-shadow:0 0 5px var(--amber);}
-.dr{background:var(--red);box-shadow:0 0 5px var(--red);}
-.dn{background:var(--muted);}
+  /* ── KPI HERO ── */
+  .kpi-hero {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: var(--green);
+  }
+  .kpi-card.amber::before { background: var(--amber); }
+  .kpi-card.red::before { background: var(--red); }
+  .kpi-card.blue::before { background: #4A9EDB; }
+  .kpi-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+  .kpi-value { font-family: 'Bebas Neue', sans-serif; font-size: 36px; line-height: 1; color: var(--text); }
+  .kpi-value.green { color: var(--green); }
+  .kpi-value.amber { color: var(--amber); }
+  .kpi-value.red { color: var(--red); }
+  .kpi-sub { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-dim); margin-top: 6px; }
+  .kpi-badge {
+    display: inline-block; padding: 2px 8px;
+    border-radius: 4px; font-size: 10px; font-weight: 600;
+    margin-top: 8px; letter-spacing: 0.5px;
+  }
+  .badge-green { background: rgba(122,182,72,0.18); color: var(--green); }
+  .badge-amber { background: rgba(245,166,35,0.15); color: var(--amber); }
+  .badge-red { background: rgba(231,76,60,0.15); color: var(--red); }
 
-/* ── PAÍS CARDS ── */
-.pcard{background:rgba(255,255,255,.025);border-radius:10px;padding:16px 18px;border:1px solid var(--border);}
-.pcard.gr{border-color:rgba(74,140,42,.4);}
-.pcard.am{border-color:rgba(251,176,64,.35);}
-.pname{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
-.cval{font-size:26px;font-weight:700;letter-spacing:-1px;}
-.cdet{font-size:10px;color:var(--muted);margin-top:3px;}
-.prow{display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-top:8px;}
-.ptrack{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:4px;overflow:hidden;}
-.pfill{height:100%;border-radius:2px;}
+  /* ── GRID 2 COL ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
 
-/* ── INSIGHTS ── */
-.ins{padding:10px 14px;border-radius:8px;border-left:3px solid;font-size:12px;line-height:1.6;margin-bottom:8px;color:var(--text2);}
-.ins:last-child{margin-bottom:0;}
-.ig{background:rgba(74,140,42,.08);border-color:var(--leaf);}
-.ia{background:rgba(251,176,64,.07);border-color:var(--amber);}
-.ir{background:rgba(248,113,113,.07);border-color:var(--red);}
-.id{background:rgba(96,165,250,.07);border-color:var(--blue);}
-.ins strong{font-weight:600;color:var(--white);}
+  /* ── PANEL ── */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .panel-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px; letter-spacing: 2px;
+    color: var(--green); margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .panel-title .tag { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); font-weight: 400; }
 
-/* ── TABLE ── */
-.tbl{width:100%;border-collapse:collapse;margin-top:10px;}
-.tbl th{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:0 10px 8px;text-align:right;border-bottom:1px solid var(--border);font-weight:600;}
-.tbl th:first-child{text-align:left;}
-.tbl td{padding:8px 10px;font-size:11px;color:var(--text2);border-bottom:1px solid rgba(42,69,53,.5);text-align:right;}
-.tbl td:first-child{text-align:left;font-weight:500;color:var(--white);}
-.tbl tr:last-child td{border-bottom:none;}
-.cv{color:#4ade80;font-weight:600;}
-.ca{color:var(--amber);font-weight:600;}
-.cr{color:var(--red);font-weight:600;}
+  /* ── TABLA RTC ── */
+  .rtc-table { width: 100%; border-collapse: collapse; }
+  .rtc-table th {
+    font-size: 9px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1.5px;
+    text-align: left; padding: 0 8px 10px;
+    border-bottom: 1px solid var(--border-dim);
+    font-weight: 500;
+  }
+  .rtc-table th.right { text-align: right; }
+  .rtc-table td { padding: 10px 8px; vertical-align: middle; }
+  .rtc-table tr { border-bottom: 1px solid var(--border-dim); }
+  .rtc-table tr:last-child { border-bottom: none; }
+  .rtc-table tr:hover { background: var(--surface2); }
+  .rtc-name { font-weight: 600; font-size: 12px; }
+  .rtc-val { font-family: 'DM Mono', monospace; font-size: 11px; text-align: right; }
+  .rtc-pct { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 600; text-align: right; }
 
-/* ── FOOTER ── */
-.footer{margin:0 48px;padding:14px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
-.fnote{font-size:10px;color:var(--muted);}
-.fbrand img{height:22px;opacity:.5;}
+  /* ── PROGRESS BAR ── */
+  .prog-wrap { background: var(--surface3); border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .prog-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
 
-@media(max-width:1100px){.kgrid{grid-template-columns:repeat(3,1fr);}.g21,.g2,.g3{grid-template-columns:1fr;}}
-@media(max-width:768px){.hdr,.wrap,.footer{padding-left:14px;padding-right:14px;}.kgrid{grid-template-columns:repeat(2,1fr);}.hnav{display:none;}}
+  /* ── SEMAFORO ── */
+  .sema { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+  .sema-green { background: var(--green); box-shadow: 0 0 6px rgba(122,182,72,0.6); }
+  .sema-amber { background: var(--amber); box-shadow: 0 0 6px rgba(245,166,35,0.5); }
+  .sema-red { background: var(--red); box-shadow: 0 0 6px rgba(231,76,60,0.5); }
+
+  /* ── CHART CONTAINER ── */
+  .chart-wrap { position: relative; height: 220px; }
+  .chart-wrap-sm { position: relative; height: 180px; }
+
+  /* ── CEO P&L PANEL ── */
+  .pl-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border-dim);
+    font-size: 12px;
+  }
+  .pl-row:last-child { border-bottom: none; font-weight: 600; }
+  .pl-row.subtotal { background: var(--surface2); padding: 7px 8px; border-radius: 4px; margin: 4px 0; }
+  .pl-row.highlight { background: rgba(122,182,72,0.08); padding: 7px 8px; border-radius: 4px; }
+  .pl-label { color: var(--text-dim); }
+  .pl-val { font-family: 'DM Mono', monospace; text-align: right; }
+  .pl-val.pos { color: var(--green); }
+  .pl-val.neg { color: var(--red); }
+  .pl-val.warn { color: var(--amber); }
+  .pl-section-head {
+    font-size: 9px; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--text-muted); padding: 12px 0 4px;
+  }
+
+  /* ── ALERTA BOXES ── */
+  .alert-box {
+    border-radius: 8px; padding: 14px 16px; margin-bottom: 10px;
+    border-left: 3px solid;
+  }
+  .alert-box.green { background: rgba(122,182,72,0.07); border-color: var(--green); }
+  .alert-box.amber { background: rgba(245,166,35,0.07); border-color: var(--amber); }
+  .alert-box.red { background: rgba(231,76,60,0.07); border-color: var(--red); }
+  .alert-title { font-weight: 600; font-size: 12px; margin-bottom: 4px; }
+  .alert-body { font-size: 11px; color: var(--text-dim); line-height: 1.6; }
+
+  /* ── CXC DONUT ── */
+  .donut-legend { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 11px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .legend-pct { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 11px; }
+
+  /* ── GRUPO CONSOLIDADO ── */
+  .consolidado-row {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+  }
+  .cons-flag { font-size: 20px; }
+  .cons-pais { font-weight: 700; font-size: 13px; width: 60px; }
+  .cons-bar-wrap { flex: 1; }
+  .cons-val { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text); white-space: nowrap; }
+  .cons-pct-badge { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700; white-space: nowrap; width: 70px; text-align: right; }
+
+  /* ── FOOTER ── */
+  .footer {
+    border-top: 1px solid var(--border-dim);
+    padding: 20px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 32px;
+  }
+  .footer-left { font-size: 10px; color: var(--text-muted); }
+  .nav-pills { display: flex; gap: 8px; }
+  .nav-pill {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 6px 14px;
+    font-size: 11px; color: var(--text-dim);
+    text-decoration: none; transition: all 0.2s;
+    cursor: pointer;
+  }
+  .nav-pill:hover { background: var(--green); color: var(--bg); border-color: var(--green); }
+
+  /* ── META GAUGE ── */
+  .meta-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(122,182,72,0.1); border: 1px solid var(--border);
+    border-radius: 6px; padding: 4px 10px;
+    font-family: 'DM Mono', monospace; font-size: 10px; color: var(--green);
+  }
+
+  @media (max-width: 900px) {
+    .kpi-hero { grid-template-columns: repeat(2,1fr); }
+    .grid-2 { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
 
-<div class="hdr">
-  <div class="hbrand">
-    <div class="hlogo"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 36'%3E%3Crect width='80' height='36' rx='6' fill='%232D5A1B'/%3E%3Ctext x='40' y='25' text-anchor='middle' font-family='Inter' font-weight='700' font-size='18' fill='%239FCC6B'%3EAV%3C/text%3E%3C/svg%3E" alt="AV"></div>
-    <div><div class="htitle">Executive Board View · Grupo Latam</div><div class="hsub">Dirección General · Q1 2026</div></div>
-  </div>
-  <div class="hnav">
-    <a href="index.html" class="hlink">← Inicio</a>
-    <a href="Dashboard_Comercial_AV_Latam_2026.html" class="hlink">Dashboard</a>
-    <a href="Panel_Jefes_Index.html" class="hlink">Panel Jefes</a>
-    <div class="cut">Corte: Chile 28/03 · Perú 27/03/2026</div>
-  </div>
-</div>
-
-<div class="wrap">
-
-<!-- ── KPIs TOP ── -->
-<div class="slabel">KPIs Ejecutivos · Grupo Latam Ene–Mar 2026</div>
-<div class="kgrid">
-  <div class="kcard">
-    <div class="klbl">Ventas Grupo YTD</div>
-    <div class="kval" style="color:var(--leaf2);">USD 373.2K</div>
-    <div class="ksub">CLP 173,2M + USD 190,9K</div>
-    <div class="badge ba">89.5% ppto YTD</div>
-  </div>
-  <div class="kcard">
-    <div class="klbl">Chile YTD</div>
-    <div class="kval" style="color:var(--leaf);">CLP 173M</div>
-    <div class="ksub">Ppto CLP 167,2M · ✅ 103.6%</div>
-    <div class="badge bg">✅ 103.6% cumplimiento</div>
-  </div>
-  <div class="kcard">
-    <div class="klbl">Perú YTD</div>
-    <div class="kval" style="color:var(--amber);">USD 190,9K</div>
-    <div class="ksub">Ppto USD 213,4K · 89.5%</div>
-    <div class="badge ba">89.5% cumplimiento</div>
-  </div>
-  <div class="kcard">
-    <div class="klbl">Cartera Vencida Chile</div>
-    <div class="kval" style="color:var(--red);">CLP 24,7M</div>
-    <div class="ksub">66% vencida · Corte 22/03</div>
-    <div class="badge br">Gestión urgente</div>
-  </div>
-  <div class="kcard">
-    <div class="klbl">Cartera Vencida Perú</div>
-    <div class="kval" style="color:var(--amber);">USD 13,3K</div>
-    <div class="ksub">4.2% del total · PAODISA crítico</div>
-    <div class="badge ba">Monitoreo activo</div>
-  </div>
-</div>
-
-<!-- ── ROW 1: Tendencia + País ── -->
-<div class="slabel">Análisis de Desempeño</div>
-<div class="g21" style="margin-bottom:14px;">
-  <div class="card">
-    <div class="ctop">
-      <div><div class="ceyebrow">Tendencia Mensual</div><div class="cq">¿Estamos creciendo según plan?</div></div>
-      <span class="tag ta">Ene–Mar · Real vs Ppto</span>
-    </div>
-    <div class="cbox" style="min-height:240px;margin-top:12px;"><canvas id="cTendencia"></canvas></div>
-    <div class="ins ia" style="margin-top:12px;">Chile ✅ cerró T1 en <strong>103.6% del ppto (CLP 173,2M)</strong>, liderado por Caroca con 162.3% YTD y Marzo al 220%. Perú <strong>USD 78,0K en Marzo — nuevo récord</strong> — nuevo récord del año. L. Aguirre generó USD 29,4K sin presupuesto. <strong>Q2: consolidar Chile, formalizar Aguirre, recuperar RTCs Perú.</strong></div>
-  </div>
-  <div class="card">
-    <div class="ctop">
-      <div><div class="ceyebrow">Performance por País</div><div class="cq">¿Qué país performa mejor?</div></div>
-      <span class="tag td">TC 950 CLP/USD</span>
-    </div>
-    <div style="margin-top:14px;">
-      <div class="pcard gr" style="margin-bottom:10px;">
-        <div class="pname">🇨🇱 Chile</div>
-        <div class="cval" style="color:var(--leaf);">USD 177K</div>
-        <div class="cdet">CLP 173,2M equiv.</div>
-        <div class="prow"><span>YTD</span><span style="font-weight:700;color:var(--leaf)">103.6%</span></div>
-        <div class="ptrack"><div class="pfill" style="width:100%;background:var(--leaf);"></div></div>
-        <div class="prow" style="margin-top:6px;"><span>Vs año completo</span><span>15.1%</span></div>
-        <div class="ptrack"><div class="pfill" style="width:15%;background:var(--leaf3);"></div></div>
-      </div>
-      <div class="pcard am">
-        <div class="pname">🇵🇪 Perú</div>
-        <div class="cval" style="color:var(--amber);">USD 190,9K</div>
-        <div class="cdet">Facturación directa</div>
-        <div class="prow"><span>YTD</span><span style="font-weight:700;color:var(--amber)">89.5%</span></div>
-        <div class="ptrack"><div class="pfill" style="width:89.5%;background:var(--amber);"></div></div>
-        <div class="prow" style="margin-top:6px;"><span>Vs año completo</span><span>13.2%</span></div>
-        <div class="ptrack"><div class="pfill" style="width:13%;background:#c4701a;"></div></div>
-      </div>
-    </div>
-    <div class="ins id" style="margin-top:10px;">Perú <strong>lidera en USD absoluto</strong> y tiene el mejor margen del grupo (89.5%). Ticket promedio Perú: <strong>USD 3.400/factura</strong>. Mayor potencial de recuperación Q2 activando RTCs rezagados.</div>
-  </div>
-</div>
-
-<!-- ── ROW 2: RTCs + Productos ── -->
-<div class="g21" style="margin-bottom:14px;">
-  <div class="card">
-    <div class="ctop">
-      <div><div class="ceyebrow">Semáforo Comercial</div><div class="cq">Estado del equipo · Grupo Latam</div></div>
-      <span class="tag tg">10 RTCs activos</span>
-    </div>
-    <div style="margin-top:12px;">
-      <div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);">🇨🇱 Chile</div>
-      <div class="srow"><span class="flag">🏆</span><div class="sinfo"><div class="sname">J. Caroca</div><div class="sdet">CLP 53,6M · Marzo 220% ppto</div></div><div class="sright"><div class="spct" style="color:#4ade80;">162.3%</div><div class="dot dg"></div></div></div>
-      <div class="srow"><span class="flag">🔵</span><div class="sinfo"><div class="sname">P. Laratro</div><div class="sdet">CLP 50,2M · CxC CLP 16,1M</div></div><div class="sright"><div class="spct" style="color:var(--amber);">92.9%</div><div class="dot da"></div></div></div>
-      <div class="srow"><span class="flag">🔵</span><div class="sinfo"><div class="sname">R. Encina</div><div class="sdet">CLP 25,5M · Mejora sostenida</div></div><div class="sright"><div class="spct" style="color:var(--amber);">87.5%</div><div class="dot da"></div></div></div>
-      <div class="srow"><span class="flag">🔵</span><div class="sinfo"><div class="sname">F. Velásquez</div><div class="sdet">CLP 27,9M · Marzo débil 53%</div></div><div class="sright"><div class="spct" style="color:var(--amber);">84.8%</div><div class="dot da"></div></div></div>
-      <div class="srow"><span class="flag">🔴</span><div class="sinfo"><div class="sname">I. Veverka</div><div class="sdet">CLP 8,1M · Solo 16.8% en Marzo</div></div><div class="sright"><div class="spct" style="color:var(--red);">45.2%</div><div class="dot dr"></div></div></div>
-      <div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:10px 0 8px;padding-top:8px;border-top:1px solid var(--border);">🇵🇪 Perú</div>
-      <div class="srow"><span class="flag">⭐</span><div class="sinfo"><div class="sname">O. Atalaya</div><div class="sdet">USD 59,1K · Modelo del equipo</div></div><div class="sright"><div class="spct" style="color:#4ade80;">110.2%</div><div class="dot dg"></div></div></div>
-      <div class="srow"><span class="flag">🔵</span><div class="sinfo"><div class="sname">N. Navarro</div><div class="sdet">USD 34,0K · Sin ventas Marzo</div></div><div class="sright"><div class="spct" style="color:var(--amber);">96.2%</div><div class="dot da"></div></div></div>
-      <div class="srow"><span class="flag">🟣</span><div class="sinfo"><div class="sname">L. Aguirre</div><div class="sdet">USD 36,2K · Sin ppto — incorporar Q2</div></div><div class="sright"><div class="spct" style="color:var(--muted);">s/p</div><div class="dot dn"></div></div></div>
-      <div class="srow"><span class="flag">🔴</span><div class="sinfo"><div class="sname">O. Infante</div><div class="sdet">USD 60,3K · 52.6% · Mejoró Marzo</div></div><div class="sright"><div class="spct" style="color:var(--red);">52.6%</div><div class="dot dr"></div></div></div>
-      <div class="srow"><span class="flag">🔴</span><div class="sinfo"><div class="sname">A. González / P. Valladares</div><div class="sdet">USD 696 / USD 600 · Críticos</div></div><div class="sright"><div class="spct" style="color:var(--red);">&lt;20%</div><div class="dot dr"></div></div></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="ctop">
-      <div><div class="ceyebrow">Mix de Productos</div><div class="cq">Top productos por país</div></div>
-      <span class="tag tg">Margen estimado</span>
-    </div>
-    <div class="cbox" style="min-height:240px;margin-top:12px;"><canvas id="cProductos"></canvas></div>
-  </div>
-</div>
-
-<!-- ── ROW 3: Cartera ── -->
-<div class="slabel">Cartera por Cobrar · Análisis de Riesgo</div>
-<div class="g2" style="margin-bottom:14px;">
-  <div class="card">
-    <div class="ctop">
-      <div><div class="ceyebrow">🇨🇱 Aging Chile · Al 22/03/2026</div><div class="cq">CLP 37,4M total · 66% vencida</div></div>
-      <span class="tag tr">Acción requerida</span>
-    </div>
-    <div style="display:flex;gap:14px;margin-top:14px;">
-      <div style="flex:0 0 140px;height:140px;position:relative;"><canvas id="cAgingChile"></canvas></div>
-      <div style="flex:1;">
-        <table class="tbl" style="margin-top:0;">
-          <thead><tr><th>Cliente</th><th>Días</th><th>CLP</th></tr></thead>
-          <tbody>
-            <tr><td>Goyaservice SPA</td><td class="cr">78d</td><td class="cr">4,194,750</td></tr>
-            <tr><td>Rio Diuto SPA</td><td class="ca">51d</td><td class="ca">2,856,000</td></tr>
-            <tr><td>Soc.Ag.Santa Teresa</td><td class="ca">15d</td><td class="ca">3,500,000</td></tr>
-            <tr><td>Ag.Ribera Ltda.</td><td class="ca">66d</td><td class="ca">1,473,696</td></tr>
-            <tr><td>Ganafrut SPA</td><td>9d</td><td>2,687,972</td></tr>
-          </tbody>
-        </table>
-        <div class="ins ig" style="margin-top:10px;font-size:11px;">✅ Sin deuda +90 días. Goyaservice (78d) y Rio Diuto (51d) son prioritarios. <strong>J. Caroca concentra CLP 15,3M</strong> — revisar política de crédito.</div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="ctop">
-      <div><div class="ceyebrow">🇵🇪 Cartera Perú · Al 24/03/2026</div><div class="cq">USD 313,9K total · 4.2% vencida</div></div>
-      <span class="tag td">Bajo riesgo</span>
-    </div>
-    <div style="display:flex;gap:14px;margin-top:14px;">
-      <div style="flex:0 0 140px;height:140px;position:relative;"><canvas id="cAgingPeru"></canvas></div>
-      <div style="flex:1;">
-        <table class="tbl" style="margin-top:0;">
-          <thead><tr><th>Cliente</th><th>USD</th></tr></thead>
-          <tbody>
-            <tr><td>RVR AGRO S.R.L.</td><td style="color:var(--leaf);">185,080</td></tr>
-            <tr><td>BOMAREA S.R.L.</td><td>20,000</td></tr>
-            <tr><td>Corp. ESAN E&amp;F</td><td>16,634</td></tr>
-            <tr><td>Soc. Ag. Drokasa</td><td>11,760</td></tr>
-            <tr><td>PAODISA S.A. ⚠</td><td class="ca">10,874</td></tr>
-          </tbody>
-        </table>
-        <div class="ins id" style="margin-top:10px;font-size:11px;">RVR AGRO representa el <strong>59% de la cartera</strong>. PAODISA tiene deuda desde 2024 — requiere gestión. El 95.8% restante está al día.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ── STRATEGIC INSIGHTS ── -->
-<div class="slabel">Análisis Estratégico</div>
-<div class="g2">
-  <div class="card">
-    <div class="ctop"><div><div class="ceyebrow">Fortalezas Q1</div><div class="cq">Lo que está funcionando</div></div><span class="tag tg">Mantener</span></div>
-    <div style="margin-top:12px;">
-      <div class="ins ig"><strong>Chile superó el 100% YTD por primera vez en 2026.</strong> J. Caroca (162.3%) y Marzo en 101.8% fueron los drivers. El equipo chileno demostró que puede cerrar el trimestre sobre meta.</div>
-      <div class="ins ig"><strong>Perú tiene el mejor margen del Grupo: 89.5%.</strong> Cuando el equipo vende, vende bien. Regalia MAX (97% margen) y Vecasil Forte (88%) son los productos ancla.</div>
-      <div class="ins ig"><strong>Perú Marzo récord: USD 65,6K.</strong> Fue el mejor mes del año y supera al anterior máximo de Enero (USD 73,5K en tendencia). L. Aguirre con USD 29,4K sin objetivo formal.</div>
-      <div class="ins ig"><strong>Sin deuda +90 días en Chile.</strong> Primera vez en el año. La gestión de cobro mejora aunque la concentración en Caroca es un riesgo.</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="ctop"><div><div class="ceyebrow">Riesgos y Plan Q2</div><div class="cq">Lo que necesita acción</div></div><span class="tag tr">Urgente</span></div>
-    <div style="margin-top:12px;">
-      <div class="ins ir"><strong>3 RTCs Perú bajo 45% YTD.</strong> Infante (42%), González (17%), Valladares (10%). Plan individual por zona con acompañamiento técnico desde Abril. Metodología Atalaya como modelo.</div>
-      <div class="ins ia"><strong>L. Aguirre sin presupuesto Q2.</strong> Generó USD 35,9K sin objetivo formal. Asignar meta, recursos y visibilidad oficial en el semáforo. Potencial real de USD 100K+ anuales.</div>
-      <div class="ins ir"><strong>Goyaservice (78d, CLP 4,2M) y Rio Diuto (51d, CLP 2,9M).</strong> Caroca concentra el mayor riesgo de cobro de Chile. Revisar límite de crédito individual y activar gestión legal.</div>
-      <div class="ins ia"><strong>Veverka (Chile) 45.2% YTD.</strong> Marzo fue solo CLP 1M vs ppto CLP 6M. Requiere plan de recuperación con revisión de cartera de clientes y acompañamiento técnico semanal.</div>
-    </div>
-  </div>
-</div>
-
-</div><!-- /wrap -->
-
-
-<!-- ══════════════════════════════════════════════════════════
-     SECCIÓN CEO: VISIÓN REPORTADA vs REALIDAD AJUSTADA
-     ══════════════════════════════════════════════════════ -->
-<div class="slabel" style="margin-top:32px;">Análisis CEO · Rentabilidad Real vs Reportada · Chile Q1 2026</div>
-
-<div class="card" style="margin-bottom:14px;border-color:rgba(248,113,113,.25);">
-  <div class="ctop">
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo-mark">AV</div>
     <div>
-      <div class="ceyebrow">05 · Informe Director Comercial</div>
-      <div class="cq" style="font-size:17px;">Lo que creemos que pasa &nbsp;≠&nbsp; Lo que realmente está pasando</div>
-    </div>
-    <span class="tag tr">⚠ 7 puntos bajo meta</span>
-  </div>
-
-  <!-- ── BARRA DE CONTRASTE SUPERIOR ── -->
-  <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:0;margin:18px 0 20px;border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-    <div style="background:rgba(74,140,42,.08);padding:18px 22px;">
-      <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:var(--leaf2);text-transform:uppercase;margin-bottom:8px;">Lo que reportamos</div>
-      <div style="font-size:11px;color:var(--muted);line-height:1.7;">
-        Margen Bruto Chile Q1: <strong style="color:var(--leaf2);font-size:15px;">62.2%</strong><br>
-        Ventas vs Ppto: <strong style="color:var(--leaf2);">103.6% ✅</strong><br>
-        Caroca 162.3% · Laratro 97% · Encina 93.5%<br>
-        <em style="color:var(--muted);">→ Lectura: trimestre exitoso, equipo en control</em>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;justify-content:center;padding:0 20px;background:rgba(0,0,0,.15);">
-      <div style="text-align:center;">
-        <div style="font-size:28px;color:var(--red);line-height:1;">≠</div>
-        <div style="font-size:8px;color:var(--muted);letter-spacing:1px;margin-top:4px;">BRECHA</div>
-      </div>
-    </div>
-    <div style="background:rgba(248,113,113,.07);padding:18px 22px;">
-      <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:var(--red);text-transform:uppercase;margin-bottom:8px;">Lo que realmente pasa</div>
-      <div style="font-size:11px;color:var(--muted);line-height:1.7;">
-        Margen Neto Real Chile Q1: <strong style="color:var(--red);font-size:15px;">17.9%</strong><br>
-        Meta corporativa: <strong style="color:var(--amber);">25%</strong> → Gap: <strong style="color:var(--red);">-7.1pp (CLP 12.2M faltante)</strong><br>
-        Solo 1 de 5 RTCs cumple la meta · Veverka destruye capital<br>
-        <em style="color:var(--muted);">→ Lectura: Chile subsidia pérdidas con un solo vendedor</em>
-      </div>
+      <div class="header-title">Executive Board View · AV Latam 2026</div>
+      <div class="header-sub">Gerencia General · Visión Consolidada</div>
     </div>
   </div>
-
-  <!-- ── TABLA PRINCIPAL POR RTC ── -->
-  <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">
-    Chile · Contraste por RTC · Q1 2026 · Meta corporativa: 25% margen neto real
+  <div class="header-corte">
+    <div class="corte-label">Corte de Datos</div>
+    <div class="corte-date">Chile 05/04 · Perú 08/04 · CxC 09/04</div>
   </div>
+</header>
 
-  <div style="overflow-x:auto;">
-  <table style="width:100%;border-collapse:collapse;font-size:11px;">
-    <thead>
-      <tr style="background:var(--surface2);">
-        <th style="padding:8px 12px;text-align:left;color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:700;">RTC</th>
-        <th style="padding:8px 12px;text-align:right;color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:700;">Venta Q1</th>
-        <th style="padding:8px 12px;text-align:center;background:rgba(74,140,42,.08);color:var(--leaf2);font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:700;">Margen Bruto<br>Reportado</th>
-        <th style="padding:8px 12px;text-align:center;background:rgba(248,113,113,.08);color:var(--red);font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:700;">Margen Neto<br>Real (con RTC)</th>
-        <th style="padding:8px 12px;text-align:center;color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:700;">Gap vs<br>Meta 25%</th>
-        <th style="padding:8px 12px;text-align:center;color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:700;">Ratio Gasto<br>x $1 vendido</th>
-        <th style="padding:8px 12px;text-align:center;color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:700;">Estado Real</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Caroca -->
-      <tr style="background:rgba(74,140,42,.06);border-bottom:1px solid rgba(42,69,53,.5);">
-        <td style="padding:10px 12px;color:var(--white);font-weight:600;">J. Caroca</td>
-        <td style="padding:10px 12px;text-align:right;color:var(--text2);">CLP 53.8M</td>
-        <td style="padding:10px 12px;text-align:center;background:rgba(74,140,42,.05);color:var(--leaf2);font-weight:600;">61.8%</td>
-        <td style="padding:10px 12px;text-align:center;background:rgba(74,140,42,.05);color:#4ade80;font-weight:700;font-size:14px;">39.2%</td>
-        <td style="padding:10px 12px;text-align:center;color:#4ade80;font-weight:700;">+14.2pp ✅</td>
-        <td style="padding:10px 12px;text-align:center;color:#4ade80;font-weight:600;">$0.11</td>
-        <td style="padding:10px 12px;text-align:center;">
-          <span style="background:rgba(74,222,128,.12);color:#4ade80;font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;">REFERENTE</span>
-        </td>
-      </tr>
-      <!-- Laratro -->
-      <tr style="background:rgba(251,176,64,.04);border-bottom:1px solid rgba(42,69,53,.5);">
-        <td style="padding:10px 12px;color:var(--white);font-weight:600;">P. Laratro</td>
-        <td style="padding:10px 12px;text-align:right;color:var(--text2);">CLP 52.5M</td>
-        <td style="padding:10px 12px;text-align:center;background:rgba(74,140,42,.05);color:var(--leaf2);font-weight:600;">64.2%</td>
-        <td style="padding:10px 12px;text-align:center;background:rgba(251,176,64,.06);color:var(--amber);font-weight:700;font-size:14px;">19.6%</td>
-        <td style="padding:10px 12px;text-align:center;color:var(--amber);font-weight:700;">-5.4pp ⚠</td>
-        <td style="padding:10px 12px;text-align:center;color:var(--amber);font-weight:600;">$0.44<br><span style="font-size:8px;color:var(--muted);">(Enero: $0.17 → Marzo: $0.70)</span></td>
-        <td style="padding:10px 12px;text-align:center;">
-          <span style="background:rgba(251,176,64,.12);color:var(--amber);font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;">BAJO META</span>
-        </td>
-      </tr>
-      <!-- Encina -->
-      <tr style="background:rgba(251,176,64,.02);border-bottom:1px solid rgba(42,69,53,.5);">
-        <td style="padding:10px 12px;color:var(--white);font-weight:600;">R. Encina</td>
-        <td style="padding:10px 12px;text-align:right;color:var(--text2);">CLP 27.1M</td>
-        <td style="padding:10px 12px;text-align:center;background:rgba(74,140,42,.05);color:var(--leaf2);font-weight:600;">64.3%</td>
-        <td style="padding:10px 12px;text-align:center;background:rgba(251,176,64,.06);color:var(--amber);font-weight:700;font-size:14px;">21.9%</td>
-        <td style="padding:10px 12px;text-align:center;color:var(--amber);font-weight:700;">-3.1pp ⚠</td>
-        <td style="padding:10px 12px;text-align:center;color:var(--amber);font-weight:600;">$0.31<br><span style="font-size:8px;color:var(--leaf2);">+Camioneta Mayo↑</span></td>
-        <td style="padding:10px 12px;text-align:center;">
-          <span style="background:rgba(251,176,64,.12);color:var(--amber);font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;">TÉCNICO / ESCALA</span>
-        </td>
-      </tr>
-      <!-- Velasquez -->
-      <tr style="background:rgba(248,113,113,.04);border-bottom:1px solid rgba(42,69,53,.5);">
-        <td style="padding:10px 12px;color:var(--white);font-weight:600;">F. Velásquez</td>
-        <td style="padding:10px 12px;text-align:right;color:var(--text2);">CLP 29.0M</td>
-        <td style="padding:10px 12px;text-align:center;background:rgba(74,140,42,.05);color:var(--leaf2);font-weight:600;">52.1%</td>
-        <td style="padding:10px 12px;text-align:center;background:rgba(248,113,113,.08);color:var(--red);font-weight:700;font-size:14px;">2.8%</td>
-        <td style="padding:10px 12px;text-align:center;color:var(--red);font-weight:700;">-22.2pp 🔴</td>
-        <td style="padding:10px 12px;text-align:center;color:var(--red);font-weight:600;">$0.44<br><span style="font-size:8px;color:var(--red);">(Marzo: $0.87)</span></td>
-        <td style="padding:10px 12px;text-align:center;">
-          <span style="background:rgba(248,113,113,.15);color:var(--red);font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;">CRÍTICO · 60 días</span>
-        </td>
-      </tr>
-      <!-- Veverka -->
-      <tr style="background:rgba(248,113,113,.07);border-bottom:1px solid rgba(42,69,53,.5);">
-        <td style="padding:10px 12px;color:var(--white);font-weight:600;">I. Veverka</td>
-        <td style="padding:10px 12px;text-align:right;color:var(--text2);">CLP 8.8M</td>
-        <td style="padding:10px 12px;text-align:center;background:rgba(74,140,42,.05);color:var(--leaf2);font-weight:600;">68.3%</td>
-        <td style="padding:10px 12px;text-align:center;background:rgba(248,113,113,.12);color:var(--red);font-weight:700;font-size:14px;">-28.7%</td>
-        <td style="padding:10px 12px;text-align:center;color:var(--red);font-weight:700;">-53.7pp ❌</td>
-        <td style="padding:10px 12px;text-align:center;color:var(--red);font-weight:600;">$2.40<br><span style="font-size:8px;color:var(--red);">(Feb: destrucción)</span></td>
-        <td style="padding:10px 12px;text-align:center;">
-          <span style="background:rgba(248,113,113,.2);color:#ff6b6b;font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;">INVIABLE · FUSIÓN</span>
-        </td>
-      </tr>
-      <!-- TOTAL -->
-      <tr style="background:rgba(0,0,0,.2);">
-        <td style="padding:10px 12px;color:var(--white);font-weight:700;font-size:12px;">CHILE TOTAL</td>
-        <td style="padding:10px 12px;text-align:right;color:var(--white);font-weight:700;">CLP 171.2M</td>
-        <td style="padding:10px 12px;text-align:center;background:rgba(74,140,42,.08);color:var(--leaf2);font-weight:700;font-size:13px;">62.2%</td>
-        <td style="padding:10px 12px;text-align:center;background:rgba(248,113,113,.1);color:var(--red);font-weight:700;font-size:16px;">17.9%</td>
-        <td style="padding:10px 12px;text-align:center;color:var(--red);font-weight:700;font-size:13px;">-7.1pp vs meta</td>
-        <td style="padding:10px 12px;text-align:center;color:var(--amber);font-weight:700;">$0.44</td>
-        <td style="padding:10px 12px;text-align:center;">
-          <span style="background:rgba(248,113,113,.15);color:var(--red);font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px;letter-spacing:.5px;">META NO ALCANZADA</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  </div>
+<div class="page">
 
-  <!-- ── REGLA SIMPLE ── -->
-  <div style="margin-top:16px;padding:12px 16px;background:rgba(251,176,64,.07);border-radius:8px;border:1px solid rgba(251,176,64,.2);display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-    <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:var(--amber);text-transform:uppercase;flex-shrink:0;">Regla de lectura rápida</div>
-    <div style="font-size:12px;color:var(--white);">El margen bruto <strong style="color:var(--leaf2);">sobreestima la realidad en ~40 puntos porcentuales.</strong> Un RTC con 64% de margen bruto genera en promedio <strong style="color:var(--amber);">~20% de margen neto real</strong> cuando se cargan todos sus costos operativos.</div>
-  </div>
+  <!-- ══════════════════════════════════════════
+       BLOQUE 1: KPIs CORPORATIVOS
+  ══════════════════════════════════════════ -->
+  <div class="section-title">Resumen Corporativo <span>YTD Grupo Latam · corte semana 14/2026</span></div>
 
-</div>
-
-<!-- ── FILA: P&L REAL + INSIGHTS ── -->
-<div class="g21" style="margin-bottom:14px;">
-
-  <div class="card">
-    <div class="ctop">
-      <div><div class="ceyebrow">P&L Real Chile Q1 · Con Todos los Costos RTC</div><div class="cq">Lo que el directorio necesita ver</div></div>
-      <span class="tag tr">Meta: 25% neto</span>
+  <div class="kpi-hero">
+    <!-- KPI Grupo -->
+    <div class="kpi-card">
+      <div class="kpi-label">Venta Grupo YTD</div>
+      <div class="kpi-value green">USD 415K</div>
+      <div class="kpi-sub">Chile USD 194.8K + Perú USD 220.5K</div>
+      <div class="kpi-badge badge-green">RÉCORD PERÚ MENSUAL ⭐</div>
     </div>
-    <div style="margin-top:14px;">
-      <!-- Barra visual del P&L -->
-      <div style="margin-bottom:12px;">
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px;"><span>Venta Neta Total</span><span style="color:var(--white);font-weight:600;">CLP 171.2M · 100%</span></div>
-        <div style="height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;"><div style="height:100%;width:100%;background:var(--leaf3);border-radius:4px;"></div></div>
-      </div>
-      <div style="margin-bottom:12px;">
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px;"><span>Margen Bruto</span><span style="color:var(--leaf2);font-weight:600;">CLP 106.5M · 62.2% ← Lo que reportamos</span></div>
-        <div style="height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;"><div style="height:100%;width:62.2%;background:var(--leaf);border-radius:4px;"></div></div>
-      </div>
-      <div style="margin-bottom:12px;">
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px;"><span>Gastos Operativos (SG&A · sueldos, viáticos, camionetas)</span><span style="color:var(--red);font-weight:600;">-CLP 75.8M · 44.3%</span></div>
-        <div style="height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;"><div style="height:100%;width:44.3%;background:var(--red);border-radius:4px;opacity:.7;"></div></div>
-      </div>
-      <div style="margin-bottom:8px;padding:10px 14px;background:rgba(248,113,113,.08);border-radius:8px;border:1px solid rgba(248,113,113,.2);">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-size:9px;color:var(--red);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;">EBITDA Real (Utilidad Neta)</div>
-            <div style="font-size:22px;font-weight:700;color:var(--amber);">CLP 30.6M</div>
+    <!-- KPI Chile -->
+    <div class="kpi-card">
+      <div class="kpi-label">Chile YTD · CLP</div>
+      <div class="kpi-value">185.1M</div>
+      <div class="kpi-sub">Ppto T1: CLP 170.8M</div>
+      <div class="kpi-badge badge-green">108.4% del Ppto ✅</div>
+    </div>
+    <!-- KPI Peru -->
+    <div class="kpi-card amber">
+      <div class="kpi-label">Perú YTD · USD</div>
+      <div class="kpi-value amber">220.5K</div>
+      <div class="kpi-sub">Ppto referencial: USD 213.4K</div>
+      <div class="kpi-badge badge-amber">Infante bajo meta · Aguirre 🚀</div>
+    </div>
+    <!-- KPI Margen Neto Chile -->
+    <div class="kpi-card red">
+      <div class="kpi-label">Margen Neto Real · Chile</div>
+      <div class="kpi-value red">17.9%</div>
+      <div class="kpi-sub">Meta corporativa: 25.0%</div>
+      <div class="kpi-badge badge-red">GAP –7.1 pp · 2 RTC en ultimátum</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       BLOQUE 2: GRUPO CONSOLIDADO
+  ══════════════════════════════════════════ -->
+  <div class="section-title">Venta Consolidada por País <span>TC = 950 CLP/USD</span></div>
+
+  <div class="grid-2" style="margin-bottom:24px;">
+    <div class="panel">
+      <div class="panel-title">CONSOLIDADO GRUPO <span class="tag">USD · YTD 2026</span></div>
+
+      <!-- Chile -->
+      <div class="consolidado-row">
+        <div class="cons-flag">🇨🇱</div>
+        <div class="cons-pais">Chile</div>
+        <div class="cons-bar-wrap">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-bottom:4px;">
+            <span>CLP 185.1M</span><span>Ppto T1: 170.8M</span>
           </div>
-          <div style="text-align:right;">
-            <div style="font-size:28px;font-weight:800;color:var(--red);">17.9%</div>
-            <div style="font-size:10px;color:var(--muted);">vs meta 25%</div>
-            <div style="font-size:11px;font-weight:700;color:var(--red);">Faltan CLP 12.2M</div>
+          <div class="prog-wrap">
+            <div class="prog-fill" style="width:100%;background:var(--green);"></div>
           </div>
         </div>
+        <div class="cons-val">USD 194.8K</div>
+        <div class="cons-pct-badge" style="color:var(--green);">108.4%</div>
       </div>
-      <div style="padding:8px 12px;background:rgba(74,140,42,.08);border-radius:6px;border:1px solid rgba(74,140,42,.15);">
-        <div style="font-size:10px;color:var(--muted);margin-bottom:3px;font-weight:600;">Aporte de Caroca al resultado</div>
-        <div style="font-size:12px;color:var(--leaf2);">Aportó el <strong style="font-size:15px;">55%</strong> de la utilidad total · CLP ~16.8M de los CLP 30.6M</div>
-        <div style="font-size:10px;color:var(--red);margin-top:3px;">⚠ Sin Caroca, Chile cierra en <strong>margen neto negativo</strong></div>
+
+      <!-- Perú -->
+      <div class="consolidado-row">
+        <div class="cons-flag">🇵🇪</div>
+        <div class="cons-pais">Perú</div>
+        <div class="cons-bar-wrap">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-bottom:4px;">
+            <span>USD 220.5K</span><span>Ppto ref: 213.4K</span>
+          </div>
+          <div class="prog-wrap">
+            <div class="prog-fill" style="width:100%;background:var(--amber);"></div>
+          </div>
+        </div>
+        <div class="cons-val">USD 220.5K</div>
+        <div class="cons-pct-badge" style="color:var(--amber);">103.4%</div>
+      </div>
+
+      <!-- Grupo total -->
+      <div style="background:var(--surface3);border-radius:8px;padding:14px 16px;margin-top:8px;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Grupo Total YTD</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green);">USD 415,383</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:10px;color:var(--text-muted);">Sem anterior estimado</div>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text-dim);">USD 373,184</div>
+          <div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--green);margin-top:2px;">+USD 42,199 ↑</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfico evolución mensual Grupo -->
+    <div class="panel">
+      <div class="panel-title">EVOLUCIÓN MENSUAL GRUPO <span class="tag">USD acumulado por mes</span></div>
+      <div class="chart-wrap">
+        <canvas id="chartGrupo"></canvas>
       </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="ctop"><div><div class="ceyebrow">5 Insights para el Directorio</div><div class="cq">Decisiones que requieren acción</div></div></div>
-    <div style="margin-top:12px;">
+  <!-- ══════════════════════════════════════════
+       BLOQUE 3: CHILE – ANÁLISIS RTC
+  ══════════════════════════════════════════ -->
+  <div class="section-title">Chile · Desempeño por RTC <span>Análisis CEO · Margen Neto Real</span></div>
 
-      <div style="padding:10px 13px;border-radius:7px;border-left:3px solid var(--red);background:rgba(248,113,113,.06);margin-bottom:9px;">
-        <div style="font-size:10px;font-weight:700;color:var(--red);margin-bottom:3px;">1 · Dependencia Crítica</div>
-        <div style="font-size:11px;color:var(--text2);line-height:1.5;">Un solo RTC genera el 55% de la utilidad. <strong style="color:var(--white);">Si Caroca baja, Chile entra en pérdida.</strong> Este es el mayor riesgo no visible en los dashboards actuales.</div>
+  <div class="grid-2" style="margin-bottom:16px;">
+    <!-- Tabla RTC Chile -->
+    <div class="panel">
+      <div class="panel-title">RTC CHILE · YTD VENTA <span class="tag">CLP · corte 05/04</span></div>
+      <table class="rtc-table">
+        <thead>
+          <tr>
+            <th>RTC</th>
+            <th class="right">YTD CLP</th>
+            <th class="right">vs Ppto</th>
+            <th class="right">Margen</th>
+            <th class="right">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="sema sema-green"></span><span class="rtc-name">J. Caroca</span></td>
+            <td class="rtc-val">61.1M</td>
+            <td><div class="rtc-pct" style="color:var(--green);">185.1%</div><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
+            <td class="rtc-pct" style="color:var(--green);">39.2%</td>
+            <td style="text-align:right;font-size:14px;">✅</td>
+          </tr>
+          <tr>
+            <td><span class="sema sema-amber"></span><span class="rtc-name">P. Laratro</span></td>
+            <td class="rtc-val">52.9M</td>
+            <td><div class="rtc-pct" style="color:var(--amber);">97.8%</div><div class="prog-wrap"><div class="prog-fill" style="width:97.8%;background:var(--amber);"></div></div></td>
+            <td class="rtc-pct" style="color:var(--amber);">19.6%</td>
+            <td style="text-align:right;font-size:14px;">⚠️</td>
+          </tr>
+          <tr>
+            <td><span class="sema sema-amber"></span><span class="rtc-name">R. Encina</span></td>
+            <td class="rtc-val">27.6M</td>
+            <td><div class="rtc-pct" style="color:var(--amber);">94.5%</div><div class="prog-wrap"><div class="prog-fill" style="width:94.5%;background:var(--amber);"></div></div></td>
+            <td class="rtc-pct" style="color:var(--amber);">21.9%</td>
+            <td style="text-align:right;font-size:14px;">⚠️</td>
+          </tr>
+          <tr>
+            <td><span class="sema sema-red"></span><span class="rtc-name">F. Velásquez</span></td>
+            <td class="rtc-val">30.5M</td>
+            <td><div class="rtc-pct" style="color:var(--amber);">92.8%</div><div class="prog-wrap"><div class="prog-fill" style="width:92.8%;background:var(--red);"></div></div></td>
+            <td class="rtc-pct" style="color:var(--red);">2.8%</td>
+            <td style="text-align:right;font-size:14px;">🔴</td>
+          </tr>
+          <tr>
+            <td><span class="sema sema-red"></span><span class="rtc-name">I. Veverka</span></td>
+            <td class="rtc-val">8.8M</td>
+            <td><div class="rtc-pct" style="color:var(--red);">48.9%</div><div class="prog-wrap"><div class="prog-fill" style="width:48.9%;background:var(--red-dark);"></div></div></td>
+            <td class="rtc-pct" style="color:var(--red);">–28.7%</td>
+            <td style="text-align:right;font-size:14px;">❌</td>
+          </tr>
+          <tr>
+            <td><span class="sema sema-green"></span><span class="rtc-name">V. Muñoz</span></td>
+            <td class="rtc-val">4.2M</td>
+            <td><div class="rtc-pct" style="color:var(--green);">117.7%</div><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
+            <td class="rtc-pct" style="color:var(--text-muted);">S/D</td>
+            <td style="text-align:right;font-size:14px;">✅</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Abril parcial -->
+      <div style="margin-top:12px;padding:10px 12px;background:var(--surface3);border-radius:6px;font-size:11px;">
+        <span style="color:var(--text-muted);text-transform:uppercase;font-size:9px;letter-spacing:1px;">Abril parcial al 05/04 ·</span>
+        Caroca <span style="color:var(--green);font-family:'DM Mono',monospace;">+7.95M</span> ·
+        Velásquez <span style="color:var(--amber);font-family:'DM Mono',monospace;">+890K</span>
       </div>
-
-      <div style="padding:10px 13px;border-radius:7px;border-left:3px solid var(--amber);background:rgba(251,176,64,.05);margin-bottom:9px;">
-        <div style="font-size:10px;font-weight:700;color:var(--amber);margin-bottom:3px;">2 · El Margen Bruto Engaña</div>
-        <div style="font-size:11px;color:var(--text2);line-height:1.5;">62.2% de margen bruto → solo 17.9% neto real. <strong style="color:var(--white);">Los KPIs actuales no muestran el impacto de la estructura fija.</strong> Necesitamos el P&L por zona en cada reporte.</div>
-      </div>
-
-      <div style="padding:10px 13px;border-radius:7px;border-left:3px solid var(--red);background:rgba(248,113,113,.06);margin-bottom:9px;">
-        <div style="font-size:10px;font-weight:700;color:var(--red);margin-bottom:3px;">3 · Dos Zonas Destruyen Capital</div>
-        <div style="font-size:11px;color:var(--text2);line-height:1.5;">Veverka (-28.7%) y Velásquez (2.8%) <strong style="color:var(--white);">no cubren su costo operativo.</strong> CEO propone ultimátum de 60 días: alcanzar 25% o fusionar zonas. El directorio debe autorizar.</div>
-      </div>
-
-      <div style="padding:10px 13px;border-radius:7px;border-left:3px solid var(--amber);background:rgba(251,176,64,.05);margin-bottom:9px;">
-        <div style="font-size:10px;font-weight:700;color:var(--amber);margin-bottom:3px;">4 · La Camioneta de Encina es una Apuesta</div>
-        <div style="font-size:11px;color:var(--text2);line-height:1.5;">+$550K en Mayo eleva su piso de venta de $6.3M a <strong style="color:var(--white);">$10.2M/mes.</strong> Si no lo logra, la camioneta destruye valor. El directorio debe exigir un plan concreto.</div>
-      </div>
-
-      <div style="padding:10px 13px;border-radius:7px;border-left:3px solid var(--leaf);background:rgba(74,140,42,.05);margin-bottom:0;">
-        <div style="font-size:10px;font-weight:700;color:var(--leaf2);margin-bottom:3px;">5 · El Producto No Es el Problema</div>
-        <div style="font-size:11px;color:var(--text2);line-height:1.5;">Chile tiene 62.2% de margen bruto — <strong style="color:var(--white);">extraordinario para la industria.</strong> El problema es la falta de masa crítica para diluir sueldos fijos. Solución: volumen, no precio.</div>
-      </div>
-
     </div>
-  </div>
-</div>
 
-<!-- ── FILA: DECISIONES + PERÚ NOTA ── -->
-<div class="g3" style="margin-bottom:14px;">
-  <div class="card" style="grid-column:span 2;">
-    <div class="ctop"><div><div class="ceyebrow">Resoluciones CEO para aprobación del Directorio</div><div class="cq">Q2 2026 · Acciones con fecha</div></div></div>
-    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-      <div style="padding:10px 13px;border-radius:7px;background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.2);">
-        <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
-          <span style="background:var(--red);color:white;font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;">60 DÍAS</span>
-          <span style="font-size:10px;font-weight:700;color:var(--white);">Ultimátum Veverka + Velásquez</span>
-        </div>
-        <div style="font-size:10px;color:var(--text2);">Alcanzar 25% margen neto real o <strong style="color:var(--red);">fusión de zonas para reducir costos fijos.</strong></div>
-      </div>
-      <div style="padding:10px 13px;border-radius:7px;background:rgba(251,176,64,.06);border:1px solid rgba(251,176,64,.2);">
-        <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
-          <span style="background:var(--amber);color:#000;font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;">INMEDIATO</span>
-          <span style="font-size:10px;font-weight:700;color:var(--white);">Plan de choque Encina</span>
-        </div>
-        <div style="font-size:10px;color:var(--text2);">Facturar $10.2M/mes desde Mayo para absorber camioneta. <strong style="color:var(--amber);">Sin plan concreto, no autorizar camioneta.</strong></div>
-      </div>
-      <div style="padding:10px 13px;border-radius:7px;background:rgba(248,113,113,.05);border:1px solid rgba(248,113,113,.15);">
-        <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
-          <span style="background:rgba(248,113,113,.3);color:var(--red);font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;">PERMANENTE</span>
-          <span style="font-size:10px;font-weight:700;color:var(--white);">Prohibición descuentos commodity</span>
-        </div>
-        <div style="font-size:10px;color:var(--text2);">Sin descuentos en AV AMIN SUGAR y similares. <strong style="color:var(--red);">Drenan el margen neto de RTCs con estructura alta.</strong></div>
-      </div>
-      <div style="padding:10px 13px;border-radius:7px;background:rgba(74,140,42,.06);border:1px solid rgba(74,140,42,.15);">
-        <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
-          <span style="background:var(--leaf3);color:white;font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;">Q2 FOCO</span>
-          <span style="font-size:10px;font-weight:700;color:var(--white);">Distribuir el modelo Caroca</span>
-        </div>
-        <div style="font-size:10px;color:var(--text2);">Documentar y transferir metodología de Caroca al equipo. <strong style="color:var(--leaf2);">Reducir dependencia de un solo RTC.</strong></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="ctop"><div><div class="ceyebrow">🇵🇪 Perú · Nota del Análisis</div><div class="cq">Análisis RTC pendiente</div></div></div>
-    <div style="margin-top:12px;">
-      <div style="padding:10px 13px;border-radius:7px;background:rgba(251,176,64,.06);border:1px solid rgba(251,176,64,.2);margin-bottom:10px;">
-        <div style="font-size:10px;font-weight:700;color:var(--amber);margin-bottom:4px;">Margen bruto reportado: 89.5%</div>
-        <div style="font-size:10px;color:var(--text2);">Perú no tiene análisis RTC del CEO disponible aún. Estimación conservadora ajustando costos:</div>
-        <div style="margin-top:8px;font-size:11px;color:var(--white);">Margen neto estimado: <strong style="color:var(--amber);font-size:14px;">~70–75%</strong></div>
-        <div style="font-size:10px;color:var(--muted);margin-top:3px;">Estructura más ligera: sin camionetas confirmadas · Salarios menores · Sin análisis de viáticos</div>
-      </div>
-      <div style="padding:10px 13px;border-radius:7px;background:rgba(74,140,42,.06);border:1px solid rgba(74,140,42,.15);margin-bottom:10px;">
-        <div style="font-size:10px;font-weight:700;color:var(--leaf2);margin-bottom:3px;">Ventaja estructural de Perú</div>
-        <div style="font-size:10px;color:var(--text2);">Perú no tiene el "efecto estructura" de Chile. <strong style="color:var(--leaf2);">La cartera CxC es 95.8% al día</strong> vs 66% vencida en Chile. Menor riesgo operativo.</div>
-      </div>
-      <div style="padding:8px 12px;border-radius:6px;background:rgba(255,255,255,.03);border:1px solid var(--border2);font-size:10px;color:var(--muted);">
-        ✦ Recomendación: solicitar al director Perú el mismo formato de P&L por RTC aplicado a Chile para Q2.
+    <!-- Gráfico barras Chile -->
+    <div class="panel">
+      <div class="panel-title">VENTA YTD vs PPTO T1 · CHILE <span class="tag">CLP millones</span></div>
+      <div class="chart-wrap">
+        <canvas id="chartChileRTC"></canvas>
       </div>
     </div>
   </div>
-</div>
-<!-- ══════ FIN SECCIÓN CEO ══════ -->
 
+  <!-- CEO P&L Chile -->
+  <div class="grid-3" style="margin-bottom:16px;">
+    <div class="panel" style="grid-column: span 1;">
+      <div class="panel-title">CEO P&L · CHILE CONSOLIDADO <span class="tag">Q1 2026 · USD</span></div>
+      <div class="pl-section-head">Ingresos</div>
+      <div class="pl-row highlight">
+        <div class="pl-label">Venta Neta Chile T1</div>
+        <div class="pl-val pos">USD 189,730</div>
+      </div>
+      <div class="pl-section-head">Costos Directos</div>
+      <div class="pl-row">
+        <div class="pl-label">Costo Comercial (×1.40)</div>
+        <div class="pl-val neg">–USD 107,850</div>
+      </div>
+      <div class="pl-row subtotal">
+        <div class="pl-label" style="font-weight:600;">Margen Bruto</div>
+        <div class="pl-val" style="color:var(--text);">USD 81,880</div>
+      </div>
+      <div class="pl-section-head">Gastos RTC (estructura)</div>
+      <div class="pl-row">
+        <div class="pl-label">Sueldos + cargas 5.5%</div>
+        <div class="pl-val neg">–USD 23,400</div>
+      </div>
+      <div class="pl-row">
+        <div class="pl-label">Viáticos + movilización</div>
+        <div class="pl-val neg">–USD 8,200</div>
+      </div>
+      <div class="pl-row">
+        <div class="pl-label">Camionetas (4 equipadas)</div>
+        <div class="pl-val neg">–USD 6,947</div>
+      </div>
+      <div class="pl-row">
+        <div class="pl-label">Comisiones RTC</div>
+        <div class="pl-val neg">–USD 5,692</div>
+      </div>
+      <div class="pl-row">
+        <div class="pl-label">Administración CLP 100K/mes</div>
+        <div class="pl-val neg">–USD 3,789</div>
+      </div>
+      <div class="pl-row subtotal">
+        <div class="pl-label" style="font-weight:600;">Total Estructura</div>
+        <div class="pl-val neg">–USD 48,028</div>
+      </div>
+      <div class="pl-row highlight" style="border-top: 1px solid var(--border);margin-top:4px;">
+        <div class="pl-label" style="font-weight:700;font-size:13px;">Margen Neto Real</div>
+        <div class="pl-val warn" style="font-size:14px;font-weight:700;">17.9%</div>
+      </div>
+      <div style="margin-top:10px;padding:8px 10px;background:rgba(231,76,60,0.08);border-radius:6px;border-left:2px solid var(--red);">
+        <div style="font-size:10px;color:var(--red);">GAP vs meta 25%</div>
+        <div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--red);font-weight:600;">–7.1 pp · Necesita +CLP 17M/mes</div>
+      </div>
+    </div>
+
+    <!-- Alertas CEO -->
+    <div class="panel" style="grid-column: span 2;">
+      <div class="panel-title">DIAGNÓSTICO CEO · ACCIONES CRÍTICAS</div>
+      <div class="alert-box green">
+        <div class="alert-title" style="color:var(--green);">✅ J. CAROCA — REFERENTE DE ZONA (MN 39.2%)</div>
+        <div class="alert-body">Genera el 55% de la utilidad real de Chile. Venta YTD CLP 61.1M (185% del ppto T1). Abril sólido +7.95M. Modelo a replicar en otras zonas. Considera incorporación estructural en Q3.</div>
+      </div>
+      <div class="alert-box amber">
+        <div class="alert-title" style="color:var(--amber);">⚠️ P. LARATRO — AJUSTE DE ESTRUCTURA (MN 19.6%)</div>
+        <div class="alert-body">Venta YTD 52.9M sólida pero margen neto bajo meta por peso de estructura. Necesita CLP 9.5M adicional/mes para alcanzar 25%. Agosto crítico: camioneta entra al stack. Revisión costos Q2.</div>
+      </div>
+      <div class="alert-box amber">
+        <div class="alert-title" style="color:var(--amber);">⚠️ R. ENCINA — META MAYO CON CAMIONETA (MN 21.9%)</div>
+        <div class="alert-body">MN 21.9% borderline. Camioneta entra en Mayo (+CLP 550K/mes). Meta mínima desde Mayo: CLP 10.2M/mes. Si no alcanza en Mayo-Junio → revisión de zona.</div>
+      </div>
+      <div class="alert-box red">
+        <div class="alert-title" style="color:var(--red);">🔴 F. VELÁSQUEZ — ULTIMÁTUM 60 DÍAS (MN 2.8%)</div>
+        <div class="alert-body">MN real 2.8% operacionalmente crítico. Requiere doblar venta mensual para viabilidad. Plazo: 60 días a partir de Abril. Si no alcanza 25% → fusión de zona con RTC colindante.</div>
+      </div>
+      <div class="alert-box red">
+        <div class="alert-title" style="color:var(--red-dark);">❌ I. VEVERKA — ZONA INVIABLE (MN –28.7%)</div>
+        <div class="alert-body">MN negativo –28.7%. La empresa subsidia cada venta. YTD 8.8M (48.9% del ppto). Sin recuperación en T2 → cierre/absorción de zona en Junio 2026. En evaluación formal.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       BLOQUE 4: PERÚ – ANÁLISIS RTC
+  ══════════════════════════════════════════ -->
+  <div class="section-title">Perú · Desempeño por Vendedor <span>corte 08/04/2026 · USD</span></div>
+
+  <div class="grid-2" style="margin-bottom:16px;">
+    <div class="panel">
+      <div class="panel-title">VENDEDORES PERÚ · YTD <span class="tag">USD · incl. Abril parcial</span></div>
+      <table class="rtc-table">
+        <thead>
+          <tr>
+            <th>Vendedor</th>
+            <th class="right">YTD USD</th>
+            <th class="right">vs Ppto</th>
+            <th class="right">Abril</th>
+            <th class="right">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="sema sema-amber"></span><span class="rtc-name">O. Infante</span></td>
+            <td class="rtc-val">85,432</td>
+            <td><div class="rtc-pct" style="color:var(--amber);">74.5%</div><div class="prog-wrap"><div class="prog-fill" style="width:74.5%;background:var(--amber);"></div></div></td>
+            <td class="rtc-val" style="color:var(--green);">13,838</td>
+            <td style="text-align:right;">⚠️</td>
+          </tr>
+          <tr>
+            <td><span class="sema sema-green"></span><span class="rtc-name">O. Atalaya</span></td>
+            <td class="rtc-val">59,072</td>
+            <td><div class="rtc-pct" style="color:var(--green);">110.1%</div><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
+            <td class="rtc-val" style="color:var(--text-muted);">–</td>
+            <td style="text-align:right;">✅</td>
+          </tr>
+          <tr>
+            <td><span class="sema sema-green"></span><span class="rtc-name">L. Aguirre</span></td>
+            <td class="rtc-val">40,333</td>
+            <td><div style="font-size:10px;color:var(--green);font-family:'DM Mono',monospace;">Sin ppto</div><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
+            <td class="rtc-val" style="color:var(--green);">2,172</td>
+            <td style="text-align:right;">🚀</td>
+          </tr>
+          <tr>
+            <td><span class="sema sema-amber"></span><span class="rtc-name">N. Navarro</span></td>
+            <td class="rtc-val">34,014</td>
+            <td><div class="rtc-pct" style="color:var(--amber);">96.2%</div><div class="prog-wrap"><div class="prog-fill" style="width:96.2%;background:var(--amber);"></div></div></td>
+            <td class="rtc-val" style="color:var(--text-muted);">–</td>
+            <td style="text-align:right;">⚠️</td>
+          </tr>
+          <tr>
+            <td><span class="sema sema-red"></span><span class="rtc-name">A. Gonzales</span></td>
+            <td class="rtc-val">696</td>
+            <td><div class="rtc-pct" style="color:var(--red);">17.4%</div><div class="prog-wrap"><div class="prog-fill" style="width:17.4%;background:var(--red);"></div></div></td>
+            <td class="rtc-val" style="color:var(--text-muted);">–</td>
+            <td style="text-align:right;">🔴</td>
+          </tr>
+          <tr>
+            <td><span class="sema sema-red"></span><span class="rtc-name">P. Valladares</span></td>
+            <td class="rtc-val">1,000</td>
+            <td><div class="rtc-pct" style="color:var(--red);">17.5%</div><div class="prog-wrap"><div class="prog-fill" style="width:17.5%;background:var(--red);"></div></div></td>
+            <td class="rtc-val" style="color:var(--text-muted);">–</td>
+            <td style="text-align:right;">🔴</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:12px;padding:10px 12px;background:var(--surface3);border-radius:6px;font-size:11px;color:var(--text-dim);">
+        🚀 <strong style="color:var(--green);">Aguirre</strong> sin presupuesto asignado · Incorporar al plan Q2 · Infante lidera volumen con mayor cartera CxC
+      </div>
+    </div>
+
+    <!-- Gráfico Perú -->
+    <div class="panel">
+      <div class="panel-title">PERÚ · YTD POR VENDEDOR <span class="tag">USD acumulado</span></div>
+      <div class="chart-wrap">
+        <canvas id="chartPeruRTC"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       BLOQUE 5: CUENTAS POR COBRAR
+  ══════════════════════════════════════════ -->
+  <div class="section-title">Cuentas por Cobrar <span>Chile 09/04 · Perú 07/04</span></div>
+
+  <div class="grid-2" style="margin-bottom:24px;">
+    <!-- CxC Chile -->
+    <div class="panel">
+      <div class="panel-title">CxC CHILE <span class="tag">CLP 28.0M total · 09/04/2026</span></div>
+      <div class="grid-2" style="gap:12px;margin-bottom:16px;">
+        <div style="background:var(--surface2);border-radius:8px;padding:14px;text-align:center;">
+          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Total Cartera</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--text);">CLP 28.0M</div>
+          <div style="font-size:10px;color:var(--text-dim);margin-top:4px;">≈ USD 29,472</div>
+        </div>
+        <div style="background:rgba(122,182,72,0.07);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;">
+          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Al día (0-30d)</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--green);">47.4%</div>
+          <div style="font-size:10px;color:var(--text-dim);margin-top:4px;">CLP 13.3M</div>
+        </div>
+      </div>
+      <!-- Tramos -->
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-bottom:6px;">
+          <span>Tramo</span><span>Monto CLP</span><span>%</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:60px;font-size:11px;color:var(--green);">0–30d</div>
+            <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:47.4%;background:var(--green);"></div></div></div>
+            <div style="font-family:'DM Mono',monospace;font-size:10px;width:60px;text-align:right;">13.3M · 47.4%</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:60px;font-size:11px;color:var(--amber);">31–60d</div>
+            <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:29.1%;background:var(--amber);"></div></div></div>
+            <div style="font-family:'DM Mono',monospace;font-size:10px;width:60px;text-align:right;">8.1M · 29.1%</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:60px;font-size:11px;color:#E67E22;">61–90d</div>
+            <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:8.6%;background:#E67E22;"></div></div></div>
+            <div style="font-family:'DM Mono',monospace;font-size:10px;width:60px;text-align:right;">2.4M · 8.6%</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:60px;font-size:11px;color:var(--red);">+90d</div>
+            <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:15.0%;background:var(--red);"></div></div></div>
+            <div style="font-family:'DM Mono',monospace;font-size:10px;width:60px;text-align:right;">4.2M · 15.0%</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:8px 10px;background:rgba(231,76,60,0.08);border-radius:6px;border-left:2px solid var(--red);font-size:11px;">
+        <span style="color:var(--red);font-weight:600;">Alerta +90d:</span>
+        <span style="color:var(--text-dim);"> CLP 4.19M — Caroca/Goyaservice (CLP 4.19M) · gestión inmediata</span>
+      </div>
+    </div>
+
+    <!-- CxC Perú -->
+    <div class="panel">
+      <div class="panel-title">CxC PERÚ (ACTIVA) <span class="tag">USD 103.8K sin SUPRA · 07/04/2026</span></div>
+      <div class="grid-2" style="gap:12px;margin-bottom:16px;">
+        <div style="background:var(--surface2);border-radius:8px;padding:14px;text-align:center;">
+          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Cartera Activa</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--text);">USD 103.8K</div>
+          <div style="font-size:10px;color:var(--text-dim);margin-top:4px;">excl. USD 196.8K PAGADO A SUPRA</div>
+        </div>
+        <div style="background:rgba(122,182,72,0.07);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;">
+          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Estado</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--green);">✅ Sano</div>
+          <div style="font-size:10px;color:var(--text-dim);margin-top:4px;">Mora normal en cobro</div>
+        </div>
+      </div>
+      <!-- Por vendedor -->
+      <div style="margin-bottom:8px;font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;">Distribución por vendedor</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:90px;font-size:11px;">O. Infante</div>
+          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:33.3%;background:var(--amber);"></div></div></div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 34,555</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:90px;font-size:11px;">L. Aguirre</div>
+          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:29.8%;background:var(--green);"></div></div></div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 30,886</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:90px;font-size:11px;">O. Atalaya</div>
+          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:14.8%;background:var(--green);"></div></div></div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 15,343</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:90px;font-size:11px;">J. Geldres</div>
+          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:10.5%;background:var(--text-muted);"></div></div></div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 10,874</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:90px;font-size:11px;">N. Navarro</div>
+          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:9.1%;background:var(--text-muted);"></div></div></div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 9,445</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:90px;font-size:11px;color:var(--text-muted);">Otros</div>
+          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:2.6%;background:var(--text-muted);"></div></div></div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;color:var(--text-muted);">USD 2,651</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;padding:8px 10px;background:rgba(122,182,72,0.07);border-radius:6px;border-left:2px solid var(--green);font-size:11px;color:var(--text-dim);">
+        Cartera dentro de rangos normales. Aguirre genera tanto venta como CxC en forma proporcional. Monitorear Infante (mayor exposición absoluta).
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       BLOQUE 6: GRÁFICOS ADICIONALES
+  ══════════════════════════════════════════ -->
+  <div class="section-title">Análisis Visual Complementario</div>
+  <div class="grid-3" style="margin-bottom:24px;">
+    <div class="panel">
+      <div class="panel-title">MN REAL POR RTC · CHILE <span class="tag">vs meta 25%</span></div>
+      <div class="chart-wrap-sm">
+        <canvas id="chartMNChile"></canvas>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">CxC CHILE · TRAMOS <span class="tag">CLP millones</span></div>
+      <div class="chart-wrap-sm">
+        <canvas id="chartCxCChile"></canvas>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">EVOLUCIÓN MENSUAL PERÚ <span class="tag">USD</span></div>
+      <div class="chart-wrap-sm">
+        <canvas id="chartPeruMes"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- FOOTER NAV -->
 <div class="footer">
-  <div class="fnote">Chile: Ventas_28-03 + CxC_22-03-2026 · Perú: Ventas_27-03 + CxC_24-03-2026 · Márgenes: Maestro Producción 2026 × 1.40 · TC 950 CLP/USD</div>
-  <div class="fbrand">AV Grupo Latam · 2026</div>
+  <div class="footer-left">
+    <div style="font-weight:600;color:var(--text-dim);margin-bottom:2px;">Agroveca Grupo Latam · BI Platform</div>
+    <div>Corte: Chile 05/04 · Perú 08/04 · CxC 09/04/2026 · TC CLP/USD 950</div>
+  </div>
+  <div class="nav-pills">
+    <a href="index.html" class="nav-pill">🏠 Inicio</a>
+    <a href="Dashboard_Comercial_AV_Latam_2026.html" class="nav-pill">📊 Dashboard</a>
+    <a href="Panel_Chile_AV_2026.html" class="nav-pill">🇨🇱 Chile</a>
+    <a href="Panel_Peru_AV_2026.html" class="nav-pill">🇵🇪 Perú</a>
+  </div>
 </div>
 
 <script>
-Chart.register(ChartDataLabels);
-Chart.defaults.font.family="'Inter',sans-serif";
-Chart.defaults.font.size=11;
-Chart.defaults.color='#7A9E86';
+Chart.defaults.color = '#8fa892';
+Chart.defaults.font.family = "'DM Mono', monospace";
+Chart.defaults.font.size = 10;
 
-var LEAF='#7AB648',LEAF2='#9FCC6B',AMBER='#FBB040',BLUE='#60A5FA',BLUE2='#3B82F6';
-var RED='#F87171',MUTED='#7A9E86',BORDER='rgba(42,69,53,0.6)',WHITE='#F0F4F1';
+const GREEN = '#7AB648';
+const AMBER = '#F5A623';
+const RED = '#E74C3C';
+const RED_DARK = '#C0392B';
+const SURFACE3 = '#1c2b1e';
+const BORDER = 'rgba(122,182,72,0.18)';
 
-// ── TENDENCIA ──
-new Chart(document.getElementById('cTendencia'),{
-  type:'line',
-  data:{labels:['Enero','Febrero','Marzo'],datasets:[
-    {label:'Chile Real (MCLP)',data:[88.2,35.7,49.3],borderColor:LEAF,backgroundColor:'rgba(122,182,72,0.08)',borderWidth:2.5,pointRadius:7,pointBackgroundColor:LEAF,pointBorderColor:'#0D1F15',pointBorderWidth:2,tension:0.35,fill:true,yAxisID:'yCL'},
-    {label:'Chile Ppto',data:[84.8,42.8,43.2],borderColor:LEAF,borderDash:[7,4],borderWidth:1.5,pointRadius:4,pointBackgroundColor:'#0D1F15',pointBorderColor:LEAF,pointBorderWidth:2,tension:0.35,fill:false,yAxisID:'yCL'},
-    {label:'Perú Real (KUSD)',data:[73.5,39.4,78.0],borderColor:BLUE,backgroundColor:'rgba(96,165,250,0.07)',borderWidth:2.5,pointRadius:7,pointBackgroundColor:BLUE,pointBorderColor:'#0D1F15',pointBorderWidth:2,tension:0.35,fill:true,yAxisID:'yPE'},
-    {label:'Perú Ppto',data:[51.7,58.5,63.0],borderColor:BLUE,borderDash:[7,4],borderWidth:1.5,pointRadius:4,pointBackgroundColor:'#0D1F15',pointBorderColor:BLUE,pointBorderWidth:2,tension:0.35,fill:false,yAxisID:'yPE'},
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-    plugins:{
-      legend:{position:'bottom',labels:{boxWidth:10,padding:14,usePointStyle:true,pointStyle:'circle',color:MUTED}},
-      datalabels:{display:ctx=>ctx.dataset.borderDash==null,anchor:'top',align:'top',offset:4,formatter:v=>v.toFixed(1),font:{size:10,weight:'600'},color:ctx=>ctx.dataset.borderColor},
-      tooltip:{backgroundColor:'rgba(13,31,21,0.96)',titleColor:WHITE,bodyColor:MUTED,borderColor:BORDER,borderWidth:1,padding:10,cornerRadius:8}
-    },
-    scales:{
-      x:{grid:{display:false},border:{display:false},ticks:{color:MUTED}},
-      yCL:{position:'left',grid:{color:BORDER},border:{display:false},ticks:{callback:v=>v+'M',color:LEAF}},
-      yPE:{position:'right',grid:{display:false},border:{display:false},ticks:{callback:v=>v+'K',color:BLUE}}
+// ── CHART 1: Grupo mensual
+new Chart(document.getElementById('chartGrupo'), {
+  type: 'bar',
+  data: {
+    labels: ['Ene', 'Feb', 'Mar', 'Abr (parcial)'],
+    datasets: [
+      {
+        label: 'Chile (USD)',
+        data: [92875, 37528, 55127, 9411],
+        backgroundColor: 'rgba(122,182,72,0.7)',
+        borderRadius: 4,
+      },
+      {
+        label: 'Perú (USD)',
+        data: [73511, 39409, 91616, 16010],
+        backgroundColor: 'rgba(74,158,219,0.7)',
+        borderRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top', labels: { boxWidth: 10, padding: 12 } } },
+    scales: {
+      x: { stacked: false, grid: { color: 'rgba(122,182,72,0.06)' }, border: { color: BORDER } },
+      y: { grid: { color: 'rgba(122,182,72,0.06)' }, border: { color: BORDER },
+           ticks: { callback: v => 'USD '+Math.round(v/1000)+'K' } }
     }
   }
 });
 
-// ── PRODUCTOS ──
-new Chart(document.getElementById('cProductos'),{
-  type:'bar',
-  data:{labels:['AV SILFORTE','AV MOVE','REGALIA MAXX','AV ROOT MAX','AV PLUS POT.','VECASIL FORTE','AV ALGAP 30'],
-    datasets:[
-      {label:'🇨🇱 Chile (MCLP)',data:[12.2,23.1,0,10.3,7.0,0,5.0],backgroundColor:ctx=>{var g=ctx.chart.ctx.createLinearGradient(0,0,140,0);g.addColorStop(0,'#1E3A2F');g.addColorStop(1,LEAF);return g;},borderRadius:4,borderSkipped:false,barThickness:9},
-      {label:'🇵🇪 Perú (KUSD×0.1)',data:[0,0,9.5,1.2,0,15.6,0],backgroundColor:ctx=>{var g=ctx.chart.ctx.createLinearGradient(0,0,80,0);g.addColorStop(0,'#1E3A8A');g.addColorStop(1,BLUE);return g;},borderRadius:4,borderSkipped:false,barThickness:9},
-    ]},
-  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-    plugins:{
-      legend:{position:'bottom',labels:{boxWidth:10,padding:14,usePointStyle:true,pointStyle:'rect',color:MUTED}},
-      datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>0,anchor:'end',align:'right',offset:3,formatter:v=>v>0?v.toFixed(1):'',font:{size:10,weight:'600'},color:MUTED},
-      tooltip:{backgroundColor:'rgba(13,31,21,0.96)',titleColor:WHITE,bodyColor:MUTED,padding:10,cornerRadius:8}
-    },
-    scales:{
-      x:{grid:{color:BORDER},border:{display:false},ticks:{callback:v=>v+'M',color:MUTED}},
-      y:{grid:{display:false},border:{display:false},ticks:{color:MUTED}}
+// ── CHART 2: Chile RTC venta vs ppto
+new Chart(document.getElementById('chartChileRTC'), {
+  type: 'bar',
+  data: {
+    labels: ['Caroca', 'Laratro', 'Encina', 'Velásquez', 'Veverka', 'Muñoz'],
+    datasets: [
+      {
+        label: 'Venta YTD',
+        data: [61.1, 52.9, 27.6, 30.5, 8.8, 4.2],
+        backgroundColor: [GREEN, AMBER, AMBER, RED, RED_DARK, GREEN],
+        borderRadius: 4,
+      },
+      {
+        label: 'Ppto T1',
+        data: [33.0, 54.1, 29.2, 32.9, 18.0, 3.6],
+        backgroundColor: 'rgba(255,255,255,0.06)',
+        borderColor: 'rgba(255,255,255,0.2)',
+        borderWidth: 1,
+        borderRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top', labels: { boxWidth: 10, padding: 12 } } },
+    scales: {
+      x: { grid: { color: 'rgba(122,182,72,0.06)' }, border: { color: BORDER } },
+      y: { grid: { color: 'rgba(122,182,72,0.06)' }, border: { color: BORDER },
+           ticks: { callback: v => v+'M' } }
     }
   }
 });
 
-// ── AGING CHILE ──
-new Chart(document.getElementById('cAgingChile'),{
-  type:'doughnut',
-  data:{labels:['Al día','1–30d','31–60d','61–90d'],
-    datasets:[{data:[12704046,9627708,5668446,1377939],
-      backgroundColor:['#7AB648','#FCD34D','#F97316','#B91C1C'],
-      borderWidth:3,borderColor:'#0D1F15',hoverOffset:8}]},
-  options:{responsive:true,maintainAspectRatio:false,cutout:'70%',
-    plugins:{
-      legend:{display:false},
-      datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>3000000,formatter:v=>(v/37378139*100).toFixed(0)+'%',color:'#fff',font:{size:10,weight:'700'}},
-      tooltip:{backgroundColor:'rgba(13,31,21,0.96)',titleColor:WHITE,bodyColor:MUTED,padding:10,cornerRadius:8,
-        callbacks:{label:ctx=>' CLP '+(ctx.raw/1000000).toFixed(1)+'M · '+(ctx.raw/37378139*100).toFixed(1)+'%'}}
+// ── CHART 3: Perú RTC horizontal
+new Chart(document.getElementById('chartPeruRTC'), {
+  type: 'bar',
+  data: {
+    labels: ['O. Infante', 'O. Atalaya', 'L. Aguirre', 'N. Navarro', 'A. Gonzales', 'P. Valladares'],
+    datasets: [{
+      label: 'YTD USD',
+      data: [85432, 59072, 40333, 34014, 696, 1000],
+      backgroundColor: [AMBER, GREEN, GREEN, AMBER, RED, RED],
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: 'rgba(122,182,72,0.06)' }, border: { color: BORDER },
+           ticks: { callback: v => 'USD '+Math.round(v/1000)+'K' } },
+      y: { grid: { display: false }, border: { color: BORDER } }
     }
   }
 });
 
-// ── AGING PERÚ ──
-new Chart(document.getElementById('cAgingPeru'),{
-  type:'doughnut',
-  data:{labels:['Al día','Vencida'],
-    datasets:[{data:[300606,13341],
-      backgroundColor:['#60A5FA','#F97316'],
-      borderWidth:3,borderColor:'#0D1F15',hoverOffset:8}]},
-  options:{responsive:true,maintainAspectRatio:false,cutout:'70%',
-    plugins:{
-      legend:{display:false},
-      datalabels:{display:true,formatter:(v,ctx)=>(v/313947*100).toFixed(0)+'%',color:'#fff',font:{size:10,weight:'700'}},
-      tooltip:{backgroundColor:'rgba(13,31,21,0.96)',titleColor:WHITE,bodyColor:MUTED,padding:10,cornerRadius:8,
-        callbacks:{label:ctx=>' USD '+(ctx.raw).toLocaleString()+' · '+(ctx.raw/313947*100).toFixed(1)+'%'}}
+// ── CHART 4: MN Real Chile
+new Chart(document.getElementById('chartMNChile'), {
+  type: 'bar',
+  data: {
+    labels: ['Caroca', 'Encina', 'Laratro', 'Velásquez', 'Veverka'],
+    datasets: [
+      {
+        label: 'Margen Neto Real %',
+        data: [39.2, 21.9, 19.6, 2.8, -28.7],
+        backgroundColor: [GREEN, AMBER, AMBER, RED, RED_DARK],
+        borderRadius: 4,
+      },
+      {
+        type: 'line',
+        label: 'Meta 25%',
+        data: [25, 25, 25, 25, 25],
+        borderColor: 'rgba(255,255,255,0.4)',
+        borderDash: [4, 4],
+        borderWidth: 1.5,
+        pointRadius: 0,
+        tension: 0,
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top', labels: { boxWidth: 10, padding: 10 } } },
+    scales: {
+      x: { grid: { color: 'rgba(122,182,72,0.06)' }, border: { color: BORDER } },
+      y: { grid: { color: 'rgba(122,182,72,0.06)' }, border: { color: BORDER },
+           ticks: { callback: v => v+'%' } }
+    }
+  }
+});
+
+// ── CHART 5: CxC Chile donut
+new Chart(document.getElementById('chartCxCChile'), {
+  type: 'doughnut',
+  data: {
+    labels: ['0–30d', '31–60d', '61–90d', '+90d'],
+    datasets: [{
+      data: [13.3, 8.1, 2.4, 4.2],
+      backgroundColor: [GREEN, AMBER, '#E67E22', RED],
+      borderColor: '#080e09',
+      borderWidth: 3,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '65%',
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10 } },
+      tooltip: { callbacks: { label: ctx => ctx.label+': CLP '+ctx.parsed+'M' } }
+    }
+  }
+});
+
+// ── CHART 6: Perú mensual
+new Chart(document.getElementById('chartPeruMes'), {
+  type: 'line',
+  data: {
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril (parc.)'],
+    datasets: [{
+      label: 'Venta Perú USD',
+      data: [73511, 39409, 91616, 16010],
+      borderColor: '#4A9EDB',
+      backgroundColor: 'rgba(74,158,219,0.12)',
+      borderWidth: 2,
+      pointRadius: 5,
+      pointBackgroundColor: '#4A9EDB',
+      tension: 0.3,
+      fill: true,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: 'rgba(122,182,72,0.06)' }, border: { color: BORDER } },
+      y: { grid: { color: 'rgba(122,182,72,0.06)' }, border: { color: BORDER },
+           ticks: { callback: v => 'USD '+Math.round(v/1000)+'K' } }
     }
   }
 });
