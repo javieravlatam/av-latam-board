@@ -563,18 +563,11 @@
             <td style="text-align:right;">✅</td>
           </tr>
           <tr>
-            <td><span class="sema sema-green"></span><span class="rtc-name">L. Aguirre</span></td>
-            <td class="rtc-val">40,333</td>
-            <td><div style="font-size:10px;color:var(--green);font-family:'DM Mono',monospace;">Sin ppto</div><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
+            <td><span class="sema sema-green"></span><span class="rtc-name">Aguirre/Navarro</span><br><span style="font-size:9px;color:var(--text-muted);">Zona unificada</span></td>
+            <td class="rtc-val">74,347</td>
+            <td><div class="rtc-pct" style="color:var(--green);">210.3%</div><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
             <td class="rtc-val" style="color:var(--green);">2,172</td>
-            <td style="text-align:right;">🚀</td>
-          </tr>
-          <tr>
-            <td><span class="sema sema-amber"></span><span class="rtc-name">N. Navarro</span></td>
-            <td class="rtc-val">34,014</td>
-            <td><div class="rtc-pct" style="color:var(--amber);">96.2%</div><div class="prog-wrap"><div class="prog-fill" style="width:96.2%;background:var(--amber);"></div></div></td>
-            <td class="rtc-val" style="color:var(--text-muted);">–</td>
-            <td style="text-align:right;">⚠️</td>
+            <td style="text-align:right;">✅</td>
           </tr>
           <tr>
             <td><span class="sema sema-red"></span><span class="rtc-name">A. Gonzales</span></td>
@@ -593,7 +586,7 @@
         </tbody>
       </table>
       <div style="margin-top:12px;padding:10px 12px;background:var(--surface3);border-radius:6px;font-size:11px;color:var(--text-dim);">
-        🚀 <strong style="color:var(--green);">Aguirre</strong> sin presupuesto asignado · Incorporar al plan Q2 · Infante lidera volumen con mayor cartera CxC
+        ✅ <strong style="color:var(--green);">Aguirre + Navarro</strong> consolidados como zona única · Ppto USD 35,350 · 210.3% cumplimiento · Incorporar plan Q2 formal · Infante lidera volumen con mayor cartera CxC
       </div>
     </div>
 
@@ -684,13 +677,7 @@
           <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:33.3%;background:var(--amber);"></div></div></div>
           <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 34,555</div>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <div style="width:90px;font-size:11px;">L. Aguirre</div>
-          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:29.8%;background:var(--green);"></div></div></div>
-          <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 30,886</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <div style="width:90px;font-size:11px;">O. Atalaya</div>
+        
           <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:14.8%;background:var(--green);"></div></div></div>
           <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 15,343</div>
         </div>
@@ -700,9 +687,9 @@
           <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 10,874</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
-          <div style="width:90px;font-size:11px;">N. Navarro</div>
-          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:9.1%;background:var(--text-muted);"></div></div></div>
-          <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 9,445</div>
+          <div style="width:90px;font-size:11px;">Aguirre/Nav.</div>
+          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:38.9%;background:var(--amber);"></div></div></div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 40,331</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <div style="width:90px;font-size:11px;color:var(--text-muted);">Otros</div>
@@ -837,11 +824,11 @@ new Chart(document.getElementById('chartChileRTC'), {
 new Chart(document.getElementById('chartPeruRTC'), {
   type: 'bar',
   data: {
-    labels: ['O. Infante', 'O. Atalaya', 'L. Aguirre', 'N. Navarro', 'A. Gonzales', 'P. Valladares'],
+    labels: ['O. Infante', 'O. Atalaya', 'Aguirre/Navarro', 'A. Gonzales', 'P. Valladares'],
     datasets: [{
       label: 'YTD USD',
-      data: [85432, 59072, 40333, 34014, 696, 1000],
-      backgroundColor: [AMBER, GREEN, GREEN, AMBER, RED, RED],
+      data: [85432, 59072, 74347, 696, 1000],
+      backgroundColor: [AMBER, GREEN, GREEN, RED, RED],
       borderRadius: 4,
     }]
   },

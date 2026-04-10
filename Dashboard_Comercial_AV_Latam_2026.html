@@ -235,7 +235,7 @@
         <div style="font-size:10px;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">⚠️ PENDIENTE</div>
         <div style="font-size:11px;color:var(--text-dim);line-height:1.7;">
           • MN Chile 17.9% (meta 25%)<br>
-          • Navarro Perú sin ventas Feb/Mar<br>
+          • Zona Aguirre/Navarro: 210.3% del ppto ✅<br>
           • Laratro bajo meta ppto<br>
           • Encina camioneta Mayo: revisar
         </div>
@@ -422,7 +422,7 @@
       <div class="kpi-mini">
         <div class="kpi-mini-label">Vendedores Activos</div>
         <div class="kpi-mini-val">4 / 6</div>
-        <div class="kpi-mini-sub" style="color:var(--amber);">Gonzales/Valladares críticos</div>
+        <div class="kpi-mini-sub" style="color:var(--amber);">Gonzales/Valladares críticos · Aguirre/Nav. 210% ✅</div>
       </div>
     </div>
 
@@ -458,20 +458,12 @@
               <td class="right">✅</td>
             </tr>
             <tr>
-              <td><span class="sema sg"></span><strong>L. Aguirre</strong></td>
-              <td class="mono right">40,333</td>
-              <td class="mono right muted">S/Ppto</td>
-              <td><span class="green mono">🚀 Nvo</span><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
-              <td class="mono right green">2,172</td>
-              <td class="right">🚀</td>
-            </tr>
-            <tr>
-              <td><span class="sema sa"></span><strong>N. Navarro</strong></td>
-              <td class="mono right">34,014</td>
+              <td><span class="sema sg"></span><strong>Aguirre / Navarro</strong><br><span style="font-size:9px;color:var(--text-muted);">Zona unificada · Aguirre activa</span></td>
+              <td class="mono right">74,347</td>
               <td class="mono right muted">35,350</td>
-              <td><span class="amber mono">96.2%</span><div class="prog-wrap"><div class="prog-fill" style="width:96.2%;background:var(--amber);"></div></div></td>
-              <td class="mono right muted">–</td>
-              <td class="right">⚠️</td>
+              <td><span class="green mono">210.3%</span><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
+              <td class="mono right green">2,172</td>
+              <td class="right">✅</td>
             </tr>
             <tr>
               <td><span class="sema sr"></span>A. Gonzales</td>
@@ -500,7 +492,7 @@
           </tbody>
         </table>
         <div style="margin-top:12px;padding:10px;background:var(--surface3);border-radius:6px;font-size:11px;color:var(--text-dim);">
-          <strong style="color:var(--green);">Nota:</strong> Aguirre sin presupuesto Q1 → incorporar formalmente en plan Q2 · Navarro sin operaciones Feb/Mar — confirmar estado
+          <strong style="color:var(--green);">Zona Aguirre / Navarro:</strong> Aguirre reemplaza a Navarro · Mismo presupuesto USD 35,350 · Ventas consolidadas USD 74,347 · <strong style="color:var(--green);">210.3% del ppto ✅</strong> · Incorporar plan Q2 formal
         </div>
       </div>
 
@@ -637,11 +629,7 @@
               <td class="mono right amber">34,555</td>
               <td class="mono right amber">33.3%</td>
             </tr>
-            <tr>
-              <td><strong>L. Aguirre</strong></td>
-              <td class="mono right">30,886</td>
-              <td class="mono right">29.8%</td>
-            </tr>
+
             <tr>
               <td>O. Atalaya</td>
               <td class="mono right green">15,343</td>
@@ -653,9 +641,9 @@
               <td class="mono right muted">10.5%</td>
             </tr>
             <tr>
-              <td>N. Navarro</td>
-              <td class="mono right green">9,445</td>
-              <td class="mono right green">9.1%</td>
+              <td><strong>Aguirre / Navarro</strong><br><span style="font-size:9px;color:var(--text-muted);">Zona unificada</span></td>
+              <td class="mono right amber">40,331</td>
+              <td class="mono right amber">38.9%</td>
             </tr>
             <tr>
               <td class="muted">Otros</td>
@@ -803,8 +791,8 @@ new Chart(document.getElementById('cPeruVend'), {
     datasets: [
       { label: 'Infante', data: [16525.8, 16187.6, 38880.7, 13837.5], backgroundColor: A, borderRadius: 2 },
       { label: 'Atalaya', data: [30071.08, 9000.44, 20000, 0], backgroundColor: G, borderRadius: 2 },
-      { label: 'Aguirre', data: [0, 6521.36, 31639.66, 2172], backgroundColor: '#5ab648', borderRadius: 2 },
-      { label: 'Navarro', data: [26314.4, 7700, 0, 0], backgroundColor: '#4A9EDB', borderRadius: 2 },
+      { label: 'Aguirre/Nav.', data: [26314.4, 14221.36, 31639.66, 2172], backgroundColor: '#5ab648', borderRadius: 2 },
+      { label: 'Aguirre/Nav.', data: [26314.4, 14221.36, 31639.66, 2172], backgroundColor: '#4A9EDB', borderRadius: 2 },
       { label: 'Otros', data: [600, 0, 1096, 0], backgroundColor: '#4a6a4a', borderRadius: 2 },
     ]
   },
@@ -842,10 +830,10 @@ new Chart(document.getElementById('cCxCChile'), {
 new Chart(document.getElementById('cCxCPeru'), {
   type: 'bar',
   data: {
-    labels: ['O. Infante', 'L. Aguirre', 'O. Atalaya', 'J. Geldres', 'N. Navarro', 'Otros'],
+    labels: ['O. Infante', 'Aguirre/Navarro', 'O. Atalaya', 'J. Geldres', 'Otros'],
     datasets: [{
       label: 'USD',
-      data: [34555, 30886, 15343, 10874, 9445, 2651],
+      data: [34555, 40331, 15343, 10874, 2651],
       backgroundColor: [A, G, G, '#4a6a4a', G, '#3a5a3a'],
       borderRadius: 4
     }]
