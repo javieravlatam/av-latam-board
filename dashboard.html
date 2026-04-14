@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AV Latam · BI Platform 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #080e09;
+    --surface: #0f1a10;
+    --surface2: #162118;
+    --green: #7AB648;
+    --green-dim: #5a8a35;
+    --amber: #F5A623;
+    --red: #E74C3C;
+    --blue: #4A9EDB;
+    --text: #e8f0e9;
+    --text-dim: #8fa892;
+    --text-muted: #5a7060;
+    --border: rgba(122,182,72,0.18);
+    --border-dim: rgba(122,182,72,0.08);
+  }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 60px 40px 40px;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 0%, rgba(122,182,72,0.08) 0%, transparent 60%);
+    border-bottom: 1px solid var(--border-dim);
+  }
+  .logo-wrap {
+    display: inline-flex; align-items: center; gap: 16px;
+    margin-bottom: 24px;
+  }
+  .logo-mark {
+    width: 64px; height: 64px;
+    background: var(--green);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px; color: var(--bg);
+    box-shadow: 0 0 32px rgba(122,182,72,0.25);
+  }
+  .logo-text { text-align: left; }
+  .logo-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 4px; color: var(--green); line-height: 1; }
+  .logo-sub { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 4px; }
+
+  .hero-tagline {
+    font-size: 14px; color: var(--text-dim);
+    max-width: 520px; margin: 0 auto 32px;
+    line-height: 1.7;
+  }
+
+  /* KPI BANNER */
+  .kpi-banner {
+    display: flex; justify-content: center; gap: 0;
+    max-width: 800px; margin: 0 auto 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+  }
+  .kpi-b-item {
+    flex: 1; padding: 20px 24px; text-align: center;
+    border-right: 1px solid var(--border-dim);
+    position: relative;
+  }
+  .kpi-b-item:last-child { border-right: none; }
+  .kpi-b-item::before {
+    content: ''; position: absolute;
+    top: 0; left: 20%; right: 20%; height: 2px;
+    background: var(--green);
+  }
+  .kpi-b-item.amber::before { background: var(--amber); }
+  .kpi-b-item.red::before { background: var(--red); }
+  .kpi-b-item.blue::before { background: var(--blue); }
+  .kpi-b-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; }
+  .kpi-b-val { font-family: 'Bebas Neue', sans-serif; font-size: 28px; line-height: 1; color: var(--text); }
+  .kpi-b-val.green { color: var(--green); }
+  .kpi-b-val.amber { color: var(--amber); }
+  .kpi-b-val.red { color: var(--red); }
+  .kpi-b-val.blue { color: var(--blue); }
+  .kpi-b-sub { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+
+  /* CARDS GRID */
+  .cards-section { padding: 0 32px 48px; max-width: 1100px; margin: 0 auto; width: 100%; }
+  .section-label {
+    font-size: 10px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 2px;
+    margin-bottom: 16px; margin-top: 40px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border-dim); }
+
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: var(--green);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .card.amber::before { background: var(--amber); }
+  .card.blue::before { background: var(--blue); }
+  .card.purple::before { background: #9B59B6; }
+  .card:hover { border-color: var(--green); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(122,182,72,0.1); }
+  .card:hover::before { transform: scaleX(1); }
+  .card.amber:hover { border-color: var(--amber); box-shadow: 0 8px 32px rgba(245,166,35,0.1); }
+  .card.blue:hover { border-color: var(--blue); box-shadow: 0 8px 32px rgba(74,158,219,0.1); }
+  .card.purple:hover { border-color: #9B59B6; box-shadow: 0 8px 32px rgba(155,89,182,0.1); }
+
+  .card-icon { font-size: 28px; margin-bottom: 14px; }
+  .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; color: var(--text); margin-bottom: 8px; }
+  .card-desc { font-size: 12px; color: var(--text-dim); line-height: 1.6; margin-bottom: 16px; }
+  .card-stats { display: flex; flex-direction: column; gap: 6px; }
+  .card-stat { display: flex; justify-content: space-between; align-items: center; }
+  .cs-label { font-size: 10px; color: var(--text-muted); }
+  .cs-val { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; }
+  .card-cta {
+    margin-top: 16px; padding: 8px 0; text-align: center;
+    font-size: 11px; color: var(--text-muted);
+    border-top: 1px solid var(--border-dim);
+    letter-spacing: 1px;
+  }
+
+  /* CORTE BANNER */
+  .corte-banner {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .corte-info { font-size: 11px; color: var(--text-dim); }
+  .corte-info strong { color: var(--text); }
+  .corte-badge {
+    background: rgba(122,182,72,0.12); border: 1px solid var(--border);
+    border-radius: 6px; padding: 4px 12px;
+    font-family: 'DM Mono', monospace; font-size: 10px; color: var(--green);
+  }
+
+  /* FOOTER */
+  .footer {
+    margin-top: auto; padding: 20px 32px;
+    border-top: 1px solid var(--border-dim);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 10px; color: var(--text-muted);
+  }
+
+  @media (max-width: 800px) {
+    .cards { grid-template-columns: 1fr; }
+    .kpi-banner { flex-direction: column; }
+    .kpi-b-item { border-right: none; border-bottom: 1px solid var(--border-dim); }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="logo-wrap">
+    <div class="logo-mark">AV</div>
+    <div class="logo-text">
+      <div class="logo-title">Agroveca Grupo Latam</div>
+      <div class="logo-sub">BI Platform · Temporada 2026</div>
+    </div>
+  </div>
+  <p class="hero-tagline">
+    Plataforma de inteligencia comercial para Chile, Perú y Ecuador.
+    Datos en tiempo real para toma de decisiones de Gerencia y Directorio.
+  </p>
+
+  <!-- KPI BANNER -->
+  <div class="kpi-banner">
+    <div class="kpi-b-item">
+      <div class="kpi-b-label">Grupo YTD</div>
+      <div class="kpi-b-val green">USD 430K</div>
+      <div class="kpi-b-sub">Chile + Perú · corte sem. 14</div>
+    </div>
+    <div class="kpi-b-item">
+      <div class="kpi-b-label">Chile YTD</div>
+      <div class="kpi-b-val">190.9M</div>
+      <div class="kpi-b-sub">CLP · 105.4% Ppto T1 ✅</div>
+    </div>
+    <div class="kpi-b-item blue">
+      <div class="kpi-b-label">Perú YTD</div>
+      <div class="kpi-b-val blue">229.3K</div>
+      <div class="kpi-b-sub">USD · Marzo récord ⭐</div>
+    </div>
+    <div class="kpi-b-item amber">
+      <div class="kpi-b-label">MN Real Chile</div>
+      <div class="kpi-b-val amber">17.9%</div>
+      <div class="kpi-b-sub">Meta 25% · gap –7.1pp</div>
+    </div>
+  </div>
+</div>
+
+<!-- CARDS SECTION -->
+<div class="cards-section">
+
+  <!-- Corte info -->
+  <div class="corte-banner">
+    <div class="corte-info">
+      Último corte: <strong>Chile 12/04/2026</strong> · <strong>Perú 10/04/2026</strong> · <strong>CxC 12/04/2026</strong>
+    </div>
+    <div class="corte-badge">TC = 950 CLP/USD · Meta MN 25%</div>
+  </div>
+
+  <div class="section-label">Vistas principales</div>
+  <div class="cards" style="grid-template-columns:repeat(2,1fr);">
+
+    <!-- Executive Board View -->
+    <a href="Executive_Board_View_AV_Latam_2026.html" class="card">
+      <div class="card-icon">📋</div>
+      <div class="card-title">Executive Board View</div>
+      <div class="card-desc">Vista consolidada de Directorio. P&L CEO por RTC, análisis de margen neto real, diagnóstico de viabilidad por zona y resumen ejecutivo corporativo.</div>
+      <div class="card-stats">
+        <div class="card-stat">
+          <span class="cs-label">Grupo YTD</span>
+          <span class="cs-val" style="color:var(--green);">USD 430,156</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">MN Real Chile</span>
+          <span class="cs-val" style="color:var(--amber);">17.9% (meta 25%)</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Zonas en ultimátum</span>
+          <span class="cs-val" style="color:var(--red);">Velásquez · Veverka</span>
+        </div>
+      </div>
+      <div class="card-cta">ABRIR BOARD VIEW →</div>
+    </a>
+
+    <!-- Dashboard Comercial -->
+    <a href="Dashboard_Comercial_AV_Latam_2026.html" class="card amber">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Dashboard Comercial</div>
+      <div class="card-desc">Control semanal de jefes de zona. Venta por RTC vs presupuesto, evolución mensual, CxC consolidada y diagnósticos por vendedor con tabs interactivos.</div>
+      <div class="card-stats">
+        <div class="card-stat">
+          <span class="cs-label">Chile YTD</span>
+          <span class="cs-val" style="color:var(--green);">CLP 190.9M · 105.4% ✅</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Perú YTD</span>
+          <span class="cs-val" style="color:var(--blue);">USD 229.3K · Marzo récord</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Aguirre Perú</span>
+          <span class="cs-val" style="color:var(--green);">USD 40.3K sin presupuesto 🚀</span>
+        </div>
+      </div>
+      <div class="card-cta">ABRIR DASHBOARD →</div>
+    </a>
+
+    <!-- Panel Presupuesto -->
+    <a href="Panel_Presupuesto_AV_2026.html" class="card" style="--card-accent:#F5A623;">
+      <div class="card-icon">📈</div>
+      <div class="card-title">Panel Presupuesto</div>
+      <div class="card-desc">Presupuesto oficial 2026 mes a mes. Real vs Ppto por RTC y zona, curvas acumuladas con selector interactivo por vendedor.</div>
+      <div class="card-stats">
+        <div class="card-stat">
+          <span class="cs-label">Chile Ppto Anual</span>
+          <span class="cs-val" style="color:var(--green);">CLP 861.3M · 105.4% T1</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Perú Ppto Anual</span>
+          <span class="cs-val" style="color:var(--blue);">USD 1.137M · 95.9% T1</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Selector por vendedor</span>
+          <span class="cs-val" style="color:var(--amber);">Chile + Perú · 4 gráficas</span>
+        </div>
+      </div>
+      <div class="card-cta">ABRIR PRESUPUESTO →</div>
+    </a>
+
+    <!-- Panel General -->
+    <a href="Panel_General_AV_2026.html" class="card blue">
+      <div class="card-icon">🌎</div>
+      <div class="card-title">Panel General</div>
+      <div class="card-desc">Vista gerencial completa del grupo con detalle operativo consolidado, mapa de vendedores activos y tendencias por trimestre.</div>
+      <div class="card-stats">
+        <div class="card-stat">
+          <span class="cs-label">Países</span>
+          <span class="cs-val">Chile · Perú · Ecuador</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Vendedores activos</span>
+          <span class="cs-val">12 RTC activos</span>
+        </div>
+      </div>
+      <div class="card-cta">ABRIR PANEL →</div>
+    </a>
+
+  </div>
+
+  <div class="section-label">Paneles por país</div>
+  <div class="cards">
+
+    <!-- Panel Chile -->
+    <a href="Panel_Chile_AV_2026.html" class="card">
+      <div class="card-icon">🇨🇱</div>
+      <div class="card-title">Panel Chile</div>
+      <div class="card-desc">Detalle operativo Chile: venta por RTC, presupuesto mensual, CxC y análisis de margen neto real por zona.</div>
+      <div class="card-stats">
+        <div class="card-stat">
+          <span class="cs-label">YTD Chile</span>
+          <span class="cs-val" style="color:var(--green);">CLP 190,852,906</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Referente</span>
+          <span class="cs-val" style="color:var(--green);">Caroca 185.1% ppto</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">CxC Total</span>
+          <span class="cs-val">CLP 62.0M</span>
+        </div>
+      </div>
+      <div class="card-cta">ABRIR CHILE →</div>
+    </a>
+
+    <!-- Panel Perú -->
+    <a href="Panel_Peru_AV_2026.html" class="card blue">
+      <div class="card-icon">🇵🇪</div>
+      <div class="card-title">Panel Perú</div>
+      <div class="card-desc">Detalle operativo Perú: ventas por vendedor, marzo récord, nueva incorporación Aguirre y estado de cartera activa.</div>
+      <div class="card-stats">
+        <div class="card-stat">
+          <span class="cs-label">YTD Perú</span>
+          <span class="cs-val" style="color:var(--blue);">USD 229,259</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Mejor mes</span>
+          <span class="cs-val" style="color:var(--green);">Marzo USD 91.6K ⭐</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">CxC Activa</span>
+          <span class="cs-val">USD 104,055</span>
+        </div>
+      </div>
+      <div class="card-cta">ABRIR PERÚ →</div>
+    </a>
+
+    <!-- Panel Ecuador -->
+    <a href="Panel_Ecuador_AV_2026.html" class="card purple">
+      <div class="card-icon">🇪🇨</div>
+      <div class="card-title">Panel Ecuador</div>
+      <div class="card-desc">Canal Ecuador en desarrollo. Seguimiento de activación comercial y primeros despachos del ejercicio 2026.</div>
+      <div class="card-stats">
+        <div class="card-stat">
+          <span class="cs-label">Estado</span>
+          <span class="cs-val" style="color:var(--amber);">En activación</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Objetivo 2026</span>
+          <span class="cs-val">Primer despacho Q2</span>
+        </div>
+      </div>
+      <div class="card-cta">ABRIR ECUADOR →</div>
+    </a>
+
+  </div>
+
+  <div class="section-label">Jefes de zona</div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <a href="Panel_Jefes_Index.html" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 20px;text-decoration:none;color:var(--text-dim);font-size:12px;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-dim)'">
+      👥 Índice Jefes de Zona →
+    </a>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div>Agroveca Grupo Latam · BI Platform · Temporada 2026</div>
+  <div style="font-family:'DM Mono',monospace;color:var(--green);">Corte: Chile 12/04 · Perú 10/04 · CxC 12/04/2026</div>
+</div>
+
+</body>
+</html>
