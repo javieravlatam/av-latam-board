@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<script>
+  /* AV Auth Guard · sesión activa mientras la pestaña esté abierta */
+  (function(){
+    if(sessionStorage.getItem('av_auth')!=='7cd4374e16e78510de24a08115c3b44f6d0d72762d41054e6ef8fa0cb5e0c45b')
+      window.location.replace('index.html');
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Rentabilidad & Pricing · AV Latam 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #080e09;
+    --surface: #0f1a10;
+    --surface2: #162118;
+    --surface3: #1c2b1e;
+    --green: #7AB648;
+    --green-dim: #5a8a35;
+    --green-glow: rgba(122,182,72,0.12);
+    --amber: #F5A623;
+    --red: #E74C3C;
+    --red-dark: #C0392B;
+    --blue: #4A9EDB;
+    --text: #e8f0e9;
+    --text-dim: #8fa892;
+    --text-muted: #5a7060;
+    --border: rgba(122,182,72,0.18);
+    --border-dim: rgba(122,182,72,0.08);
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; line-height: 1.5; min-height: 100vh; }
+
+  /* ── HEADER ── */
+  .header { background: linear-gradient(180deg,#0c1a0d 0%,var(--bg) 100%); border-bottom: 1px solid var(--border); padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .logo-mark { width: 38px; height: 38px; background: var(--red); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue',sans-serif; font-size: 18px; color: #fff; }
+  .header-title { font-family: 'Bebas Neue',sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--green); }
+  .header-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+  .corte-date { font-family: 'DM Mono',monospace; font-size: 11px; color: var(--amber); text-align: right; }
+  .corte-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── PAGE ── */
+  .page { max-width: 1400px; margin: 0 auto; padding: 20px 28px 56px; }
+
+  /* ── TABS ── */
+  .tabs { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 1px solid var(--border-dim); padding-bottom: 0; }
+  .tab { padding: 10px 22px; font-size: 12px; font-weight: 500; cursor: pointer; border-radius: 8px 8px 0 0; color: var(--text-muted); transition: all .2s; border: 1px solid transparent; border-bottom: none; background: transparent; position: relative; top: 1px; }
+  .tab.active { background: var(--surface); color: var(--green); border-color: var(--border); border-bottom-color: var(--surface); }
+  .tab:hover:not(.active) { color: var(--text-dim); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── GRIDS ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+  .grid-5 { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; }
+
+  /* ── PANEL ── */
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .panel-title { font-family: 'Bebas Neue',sans-serif; font-size: 13px; letter-spacing: 2px; color: var(--green); margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+  .panel-title .tag { font-family: 'DM Mono',monospace; font-size: 9px; color: var(--text-muted); font-weight: 400; letter-spacing: 1px; }
+  .panel-title.red-title { color: var(--red); }
+  .panel-title.amber-title { color: var(--amber); }
+
+  /* ── KPI STRIP ── */
+  .kpi-strip { display: grid; gap: 12px; margin-bottom: 18px; }
+  .kpi-strip.k4 { grid-template-columns: repeat(4,1fr); }
+  .kpi-strip.k5 { grid-template-columns: repeat(5,1fr); }
+  .kpi-mini { background: var(--surface2); border: 1px solid var(--border-dim); border-radius: 10px; padding: 14px 16px; }
+  .kpi-mini.red   { border-color: rgba(231,76,60,0.35); background: rgba(231,76,60,0.06); }
+  .kpi-mini.amber { border-color: rgba(245,166,35,0.30); background: rgba(245,166,35,0.05); }
+  .kpi-mini.green { border-color: rgba(122,182,72,0.30); background: rgba(122,182,72,0.06); }
+  .kpi-mini-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; }
+  .kpi-mini-val { font-family: 'Bebas Neue',sans-serif; font-size: 28px; line-height: 1; }
+  .kpi-mini-val.v-red { color: var(--red); }
+  .kpi-mini-val.v-amber { color: var(--amber); }
+  .kpi-mini-val.v-green { color: var(--green); }
+  .kpi-mini-sub { font-family: 'DM Mono',monospace; font-size: 10px; color: var(--text-dim); margin-top: 4px; }
+
+  /* ── EXEC CARD ── */
+  .exec-card { background: linear-gradient(135deg,rgba(231,76,60,0.10) 0%,rgba(8,14,9,0) 60%); border: 1px solid rgba(231,76,60,0.30); border-radius: 14px; padding: 24px 28px; margin-bottom: 18px; display: flex; align-items: center; gap: 28px; }
+  .exec-num { font-family: 'Bebas Neue',sans-serif; font-size: 54px; color: var(--red); line-height: 1; white-space: nowrap; }
+  .exec-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--red); margin-bottom: 4px; }
+  .exec-msg { font-size: 12px; color: var(--text-dim); line-height: 1.6; max-width: 600px; }
+  .exec-divider { width: 1px; height: 60px; background: rgba(231,76,60,0.25); flex-shrink: 0; }
+
+  /* ── TABLE ── */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; padding: 0 10px 10px; border-bottom: 1px solid var(--border-dim); font-weight: 500; }
+  .data-table th.r { text-align: right; }
+  .data-table td { padding: 9px 10px; border-bottom: 1px solid var(--border-dim); font-size: 11px; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--surface2); }
+  .mono { font-family: 'DM Mono',monospace; font-size: 11px; }
+  .right { text-align: right; }
+  .center { text-align: center; }
+  .green { color: var(--green); }
+  .amber { color: var(--amber); }
+  .red { color: var(--red); }
+  .muted { color: var(--text-muted); }
+  .bold { font-weight: 600; }
+
+  /* ── SEMÁFOROS ── */
+  .sema { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+  .sg  { background: var(--green); box-shadow: 0 0 5px rgba(122,182,72,0.6); }
+  .sa  { background: var(--amber); }
+  .sr  { background: var(--red); }
+  .srd { background: var(--red-dark); box-shadow: 0 0 5px rgba(192,57,43,0.6); }
+
+  /* ── BADGES ── */
+  .badge { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 9px; font-weight: 600; letter-spacing: .5px; }
+  .badge-g { background: rgba(122,182,72,0.15); color: var(--green); }
+  .badge-a { background: rgba(245,166,35,0.15); color: var(--amber); }
+  .badge-r { background: rgba(231,76,60,0.15); color: var(--red); }
+  .badge-b { background: rgba(74,158,219,0.15); color: var(--blue); }
+
+  /* ── PROGRESS BAR ── */
+  .prog-wrap { background: var(--surface3); border-radius: 3px; height: 5px; margin-top: 6px; overflow: hidden; }
+  .prog-fill { height: 100%; border-radius: 3px; }
+  .prog-red   { background: var(--red); }
+  .prog-amber { background: var(--amber); }
+  .prog-green { background: var(--green); }
+
+  /* ── CHARTS ── */
+  .chart-box    { position: relative; height: 240px; }
+  .chart-box-sm { position: relative; height: 190px; }
+  .chart-box-lg { position: relative; height: 300px; }
+
+  /* ── SECTION HEADER ── */
+  .section-h { font-family: 'Bebas Neue',sans-serif; font-size: 14px; letter-spacing: 3px; color: var(--green); border-left: 3px solid var(--green); padding-left: 10px; margin: 24px 0 14px; }
+  .section-h.red   { color: var(--red); border-color: var(--red); }
+  .section-h.amber { color: var(--amber); border-color: var(--amber); }
+  .section-h.blue  { color: var(--blue); border-color: var(--blue); }
+
+  /* ── ALERT BOXES ── */
+  .alert-box { background: rgba(231,76,60,0.07); border: 1px solid rgba(231,76,60,0.28); border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; }
+  .alert-box.amber { background: rgba(245,166,35,0.07); border-color: rgba(245,166,35,0.28); }
+  .alert-box.blue  { background: rgba(74,158,219,0.07); border-color: rgba(74,158,219,0.28); }
+  .alert-box.muted { background: rgba(90,112,96,0.07); border-color: rgba(90,112,96,0.25); }
+  .alert-title { font-size: 11px; font-weight: 700; margin-bottom: 5px; }
+  .alert-title.red   { color: var(--red); }
+  .alert-title.amber { color: var(--amber); }
+  .alert-title.blue  { color: var(--blue); }
+  .alert-title.muted { color: var(--text-dim); }
+  .alert-body { font-size: 11px; color: var(--text-dim); line-height: 1.6; }
+
+  /* ── DECISION GRID ── */
+  .decision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+  .decision-card { background: var(--surface); border: 1px solid var(--border-dim); border-radius: 10px; padding: 16px; }
+  .decision-card.red   { border-color: rgba(231,76,60,0.35); background: rgba(231,76,60,0.05); }
+  .decision-card.amber { border-color: rgba(245,166,35,0.35); background: rgba(245,166,35,0.05); }
+  .decision-card.blue  { border-color: rgba(74,158,219,0.30); background: rgba(74,158,219,0.04); }
+  .decision-card.muted { border-color: rgba(90,112,96,0.3);   background: rgba(90,112,96,0.05); }
+  .decision-icon { font-size: 20px; margin-bottom: 8px; }
+  .decision-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .decision-title.red   { color: var(--red); }
+  .decision-title.amber { color: var(--amber); }
+  .decision-title.blue  { color: var(--blue); }
+  .decision-title.muted { color: var(--text-dim); }
+  .decision-body { font-size: 10px; color: var(--text-dim); line-height: 1.6; }
+
+  /* ── FOOTER ── */
+  .footer { border-top: 1px solid var(--border-dim); padding: 14px 28px; display: flex; justify-content: space-between; align-items: center; margin-top: 32px; }
+  .nav-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nav-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 11px; color: var(--text-dim); text-decoration: none; transition: all .2s; }
+  .nav-pill:hover { background: var(--green); color: var(--bg); border-color: var(--green); }
+  .nav-pill.active { background: var(--green-glow); color: var(--green); border-color: var(--green); }
+  .footer-copy { font-family: 'DM Mono',monospace; font-size: 9px; color: var(--text-muted); }
+
+  /* ── RANK PILL ── */
+  .rank { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; font-family: 'DM Mono',monospace; font-size: 10px; font-weight: 600; background: var(--surface3); color: var(--text-dim); }
+  .rank.top { background: rgba(231,76,60,0.20); color: var(--red); }
+
+  /* ── COUNTRY FLAGS ── */
+  .flag { font-size: 14px; margin-right: 4px; }
+
+  @media (max-width: 900px) {
+    .grid-2,.grid-3,.grid-4,.grid-5,.kpi-strip.k4,.kpi-strip.k5,.decision-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════════════════════ -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo-mark">$</div>
+    <div>
+      <div class="header-title">RENTABILIDAD &amp; PRICING — CONTROL COMERCIAL</div>
+      <div class="header-sub">Agroveca Grupo LATAM · Disciplina de precios piso · Chile + Perú</div>
+    </div>
+  </div>
+  <div style="text-align:right">
+    <div class="corte-label">Fuente</div>
+    <div class="corte-date">modulo_rentabilidad_pricing.xlsx</div>
+    <div class="corte-label" style="margin-top:4px">Historial Chile 2024–2025 · Perú 2025</div>
+  </div>
+</header>
+
+<!-- ══ PAGE ════════════════════════════════════════════════════════════════ -->
+<div class="page">
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('resumen',this)">📋 Resumen Ejecutivo</div>
+    <div class="tab" onclick="switchTab('chile',this)">🇨🇱 Chile</div>
+    <div class="tab" onclick="switchTab('peru',this)">🇵🇪 Perú</div>
+    <div class="tab" onclick="switchTab('alertas',this)">🚨 Alertas &amp; Decisiones</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       TAB 1 · RESUMEN EJECUTIVO
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div id="tab-resumen" class="tab-content active">
+
+    <!-- Exec Card -->
+    <div class="exec-card">
+      <div>
+        <div class="exec-label">Pérdida estimada acumulada por pricing bajo piso — Chile</div>
+        <div class="exec-num">CLP 96.7M</div>
+      </div>
+      <div class="exec-divider"></div>
+      <div class="exec-msg">
+        En el historial 2024–2025, <strong style="color:var(--text)">507 transacciones (12.6% del total)</strong> se ejecutaron por debajo del precio piso oficial en Chile. Esto representa <strong style="color:var(--red)">CLP 74.9M en ventas realizadas bajo piso</strong> y una pérdida estimada de <strong style="color:var(--red)">CLP 96.7M</strong> si se calcula el gap por volumen vendido. <span style="color:var(--amber)">50 de 91 SKUs analizados tienen precio promedio histórico inferior al piso.</span> Perú no tiene desglose por SKU disponible — análisis a nivel cliente/vendedor.
+      </div>
+    </div>
+
+    <!-- KPI Strip -->
+    <div class="kpi-strip k5" style="margin-bottom:20px">
+      <div class="kpi-mini red">
+        <div class="kpi-mini-label">Pérdida Est. Chile</div>
+        <div class="kpi-mini-val v-red">96.7M</div>
+        <div class="kpi-mini-sub">CLP · gap×volumen</div>
+      </div>
+      <div class="kpi-mini amber">
+        <div class="kpi-mini-label">Ventas Bajo Piso</div>
+        <div class="kpi-mini-val v-amber">74.9M</div>
+        <div class="kpi-mini-sub">CLP · 5.4% del total</div>
+      </div>
+      <div class="kpi-mini amber">
+        <div class="kpi-mini-label">Trans. Bajo Piso</div>
+        <div class="kpi-mini-val v-amber">507</div>
+        <div class="kpi-mini-sub">de 4,025 · 12.6%</div>
+      </div>
+      <div class="kpi-mini red">
+        <div class="kpi-mini-label">SKUs Bajo Piso</div>
+        <div class="kpi-mini-val v-red">55%</div>
+        <div class="kpi-mini-sub">50 de 91 analizados</div>
+      </div>
+      <div class="kpi-mini">
+        <div class="kpi-mini-label">Total Ventas Chile</div>
+        <div class="kpi-mini-val v-green">1,389M</div>
+        <div class="kpi-mini-sub">CLP · historial 2024-25</div>
+      </div>
+    </div>
+
+    <!-- Charts + Summary -->
+    <div class="grid-2" style="margin-bottom:16px">
+
+      <div class="panel">
+        <div class="panel-title">DISTRIBUCIÓN VENTAS CHILE — PISO VS BAJO PISO <span class="tag">CLP</span></div>
+        <div class="chart-box-lg">
+          <canvas id="chartResumen"></canvas>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title red-title">RANKING VENDEDORES — VENTA BAJO PISO <span class="tag">CLP · CHILE</span></div>
+        <div class="chart-box-lg">
+          <canvas id="chartResumenVend"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Country comparison -->
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-title"><span class="flag">🇨🇱</span>CHILE — Exposición pricing</div>
+        <table class="data-table">
+          <tr><th>Métrica</th><th class="r">Valor</th><th class="r">Estado</th></tr>
+          <tr><td>Total ventas históricas</td><td class="right mono">CLP 1,389.7M</td><td class="right"><span class="badge badge-g">BASE</span></td></tr>
+          <tr><td>Ventas bajo piso</td><td class="right mono red bold">CLP 74.9M</td><td class="right"><span class="badge badge-r">5.4%</span></td></tr>
+          <tr><td>Pérdida estimada</td><td class="right mono red bold">CLP 96.7M</td><td class="right"><span class="badge badge-r">CRÍTICO</span></td></tr>
+          <tr><td>SKUs bajo piso</td><td class="right mono amber">50 / 91</td><td class="right"><span class="badge badge-a">54.9%</span></td></tr>
+          <tr><td>Vendedor más expuesto</td><td class="right mono amber">Pablo Laratro</td><td class="right"><span class="badge badge-a">27.5M</span></td></tr>
+          <tr><td>Producto top impacto</td><td class="right mono amber">ALGAP 30</td><td class="right"><span class="badge badge-r">16.3M</span></td></tr>
+        </table>
+      </div>
+      <div class="panel">
+        <div class="panel-title"><span class="flag">🇵🇪</span>PERÚ — Resumen comercial</div>
+        <table class="data-table">
+          <tr><th>Métrica</th><th class="r">Valor</th><th class="r">Estado</th></tr>
+          <tr><td>Total ventas 2025</td><td class="right mono">USD 690,415</td><td class="right"><span class="badge badge-b">BASE</span></td></tr>
+          <tr><td>Facturas emitidas</td><td class="right mono">187</td><td class="right"><span class="badge badge-g">OK</span></td></tr>
+          <tr><td>Vendedores activos</td><td class="right mono">6</td><td class="right"><span class="badge badge-g">OK</span></td></tr>
+          <tr><td>Clientes únicos</td><td class="right mono">37</td><td class="right"><span class="badge badge-b">INFO</span></td></tr>
+          <tr><td>Vendedor top</td><td class="right mono green">Jose Geldres</td><td class="right"><span class="badge badge-g">275K USD</span></td></tr>
+          <tr><td>Análisis SKU</td><td class="right mono muted">No disponible</td><td class="right"><span class="badge badge-a">SIN DETALLE</span></td></tr>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /tab-resumen -->
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       TAB 2 · CHILE
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div id="tab-chile" class="tab-content">
+
+    <div class="kpi-strip k4" style="margin-bottom:18px">
+      <div class="kpi-mini red">
+        <div class="kpi-mini-label">Pérdida Estimada</div>
+        <div class="kpi-mini-val v-red">96.7M</div>
+        <div class="kpi-mini-sub">CLP · gap × volumen vendido</div>
+      </div>
+      <div class="kpi-mini amber">
+        <div class="kpi-mini-label">Venta Bajo Piso</div>
+        <div class="kpi-mini-val v-amber">74.9M</div>
+        <div class="kpi-mini-sub">CLP · 5.4% historial</div>
+      </div>
+      <div class="kpi-mini amber">
+        <div class="kpi-mini-label">Trans. Bajo Piso</div>
+        <div class="kpi-mini-val v-amber">507</div>
+        <div class="kpi-mini-sub">12.6% de 4,025 totales</div>
+      </div>
+      <div class="kpi-mini red">
+        <div class="kpi-mini-label">SKUs Afectados</div>
+        <div class="kpi-mini-val v-red">50</div>
+        <div class="kpi-mini-sub">de 91 analizados (54.9%)</div>
+      </div>
+    </div>
+
+    <!-- Vendedores + Chart -->
+    <div class="section-h red">VENDEDORES — CUMPLIMIENTO DE PRECIO PISO</div>
+    <div class="grid-2" style="margin-bottom:18px">
+
+      <div class="panel">
+        <div class="panel-title red-title">RANKING — VENTA BAJO PISO <span class="tag">CLP ACUMULADO</span></div>
+        <table class="data-table">
+          <tr>
+            <th>#</th><th>Vendedor</th>
+            <th class="r">Ventas Total</th><th class="r">Bajo Piso</th>
+            <th class="r">% Trans.</th><th class="r">Estado</th>
+          </tr>
+          <tr>
+            <td><span class="rank top">1</span></td>
+            <td class="bold">Pablo Laratro</td>
+            <td class="right mono">392.3M</td>
+            <td class="right mono red bold">27.5M</td>
+            <td class="right mono amber">15.4%</td>
+            <td class="right"><span class="badge badge-a">REVISAR</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank top">2</span></td>
+            <td class="bold">Francisco Velásquez</td>
+            <td class="right mono">279.7M</td>
+            <td class="right mono red bold">18.5M</td>
+            <td class="right mono amber">12.9%</td>
+            <td class="right"><span class="badge badge-a">REVISAR</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank top">3</span></td>
+            <td class="bold">Jorge Caroca</td>
+            <td class="right mono">219.5M</td>
+            <td class="right mono red bold">12.8M</td>
+            <td class="right mono red">27.2%</td>
+            <td class="right"><span class="badge badge-r">ALERTA</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank">4</span></td>
+            <td>Eduardo Pinto</td>
+            <td class="right mono">117.9M</td>
+            <td class="right mono amber">8.4M</td>
+            <td class="right mono">5.6%</td>
+            <td class="right"><span class="badge badge-a">REVISAR</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank">5</span></td>
+            <td>Franco Riffo</td>
+            <td class="right mono">58.7M</td>
+            <td class="right mono amber">4.9M</td>
+            <td class="right mono">6.8%</td>
+            <td class="right"><span class="badge badge-a">REVISAR</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank">6</span></td>
+            <td>Rodrigo Encina</td>
+            <td class="right mono">19.5M</td>
+            <td class="right mono">1.1M</td>
+            <td class="right mono red">22.1%</td>
+            <td class="right"><span class="badge badge-r">ALERTA</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank">7</span></td>
+            <td>Valentina Muñoz</td>
+            <td class="right mono muted">5.4M</td>
+            <td class="right mono">1.1M</td>
+            <td class="right mono red bold">30.0%</td>
+            <td class="right"><span class="badge badge-r">ALERTA</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank">8</span></td>
+            <td>Javier Almeida</td>
+            <td class="right mono muted">6.6M</td>
+            <td class="right mono muted">0.3M</td>
+            <td class="right mono">9.5%</td>
+            <td class="right"><span class="badge badge-g">OK</span></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title red-title">% TRANSACCIONES BAJO PISO POR VENDEDOR</div>
+        <div class="chart-box-lg">
+          <canvas id="chartVendedores"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Productos -->
+    <div class="section-h red">PRODUCTOS — MAYOR IMPACTO BAJO PISO</div>
+    <div class="grid-2" style="margin-bottom:18px">
+
+      <div class="panel">
+        <div class="panel-title red-title">TOP PRODUCTOS — IMPACTO ESTIMADO <span class="tag">CLP · GAP×VOLUMEN</span></div>
+        <table class="data-table">
+          <tr>
+            <th>#</th><th>Producto</th>
+            <th class="r">Venta Bajo Piso</th>
+            <th class="r">Gap Prom/Ud</th>
+            <th class="r">Impacto Est.</th>
+          </tr>
+          <tr><td><span class="rank top">1</span></td><td class="bold">ALGAP 30</td><td class="right mono">999.8K</td><td class="right mono red">-1,136</td><td class="right mono red bold">16.3M</td></tr>
+          <tr><td><span class="rank top">2</span></td><td class="bold">HUMIC ROOT</td><td class="right mono">12.3M</td><td class="right mono red">-1,086</td><td class="right mono red bold">11.8M</td></tr>
+          <tr><td><span class="rank top">3</span></td><td class="bold">PLUS POTASIO</td><td class="right mono">12.6M</td><td class="right mono amber">-772</td><td class="right mono amber">7.3M</td></tr>
+          <tr><td><span class="rank top">4</span></td><td class="bold">MAX FULVIC 45%</td><td class="right mono">17.6M</td><td class="right mono amber">-586</td><td class="right mono amber">7.2M</td></tr>
+          <tr><td><span class="rank">5</span></td><td>PLUS CALCIO</td><td class="right mono">303.9K</td><td class="right mono amber">-578</td><td class="right mono amber">7.0M</td></tr>
+          <tr><td><span class="rank">6</span></td><td>PLUS ZINC</td><td class="right mono">14.6M</td><td class="right mono amber">-1,062</td><td class="right mono amber">4.5M</td></tr>
+          <tr><td><span class="rank">7</span></td><td>PLUS NUTRI MIX</td><td class="right mono">5.9M</td><td class="right mono">-1,167</td><td class="right mono">1.3M</td></tr>
+          <tr><td><span class="rank">8</span></td><td>AMIN</td><td class="right mono">3.0M</td><td class="right mono">-831</td><td class="right mono">833K</td></tr>
+        </table>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title red-title">IMPACTO ESTIMADO POR PRODUCTO <span class="tag">CLP MILLONES</span></div>
+        <div class="chart-box-lg">
+          <canvas id="chartProductos"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Clientes -->
+    <div class="section-h amber">CLIENTES — COMPRAS BAJO PRECIO PISO</div>
+    <div class="panel">
+      <div class="panel-title amber-title">TOP CLIENTES — MONTO COMPRADO BAJO PISO <span class="tag">CLP · CHILE</span></div>
+      <table class="data-table">
+        <tr>
+          <th>#</th><th>Cliente</th><th>Vendedor</th>
+          <th class="r">Venta Bajo Piso</th><th class="r">Trans.</th><th class="r">Clasificación</th><th class="r">Acción</th>
+        </tr>
+        <tr><td><span class="rank top">1</span></td><td class="bold">AGRÍCOLA DON PEDRO SPA</td><td class="muted">Pablo Laratro</td><td class="right mono red bold">8.7M</td><td class="right mono">2</td><td class="right"><span class="srd"></span><span class="red">CRÍTICO</span></td><td class="right"><span class="badge badge-r">Negociar precio</span></td></tr>
+        <tr><td><span class="rank top">2</span></td><td class="bold">AGROFRUTILLAS SAN PEDRO SA</td><td class="muted">Eduardo Pinto</td><td class="right mono red bold">7.7M</td><td class="right mono">14</td><td class="right"><span class="srd"></span><span class="red">CRÍTICO</span></td><td class="right"><span class="badge badge-r">Negociar precio</span></td></tr>
+        <tr><td><span class="rank top">3</span></td><td class="bold">AGROINSUMOS KULLIN SPA</td><td class="muted">Pablo Laratro</td><td class="right mono red">5.7M</td><td class="right mono red">72</td><td class="right"><span class="srd"></span><span class="red">CRÍTICO</span></td><td class="right"><span class="badge badge-r">Revisar acuerdo</span></td></tr>
+        <tr><td><span class="rank top">4</span></td><td class="bold">COMERC. LA COLONIA LTDA</td><td class="muted">Fco. Velásquez</td><td class="right mono red">5.2M</td><td class="right mono">2</td><td class="right"><span class="srd"></span><span class="red">CRÍTICO</span></td><td class="right"><span class="badge badge-r">Negociar precio</span></td></tr>
+        <tr><td><span class="rank">5</span></td><td>VILLEGAS Y BERRIOS Y CIA LTDA</td><td class="muted">Jorge Caroca</td><td class="right mono amber">4.7M</td><td class="right mono amber">106</td><td class="right"><span class="sa"></span><span class="amber">ALERTA</span></td><td class="right"><span class="badge badge-a">Revisar con vendedor</span></td></tr>
+        <tr><td><span class="rank">6</span></td><td>AGRÍCOLA DEL NORTE LTDA</td><td class="muted">Franco Riffo</td><td class="right mono amber">4.7M</td><td class="right mono">4</td><td class="right"><span class="sa"></span><span class="amber">ALERTA</span></td><td class="right"><span class="badge badge-a">Revisar con vendedor</span></td></tr>
+        <tr><td><span class="rank">7</span></td><td>AGRÍCOLA SEMINARIO LTDA</td><td class="muted">Fco. Velásquez</td><td class="right mono amber">3.9M</td><td class="right mono">5</td><td class="right"><span class="sa"></span><span class="amber">ALERTA</span></td><td class="right"><span class="badge badge-a">Revisar con vendedor</span></td></tr>
+        <tr><td><span class="rank">8</span></td><td>CARLOS G. SOUPER URRA</td><td class="muted">Pablo Laratro</td><td class="right mono">3.4M</td><td class="right mono">10</td><td class="right"><span class="sa"></span><span class="amber">MONITOREAR</span></td><td class="right"><span class="badge badge-a">Monitorear</span></td></tr>
+      </table>
+    </div>
+
+  </div><!-- /tab-chile -->
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       TAB 3 · PERÚ
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div id="tab-peru" class="tab-content">
+
+    <div class="kpi-strip k4" style="margin-bottom:18px">
+      <div class="kpi-mini green">
+        <div class="kpi-mini-label">Total Ventas 2025</div>
+        <div class="kpi-mini-val v-green">690K</div>
+        <div class="kpi-mini-sub">USD · año completo 2025</div>
+      </div>
+      <div class="kpi-mini">
+        <div class="kpi-mini-label">Vendedores Activos</div>
+        <div class="kpi-mini-val" style="color:var(--blue)">6</div>
+        <div class="kpi-mini-sub">Facturas: 187 emitidas</div>
+      </div>
+      <div class="kpi-mini">
+        <div class="kpi-mini-label">Clientes Únicos</div>
+        <div class="kpi-mini-val" style="color:var(--blue)">37</div>
+        <div class="kpi-mini-sub">Total clientes facturados</div>
+      </div>
+      <div class="kpi-mini amber">
+        <div class="kpi-mini-label">Análisis Pricing SKU</div>
+        <div class="kpi-mini-val v-amber">N/D</div>
+        <div class="kpi-mini-sub">Sin desglose por producto</div>
+      </div>
+    </div>
+
+    <div class="alert-box blue" style="margin-bottom:18px">
+      <div class="alert-title blue">ⓘ  Nota metodológica — Perú</div>
+      <div class="alert-body">Los datos de ventas de Perú están registrados a nivel de factura total (USD por factura), sin desglose individual por SKU. El análisis de disciplina de precios piso a nivel producto no es calculable con la fuente actual. Se muestra el análisis a nivel cliente/vendedor, que es el nivel de detalle disponible.</div>
+    </div>
+
+    <!-- Vendedores + Chart -->
+    <div class="section-h blue">VENDEDORES — VOLUMEN Y COBERTURA</div>
+    <div class="grid-2" style="margin-bottom:18px">
+
+      <div class="panel">
+        <div class="panel-title" style="color:var(--blue)">RANKING VENDEDORES — VENTAS USD 2025</div>
+        <table class="data-table">
+          <tr>
+            <th>#</th><th>Vendedor</th>
+            <th class="r">Ventas USD</th><th class="r">Facturas</th>
+            <th class="r">Clientes</th><th class="r">Prom/Fact.</th><th class="r">% Total</th>
+          </tr>
+          <tr>
+            <td><span class="rank top">1</span></td>
+            <td class="bold green">Jose Geldres</td>
+            <td class="right mono green bold">275,131</td>
+            <td class="right mono">59</td><td class="right mono">16</td>
+            <td class="right mono">4,663</td>
+            <td class="right"><span class="badge badge-g">39.8%</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank top">2</span></td>
+            <td class="bold">Oscar Infante</td>
+            <td class="right mono bold">219,543</td>
+            <td class="right mono">63</td><td class="right mono">15</td>
+            <td class="right mono">3,484</td>
+            <td class="right"><span class="badge badge-g">31.8%</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank top">3</span></td>
+            <td class="bold">Lisbeth Aguirre</td>
+            <td class="right mono bold">162,790</td>
+            <td class="right mono">50</td><td class="right mono">16</td>
+            <td class="right mono">3,256</td>
+            <td class="right"><span class="badge badge-b">23.6%</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank">4</span></td>
+            <td>Omar Atalaya</td>
+            <td class="right mono muted">20,306</td>
+            <td class="right mono">9</td><td class="right mono">6</td>
+            <td class="right mono">2,256</td>
+            <td class="right"><span class="badge badge-a">2.9%</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank">5</span></td>
+            <td class="muted">Guillermo Pradenas</td>
+            <td class="right mono muted">7,830</td>
+            <td class="right mono muted">5</td><td class="right mono muted">2</td>
+            <td class="right mono muted">1,566</td>
+            <td class="right"><span class="badge badge-a">1.1%</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank">6</span></td>
+            <td class="muted">Antonio González</td>
+            <td class="right mono muted">4,814</td>
+            <td class="right mono muted">1</td><td class="right mono muted">1</td>
+            <td class="right mono muted">4,814</td>
+            <td class="right"><span class="badge badge-a">0.7%</span></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title" style="color:var(--blue)">VENTAS USD POR VENDEDOR — 2025</div>
+        <div class="chart-box-lg">
+          <canvas id="chartPeru"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Top Clientes -->
+    <div class="section-h blue">CLIENTES — VOLUMEN TOTAL 2025</div>
+    <div class="grid-2">
+
+      <div class="panel">
+        <div class="panel-title" style="color:var(--blue)">TOP CLIENTES — VENTAS USD</div>
+        <table class="data-table">
+          <tr><th>#</th><th>Cliente</th><th>Vendedor</th><th class="r">USD</th><th class="r">Fact.</th></tr>
+          <tr><td><span class="rank top">1</span></td><td class="bold">SOC. AGRÍCOLA DON LUIS SA</td><td class="muted">Oscar Infante</td><td class="right mono green bold">117,711</td><td class="right mono">14</td></tr>
+          <tr><td><span class="rank top">2</span></td><td class="bold">FAMILY FARMS PERÚ SRL</td><td class="muted">Jose Geldres</td><td class="right mono bold">53,200</td><td class="right mono">7</td></tr>
+          <tr><td><span class="rank top">3</span></td><td class="bold">POB SAC</td><td class="muted">Jose Geldres</td><td class="right mono bold">51,443</td><td class="right mono">10</td></tr>
+          <tr><td><span class="rank top">4</span></td><td class="bold">IQF DEL PERU SA</td><td class="muted">Oscar Infante</td><td class="right mono">49,488</td><td class="right mono">8</td></tr>
+          <tr><td><span class="rank">5</span></td><td>SUREXPORT PERU BERRIES SAC</td><td class="muted">L. Aguirre</td><td class="right mono">46,724</td><td class="right mono">4</td></tr>
+          <tr><td><span class="rank">6</span></td><td>AGROINDUSTRIAL HUAMANI SAC</td><td class="muted">Jose Geldres</td><td class="right mono">43,923</td><td class="right mono">12</td></tr>
+          <tr><td><span class="rank">7</span></td><td>SOC. AGRÍCOLA DON LUIS SA</td><td class="muted">Jose Geldres</td><td class="right mono">31,018</td><td class="right mono">3</td></tr>
+          <tr><td><span class="rank">8</span></td><td>FAMILY FARMS PERÚ SRL</td><td class="muted">L. Aguirre</td><td class="right mono">29,205</td><td class="right mono">2</td></tr>
+        </table>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title" style="color:var(--blue)">CONCENTRACIÓN CLIENTES — PERÚ <span class="tag">USD 2025</span></div>
+        <div class="chart-box">
+          <canvas id="chartPeruCli"></canvas>
+        </div>
+        <div class="alert-box muted" style="margin-top:14px">
+          <div class="alert-title muted">Alta concentración en clientes</div>
+          <div class="alert-body">SOC. AGRÍCOLA DON LUIS SA aparece con dos vendedores distintos (Oscar Infante + Jose Geldres), representando en conjunto ~USD 148.7K = 21.5% de las ventas Peru. Riesgo de dependencia en cliente único.</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- /tab-peru -->
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       TAB 4 · ALERTAS & DECISIONES
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div id="tab-alertas" class="tab-content">
+
+    <div class="section-h red">ALERTAS CRÍTICAS — ACCIÓN INMEDIATA</div>
+
+    <div class="alert-box" style="margin-bottom:10px">
+      <div class="alert-title red">🔴  PÉRDIDA ESTIMADA CLP 96.7M POR DISCIPLINA DE PRECIOS</div>
+      <div class="alert-body">El gap entre precio piso oficial y precio real facturado, multiplicado por el volumen vendido, arroja una pérdida estimada de <strong style="color:var(--red)">CLP 96,652,205</strong> en el historial 2024–2025 de Chile. Esto no es una proyección sino el impacto ya materializado. Requiere política correctiva urgente con los vendedores más expuestos.</div>
+    </div>
+
+    <div class="alert-box" style="margin-bottom:10px">
+      <div class="alert-title red">🔴  JORGE CAROCA — 27.2% DE TRANSACCIONES BAJO PISO (179 TRANS.)</div>
+      <div class="alert-body">Caroca es el vendedor con el mayor porcentaje de transacciones fuera de política de precios piso: <strong style="color:var(--red)">179 transacciones bajo piso sobre 657 totales</strong>. Venta bajo piso: CLP 12.8M. Requiere revisión inmediata y política de autorización para descuentos.</div>
+    </div>
+
+    <div class="alert-box" style="margin-bottom:10px">
+      <div class="alert-title red">🔴  VALENTINA MUÑOZ — 30% TRANSACCIONES BAJO PISO (mayor % de la fuerza de ventas)</div>
+      <div class="alert-body">30% de sus 20 transacciones están bajo piso. Aunque el volumen absoluto es bajo (CLP 1.1M), la tasa de incumplimiento es la más alta del equipo y requiere atención inmediata como señal de comportamiento.</div>
+    </div>
+
+    <div class="alert-box amber" style="margin-bottom:10px">
+      <div class="alert-title amber">🟡  ALGAP 30 · 1000 L — IMPACTO ESTIMADO CLP 16.3M</div>
+      <div class="alert-body">El formato 1000 L de ALGAP 30 tiene un gap promedio de CLP 1,136/ud vs el precio piso. Multiplicado por el volumen acumulado, el impacto estimado supera los <strong style="color:var(--amber)">CLP 16.3M</strong>. Este SKU de gran volumen requiere revisión de lista de precios y condiciones de venta activas.</div>
+    </div>
+
+    <div class="alert-box amber" style="margin-bottom:18px">
+      <div class="alert-title amber">🟡  55% DE SKUs CHILE CON PRECIO PROMEDIO BAJO PISO (50 de 91)</div>
+      <div class="alert-body">Más de la mitad de los SKUs analizados en Chile tienen un precio promedio histórico inferior al precio piso oficial. Esto sugiere que la política de precios no está siendo aplicada de manera sistemática. Se requiere revisión de las condiciones comerciales de toda la cartera.</div>
+    </div>
+
+    <div class="section-h amber">DECISIONES SUGERIDAS — DIRECTORIO</div>
+    <div class="decision-grid">
+
+      <div class="decision-card red">
+        <div class="decision-icon">⏸</div>
+        <div class="decision-title red">Bloqueo de ventas bajo piso sin autorización</div>
+        <div class="decision-body">Implementar control operativo: ningún pedido puede ser facturado por debajo del precio piso sin aprobación explícita de Gerencia. Aplicar primero a los 3 vendedores con mayor tasa de incumplimiento: Caroca (27.2%), Encina (22.1%), Valentina Muñoz (30.0%).</div>
+      </div>
+
+      <div class="decision-card red">
+        <div class="decision-icon">📞</div>
+        <div class="decision-title red">Reunión urgente con clientes críticos Chile</div>
+        <div class="decision-body">Los 4 clientes con compras superiores a CLP 5M bajo piso deben ser abordados en el ciclo comercial inmediato: Agrícola Don Pedro (8.7M), Agrofrutillas San Pedro (7.7M), Agroinsumos Kullin (5.7M), Comerc. La Colonia (5.2M). Sin renegociación de condiciones, el pricing no se puede sostener.</div>
+      </div>
+
+      <div class="decision-card amber">
+        <div class="decision-icon">📋</div>
+        <div class="decision-title amber">Revisión de lista de precios — ALGAP 30, HUMIC ROOT, PLUS POTASIO</div>
+        <div class="decision-body">Estos tres productos concentran el mayor impacto estimado (CLP 35.4M combinados). Los formatos de gran volumen (1000L, 20L) son los más afectados. Revisar si el precio piso oficial está desactualizado respecto al mercado o si hay condiciones especiales sin registrar.</div>
+      </div>
+
+      <div class="decision-card amber">
+        <div class="decision-icon">🇵🇪</div>
+        <div class="decision-title amber">Perú: incorporar desglose SKU en próximo corte</div>
+        <div class="decision-body">El análisis de disciplina de precios en Perú no es calculable con la fuente actual (facturas sin desglose por producto). Solicitar al equipo Perú que las próximas ventas sean registradas con detalle por SKU y litros/unidades, para poder aplicar el mismo análisis que Chile.</div>
+      </div>
+
+      <div class="decision-card blue">
+        <div class="decision-icon">📊</div>
+        <div class="decision-title blue">Completar costos de los 15 SKUs sin información</div>
+        <div class="decision-body">15 SKUs en la base de productos no tienen costo registrado (Clasificación: SIN COSTO / N/A). Sin costo no hay piso calculable ni margen real. Solicitar a la gerencia de producción o compras los costos actualizados de: CRYOPHILE, REGALIA MAX, PK-DEFEND MAX y demás sin datos.</div>
+      </div>
+
+      <div class="decision-card muted">
+        <div class="decision-icon">📅</div>
+        <div class="decision-title muted">Ciclo mensual de control de pricing</div>
+        <div class="decision-body">Establecer revisión mensual automática: cruzar ventas del mes vs precios piso · generar reporte de desviación por vendedor · presentar en reunión comercial con umbral de alerta (>10% trans. bajo piso = revisión obligatoria). Usar este panel como base del ciclo.</div>
+      </div>
+
+    </div>
+
+    <!-- Productos críticos table -->
+    <div class="section-h red" style="margin-top:28px">PRODUCTOS CRÍTICOS — MARGEN NEGATIVO ACTIVO</div>
+    <div class="grid-2">
+      <div class="alert-box" style="margin-bottom:0">
+        <div class="alert-title red">⏸  HUMIC ROOT (sin formato registrado) — Margen -33.5%</div>
+        <div class="alert-body">Vendido a CLP 2,500/ud con costo de CLP 3,338/ud. Cada unidad vendida genera una pérdida de CLP 838. Se vendieron 40 unidades YTD = CLP 100,000 vendidos a pérdida. <strong style="color:var(--red)">Pausar hasta corregir costo o precio.</strong></div>
+      </div>
+      <div class="alert-box" style="margin-bottom:0">
+        <div class="alert-title red">⏸  PLUS MICRO MIX · 1L — Margen -14.3%</div>
+        <div class="alert-body">Vendido a CLP 3,820/ud con costo de CLP 4,366/ud. Pérdida de CLP 546 por unidad. 13 unidades YTD = CLP 49,668 vendidos a pérdida. <strong style="color:var(--red)">Revisar costo o suspender venta del formato 1L.</strong></div>
+      </div>
+    </div>
+
+  </div><!-- /tab-alertas -->
+
+</div><!-- /page -->
+
+<!-- ══ FOOTER ══════════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <nav class="nav-pills">
+    <a href="dashboard.html" class="nav-pill">🏠 Inicio</a>
+    <a href="Dashboard_Comercial_AV_Latam_2026.html" class="nav-pill">📊 Comercial</a>
+    <a href="Panel_Productos_AV_2026.html" class="nav-pill">📦 Productos</a>
+    <a href="Panel_Chile_AV_2026.html" class="nav-pill">🇨🇱 Chile</a>
+    <a href="Panel_Peru_AV_2026.html" class="nav-pill">🇵🇪 Perú</a>
+    <a href="Panel_CxC_AV_Latam_2026.html" class="nav-pill">💳 CxC</a>
+    <a href="Panel_Rentabilidad_AV_2026.html" class="nav-pill active">💰 Rentabilidad</a>
+    <a href="Executive_Board_View_AV_Latam_2026.html" class="nav-pill">👔 Board</a>
+  </nav>
+  <div class="footer-copy">Panel Rentabilidad &amp; Pricing · AV LATAM 2026 · Fuente: modulo_rentabilidad_pricing.xlsx</div>
+</footer>
+
+<!-- ══ SCRIPTS ══════════════════════════════════════════════════════════════ -->
+<script>
+/* ── TAB SWITCH ── */
+function switchTab(id, el) {
+  document.querySelectorAll('.tab-content').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('tab-' + id).classList.add('active');
+  el.classList.add('active');
+}
+
+/* ── CHART DEFAULTS ── */
+Chart.defaults.color = '#8fa892';
+Chart.defaults.font.family = 'DM Sans';
+Chart.defaults.font.size = 11;
+
+var GRID_COLOR  = 'rgba(122,182,72,0.08)';
+var RED         = '#E74C3C';
+var AMBER       = '#F5A623';
+var GREEN       = '#7AB648';
+var BLUE        = '#4A9EDB';
+var RED_DIM     = 'rgba(231,76,60,0.25)';
+var AMBER_DIM   = 'rgba(245,166,35,0.25)';
+var GREEN_DIM   = 'rgba(122,182,72,0.25)';
+var BLUE_DIM    = 'rgba(74,158,219,0.25)';
+
+/* ── CHART 1 · RESUMEN — DOUGHNUT ventas sobre/bajo piso ── */
+new Chart(document.getElementById('chartResumen'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Ventas SOBRE piso (CLP)', 'Ventas BAJO piso (CLP)'],
+    datasets: [{
+      data: [1314763418, 74894902],
+      backgroundColor: ['rgba(122,182,72,0.75)', 'rgba(231,76,60,0.75)'],
+      borderColor:     ['#7AB648', '#E74C3C'],
+      borderWidth: 2,
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '65%',
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyleWidth: 8 } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            var v = ctx.raw;
+            return ' CLP ' + (v/1000000).toFixed(1) + 'M (' + ((v/1389658320)*100).toFixed(1) + '%)';
+          }
+        }
+      }
+    }
+  }
+});
+
+/* ── CHART 2 · RESUMEN — VENDEDORES top 5 venta bajo piso ── */
+new Chart(document.getElementById('chartResumenVend'), {
+  type: 'bar',
+  data: {
+    labels: ['Pablo Laratro','Fco. Velásquez','Jorge Caroca','Eduardo Pinto','Franco Riffo'],
+    datasets: [{
+      label: 'Venta Bajo Piso (CLP M)',
+      data: [27.5, 18.5, 12.8, 8.4, 4.9],
+      backgroundColor: ['rgba(231,76,60,0.80)','rgba(231,76,60,0.70)','rgba(231,76,60,0.60)','rgba(245,166,35,0.70)','rgba(245,166,35,0.55)'],
+      borderColor:     ['#E74C3C','#E74C3C','#E74C3C','#F5A623','#F5A623'],
+      borderWidth: 1, borderRadius: 4
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: {
+        grid: { color: GRID_COLOR },
+        ticks: { callback: function(v){ return 'CLP ' + v + 'M'; } }
+      },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+/* ── CHART 3 · CHILE — VENDEDORES % trans bajo piso ── */
+new Chart(document.getElementById('chartVendedores'), {
+  type: 'bar',
+  data: {
+    labels: ['Valentina M.','Jorge Caroca','Rodrigo Encina','Pablo Laratro','Fco. Velásquez','Javier Almeida','Franco Riffo','Eduardo Pinto'],
+    datasets: [{
+      label: '% Trans. Bajo Piso',
+      data: [30.0, 27.2, 22.1, 15.4, 12.9, 9.5, 6.8, 5.6],
+      backgroundColor: function(ctx) {
+        var v = ctx.raw;
+        if (v >= 20) return 'rgba(231,76,60,0.80)';
+        if (v >= 10) return 'rgba(245,166,35,0.75)';
+        return 'rgba(122,182,72,0.60)';
+      },
+      borderRadius: 4,
+      borderWidth: 0
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: function(c){ return ' ' + c.raw.toFixed(1) + '% transacciones bajo piso'; } } }
+    },
+    scales: {
+      x: {
+        max: 35,
+        grid: { color: GRID_COLOR },
+        ticks: { callback: function(v){ return v + '%'; } }
+      },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+/* ── CHART 4 · CHILE — PRODUCTOS impacto estimado ── */
+new Chart(document.getElementById('chartProductos'), {
+  type: 'bar',
+  data: {
+    labels: ['ALGAP 30','HUMIC ROOT','PLUS POTASIO','MAX FULVIC 45%','PLUS CALCIO','PLUS ZINC','PLUS NUTRI MIX','AMIN'],
+    datasets: [{
+      label: 'Impacto Estimado (CLP M)',
+      data: [16.3, 11.8, 7.3, 7.2, 7.0, 4.5, 1.3, 0.8],
+      backgroundColor: [
+        'rgba(231,76,60,0.85)','rgba(231,76,60,0.75)','rgba(245,166,35,0.80)',
+        'rgba(245,166,35,0.75)','rgba(245,166,35,0.70)','rgba(245,166,35,0.60)',
+        'rgba(122,182,72,0.50)','rgba(122,182,72,0.40)'
+      ],
+      borderRadius: 4, borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: function(c){ return ' CLP ' + c.raw + 'M impacto estimado'; } } }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { maxRotation: 35, font: { size: 10 } } },
+      y: { grid: { color: GRID_COLOR }, ticks: { callback: function(v){ return v + 'M'; } } }
+    }
+  }
+});
+
+/* ── CHART 5 · PERU — VENDEDORES ventas USD ── */
+new Chart(document.getElementById('chartPeru'), {
+  type: 'bar',
+  data: {
+    labels: ['Jose Geldres','Oscar Infante','Lisbeth Aguirre','Omar Atalaya','G. Pradenas','A. González'],
+    datasets: [{
+      label: 'Ventas USD 2025',
+      data: [275131, 219543, 162790, 20306, 7830, 4814],
+      backgroundColor: ['rgba(74,158,219,0.85)','rgba(74,158,219,0.75)','rgba(74,158,219,0.65)','rgba(74,158,219,0.40)','rgba(74,158,219,0.30)','rgba(74,158,219,0.25)'],
+      borderRadius: 5, borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: function(c){ return ' USD ' + c.raw.toLocaleString('es-CL'); } } }
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: { grid: { color: GRID_COLOR }, ticks: { callback: function(v){ return 'USD ' + (v/1000).toFixed(0) + 'K'; } } }
+    }
+  }
+});
+
+/* ── CHART 6 · PERU — CLIENTES top doughnut ── */
+new Chart(document.getElementById('chartPeruCli'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Don Luis SA (×2 vend.)','Family Farms (×2)','POB SAC','IQF del Peru','Surexport','Huamani SAC','Otros'],
+    datasets: [{
+      data: [148729, 82405, 51443, 74006, 46724, 43923, 243185],
+      backgroundColor: [
+        'rgba(74,158,219,0.85)','rgba(74,158,219,0.70)','rgba(74,158,219,0.55)',
+        'rgba(122,182,72,0.65)','rgba(122,182,72,0.50)','rgba(245,166,35,0.65)',
+        'rgba(90,112,96,0.40)'
+      ],
+      borderColor: 'rgba(8,14,9,0.8)',
+      borderWidth: 2, hoverOffset: 6
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '55%',
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 10, usePointStyle: true, pointStyleWidth: 7, font: { size: 10 } } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            return ' USD ' + ctx.raw.toLocaleString('es-CL') + ' (' + ((ctx.raw/690415)*100).toFixed(1) + '%)';
+          }
+        }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

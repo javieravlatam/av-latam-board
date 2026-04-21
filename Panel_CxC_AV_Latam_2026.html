@@ -889,8 +889,6 @@ const chileData = [
   {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA COMERCIAL SIEMBRA SPA',folio:'479',emision:'29/01/2026',vencimiento:'30/04/2026',dias:-13,tramo:'Al día',monto:495944,estado:'Al día',condicion:'Crédito'},
 ];
 
-];
-
 // Perú data
 const peruData = [
   {vendedor:'JOSE GELDRES',cliente:'PAODISA S.A.',folio:'453',emision:'01/07/2024',vencimiento:'31/07/2024',dias:628,tramo:'+90d',monto:1477.5,estado:'Crítico'},
@@ -939,8 +937,6 @@ const peruData = [
   {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1003',emision:'07/04/2026',vencimiento:'05/08/2026',dias:-107,tramo:'Al día',monto:936,estado:'Al día'},
   {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1004',emision:'07/04/2026',vencimiento:'05/08/2026',dias:-107,tramo:'Al día',monto:936,estado:'Al día'},
   {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1009',emision:'15/04/2026',vencimiento:'13/08/2026',dias:-115,tramo:'Al día',monto:2800,estado:'Al día'},
-];
-
 ];
 
 function tramoClass(t){
@@ -1004,7 +1000,7 @@ function renderPeru(data){
   const tb = document.getElementById('tbody-peru');
   let html='',total=0,cnt=0;
   data.forEach(r=>{
-    total+=r.saldo; cnt++;
+    total+=r.monto; cnt++;
     const mc=moraClass(r.dias);
     const diasStr = r.dias===null?'–':r.dias<0?`<span class="mora neg">+${Math.abs(r.dias)}d</span>`:`<span class="mora ${mc}">${r.dias}d</span>`;
     const isSupra = r.vendedor==='PAGADO A SUPRA';
@@ -1015,12 +1011,12 @@ function renderPeru(data){
       <td class="r" style="font-family:'DM Mono';font-size:10px;">${r.vencimiento}</td>
       <td class="c">${diasStr}</td>
       <td class="c"><span class="tramo ${tramoClass(r.tramo)}">${r.tramo}</span></td>
-      <td class="r" style="font-family:'DM Mono';font-size:11px;font-weight:${r.dias!==null&&r.dias>60?'700':'400'};color:${r.dias!==null&&r.dias>90?'var(--red)':r.dias!==null&&r.dias>60?'var(--orange)':r.dias!==null&&r.dias>30?'var(--amber)':isSupra?'var(--text-muted)':'var(--text-dim)'};">${r.saldo.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
+      <td class="r" style="font-family:'DM Mono';font-size:11px;font-weight:${r.dias!==null&&r.dias>60?'700':'400'};color:${r.dias!==null&&r.dias>90?'var(--red)':r.dias!==null&&r.dias>60?'var(--orange)':r.dias!==null&&r.dias>30?'var(--amber)':isSupra?'var(--text-muted)':'var(--text-dim)'};">${r.monto.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
       <td class="c"><span class="tramo ${r.estado==='Crítico'?'t-crit':r.estado==='Riesgo'?'t-6190':r.estado==='Alerta'?'t-3160':r.estado==='SUPRA'?'t-ok':'t-030'}">${r.estado}</span></td>
       <td class="c">${isSupra?'':accionBadge(r.estado)}</td>
     </tr>`;
   });
-  html+=`<tr class="total-row"><td colspan="6">TOTAL (${cnt} registros)</td><td class="r" style="font-family:'DM Mono';">USD ${total.toLocaleString('en-US',{minimumFractionDigits:2})}</td><td colspan="2"></td></tr>`;
+  html+=`<tr class="total-row"><td colspan="6">TOTAL (${cnt} registros)</td><td class="r" style="font-family:'DM Mono';">USD ${total.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</td><td colspan="2"></td></tr>`;
   tb.innerHTML=html;
   document.getElementById('pe-count').textContent=`${cnt} registros · USD ${total.toLocaleString('en-US',{minimumFractionDigits:0})}`;
 }
