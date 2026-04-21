@@ -175,6 +175,8 @@
 
 <script>
   const HASH = "7cd4374e16e78510de24a08115c3b44f6d0d72762d41054e6ef8fa0cb5e0c45b";
+  // Auto-redirect: si ya está autenticado en esta sesión, saltar el login
+  if (sessionStorage.getItem('av_auth') === HASH) { window.location.replace('dashboard.html'); }
   let intentos = 0;
 
   document.getElementById('eyeBtn').addEventListener('click', () => {

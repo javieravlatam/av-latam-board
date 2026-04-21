@@ -2,6 +2,13 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<script>
+  /* AV Auth Guard · sesión activa mientras la pestaña esté abierta */
+  (function(){
+    if(sessionStorage.getItem('av_auth')!=='7cd4374e16e78510de24a08115c3b44f6d0d72762d41054e6ef8fa0cb5e0c45b')
+      window.location.replace('index.html');
+  })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel Comercial · Perú · AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -171,7 +178,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     </div>
   </div>
   <div class="hnav">
-    <a href="index.html">← Países</a>
+    <a href="dashboard.html">← Países</a>
     <a href="Panel_General_AV_2026.html">🌎 General</a>
     <a href="Panel_Chile_AV_2026.html">🇨🇱 Chile</a>
     <a href="Panel_Peru_AV_2026.html" class="active">🇵🇪 Perú</a>
@@ -564,7 +571,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 <div class="ftr">
   <div>AV Latam BI Platform · Panel Perú · Corte ventas 16/04 · CxC 20/04/2026 · Ppto oficial USD 1,137,034</div>
   <div class="npills">
-    <a href="index.html" class="np">🏠 Inicio</a>
+    <a href="dashboard.html" class="np">🏠 Inicio</a>
     <a href="Executive_Board_View_AV_Latam_2026.html" class="np">📋 Board View</a>
     <a href="Dashboard_Comercial_AV_Latam_2026.html" class="np">📊 Dashboard</a>
     <a href="Panel_CxC_AV_Latam_2026.html" class="np">💰 CxC</a>
