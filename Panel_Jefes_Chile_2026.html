@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<script>
+  (function(){
+    if(sessionStorage.getItem('av_auth')!=='7cd4374e16e78510de24a08115c3b44f6d0d72762d41054e6ef8fa0cb5e0c45b')
+      window.location.replace('index.html');
+  })();
+</script>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Panel Jefes · Chile 2025 · AV Latam</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080e09;--s1:#0f1a10;--s2:#162118;--s3:#1c2b1e;
+  --green:#7AB648;--amber:#F5A623;--red:#E74C3C;--red2:#C0392B;
+  --blue:#4A9EDB;--orange:#E67E22;--purple:#9B59B6;
+  --text:#e8f0e9;--dim:#8fa892;--muted:#5a7060;
+  --bdr:rgba(122,182,72,0.18);--bdim:rgba(122,182,72,0.07);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh}
+
+/* HEADER */
+.hdr{background:linear-gradient(180deg,#0c1a0d,var(--bg));border-bottom:1px solid var(--bdr);
+  padding:12px 28px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100}
+.hdr-l{display:flex;align-items:center;gap:13px}
+.logo{width:36px;height:36px;background:var(--green);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue';font-size:15px;color:var(--bg)}
+.htitle{font-family:'Bebas Neue';font-size:19px;letter-spacing:2px;color:var(--green)}
+.hsub{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.hcorte{font-family:'DM Mono';font-size:10px;color:var(--dim);text-align:right;line-height:1.6}
+.hcorte b{color:var(--green)}
+.hnav{display:flex;gap:8px}
+.np{background:var(--s2);border:1px solid var(--bdr);border-radius:6px;
+  padding:5px 12px;font-size:10px;color:var(--dim);text-decoration:none;transition:all .2s}
+.np:hover{background:var(--green);color:var(--bg);border-color:var(--green)}
+
+/* PAGE */
+.page{max-width:1320px;margin:0 auto;padding:24px 32px 60px}
+
+/* KPI BANNER */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:22px}
+.kpi{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;padding:14px 16px}
+.kpi-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px}
+.kpi-val{font-family:'Bebas Neue';font-size:24px;line-height:1;margin-bottom:3px}
+.kpi-sub{font-size:10px;color:var(--dim)}
+.kpi-g{color:var(--green)}.kpi-a{color:var(--amber)}.kpi-r{color:var(--red)}.kpi-b{color:var(--blue)}
+
+/* TABS */
+.tabs{display:flex;gap:0;background:var(--s1);border:1px solid var(--bdr);border-radius:10px;
+  padding:4px;margin-bottom:20px;width:fit-content}
+.tab{padding:8px 20px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;
+  letter-spacing:.5px;color:var(--dim);border:none;background:transparent;transition:all .2s}
+.tab.active{background:var(--green);color:var(--bg)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* SECTION TITLE */
+.sec{font-family:'Bebas Neue';font-size:13px;letter-spacing:3px;color:var(--green);
+  border-left:3px solid var(--green);padding-left:10px;margin:22px 0 14px;
+  display:flex;align-items:center;gap:10px}
+.sec span{font-family:'DM Mono';font-size:9px;color:var(--muted);font-weight:400;letter-spacing:0}
+
+/* CHART CONTAINERS */
+.chart-wrap{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;padding:16px}
+.chart-title{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;font-weight:600}
+.chart-canvas{height:280px;position:relative}
+.chart-canvas-sm{height:220px;position:relative}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+/* TABLE */
+.tbl-wrap{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;overflow:hidden}
+.tbl-head{padding:12px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+.tbl-head-title{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;font-weight:600}
+table.tbl{width:100%;border-collapse:collapse;font-size:12px}
+table.tbl th{padding:9px 12px;text-align:left;font-size:9px;text-transform:uppercase;
+  letter-spacing:1px;color:var(--muted);background:var(--s2);font-weight:600;border-bottom:1px solid var(--bdr)}
+table.tbl td{padding:8px 12px;border-bottom:1px solid rgba(122,182,72,0.06)}
+table.tbl tr:last-child td{border-bottom:none}
+table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
+.c{text-align:center}.r{text-align:right}
+.mono{font-family:'DM Mono';font-size:11px}
+
+/* SEMAFORO */
+.sema{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.s-ok{background:var(--green)}.s-warn{background:var(--amber)}.s-risk{background:var(--orange)}.s-crit{background:var(--red)}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600}
+.b-ok{background:rgba(122,182,72,0.15);color:var(--green)}
+.b-warn{background:rgba(245,166,35,0.15);color:var(--amber)}
+.b-risk{background:rgba(230,126,34,0.15);color:var(--orange)}
+.b-crit{background:rgba(231,76,60,0.15);color:var(--red)}
+.b-nd{background:rgba(90,112,96,0.15);color:var(--muted)}
+
+/* VENDEDOR SELECTOR */
+.vend-btns{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.vbtn{padding:5px 12px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;
+  background:var(--s2);border:1px solid var(--bdr);color:var(--dim);transition:all .2s}
+.vbtn.active,.vbtn:hover{background:var(--green);color:var(--bg);border-color:var(--green)}
+
+/* MES TABLE INLINE */
+.mes-table{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin-top:14px}
+.mes-cell{background:var(--s2);border-radius:5px;padding:6px 4px;text-align:center}
+.mes-cell .mes-lbl{font-size:8px;color:var(--muted);text-transform:uppercase}
+.mes-cell .mes-v{font-family:'Bebas Neue';font-size:13px;color:var(--text)}
+.mes-cell .mes-p{font-size:8px;margin-top:2px}
+
+/* CxC SUMMARY */
+.cxc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.cxc-card{border-radius:8px;padding:14px 16px}
+.cxc-card .tramo{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:6px}
+.cxc-card .monto{font-family:'Bebas Neue';font-size:22px;line-height:1;margin-bottom:4px}
+.cxc-card .detail{font-size:10px;color:var(--dim)}
+
+/* PRICING SECTION */
+.pricing-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pc{background:var(--s2);border:1px solid;border-radius:8px;padding:14px}
+.pc-icon{font-size:20px;margin-bottom:8px}
+.pc-val{font-family:'Bebas Neue';font-size:26px;line-height:1;margin-bottom:4px}
+.pc-lbl{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:1px}
+
+/* CUMPLIMIENTO BAR */
+.cumpl-bar{height:5px;background:var(--s3);border-radius:3px;margin-top:6px;overflow:hidden}
+.cumpl-fill{height:100%;border-radius:3px;transition:width .3s}
+
+/* FOOTER */
+.footer{text-align:center;padding:20px 32px;font-size:10px;color:var(--muted);
+  border-top:1px solid var(--bdim);margin-top:20px;display:flex;justify-content:space-between;align-items:center}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-l">
+    <div class="logo">AV</div>
+    <div>
+      <div class="htitle">🇨🇱 JEFES · CHILE</div>
+      <div class="hsub">Panel Comercial Operativo · Ventas 2025</div>
+    </div>
+  </div>
+  <div class="hnav">
+    <a href="Panel_Jefes_Index.html" class="np">← Hub Jefes</a>
+    <a href="Panel_CxC_AV_Latam_2026.html" class="np">📋 CxC Detalle</a>
+    <a href="Panel_Rentabilidad_AV_2026.html" class="np">💹 Rentabilidad</a>
+  </div>
+  <div class="hcorte">
+    <div>Jefatura País Chile · <b>Corte: Dic 2025</b></div>
+    <div style="color:var(--muted)">Ppto 2026 · CxC Abr 2026</div>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- KPI BANNER -->
+<div class="kpis">
+  <div class="kpi">
+    <div class="kpi-lbl">Ventas 2025 · Total</div>
+    <div class="kpi-val kpi-g">CLP 765.9M</div>
+    <div class="kpi-sub">+22.8% vs 2024 (623.7M)</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-lbl">Presupuesto 2026</div>
+    <div class="kpi-val kpi-b">CLP 861.3M</div>
+    <div class="kpi-sub">Meta anual · 5 RTCs activos</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-lbl">Top Vendedor 2025</div>
+    <div class="kpi-val kpi-g" style="font-size:17px">F. VELÁSQUEZ</div>
+    <div class="kpi-sub">CLP 240.1M · 95% ppto</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-lbl">CxC Vencido Activo</div>
+    <div class="kpi-val kpi-r">CLP 15.2M</div>
+    <div class="kpi-sub">+90d: 9.9M · 61-90d: 5.3M</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-lbl">Efic. Pricing 2025</div>
+    <div class="kpi-val kpi-a">74.9M</div>
+    <div class="kpi-sub">Ventas bajo precio piso</div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('ventas',this)">📈 Ventas & Presupuesto</button>
+  <button class="tab" onclick="switchTab('vendedores',this)">👤 Vendedores</button>
+  <button class="tab" onclick="switchTab('clientes',this)">🏢 Clientes</button>
+  <button class="tab" onclick="switchTab('cxc',this)">💳 CxC & Eficiencia</button>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- TAB: VENTAS -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="tab-ventas" class="tab-content active">
+
+  <div class="chart-wrap" style="margin-bottom:16px">
+    <div class="chart-title">Ventas Mensuales Chile (CLP Millones) · 2024 Real vs 2025 Real + Presupuesto 2026</div>
+    <div class="chart-canvas">
+      <canvas id="chartVentas"></canvas>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="tbl-head">
+      <div class="tbl-head-title">Detalle mensual · Real 2024 vs Real 2025 vs Presupuesto 2026</div>
+    </div>
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Mes</th>
+          <th class="r">Real 2024 (M)</th>
+          <th class="r">Real 2025 (M)</th>
+          <th class="c">Var 24→25</th>
+          <th class="r">Ppto 2026 (M)</th>
+          <th class="c">Estado</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-ventas"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- TAB: VENDEDORES -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="tab-vendedores" class="tab-content">
+
+  <div class="sec">Ranking General 2025 <span>Real anual vs Presupuesto 2026</span></div>
+  <div class="tbl-wrap" style="margin-bottom:20px">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Vendedor</th>
+          <th class="r">Real 2025 (M)</th>
+          <th class="r">Ppto 2026 (M)</th>
+          <th class="c">% Cumpl 2025</th>
+          <th class="c">Semáforo</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-vendedores"></tbody>
+    </table>
+  </div>
+
+  <div class="sec">Detalle Mensual por Vendedor <span>Selecciona un vendedor para ver su curva</span></div>
+  <div class="vend-btns" id="vend-selector"></div>
+
+  <div class="chart-wrap">
+    <div class="chart-title" id="vend-chart-title">Ventas mensuales 2025 vs Presupuesto 2026</div>
+    <div class="chart-canvas">
+      <canvas id="chartVendedor"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- TAB: CLIENTES -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="tab-clientes" class="tab-content">
+
+  <div class="sec">Top 15 Clientes Chile · 2025 <span>Por facturación anual · 38.9% del total</span></div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th class="c">#</th>
+          <th>Cliente</th>
+          <th>RTC</th>
+          <th class="r">Ventas 2025</th>
+          <th class="c">% Total</th>
+          <th class="c">% Acum</th>
+          <th class="c">Estado CxC</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-clientes"></tbody>
+    </table>
+  </div>
+
+  <div class="sec" style="margin-top:22px">Concentración por Vendedor <span>Participación en total 2025</span></div>
+  <div class="g2" style="margin-top:8px">
+    <div class="chart-wrap">
+      <div class="chart-title">Ventas por RTC · 2025 (M CLP)</div>
+      <div class="chart-canvas-sm">
+        <canvas id="chartRTC"></canvas>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Distribución por Región · 2025</div>
+      <div class="chart-canvas-sm">
+        <canvas id="chartRegion"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- TAB: CxC & EFICIENCIA -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="tab-cxc" class="tab-content">
+
+  <div class="sec">Cobranzas Chile · Corte Abril 2026 <span>Cartera activa total: CLP 60.4M</span></div>
+
+  <div class="cxc-grid" style="margin-bottom:20px">
+    <div class="cxc-card" style="background:rgba(122,182,72,0.07);border:1px solid rgba(122,182,72,0.25)">
+      <div class="tramo" style="color:var(--green)">✅ 0–30d Normal</div>
+      <div class="monto" style="color:var(--green)">34.5M</div>
+      <div class="detail">57.2% de cartera · En cobro</div>
+    </div>
+    <div class="cxc-card" style="background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.25)">
+      <div class="tramo" style="color:var(--amber)">🟡 31–60d Alerta</div>
+      <div class="monto" style="color:var(--amber)">10.7M</div>
+      <div class="detail">17.7% de cartera · Gestión activa</div>
+    </div>
+    <div class="cxc-card" style="background:rgba(230,126,34,0.07);border:1px solid rgba(230,126,34,0.25)">
+      <div class="tramo" style="color:var(--orange)">🟠 61–90d Riesgo</div>
+      <div class="monto" style="color:var(--orange)">5.3M</div>
+      <div class="detail">8.8% de cartera · Acuerdo urgente</div>
+    </div>
+    <div class="cxc-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.3)">
+      <div class="tramo" style="color:var(--red)">🔴 +90d Crítico</div>
+      <div class="monto" style="color:var(--red)">9.9M</div>
+      <div class="detail">16.3% de cartera · Acción inmediata</div>
+    </div>
+  </div>
+
+  <div class="sec">Clientes Críticos Chile <span>Vencimiento mayor a 90 días</span></div>
+  <div class="tbl-wrap" style="margin-bottom:20px">
+    <table class="tbl">
+      <thead>
+        <tr><th>Cliente</th><th>RTC</th><th class="c">Días mora</th><th class="r">Monto CLP</th><th class="c">Acción</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>GOYASERVICE SPA</strong></td>
+          <td style="font-size:11px;color:var(--dim)">Jorge Caroca</td>
+          <td class="c"><span class="badge b-crit">104d</span></td>
+          <td class="r mono" style="color:var(--red)">4,194,750</td>
+          <td class="c"><span class="badge b-crit">URGENTE</span></td>
+        </tr>
+        <tr>
+          <td><strong>AGROCOMERCIAL Y GANADERA LOMA LARGA LTDA</strong><br>
+              <span style="font-size:9px;color:var(--muted)">3 facturas · También aparece en top 15 clientes</span></td>
+          <td style="font-size:11px;color:var(--dim)">Pablo Laratro</td>
+          <td class="c"><span class="badge b-crit">96–103d</span></td>
+          <td class="r mono" style="color:var(--red)">4,195,937</td>
+          <td class="c"><span class="badge b-crit">URGENTE</span></td>
+        </tr>
+        <tr>
+          <td><strong>AGRICOLA RIBERA LIMITADA</strong></td>
+          <td style="font-size:11px;color:var(--dim)">Jorge Caroca</td>
+          <td class="c"><span class="badge b-crit">92d</span></td>
+          <td class="r mono" style="color:var(--red)">1,473,696</td>
+          <td class="c"><span class="badge b-crit">URGENTE</span></td>
+        </tr>
+        <tr style="background:var(--s2)">
+          <td colspan="3" style="font-weight:600">Total +90d</td>
+          <td class="r mono" style="color:var(--red);font-weight:700">9,864,383</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec">Eficiencia Pricing · Chile 2025 <span>Ventas vs Precio Piso — sin revelar costos ni márgenes</span></div>
+  <div class="pricing-cards">
+    <div class="pc" style="border-color:rgba(231,76,60,0.35)">
+      <div class="pc-icon">⚠️</div>
+      <div class="pc-val" style="color:var(--red)">74.9M</div>
+      <div class="pc-lbl">CLP vendido bajo precio piso</div>
+    </div>
+    <div class="pc" style="border-color:rgba(231,76,60,0.35)">
+      <div class="pc-icon">📦</div>
+      <div class="pc-val" style="color:var(--red)">72</div>
+      <div class="pc-lbl">SKUs con al menos 1 venta bajo piso</div>
+    </div>
+    <div class="pc" style="border-color:rgba(245,166,35,0.35)">
+      <div class="pc-icon">💰</div>
+      <div class="pc-val" style="color:var(--amber)">96.7M</div>
+      <div class="pc-lbl">Impacto estimado acumulado (gap × und)</div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;background:var(--s2);border:1px solid rgba(231,76,60,0.25);border-radius:8px;padding:14px">
+    <div style="font-size:10px;color:var(--red);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px">
+      🚨 Vendedores con mayor % de transacciones bajo precio piso
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+      <div style="background:rgba(231,76,60,0.08);border-radius:6px;padding:10px">
+        <div style="font-size:11px;font-weight:600;margin-bottom:4px">FRANCO RIFFO</div>
+        <div style="font-family:'DM Mono';font-size:18px;color:var(--red)">76%</div>
+        <div style="font-size:9px;color:var(--muted)">Trans. bajo piso</div>
+      </div>
+      <div style="background:rgba(245,166,35,0.08);border-radius:6px;padding:10px">
+        <div style="font-size:11px;font-weight:600;margin-bottom:4px">JORGE CAROCA</div>
+        <div style="font-family:'DM Mono';font-size:18px;color:var(--amber)">61%</div>
+        <div style="font-size:9px;color:var(--muted)">Trans. bajo piso</div>
+      </div>
+      <div style="background:rgba(245,166,35,0.08);border-radius:6px;padding:10px">
+        <div style="font-size:11px;font-weight:600;margin-bottom:4px">IVÁN VEVERKA</div>
+        <div style="font-family:'DM Mono';font-size:18px;color:var(--amber)">58%</div>
+        <div style="font-size:9px;color:var(--muted)">Trans. bajo piso</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;font-size:10px;color:var(--muted)">
+      Ver detalle completo por SKU → <a href="Panel_Rentabilidad_AV_2026.html" style="color:var(--amber)">Panel Rentabilidad & Pricing ↗</a>
+    </div>
+  </div>
+
+</div><!-- /tab-cxc -->
+
+</div><!-- /page -->
+
+<div class="footer">
+  <div>AV Latam BI Platform · Jefes País · Chile 2025 · Presupuesto 2026</div>
+  <div class="hnav">
+    <a href="Panel_Jefes_Index.html" class="np">🏠 Hub Jefes</a>
+    <a href="Panel_CxC_AV_Latam_2026.html" class="np">📋 CxC</a>
+    <a href="Panel_Rentabilidad_AV_2026.html" class="np">💹 Rentabilidad</a>
+  </div>
+</div>
+
+<script>
+Chart.defaults.color='#8fa892';
+Chart.defaults.font.family="'DM Mono',monospace";
+Chart.defaults.font.size=10;
+
+const G='#7AB648',A='#F5A623',O='#E67E22',R='#E74C3C',B='#4A9EDB',M='#9B59B6';
+const LABELS=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+
+// ── DATA ──
+const real2024=[77.4,46.1,37.4,72.1,18.2,33.8,42.7,24.8,41.5,109.0,67.3,53.4];
+const real2025=[61.5,57.9,38.9,44.2,131.5,36.8,33.9,75.0,101.1,134.5,43.6,7.0];
+const ppto2026=[83.6,41.6,42.0,46.4,51.0,49.7,62.8,76.5,110.8,112.7,97.5,86.7];
+
+const vendedoresData=[
+  {nombre:'FRANCISCO VELÁSQUEZ', corto:'F. Velásquez', real:240.1, ppto:253.9,
+   meses:[8.3,10.9,4.1,17.9,46.6,13.3,4.4,16.1,50.5,52.6,10.9,4.6],
+   pptoMes:[14.9,11.5,6.5,10.0,5.0,20.0,38.0,12.0,48.0,50.0,18.0,20.0]},
+  {nombre:'PABLO LARATRO',       corto:'P. Laratro',   real:232.6, ppto:234.0,
+   meses:[27.0,21.2,11.9,10.4,50.6,8.3,12.2,24.1,26.6,16.8,22.2,1.2],
+   pptoMes:[36.0,10.6,7.5,16.6,22.5,10.0,7.8,21.0,25.0,20.0,37.5,19.5]},
+  {nombre:'JORGE CAROCA',        corto:'J. Caroca',    real:97.0,  ppto:131.6,
+   meses:[8.4,9.9,10.3,5.9,13.0,7.2,6.5,19.6,8.5,7.7,0.0,0.0],
+   pptoMes:[12.5,6.0,14.5,8.8,12.5,8.7,6.0,25.5,10.8,8.7,5.0,12.5]},
+  {nombre:'FRANCO RIFFO',        corto:'F. Riffo',     real:58.7,  ppto:null,
+   meses:[0.0,0.0,0.0,0.0,0.0,3.4,5.2,9.0,8.2,32.9,0.0,0.0],
+   pptoMes:null},
+  {nombre:'IVÁN VEVERKA',        corto:'I. Veverka',   real:36.4,  ppto:72.0,
+   meses:[1.1,1.9,1.1,1.7,10.2,0.0,0.6,0.0,0.0,15.4,4.4,0.0],
+   pptoMes:[6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0]},
+  {nombre:'GUILLERMO PRADENAS',  corto:'G. Pradenas',  real:33.5,  ppto:null,
+   meses:[5.2,8.2,4.9,4.3,7.1,2.6,1.2,0.0,0.0,0.0,0.0,0.0],
+   pptoMes:null},
+  {nombre:'DAVID CAMILLA',       corto:'D. Camilla',   real:21.0,  ppto:null,
+   meses:[8.5,5.1,2.7,2.0,2.7,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+   pptoMes:null},
+  {nombre:'RODRIGO ENCINA',      corto:'R. Encina',    real:19.5,  ppto:169.9,
+   meses:[0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,6.3,5.3,5.8,0.0],
+   pptoMes:[14.2,7.5,7.5,5.0,5.0,5.0,5.0,12.0,21.0,28.0,31.0,28.7]},
+];
+
+const clientesData=[
+  {cli:'AGRICOLA SEMINARIO LIMITADA',            rtc:'F. Velásquez', monto:49752010,pct:6.5,cum:6.5,  cxc:'ok'},
+  {cli:'SOC AGRICOLA SANTA TERESA LIMITADA',     rtc:'P. Laratro',   monto:28406300,pct:3.7,cum:10.2, cxc:'ok'},
+  {cli:'AGRICOLA MALLINKO LIMITADA',             rtc:'F. Velásquez', monto:25351000,pct:3.3,cum:13.5, cxc:'ok'},
+  {cli:'AGRICOLA JOSE MARIA Y OTRO LIMITADA',    rtc:'P. Laratro',   monto:24571000,pct:3.2,cum:16.7, cxc:'ok'},
+  {cli:'AGROCOMERCIAL POLANCO SPA',              rtc:'F. Riffo',     monto:18915760,pct:2.5,cum:19.2, cxc:'ok'},
+  {cli:'AGRICOLA LOZANO SUAZO SpA.',             rtc:'J. Caroca',    monto:18745468,pct:2.4,cum:21.6, cxc:'ok'},
+  {cli:'COMERCIALIZADORA LA COLONIA LIMITADA',   rtc:'F. Velásquez', monto:17525000,pct:2.3,cum:23.9, cxc:'ok'},
+  {cli:'ELIAS FELICIANO RETAMAL RIVERA',         rtc:'F. Velásquez', monto:17506137,pct:2.3,cum:26.2, cxc:'ok'},
+  {cli:'BODEN SPA',                              rtc:'J. Caroca',    monto:15420000,pct:2.0,cum:28.2, cxc:'ok'},
+  {cli:'SOC AGRICOLA PALO ALTO LIMITADA',        rtc:'P. Laratro',   monto:15116192,pct:2.0,cum:30.2, cxc:'ok'},
+  {cli:'ASESORIAS Y COMERCIALIZACION INSUMOS',   rtc:'J. Caroca',    monto:14701120,pct:1.9,cum:32.1, cxc:'ok'},
+  {cli:'FRUTICOLA RIO BLANCO SPA',               rtc:'P. Laratro',   monto:14382357,pct:1.9,cum:34.0, cxc:'ok'},
+  {cli:'AGROCOMERCIAL Y GANADERA LOMA LARGA',    rtc:'F. Riffo',     monto:14360800,pct:1.9,cum:35.9, cxc:'crit'},
+  {cli:'AGRICOLA FUNDO LA PIEDRA LIMITADA',      rtc:'F. Velásquez', monto:11814800,pct:1.5,cum:37.4, cxc:'ok'},
+  {cli:'AGRICOLA LOS QUILLAYES SPA',             rtc:'G. Pradenas',  monto:11142200,pct:1.5,cum:38.9, cxc:'ok'},
+];
+
+// ── TAB SWITCH ──
+function switchTab(t,el){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+t).classList.add('active');
+}
+
+// ── CHART VENTAS PRINCIPAL ──
+new Chart(document.getElementById('chartVentas'),{
+  type:'bar',
+  data:{
+    labels:LABELS,
+    datasets:[
+      {label:'Real 2024',data:real2024,backgroundColor:'rgba(122,182,72,0.25)',borderColor:G,borderWidth:1.5,borderRadius:3},
+      {label:'Real 2025',data:real2025,backgroundColor:'rgba(122,182,72,0.65)',borderColor:G,borderWidth:1.5,borderRadius:3},
+      {label:'Ppto 2026',data:ppto2026,type:'line',borderColor:B,borderWidth:2,pointRadius:4,
+       pointBackgroundColor:B,fill:false,tension:0.3,borderDash:[5,3]}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'top',labels:{boxWidth:12,padding:16,usePointStyle:true}},
+      tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: CLP ${ctx.parsed.y}M`}}
+    },
+    scales:{
+      x:{grid:{color:'rgba(122,182,72,0.06)'}},
+      y:{grid:{color:'rgba(122,182,72,0.06)'},
+        ticks:{callback:v=>v+'M'},
+        title:{display:true,text:'CLP Millones',color:'#5a7060',font:{size:9}}}
+    }
+  }
+});
+
+// ── TABLA VENTAS MENSUALES ──
+(function(){
+  const meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  let html='';
+  let tot24=0,tot25=0,totPpto=0;
+  real2024.forEach((v24,i)=>{
+    const v25=real2025[i], pp=ppto2026[i];
+    const varPct=((v25-v24)/v24*100).toFixed(1);
+    const varColor=v25>=v24?'color:var(--green)':'color:var(--red)';
+    const varArrow=v25>=v24?'▲':'▼';
+    const vsState= v25>=pp?'b-ok':'b-warn';
+    tot24+=v24;tot25+=v25;totPpto+=pp;
+    html+=`<tr>
+      <td style="font-weight:500">${meses[i]}</td>
+      <td class="r mono" style="color:var(--dim)">${v24.toFixed(1)}</td>
+      <td class="r mono" style="font-weight:600">${v25.toFixed(1)}</td>
+      <td class="c" style="${varColor};font-family:'DM Mono';font-size:11px">${varArrow} ${Math.abs(varPct)}%</td>
+      <td class="r mono" style="color:var(--blue)">${pp.toFixed(1)}</td>
+      <td class="c"><span class="badge ${vsState}">${v25>=pp?'≥ Ppto':'< Ppto'}</span></td>
+    </tr>`;
+  });
+  const varTot=((tot25-tot24)/tot24*100).toFixed(1);
+  html+=`<tr style="background:var(--s2);font-weight:700">
+    <td>TOTAL ANUAL</td>
+    <td class="r mono" style="color:var(--dim)">${tot24.toFixed(1)}</td>
+    <td class="r mono">${tot25.toFixed(1)}</td>
+    <td class="c" style="color:var(--green);font-family:'DM Mono';font-size:11px">▲ ${varTot}%</td>
+    <td class="r mono" style="color:var(--blue)">${totPpto.toFixed(1)}</td>
+    <td class="c"><span class="badge b-warn">Ppto 2026 por ejecutar</span></td>
+  </tr>`;
+  document.getElementById('tbody-ventas').innerHTML=html;
+})();
+
+// ── TABLA VENDEDORES ──
+(function(){
+  let html='';
+  vendedoresData.forEach((v,i)=>{
+    const cumpl=v.ppto?Math.round(v.real/v.ppto*100):null;
+    let sem='b-nd',semDot='s-crit';
+    if(cumpl===null){sem='b-nd';semDot='s-crit';}
+    else if(cumpl>=90){sem='b-ok';semDot='s-ok';}
+    else if(cumpl>=70){sem='b-warn';semDot='s-warn';}
+    else if(cumpl>=40){sem='b-risk';semDot='s-risk';}
+    else{sem='b-crit';semDot='s-crit';}
+    const pptoStr=v.ppto?v.ppto.toFixed(1)+'M':'—';
+    const cumplStr=cumpl?`<span class="badge ${sem}">${cumpl}%</span>`:'<span class="badge b-nd">Sin ppto</span>';
+    html+=`<tr>
+      <td class="c mono" style="color:var(--muted)">${i+1}</td>
+      <td><span class="sema ${semDot}"></span><strong>${v.nombre}</strong></td>
+      <td class="r mono" style="font-weight:600">${v.real.toFixed(1)}M</td>
+      <td class="r mono" style="color:var(--blue)">${pptoStr}</td>
+      <td class="c">${cumplStr}</td>
+      <td class="c">
+        ${v.ppto?`<div class="cumpl-bar" style="width:80px;margin:0 auto"><div class="cumpl-fill" style="width:${Math.min(cumpl,100)}%;background:${cumpl>=90?G:cumpl>=70?A:O}"></div></div>`:'—'}
+      </td>
+    </tr>`;
+  });
+  document.getElementById('tbody-vendedores').innerHTML=html;
+})();
+
+// ── VENDEDOR SELECTOR + CHART ──
+let chartVend=null;
+(function(){
+  const sel=document.getElementById('vend-selector');
+  vendedoresData.forEach((v,i)=>{
+    const btn=document.createElement('button');
+    btn.className='vbtn'+(i===0?' active':'');
+    btn.textContent=v.corto;
+    btn.onclick=()=>{
+      document.querySelectorAll('.vbtn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      updateVendChart(i);
+    };
+    sel.appendChild(btn);
+  });
+  updateVendChart(0);
+})();
+
+function updateVendChart(idx){
+  const v=vendedoresData[idx];
+  document.getElementById('vend-chart-title').textContent=`${v.nombre} · Ventas 2025 por mes vs Presupuesto 2026`;
+  const datasets=[{
+    label:'Real 2025',data:v.meses,
+    backgroundColor:'rgba(122,182,72,0.6)',borderColor:G,borderWidth:1.5,borderRadius:3
+  }];
+  if(v.pptoMes){
+    datasets.push({
+      label:'Ppto 2026',data:v.pptoMes,type:'line',
+      borderColor:B,borderWidth:2,pointRadius:4,pointBackgroundColor:B,
+      fill:false,tension:0.3,borderDash:[5,3]
+    });
+  }
+  if(chartVend){
+    chartVend.data.datasets=datasets;
+    chartVend.update();
+  } else {
+    chartVend=new Chart(document.getElementById('chartVendedor'),{
+      type:'bar',
+      data:{labels:LABELS,datasets},
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'top',labels:{boxWidth:12,padding:14,usePointStyle:true}},
+          tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: CLP ${ctx.parsed.y}M`}}},
+        scales:{
+          x:{grid:{color:'rgba(122,182,72,0.06)'}},
+          y:{grid:{color:'rgba(122,182,72,0.06)'},ticks:{callback:v=>v+'M'}}
+        }
+      }
+    });
+  }
+}
+
+// ── TABLA CLIENTES ──
+(function(){
+  const cxcMap={ok:'b-ok',crit:'b-crit',warn:'b-warn'};
+  const cxcLabel={ok:'Al día',crit:'⚠️ Mora +90d',warn:'En seguimiento'};
+  let html='';
+  clientesData.forEach((c,i)=>{
+    html+=`<tr>
+      <td class="c mono" style="color:var(--muted)">${i+1}</td>
+      <td style="font-weight:${i<3?'600':'400'}">${c.cli}</td>
+      <td style="font-size:11px;color:var(--dim)">${c.rtc}</td>
+      <td class="r mono" style="font-weight:600">${c.monto.toLocaleString('es-CL')}</td>
+      <td class="c"><span class="badge b-nd">${c.pct}%</span></td>
+      <td class="c"><span class="badge ${c.cum<=20?'b-ok':'b-nd'}">${c.cum.toFixed(1)}%</span></td>
+      <td class="c"><span class="badge ${cxcMap[c.cxc]}">${cxcLabel[c.cxc]}</span></td>
+    </tr>`;
+  });
+  document.getElementById('tbody-clientes').innerHTML=html;
+})();
+
+// ── CHART RTC ──
+new Chart(document.getElementById('chartRTC'),{
+  type:'bar',
+  data:{
+    labels:['F. Velásquez','P. Laratro','J. Caroca','F. Riffo','I. Veverka','G. Pradenas','D. Camilla','R. Encina'],
+    datasets:[{
+      label:'Ventas 2025 (M CLP)',
+      data:[240.1,232.6,97.0,58.7,36.4,33.5,21.0,19.5],
+      backgroundColor:[G,G,'rgba(122,182,72,0.65)','rgba(122,182,72,0.5)','rgba(122,182,72,0.4)','rgba(122,182,72,0.35)','rgba(122,182,72,0.3)','rgba(122,182,72,0.25)'],
+      borderRadius:3,borderWidth:0
+    }]
+  },
+  options:{
+    indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`CLP ${ctx.parsed.x}M`}}},
+    scales:{x:{grid:{color:'rgba(122,182,72,0.06)'},ticks:{callback:v=>v+'M'}},
+      y:{grid:{display:false}}}
+  }
+});
+
+// ── CHART REGIÓN ──
+new Chart(document.getElementById('chartRegion'),{
+  type:'doughnut',
+  data:{
+    labels:['VII Maule','VI O\'Higgins','IV Coquimbo','RM Metropolitana','V Valparaíso','X Los Lagos','Otras'],
+    datasets:[{
+      data:[176.8,159.3,155.1,115.1,88.8,23.2,48.0],
+      backgroundColor:[G,'rgba(122,182,72,0.8)','rgba(122,182,72,0.65)',A,O,B,'#9B59B6'],
+      borderColor:'#080e09',borderWidth:2
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,cutout:'58%',
+    plugins:{
+      legend:{position:'bottom',labels:{boxWidth:10,padding:8,font:{size:9}}},
+      tooltip:{callbacks:{label:ctx=>`${ctx.label}: CLP ${ctx.parsed}M`}}
+    }
+  }
+});
+</script>
+</body>
+</html>
