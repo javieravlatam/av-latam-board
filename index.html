@@ -142,28 +142,55 @@
 
     <div class="divider">
       <div class="divider-line"></div>
-      <div class="divider-text">Plataforma BI · Acceso Restringido</div>
+      <div class="divider-text">Plataforma BI · Selecciona tu acceso</div>
       <div class="divider-line"></div>
     </div>
 
-    <div class="welcome">
-      <h1>Bienvenido al Panel de Gestión</h1>
-      <p>Ingresa tu clave de acceso para continuar<br>a la plataforma comercial 2026</p>
+    <!-- BLOQUE DIRECTORES -->
+    <div style="margin-bottom:6px">
+      <div style="font-size:9px;color:#8fa892;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;display:flex;align-items:center;gap:7px">
+        <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#7AB648"></span>
+        Directores · Acceso completo
+      </div>
+      <div class="input-wrap">
+        <span class="input-icon">🔒</span>
+        <input type="password" id="pwdDir" class="pwd-input"
+          placeholder="Clave directores" maxlength="20" autocomplete="off" autofocus />
+        <button class="eye-btn" id="eyeDir" type="button" tabindex="-1">👁</button>
+      </div>
+      <div class="error-msg" id="errDir">Clave incorrecta. Intenta nuevamente.</div>
+      <button class="btn" id="btnDir" onclick="checkDir()">
+        <div class="btn-spinner" id="spDir"></div>
+        <span id="txDir">ACCESO DIRECTORES</span>
+      </button>
     </div>
 
-    <div class="input-wrap">
-      <span class="input-icon">🔒</span>
-      <input type="password" id="pwdInput" class="pwd-input"
-        placeholder="Clave de acceso" maxlength="20" autocomplete="off" autofocus />
-      <button class="eye-btn" id="eyeBtn" type="button" tabindex="-1">👁</button>
+    <!-- SEPARADOR ENTRE BLOQUES -->
+    <div style="display:flex;align-items:center;gap:10px;margin:18px 0">
+      <div style="flex:1;height:1px;background:rgba(122,182,72,0.12)"></div>
+      <div style="font-size:9px;color:#4a6050;letter-spacing:2px;text-transform:uppercase">o</div>
+      <div style="flex:1;height:1px;background:rgba(122,182,72,0.12)"></div>
     </div>
 
-    <div class="error-msg" id="errorMsg">Clave incorrecta. Intenta nuevamente.</div>
-
-    <button class="btn" id="accessBtn" onclick="checkPassword()">
-      <div class="btn-spinner" id="spinner"></div>
-      <span id="btnText">INGRESAR A LA PLATAFORMA</span>
-    </button>
+    <!-- BLOQUE JEFES -->
+    <div style="margin-bottom:6px">
+      <div style="font-size:9px;color:#8fa892;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;display:flex;align-items:center;gap:7px">
+        <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#4A9EDB"></span>
+        Jefes País · Gestión comercial
+      </div>
+      <div class="input-wrap">
+        <span class="input-icon">🔒</span>
+        <input type="password" id="pwdJefe" class="pwd-input"
+          placeholder="Clave jefes país" maxlength="20" autocomplete="off" />
+        <button class="eye-btn" id="eyeJefe" type="button" tabindex="-1">👁</button>
+      </div>
+      <div class="error-msg" id="errJefe">Clave incorrecta. Intenta nuevamente.</div>
+      <button class="btn" id="btnJefe" onclick="checkJefe()"
+        style="background:#4A9EDB;box-shadow:0 4px 20px rgba(74,158,219,.28)">
+        <div class="btn-spinner" id="spJefe"></div>
+        <span id="txJefe">ACCESO JEFES PAÍS</span>
+      </button>
+    </div>
 
     <div class="card-footer">
       <span class="dot-green"></span>Agroveca Grupo Latam · 2026<br>
@@ -174,52 +201,93 @@
 </div>
 
 <script>
-  const HASH = "7cd4374e16e78510de24a08115c3b44f6d0d72762d41054e6ef8fa0cb5e0c45b";
-  // Auto-redirect: si ya está autenticado en esta sesión, saltar el login
-  if (sessionStorage.getItem('av_auth') === HASH) { window.location.replace('dashboard.html'); }
-  let intentos = 0;
+  const DIR_HASH  = "7cd4374e16e78510de24a08115c3b44f6d0d72762d41054e6ef8fa0cb5e0c45b";
+  const JEFE_HASH = "7d575fec604a7d6f7bc4345dce24adfabf6ccee7bd800b718f79afebbeab4320";
 
-  document.getElementById('eyeBtn').addEventListener('click', () => {
-    const i = document.getElementById('pwdInput');
-    i.type = i.type === 'password' ? 'text' : 'password';
-    document.getElementById('eyeBtn').textContent = i.type === 'password' ? '👁' : '🙈';
-  });
+  // Auto-redirect si ya hay sesión activa
+  if (sessionStorage.getItem('av_auth') === DIR_HASH) {
+    const role = sessionStorage.getItem('av_role');
+    window.location.replace(role === 'jefe' ? 'Panel_Jefes_Index.html' : 'dashboard.html');
+  }
 
-  document.getElementById('pwdInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') checkPassword();
-    document.getElementById('errorMsg').classList.remove('show');
-    document.getElementById('pwdInput').classList.remove('error');
-  });
+  let intDir = 0, intJefe = 0;
 
   async function sha256(msg) {
     const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
     return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
   }
 
-  async function checkPassword() {
-    const val = document.getElementById('pwdInput').value.trim();
-    if (!val || intentos >= 5) return;
-    const btn = document.getElementById('accessBtn');
-    const sp  = document.getElementById('spinner');
-    const tx  = document.getElementById('btnText');
-    btn.disabled = true; sp.style.display = 'block'; tx.textContent = 'Verificando...';
+  // Toggle visibilidad password
+  function toggleEye(inputId, btnId) {
+    const i = document.getElementById(inputId);
+    i.type = i.type === 'password' ? 'text' : 'password';
+    document.getElementById(btnId).textContent = i.type === 'password' ? '👁' : '🙈';
+  }
+  document.getElementById('eyeDir').addEventListener('click',  () => toggleEye('pwdDir','eyeDir'));
+  document.getElementById('eyeJefe').addEventListener('click', () => toggleEye('pwdJefe','eyeJefe'));
+
+  // Enter en cada campo
+  document.getElementById('pwdDir').addEventListener('keydown',  e => { if(e.key==='Enter') checkDir();  clearErr('pwdDir','errDir'); });
+  document.getElementById('pwdJefe').addEventListener('keydown', e => { if(e.key==='Enter') checkJefe(); clearErr('pwdJefe','errJefe'); });
+
+  function clearErr(inputId, errId) {
+    document.getElementById(errId).classList.remove('show');
+    document.getElementById(inputId).classList.remove('error');
+  }
+
+  function showErr(inputId, errId, btnId, spId, txId, msg, label) {
+    document.getElementById(btnId).disabled = false;
+    document.getElementById(spId).style.display = 'none';
+    document.getElementById(txId).textContent = label;
+    document.getElementById(inputId).value = '';
+    document.getElementById(inputId).classList.add('error');
+    const el = document.getElementById(errId);
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => document.getElementById(inputId).classList.remove('error'), 500);
+    document.getElementById(inputId).focus();
+  }
+
+  async function checkDir() {
+    const val = document.getElementById('pwdDir').value.trim();
+    if (!val || intDir >= 5) return;
+    const btn=document.getElementById('btnDir'), sp=document.getElementById('spDir'), tx=document.getElementById('txDir');
+    btn.disabled=true; sp.style.display='block'; tx.textContent='Verificando...';
     await new Promise(r => setTimeout(r, 700));
     const h = await sha256(val);
-    if (h === HASH) {
-      sessionStorage.setItem('av_auth', HASH);
+    if (h === DIR_HASH) {
+      sessionStorage.setItem('av_auth', DIR_HASH);
+      sessionStorage.setItem('av_role', 'director');
       document.getElementById('successOverlay').classList.add('show');
+      document.querySelector('.success-sub').textContent = 'Cargando panel directores...';
       setTimeout(() => window.location.href = 'dashboard.html', 1500);
     } else {
-      intentos++;
-      btn.disabled = false; sp.style.display = 'none'; tx.textContent = 'INGRESAR A LA PLATAFORMA';
-      document.getElementById('pwdInput').value = '';
-      document.getElementById('pwdInput').classList.add('error');
-      const e = document.getElementById('errorMsg');
-      e.textContent = intentos >= 5 ? 'Acceso bloqueado. Recarga la página.'
-        : `Clave incorrecta · ${5-intentos} intento${5-intentos!==1?'s':''} restante${5-intentos!==1?'s':''}`;
-      e.classList.add('show');
-      setTimeout(() => document.getElementById('pwdInput').classList.remove('error'), 500);
-      document.getElementById('pwdInput').focus();
+      intDir++;
+      const msg = intDir>=5 ? 'Acceso bloqueado. Recarga la página.'
+        : `Clave incorrecta · ${5-intDir} intento${5-intDir!==1?'s':''} restante${5-intDir!==1?'s':''}`;
+      showErr('pwdDir','errDir','btnDir','spDir','txDir', msg, 'ACCESO DIRECTORES');
+    }
+  }
+
+  async function checkJefe() {
+    const val = document.getElementById('pwdJefe').value.trim();
+    if (!val || intJefe >= 5) return;
+    const btn=document.getElementById('btnJefe'), sp=document.getElementById('spJefe'), tx=document.getElementById('txJefe');
+    btn.disabled=true; sp.style.display='block'; tx.textContent='Verificando...';
+    await new Promise(r => setTimeout(r, 700));
+    const h = await sha256(val);
+    if (h === JEFE_HASH) {
+      // Almacenamos DIR_HASH para que todos los paneles existentes validen sin cambios
+      sessionStorage.setItem('av_auth', DIR_HASH);
+      sessionStorage.setItem('av_role', 'jefe');
+      document.getElementById('successOverlay').classList.add('show');
+      document.querySelector('.success-sub').textContent = 'Cargando panel jefes país...';
+      setTimeout(() => window.location.href = 'Panel_Jefes_Index.html', 1500);
+    } else {
+      intJefe++;
+      const msg = intJefe>=5 ? 'Acceso bloqueado. Recarga la página.'
+        : `Clave incorrecta · ${5-intJefe} intento${5-intJefe!==1?'s':''} restante${5-intJefe!==1?'s':''}`;
+      showErr('pwdJefe','errJefe','btnJefe','spJefe','txJefe', msg, 'ACCESO JEFES PAÍS');
     }
   }
 </script>
