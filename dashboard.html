@@ -419,13 +419,77 @@
       <div class="card-cta">ABRIR PRODUCTOS →</div>
     </a>
 
+    <!-- Panel Clientes — PRÓXIMAMENTE -->
+    <div class="card" style="opacity:0.55;cursor:default;pointer-events:none;border-style:dashed;">
+      <div class="card-icon">🏢</div>
+      <div class="card-title">Panel Clientes</div>
+      <div class="card-desc">Evolución por cliente, rentabilidad por cuenta, concentración de cartera y riesgo comercial. Chile + Perú consolidado.</div>
+      <div class="card-stats">
+        <div class="card-stat">
+          <span class="cs-label">Módulos previstos</span>
+          <span class="cs-val" style="color:var(--text-dim);">Evolución · Ranking · Riesgo</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Cobertura</span>
+          <span class="cs-val" style="color:var(--text-dim);">Chile + Perú</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Estado</span>
+          <span class="cs-val" style="color:var(--amber);">En desarrollo</span>
+        </div>
+      </div>
+      <div class="card-cta" style="color:var(--text-dim);background:transparent;border:1px dashed var(--border);">PRÓXIMAMENTE →</div>
+    </div>
+
   </div>
 
-  <div class="section-label">Jefes de zona</div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;">
-    <a href="Panel_Jefes_Index.html" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 20px;text-decoration:none;color:var(--text-dim);font-size:12px;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-dim)'">
-      👥 Índice Jefes de Zona →
+  <div class="section-label">Gestión de equipos</div>
+  <div class="cards" style="grid-template-columns:repeat(2,1fr);">
+
+    <!-- Panel Jefes País -->
+    <a href="Panel_Jefes_Index.html" class="card blue">
+      <div class="card-icon">👥</div>
+      <div class="card-title">Panel Jefes País</div>
+      <div class="card-desc">Módulo de gestión operativa para jefes de país. Ventas vs presupuesto, eficiencia comercial por vendedor, ranking clientes y cobranzas. Chile · Perú · Grupo AV.</div>
+      <div class="card-stats">
+        <div class="card-stat">
+          <span class="cs-label">Países activos</span>
+          <span class="cs-val" style="color:var(--blue);">Chile · Perú</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Acceso</span>
+          <span class="cs-val" style="color:var(--blue);">Clave jefes2026</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Paneles disponibles</span>
+          <span class="cs-val" style="color:var(--green);">Hub · Chile · Perú (Grupo pronto)</span>
+        </div>
+      </div>
+      <div class="card-cta">ABRIR MÓDULO JEFES →</div>
     </a>
+
+    <!-- Panel CxC -->
+    <a href="Panel_CxC_AV_Latam_2026.html" class="card amber">
+      <div class="card-icon">💳</div>
+      <div class="card-title">Panel CxC</div>
+      <div class="card-desc">Cobranzas y cartera activa consolidada Chile + Perú. Tramos de mora, clientes críticos por vendedor y gestión urgente por país.</div>
+      <div class="card-stats">
+        <div class="card-stat">
+          <span class="cs-label">CxC vencida Chile</span>
+          <span class="cs-val" style="color:var(--red);">CLP 15.2M · +90d crítico</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">CxC vencida Perú</span>
+          <span class="cs-val" style="color:var(--red);">USD 30.8K · +90d crítico</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Clientes en mora +90d</span>
+          <span class="cs-val" style="color:var(--amber);">Chile 3 · Perú 6</span>
+        </div>
+      </div>
+      <div class="card-cta">ABRIR CxC →</div>
+    </a>
+
   </div>
 
 </div>
