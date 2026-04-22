@@ -9,7 +9,7 @@
   })();
 </script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Panel Jefes · Perú 2025 · AV Latam</title>
+<title>Panel Jefes · Perú 2026 · AV Latam</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -75,6 +75,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
 /* GRID */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
 
 /* TABLE */
 .tbl-wrap{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;overflow:hidden}
@@ -120,6 +121,16 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
 /* ALERTA CONCENTRACION */
 .conc-alert{background:rgba(231,76,60,0.07);border:1px solid rgba(231,76,60,0.25);border-radius:8px;padding:14px;margin-bottom:16px}
 
+/* PRODUCT BAR */
+.prod-bar-wrap{height:8px;background:var(--s3);border-radius:4px;overflow:hidden;margin-top:4px}
+.prod-bar-fill{height:100%;border-radius:4px}
+
+/* PRICING / IEC CARDS */
+.pc{background:var(--s2);border:1px solid;border-radius:8px;padding:14px}
+.pc-icon{font-size:20px;margin-bottom:8px}
+.pc-val{font-family:'Bebas Neue';font-size:26px;line-height:1;margin-bottom:4px}
+.pc-lbl{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:1px}
+
 /* FOOTER */
 .footer{text-align:center;padding:20px 32px;font-size:10px;color:var(--muted);
   border-top:1px solid var(--bdim);margin-top:20px;display:flex;justify-content:space-between;align-items:center}
@@ -133,7 +144,7 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
     <div class="logo">AV</div>
     <div>
       <div class="htitle">🇵🇪 JEFES · PERÚ</div>
-      <div class="hsub">Panel Comercial Operativo · Ventas 2025 · USD</div>
+      <div class="hsub">Panel Comercial · Real 2026 vs Ppto 2026 · USD</div>
     </div>
   </div>
   <div class="hnav">
@@ -142,8 +153,8 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
     <a href="Panel_CxC_AV_Latam_2026.html" class="np">📋 CxC Detalle</a>
   </div>
   <div class="hcorte">
-    <div>Jefatura País Perú · <b>Corte: Dic 2025</b></div>
-    <div style="color:var(--muted)">Ppto 2026 · CxC Abr 2026 · USD</div>
+    <div>Perú · <b>Real: Ene–Abr 2026 (al 22 Abr)</b></div>
+    <div style="color:var(--muted)">Ppto Anual 2026 · Ref. 2025 · CxC Abr 2026</div>
   </div>
 </div>
 
@@ -152,19 +163,19 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
 <!-- KPI BANNER -->
 <div class="kpis">
   <div class="kpi">
-    <div class="kpi-lbl">Ventas 2025 · Total</div>
-    <div class="kpi-val kpi-b">USD 690.4K</div>
-    <div class="kpi-sub">12 meses · 6 vendedores activos</div>
+    <div class="kpi-lbl">Real 2026 · Acum Ene–Abr</div>
+    <div class="kpi-val kpi-b">USD 232.9K</div>
+    <div class="kpi-sub">vs 2025 mismo período: 212.4K (+9.7%)</div>
   </div>
   <div class="kpi">
-    <div class="kpi-lbl">Presupuesto 2026</div>
+    <div class="kpi-lbl">Cumplimiento vs Ppto 4m</div>
+    <div class="kpi-val kpi-a">81.8%</div>
+    <div class="kpi-sub">Ene–Mar cerrado: 95.8% · Abr parcial</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-lbl">Ppto 2026 · Anual</div>
     <div class="kpi-val kpi-a">USD 1,137K</div>
-    <div class="kpi-sub">Meta anual · 5 RTCs con ppto</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-lbl">Top Vendedor 2025</div>
-    <div class="kpi-val kpi-b" style="font-size:16px">J. GELDRES</div>
-    <div class="kpi-sub">USD 275.1K · 39.9% del total</div>
+    <div class="kpi-sub">Pendiente: 904K · 6 vendedores activos</div>
   </div>
   <div class="kpi">
     <div class="kpi-lbl">CxC Vencido Activo</div>
@@ -172,27 +183,28 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
     <div class="kpi-sub">+90d: 30.8K · 31-90d: 7.5K</div>
   </div>
   <div class="kpi">
-    <div class="kpi-lbl">Concentración Top 4</div>
-    <div class="kpi-val kpi-r">55.4%</div>
-    <div class="kpi-sub">Don Luis 21.5% · riesgo alto</div>
+    <div class="kpi-lbl">Top Vendedor 2026</div>
+    <div class="kpi-val kpi-b" style="font-size:16px">O. INFANTE</div>
+    <div class="kpi-sub">USD 94.1K · 40.4% del real YTD</div>
   </div>
 </div>
 
 <!-- TABS -->
 <div class="tabs">
-  <button class="tab active" onclick="switchTab('ventas',this)">📈 Ventas & Presupuesto</button>
+  <button class="tab active" onclick="switchTab('ventas',this)">📈 Ventas & Ppto</button>
   <button class="tab" onclick="switchTab('vendedores',this)">👤 Vendedores</button>
   <button class="tab" onclick="switchTab('clientes',this)">🏢 Clientes</button>
-  <button class="tab" onclick="switchTab('cxc',this)">💳 CxC & Eficiencia</button>
+  <button class="tab" onclick="switchTab('productos',this)">📦 Productos</button>
+  <button class="tab" onclick="switchTab('cxc',this)">💳 CxC & Alertas</button>
 </div>
 
 <!-- ══════════════════════════════════════════════ -->
-<!-- TAB: VENTAS -->
+<!-- TAB: VENTAS & PRESUPUESTO -->
 <!-- ══════════════════════════════════════════════ -->
 <div id="tab-ventas" class="tab-content active">
 
   <div class="chart-wrap" style="margin-bottom:16px">
-    <div class="chart-title">Ventas Mensuales Perú (USD Miles) · 2025 Real + Presupuesto 2026</div>
+    <div class="chart-title">Ventas Perú (USD Miles) · Real 2026 vs Presupuesto 2026 · Referencia 2025</div>
     <div class="chart-canvas">
       <canvas id="chartVentas"></canvas>
     </div>
@@ -200,15 +212,18 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
 
   <div class="tbl-wrap">
     <div class="tbl-head">
-      <div class="tbl-head-title">Detalle mensual · Real 2025 vs Presupuesto 2026</div>
+      <div class="tbl-head-title">Detalle mensual · Ppto 2026 vs Real 2026 · Referencia Real 2025</div>
+      <div style="font-size:10px;color:var(--muted)">* Abril parcial al 22 Abr 2026 · Mayo–Dic pendientes de ejecución</div>
     </div>
     <table class="tbl">
       <thead>
         <tr>
           <th>Mes</th>
-          <th class="r">Real 2025 (USD)</th>
-          <th class="r">Ppto 2026 (USD)</th>
-          <th class="c">vs Ppto 2026</th>
+          <th class="r">Ppto 2026 (K)</th>
+          <th class="r">Real 2026 (K)</th>
+          <th class="c">% Cumpl 2026</th>
+          <th class="r">Real 2025 (K)</th>
+          <th class="c">Δ 26 vs 25</th>
           <th class="c">Estado</th>
         </tr>
       </thead>
@@ -223,37 +238,38 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
 <!-- ══════════════════════════════════════════════ -->
 <div id="tab-vendedores" class="tab-content">
 
-  <!-- Alerta: Geldres no está en ppto 2026 -->
-  <div style="background:rgba(231,76,60,0.07);border:1px solid rgba(231,76,60,0.25);border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
-    <span style="font-size:18px">⚠️</span>
+  <!-- Alerta equipo 2026 -->
+  <div style="background:rgba(74,158,219,0.07);border:1px solid rgba(74,158,219,0.25);border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:flex-start;gap:12px">
+    <span style="font-size:18px">ℹ️</span>
     <div>
-      <div style="font-size:11px;font-weight:700;color:var(--red)">Riesgo de transición: JOSE GELDRES (39.9% del total 2025) no figura en presupuesto 2026</div>
-      <div style="font-size:10px;color:var(--muted);margin-top:2px">Su cartera debe redistribuirse entre los vendedores activos. Verificar estado con jefatura.</div>
+      <div style="font-size:11px;font-weight:700;color:var(--blue)">Equipo Perú 2026: nuevo roster · Geldres sin actividad · 2 vendedores nuevos (Navarro, Valladares)</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">Family Farms y POB (ex-Geldres) ya fueron reasignados. Lisbeth Aguirre y Omar Atalaya lideran cumplimiento vs ppto 4 meses. Oscar Infante lidera en volumen absoluto.</div>
     </div>
   </div>
 
-  <div class="sec">Ranking General 2025 <span>Real anual vs Presupuesto 2026</span></div>
+  <div class="sec">Ranking Real 2026 (Ene–Abr) <span>vs Presupuesto Anual 2026 · Ref. Real 2025</span></div>
   <div class="tbl-wrap" style="margin-bottom:20px">
     <table class="tbl">
       <thead>
         <tr>
           <th>#</th>
           <th>Vendedor</th>
-          <th class="r">Real 2025 (USD)</th>
-          <th class="r">Ppto 2026 (USD)</th>
-          <th class="c">% Cumpl 2025</th>
-          <th class="c">Semáforo</th>
+          <th class="r">Real 2026 YTD</th>
+          <th class="r">Ppto Anual 2026</th>
+          <th class="c">Cumpl 4m vs Ppto 4m</th>
+          <th class="r">Real 2025 Ref.</th>
+          <th class="c">Estado</th>
         </tr>
       </thead>
       <tbody id="tbody-vendedores"></tbody>
     </table>
   </div>
 
-  <div class="sec">Detalle Mensual por Vendedor <span>Selecciona un vendedor para ver su curva</span></div>
+  <div class="sec">Detalle Mensual por Vendedor <span>Real 2026 mes a mes vs Presupuesto 2026</span></div>
   <div class="vend-btns" id="vend-selector"></div>
 
   <div class="chart-wrap">
-    <div class="chart-title" id="vend-chart-title">Ventas mensuales 2025 vs Presupuesto 2026</div>
+    <div class="chart-title" id="vend-chart-title">Selecciona un vendedor</div>
     <div class="chart-canvas">
       <canvas id="chartVendedor"></canvas>
     </div>
@@ -267,11 +283,11 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
 <div id="tab-clientes" class="tab-content">
 
   <div class="conc-alert">
-    <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">🔴 Alerta de Concentración · Perú</div>
-    <div style="font-size:11px;color:var(--dim)">Top 4 clientes concentran <strong style="color:var(--red)">55.4%</strong> del total · Top 6 concentran <strong style="color:var(--amber)">72.2%</strong> · Cliente único máximo (Don Luis) = <strong style="color:var(--red)">21.5%</strong>. Exposición crítica si alguno suspende compras.</div>
+    <div style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">📊 Rotación de Cartera 2026 · Nueva Concentración</div>
+    <div style="font-size:11px;color:var(--dim)">Top cliente 2026 es <strong style="color:var(--blue)">Bomarea S.R.L. (19.1%, Atalaya)</strong> — nuevo. Top 5 concentran <strong style="color:var(--amber)">56.2%</strong>. AMFRESH (CxC crítico 2025) sigue comprando en 2026 — gestionar cobro activo. Family Farms y POB reasignados exitosamente desde Geldres.</div>
   </div>
 
-  <div class="sec">Top 15 Clientes Perú · 2025 <span>Por facturación anual · 90.5% del total</span></div>
+  <div class="sec">Top 15 Clientes Perú · Real 2026 Ene–Abr <span>Por facturación acumulada · 92.2% del total YTD</span></div>
   <div class="tbl-wrap">
     <table class="tbl">
       <thead>
@@ -279,7 +295,7 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
           <th class="c">#</th>
           <th>Cliente</th>
           <th>Vendedor</th>
-          <th class="r">Ventas 2025 (USD)</th>
+          <th class="r">Ventas 2026 YTD (USD)</th>
           <th class="c">% Total</th>
           <th class="c">% Acum</th>
           <th class="c">Estado CxC</th>
@@ -289,16 +305,16 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
     </table>
   </div>
 
-  <div class="sec" style="margin-top:22px">Concentración por Vendedor & Cartera <span>2025</span></div>
+  <div class="sec" style="margin-top:22px">Concentración por Vendedor & Clientes <span>Real 2026 YTD</span></div>
   <div class="g2" style="margin-top:8px">
     <div class="chart-wrap">
-      <div class="chart-title">Ventas por Vendedor · 2025 (USD)</div>
+      <div class="chart-title">Ventas por Vendedor · Real 2026 YTD (USD K)</div>
       <div class="chart-canvas-sm">
         <canvas id="chartRTC"></canvas>
       </div>
     </div>
     <div class="chart-wrap">
-      <div class="chart-title">Concentración Top 6 Clientes · 2025</div>
+      <div class="chart-title">Top 6 Clientes · Concentración 2026</div>
       <div class="chart-canvas-sm">
         <canvas id="chartConc"></canvas>
       </div>
@@ -308,7 +324,75 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
 </div>
 
 <!-- ══════════════════════════════════════════════ -->
-<!-- TAB: CxC & EFICIENCIA -->
+<!-- TAB: PRODUCTOS -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="tab-productos" class="tab-content">
+
+  <div style="background:rgba(74,158,219,0.07);border:1px solid rgba(74,158,219,0.2);border-radius:8px;padding:12px 16px;margin-bottom:20px">
+    <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">📦 Portafolio Perú 2026 · Ene–Abr</div>
+    <div style="font-size:11px;color:var(--dim)"><strong style="color:var(--text)">VECASIL FORTE domina con 35.4%</strong> del total facturado. Los 4 primeros productos concentran el <strong style="color:var(--amber)">76.0%</strong> del mix. REGALIA MAX es el segundo más importante (20.1%). El portafolio es estrecho: 9 productos explican el 90% de las ventas.</div>
+  </div>
+
+  <div class="sec">Top Productos Perú · Real 2026 Ene–Abr <span>Por facturación · 10 productos = 90.9% del total</span></div>
+
+  <div class="tbl-wrap" style="margin-bottom:20px">
+    <div class="tbl-head">
+      <div class="tbl-head-title">Ranking de productos por venta acumulada · USD</div>
+      <div style="font-size:10px;color:var(--muted)">Real 2026 Ene–Abr · Total: USD 232,858</div>
+    </div>
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th class="c">#</th>
+          <th>Producto</th>
+          <th class="r">Ventas 2026 (USD)</th>
+          <th class="c">% Total</th>
+          <th class="c">% Acumulado</th>
+          <th style="width:120px">Participación</th>
+          <th class="c">Estratégico</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-productos"></tbody>
+    </table>
+  </div>
+
+  <div class="g2">
+    <div class="chart-wrap">
+      <div class="chart-title">Mix de Productos · Real 2026 (% participación)</div>
+      <div class="chart-canvas">
+        <canvas id="chartProductos"></canvas>
+      </div>
+    </div>
+    <div>
+      <!-- Lectura ejecutiva -->
+      <div class="chart-wrap" style="margin-bottom:16px">
+        <div class="chart-title">Lectura Ejecutiva · Portafolio Perú 2026</div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding-top:4px">
+          <div style="padding:10px;background:rgba(74,158,219,0.07);border-radius:6px;border-left:3px solid var(--blue)">
+            <div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:3px">VECASIL FORTE · Producto ancla</div>
+            <div style="font-size:10px;color:var(--dim)">35.4% del total. Vendido a múltiples clientes por todos los vendedores activos. Alta dependencia — proteger ante faltantes de stock o competencia.</div>
+          </div>
+          <div style="padding:10px;background:rgba(122,182,72,0.07);border-radius:6px;border-left:3px solid var(--green)">
+            <div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:3px">REGALIA MAX · Producto diferenciador</div>
+            <div style="font-size:10px;color:var(--dim)">20.1% — Producto premium con diferenciación técnica. Favorito de Aguirre y Navarro. Señal de clientes con mayor valor unitario.</div>
+          </div>
+          <div style="padding:10px;background:rgba(245,166,35,0.07);border-radius:6px;border-left:3px solid var(--amber)">
+            <div style="font-size:11px;font-weight:700;color:var(--amber);margin-bottom:3px">VECA ROOT MAX · Oportunidad de crecimiento</div>
+            <div style="font-size:10px;color:var(--dim)">12.6% — Tercer producto más importante. Potencial de ampliar distribución a clientes que aún no lo usan. Revisar penetración por cliente.</div>
+          </div>
+          <div style="padding:10px;background:rgba(230,126,34,0.07);border-radius:6px;border-left:3px solid var(--orange)">
+            <div style="font-size:11px;font-weight:700;color:var(--orange);margin-bottom:3px">Concentración de portafolio: RIESGO</div>
+            <div style="font-size:10px;color:var(--dim)">4 productos = 76% de ventas. Portafolio estrecho. Si hay ruptura de stock o problema técnico en VECASIL FORTE, impacto directo en ingresos.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- TAB: CxC & ALERTAS -->
 <!-- ══════════════════════════════════════════════ -->
 <div id="tab-cxc" class="tab-content">
 
@@ -341,14 +425,15 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
   <div class="tbl-wrap" style="margin-bottom:20px">
     <table class="tbl">
       <thead>
-        <tr><th>Cliente</th><th>Vendedor</th><th class="c">Días mora</th><th class="r">Monto USD</th><th class="c">Acción</th></tr>
+        <tr><th>Cliente</th><th>Vendedor</th><th class="c">Días mora</th><th class="r">Monto USD</th><th class="c">Compra en 2026</th><th class="c">Acción</th></tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>PAODISA S.A.</strong><br><span style="font-size:9px;color:var(--muted)">4 facturas · 2024 · 468–628 días</span></td>
-          <td style="font-size:11px;color:var(--dim)">J. Geldres</td>
+          <td style="font-size:11px;color:var(--dim)">J. Geldres (inactivo)</td>
           <td class="c"><span class="badge b-crit">468–628d</span></td>
           <td class="r mono" style="color:var(--red)">10,874</td>
+          <td class="c"><span class="badge b-nd">No</span></td>
           <td class="c"><span class="badge b-crit">PROCESO FORMAL</span></td>
         </tr>
         <tr>
@@ -356,87 +441,92 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
           <td style="font-size:11px;color:var(--dim)">O. Atalaya</td>
           <td class="c"><span class="badge b-crit">191d</span></td>
           <td class="r mono" style="color:var(--red)">9,493</td>
+          <td class="c"><span class="badge b-nd">No</span></td>
           <td class="c"><span class="badge b-crit">URGENTE</span></td>
         </tr>
         <tr>
-          <td><strong>CORP. AGRICOLA OLMOS S.A.</strong></td>
+          <td><strong>CORP. AGRICOLA OLMOS S.A.</strong><br><span style="font-size:9px;color:var(--muted)">Compra en 2026: USD 5,850</span></td>
           <td style="font-size:11px;color:var(--dim)">O. Atalaya</td>
           <td class="c"><span class="badge b-crit">328d</span></td>
           <td class="r mono" style="color:var(--red)">5,850</td>
+          <td class="c"><span class="badge b-warn">Sí ⚠️</span></td>
           <td class="c"><span class="badge b-crit">URGENTE</span></td>
         </tr>
         <tr>
-          <td><strong>AMFRESH PERU AGRISIL</strong><br><span style="font-size:9px;color:var(--muted)">2 facturas</span></td>
+          <td><strong>AMFRESH PERU AGRISIL</strong><br><span style="font-size:9px;color:var(--muted)">Compra en 2026: USD 14,537 — sigue activo</span></td>
           <td style="font-size:11px;color:var(--dim)">O. Infante</td>
           <td class="c"><span class="badge b-crit">328–362d</span></td>
           <td class="r mono" style="color:var(--red)">3,289</td>
-          <td class="c"><span class="badge b-crit">URGENTE</span></td>
+          <td class="c"><span class="badge b-ok">Sí ✅</span></td>
+          <td class="c"><span class="badge b-risk">NEGOCIAR</span></td>
         </tr>
         <tr>
           <td><strong>INVERSIONES AJS S.A.C.</strong></td>
           <td style="font-size:11px;color:var(--dim)">O. Infante</td>
           <td class="c"><span class="badge b-crit">312d</span></td>
           <td class="r mono" style="color:var(--red)">304</td>
-          <td class="c"><span class="badge b-crit">URGENTE</span></td>
+          <td class="c"><span class="badge b-ok">Sí ✅</span></td>
+          <td class="c"><span class="badge b-warn">COBRAR</span></td>
         </tr>
         <tr>
           <td><strong>LUNA QUINTANILLA B.A.</strong></td>
           <td style="font-size:11px;color:var(--dim)">O. Infante</td>
           <td class="c"><span class="badge b-crit">132d</span></td>
           <td class="r mono" style="color:var(--red)">1,005</td>
-          <td class="c"><span class="badge b-crit">URGENTE</span></td>
+          <td class="c"><span class="badge b-ok">Sí ✅</span></td>
+          <td class="c"><span class="badge b-warn">COBRAR</span></td>
         </tr>
         <tr style="background:var(--s2)">
           <td colspan="3" style="font-weight:600">Total +90d</td>
           <td class="r mono" style="color:var(--red);font-weight:700">30,815</td>
-          <td></td>
+          <td colspan="2"></td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="sec">Eficiencia Comercial · Perú 2025 <span>Concentración, riesgo y oportunidades — sin revelar costos</span></div>
+  <div class="sec">Alertas Comerciales · Perú 2026</div>
 
   <div class="g2" style="margin-bottom:16px">
-    <!-- Riesgo de cartera Geldres -->
-    <div style="background:var(--s2);border:1px solid rgba(231,76,60,0.3);border-radius:8px;padding:14px">
-      <div style="font-size:10px;color:var(--red);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px">🚨 Riesgo Transición Geldres</div>
+    <!-- Alerta: equipo 2026 sin Geldres -->
+    <div style="background:var(--s2);border:1px solid rgba(74,158,219,0.3);border-radius:8px;padding:14px">
+      <div style="font-size:10px;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px">📊 Equipo Perú 2026 · Resumen de transición</div>
       <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(231,76,60,0.08);border-radius:4px">
-          <span style="font-size:11px;color:var(--dim)">Ventas Geldres 2025</span>
-          <span style="font-family:'DM Mono';font-size:12px;color:var(--red);font-weight:700">USD 275.1K</span>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(122,182,72,0.08);border-radius:4px">
+          <span style="font-size:11px;color:var(--dim)">Family Farms (11.9% de 2025)</span>
+          <span style="font-family:'DM Mono';font-size:11px;color:var(--green)">✅ Reasignado → L. Aguirre</span>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(231,76,60,0.08);border-radius:4px">
-          <span style="font-size:11px;color:var(--dim)">% del total Perú</span>
-          <span style="font-family:'DM Mono';font-size:12px;color:var(--red);font-weight:700">39.9%</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(231,76,60,0.08);border-radius:4px">
-          <span style="font-size:11px;color:var(--dim)">En ppto 2026</span>
-          <span style="font-family:'DM Mono';font-size:12px;color:var(--red);font-weight:700">NO asignado</span>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(122,182,72,0.08);border-radius:4px">
+          <span style="font-size:11px;color:var(--dim)">POB S.A.C. (11.3% de 2025)</span>
+          <span style="font-family:'DM Mono';font-size:11px;color:var(--green)">✅ Reasignado → N. Navarro</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(245,166,35,0.08);border-radius:4px">
-          <span style="font-size:11px;color:var(--dim)">Clientes a reasignar</span>
-          <span style="font-family:'DM Mono';font-size:12px;color:var(--amber);font-weight:700">Family Farms · POB · Huamani · Drokasa</span>
+          <span style="font-size:11px;color:var(--dim)">Agroindustrial Huamani (6.4%)</span>
+          <span style="font-family:'DM Mono';font-size:11px;color:var(--amber)">⚠️ Sin ventas 2026 aún</span>
         </div>
-        <div style="font-size:10px;color:var(--muted);margin-top:4px">Coordinación urgente con jefatura para reasignación antes de campaña AGO-OCT 2026.</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(245,166,35,0.08);border-radius:4px">
+          <span style="font-size:11px;color:var(--dim)">Drokasa (1.4% 2025)</span>
+          <span style="font-family:'DM Mono';font-size:11px;color:var(--amber)">⚠️ Sin ventas 2026 aún</span>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Nicoll Navarro y Patricia Valladares son incorporaciones nuevas al equipo 2026.</div>
       </div>
     </div>
 
-    <!-- Oportunidades de crecimiento -->
+    <!-- Oportunidades comerciales -->
     <div style="background:var(--s2);border:1px solid rgba(74,158,219,0.25);border-radius:8px;padding:14px">
-      <div style="font-size:10px;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px">📊 Oportunidades Comerciales 2026</div>
+      <div style="font-size:10px;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px">📈 Oportunidades Comerciales 2026</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="padding:8px;background:rgba(122,182,72,0.07);border-radius:4px">
-          <div style="font-size:11px;font-weight:600;color:var(--green);margin-bottom:2px">Lisbeth Aguirre — Mayor potencial</div>
-          <div style="font-size:10px;color:var(--dim)">162.8K en 5 meses (ago-dic). Con año completo: proyección ~270K. Ppto 223.9K ya alcanzable.</div>
+          <div style="font-size:11px;font-weight:600;color:var(--green);margin-bottom:2px">Lisbeth Aguirre — Mejor ritmo vs ppto</div>
+          <div style="font-size:10px;color:var(--dim)">97.9% cumplimiento en 4 meses. Tendencia positiva MAR (31.6K). Proyección anual alcanzable si mantiene ritmo AGO–OCT.</div>
         </div>
         <div style="padding:8px;background:rgba(230,126,34,0.07);border-radius:4px">
-          <div style="font-size:11px;font-weight:600;color:var(--orange);margin-bottom:2px">Omar Atalaya — Brecha crítica</div>
-          <div style="font-size:10px;color:var(--dim)">Solo 20.3K de 248.4K ppto. Necesita plan de reactivación urgente o revisión de ppto.</div>
+          <div style="font-size:11px;font-weight:600;color:var(--orange);margin-bottom:2px">Oscar Infante — Mayor brecha absoluta</div>
+          <div style="font-size:10px;color:var(--dim)">61.3% cumpl 4m (94K vs 153K ppto parcial). Ppto anual 485K requiere aceleración urgente desde MAY.</div>
         </div>
         <div style="padding:8px;background:rgba(74,158,219,0.07);border-radius:4px">
-          <div style="font-size:11px;font-weight:600;color:var(--blue);margin-bottom:2px">Temporada AGO-OCT 2026</div>
-          <div style="font-size:10px;color:var(--dim)">Ppto AGO 178K es el mes más fuerte. Construir cartera desde MAY-JUL. Referencia: OCT 2025 fue récord con 120.6K.</div>
+          <div style="font-size:11px;font-weight:600;color:var(--blue);margin-bottom:2px">Bomarea S.R.L. — Cliente nuevo líder</div>
+          <div style="font-size:10px;color:var(--dim)">USD 44.5K en 4 meses (solo Atalaya). Cliente de alta frecuencia. Proteger relación y ampliar mix.</div>
         </div>
       </div>
     </div>
@@ -447,9 +537,9 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
     <div style="font-size:10px;color:var(--red);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px">🚨 CxC +90d por Vendedor</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
       <div style="background:rgba(231,76,60,0.08);border-radius:6px;padding:10px">
-        <div style="font-size:11px;font-weight:600;margin-bottom:4px">J. GELDRES</div>
+        <div style="font-size:11px;font-weight:600;margin-bottom:4px">J. GELDRES <span style="font-size:9px;color:var(--muted)">(inactivo)</span></div>
         <div style="font-family:'DM Mono';font-size:18px;color:var(--red)">USD 10,874</div>
-        <div style="font-size:9px;color:var(--muted)">PAODISA · 468–628 días</div>
+        <div style="font-size:9px;color:var(--muted)">PAODISA · 468–628 días · sin vendedor activo</div>
       </div>
       <div style="background:rgba(231,76,60,0.08);border-radius:6px;padding:10px">
         <div style="font-size:11px;font-weight:600;margin-bottom:4px">O. ATALAYA</div>
@@ -459,7 +549,7 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
       <div style="background:rgba(245,166,35,0.08);border-radius:6px;padding:10px">
         <div style="font-size:11px;font-weight:600;margin-bottom:4px">O. INFANTE</div>
         <div style="font-family:'DM Mono';font-size:18px;color:var(--amber)">USD 4,598</div>
-        <div style="font-size:9px;color:var(--muted)">Amfresh + AJS + Luna Q.</div>
+        <div style="font-size:9px;color:var(--muted)">Amfresh + AJS + Luna Q. — 3 activos comprando</div>
       </div>
     </div>
     <div style="margin-top:10px;font-size:10px;color:var(--muted)">
@@ -467,12 +557,253 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
     </div>
   </div>
 
+  <!-- ──────────────────────────────────────────── -->
+  <div class="sec" style="margin-top:22px">Eficiencia Comercial (IEC) · Perú · Real 2026 YTD <span>Ene–Abr 2026 · vs precio piso propuesto · sin revelar costos ni márgenes</span></div>
+
+  <!-- KPI row -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+    <div class="pc" style="border-color:rgba(122,182,72,0.5);background:rgba(122,182,72,0.05)">
+      <div class="pc-icon">📊</div>
+      <div class="pc-val" style="color:var(--green)">92.1%</div>
+      <div class="pc-lbl">IEC 2026 YTD — eficiencia vs piso</div>
+    </div>
+    <div class="pc" style="border-color:rgba(245,166,35,0.35)">
+      <div class="pc-icon">⚠️</div>
+      <div class="pc-val" style="color:var(--amber)">13,038</div>
+      <div class="pc-lbl">USD vendido bajo precio piso</div>
+    </div>
+    <div class="pc" style="border-color:rgba(74,158,219,0.3)">
+      <div class="pc-icon">📋</div>
+      <div class="pc-val" style="color:var(--blue)">22.4%</div>
+      <div class="pc-lbl">% Transacciones bajo piso</div>
+    </div>
+    <div class="pc" style="border-color:rgba(74,158,219,0.3)">
+      <div class="pc-icon">💰</div>
+      <div class="pc-val" style="color:var(--blue)">1,687</div>
+      <div class="pc-lbl">Impacto estimado (gap × unidad)</div>
+    </div>
+  </div>
+
+  <!-- Selector IEC Perú -->
+  <div class="vend-btns" id="iec-sel-pe">
+    <button class="vbtn active" onclick="iecTab('pe','vend',this)">👤 Vendedores</button>
+    <button class="vbtn" onclick="iecTab('pe','prod',this)">📦 Productos</button>
+    <button class="vbtn" onclick="iecTab('pe','cli',this)">🏢 Clientes</button>
+  </div>
+
+  <!-- Tabla Vendedores PE -->
+  <div id="iec-pe-vend" class="tbl-wrap">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Vendedor</th><th class="r">Venta YTD</th><th class="c">IEC%</th>
+          <th class="c">Estado</th><th class="c">Gap%</th><th class="r">Impacto USD</th><th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>OSCAR INFANTE</strong></td>
+          <td class="r mono">USD 84,778</td><td class="c mono">99.2%</td>
+          <td class="c"><span class="badge b-ok">Sobre piso</span></td>
+          <td class="c mono" style="color:var(--muted)">−0.5%</td>
+          <td class="r mono" style="color:var(--dim)">66</td>
+          <td style="font-size:10px;color:var(--green)">✅ Sin acción</td>
+        </tr>
+        <tr>
+          <td><strong>OMAR ATALAYA</strong></td>
+          <td class="r mono">USD 51,975</td><td class="c mono">86.7%</td>
+          <td class="c"><span class="badge" style="background:rgba(245,166,35,0.15);color:var(--amber)">Parcial</span></td>
+          <td class="c mono" style="color:var(--amber)">−7.1%</td>
+          <td class="r mono" style="color:var(--amber)">990</td>
+          <td style="font-size:10px;color:var(--amber)">⚠️ Monitorear</td>
+        </tr>
+        <tr>
+          <td><strong>LISBETH AGUIRRE</strong></td>
+          <td class="r mono">USD 20,763</td><td class="c mono">79.6%</td>
+          <td class="c"><span class="badge" style="background:rgba(245,166,35,0.15);color:var(--amber)">Parcial</span></td>
+          <td class="c mono" style="color:var(--amber)">−12.3%</td>
+          <td class="r mono" style="color:var(--amber)">291</td>
+          <td style="font-size:10px;color:var(--amber)">⚠️ Monitorear</td>
+        </tr>
+        <tr>
+          <td><strong>NICOLL NAVARRO</strong></td>
+          <td class="r mono">USD 6,160</td><td class="c mono">97.4%</td>
+          <td class="c"><span class="badge b-ok">Sobre piso</span></td>
+          <td class="c mono" style="color:var(--muted)">−1.8%</td>
+          <td class="r mono" style="color:var(--dim)">40</td>
+          <td style="font-size:10px;color:var(--green)">✅ Sin acción</td>
+        </tr>
+        <tr>
+          <td><strong>PATRICIA VALLADARES</strong></td>
+          <td class="r mono">USD 1,200</td><td class="c mono">16.7%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−18.5%</td>
+          <td class="r mono" style="color:var(--amber)">300</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>ANTONIO GONZALES</strong></td>
+          <td class="r mono">USD 696</td><td class="c mono">100.0%</td>
+          <td class="c"><span class="badge b-ok">Sobre piso</span></td>
+          <td class="c mono" style="color:var(--muted)">—</td>
+          <td class="r mono" style="color:var(--muted)">0</td>
+          <td style="font-size:10px;color:var(--green)">✅ Sin acción</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Tabla Productos PE -->
+  <div id="iec-pe-prod" class="tbl-wrap" style="display:none">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Producto</th><th class="r">Venta YTD</th><th class="c">IEC%</th>
+          <th class="c">Estado</th><th class="c">Gap%</th><th class="r">Impacto USD</th><th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>AV SILFORTE</strong></td>
+          <td class="r mono">USD 89,143</td><td class="c mono">91.1%</td>
+          <td class="c"><span class="badge b-ok">Sobre piso</span></td>
+          <td class="c mono" style="color:var(--amber)">−5.2%</td>
+          <td class="r mono" style="color:var(--amber)">1,290</td>
+          <td style="font-size:10px;color:var(--green)">✅ Sin acción</td>
+        </tr>
+        <tr>
+          <td><strong>AV ALGAP 30</strong></td>
+          <td class="r mono">USD 18,384</td><td class="c mono">99.1%</td>
+          <td class="c"><span class="badge b-ok">Sobre piso</span></td>
+          <td class="c mono" style="color:var(--muted)">−0.4%</td>
+          <td class="r mono" style="color:var(--dim)">40</td>
+          <td style="font-size:10px;color:var(--green)">✅ Sin acción</td>
+        </tr>
+        <tr>
+          <td><strong>AV PLUS MAGNESIO</strong></td>
+          <td class="r mono">USD 10,421</td><td class="c mono">59.6%</td>
+          <td class="c"><span class="badge" style="background:rgba(245,166,35,0.15);color:var(--amber)">Parcial</span></td>
+          <td class="c mono" style="color:var(--red)">−20.4%</td>
+          <td class="r mono" style="color:var(--amber)">288</td>
+          <td style="font-size:10px;color:var(--amber)">🔧 Reforzar</td>
+        </tr>
+        <tr>
+          <td><strong>AV CYTO PRIME</strong></td>
+          <td class="r mono">USD 5,434</td><td class="c mono">100.0%</td>
+          <td class="c"><span class="badge b-ok">Sobre piso</span></td>
+          <td class="c mono" style="color:var(--muted)">—</td>
+          <td class="r mono" style="color:var(--muted)">0</td>
+          <td style="font-size:10px;color:var(--green)">✅ Sin acción</td>
+        </tr>
+        <tr>
+          <td><strong>AV HUMIC ROOT</strong></td>
+          <td class="r mono">USD 3,448</td><td class="c mono">100.0%</td>
+          <td class="c"><span class="badge b-ok">Sobre piso</span></td>
+          <td class="c mono" style="color:var(--muted)">—</td>
+          <td class="r mono" style="color:var(--muted)">0</td>
+          <td style="font-size:10px;color:var(--green)">✅ Sin acción</td>
+        </tr>
+        <tr>
+          <td><strong>AV AMIN</strong></td>
+          <td class="r mono">USD 1,265</td><td class="c mono">47.4%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−14.8%</td>
+          <td class="r mono" style="color:var(--dim)">48</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>AV MAX FULVIC 45%</strong></td>
+          <td class="r mono">USD 1,400</td><td class="c mono">100.0%</td>
+          <td class="c"><span class="badge b-ok">Sobre piso</span></td>
+          <td class="c mono" style="color:var(--muted)">—</td>
+          <td class="r mono" style="color:var(--muted)">0</td>
+          <td style="font-size:10px;color:var(--green)">✅ Sin acción</td>
+        </tr>
+        <tr>
+          <td><strong>AV PLUS ZINC MANGANESO</strong></td>
+          <td class="r mono">USD 480</td><td class="c mono">88.8%</td>
+          <td class="c"><span class="badge" style="background:rgba(245,166,35,0.15);color:var(--amber)">Parcial</span></td>
+          <td class="c mono" style="color:var(--amber)">−2.5%</td>
+          <td class="r mono" style="color:var(--dim)">18</td>
+          <td style="font-size:10px;color:var(--amber)">⚠️ Monitorear</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Tabla Clientes PE -->
+  <div id="iec-pe-cli" class="tbl-wrap" style="display:none">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Cliente</th><th class="r">Venta YTD</th><th class="c">IEC%</th>
+          <th class="c">Estado</th><th class="c">Gap%</th><th class="r">Impacto USD</th><th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>SOCIEDAD AGRICOLA DON LUIS S.A.</strong></td>
+          <td class="r mono">USD 15,728</td><td class="c mono">100.0%</td>
+          <td class="c"><span class="badge b-ok">Sobre piso</span></td>
+          <td class="c mono" style="color:var(--muted)">—</td>
+          <td class="r mono" style="color:var(--muted)">0</td>
+          <td style="font-size:10px;color:var(--green)">✅ Sin acción</td>
+        </tr>
+        <tr>
+          <td><strong>AMFRESH PERU AGRISIL S.R.L.</strong></td>
+          <td class="r mono">USD 14,537</td><td class="c mono">95.4%</td>
+          <td class="c"><span class="badge b-ok">Sobre piso</span></td>
+          <td class="c mono" style="color:var(--muted)">−3.2%</td>
+          <td class="r mono" style="color:var(--dim)">48</td>
+          <td style="font-size:10px;color:var(--green)">✅ Sin acción</td>
+        </tr>
+        <tr>
+          <td><strong>UVICA S.A.C.</strong></td>
+          <td class="r mono">USD 7,312</td><td class="c mono">42.4%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−20.4%</td>
+          <td class="r mono" style="color:var(--amber)">288</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>AGRICOLA HUARMEY S.A.C.</strong></td>
+          <td class="r mono">USD 6,930</td><td class="c mono">0.0%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−7.1%</td>
+          <td class="r mono" style="color:var(--amber)">990</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>GIDDINGS BERRIES PERU S.A.C.</strong></td>
+          <td class="r mono">USD 1,232</td><td class="c mono">100.0%</td>
+          <td class="c"><span class="badge b-ok">Sobre piso</span></td>
+          <td class="c mono" style="color:var(--muted)">—</td>
+          <td class="r mono" style="color:var(--muted)">0</td>
+          <td style="font-size:10px;color:var(--green)">✅ Sin acción</td>
+        </tr>
+        <tr>
+          <td><strong>SOC. EXPORTADORA VERFRUT (2 RUC)</strong></td>
+          <td class="r mono">USD 1,000</td><td class="c mono">0.0%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−24.0%</td>
+          <td class="r mono" style="color:var(--dim)">300</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:10px;font-size:10px;color:var(--muted)">
+    Base: 58 transacciones únicas con precio conocido · 71.1% cobertura piso (excluye facturas multi-producto)
+    <span style="margin-left:12px">Ver detalle completo → <a href="Panel_Rentabilidad_AV_2026.html" style="color:var(--blue)">Panel Rentabilidad & Pricing ↗</a></span>
+  </div>
+
 </div><!-- /tab-cxc -->
 
 </div><!-- /page -->
 
 <div class="footer">
-  <div>AV Latam BI Platform · Jefes País · Perú 2025 · Presupuesto 2026</div>
+  <div>AV Latam BI Platform · Jefes País · Perú · Real Ene–Abr 2026</div>
   <div class="hnav">
     <a href="Panel_Jefes_Index.html" class="np">🏠 Hub Jefes</a>
     <a href="Panel_Jefes_Chile_2026.html" class="np">🇨🇱 Chile</a>
@@ -487,49 +818,21 @@ Chart.defaults.font.size=10;
 
 const G='#7AB648',A='#F5A623',O='#E67E22',R='#E74C3C',B='#4A9EDB',M='#9B59B6';
 const LABELS=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+const MESES_FULL=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
 // ── DATA ──
+// 2026 real (null = meses sin dato cerrado)
+const real2026=[73.5,39.4,91.6,28.3,null,null,null,null,null,null,null,null];
+// 2026 real absoluto (USD) por mes
+const real2026usd=[73511,39409,91616,28322,null,null,null,null,null,null,null,null];
+
+// 2025 referencia
 const real2025=[59.1,36.7,70.9,42.5,24.3,27.8,48.1,53.0,70.9,120.6,82.5,54.0];
+
+// Presupuesto 2026 completo
 const ppto2026=[51.7,58.5,103.2,71.3,61.9,78.7,100.7,178.2,125.6,165.8,98.5,43.0];
 
-const vendedoresData=[
-  {nombre:'JOSE GELDRES',      corto:'J. Geldres',    real:275.1, ppto:null,
-   meses:[59.1,36.7,70.9,21.8,14.4,5.6,36.4,1.5,8.9,0,0,19.8], pptoMes:null},
-  {nombre:'OSCAR INFANTE',     corto:'O. Infante',    real:219.5, ppto:485.1,
-   meses:[0,0,0,20.7,9.8,12.0,5.6,22.7,49.6,41.9,39.2,18.0],
-   pptoMes:[18.2,29.7,66.8,38.8,26.9,24.9,24.3,67.3,52.6,51.3,60.4,23.8]},
-  {nombre:'LISBETH AGUIRRE',   corto:'L. Aguirre',    real:162.8, ppto:223.9,
-   meses:[0,0,0,0,0,0,0,23.5,10.4,76.9,43.3,8.6],
-   pptoMes:[11.2,9.2,15.0,9.2,7.0,9.2,15.5,37.6,29.8,60.3,15.8,4.3]},
-  {nombre:'OMAR ATALAYA',      corto:'O. Atalaya',    real:20.3,  ppto:248.4,
-   meses:[0,0,0,0,0,10.2,1.3,5.3,2.0,0,0,1.6],
-   pptoMes:[22.2,19.3,12.1,18.3,22.8,27.6,25.8,28.8,23.1,18.5,16.4,13.5]},
-  {nombre:'GUILLERMO PRADENAS',corto:'G. Pradenas',   real:7.8,   ppto:null,
-   meses:[0,0,0,0,0,0,0,0,0,1.9,0,6.0], pptoMes:null},
-  {nombre:'ANTONIO GONZALEZ',  corto:'A. Gonzalez',   real:4.8,   ppto:37.3,
-   meses:[0,0,0,0,0,0,4.8,0,0,0,0,0],
-   pptoMes:[0,0,4.0,0,0,7.0,7.0,19.3,0,0,0,0]},
-];
-
-const clientesData=[
-  {cli:'SOCIEDAD AGRICOLA DON LUIS S.A',          vend:'O. Infante',  monto:148729,pct:21.5,cum:21.5,cxc:'ok'},
-  {cli:'FAMILY FARMS PERÚ S.R.L',                 vend:'J. Geldres',  monto:82405, pct:11.9,cum:33.4,cxc:'ok'},
-  {cli:'POB S.A.C.',                               vend:'J. Geldres',  monto:78188, pct:11.3,cum:44.7,cxc:'ok'},
-  {cli:'I Q F DEL PERU SA',                        vend:'O. Infante',  monto:74006, pct:10.7,cum:55.4,cxc:'ok'},
-  {cli:'SUREXPORT PERU BERRIES S.A.C.',            vend:'L. Aguirre',  monto:68889, pct:10.0,cum:65.4,cxc:'ok'},
-  {cli:'AGROINDUSTRIAL HUAMANI S.A.C.',            vend:'J. Geldres',  monto:43923, pct:6.4, cum:71.8,cxc:'ok'},
-  {cli:'AMFRESH PERU AGRISIL S.R.L.',              vend:'J. Geldres',  monto:23642, pct:3.4, cum:75.2,cxc:'crit'},
-  {cli:'AGRICOLA PAMPA BAJA S.A.C',               vend:'L. Aguirre',  monto:22715, pct:3.3, cum:78.5,cxc:'ok'},
-  {cli:'AGRICOLA GUILI S.A.C.',                   vend:'O. Infante',  monto:17388, pct:2.5, cum:81.0,cxc:'ok'},
-  {cli:'AGRO TIERRA VID S.A.C.',                  vend:'A. Gonzalez', monto:14443, pct:2.1, cum:83.1,cxc:'ok'},
-  {cli:'AGRISIL S.A.C.',                          vend:'L. Aguirre',  monto:11455, pct:1.7, cum:84.8,cxc:'ok'},
-  {cli:'AGROINDUSTRIA CAMPO VERDE S.A.C',         vend:'O. Infante',  monto:10368, pct:1.5, cum:86.3,cxc:'ok'},
-  {cli:'SOCIEDAD AGRICOLA DROKASA S.A',           vend:'J. Geldres',  monto:9600,  pct:1.4, cum:87.7,cxc:'ok'},
-  {cli:'AGROFER MJ E.I.R.L.',                     vend:'O. Atalaya',  monto:9493,  pct:1.4, cum:89.1,cxc:'crit'},
-  {cli:'AGRICOLA RIACHUELO S.A.C',               vend:'L. Aguirre',  monto:8970,  pct:1.3, cum:90.4,cxc:'ok'},
-];
-
-// ── TAB SWITCH ──
+// TAB SWITCH
 function switchTab(t,el){
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
@@ -538,21 +841,32 @@ function switchTab(t,el){
 }
 
 // ── CHART VENTAS PRINCIPAL ──
+// 3 series: real 2025 (dim), real 2026 (solid), ppto 2026 (line)
 new Chart(document.getElementById('chartVentas'),{
   type:'bar',
   data:{
     labels:LABELS,
     datasets:[
-      {label:'Real 2025',data:real2025,backgroundColor:'rgba(74,158,219,0.65)',borderColor:B,borderWidth:1.5,borderRadius:3},
-      {label:'Ppto 2026',data:ppto2026,type:'line',borderColor:A,borderWidth:2,pointRadius:4,
-       pointBackgroundColor:A,fill:false,tension:0.3,borderDash:[5,3]}
+      {label:'Real 2025 (ref.)',data:real2025,
+       backgroundColor:'rgba(74,158,219,0.15)',borderColor:'rgba(74,158,219,0.3)',
+       borderWidth:1,borderRadius:2,order:3},
+      {label:'Real 2026',data:real2026,
+       backgroundColor:'rgba(74,158,219,0.75)',borderColor:B,
+       borderWidth:1.5,borderRadius:3,order:2},
+      {label:'Ppto 2026',data:ppto2026,type:'line',
+       borderColor:A,borderWidth:2.5,pointRadius:4,pointBackgroundColor:A,
+       fill:false,tension:0.3,order:1}
     ]
   },
   options:{
     responsive:true,maintainAspectRatio:false,
     plugins:{
       legend:{position:'top',labels:{boxWidth:12,padding:16,usePointStyle:true}},
-      tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: USD ${ctx.parsed.y}K`}}
+      tooltip:{callbacks:{label:ctx=>{
+        const v=ctx.parsed.y;
+        if(v===null)return null;
+        return `${ctx.dataset.label}: USD ${v.toFixed(1)}K`;
+      }}}
     },
     scales:{
       x:{grid:{color:'rgba(74,158,219,0.06)'}},
@@ -563,58 +877,139 @@ new Chart(document.getElementById('chartVentas'),{
   }
 });
 
-// ── TABLA VENTAS MENSUALES ──
+// ── TABLA VENTAS ──
 (function(){
-  const meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-  let html='',tot25=0,totPpto=0;
-  real2025.forEach((v25,i)=>{
+  let html='',tot26=0,totPpto=0,tot25=0;
+  const mesesConData=4; // Ene-Abr con datos
+  const ppto4m=ppto2026.slice(0,mesesConData).reduce((a,b)=>a+b,0);
+
+  real2026.forEach((r26,i)=>{
     const pp=ppto2026[i];
-    const pct=((v25-pp)/pp*100).toFixed(1);
-    const varColor=v25>=pp?'color:var(--green)':'color:var(--red)';
-    const varArrow=v25>=pp?'▲':'▼';
-    tot25+=v25; totPpto+=pp;
-    html+=`<tr>
-      <td style="font-weight:500">${meses[i]}</td>
-      <td class="r mono" style="font-weight:600">${v25.toFixed(1)}K</td>
+    const r25=real2025[i];
+    const hasDato=r26!==null;
+    const cumpl=hasDato?(r26/pp*100):null;
+    const delta25=hasDato?((r26-r25)/r25*100):null;
+    const badgeCumpl=!hasDato?'b-nd':cumpl>=100?'b-ok':cumpl>=80?'b-warn':'b-crit';
+    const badgeDelta=!hasDato?'b-nd':delta25>=0?'b-ok':'b-warn';
+    const isPartial=i===3; // Abril parcial
+
+    if(hasDato){tot26+=r26; tot25+=r25;}
+    totPpto+=pp;
+
+    html+=`<tr${!hasDato?' style="opacity:0.45"':''}>
+      <td style="font-weight:500">${MESES_FULL[i]}${isPartial?' *':''}</td>
       <td class="r mono" style="color:var(--amber)">${pp.toFixed(1)}K</td>
-      <td class="c" style="${varColor};font-family:'DM Mono';font-size:11px">${varArrow} ${Math.abs(pct)}%</td>
-      <td class="c"><span class="badge ${v25>=pp?'b-ok':'b-warn'}">${v25>=pp?'≥ Ppto':'< Ppto'}</span></td>
+      <td class="r mono" style="color:${hasDato?'var(--blue)':'var(--muted)'}">
+        ${hasDato?r26.toFixed(1)+'K':'Pendiente'}
+      </td>
+      <td class="c">
+        ${hasDato?`<span class="badge ${badgeCumpl}">${cumpl.toFixed(0)}%${isPartial?' (parcial)':''}</span>`:'<span class="badge b-nd">—</span>'}
+      </td>
+      <td class="r mono" style="color:var(--muted)">${r25.toFixed(1)}K</td>
+      <td class="c">
+        ${hasDato?`<span class="badge ${badgeDelta}">${delta25>=0?'▲':'▼'} ${Math.abs(delta25).toFixed(1)}%</span>`:'<span class="badge b-nd">—</span>'}
+      </td>
+      <td class="c">
+        ${!hasDato?'<span class="badge b-nd">Sin ejecutar</span>':
+          isPartial?'<span class="badge b-warn">⏳ En curso</span>':
+          cumpl>=100?'<span class="badge b-ok">✅ Meta lograda</span>':
+          cumpl>=80?'<span class="badge b-warn">🟡 Cerca</span>':
+          '<span class="badge b-crit">🔴 Bajo ppto</span>'}
+      </td>
     </tr>`;
   });
+
+  const cumplAcum=(tot26/tot25); // wrong - should be vs ppto partial
+  const acumPpto4m=ppto2026.slice(0,4).reduce((a,b)=>a+b,0);
+  const cumplTotal=(tot26/acumPpto4m*100);
   html+=`<tr style="background:var(--s2);font-weight:700">
-    <td>TOTAL ANUAL</td>
-    <td class="r mono">${tot25.toFixed(1)}K</td>
-    <td class="r mono" style="color:var(--amber)">${totPpto.toFixed(1)}K</td>
-    <td class="c" style="color:var(--red);font-family:'DM Mono';font-size:11px">▼ ${Math.abs(((tot25-totPpto)/totPpto*100)).toFixed(1)}%</td>
-    <td class="c"><span class="badge b-warn">Ppto 2026 por ejecutar</span></td>
+    <td>ACUM ENE–ABR</td>
+    <td class="r mono" style="color:var(--amber)">${acumPpto4m.toFixed(1)}K</td>
+    <td class="r mono" style="color:var(--blue)">${tot26.toFixed(1)}K</td>
+    <td class="c"><span class="badge ${cumplTotal>=100?'b-ok':cumplTotal>=80?'b-warn':'b-crit'}">${cumplTotal.toFixed(1)}%</span></td>
+    <td class="r mono" style="color:var(--muted)">${tot25.toFixed(1)}K</td>
+    <td class="c"><span class="badge b-ok">▲ ${((tot26-tot25)/tot25*100).toFixed(1)}%</span></td>
+    <td class="c"><span class="badge b-warn">* Abr parcial</span></td>
+  </tr>
+  <tr style="opacity:0.5">
+    <td>MAY–DIC (ppto)</td>
+    <td class="r mono" style="color:var(--amber)">${(1137.1-acumPpto4m).toFixed(1)}K</td>
+    <td class="r mono" style="color:var(--muted)">—</td>
+    <td colspan="4" class="c" style="font-size:10px;color:var(--muted)">Pendiente de ejecución · mayo a diciembre 2026</td>
   </tr>`;
+
   document.getElementById('tbody-ventas').innerHTML=html;
 })();
+
+// ── VENDEDORES DATA 2026 ──
+const vendedoresData=[
+  {nombre:'OSCAR INFANTE',     corto:'O. Infante',    real26:94.1, real25:219.5, ppto:485.1,
+   ppto4m:153.5,
+   meses26:[16.5,16.2,38.9,22.5,null,null,null,null,null,null,null,null],
+   pptoMes:[18.2,29.7,66.8,38.8,26.9,24.9,24.3,67.3,52.6,51.3,60.4,23.8]},
+  {nombre:'OMAR ATALAYA',      corto:'O. Atalaya',    real26:59.1, real25:20.3,  ppto:248.4,
+   ppto4m:71.9,
+   meses26:[30.1,9.0,20.0,0,null,null,null,null,null,null,null,null],
+   pptoMes:[22.2,19.3,12.1,18.3,22.8,27.6,25.8,28.8,23.1,18.5,16.4,13.5]},
+  {nombre:'LISBETH AGUIRRE',   corto:'L. Aguirre',    real26:43.7, real25:162.8, ppto:223.9,
+   ppto4m:44.6,
+   meses26:[0,6.5,31.6,5.6,null,null,null,null,null,null,null,null],
+   pptoMes:[11.2,9.2,15.0,9.2,7.0,9.2,15.5,37.6,29.8,60.3,15.8,4.3]},
+  {nombre:'NICOLL NAVARRO',    corto:'N. Navarro',    real26:34.0, real25:0, ppto:null,
+   ppto4m:null,
+   meses26:[26.3,7.7,0,0,null,null,null,null,null,null,null,null],
+   pptoMes:null},
+  {nombre:'PATRICIA VALLADARES',corto:'P. Valladares',real26:1.2,  real25:0, ppto:null,
+   ppto4m:null,
+   meses26:[0,0,1.0,0.2,null,null,null,null,null,null,null,null],
+   pptoMes:null},
+  {nombre:'ANTONIO GONZALES',  corto:'A. Gonzalez',   real26:0.7, real25:4.8,  ppto:37.3,
+   ppto4m:4.0,
+   meses26:[0.6,0,0.1,0,null,null,null,null,null,null,null,null],
+   pptoMes:[0,0,4.0,0,0,7.0,7.0,19.3,0,0,0,0]},
+  {nombre:'JOSE GELDRES',      corto:'J. Geldres ★',  real26:0, real25:275.1, ppto:null,
+   ppto4m:null,
+   meses26:[0,0,0,0,null,null,null,null,null,null,null,null],
+   pptoMes:null, inactivo2026:true},
+];
 
 // ── TABLA VENDEDORES ──
 (function(){
   let html='';
   vendedoresData.forEach((v,i)=>{
-    const cumpl=v.ppto?Math.round(v.real/v.ppto*100):null;
-    let sem='b-nd',semDot='s-crit';
-    if(v.nombre==='JOSE GELDRES'){sem='b-risk';semDot='s-risk';} // special: no 2026 ppto
-    else if(cumpl===null){sem='b-nd';semDot='s-crit';}
-    else if(cumpl>=90){sem='b-ok';semDot='s-ok';}
-    else if(cumpl>=70){sem='b-warn';semDot='s-warn';}
-    else if(cumpl>=30){sem='b-risk';semDot='s-risk';}
+    const cumpl4m=v.ppto4m&&v.ppto4m>0?(v.real26/v.ppto4m*100):null;
+    let sem='b-nd', semDot='s-crit';
+    if(v.inactivo2026){sem='b-nd';semDot='s-crit';}
+    else if(v.ppto===null){sem='b-blue';semDot='s-ok';}
+    else if(cumpl4m>=100){sem='b-ok';semDot='s-ok';}
+    else if(cumpl4m>=80){sem='b-warn';semDot='s-warn';}
+    else if(cumpl4m>=50){sem='b-risk';semDot='s-risk';}
     else{sem='b-crit';semDot='s-crit';}
-    const pptoStr=v.ppto?'USD '+v.ppto.toFixed(1)+'K':'—';
-    const cumplStr=v.nombre==='JOSE GELDRES'
-      ?'<span class="badge b-risk">Sin ppto 2026 ⚠️</span>'
-      :cumpl?`<span class="badge ${sem}">${cumpl}%</span>`:'<span class="badge b-nd">Sin ppto</span>';
-    html+=`<tr>
+
+    const cumplStr=v.inactivo2026
+      ?'<span class="badge b-nd">Sin actividad 2026</span>'
+      :cumpl4m!==null
+        ?`<span class="badge ${sem}">${cumpl4m.toFixed(0)}%</span>`
+        :'<span class="badge b-blue">Nuevo · Sin ppto</span>';
+
+    const pptoStr=v.ppto?`USD ${v.ppto}K`:'—';
+    const ref25=v.real25>0?`USD ${v.real25.toFixed(1)}K`:'Nuevo vendedor';
+    const rowStyle=v.inactivo2026?' style="opacity:0.45"':'';
+
+    html+=`<tr${rowStyle}>
       <td class="c mono" style="color:var(--muted)">${i+1}</td>
-      <td><span class="sema ${semDot}"></span><strong>${v.nombre}</strong></td>
-      <td class="r mono" style="font-weight:600">USD ${v.real.toFixed(1)}K</td>
+      <td><span class="sema ${semDot}"></span><strong>${v.nombre}</strong>${v.inactivo2026?'<br><span style="font-size:9px;color:var(--muted)">Sin actividad en 2026</span>':''}</td>
+      <td class="r mono" style="font-weight:600;color:${v.real26>0?'var(--blue)':'var(--muted)'}">USD ${v.real26.toFixed(1)}K</td>
       <td class="r mono" style="color:var(--amber)">${pptoStr}</td>
       <td class="c">${cumplStr}</td>
+      <td class="r mono" style="color:var(--muted)">${ref25}</td>
       <td class="c">
-        ${v.ppto?`<div class="cumpl-bar" style="width:80px;margin:0 auto"><div class="cumpl-fill" style="width:${Math.min(cumpl,100)}%;background:${cumpl>=90?G:cumpl>=70?A:O}"></div></div>`:'—'}
+        ${v.inactivo2026?'<span class="badge b-nd">Inactivo</span>':
+          v.ppto===null?'<span class="badge b-blue">Nuevo</span>':
+          cumpl4m>=100?'<span class="badge b-ok">✅ En meta</span>':
+          cumpl4m>=80?'<span class="badge b-warn">🟡 Cerca</span>':
+          cumpl4m>=50?'<span class="badge b-risk">🟠 Bajo</span>':
+          '<span class="badge b-crit">🔴 Crítico</span>'}
       </td>
     </tr>`;
   });
@@ -625,26 +1020,27 @@ new Chart(document.getElementById('chartVentas'),{
 let chartVend=null;
 (function(){
   const sel=document.getElementById('vend-selector');
-  vendedoresData.forEach((v,i)=>{
+  vendedoresData.filter(v=>!v.inactivo2026).forEach((v,i)=>{
     const btn=document.createElement('button');
     btn.className='vbtn'+(i===0?' active':'');
     btn.textContent=v.corto;
     btn.onclick=()=>{
       document.querySelectorAll('.vbtn').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
-      updateVendChart(i);
+      updateVendChart(v);
     };
     sel.appendChild(btn);
   });
-  updateVendChart(0);
+  updateVendChart(vendedoresData[0]);
 })();
 
-function updateVendChart(idx){
-  const v=vendedoresData[idx];
-  document.getElementById('vend-chart-title').textContent=`${v.nombre} · Ventas 2025 por mes${v.ppto?' vs Presupuesto 2026':''}`;
+function updateVendChart(v){
+  document.getElementById('vend-chart-title').textContent=
+    `${v.nombre} · Real 2026 vs Ppto 2026 (${v.ppto?'Ppto: USD '+v.ppto+'K anual':'Sin presupuesto 2026'})`;
   const datasets=[{
-    label:'Real 2025',data:v.meses,
-    backgroundColor:'rgba(74,158,219,0.6)',borderColor:B,borderWidth:1.5,borderRadius:3
+    label:'Real 2026',
+    data:v.meses26,
+    backgroundColor:'rgba(74,158,219,0.7)',borderColor:B,borderWidth:1.5,borderRadius:3
   }];
   if(v.pptoMes){
     datasets.push({
@@ -663,63 +1059,91 @@ function updateVendChart(idx){
       options:{
         responsive:true,maintainAspectRatio:false,
         plugins:{legend:{position:'top',labels:{boxWidth:12,padding:14,usePointStyle:true}},
-          tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: USD ${ctx.parsed.y}K`}}},
+          tooltip:{callbacks:{label:ctx=>{
+            const v=ctx.parsed.y;
+            if(v===null)return null;
+            return `${ctx.dataset.label}: USD ${v.toFixed(1)}K`;
+          }}}},
         scales:{
           x:{grid:{color:'rgba(74,158,219,0.06)'}},
-          y:{grid:{color:'rgba(74,158,219,0.06)'},ticks:{callback:v=>v+'K'}}
+          y:{grid:{color:'rgba(74,158,219,0.06)'},ticks:{callback:v=>v!==null?v+'K':''}}
         }
       }
     });
   }
 }
 
+// ── CLIENTES DATA 2026 ──
+const clientesData=[
+  {cli:'BOMAREA S.R.L.',                              vend:'O. Atalaya',  monto:44500, pct:19.1,cum:19.1, cxc:'ok',  nota:'Nuevo cliente #1 en 2026'},
+  {cli:'I Q F DEL PERU SA',                           vend:'O. Infante',  monto:34670, pct:14.9,cum:34.0, cxc:'ok',  nota:''},
+  {cli:'AGRO TIERRA VID S.A.C.',                      vend:'N. Navarro',  monto:19258, pct:8.3, cum:42.3, cxc:'ok',  nota:'Cartera de Navarro (nuevo)'},
+  {cli:'CORPORACION ESAN',                            vend:'L. Aguirre',  monto:16634, pct:7.1, cum:49.4, cxc:'ok',  nota:''},
+  {cli:'SOCIEDAD AGRICOLA DON LUIS',                  vend:'O. Infante',  monto:15728, pct:6.8, cum:56.2, cxc:'ok',  nota:'Ex-#1 en 2025'},
+  {cli:'AMFRESH PERU AGRISIL',                        vend:'O. Infante',  monto:14537, pct:6.2, cum:62.4, cxc:'crit',nota:'CxC crítico 2025 — sigue comprando'},
+  {cli:'UVICA S.A.C.',                                vend:'L. Aguirre',  monto:12282, pct:5.3, cum:67.7, cxc:'ok',  nota:''},
+  {cli:'FAMILY FARMS PERÚ S.R.L',                    vend:'L. Aguirre',  monto:10332, pct:4.4, cum:72.1, cxc:'ok',  nota:'Reasignado desde Geldres ✅'},
+  {cli:'AGRICOLA GUILI S.A.C.',                       vend:'O. Infante',  monto:9108,  pct:3.9, cum:76.0, cxc:'ok',  nota:''},
+  {cli:'POB S.A.C.',                                  vend:'N. Navarro',  monto:7196,  pct:3.1, cum:79.1, cxc:'ok',  nota:'Reasignado desde Geldres ✅'},
+  {cli:'AGRICOLA HUARMEY S.A.C.',                     vend:'O. Atalaya',  monto:6930,  pct:3.0, cum:82.1, cxc:'ok',  nota:''},
+  {cli:'AGRICOLA CARMEN LUISA S.A.C.',                vend:'L. Aguirre',  monto:6451,  pct:2.8, cum:84.9, cxc:'ok',  nota:''},
+  {cli:'CORPORACION AGRICOLA OLMOS',                  vend:'O. Atalaya',  monto:5850,  pct:2.5, cum:87.4, cxc:'crit',nota:'CxC +328d — compra y debe'},
+  {cli:'GRANDBERRY PERU S.A.C.',                      vend:'O. Infante',  monto:4531,  pct:1.9, cum:89.3, cxc:'ok',  nota:''},
+  {cli:'SUREXPORT PERU BERRIES',                      vend:'N. Navarro',  monto:4144,  pct:1.8, cum:91.1, cxc:'ok',  nota:''},
+];
+
 // ── TABLA CLIENTES ──
 (function(){
-  const cxcLabel={ok:'Al día',crit:'⚠️ CxC crítico'};
-  const cxcMap={ok:'b-ok',crit:'b-crit'};
   let html='';
   clientesData.forEach((c,i)=>{
+    const cxcBadge=c.cxc==='ok'
+      ?'<span class="badge b-ok">Al día</span>'
+      :'<span class="badge b-crit">⚠️ CxC</span>';
+    const cumBadge=c.cum<=50?'b-crit':c.cum<=72?'b-warn':'b-nd';
     html+=`<tr>
       <td class="c mono" style="color:var(--muted)">${i+1}</td>
-      <td style="font-weight:${i<4?'600':'400'};max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${c.cli}">${c.cli}</td>
+      <td style="font-weight:${i<5?'600':'400'}">
+        ${c.cli}
+        ${c.nota?`<br><span style="font-size:9px;color:var(--muted)">${c.nota}</span>`:''}
+      </td>
       <td style="font-size:11px;color:var(--dim)">${c.vend}</td>
       <td class="r mono" style="font-weight:600">${c.monto.toLocaleString('en-US')}</td>
       <td class="c"><span class="badge b-blue">${c.pct}%</span></td>
-      <td class="c"><span class="badge ${c.cum<=55?'b-crit':c.cum<=72?'b-warn':'b-nd'}">${c.cum.toFixed(1)}%</span></td>
-      <td class="c"><span class="badge ${cxcMap[c.cxc]}">${cxcLabel[c.cxc]}</span></td>
+      <td class="c"><span class="badge ${cumBadge}">${c.cum.toFixed(1)}%</span></td>
+      <td class="c">${cxcBadge}</td>
     </tr>`;
   });
   document.getElementById('tbody-clientes').innerHTML=html;
 })();
 
-// ── CHART RTC ──
+// ── CHART RTC 2026 ──
 new Chart(document.getElementById('chartRTC'),{
   type:'bar',
   data:{
-    labels:['J. Geldres','O. Infante','L. Aguirre','O. Atalaya','G. Pradenas','A. Gonzalez'],
+    labels:['O. Infante','O. Atalaya','L. Aguirre','N. Navarro','P. Valladares','A. Gonzalez'],
     datasets:[{
-      label:'Ventas 2025 (USD K)',
-      data:[275.1,219.5,162.8,20.3,7.8,4.8],
-      backgroundColor:[B,'rgba(74,158,219,0.75)','rgba(74,158,219,0.6)','rgba(74,158,219,0.4)','rgba(74,158,219,0.3)','rgba(74,158,219,0.25)'],
+      label:'Real 2026 YTD (USD K)',
+      data:[94.1,59.1,43.7,34.0,1.2,0.7],
+      backgroundColor:[B,'rgba(74,158,219,0.75)','rgba(74,158,219,0.6)','rgba(74,158,219,0.45)','rgba(74,158,219,0.3)','rgba(74,158,219,0.2)'],
       borderRadius:3,borderWidth:0
     }]
   },
   options:{
     indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`USD ${ctx.parsed.x}K`}}},
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`USD ${ctx.parsed.x.toFixed(1)}K`}}},
     scales:{x:{grid:{color:'rgba(74,158,219,0.06)'},ticks:{callback:v=>v+'K'}},
       y:{grid:{display:false}}}
   }
 });
 
-// ── CHART CONCENTRACION CLIENTES ──
+// ── CHART CONCENTRACION CLIENTES 2026 ──
 new Chart(document.getElementById('chartConc'),{
   type:'doughnut',
   data:{
-    labels:['Don Luis (21.5%)','Family Farms (11.9%)','POB (11.3%)','IQF Perú (10.7%)','Surexport (10.0%)','Huamani (6.4%)','Resto (28.2%)'],
+    labels:['Bomarea (19.1%)','IQF Perú (14.9%)','Agro Tierra VID (8.3%)','Corp ESAN (7.1%)','Don Luis (6.8%)','Amfresh (6.2%)','Resto (37.6%)'],
     datasets:[{
-      data:[21.5,11.9,11.3,10.7,10.0,6.4,28.2],
-      backgroundColor:[R,O,A,B,G,M,'rgba(90,112,96,0.5)'],
+      data:[19.1,14.9,8.3,7.1,6.8,6.2,37.6],
+      backgroundColor:[B,O,A,G,R,M,'rgba(90,112,96,0.5)'],
       borderColor:'#080e09',borderWidth:2
     }]
   },
@@ -727,10 +1151,82 @@ new Chart(document.getElementById('chartConc'),{
     responsive:true,maintainAspectRatio:false,cutout:'55%',
     plugins:{
       legend:{position:'bottom',labels:{boxWidth:10,padding:7,font:{size:9}}},
-      tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed}% del total`}}
+      tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed.toFixed(1)}%`}}
     }
   }
 });
+
+// ── PRODUCTOS DATA 2026 ──
+const productosData=[
+  {prod:'VECASIL FORTE',      monto:82370, pct:35.4, estrategico:true,  nota:'Producto ancla · alta dependencia'},
+  {prod:'REGALIA MAX',         monto:46741, pct:20.1, estrategico:true,  nota:'Premium diferenciador'},
+  {prod:'VECA ROOT MAX',       monto:29378, pct:12.6, estrategico:true,  nota:'3er producto · potencial ampliación'},
+  {prod:'ALGAP',               monto:18384, pct:7.9,  estrategico:false, nota:''},
+  {prod:'REGALIA',             monto:6740,  pct:2.9,  estrategico:false, nota:'Familia Regalia (menor presentación)'},
+  {prod:'VECA PLUS MAGNESIO',  monto:6209,  pct:2.7,  estrategico:false, nota:''},
+  {prod:'AV SILIFORTE',        monto:6132,  pct:2.6,  estrategico:false, nota:''},
+  {prod:'VECA MOVE',           monto:5478,  pct:2.4,  estrategico:false, nota:''},
+  {prod:'CYTO PRIME',          monto:5434,  pct:2.3,  estrategico:false, nota:''},
+  {prod:'AV PLUS MICRO MIX',   monto:3149,  pct:1.4,  estrategico:false, nota:''},
+  {prod:'OTROS (21 prod.)',     monto:22843, pct:9.8,  estrategico:false, nota:'Larga cola, baja rotación'},
+];
+
+// ── TABLA PRODUCTOS ──
+(function(){
+  let html='', cum=0;
+  const barColors=['rgba(74,158,219,0.9)','rgba(122,182,72,0.85)','rgba(245,166,35,0.8)','rgba(230,126,34,0.75)','rgba(155,89,182,0.7)','rgba(74,158,219,0.55)','rgba(74,158,219,0.45)','rgba(74,158,219,0.35)','rgba(74,158,219,0.25)','rgba(74,158,219,0.2)','rgba(90,112,96,0.4)'];
+  productosData.forEach((p,i)=>{
+    cum+=p.pct;
+    const barW=Math.min(p.pct/36*100,100);
+    html+=`<tr>
+      <td class="c mono" style="color:var(--muted)">${i<10?i+1:'—'}</td>
+      <td>
+        <strong>${p.prod}</strong>
+        ${p.nota?`<br><span style="font-size:9px;color:var(--muted)">${p.nota}</span>`:''}
+      </td>
+      <td class="r mono" style="font-weight:600">${p.monto.toLocaleString('en-US')}</td>
+      <td class="c"><span class="badge b-blue">${p.pct}%</span></td>
+      <td class="c"><span class="badge ${cum<=76?'b-crit':cum<=90?'b-warn':'b-nd'}">${cum.toFixed(1)}%</span></td>
+      <td style="padding:6px 12px">
+        <div class="prod-bar-wrap">
+          <div class="prod-bar-fill" style="width:${barW}%;background:${barColors[i]||'rgba(74,158,219,0.2)'}"></div>
+        </div>
+      </td>
+      <td class="c">${p.estrategico?'<span class="badge b-blue">⭐ Estratégico</span>':'<span class="badge b-nd">Estándar</span>'}</td>
+    </tr>`;
+  });
+  document.getElementById('tbody-productos').innerHTML=html;
+})();
+
+// ── CHART PRODUCTOS DOUGHNUT ──
+new Chart(document.getElementById('chartProductos'),{
+  type:'doughnut',
+  data:{
+    labels:productosData.map(p=>p.prod+' ('+p.pct+'%)'),
+    datasets:[{
+      data:productosData.map(p=>p.pct),
+      backgroundColor:[B,G,A,O,M,'rgba(74,158,219,0.5)','rgba(74,158,219,0.4)','rgba(74,158,219,0.3)','rgba(74,158,219,0.2)','rgba(74,158,219,0.15)','rgba(90,112,96,0.4)'],
+      borderColor:'#080e09',borderWidth:2
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,cutout:'45%',
+    plugins:{
+      legend:{position:'right',labels:{boxWidth:10,padding:6,font:{size:9}}},
+      tooltip:{callbacks:{label:ctx=>`${productosData[ctx.dataIndex].prod}: USD ${productosData[ctx.dataIndex].monto.toLocaleString('en-US')} (${ctx.parsed.toFixed(1)}%)`}}
+    }
+  }
+});
+
+function iecTab(country, tab, btn) {
+  ['vend','prod','cli'].forEach(t => {
+    const el = document.getElementById('iec-'+country+'-'+t);
+    if(el) el.style.display = t===tab ? '' : 'none';
+  });
+  const sel = document.getElementById('iec-sel-'+country);
+  if(sel) sel.querySelectorAll('.vbtn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
 </script>
 </body>
 </html>

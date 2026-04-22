@@ -373,49 +373,300 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
     </table>
   </div>
 
-  <div class="sec">Eficiencia Pricing · Chile 2025 <span>Ventas vs Precio Piso — sin revelar costos ni márgenes</span></div>
-  <div class="pricing-cards">
-    <div class="pc" style="border-color:rgba(231,76,60,0.35)">
-      <div class="pc-icon">⚠️</div>
-      <div class="pc-val" style="color:var(--red)">74.9M</div>
-      <div class="pc-lbl">CLP vendido bajo precio piso</div>
+  <div class="sec">Eficiencia Comercial (IEC) · Chile · Real 2026 YTD <span>Ene–Abr 2026 · vs precio piso propuesto · sin revelar costos ni márgenes</span></div>
+
+  <!-- KPI row -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+    <div class="pc" style="border-color:rgba(231,76,60,0.5);background:rgba(231,76,60,0.05)">
+      <div class="pc-icon">📊</div>
+      <div class="pc-val" style="color:var(--red)">45.3%</div>
+      <div class="pc-lbl">IEC 2026 YTD — eficiencia vs piso</div>
     </div>
     <div class="pc" style="border-color:rgba(231,76,60,0.35)">
-      <div class="pc-icon">📦</div>
-      <div class="pc-val" style="color:var(--red)">72</div>
-      <div class="pc-lbl">SKUs con al menos 1 venta bajo piso</div>
+      <div class="pc-icon">⚠️</div>
+      <div class="pc-val" style="color:var(--red)">79.1M</div>
+      <div class="pc-lbl">CLP vendido bajo precio piso</div>
+    </div>
+    <div class="pc" style="border-color:rgba(245,166,35,0.35)">
+      <div class="pc-icon">📋</div>
+      <div class="pc-val" style="color:var(--amber)">56.6%</div>
+      <div class="pc-lbl">% Transacciones bajo piso</div>
     </div>
     <div class="pc" style="border-color:rgba(245,166,35,0.35)">
       <div class="pc-icon">💰</div>
-      <div class="pc-val" style="color:var(--amber)">96.7M</div>
-      <div class="pc-lbl">Impacto estimado acumulado (gap × und)</div>
+      <div class="pc-val" style="color:var(--amber)">17.7M</div>
+      <div class="pc-lbl">Impacto estimado (gap × unidad)</div>
     </div>
   </div>
 
-  <div style="margin-top:16px;background:var(--s2);border:1px solid rgba(231,76,60,0.25);border-radius:8px;padding:14px">
-    <div style="font-size:10px;color:var(--red);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px">
-      🚨 Vendedores con mayor % de transacciones bajo precio piso
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
-      <div style="background:rgba(231,76,60,0.08);border-radius:6px;padding:10px">
-        <div style="font-size:11px;font-weight:600;margin-bottom:4px">FRANCO RIFFO</div>
-        <div style="font-family:'DM Mono';font-size:18px;color:var(--red)">76%</div>
-        <div style="font-size:9px;color:var(--muted)">Trans. bajo piso</div>
-      </div>
-      <div style="background:rgba(245,166,35,0.08);border-radius:6px;padding:10px">
-        <div style="font-size:11px;font-weight:600;margin-bottom:4px">JORGE CAROCA</div>
-        <div style="font-family:'DM Mono';font-size:18px;color:var(--amber)">61%</div>
-        <div style="font-size:9px;color:var(--muted)">Trans. bajo piso</div>
-      </div>
-      <div style="background:rgba(245,166,35,0.08);border-radius:6px;padding:10px">
-        <div style="font-size:11px;font-weight:600;margin-bottom:4px">IVÁN VEVERKA</div>
-        <div style="font-family:'DM Mono';font-size:18px;color:var(--amber)">58%</div>
-        <div style="font-size:9px;color:var(--muted)">Trans. bajo piso</div>
-      </div>
-    </div>
-    <div style="margin-top:10px;font-size:10px;color:var(--muted)">
-      Ver detalle completo por SKU → <a href="Panel_Rentabilidad_AV_2026.html" style="color:var(--amber)">Panel Rentabilidad & Pricing ↗</a>
-    </div>
+  <!-- Selector IEC -->
+  <div class="vend-btns" id="iec-sel-cl">
+    <button class="vbtn active" onclick="iecTab('cl','vend',this)">👤 Vendedores</button>
+    <button class="vbtn" onclick="iecTab('cl','prod',this)">📦 Productos (Top 10)</button>
+    <button class="vbtn" onclick="iecTab('cl','cli',this)">🏢 Clientes (Top 10)</button>
+  </div>
+
+  <!-- Tabla Vendedores CL -->
+  <div id="iec-cl-vend" class="tbl-wrap">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Vendedor</th><th class="r">Venta YTD</th><th class="c">IEC%</th>
+          <th class="c">Estado</th><th class="c">Gap%</th><th class="r">Impacto CLP</th><th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>PABLO LARATRO</strong></td>
+          <td class="r mono">54.6M</td><td class="c mono">51.7%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−17.0%</td>
+          <td class="r mono" style="color:var(--amber)">4,834,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>FRANCISCO VELASQUEZ</strong></td>
+          <td class="r mono">31.3M</td><td class="c mono">23.1%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−18.9%</td>
+          <td class="r mono" style="color:var(--red)">6,824,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>RODRIGO ENCINA</strong></td>
+          <td class="r mono">29.1M</td><td class="c mono">35.8%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−20.5%</td>
+          <td class="r mono" style="color:var(--amber)">3,918,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>JORGE CAROCA</strong></td>
+          <td class="r mono">16.7M</td><td class="c mono">63.1%</td>
+          <td class="c"><span class="badge" style="background:rgba(245,166,35,0.15);color:var(--amber)">Parcial</span></td>
+          <td class="c mono" style="color:var(--amber)">−14.2%</td>
+          <td class="r mono" style="color:var(--amber)">1,028,000</td>
+          <td style="font-size:10px;color:var(--amber)">🔧 Reforzar</td>
+        </tr>
+        <tr>
+          <td><strong>VALENTINA MUÑOZ</strong></td>
+          <td class="r mono">4.2M</td><td class="c mono">43.2%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−22.0%</td>
+          <td class="r mono" style="color:var(--amber)">942,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>IVAN VEVERKA</strong></td>
+          <td class="r mono">8.8M</td><td class="c mono">83.4%</td>
+          <td class="c"><span class="badge" style="background:rgba(245,166,35,0.15);color:var(--amber)">Parcial</span></td>
+          <td class="c mono" style="color:var(--amber)">−8.2%</td>
+          <td class="r mono" style="color:var(--dim)">143,000</td>
+          <td style="font-size:10px;color:var(--amber)">⚠️ Monitorear</td>
+        </tr>
+        <tr>
+          <td><strong>RAYEN BERNAZAR</strong></td>
+          <td class="r mono">39.8K</td><td class="c mono">100.0%</td>
+          <td class="c"><span class="badge b-ok">Sobre piso</span></td>
+          <td class="c mono" style="color:var(--muted)">—</td>
+          <td class="r mono" style="color:var(--muted)">0</td>
+          <td style="font-size:10px;color:var(--green)">✅ Sin acción</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Tabla Productos CL -->
+  <div id="iec-cl-prod" class="tbl-wrap" style="display:none">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Producto</th><th class="r">Venta YTD</th><th class="c">IEC%</th>
+          <th class="c">Estado</th><th class="c">Gap%</th><th class="r">Impacto CLP</th><th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>AV HUMIC ROOT</strong></td>
+          <td class="r mono">16.0M</td><td class="c mono">8.2%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−25.8%</td>
+          <td class="r mono" style="color:var(--red)">4,414,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>AV MAX FULVIC 45%</strong></td>
+          <td class="r mono">5.7M</td><td class="c mono">15.5%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−23.6%</td>
+          <td class="r mono" style="color:var(--red)">1,758,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>AV PLUS MICRO MIX</strong></td>
+          <td class="r mono">4.4M</td><td class="c mono">68.0%</td>
+          <td class="c"><span class="badge" style="background:rgba(245,166,35,0.15);color:var(--amber)">Parcial</span></td>
+          <td class="c mono" style="color:var(--red)">−44.7%</td>
+          <td class="r mono" style="color:var(--amber)">1,682,000</td>
+          <td style="font-size:10px;color:var(--amber)">🔧 Reforzar</td>
+        </tr>
+        <tr>
+          <td><strong>AV PLUS POTASIO</strong></td>
+          <td class="r mono">7.6M</td><td class="c mono">38.6%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−19.1%</td>
+          <td class="r mono" style="color:var(--amber)">1,347,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>AV MOVE</strong></td>
+          <td class="r mono">28.9M</td><td class="c mono">64.1%</td>
+          <td class="c"><span class="badge" style="background:rgba(245,166,35,0.15);color:var(--amber)">Parcial</span></td>
+          <td class="c mono" style="color:var(--amber)">−11.8%</td>
+          <td class="r mono" style="color:var(--amber)">1,289,000</td>
+          <td style="font-size:10px;color:var(--amber)">🔧 Reforzar</td>
+        </tr>
+        <tr>
+          <td><strong>AV AMIN SUGAR</strong></td>
+          <td class="r mono">9.6M</td><td class="c mono">29.8%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−21.0%</td>
+          <td class="r mono" style="color:var(--amber)">1,224,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>AV SILFORTE</strong></td>
+          <td class="r mono">12.2M</td><td class="c mono">46.6%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−13.3%</td>
+          <td class="r mono" style="color:var(--dim)">763,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>AV15 40-20</strong></td>
+          <td class="r mono">3.9M</td><td class="c mono">27.1%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−22.6%</td>
+          <td class="r mono" style="color:var(--dim)">725,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>BIOVECA RAIZ</strong></td>
+          <td class="r mono">3.2M</td><td class="c mono">35.6%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−19.2%</td>
+          <td class="r mono" style="color:var(--dim)">680,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>BIOVECA PRADERAS</strong></td>
+          <td class="r mono">3.0M</td><td class="c mono">4.6%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−12.1%</td>
+          <td class="r mono" style="color:var(--dim)">541,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Tabla Clientes CL -->
+  <div id="iec-cl-cli" class="tbl-wrap" style="display:none">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Cliente</th><th class="r">Venta YTD</th><th class="c">IEC%</th>
+          <th class="c">Estado</th><th class="c">Gap%</th><th class="r">Impacto CLP</th><th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>FRUTICOLA RIO BLANCO SPA</strong></td>
+          <td class="r mono">4.6M</td><td class="c mono">0.0%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−34.6%</td>
+          <td class="r mono" style="color:var(--red)">1,971,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>COMERCIALIZADORA LA COLONIA LTDA</strong></td>
+          <td class="r mono">7.9M</td><td class="c mono">0.0%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−21.0%</td>
+          <td class="r mono" style="color:var(--red)">1,945,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>AGRICOLA E INVERSIONES VGV SPA</strong></td>
+          <td class="r mono">4.0M</td><td class="c mono">6.2%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−30.8%</td>
+          <td class="r mono" style="color:var(--red)">1,865,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>H R INVERSIONES SPA</strong></td>
+          <td class="r mono">2.5M</td><td class="c mono">0.0%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−35.3%</td>
+          <td class="r mono" style="color:var(--amber)">1,036,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>AGRICOLA SAN PEDRO SPA</strong></td>
+          <td class="r mono">7.1M</td><td class="c mono">11.0%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−21.5%</td>
+          <td class="r mono" style="color:var(--amber)">988,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>AGRICOLA LAS VERTIENTES S.A.</strong></td>
+          <td class="r mono">4.6M</td><td class="c mono">6.9%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−15.3%</td>
+          <td class="r mono" style="color:var(--amber)">865,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>AGRICOLA FUNDO LA PIEDRA LTDA</strong></td>
+          <td class="r mono">2.0M</td><td class="c mono">0.0%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−28.6%</td>
+          <td class="r mono" style="color:var(--amber)">800,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>AGROINVEST SPA</strong></td>
+          <td class="r mono">1.2M</td><td class="c mono">0.0%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−40.9%</td>
+          <td class="r mono" style="color:var(--amber)">768,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>JOSE CRISTOBAL GONZALEZ CORREA</strong></td>
+          <td class="r mono">1.7M</td><td class="c mono">0.0%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−29.7%</td>
+          <td class="r mono" style="color:var(--amber)">675,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+        <tr>
+          <td><strong>SOC. AGRÍCOLA COMERCIAL SIEMBRA SPA</strong></td>
+          <td class="r mono">1.3M</td><td class="c mono">6.2%</td>
+          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
+          <td class="c mono" style="color:var(--red)">−34.0%</td>
+          <td class="r mono" style="color:var(--dim)">616,000</td>
+          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:10px;font-size:10px;color:var(--muted)">
+    Ver detalle completo por SKU → <a href="Panel_Rentabilidad_AV_2026.html" style="color:var(--amber)">Panel Rentabilidad & Pricing ↗</a>
+    <span style="margin-left:12px">Base: 500 transacciones con precio unitario conocido · 96.5% cobertura piso</span>
   </div>
 
 </div><!-- /tab-cxc -->
@@ -694,6 +945,16 @@ new Chart(document.getElementById('chartRegion'),{
     }
   }
 });
+
+function iecTab(country, tab, btn) {
+  ['vend','prod','cli'].forEach(t => {
+    const el = document.getElementById('iec-'+country+'-'+t);
+    if(el) el.style.display = t===tab ? '' : 'none';
+  });
+  const sel = document.getElementById('iec-sel-'+country);
+  if(sel) sel.querySelectorAll('.vbtn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
 </script>
 </body>
 </html>
