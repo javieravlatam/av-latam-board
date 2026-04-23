@@ -9,7 +9,7 @@
   })();
 </script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Panel Jefes · Chile 2025 · AV Latam</title>
+<title>Panel Jefes · Chile 2026 · AV Latam</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -144,17 +144,16 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
     <div class="logo">AV</div>
     <div>
       <div class="htitle">🇨🇱 JEFES · CHILE</div>
-      <div class="hsub">Panel Comercial Operativo · Ventas 2025</div>
+      <div class="hsub">Panel Comercial · Real 2026 vs Ppto 2026 · CLP</div>
     </div>
   </div>
   <div class="hnav">
     <a href="Panel_Jefes_Index.html" class="np">← Hub Jefes</a>
     <a href="Panel_CxC_AV_Latam_2026.html" class="np">📋 CxC Detalle</a>
-    <a href="Panel_Rentabilidad_AV_2026.html" class="np">💹 Rentabilidad</a>
   </div>
   <div class="hcorte">
-    <div>Jefatura País Chile · <b>Corte: Dic 2025</b></div>
-    <div style="color:var(--muted)">Ppto 2026 · CxC Abr 2026</div>
+    <div>Jefatura País Chile · <b>Corte: Abr 2026 (Ene–Abr 22)</b></div>
+    <div style="color:var(--muted)">Real 2026 YTD · CxC Abr 2026</div>
   </div>
 </div>
 
@@ -163,29 +162,29 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
 <!-- KPI BANNER -->
 <div class="kpis">
   <div class="kpi">
-    <div class="kpi-lbl">Ventas 2025 · Total</div>
-    <div class="kpi-val kpi-g">CLP 765.9M</div>
-    <div class="kpi-sub">+22.8% vs 2024 (623.7M)</div>
+    <div class="kpi-lbl">Real 2026 · Acum Ene–Abr</div>
+    <div class="kpi-val kpi-g">CLP 191.7M</div>
+    <div class="kpi-sub">T1 105.4% del ppto · Abr parcial</div>
   </div>
   <div class="kpi">
-    <div class="kpi-lbl">Presupuesto 2026</div>
+    <div class="kpi-lbl">Cumplimiento vs Ppto 4m</div>
+    <div class="kpi-val kpi-a">89.7%</div>
+    <div class="kpi-sub">191.7M vs ppto 213.6M (Ene–Abr)</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-lbl">Presupuesto 2026 · Anual</div>
     <div class="kpi-val kpi-b">CLP 861.3M</div>
-    <div class="kpi-sub">Meta anual · 5 RTCs activos</div>
+    <div class="kpi-sub">Meta anual · 6 RTCs activos</div>
   </div>
   <div class="kpi">
-    <div class="kpi-lbl">Top Vendedor 2025</div>
-    <div class="kpi-val kpi-g" style="font-size:17px">F. VELÁSQUEZ</div>
-    <div class="kpi-sub">CLP 240.1M · 95% ppto</div>
+    <div class="kpi-lbl">Top Vendedor 2026</div>
+    <div class="kpi-val kpi-g" style="font-size:17px">J. CAROCA</div>
+    <div class="kpi-sub">CLP 63.3M · 4 meses</div>
   </div>
   <div class="kpi">
-    <div class="kpi-lbl">CxC Vencido Activo</div>
-    <div class="kpi-val kpi-r">CLP 15.2M</div>
-    <div class="kpi-sub">+90d: 9.9M · 61-90d: 5.3M</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-lbl">Efic. Pricing 2025</div>
-    <div class="kpi-val kpi-a">74.9M</div>
-    <div class="kpi-sub">Ventas bajo precio piso</div>
+    <div class="kpi-lbl">IEC 2026 YTD</div>
+    <div class="kpi-val kpi-r">45.3%</div>
+    <div class="kpi-sub">Eficiencia vs precio piso propuesto</div>
   </div>
 </div>
 
@@ -203,7 +202,7 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
 <div id="tab-ventas" class="tab-content active">
 
   <div class="chart-wrap" style="margin-bottom:16px">
-    <div class="chart-title">Ventas Mensuales Chile (CLP Millones) · 2024 Real vs 2025 Real + Presupuesto 2026</div>
+    <div class="chart-title">Ventas Mensuales Chile (CLP Millones) · Real 2026 vs Presupuesto 2026 · Referencia 2025</div>
     <div class="chart-canvas">
       <canvas id="chartVentas"></canvas>
     </div>
@@ -211,16 +210,16 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
 
   <div class="tbl-wrap">
     <div class="tbl-head">
-      <div class="tbl-head-title">Detalle mensual · Real 2024 vs Real 2025 vs Presupuesto 2026</div>
+      <div class="tbl-head-title">Detalle mensual · Ppto 2026 vs Real 2026 · Referencia Real 2025</div>
     </div>
     <table class="tbl">
       <thead>
         <tr>
           <th>Mes</th>
-          <th class="r">Real 2024 (M)</th>
-          <th class="r">Real 2025 (M)</th>
-          <th class="c">Var 24→25</th>
           <th class="r">Ppto 2026 (M)</th>
+          <th class="r">Real 2026 (M)</th>
+          <th class="c">% Cumpl 2026</th>
+          <th class="r">Real 2025 (M)</th>
           <th class="c">Estado</th>
         </tr>
       </thead>
@@ -235,7 +234,7 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
 <!-- ══════════════════════════════════════════════ -->
 <div id="tab-vendedores" class="tab-content">
 
-  <div class="sec">Ranking General 2025 <span>Real anual vs Presupuesto 2026</span></div>
+  <div class="sec">Ranking 2026 YTD + Ref. 2025 <span>Real anual 2025 vs Presupuesto 2026 · base histórica</span></div>
   <div class="tbl-wrap" style="margin-bottom:20px">
     <table class="tbl">
       <thead>
@@ -665,8 +664,7 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
   </div>
 
   <div style="margin-top:10px;font-size:10px;color:var(--muted)">
-    Ver detalle completo por SKU → <a href="Panel_Rentabilidad_AV_2026.html" style="color:var(--amber)">Panel Rentabilidad & Pricing ↗</a>
-    <span style="margin-left:12px">Base: 500 transacciones con precio unitario conocido · 96.5% cobertura piso</span>
+    Base: 500 transacciones con precio unitario conocido · 96.5% cobertura piso · Ene–Abr 2026
   </div>
 
 </div><!-- /tab-cxc -->
@@ -674,11 +672,10 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
 </div><!-- /page -->
 
 <div class="footer">
-  <div>AV Latam BI Platform · Jefes País · Chile 2025 · Presupuesto 2026</div>
+  <div>AV Latam BI Platform · Jefes País · Chile · Real Ene–Abr 2026</div>
   <div class="hnav">
     <a href="Panel_Jefes_Index.html" class="np">🏠 Hub Jefes</a>
     <a href="Panel_CxC_AV_Latam_2026.html" class="np">📋 CxC</a>
-    <a href="Panel_Rentabilidad_AV_2026.html" class="np">💹 Rentabilidad</a>
   </div>
 </div>
 
@@ -694,6 +691,7 @@ const LABELS=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV',
 const real2024=[77.4,46.1,37.4,72.1,18.2,33.8,42.7,24.8,41.5,109.0,67.3,53.4];
 const real2025=[61.5,57.9,38.9,44.2,131.5,36.8,33.9,75.0,101.1,134.5,43.6,7.0];
 const ppto2026=[83.6,41.6,42.0,46.4,51.0,49.7,62.8,76.5,110.8,112.7,97.5,86.7];
+const real2026=[88.2,35.7,52.4,15.4,null,null,null,null,null,null,null,null];
 
 const vendedoresData=[
   {nombre:'FRANCISCO VELÁSQUEZ', corto:'F. Velásquez', real:240.1, ppto:253.9,
@@ -754,8 +752,8 @@ new Chart(document.getElementById('chartVentas'),{
   data:{
     labels:LABELS,
     datasets:[
-      {label:'Real 2024',data:real2024,backgroundColor:'rgba(122,182,72,0.25)',borderColor:G,borderWidth:1.5,borderRadius:3},
-      {label:'Real 2025',data:real2025,backgroundColor:'rgba(122,182,72,0.65)',borderColor:G,borderWidth:1.5,borderRadius:3},
+      {label:'Real 2025 (ref.)',data:real2025,backgroundColor:'rgba(122,182,72,0.15)',borderColor:'rgba(122,182,72,0.3)',borderWidth:1,borderRadius:3},
+      {label:'Real 2026',data:real2026,backgroundColor:'rgba(122,182,72,0.70)',borderColor:G,borderWidth:1.5,borderRadius:3},
       {label:'Ppto 2026',data:ppto2026,type:'line',borderColor:B,borderWidth:2,pointRadius:4,
        pointBackgroundColor:B,fill:false,tension:0.3,borderDash:[5,3]}
     ]
@@ -779,31 +777,39 @@ new Chart(document.getElementById('chartVentas'),{
 (function(){
   const meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   let html='';
-  let tot24=0,tot25=0,totPpto=0;
-  real2024.forEach((v24,i)=>{
-    const v25=real2025[i], pp=ppto2026[i];
-    const varPct=((v25-v24)/v24*100).toFixed(1);
-    const varColor=v25>=v24?'color:var(--green)':'color:var(--red)';
-    const varArrow=v25>=v24?'▲':'▼';
-    const vsState= v25>=pp?'b-ok':'b-warn';
-    tot24+=v24;tot25+=v25;totPpto+=pp;
+  let tot26=0,tot25=0,totPpto=0;
+  ppto2026.forEach((pp,i)=>{
+    const v26=real2026[i], v25=real2025[i];
+    const hasData=v26!==null;
+    const isPartial=i===3; // ABR parcial
+    if(hasData) {tot26+=v26; totPpto+=pp;}
+    tot25+=v25;
+    const cumpl=hasData?(v26/pp*100).toFixed(1):null;
+    const cumplColor=cumpl>=100?'color:var(--green)':cumpl>=80?'color:var(--amber)':'color:var(--red)';
+    const cumplArrow=cumpl>=100?'▲':'▼';
+    let estadoBadge;
+    if(!hasData){estadoBadge='<span class="badge b-nd">Sin dato</span>';}
+    else if(isPartial && v26<pp){estadoBadge='<span class="badge b-warn">Abr parcial</span>';}
+    else if(v26>=pp){estadoBadge='<span class="badge b-ok">≥ Ppto</span>';}
+    else if(v26/pp>=0.8){estadoBadge='<span class="badge b-warn">< Ppto</span>';}
+    else{estadoBadge='<span class="badge b-crit">< Ppto</span>';}
     html+=`<tr>
       <td style="font-weight:500">${meses[i]}</td>
-      <td class="r mono" style="color:var(--dim)">${v24.toFixed(1)}</td>
-      <td class="r mono" style="font-weight:600">${v25.toFixed(1)}</td>
-      <td class="c" style="${varColor};font-family:'DM Mono';font-size:11px">${varArrow} ${Math.abs(varPct)}%</td>
       <td class="r mono" style="color:var(--blue)">${pp.toFixed(1)}</td>
-      <td class="c"><span class="badge ${vsState}">${v25>=pp?'≥ Ppto':'< Ppto'}</span></td>
+      <td class="r mono" style="font-weight:600">${hasData?v26.toFixed(1):'—'}</td>
+      <td class="c" style="${hasData?cumplColor:'color:var(--muted)'};font-family:'DM Mono';font-size:11px">${hasData?`${cumplArrow} ${Math.abs(cumpl)}%`:'—'}</td>
+      <td class="r mono" style="color:var(--dim)">${v25.toFixed(1)}</td>
+      <td class="c">${estadoBadge}</td>
     </tr>`;
   });
-  const varTot=((tot25-tot24)/tot24*100).toFixed(1);
+  const cumplTot=(tot26/totPpto*100).toFixed(1);
   html+=`<tr style="background:var(--s2);font-weight:700">
-    <td>TOTAL ANUAL</td>
-    <td class="r mono" style="color:var(--dim)">${tot24.toFixed(1)}</td>
-    <td class="r mono">${tot25.toFixed(1)}</td>
-    <td class="c" style="color:var(--green);font-family:'DM Mono';font-size:11px">▲ ${varTot}%</td>
+    <td>YTD ENE–ABR</td>
     <td class="r mono" style="color:var(--blue)">${totPpto.toFixed(1)}</td>
-    <td class="c"><span class="badge b-warn">Ppto 2026 por ejecutar</span></td>
+    <td class="r mono">${tot26.toFixed(1)}</td>
+    <td class="c" style="color:${cumplTot>=100?'var(--green)':'var(--amber)'};font-family:'DM Mono';font-size:11px">${cumplTot>=100?'▲':'▼'} ${Math.abs(cumplTot)}%</td>
+    <td class="r mono" style="color:var(--dim)">${(real2025.slice(0,4).reduce((a,b)=>a+b,0)).toFixed(1)}</td>
+    <td class="c"><span class="badge b-warn">Abr parcial</span></td>
   </tr>`;
   document.getElementById('tbody-ventas').innerHTML=html;
 })();

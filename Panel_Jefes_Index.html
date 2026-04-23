@@ -123,6 +123,39 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .cc-chart{padding:0 22px 14px}
 .ch{position:relative}.ch-sm{height:110px}
 
+/* IEC STRIP */
+.iec-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.iec-kpi{background:var(--s1);border:1px solid;border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.iec-icon{font-size:24px;flex-shrink:0}
+.iec-body{min-width:0}
+.iec-val{font-family:'Bebas Neue';font-size:24px;line-height:1;margin-bottom:2px}
+.iec-lbl{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;line-height:1.4}
+
+/* IEC COMPARE BAR */
+.iec-bar-wrap{height:6px;background:var(--s3);border-radius:3px;margin-top:4px;overflow:hidden}
+.iec-bar-fill{height:100%;border-radius:3px}
+
+/* ALERTAS CLAVE */
+.ak-item{display:flex;align-items:flex-start;gap:9px;padding:9px 12px;border-radius:7px;margin-bottom:7px;font-size:11px}
+.ak-item:last-child{margin-bottom:0}
+.ak-item.rd{background:rgba(231,76,60,0.07);border:1px solid rgba(231,76,60,0.2)}
+.ak-item.am{background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15)}
+.ak-item.ok{background:rgba(122,182,72,0.06);border:1px solid rgba(122,182,72,0.15)}
+.ak-ico{font-size:14px;flex-shrink:0;margin-top:1px}
+.ak-txt{color:var(--dim);line-height:1.5}
+.ak-txt b{color:var(--text)}
+.ak-tag{display:inline-block;font-size:8px;font-weight:700;letter-spacing:1px;padding:1px 5px;border-radius:3px;margin-right:4px;vertical-align:middle}
+.ak-tag.cl{background:rgba(122,182,72,0.15);color:var(--green)}
+.ak-tag.pe{background:rgba(74,158,219,0.15);color:var(--blue)}
+
+/* IEC COMPARE PANEL */
+.iec-cmp{background:var(--s1);border:1px solid var(--bdr);border-radius:11px;padding:16px 18px}
+.iec-cmp-row{margin-bottom:14px}
+.iec-cmp-row:last-child{margin-bottom:0}
+.iec-cmp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.iec-cmp-name{font-size:11px;font-weight:600}
+.iec-cmp-val{font-family:'DM Mono';font-size:12px;font-weight:700}
+
 /* SHORTCUTS */
 .shortcuts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
 .sc{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;padding:14px 16px;
@@ -213,6 +246,38 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <div class="ik">
         <div class="ik-val" style="color:var(--red);">CLP 62M</div>
         <div class="ik-lbl">CxC Chile ⚠️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ IEC STRIP · KPIs Eficiencia Comercial ══ -->
+  <div class="iec-strip">
+    <div class="iec-kpi" style="border-color:rgba(231,76,60,0.4)">
+      <div class="iec-icon">🇨🇱</div>
+      <div class="iec-body">
+        <div class="iec-val" style="color:var(--red)">45.3%</div>
+        <div class="iec-lbl">IEC Chile 2026 YTD<br>🔴 Precio bajo piso · 56.6% tx</div>
+      </div>
+    </div>
+    <div class="iec-kpi" style="border-color:rgba(122,182,72,0.4)">
+      <div class="iec-icon">🇵🇪</div>
+      <div class="iec-body">
+        <div class="iec-val" style="color:var(--green)">92.1%</div>
+        <div class="iec-lbl">IEC Perú 2026 YTD<br>✅ Posición saludable · 22.4% tx</div>
+      </div>
+    </div>
+    <div class="iec-kpi" style="border-color:rgba(231,76,60,0.3)">
+      <div class="iec-icon">🚨</div>
+      <div class="iec-body">
+        <div class="iec-val" style="color:var(--red)">7</div>
+        <div class="iec-lbl">Alertas activas<br>4 críticas Chile · 3 monitoreo Perú</div>
+      </div>
+    </div>
+    <div class="iec-kpi" style="border-color:rgba(245,166,35,0.35)">
+      <div class="iec-icon">💳</div>
+      <div class="iec-body">
+        <div class="iec-val" style="color:var(--amber)">+90d</div>
+        <div class="iec-lbl">CxC Crítico activo<br>CLP 8.4M Chile · USD 30.8K Perú</div>
       </div>
     </div>
   </div>
@@ -387,6 +452,116 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
         <span class="cta-btn pe">ABRIR PANEL PERÚ</span>
       </div>
     </a>
+
+  </div>
+
+  <!-- ══ IEC COMPARACIÓN + ALERTAS CLAVE ══ -->
+  <div class="sec">Eficiencia Comercial · Alertas Clave <span>IEC 2026 YTD · datos reales Ene–Abr · precios vs piso propuesto</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:16px;margin-bottom:24px">
+
+    <!-- IEC Comparación Chile vs Perú -->
+    <div class="iec-cmp">
+      <div style="font-family:'Bebas Neue';font-size:12px;letter-spacing:2px;color:var(--green);margin-bottom:14px">
+        📊 IEC · Chile vs Perú 2026 YTD
+      </div>
+
+      <div class="iec-cmp-row">
+        <div class="iec-cmp-head">
+          <span class="iec-cmp-name">🇨🇱 Chile</span>
+          <span class="iec-cmp-val" style="color:var(--red)">45.3%</span>
+        </div>
+        <div class="iec-bar-wrap">
+          <div class="iec-bar-fill" style="width:45.3%;background:var(--red)"></div>
+        </div>
+        <div style="font-size:9px;color:var(--muted);margin-top:3px">CLP 79.1M bajo piso · Impacto 17.7M</div>
+      </div>
+
+      <div class="iec-cmp-row">
+        <div class="iec-cmp-head">
+          <span class="iec-cmp-name">🇵🇪 Perú</span>
+          <span class="iec-cmp-val" style="color:var(--green)">92.1%</span>
+        </div>
+        <div class="iec-bar-wrap">
+          <div class="iec-bar-fill" style="width:92.1%;background:var(--green)"></div>
+        </div>
+        <div style="font-size:9px;color:var(--muted);margin-top:3px">USD 13.0K bajo piso · Impacto USD 1.7K</div>
+      </div>
+
+      <div style="margin-top:14px;padding:10px;background:var(--s2);border-radius:7px;font-size:10px;color:var(--dim);line-height:1.6">
+        <span style="color:var(--red);font-weight:700">Chile requiere acción inmediata.</span><br>
+        IEC objetivo: ≥85%. Brecha actual: −39.7pp.<br>
+        <span style="color:var(--muted);font-size:9px">Base: facturas con precio unitario · piso propuesto gerencia</span>
+      </div>
+
+      <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+        <div style="background:rgba(231,76,60,0.07);border:1px solid rgba(231,76,60,0.2);border-radius:6px;padding:8px;text-align:center">
+          <div style="font-family:'DM Mono';font-size:14px;color:var(--red);font-weight:700">6/7</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px">Vendedores CL<br>con IEC &lt;100%</div>
+        </div>
+        <div style="background:rgba(122,182,72,0.07);border:1px solid rgba(122,182,72,0.2);border-radius:6px;padding:8px;text-align:center">
+          <div style="font-family:'DM Mono';font-size:14px;color:var(--green);font-weight:700">4/6</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px">Vendedores PE<br>con IEC ≥90%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alertas Clave -->
+    <div style="background:var(--s1);border:1px solid var(--bdr);border-radius:11px;padding:16px 18px">
+      <div style="font-family:'Bebas Neue';font-size:12px;letter-spacing:2px;color:var(--red);margin-bottom:14px">
+        🚨 Alertas Clave · Acción Directiva
+      </div>
+
+      <div class="ak-item rd">
+        <span class="ak-ico">📉</span>
+        <div class="ak-txt">
+          <span class="ak-tag cl">CL</span>
+          <b>F. Velásquez — IEC 23.1% · impacto CLP 6.8M</b><br>
+          Mayor brecha absoluta del grupo. 59% de sus transacciones bajo piso. Revisar condiciones con clientes activos esta semana.
+        </div>
+      </div>
+
+      <div class="ak-item rd">
+        <span class="ak-ico">📦</span>
+        <div class="ak-txt">
+          <span class="ak-tag cl">CL</span>
+          <b>AV HUMIC ROOT · IEC 8.2% · gap −25.8% · impacto CLP 4.4M</b><br>
+          Producto más afectado de Chile. 15 de 18 transacciones bajo piso. Escalar a gerencia para ajuste de política de precio.
+        </div>
+      </div>
+
+      <div class="ak-item rd">
+        <span class="ak-ico">🏢</span>
+        <div class="ak-txt">
+          <span class="ak-tag cl">CL</span>
+          <b>Fruticola Río Blanco + Cial. La Colonia — IEC 0% · impacto acum. CLP 3.9M</b><br>
+          Todas sus compras YTD están bajo el piso propuesto. Gap −34% y −21% respectivamente. Renegociación o revisión de condiciones.
+        </div>
+      </div>
+
+      <div class="ak-item am">
+        <span class="ak-ico">⚠️</span>
+        <div class="ak-txt">
+          <span class="ak-tag pe">PE</span>
+          <b>Agricola Huarmey S.A.C. — IEC 0% · impacto USD 990</b><br>
+          Todo comprado bajo piso. Cliente de Atalaya. Revisar condiciones acordadas para próximos pedidos.
+        </div>
+      </div>
+
+      <div class="ak-item am">
+        <span class="ak-ico">👤</span>
+        <div class="ak-txt">
+          <span class="ak-tag pe">PE</span>
+          <b>Patricia Valladares — IEC 16.7% · 3/4 tx bajo piso</b><br>
+          Vendedora nueva sin política de precios establecida. Capacitar en límites de negociación antes de Junio.
+        </div>
+      </div>
+
+      <div style="margin-top:10px;font-size:9px;color:var(--muted)">
+        Ver análisis completo por vendedor/producto/cliente →
+        <a href="Panel_Jefes_Chile_2026.html" style="color:var(--green)">Panel Chile ↗</a> ·
+        <a href="Panel_Jefes_Peru_2026.html" style="color:var(--blue)">Panel Perú ↗</a>
+      </div>
+    </div>
 
   </div>
 
