@@ -196,6 +196,9 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .npills{display:flex;gap:7px}
 
 @media(max-width:900px){.country-grid,.shortcuts,.cxc-grid,.inst-grid{grid-template-columns:1fr}}
+
+  .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
+  .btn-logout:hover { background:rgba(231,76,60,0.10); }
 </style>
 </head>
 <body>
@@ -217,6 +220,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     <div>Chile <b>26/04</b> · Perú <b>24/04</b> · CxC <b>27/04/2026</b></div>
     <div style="font-size:8px;margin-top:1px;">TC = 950 CLP/USD · Semana 17 · Grupo YTD USD 437K</div>
   </div>
+  <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
 </header>
 
 <div class="page">
@@ -711,6 +715,12 @@ new Chart(document.getElementById('cPeruMini'),{
     }
   }
 });
+
+function cerrarSesion() {
+  sessionStorage.removeItem('av_auth');
+  sessionStorage.removeItem('av_role');
+  window.location.href = 'index.html';
+}
 </script>
 </body>
 </html>

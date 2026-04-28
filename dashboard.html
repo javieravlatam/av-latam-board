@@ -10,6 +10,12 @@
     if(sessionStorage.getItem('av_role')==='jefe')
       window.location.replace('Panel_Jefes_Index.html');
   })();
+
+function cerrarSesion() {
+  sessionStorage.removeItem('av_auth');
+  sessionStorage.removeItem('av_role');
+  window.location.href = 'index.html';
+}
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AV Latam · BI Platform 2026</title>
@@ -184,18 +190,24 @@
     .kpi-banner { flex-direction: column; }
     .kpi-b-item { border-right: none; border-bottom: 1px solid var(--border-dim); }
   }
+
+  .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
+  .btn-logout:hover { background:rgba(231,76,60,0.10); }
 </style>
 </head>
 <body>
 
 <!-- HERO -->
 <div class="hero">
-  <div class="logo-wrap">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;width:100%;margin-bottom:4px">
+    <div class="logo-wrap" style="margin-bottom:0">
     <div class="logo-mark">AV</div>
     <div class="logo-text">
       <div class="logo-title">Agroveca Grupo Latam</div>
       <div class="logo-sub">BI Platform · Temporada 2026</div>
     </div>
+  </div>
+    <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
   </div>
   <p class="hero-tagline">
     Plataforma de inteligencia comercial para Chile, Perú y Ecuador.

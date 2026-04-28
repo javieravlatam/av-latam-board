@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <script>
+
   /* AV Auth Guard · sesión activa mientras la pestaña esté abierta */
   (function(){
     if(sessionStorage.getItem('av_auth')!=='7cd4374e16e78510de24a08115c3b44f6d0d72762d41054e6ef8fa0cb5e0c45b')
@@ -185,6 +186,19 @@
   @media (max-width: 900px) {
     .grid-2,.grid-3,.grid-4,.grid-5,.kpi-strip.k4,.kpi-strip.k5,.decision-grid { grid-template-columns: 1fr; }
   }
+
+  /* ── PRICING SELECTOR BAR ── */
+  .pric-sel-bar { display:flex; align-items:center; gap:20px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 18px; margin-bottom:16px; flex-wrap:wrap; }
+  .pric-sel-group { display:flex; align-items:center; gap:10px; }
+  .pric-sel-label { font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px; white-space:nowrap; }
+  .pric-sbtn { background:var(--surface2); border:1px solid var(--border-dim); border-radius:6px; padding:5px 12px; font-size:11px; color:var(--text-dim); cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+  .pric-sbtn:hover { color:var(--text); border-color:var(--border); }
+  .pric-sbtn.active { background:var(--green-glow); color:var(--green); border-color:var(--green); }
+  .pric-sel { background:var(--surface2); border:1px solid var(--border-dim); border-radius:6px; padding:5px 10px; font-size:11px; color:var(--text-dim); font-family:'DM Sans',sans-serif; min-width:160px; cursor:pointer; }
+  .pric-sel:focus { outline:none; border-color:var(--green); }
+  .pric-corte-tag { margin-left:auto; font-family:'DM Mono',monospace; font-size:10px; color:var(--text-muted); background:var(--surface2); border:1px solid var(--border-dim); border-radius:6px; padding:4px 10px; }
+  .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:var(--red); cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
+  .btn-logout:hover { background:rgba(231,76,60,0.10); }
 </style>
 </head>
 <body>
@@ -198,10 +212,13 @@
       <div class="header-sub">Agroveca Grupo LATAM · Disciplina de precios piso · Chile + Perú</div>
     </div>
   </div>
-  <div style="text-align:right">
-    <div class="corte-label">Fuente</div>
-    <div class="corte-date">modulo_rentabilidad_pricing.xlsx</div>
-    <div class="corte-label" style="margin-top:4px">Historial Chile 2024–2025 · Perú 2025</div>
+  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+    <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
+    <div style="text-align:right">
+      <div class="corte-label">Fuente</div>
+      <div class="corte-date">modulo_rentabilidad_pricing.xlsx</div>
+      <div class="corte-label" style="margin-top:4px">Historial Chile 2024–2025 · Perú 2025</div>
+    </div>
   </div>
 </header>
 
@@ -213,6 +230,7 @@
     <div class="tab active" onclick="switchTab('resumen',this)">📋 Resumen Ejecutivo</div>
     <div class="tab" onclick="switchTab('chile',this)">🇨🇱 Chile</div>
     <div class="tab" onclick="switchTab('peru',this)">🇵🇪 Perú</div>
+    <div class="tab" onclick="switchTab('pricing',this)">📊 Eficiencia Pricing</div>
     <div class="tab" onclick="switchTab('alertas',this)">🚨 Alertas &amp; Decisiones</div>
   </div>
 
@@ -712,6 +730,200 @@
 
   </div><!-- /tab-alertas -->
 
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       TAB 5 · EFICIENCIA PRICING
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div id="tab-pricing" class="tab-content">
+
+    <!-- SELECTOR BAR -->
+    <div class="pric-sel-bar">
+      <div class="pric-sel-group">
+        <div class="pric-sel-label">PAÍS</div>
+        <div style="display:flex;gap:4px">
+          <button class="pric-sbtn active" onclick="setPais('chile',this)">🇨🇱 Chile</button>
+          <button class="pric-sbtn" onclick="setPais('peru',this)">🇵🇪 Perú</button>
+          <button class="pric-sbtn" onclick="setPais('grupo',this)">🌎 Grupo</button>
+        </div>
+      </div>
+      <div class="pric-sel-group">
+        <div class="pric-sel-label">VENDEDOR</div>
+        <select id="pricSelVend" class="pric-sel" onchange="filtrarPric()">
+          <option value="">Todos</option>
+        </select>
+      </div>
+      <div class="pric-sel-group">
+        <div class="pric-sel-label">VISTA</div>
+        <select id="pricSelVista" class="pric-sel" onchange="cambiarVista()">
+          <option value="vend">Vendedores</option>
+          <option value="prod">Productos bajo piso</option>
+          <option value="sinpiso">Productos sin piso</option>
+          <option value="cli">Clientes expuestos</option>
+        </select>
+      </div>
+      <div id="pricCorte" class="pric-corte-tag">📅 Chile · YTD 2026 Ene–Abr 26</div>
+    </div>
+
+    <!-- KPI STRIP — 5 cards, Cobertura destacado primero -->
+    <div style="display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr 1fr;gap:12px;margin-bottom:18px">
+      <div class="kpi-mini" style="border-color:rgba(230,126,34,0.45);background:rgba(230,126,34,0.07)">
+        <div class="kpi-mini-label">🗂️ Cobertura Pricing</div>
+        <div class="kpi-mini-val" style="color:#e67e22;font-size:36px;line-height:1" id="kpCob">66.6%</div>
+        <div class="kpi-mini-sub" id="kpCobSub">Revenue con piso definido · 2026 YTD</div>
+      </div>
+      <div class="kpi-mini amber">
+        <div class="kpi-mini-label">📊 IEC</div>
+        <div class="kpi-mini-val v-amber" id="kpIec">43.1%</div>
+        <div class="kpi-mini-sub" id="kpIecSub">Ventas sobre piso / con piso · 2026</div>
+      </div>
+      <div class="kpi-mini green">
+        <div class="kpi-mini-label">💰 Ventas Totales</div>
+        <div class="kpi-mini-val v-green" id="kpTotal">CLP 193.3M</div>
+        <div class="kpi-mini-sub" id="kpTotalSub">2026 YTD · Ene–Abr 26</div>
+      </div>
+      <div class="kpi-mini red">
+        <div class="kpi-mini-label">📉 Ventas Bajo Piso</div>
+        <div class="kpi-mini-val v-red" id="kpBajo">CLP 73.2M</div>
+        <div class="kpi-mini-sub" id="kpBajoSub">37.9% de ventas con piso · 2026</div>
+      </div>
+      <div class="kpi-mini amber">
+        <div class="kpi-mini-label">💸 Impacto Estimado</div>
+        <div class="kpi-mini-val v-amber" id="kpImp">CLP 16.3M</div>
+        <div class="kpi-mini-sub" id="kpImpSub">Gap × volumen · 2026 YTD</div>
+      </div>
+    </div>
+
+    <!-- ═══ CONTENIDO CHILE ═══ -->
+    <div id="pric-cl">
+
+      <!-- VENDEDORES -->
+      <div id="pric-cl-vend">
+        <div class="section-h red">RANKING VENDEDORES — EXPOSICIÓN PRICING CHILE <span style="font-size:10px;font-weight:400;color:var(--text-muted)">Historial 2024–25 · CLP</span></div>
+        <div class="panel">
+          <div class="panel-title red-title">VENDEDORES — % TRANS. BAJO PISO · MONTO · ESTADO <span class="tag">ORDENADO POR MONTO BAJO PISO DESC.</span></div>
+          <table class="data-table">
+            <thead><tr>
+              <th>#</th><th>Vendedor</th>
+              <th class="r">Ventas Total</th><th class="r">TX Total</th>
+              <th class="r">TX Bajo Piso</th><th class="r">% TX Bajo Piso</th>
+              <th class="r">Monto Bajo Piso</th><th class="r">% Monto</th>
+              <th class="r">Estado</th>
+            </tr></thead>
+            <tbody id="tbVend"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PRODUCTOS BAJO PISO -->
+      <div id="pric-cl-prod" style="display:none">
+        <div class="section-h red">RANKING PRODUCTOS — BAJO PRECIO PISO <span style="font-size:10px;font-weight:400;color:var(--text-muted)">Historial 2024–25 · Ordenado por Impacto Est. desc.</span></div>
+        <div class="panel">
+          <div class="panel-title red-title">PRODUCTOS CON VENTA BAJO PISO — IMPACTO ESTIMADO <span class="tag">CLP · GAP UNIT × CANTIDAD TOTAL SKU</span></div>
+          <table class="data-table">
+            <thead><tr>
+              <th>#</th><th>Producto · Formato</th>
+              <th class="r">Venta Bajo Piso</th><th class="r">TX Bajo Piso</th>
+              <th class="r">Gap Prom/Ud</th><th class="r">Impacto Est.</th>
+              <th class="r">Acción Sugerida</th>
+            </tr></thead>
+            <tbody id="tbProd"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SIN PISO -->
+      <div id="pric-cl-sinpiso" style="display:none">
+        <div class="section-h amber">PRODUCTOS SIN PRECIO PISO DEFINIDO <span style="font-size:10px;font-weight:400;color:var(--text-muted)">2026 YTD · Excluidos del cálculo IEC</span></div>
+        <div class="alert-box amber" style="margin-bottom:14px">
+          <div class="alert-title amber">⚠️ IEC distorsionado por productos externos sin piso — J. Caroca</div>
+          <div class="alert-body">64.5M CLP en 94 transacciones de productos de terceros (CRYOPHILE, PROTECT PRADERAS, FOLIBAC, SOLUFOS, BODENPRO) quedan excluidos del cálculo de IEC. El IEC de Caroca (67.7%) está sobreestimado. Requiere definir política de precio piso para productos externos o marcas de terceros.</div>
+        </div>
+        <div class="panel">
+          <div class="panel-title amber-title">PRODUCTOS SIN PRECIO PISO — 2026 YTD <span class="tag">CLP · VENTAS SIN PISO DEFINIDO</span></div>
+          <table class="data-table">
+            <thead><tr>
+              <th>#</th><th>Producto</th><th>Vendedor Principal</th>
+              <th class="r">Ventas 2026 YTD</th><th class="r">Acción Requerida</th>
+            </tr></thead>
+            <tbody id="tbSinPiso"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CLIENTES EXPUESTOS -->
+      <div id="pric-cl-cli" style="display:none">
+        <div class="section-h amber">EXPOSICIÓN CLIENTES — COMPRAS BAJO PRECIO PISO <span style="font-size:10px;font-weight:400;color:var(--text-muted)">Historial 2024–25 · Ordenado por impacto desc.</span></div>
+        <div class="alert-box blue" style="margin-bottom:12px">
+          <div class="alert-title blue">ℹ️ Vendedor × Cliente · Filtrar por Vendedor con el selector superior</div>
+          <div class="alert-body">Esta tabla muestra el cruce Vendedor × Cliente con monto comprado bajo piso. Usar el selector "Vendedor" para focalizar el análisis por responsable comercial. El cruce Vendedor × Producto granular requiere procesamiento de transacciones individuales.</div>
+        </div>
+        <div class="panel">
+          <div class="panel-title amber-title">CLIENTES CON COMPRAS BAJO PISO — RESPONSABLE COMERCIAL <span class="tag">CLP · 2024–25</span></div>
+          <table class="data-table">
+            <thead><tr>
+              <th>#</th><th>Cliente</th><th>Vendedor</th>
+              <th class="r">Monto Bajo Piso</th><th class="r">TX</th><th class="r">% TX</th><th class="r">Clasif.</th>
+            </tr></thead>
+            <tbody id="tbCli"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /pric-cl -->
+
+    <!-- ═══ CONTENIDO PERÚ ═══ -->
+    <div id="pric-pe" style="display:none">
+      <div class="alert-box blue" style="margin-bottom:18px">
+        <div class="alert-title blue">ℹ️ Análisis de pricing por SKU no disponible para Perú</div>
+        <div class="alert-body">Las ventas de Perú están registradas a nivel de factura total (USD por factura), sin desglose por SKU ni precio unitario. El análisis de disciplina de precio piso, IEC y cobertura de pricing no son calculables con la fuente actual. Se muestra el análisis de volumen por vendedor como referencia comercial.</div>
+      </div>
+      <div class="section-h blue">VENDEDORES PERÚ — VOLUMEN 2025</div>
+      <div class="panel">
+        <div class="panel-title" style="color:var(--blue)">RANKING VENDEDORES — VENTAS USD 2025</div>
+        <table class="data-table">
+          <thead><tr>
+            <th>#</th><th>Vendedor</th>
+            <th class="r">Ventas USD</th><th class="r">Facturas</th>
+            <th class="r">Clientes</th><th class="r">% Total</th>
+          </tr></thead>
+          <tbody id="tbPeVend"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ CONTENIDO GRUPO ═══ -->
+    <div id="pric-grupo" style="display:none">
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-title"><span class="flag">🇨🇱</span>CHILE 2026 — Eficiencia Pricing YTD</div>
+          <table class="data-table">
+            <tr><th>KPI</th><th class="r">Valor</th><th class="r">Estado</th></tr>
+            <tr><td>🗂️ Cobertura pricing (revenue)</td><td class="right mono" style="color:#e67e22"><strong>66.6%</strong></td><td class="right"><span class="badge badge-a">🟠 BAJA</span></td></tr>
+            <tr><td>📊 IEC 2026 YTD</td><td class="right mono amber"><strong>43.1%</strong></td><td class="right"><span class="badge badge-a">REVISAR</span></td></tr>
+            <tr><td>💰 Ventas 2026 YTD</td><td class="right mono green">CLP 193.3M</td><td class="right"><span class="badge badge-g">Ene–Abr</span></td></tr>
+            <tr><td>📉 Ventas bajo piso</td><td class="right mono red">CLP 73.2M</td><td class="right"><span class="badge badge-r">37.9% con piso</span></td></tr>
+            <tr><td>💸 Impacto estimado</td><td class="right mono amber">CLP 16.3M</td><td class="right"><span class="badge badge-a">gap×volumen</span></td></tr>
+            <tr><td>🚫 Productos sin piso</td><td class="right mono red">5 productos · 64.5M</td><td class="right"><span class="badge badge-r">IEC DISTORCIONADO</span></td></tr>
+          </table>
+        </div>
+        <div class="panel">
+          <div class="panel-title"><span class="flag">🇵🇪</span>PERÚ 2025 — Referencia comercial</div>
+          <table class="data-table">
+            <tr><th>KPI</th><th class="r">Valor</th><th class="r">Estado</th></tr>
+            <tr><td>🗂️ Cobertura pricing (SKU)</td><td class="right mono muted">N/D</td><td class="right"><span class="badge badge-a">SIN DETALLE</span></td></tr>
+            <tr><td>📊 IEC 2025</td><td class="right mono muted">N/D</td><td class="right"><span class="badge badge-a">SIN SKU</span></td></tr>
+            <tr><td>💰 Ventas 2025</td><td class="right mono green">USD 690K</td><td class="right"><span class="badge badge-g">Año completo</span></td></tr>
+            <tr><td>👥 Vendedores activos</td><td class="right mono">6</td><td class="right"><span class="badge badge-g">OK</span></td></tr>
+            <tr><td>🏆 Top vendedor</td><td class="right mono green">J. Geldres</td><td class="right"><span class="badge badge-g">USD 275K</span></td></tr>
+            <tr><td>📦 Análisis SKU</td><td class="right mono muted">No disponible</td><td class="right"><span class="badge badge-a">SOLICITAR</span></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-pricing -->
+
 </div><!-- /page -->
 
 <!-- ══ FOOTER ══════════════════════════════════════════════════════════════ -->
@@ -932,6 +1144,236 @@ new Chart(document.getElementById('chartPeruCli'), {
     }
   }
 });
+
+
+
+/* ══════════════════════════════════════════════════════════
+   CERRAR SESIÓN
+   ══════════════════════════════════════════════════════════ */
+function cerrarSesion() {
+  sessionStorage.removeItem('av_auth');
+  sessionStorage.removeItem('av_role');
+  window.location.href = 'index.html';
+}
+
+/* ══════════════════════════════════════════════════════════
+   EFICIENCIA PRICING — DATA + LOGIC
+   ══════════════════════════════════════════════════════════ */
+var VEND_CL_P = [
+  {n:'Pablo Laratro',   total:392.3, tx:1160,bajoPisoTx:179, pctTx:15.4, ventaBajo:27.51, pctVenta:7.0, estado:'REVISAR'},
+  {n:'Fco. Velásquez',  total:279.7, tx:590, bajoPisoTx:76,  pctTx:12.9, ventaBajo:18.47, pctVenta:6.6, estado:'REVISAR'},
+  {n:'Jorge Caroca',    total:219.5, tx:657, bajoPisoTx:179, pctTx:27.2, ventaBajo:12.78, pctVenta:5.8, estado:'ALERTA'},
+  {n:'Eduardo Pinto',   total:117.9, tx:425, bajoPisoTx:24,  pctTx:5.6,  ventaBajo:8.36,  pctVenta:7.1, estado:'OK'},
+  {n:'Capel',           total:72.3,  tx:126, bajoPisoTx:4,   pctTx:3.2,  ventaBajo:0.17,  pctVenta:0.2, estado:'OK'},
+  {n:'Iván Veverka',    total:68.6,  tx:121, bajoPisoTx:1,   pctTx:0.8,  ventaBajo:0.03,  pctVenta:0.0, estado:'OK'},
+  {n:'Franco Riffo',    total:58.7,  tx:73,  bajoPisoTx:5,   pctTx:6.8,  ventaBajo:4.86,  pctVenta:8.3, estado:'OK'},
+  {n:'G. Pradenas',     total:53.3,  tx:191, bajoPisoTx:4,   pctTx:2.1,  ventaBajo:0.04,  pctVenta:0.1, estado:'OK'},
+  {n:'José Muñoz',      total:22.1,  tx:79,  bajoPisoTx:0,   pctTx:0,    ventaBajo:0.0,   pctVenta:0,   estado:'OK'},
+  {n:'David Camilla',   total:21.5,  tx:82,  bajoPisoTx:3,   pctTx:3.7,  ventaBajo:0.09,  pctVenta:0.4, estado:'OK'},
+  {n:'Rodrigo Encina',  total:19.5,  tx:104, bajoPisoTx:23,  pctTx:22.1, ventaBajo:1.14,  pctVenta:5.8, estado:'ALERTA'},
+  {n:'Rayén Bernazar',  total:14.8,  tx:267, bajoPisoTx:0,   pctTx:0,    ventaBajo:0.0,   pctVenta:0,   estado:'OK'},
+  {n:'Javier Almeida',  total:6.6,   tx:21,  bajoPisoTx:2,   pctTx:9.5,  ventaBajo:0.29,  pctVenta:4.4, estado:'OK'},
+  {n:'Valentina Muñoz', total:5.39,  tx:20,  bajoPisoTx:6,   pctTx:30.0, ventaBajo:1.12,  pctVenta:20.8,estado:'ALERTA'}
+];
+var PROD_CL_P = [
+  {n:'ALGAP 30 · 1000 L',       bajo:0.0,  tx:2,  gap:2795, imp:39.14, accion:'SUBIR PRECIO URGENTE'},
+  {n:'PLUS CALCIO · 1000 L',    bajo:0.0,  tx:2,  gap:1695, imp:20.35, accion:'SUBIR PRECIO URGENTE'},
+  {n:'PLUS POTASIO · 1000 L',   bajo:0.0,  tx:2,  gap:2776, imp:16.66, accion:'SUBIR PRECIO URGENTE'},
+  {n:'HUMIC ROOT · 1000 L',     bajo:9.21, tx:3,  gap:1063, imp:10.20, accion:'SUBIR PRECIO URGENTE'},
+  {n:'MAX FULVIC 45% · 1000 L', bajo:3.64, tx:3,  gap:895,  imp:5.37,  accion:'SUBIR PRECIO URGENTE'},
+  {n:'MAX FULVIC 45% · 20 L',   bajo:11.78,tx:18, gap:503,  imp:2.62,  accion:'SUBIR PRECIO URGENTE'},
+  {n:'PLUS ZINC · 20 L',        bajo:6.84, tx:25, gap:589,  imp:1.20,  accion:'SUBIR PRECIO'},
+  {n:'PLUS POTASIO · 20 L',     bajo:4.17, tx:6,  gap:726,  imp:1.13,  accion:'SUBIR PRECIO'},
+  {n:'PLUS POTASIO · 1 L',      bajo:4.23, tx:56, gap:968,  imp:0.91,  accion:'SUBIR PRECIO'},
+  {n:'PLUS NUTRI MIX · 1 L',    bajo:4.28, tx:55, gap:1288, imp:0.88,  accion:'SUBIR PRECIO'},
+  {n:'PLUS ZINC · 200 L',       bajo:4.73, tx:4,  gap:308,  imp:0.49,  accion:'REVISAR'},
+  {n:'AMIN · 20 L',             bajo:2.77, tx:3,  gap:441,  imp:0.42,  accion:'REVISAR'},
+  {n:'PLUS ZINC · 5 L',         bajo:1.85, tx:42, gap:928,  imp:0.40,  accion:'REVISAR'},
+  {n:'AMIN SUGAR · 20 L',       bajo:0.78, tx:5,  gap:791,  imp:0.38,  accion:'REVISAR'},
+  {n:'PLUS POTASIO · 5 L',      bajo:4.25, tx:38, gap:385,  imp:0.38,  accion:'REVISAR'}
+];
+var SINPISO_CL_P = [
+  {n:'CRYOPHILE',        vend:'J. Caroca', ventas:15.4,  accion:'Definir precio piso urgente'},
+  {n:'PROTECT PRADERAS', vend:'J. Caroca', ventas:10.8,  accion:'Definir precio piso'},
+  {n:'FOLIBAC',          vend:'J. Caroca', ventas:8.0,   accion:'Definir precio piso'},
+  {n:'SOLUFOS',          vend:'J. Caroca', ventas:5.0,   accion:'Definir precio piso'},
+  {n:'BODENPRO',         vend:'J. Caroca', ventas:3.78,  accion:'Definir precio piso'}
+];
+var CLI_CL_P = [
+  {cli:'AGRÍCOLA DON PEDRO SPA',       vend:'Pablo Laratro',  bajo:8.72, tx:2,  pctTx:66.7, cl:'CRÍTICO'},
+  {cli:'AGROFRUTILLAS SAN PEDRO S.A.', vend:'Eduardo Pinto',  bajo:7.47, tx:13, pctTx:36.1, cl:'CRÍTICO'},
+  {cli:'AGROINSUMOS KULLIN SPA',       vend:'Pablo Laratro',  bajo:5.68, tx:72, pctTx:32.9, cl:'CRÍTICO'},
+  {cli:'COMERC. LA COLONIA LTDA',      vend:'Fco. Velásquez', bajo:5.2,  tx:2,  pctTx:33.3, cl:'CRÍTICO'},
+  {cli:'AGRÍCOLA DEL NORTE LTDA',      vend:'Franco Riffo',   bajo:4.68, tx:4,  pctTx:66.7, cl:'ALERTA'},
+  {cli:'VILLEGAS Y BERRIOS LTDA',      vend:'Jorge Caroca',   bajo:4.5,  tx:99, pctTx:38.7, cl:'ALERTA'},
+  {cli:'AGRÍCOLA SEMINARIO LTDA',      vend:'Fco. Velásquez', bajo:3.86, tx:5,  pctTx:18.5, cl:'ALERTA'},
+  {cli:'CARLOS G. SOUPER URRA',        vend:'Pablo Laratro',  bajo:3.39, tx:10, pctTx:47.6, cl:'ALERTA'},
+  {cli:'FRUTICOLA RIO BLANCO SPA',     vend:'Pablo Laratro',  bajo:2.94, tx:8,  pctTx:8.8,  cl:'ALERTA'},
+  {cli:'AG. FUNDO LA PIEDRA LTDA',     vend:'Fco. Velásquez', bajo:2.78, tx:8,  pctTx:36.4, cl:'ALERTA'},
+  {cli:'SIEMBRA SPA',                  vend:'Jorge Caroca',   bajo:2.30, tx:25, pctTx:25.8, cl:'ALERTA'},
+  {cli:'COPELEC S.A.',                 vend:'Jorge Caroca',   bajo:1.45, tx:12, pctTx:38.7, cl:'ALERTA'},
+  {cli:'COPELEC S.A.',                 vend:'Valentina Muñoz',bajo:1.12, tx:6,  pctTx:33.3, cl:'ALERTA'},
+  {cli:'RAÚL JOFRE Y CÍA LTDA',       vend:'Rodrigo Encina', bajo:0.67, tx:11, pctTx:37.9, cl:'MONITOREAR'},
+  {cli:'RAMADA DE CAMPOS SPA',         vend:'Jorge Caroca',   bajo:0.70, tx:10, pctTx:18.5, cl:'MONITOREAR'}
+];
+var VEND_PE_P = [
+  {n:'Jose Geldres',    usd:275131, tx:59, cli:16, pct:39.8},
+  {n:'Oscar Infante',   usd:219543, tx:63, cli:15, pct:31.8},
+  {n:'Lisbeth Aguirre', usd:162790, tx:50, cli:16, pct:23.6},
+  {n:'Omar Atalaya',    usd:20306,  tx:9,  cli:6,  pct:2.9},
+  {n:'G. Pradenas',     usd:7830,   tx:5,  cli:2,  pct:1.1},
+  {n:'A. González',     usd:4814,   tx:1,  cli:1,  pct:0.7}
+];
+var KPIS_P = {
+  chile:{cob:'66.6%',cobSub:'Revenue con piso definido · 2026 YTD',iec:'43.1%',iecSub:'Ventas sobre piso / con piso · 2026',total:'CLP 193.3M',totalSub:'2026 YTD · Ene–Abr 26',bajo:'CLP 73.2M',bajoSub:'37.9% de ventas con piso conocido',imp:'CLP 16.3M',impSub:'Gap × volumen · 2026 YTD'},
+  peru: {cob:'N/D',cobSub:'Sin desglose por SKU · Perú 2025',iec:'N/D',iecSub:'No calculable sin precio/SKU',total:'USD 690K',totalSub:'2025 año completo',bajo:'N/D',bajoSub:'Sin datos de precio por transacción',imp:'N/D',impSub:'No calculable sin SKU'},
+  grupo:{cob:'66.6% CL',cobSub:'Perú sin desglose SKU',iec:'43.1% CL',iecSub:'Perú IEC no calculable',total:'USD 437K',totalSub:'Grupo 2026 YTD (Chile + Perú)',bajo:'CLP 73.2M+',bajoSub:'Chile 2026 · Perú sin dato',imp:'CLP 16.3M+',impSub:'Chile 2026 · Perú sin dato'}
+};
+var CORTE_P = {chile:'📅 Chile · YTD 2026 Ene–Abr 26',peru:'📅 Perú · 2025 año completo',grupo:'📅 Grupo · Chile 2026 YTD + Perú 2025'};
+var currentPaisP = 'chile';
+
+function pEstadoBadge(e){
+  if(e==='ALERTA') return '<span class="badge badge-r">ALERTA</span>';
+  if(e==='REVISAR') return '<span class="badge badge-a">REVISAR</span>';
+  return '<span class="badge badge-g">OK</span>';
+}
+function pClBadge(c){
+  if(c==='CRÍTICO') return '<span class="badge badge-r">CRÍTICO</span>';
+  if(c==='ALERTA') return '<span class="badge badge-a">ALERTA</span>';
+  return '<span class="badge badge-b">MONITOREAR</span>';
+}
+function pColorPct(p){ return p>=20?'red bold':p>=10?'amber':p>0?'':'muted'; }
+function pColorImp(v){ return v>=10?'red bold':v>=3?'red':v>=1?'amber':''; }
+
+function renderVendCLP(filtro){
+  var data = filtro ? VEND_CL_P.filter(function(v){return v.n.toLowerCase().indexOf(filtro.toLowerCase())>=0;}) : VEND_CL_P.slice();
+  data.sort(function(a,b){return b.ventaBajo-a.ventaBajo;});
+  var h='';
+  data.forEach(function(v,i){
+    var cp=pColorPct(v.pctTx);
+    h+='<tr><td><span class="rank'+(i<3?' top':'')+'">'+(i+1)+'</span></td>'+
+      '<td class="bold">'+v.n+'</td>'+
+      '<td class="right mono">CLP '+v.total.toFixed(1)+'M</td>'+
+      '<td class="right mono">'+v.tx+'</td>'+
+      '<td class="right mono '+(v.bajoPisoTx>20?'red':'')+'">'+v.bajoPisoTx+'</td>'+
+      '<td class="right mono '+cp+'">'+v.pctTx.toFixed(1)+'%</td>'+
+      '<td class="right mono '+pColorImp(v.ventaBajo)+'">'+(v.ventaBajo>0?'CLP '+v.ventaBajo.toFixed(2)+'M':'—')+'</td>'+
+      '<td class="right mono muted">'+(v.pctVenta>0?v.pctVenta.toFixed(1)+'%':'—')+'</td>'+
+      '<td class="right">'+pEstadoBadge(v.estado)+'</td></tr>';
+  });
+  document.getElementById('tbVend').innerHTML=h;
+}
+function renderProdCLP(){
+  var h='';
+  PROD_CL_P.forEach(function(p,i){
+    var ia=p.accion.indexOf('URGENTE')>=0?'badge-r':p.accion.indexOf('SUBIR')>=0?'badge-a':'badge-b';
+    h+='<tr><td><span class="rank'+(i<5?' top':'')+'">'+(i+1)+'</span></td>'+
+      '<td class="bold">'+p.n+'</td>'+
+      '<td class="right mono '+(p.bajo>0?'amber':'muted')+'">'+(p.bajo>0?'CLP '+p.bajo.toFixed(2)+'M':'—')+'</td>'+
+      '<td class="right mono">'+p.tx+'</td>'+
+      '<td class="right mono red">−'+p.gap.toLocaleString('es-CL')+'</td>'+
+      '<td class="right mono '+pColorImp(p.imp)+'">CLP '+p.imp.toFixed(2)+'M</td>'+
+      '<td class="right"><span class="badge '+ia+'" style="font-size:8px">'+p.accion+'</span></td></tr>';
+  });
+  document.getElementById('tbProd').innerHTML=h;
+}
+function renderSinPisoP(){
+  var h='';
+  SINPISO_CL_P.forEach(function(p,i){
+    h+='<tr><td><span class="rank top">'+(i+1)+'</span></td>'+
+      '<td class="bold amber">'+p.n+'</td>'+
+      '<td class="muted">'+p.vend+'</td>'+
+      '<td class="right mono amber bold">CLP '+p.ventas.toFixed(2)+'M</td>'+
+      '<td class="right"><span class="badge badge-r" style="font-size:8px">'+p.accion+'</span></td></tr>';
+  });
+  document.getElementById('tbSinPiso').innerHTML=h;
+}
+function renderCliCLP(filtro){
+  var data=filtro?CLI_CL_P.filter(function(c){return c.vend.toLowerCase().indexOf(filtro.toLowerCase())>=0;}):CLI_CL_P.slice();
+  data.sort(function(a,b){return b.bajo-a.bajo;});
+  var h='';
+  data.forEach(function(c,i){
+    var pc=c.pctTx>=50?'red bold':c.pctTx>=30?'red':'amber';
+    h+='<tr><td><span class="rank'+(i<4?' top':'')+'">'+(i+1)+'</span></td>'+
+      '<td class="bold">'+c.cli+'</td>'+
+      '<td class="muted">'+c.vend+'</td>'+
+      '<td class="right mono red bold">CLP '+c.bajo.toFixed(2)+'M</td>'+
+      '<td class="right mono">'+c.tx+'</td>'+
+      '<td class="right mono '+pc+'">'+c.pctTx.toFixed(1)+'%</td>'+
+      '<td class="right">'+pClBadge(c.cl)+'</td></tr>';
+  });
+  document.getElementById('tbCli').innerHTML=h;
+}
+function renderPeVendP(){
+  var h='';
+  VEND_PE_P.forEach(function(v,i){
+    h+='<tr><td><span class="rank'+(i<3?' top':'')+'">'+(i+1)+'</span></td>'+
+      '<td class="bold'+(i===0?' green':'')+'">'+(i===0?'⭐ ':'')+v.n+'</td>'+
+      '<td class="right mono'+(i===0?' green bold':'')+'">USD '+v.usd.toLocaleString('es-CL')+'</td>'+
+      '<td class="right mono">'+v.tx+'</td>'+
+      '<td class="right mono">'+v.cli+'</td>'+
+      '<td class="right"><span class="badge '+(i<3?'badge-g':'badge-a')+'">'+v.pct.toFixed(1)+'%</span></td></tr>';
+  });
+  document.getElementById('tbPeVend').innerHTML=h;
+}
+function populateVendDropP(pais){
+  var sel=document.getElementById('pricSelVend');
+  sel.innerHTML='<option value="">Todos</option>';
+  var arr=pais==='chile'?VEND_CL_P:pais==='peru'?VEND_PE_P:[];
+  arr.forEach(function(v){var o=document.createElement('option');o.value=v.n;o.text=v.n;sel.appendChild(o);});
+}
+function updateKpisP(pais){
+  var k=KPIS_P[pais];
+  document.getElementById('kpCob').textContent=k.cob;
+  document.getElementById('kpCobSub').textContent=k.cobSub;
+  document.getElementById('kpIec').textContent=k.iec;
+  document.getElementById('kpIecSub').textContent=k.iecSub;
+  document.getElementById('kpTotal').textContent=k.total;
+  document.getElementById('kpTotalSub').textContent=k.totalSub;
+  document.getElementById('kpBajo').textContent=k.bajo;
+  document.getElementById('kpBajoSub').textContent=k.bajoSub;
+  document.getElementById('kpImp').textContent=k.imp;
+  document.getElementById('kpImpSub').textContent=k.impSub;
+}
+function setPais(pais,btn){
+  currentPaisP=pais;
+  document.querySelectorAll('.pric-sbtn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  document.getElementById('pric-cl').style.display=pais==='chile'?'':'none';
+  document.getElementById('pric-pe').style.display=pais==='peru'?'':'none';
+  document.getElementById('pric-grupo').style.display=pais==='grupo'?'':'none';
+  document.getElementById('pricCorte').textContent=CORTE_P[pais];
+  updateKpisP(pais);
+  populateVendDropP(pais);
+  document.getElementById('pricSelVend').value='';
+  if(pais==='chile'){renderVendCLP('');cambiarVistaP();}
+  if(pais==='peru') renderPeVendP();
+}
+function cambiarVistaP(){
+  var vista=document.getElementById('pricSelVista').value;
+  ['vend','prod','sinpiso','cli'].forEach(function(v){
+    var el=document.getElementById('pric-cl-'+v);
+    if(el) el.style.display=v===vista?'':'none';
+  });
+  var filtro=document.getElementById('pricSelVend').value;
+  if(vista==='vend') renderVendCLP(filtro);
+  else if(vista==='prod') renderProdCLP();
+  else if(vista==='sinpiso') renderSinPisoP();
+  else if(vista==='cli') renderCliCLP(filtro);
+}
+function filtrarPric(){
+  var vista=document.getElementById('pricSelVista').value;
+  var filtro=document.getElementById('pricSelVend').value;
+  if(vista==='vend') renderVendCLP(filtro);
+  else if(vista==='cli') renderCliCLP(filtro);
+}
+/* Init pricing tab */
+(function(){
+  renderVendCLP(''); renderProdCLP(); renderSinPisoP(); renderCliCLP(''); renderPeVendP();
+  populateVendDropP('chile');
+})();
+
+
 </script>
 </body>
 </html>

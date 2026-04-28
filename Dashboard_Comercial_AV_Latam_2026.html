@@ -159,6 +159,9 @@
   @media (max-width: 900px) {
     .grid-2, .grid-3, .grid-4, .kpi-strip { grid-template-columns: 1fr; }
   }
+
+  .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
+  .btn-logout:hover { background:rgba(231,76,60,0.10); }
 </style>
 </head>
 <body>
@@ -175,6 +178,7 @@
     <div class="corte-label">Corte de datos</div>
     <div class="corte-date">Chile 12/04 · Perú 16/04 · CxC 20/04/2026</div>
   </div>
+  <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
 </header>
 
 <div class="page">
@@ -857,6 +861,12 @@ new Chart(document.getElementById('cCxCPeru'), {
     }
   }
 });
+
+function cerrarSesion() {
+  sessionStorage.removeItem('av_auth');
+  sessionStorage.removeItem('av_role');
+  window.location.href = 'index.html';
+}
 </script>
 </body>
 </html>

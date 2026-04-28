@@ -136,6 +136,9 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
 /* FOOTER */
 .footer{text-align:center;padding:20px 32px;font-size:10px;color:var(--muted);
   border-top:1px solid var(--bdim);margin-top:20px;display:flex;justify-content:space-between;align-items:center}
+
+  .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
+  .btn-logout:hover { background:rgba(231,76,60,0.10); }
 </style>
 </head>
 <body>
@@ -159,6 +162,7 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
     <div>Vista Consolidada Grupo · <b>Corte: Dic 2025</b></div>
     <div style="color:var(--muted)">Ppto 2026 · CxC Abr 2026 · Multi-moneda</div>
   </div>
+  <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
 </div>
 
 <div class="page">
@@ -1003,6 +1007,12 @@ new Chart(document.getElementById('chartCxcPeru').getContext('2d'),{
     }
   }
 });
+
+function cerrarSesion() {
+  sessionStorage.removeItem('av_auth');
+  sessionStorage.removeItem('av_role');
+  window.location.href = 'index.html';
+}
 </script>
 
 </body>

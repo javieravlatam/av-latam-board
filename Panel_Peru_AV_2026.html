@@ -167,6 +167,9 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
 .sep{margin:24px 0;border:none;border-top:1px solid var(--bdim)}
 @media(max-width:960px){.g2,.g3,.g5{grid-template-columns:1fr}}
+
+  .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
+  .btn-logout:hover { background:rgba(231,76,60,0.10); }
 </style>
 </head>
 <body>
@@ -190,6 +193,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     <div>Corte <b>16/04/2026</b> · CxC <b>20/04/2026</b></div>
     <div style="font-size:8px;margin-top:1px;">Aguirre/Navarro = zona unificada · Ppto anual USD 1,137,034</div>
   </div>
+  <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
 </header>
 
 <div class="page">
@@ -693,6 +697,12 @@ new Chart(document.getElementById('cCxC'),{
     }
   }
 });
+
+function cerrarSesion() {
+  sessionStorage.removeItem('av_auth');
+  sessionStorage.removeItem('av_role');
+  window.location.href = 'index.html';
+}
 </script>
 </body>
 </html>
