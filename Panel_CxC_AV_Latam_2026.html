@@ -226,7 +226,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
   <div class="kpi-strip">
     <div class="kpi">
       <div class="kpi-lbl">Total Chile CxC</div>
-      <div class="kpi-val">60.4M</div>
+      <div class="kpi-val">39.3M</div>
       <div class="kpi-sub">CLP · corte 17/04</div>
     </div>
     <div class="kpi red">
@@ -241,7 +241,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
     </div>
     <div class="kpi blue">
       <div class="kpi-lbl">Total Perú CxC</div>
-      <div class="kpi-val blue">99.9K</div>
+      <div class="kpi-val blue">95.9K</div>
       <div class="kpi-sub">USD · sin SUPRA</div>
     </div>
     <div class="kpi amber">
@@ -340,7 +340,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
               <td class="r" style="font-family:'DM Mono';">100%</td>
               <td class="r" style="font-family:'DM Mono';color:var(--red);">15,957,630</td>
               <td class="r" style="font-family:'DM Mono';color:var(--red);">9,864,383</td>
-              <td class="c"><span class="tramo t-90">57.2% al día</span></td>
+              <td class="c"><span class="tramo t-90">55.6% al día</span></td>
             </tr>
           </tbody>
         </table>
@@ -409,7 +409,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
             </tr>
             <tr class="total-row">
               <td>TOTAL PERÚ</td>
-              <td class="r" style="font-family:'DM Mono';">99,926</td>
+              <td class="r" style="font-family:'DM Mono';">95,947</td>
               <td class="r" style="font-family:'DM Mono';">100%</td>
               <td class="r" style="font-family:'DM Mono';color:var(--red);">49,160</td>
               <td class="r" style="font-family:'DM Mono';color:var(--red);">30,816</td>
@@ -469,7 +469,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
       <div class="filter-btn" onclick="filterPE('normal',this)" style="color:var(--green);">🟢 Al día</div>
       <div class="filter-btn" onclick="filterPE('supra',this)" style="color:var(--text-muted);">⚫ SUPRA</div>
       <input class="filter-search" id="searchPE" placeholder="Buscar cliente o vendedor..." onkeyup="searchPEF(this.value)">
-      <div class="filter-label" id="pe-count">46 entradas · USD 99,926</div>
+      <div class="filter-label" id="pe-count">45 entradas · USD 95,947</div>
     </div>
 
     <table class="tbl" id="tbl-peru">
@@ -805,7 +805,7 @@ const G='#7AB648',A='#F5A623',O='#E67E22',R='#E74C3C',RD='#C0392B',B='#4A9EDB';
 new Chart(document.getElementById('cCH'), {
   type: 'doughnut',
   data: {
-    labels: ['0–30d Normal (57.2%)', '31–60d Alerta (17.7%)', '61–90d Riesgo (8.8%)', '+90d Crítico (16.3%)'],
+    labels: ['0–30d Normal (55.6%)', '31–60d Alerta (27.9%)', '61–90d Riesgo (10.4%)', '+90d Crítico (6.1%)'],
     datasets: [{ data: [34.5,10.7,5.3,9.9], backgroundColor:[G,A,O,R], borderColor:'#080e09', borderWidth:3 }]
   },
   options: {

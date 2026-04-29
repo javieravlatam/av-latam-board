@@ -202,9 +202,9 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   <div class="g5" style="margin-bottom:18px;">
     <div class="kpi blue">
       <div class="klbl">Ventas YTD</div>
-      <div class="kval blue">USD 234K</div>
-      <div class="ksub">al 24/04/2026</div>
-      <span class="kbadge kb-am">81.7% del Ppto Ene-Abr</span>
+      <div class="kval blue">USD 270K</div>
+      <div class="ksub">al 29/04/2026</div>
+      <span class="kbadge kb-am">95.9% del Ppto Ene-Abr</span>
     </div>
     <div class="kpi ok">
       <div class="klbl">Mejor Mes · Marzo</div>
@@ -337,7 +337,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
               <div class="mes-pct" style="color:var(--amber);font-weight:700;">95.9%</div>
             </div>
           </div>
-          <div style="font-size:9px;color:var(--muted);margin-top:6px;">* Abril parcial al 16/04/2026</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:6px;">* Abril parcial al 29/04/2026</div>
         </div>
       </div>
 
@@ -360,7 +360,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   </div>
 
   <!-- DETALLE POR ZONA + CHART -->
-  <div class="sec">Desempeño por Zona <span>YTD vs Ppto · corte 16/04/2026</span></div>
+  <div class="sec">Desempeño por Zona <span>YTD vs Ppto · corte 29/04/2026</span></div>
 
   <div class="g2" style="margin-bottom:15px;align-items:start;">
     <div class="panel">
@@ -424,7 +424,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
           <td class="mono r">213,385</td>
           <td class="c"><span class="pb pb-am">95.9%</span></td>
           <td class="mono r" style="color:var(--blue);">28,122</td>
-          <td class="mono r" style="color:var(--blue);">233,700</td>
+          <td class="mono r" style="color:var(--blue);">269,970</td>
           <td class="mono r">1,137,034</td>
         </tr></tfoot>
       </table>
@@ -656,7 +656,7 @@ const PPTO=[51674,58489,103222,71299,61946,78710,100675,178180,125564,165842,984
 const REAL=[73511,39409,91616,28122,0,0,0,0,0,0,0,0];
 const acum=arr=>arr.reduce((a,v,i)=>{a.push((a[i-1]||0)+(v||0));return a;},[]);
 const pptoAc=acum(PPTO);
-const realAc=[73511,112920,204537,232659,null,null,null,null,null,null,null,null];
+const realAc=[73511,112920,204537,269970,null,null,null,null,null,null,null,null];
 
 new Chart(document.getElementById('cCurva'),{
   type:'line',
