@@ -227,6 +227,10 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
         <span class="cc-k">Real 2025</span>
         <span class="cc-v" style="color:var(--green)">CLP 765.9M</span>
       </div>
+      <div class="cc-metric" style="background:rgba(122,182,72,0.08);border-radius:6px;padding:4px 6px;margin:-2px 0">
+        <span class="cc-k" style="color:var(--green)">Real 2026 YTD (4m)</span>
+        <span class="cc-v" style="color:var(--green);font-size:15px">CLP 193.3M</span>
+      </div>
       <div class="cc-metric">
         <span class="cc-k">Presupuesto 2026</span>
         <span class="cc-v" style="color:var(--amber)">CLP 861.3M</span>
@@ -265,6 +269,10 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
         <span class="cc-k">Real 2025</span>
         <span class="cc-v" style="color:var(--blue)">USD 690.4K</span>
       </div>
+      <div class="cc-metric" style="background:rgba(74,158,219,0.08);border-radius:6px;padding:4px 6px;margin:-2px 0">
+        <span class="cc-k" style="color:var(--blue)">Real 2026 YTD (4m · c.24/04)</span>
+        <span class="cc-v" style="color:var(--blue);font-size:15px">USD 234K</span>
+      </div>
       <div class="cc-metric">
         <span class="cc-k">Presupuesto 2026</span>
         <span class="cc-v" style="color:var(--amber)">USD 1,137K</span>
@@ -289,16 +297,16 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
   </div>
 
   <!-- CHARTS: EVOLUCIÓN MENSUAL -->
-  <div class="sec">Evolución Mensual por País <span>Real 2025 vs Presupuesto 2026</span></div>
+  <div class="sec">Evolución Mensual por País <span>Real 2025 · Real 2026 YTD · Presupuesto 2026</span></div>
   <div class="g2" style="margin-bottom:20px">
     <div class="chart-wrap">
-      <div class="chart-title">🇨🇱 Chile · Real 2025 vs Ppto 2026 (M CLP)</div>
+      <div class="chart-title">🇨🇱 Chile · Real 2025 / Real 2026 YTD / Ppto 2026 (M CLP)</div>
       <div class="chart-canvas">
         <canvas id="chartChile"></canvas>
       </div>
     </div>
     <div class="chart-wrap">
-      <div class="chart-title">🇵🇪 Perú · Real 2025 vs Ppto 2026 (USD miles)</div>
+      <div class="chart-title">🇵🇪 Perú · Real 2025 / Real 2026 YTD / Ppto 2026 (USD miles)</div>
       <div class="chart-canvas">
         <canvas id="chartPeru"></canvas>
       </div>
@@ -306,21 +314,23 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
   </div>
 
   <!-- TABLA COMPARATIVA MENSUAL -->
-  <div class="sec">Comparativo Mensual Grupo <span>Real 2025 · ambos países</span></div>
+  <div class="sec">Comparativo Mensual Grupo <span>Real 2025 · Real 2026 YTD · Ppto 2026</span></div>
   <div class="tbl-wrap">
     <div class="tbl-head">
-      <div class="tbl-head-title">Ventas mensuales 2025 · Real vs Presupuesto 2026</div>
+      <div class="tbl-head-title">Ventas mensuales · Real 2025 · Real 2026 YTD · Ppto 2026</div>
     </div>
     <table class="tbl">
       <thead>
         <tr>
           <th>Mes</th>
-          <th class="r" style="color:var(--green)">Chile Real 2025 (M)</th>
-          <th class="r" style="color:rgba(122,182,72,0.6)">Chile Ppto 2026 (M)</th>
-          <th class="c">Cumpl Chile</th>
-          <th class="r" style="color:var(--blue)">Perú Real 2025 (K USD)</th>
-          <th class="r" style="color:rgba(74,158,219,0.6)">Perú Ppto 2026 (K USD)</th>
-          <th class="c">Cumpl Perú</th>
+          <th class="r" style="color:var(--green)">CL Real 2025 (M)</th>
+          <th class="r" style="color:rgba(50,200,100,0.9)">CL Real 2026 (M)</th>
+          <th class="r" style="color:rgba(122,182,72,0.6)">CL Ppto 2026 (M)</th>
+          <th class="c">Cumpl CL</th>
+          <th class="r" style="color:var(--blue)">PE Real 2025 (K USD)</th>
+          <th class="r" style="color:rgba(30,120,255,0.9)">PE Real 2026 (K USD)</th>
+          <th class="r" style="color:rgba(74,158,219,0.6)">PE Ppto 2026 (K USD)</th>
+          <th class="c">Cumpl PE</th>
         </tr>
       </thead>
       <tbody id="tbody-mensual"></tbody>
@@ -764,10 +774,16 @@ const clPpto26  = [83.6,41.6,42.0,46.4,51.0,49.7,62.8,76.5,110.8,112.7,97.5,86.7
 const peReal25  = [59.1,36.7,70.9,42.5,24.3,27.8,48.1,53.0,70.9,120.6,82.5,54.0];
 const pePpto26  = [51.7,58.5,103.2,71.3,61.9,78.7,100.7,178.2,125.6,165.8,98.5,43.0];
 
+// Real 2026 YTD (Ene–Abr corte 24/04)
+const clReal26  = [88.2,35.7,52.4,17.0,null,null,null,null,null,null,null,null];
+const peReal26  = [73.5,39.4,91.6,28.1,null,null,null,null,null,null,null,null];
+
 const clTotal25 = clReal25.reduce((a,b)=>a+b,0);
 const clTotal26 = clPpto26.reduce((a,b)=>a+b,0);
 const peTotal25 = peReal25.reduce((a,b)=>a+b,0);
 const peTotal26 = pePpto26.reduce((a,b)=>a+b,0);
+const clYTD26   = clReal26.reduce((a,b)=>a+(b||0),0);
+const peYTD26   = peReal26.reduce((a,b)=>a+(b||0),0);
 
 // Vendedores Chile
 const vendChile = [
@@ -802,35 +818,49 @@ function switchTab(t, el) {
 /* ─── TABLA MENSUAL ─── */
 (function buildMensual() {
   const tb = document.getElementById('tbody-mensual');
-  let rCL=0, rPE=0, pCL=0, pPE=0;
+  let rCL=0, rPE=0, pCL=0, pPE=0, r26CL=0, r26PE=0;
   MESES.forEach((m,i)=>{
     const cl = clReal25[i], cp = clPpto26[i];
     const pe = peReal25[i], pp = pePpto26[i];
-    const cumplCL = (cl/cp*100).toFixed(0);
-    const cumplPE = (pe/pp*100).toFixed(0);
+    const cl26 = clReal26[i], pe26 = peReal26[i];
+    // Cumpl: use Real 2026 for months with data, Real 2025 otherwise
+    const baseValCL = cl26!==null ? cl26 : cl;
+    const baseValPE = pe26!==null ? pe26 : pe;
+    const cumplCL = (baseValCL/cp*100).toFixed(0);
+    const cumplPE = (baseValPE/pp*100).toFixed(0);
     rCL+=cl; rPE+=pe; pCL+=cp; pPE+=pp;
-    const badgeCL = cumplCL>=100?'b-ok':cumplCL>=85?'b-warn':'b-crit';
-    const badgePE = cumplPE>=100?'b-ok':cumplPE>=85?'b-warn':'b-crit';
+    if(cl26!==null) r26CL+=cl26;
+    if(pe26!==null) r26PE+=pe26;
+    const badgeCL = cl26!==null?(cumplCL>=100?'b-ok':cumplCL>=85?'b-warn':'b-crit'):'b-nd';
+    const badgePE = pe26!==null?(cumplPE>=100?'b-ok':cumplPE>=85?'b-warn':'b-crit'):'b-nd';
+    const cl26Txt = cl26!==null?`<td class="r mono" style="color:rgba(50,200,100,0.95)">${cl26.toFixed(1)}</td>`:`<td class="r mono" style="color:var(--muted)">—</td>`;
+    const pe26Txt = pe26!==null?`<td class="r mono" style="color:rgba(30,120,255,0.9)">${pe26.toFixed(1)}</td>`:`<td class="r mono" style="color:var(--muted)">—</td>`;
+    const cumplCLtxt = cl26!==null?`<span class="badge ${badgeCL}">${cumplCL}%</span>`:`<span class="badge b-nd" style="opacity:0.5">${(cl/cp*100).toFixed(0)}%</span>`;
+    const cumplPEtxt = pe26!==null?`<span class="badge ${badgePE}">${cumplPE}%</span>`:`<span class="badge b-nd" style="opacity:0.5">${(pe/pp*100).toFixed(0)}%</span>`;
     tb.innerHTML += `<tr>
       <td style="font-weight:600">${m}</td>
       <td class="r mono" style="color:var(--green)">${cl.toFixed(1)}</td>
+      ${cl26Txt}
       <td class="r mono" style="color:rgba(122,182,72,0.55)">${cp.toFixed(1)}</td>
-      <td class="c"><span class="badge ${badgeCL}">${cumplCL}%</span></td>
+      <td class="c">${cumplCLtxt}</td>
       <td class="r mono" style="color:var(--blue)">${pe.toFixed(1)}</td>
+      ${pe26Txt}
       <td class="r mono" style="color:rgba(74,158,219,0.55)">${pp.toFixed(1)}</td>
-      <td class="c"><span class="badge ${badgePE}">${cumplPE}%</span></td>
+      <td class="c">${cumplPEtxt}</td>
     </tr>`;
   });
-  const badgeCLt = (rCL/pCL*100)>=100?'b-ok':(rCL/pCL*100)>=85?'b-warn':'b-risk';
-  const badgePEt = (rPE/pPE*100)>=100?'b-ok':(rPE/pPE*100)>=85?'b-warn':'b-risk';
+  const badgeCLt = (r26CL/pCL*100)>=100?'b-ok':(r26CL/pCL*100)>=85?'b-warn':'b-risk';
+  const badgePEt = (r26PE/pPE*100)>=100?'b-ok':(r26PE/pPE*100)>=85?'b-warn':'b-risk';
   tb.innerHTML += `<tr style="background:var(--s2);font-weight:700">
     <td>TOTAL</td>
     <td class="r mono" style="color:var(--green)">${rCL.toFixed(1)}</td>
+    <td class="r mono" style="color:rgba(50,200,100,0.95)">${r26CL.toFixed(1)} <span style="font-size:8px;opacity:0.6">YTD</span></td>
     <td class="r mono" style="color:rgba(122,182,72,0.55)">${pCL.toFixed(1)}</td>
-    <td class="c"><span class="badge ${badgeCLt}">${(rCL/pCL*100).toFixed(0)}%</span></td>
+    <td class="c"><span class="badge ${badgeCLt}">${(r26CL/pCL*100).toFixed(0)}%</span></td>
     <td class="r mono" style="color:var(--blue)">${rPE.toFixed(1)}</td>
+    <td class="r mono" style="color:rgba(30,120,255,0.9)">${r26PE.toFixed(1)} <span style="font-size:8px;opacity:0.6">YTD</span></td>
     <td class="r mono" style="color:rgba(74,158,219,0.55)">${pPE.toFixed(1)}</td>
-    <td class="c"><span class="badge ${badgePEt}">${(rPE/pPE*100).toFixed(0)}%</span></td>
+    <td class="c"><span class="badge ${badgePEt}">${(r26PE/pPE*100).toFixed(0)}%</span></td>
   </tr>`;
 })();
 
@@ -904,7 +934,8 @@ new Chart(document.getElementById('chartChile').getContext('2d'),{
   data:{
     labels:MESES,
     datasets:[
-      {label:'Real 2025 (M CLP)',data:clReal25,backgroundColor:GREEN_RGBA,borderRadius:4,order:2},
+      {label:'Real 2025 (M CLP)',data:clReal25,backgroundColor:GREEN_RGBA,borderRadius:4,order:3},
+      {label:'Real 2026 YTD (M CLP)',data:clReal26,backgroundColor:'rgba(50,200,100,0.85)',borderRadius:4,order:2},
       {label:'Ppto 2026 (M CLP)',data:clPpto26,type:'line',borderColor:AMBER_LINE,backgroundColor:'transparent',
        borderWidth:2,pointRadius:3,pointBackgroundColor:AMBER_LINE,tension:0.3,order:1}
     ]
@@ -918,7 +949,8 @@ new Chart(document.getElementById('chartPeru').getContext('2d'),{
   data:{
     labels:MESES,
     datasets:[
-      {label:'Real 2025 (K USD)',data:peReal25,backgroundColor:BLUE_RGBA,borderRadius:4,order:2},
+      {label:'Real 2025 (K USD)',data:peReal25,backgroundColor:BLUE_RGBA,borderRadius:4,order:3},
+      {label:'Real 2026 YTD (K USD)',data:peReal26,backgroundColor:'rgba(30,120,255,0.85)',borderRadius:4,order:2},
       {label:'Ppto 2026 (K USD)',data:pePpto26,type:'line',borderColor:AMBER_LINE,backgroundColor:'transparent',
        borderWidth:2,pointRadius:3,pointBackgroundColor:AMBER_LINE,tension:0.3,order:1}
     ]
