@@ -203,8 +203,8 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
     </div>
   </div>
   <div class="corte">
-    <div>Chile <span>17/04/2026</span> · Perú <span>17/04/2026</span></div>
-    <div style="color:var(--text-muted);font-size:9px;margin-top:2px;">TC = 950 CLP/USD · Fecha análisis: 17/04/2026</div>
+    <div>Chile <span>29/04/2026</span> · Perú <span>29/04/2026</span></div>
+    <div style="color:var(--text-muted);font-size:9px;margin-top:2px;">TC = 950 CLP/USD · Fecha análisis: 29/04/2026</div>
   </div>
   <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
 </header>
@@ -216,8 +216,8 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
     <div class="alerta-icon">🚨</div>
     <div class="alerta-text">
       <strong>ALERTA DE RECUPERACIÓN BAJA.</strong>
-      Chile tiene <strong>CLP 9.86M en estado Crítico (+90 días)</strong> — Goyaservice (104d) + Loma Larga (103d) + Ribera (92d) escalaron.
-      Perú acumula <strong>USD 30,816 vencidos</strong> en cuentas +90 días. Cartera expuesta sube a 42.8% en Chile.
+      Chile tiene <strong>CLP 2.4M en estado Crítico (+90 días)</strong> — Goyaservice y Loma Larga <strong style="color:var(--green)">RESUELTOS ✅</strong> · Activos: Ribera (104d) + Kullin (97d).
+      Perú acumula <strong>USD 28,792 vencidos</strong> en cuentas +90 días. Cartera vencida total Chile: 44.4%.
       Se requiere acción inmediata por parte de los Jefes de País y RTCs responsables.
     </div>
   </div>
@@ -227,17 +227,17 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
     <div class="kpi">
       <div class="kpi-lbl">Total Chile CxC</div>
       <div class="kpi-val">39.3M</div>
-      <div class="kpi-sub">CLP · corte 17/04</div>
+      <div class="kpi-sub">CLP · corte 29/04</div>
     </div>
-    <div class="kpi red">
+    <div class="kpi amber">
       <div class="kpi-lbl">Chile Vencida</div>
-      <div class="kpi-val red">25.8M</div>
-      <div class="kpi-sub">CLP · 42.8% cartera</div>
+      <div class="kpi-val amber">17.5M</div>
+      <div class="kpi-sub">CLP · 44.4% cartera</div>
     </div>
-    <div class="kpi red">
+    <div class="kpi amber">
       <div class="kpi-lbl">Chile +90 días</div>
-      <div class="kpi-val red">9.86M</div>
-      <div class="kpi-sub">CLP · 3 cuentas · CRÍTICO</div>
+      <div class="kpi-val amber">2.4M</div>
+      <div class="kpi-sub">CLP · 2 cuentas · activo</div>
     </div>
     <div class="kpi blue">
       <div class="kpi-lbl">Total Perú CxC</div>
@@ -296,50 +296,50 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
           <tbody>
             <tr>
               <td><strong>P. Laratro</strong></td>
-              <td class="monto warn">27,382,596</td>
-              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--red);">45.4%</span><div class="pb"><div class="pb-fill" style="width:45.4%;background:var(--red);"></div></div></td>
-              <td class="monto danger">11,405,605</td>
-              <td class="monto danger">4,195,937</td>
-              <td class="c"><span class="tramo t-crit">CRÍTICO</span></td>
-            </tr>
-            <tr>
-              <td><strong>J. Caroca</strong></td>
-              <td class="monto warn">12,958,417</td>
-              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--red);">21.5%</span><div class="pb"><div class="pb-fill" style="width:21.5%;background:var(--red);"></div></div></td>
-              <td class="monto danger">3,191,236</td>
-              <td class="monto danger">5,668,446</td>
+              <td class="monto warn">15,179,365</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--amber);">38.6%</span><div class="pb"><div class="pb-fill" style="width:38.6%;background:var(--amber);"></div></div></td>
+              <td class="monto danger">8,877,161</td>
+              <td class="monto danger">921,215</td>
               <td class="c"><span class="tramo t-crit">CRÍTICO</span></td>
             </tr>
             <tr>
               <td>R. Encina</td>
-              <td class="monto ok">12,704,454</td>
-              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--amber);">21.1%</span><div class="pb"><div class="pb-fill" style="width:21.1%;background:var(--amber);"></div></div></td>
-              <td class="monto warn">170,789</td>
+              <td class="monto ok">11,921,619</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--amber);">30.3%</span><div class="pb"><div class="pb-fill" style="width:30.3%;background:var(--amber);"></div></div></td>
+              <td class="monto warn">3,040,355</td>
               <td class="monto ok">–</td>
               <td class="c"><span class="tramo t-3160">ALERTA</span></td>
+            </tr>
+            <tr>
+              <td><strong>J. Caroca</strong></td>
+              <td class="monto warn">6,445,493</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--red);">16.4%</span><div class="pb"><div class="pb-fill" style="width:16.4%;background:var(--red);"></div></div></td>
+              <td class="monto danger">4,571,243</td>
+              <td class="monto danger">1,473,696</td>
+              <td class="c"><span class="tramo t-crit">CRÍTICO</span></td>
             </tr>
             <tr>
               <td>F. Velásquez</td>
-              <td class="monto ok">5,194,945</td>
-              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--amber);">8.6%</span><div class="pb"><div class="pb-fill" style="width:8.6%;background:var(--amber);"></div></div></td>
-              <td class="monto warn">1,190,000</td>
+              <td class="monto ok">1,992,060</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--text-muted);">5.1%</span><div class="pb"><div class="pb-fill" style="width:5.1%;background:var(--green);"></div></div></td>
               <td class="monto ok">–</td>
-              <td class="c"><span class="tramo t-3160">ALERTA</span></td>
+              <td class="monto ok">–</td>
+              <td class="c"><span class="tramo t-ok">NORMAL</span></td>
             </tr>
             <tr>
               <td style="color:var(--text-muted);">Otros RTCs</td>
-              <td class="monto ok" style="color:var(--text-muted);">2,112,454</td>
-              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--text-muted);">3.5%</span></td>
-              <td class="monto ok" style="color:var(--text-muted);">–</td>
+              <td class="monto ok" style="color:var(--text-muted);">3,798,604</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--text-muted);">9.7%</span></td>
+              <td class="monto ok" style="color:var(--text-muted);">990,259</td>
               <td class="monto ok">–</td>
               <td class="c">–</td>
             </tr>
             <tr class="total-row">
               <td>TOTAL CHILE</td>
-              <td class="r" style="font-family:'DM Mono';">60,352,866</td>
+              <td class="r" style="font-family:'DM Mono';">39,337,141</td>
               <td class="r" style="font-family:'DM Mono';">100%</td>
-              <td class="r" style="font-family:'DM Mono';color:var(--red);">15,957,630</td>
-              <td class="r" style="font-family:'DM Mono';color:var(--red);">9,864,383</td>
+              <td class="r" style="font-family:'DM Mono';color:var(--amber);">17,479,018</td>
+              <td class="r" style="font-family:'DM Mono';color:var(--amber);">2,394,911</td>
               <td class="c"><span class="tramo t-90">55.6% al día</span></td>
             </tr>
           </tbody>
@@ -433,7 +433,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
       <div class="filter-btn" onclick="filterCH('alerta',this)" style="color:var(--amber);">🟡 Alerta (31-60d)</div>
       <div class="filter-btn" onclick="filterCH('normal',this)" style="color:var(--green);">🟢 Normal</div>
       <input class="filter-search" id="searchCH" placeholder="Buscar cliente o RTC..." onkeyup="searchCHF(this.value)">
-      <div class="filter-label" id="ch-count">62 facturas · CLP 60,352,866</div>
+      <div class="filter-label" id="ch-count">45 facturas · CLP 39,337,141</div>
     </div>
 
     <table class="tbl" id="tbl-chile">
@@ -508,36 +508,43 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
             <thead><tr><th>Cliente</th><th>RTC</th><th class="c">Días</th><th class="r">CLP</th><th class="c">Acción</th></tr></thead>
             <tbody>
               <tr>
-                <td><strong>GOYASERVICE SPA</strong></td>
+                <td><strong>AGRICOLA RIBERA LTDA</strong><br><span style="font-size:9px;color:var(--red);">⬆ Escaló desde Riesgo · 104d</span></td>
                 <td>J. Caroca</td>
                 <td class="c"><span class="mora crit">104d</span></td>
-                <td class="monto danger">4,194,750</td>
-                <td class="c"><span class="accion a-urg">URGENTE</span></td>
-              </tr>
-              <tr>
-                <td><strong>LOMA LARGA LTDA</strong><br><span style="font-size:9px;color:var(--text-muted);">3 cuotas pendientes</span></td>
-                <td>P. Laratro</td>
-                <td class="c"><span class="mora crit">96-103d</span></td>
-                <td class="monto danger">4,195,937</td>
-                <td class="c"><span class="accion a-urg">URGENTE</span></td>
-              </tr>
-              <tr>
-                <td><strong>AGRICOLA RIBERA LTDA</strong><br><span style="font-size:9px;color:var(--red);">⬆ Escaló desde Riesgo</span></td>
-                <td>J. Caroca</td>
-                <td class="c"><span class="mora crit">92d</span></td>
                 <td class="monto danger">1,473,696</td>
                 <td class="c"><span class="accion a-urg">URGENTE</span></td>
               </tr>
+              <tr>
+                <td><strong>AGROINSUMOS KULLIN</strong><br><span style="font-size:9px;color:var(--red);">3 facturas · escaló desde 61-90d</span></td>
+                <td>P. Laratro</td>
+                <td class="c"><span class="mora crit">97d</span></td>
+                <td class="monto danger">921,215</td>
+                <td class="c"><span class="accion a-urg">URGENTE</span></td>
+              </tr>
+              <tr style="background:rgba(122,182,72,0.08);">
+                <td><del style="color:var(--text-muted);">GOYASERVICE SPA</del></td>
+                <td style="color:var(--text-muted);">J. Caroca</td>
+                <td class="c"><span style="color:var(--green);font-size:10px;">PAGADO ✅</span></td>
+                <td class="monto ok" style="color:var(--green);">4,194,750</td>
+                <td class="c"><span style="color:var(--green);font-size:10px;">RESUELTO</span></td>
+              </tr>
+              <tr style="background:rgba(122,182,72,0.08);">
+                <td><del style="color:var(--text-muted);">LOMA LARGA LTDA</del></td>
+                <td style="color:var(--text-muted);">P. Laratro</td>
+                <td class="c"><span style="color:var(--green);font-size:10px;">PAGADO ✅</span></td>
+                <td class="monto ok" style="color:var(--green);">4,195,937</td>
+                <td class="c"><span style="color:var(--green);font-size:10px;">RESUELTO</span></td>
+              </tr>
               <tr style="background:var(--surface3);">
-                <td colspan="3"><strong>Subtotal +90d</strong></td>
-                <td class="r" style="font-family:'DM Mono';font-weight:700;color:var(--red);">9,864,383</td>
+                <td colspan="3"><strong>Subtotal +90d activo</strong></td>
+                <td class="r" style="font-family:'DM Mono';font-weight:700;color:var(--amber);">2,394,911</td>
                 <td></td>
               </tr>
             </tbody>
           </table>
           <div style="margin-top:10px;padding:8px;background:rgba(0,0,0,0.2);border-radius:4px;font-size:10px;color:var(--text-dim);">
-            ℹ️ Goyaservice folio 250 sin pago desde 03/01/2026. Loma Larga con 3 cuotas en mora. Ribera escaló a Crítico esta semana.<br>
-            <strong style="color:var(--red);">Medida:</strong> Contacto formal + nota de cobro + bloqueo crédito hasta pago.
+            ✅ Goyaservice (4.19M) y Loma Larga (4.20M) cancelaron entre 17/04 y 29/04. Ribera (104d) y Kullin (97d) siguen activos.<br>
+            <strong style="color:var(--amber);">Medida:</strong> Contacto directo Ribera + bloqueo crédito Kullin. Gestión jefe país.
           </div>
         </div>
         <!-- 61-90d Riesgo -->
@@ -547,23 +554,18 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
             <thead><tr><th>Cliente</th><th>RTC</th><th class="c">Días</th><th class="r">CLP</th></tr></thead>
             <tbody>
               <tr>
-                <td>LOMA LARGA LTDA<br><span style="font-size:9px;color:var(--text-muted);">3 cuotas en tramo 61-90d</span></td><td>P. Laratro</td>
-                <td class="c"><span class="mora high">65-72d</span></td>
-                <td class="monto danger">4,195,938</td>
-              </tr>
-              <tr>
-                <td>AGROINSUMOS KULLIN<br><span style="font-size:9px;color:var(--text-muted);">3 facturas</span></td><td>P. Laratro</td>
-                <td class="c"><span class="mora high">85d</span></td>
-                <td class="monto danger">921,215</td>
-              </tr>
-              <tr>
                 <td>MAGALY ORELLANA PINO</td><td>J. Caroca</td>
-                <td class="c"><span class="mora high">61d</span></td>
+                <td class="c"><span class="mora high">73d</span></td>
                 <td class="monto danger">182,047</td>
+              </tr>
+              <tr>
+                <td>Otras cuentas 61-90d<br><span style="font-size:9px;color:var(--text-muted);">Múltiples clientes · ver Tab Chile</span></td><td>Varios</td>
+                <td class="c"><span class="mora high">61-90d</span></td>
+                <td class="monto danger">3,876,633</td>
               </tr>
             </tbody>
           </table>
-          <div style="margin-top:6px;font-size:10px;color:var(--text-dim);">Total 61–90d: <strong style="color:var(--orange);">CLP 5,299,200</strong></div>
+          <div style="margin-top:6px;font-size:10px;color:var(--text-dim);">Total 61–90d: <strong style="color:var(--orange);">CLP 4,058,680</strong> · Kullin escaló a +90d · Loma Larga RESUELTO ✅</div>
         </div>
       </div>
 
@@ -573,12 +575,6 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
         <table class="tbl">
           <thead><tr><th>Cliente</th><th>RTC</th><th class="c">Días</th><th class="r">CLP</th><th class="c">Acción</th></tr></thead>
           <tbody>
-            <tr>
-              <td><strong>LOMA LARGA LTDA</strong><br><span style="font-size:9px;color:var(--text-muted);">3 cuotas en tramo 31-60d</span></td><td>P. Laratro</td>
-              <td class="c"><span class="mora mid">38-44d</span></td>
-              <td class="monto warn">4,574,852</td>
-              <td class="c"><span class="accion a-seg">SEGUIMIENTO</span></td>
-            </tr>
             <tr>
               <td><strong>SOC. AGRIC. TIERRA DE BACO</strong></td><td>J. Caroca</td>
               <td class="c"><span class="mora mid">31d</span></td>
@@ -606,12 +602,12 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
             <tr>
               <td>Otras cuentas 31-60d</td><td>Varios</td>
               <td class="c"><span class="mora mid">31-42d</span></td>
-              <td class="monto warn">820,208</td>
+              <td class="monto warn">4,931,922</td>
               <td class="c"><span class="accion a-seg">SEGUIMIENTO</span></td>
             </tr>
             <tr style="background:var(--surface3);">
               <td colspan="3"><strong>Subtotal 31-60d</strong></td>
-              <td class="r" style="font-family:'DM Mono';font-weight:700;color:var(--amber);">10,658,430</td>
+              <td class="r" style="font-family:'DM Mono';font-weight:700;color:var(--amber);">11,015,500</td>
               <td></td>
             </tr>
           </tbody>
@@ -623,11 +619,11 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
         <div>
           <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">📋 INSTRUCCIÓN JEFE PAÍS CHILE</div>
           <div style="font-size:11px;color:var(--text-dim);line-height:1.8;">
-            1. <strong style="color:var(--red);">GOYASERVICE (104d) + RIBERA (92d)</strong> — Gestión directa urgente. Copia a GG.<br>
-            2. <strong style="color:var(--red);">LOMA LARGA (96-103d)</strong> — Laratro: nota de cobro formal + bloqueo crédito.<br>
-            3. <strong style="color:var(--orange);">KULLIN (85d)</strong> — Compromiso de pago inmediato o acciones legales.<br>
-            4. <strong style="color:var(--amber);">TIERRA DE BACO + GOMEZ SPA</strong> — Seguimiento y acuerdo de pago parcial.<br>
-            5. Reporte de avance: <strong>lunes 20/04</strong> a GG.
+            1. <strong style="color:var(--green);">GOYASERVICE + LOMA LARGA ✅ RESUELTOS</strong> — Pagos confirmados entre 17/04 y 29/04.<br>
+            2. <strong style="color:var(--red);">RIBERA (104d · 1.47M)</strong> — Gestión directa urgente. Copia a GG. Bloqueo crédito.<br>
+            3. <strong style="color:var(--red);">KULLIN (97d · 921K)</strong> — Escaló desde riesgo. Compromiso de pago o acciones legales.<br>
+            4. <strong style="color:var(--amber);">TIERRA DE BACO + ENCINA</strong> — Seguimiento 31-60d. Acuerdo de pago parcial.<br>
+            5. Reporte de avance: <strong>próximo lunes</strong> a GG. Corte 29/04.
           </div>
         </div>
         <div>
@@ -635,19 +631,19 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
           <div style="display:flex;flex-direction:column;gap:6px;">
             <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(192,57,43,0.1);border-radius:4px;">
               <span style="font-size:11px;color:var(--red);">+90d Crítico</span>
-              <span style="font-family:'DM Mono';font-size:11px;color:var(--red);font-weight:700;">CLP 9,864,383</span>
+              <span style="font-family:'DM Mono';font-size:11px;color:var(--amber);font-weight:700;">CLP 2,394,911</span>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(230,126,34,0.08);border-radius:4px;">
               <span style="font-size:11px;color:var(--orange);">61-90d Riesgo</span>
-              <span style="font-family:'DM Mono';font-size:11px;color:var(--orange);">CLP 5,299,200</span>
+              <span style="font-family:'DM Mono';font-size:11px;color:var(--orange);">CLP 4,058,680</span>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(245,166,35,0.08);border-radius:4px;">
               <span style="font-size:11px;color:var(--amber);">31-60d Alerta</span>
-              <span style="font-family:'DM Mono';font-size:11px;color:var(--amber);">CLP 10,658,430</span>
+              <span style="font-family:'DM Mono';font-size:11px;color:var(--amber);">CLP 11,015,500</span>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(122,182,72,0.08);border-radius:4px;border-top:1px solid var(--border-dim);">
               <span style="font-size:11px;font-weight:700;">TOTAL VENCIDO &gt;30d</span>
-              <span style="font-family:'DM Mono';font-size:12px;font-weight:700;color:var(--red);">CLP 25,822,013</span>
+              <span style="font-family:'DM Mono';font-size:12px;font-weight:700;color:var(--amber);">CLP 17,479,018</span>
             </div>
           </div>
         </div>
@@ -697,7 +693,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
               </tr>
               <tr style="background:var(--surface3);">
                 <td colspan="3"><strong>Subtotal +90d</strong></td>
-                <td class="r" style="font-family:'DM Mono';font-weight:700;color:var(--red);">30,815.89</td>
+                <td class="r" style="font-family:'DM Mono';font-weight:700;color:var(--red);">28,792.00</td>
               </tr>
             </tbody>
           </table>
@@ -786,7 +782,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
 </div><!-- /page -->
 
 <div class="footer">
-  <div>AV Latam BI Platform · Panel CxC · Chile 17/04 · Perú 17/04/2026</div>
+  <div>AV Latam BI Platform · Panel CxC · Chile 29/04 · Perú 29/04/2026</div>
   <div class="nav-pills">
     <a href="dashboard.html" class="np">🏠 Inicio</a>
     <a href="Executive_Board_View_AV_Latam_2026.html" class="np">📋 Board View</a>
@@ -805,8 +801,8 @@ const G='#7AB648',A='#F5A623',O='#E67E22',R='#E74C3C',RD='#C0392B',B='#4A9EDB';
 new Chart(document.getElementById('cCH'), {
   type: 'doughnut',
   data: {
-    labels: ['0–30d Normal (55.6%)', '31–60d Alerta (27.9%)', '61–90d Riesgo (10.4%)', '+90d Crítico (6.1%)'],
-    datasets: [{ data: [34.5,10.7,5.3,9.9], backgroundColor:[G,A,O,R], borderColor:'#080e09', borderWidth:3 }]
+    labels: ['0–30d Normal (55.6%)', '31–60d Alerta (28.0%)', '61–90d Riesgo (10.3%)', '+90d Crítico (6.1%)'],
+    datasets: [{ data: [21.9,11.0,4.1,2.4], backgroundColor:[G,A,O,R], borderColor:'#080e09', borderWidth:3 }]
   },
   options: {
     responsive:true, maintainAspectRatio:false, cutout:'60%',
@@ -831,68 +827,59 @@ new Chart(document.getElementById('cPE'), {
 
 // ── DATOS CHILE
 const chileData = [
-  {rtc:'Jorge Caroca',cliente:'GOYASERVICE SPA',folio:'250',emision:'05/09/2025',vencimiento:'03/01/2026',dias:104,tramo:'+90d',monto:4194750,estado:'Crítico',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA',folio:'354',emision:'15/12/2025',vencimiento:'04/01/2026',dias:103,tramo:'+90d',monto:2891224,estado:'Crítico',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA',folio:'341',emision:'11/12/2025',vencimiento:'10/01/2026',dias:97,tramo:'+90d',monto:863620,estado:'Crítico',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA',folio:'332',emision:'04/12/2025',vencimiento:'11/01/2026',dias:96,tramo:'+90d',monto:441093,estado:'Crítico',condicion:'Crédito'},
-  {rtc:'Jorge Caroca',cliente:'AGRICOLA RIBERA LIMITADA',folio:'425',emision:'13/01/2026',vencimiento:'15/01/2026',dias:92,tramo:'+90d',monto:1473696,estado:'Crítico',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROINSUMOS KULLIN',folio:'416',emision:'12/01/2026',vencimiento:'22/01/2026',dias:85,tramo:'61-90d',monto:499300,estado:'Riesgo',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROINSUMOS KULLIN',folio:'415',emision:'12/01/2026',vencimiento:'22/01/2026',dias:85,tramo:'61-90d',monto:111206,estado:'Riesgo',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROINSUMOS KULLIN',folio:'414',emision:'12/01/2026',vencimiento:'22/01/2026',dias:85,tramo:'61-90d',monto:310709,estado:'Riesgo',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA',folio:'354',emision:'15/12/2025',vencimiento:'04/02/2026',dias:72,tramo:'61-90d',monto:2891224,estado:'Riesgo',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA',folio:'341',emision:'11/12/2025',vencimiento:'10/02/2026',dias:66,tramo:'61-90d',monto:863620,estado:'Riesgo',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA',folio:'332',emision:'04/12/2025',vencimiento:'11/02/2026',dias:65,tramo:'61-90d',monto:441094,estado:'Riesgo',condicion:'Crédito'},
-  {rtc:'Jorge Caroca',cliente:'MAGALY DEL CARMEN ORELLANA PINO',folio:'272',emision:'17/10/2025',vencimiento:'15/02/2026',dias:61,tramo:'61-90d',monto:182047,estado:'Riesgo',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGRICOLA FRANCISCA MONTES E.I.R.L',folio:'483',emision:'02/02/2026',vencimiento:'04/03/2026',dias:44,tramo:'31-60d',monto:711620,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA',folio:'354',emision:'15/12/2025',vencimiento:'04/03/2026',dias:44,tramo:'31-60d',monto:2891224,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA',folio:'403',emision:'07/01/2026',vencimiento:'06/03/2026',dias:42,tramo:'31-60d',monto:820000,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Francisco Velásquez',cliente:'AGRICOLA GOMEZ SPA',folio:'347',emision:'12/12/2025',vencimiento:'08/03/2026',dias:40,tramo:'31-60d',monto:1190000,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA',folio:'341',emision:'11/12/2025',vencimiento:'10/03/2026',dias:38,tramo:'31-60d',monto:863628,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Jorge Caroca',cliente:'AGRICOLA QUINQUILHUE SPA',folio:'552',emision:'11/03/2026',vencimiento:'11/03/2026',dias:37,tramo:'31-60d',monto:93689,estado:'Alerta',condicion:'Contado'},
-  {rtc:'Pablo Laratro',cliente:'AGRICOLA LOS ALAMOS LTDA',folio:'501',emision:'10/02/2026',vencimiento:'12/03/2026',dias:36,tramo:'31-60d',monto:446250,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'JOSE CRISTOBAL GONZALEZ CORREA',folio:'494',emision:'10/02/2026',vencimiento:'12/03/2026',dias:36,tramo:'31-60d',monto:170789,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGRICOLA LUIS ANTONIO HERRERA AVENDANO E.I.R.L.',folio:'555',emision:'13/03/2026',vencimiento:'13/03/2026',dias:35,tramo:'31-60d',monto:357000,estado:'Alerta',condicion:'Contado'},
-  {rtc:'Jorge Caroca',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'439',emision:'05/01/2026',vencimiento:'17/03/2026',dias:31,tramo:'31-60d',monto:2915500,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'CARLOS HUMBERTO CASTRO VALENZUELA',folio:'565',emision:'17/03/2026',vencimiento:'17/03/2026',dias:31,tramo:'31-60d',monto:198730,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'AGRICOLA TUNICHE LIMITADA',folio:'545',emision:'05/03/2026',vencimiento:'20/03/2026',dias:28,tramo:'0-30d',monto:162316,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Oficina',cliente:'JUAN FRANCISCO VARGAS MANCILLA',folio:'453',emision:'20/01/2026',vencimiento:'21/03/2026',dias:27,tramo:'0-30d',monto:170259,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Francisco Velásquez',cliente:'LEONARDO ENRIQUE OYARCE GENERAL',folio:'525',emision:'24/02/2026',vencimiento:'27/03/2026',dias:21,tramo:'0-30d',monto:314160,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'440',emision:'05/01/2026',vencimiento:'29/03/2026',dias:19,tramo:'0-30d',monto:2707250,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Javier Almeida',cliente:'BRIGITTE ELENA PARDO CONTRERAS',folio:'559',emision:'16/03/2026',vencimiento:'30/03/2026',dias:18,tramo:'0-30d',monto:368757,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Javier Almeida',cliente:'BRIGITTE ELENA PARDO CONTRERAS',folio:'558',emision:'16/03/2026',vencimiento:'30/03/2026',dias:18,tramo:'0-30d',monto:420001,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Javier Almeida',cliente:'BRIGITTE ELENA PARDO CONTRERAS',folio:'557',emision:'16/03/2026',vencimiento:'30/03/2026',dias:18,tramo:'0-30d',monto:358285,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA COMERCIAL SIEMBRA SPA',folio:'480',emision:'29/01/2026',vencimiento:'30/03/2026',dias:18,tramo:'0-30d',monto:72055,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA',folio:'403',emision:'07/01/2026',vencimiento:'06/04/2026',dias:11,tramo:'0-30d',monto:820000,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'438',emision:'06/01/2026',vencimiento:'06/04/2026',dias:11,tramo:'0-30d',monto:2290750,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'437',emision:'08/01/2026',vencimiento:'08/04/2026',dias:9,tramo:'0-30d',monto:1041250,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Jorge Caroca',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'436',emision:'12/01/2026',vencimiento:'09/04/2026',dias:8,tramo:'0-30d',monto:1874250,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'CARLOS HUMBERTO CASTRO VALENZUELA',folio:'595',emision:'10/04/2026',vencimiento:'10/04/2026',dias:7,tramo:'0-30d',monto:97580,estado:'Normal',condicion:'Contado'},
-  {rtc:'Rayen Bernazar',cliente:'CRR SERVICIOS SPA',folio:'596',emision:'10/04/2026',vencimiento:'10/04/2026',dias:7,tramo:'0-30d',monto:39826,estado:'Normal',condicion:'Contado'},
-  {rtc:'Francisco Velásquez',cliente:'JUAN ENRIQUE VARGAS ALZAMORA',folio:'602',emision:'12/04/2026',vencimiento:'11/04/2026',dias:6,tramo:'0-30d',monto:1071000,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'AGRICOLA TUNICHE LIMITADA',folio:'571',emision:'19/03/2026',vencimiento:'13/04/2026',dias:4,tramo:'0-30d',monto:533775,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'AGRICOLA TUNICHE LIMITADA',folio:'570',emision:'19/03/2026',vencimiento:'13/04/2026',dias:4,tramo:'0-30d',monto:228175,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Jorge Caroca',cliente:'VILLEGAS Y BERRIOS Y CIA LTDA',folio:'433',emision:'14/01/2026',vencimiento:'14/04/2026',dias:3,tramo:'0-30d',monto:1496776,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Jorge Caroca',cliente:'VILLEGAS Y BERRIOS Y CIA LTDA',folio:'432',emision:'14/01/2026',vencimiento:'14/04/2026',dias:3,tramo:'0-30d',monto:727709,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGRICOLA GEOAGRO LTDA',folio:'442',emision:'15/01/2026',vencimiento:'15/04/2026',dias:2,tramo:'0-30d',monto:1785000,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGRICOLA GEOAGRO LTDA',folio:'441',emision:'15/01/2026',vencimiento:'15/04/2026',dias:2,tramo:'0-30d',monto:410550,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Francisco Velásquez',cliente:'PONTIFICIA UNIVERSIDAD CATOLICA DE VALPARAISO',folio:'564',emision:'17/03/2026',vencimiento:'16/04/2026',dias:1,tramo:'0-30d',monto:2305625,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGRICOLA DON PEDRO SPA',folio:'451',emision:'20/01/2026',vencimiento:'20/04/2026',dias:-3,tramo:'Al día',monto:1990870,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Valentina Muñoz',cliente:'COMERCIAL COPELEC SA',folio:'574',emision:'23/03/2026',vencimiento:'20/04/2026',dias:-3,tramo:'Al día',monto:755326,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGRICOLA FRANCISCA MONTES E.I.R.L',folio:'577',emision:'25/03/2026',vencimiento:'24/04/2026',dias:-7,tramo:'Al día',monto:1361360,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'RAUL JOFRE Y COMPAQIA LIMITADA',folio:'475',emision:'27/01/2026',vencimiento:'26/04/2026',dias:-9,tramo:'Al día',monto:451238,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Francisco Velásquez',cliente:'LEONARDO ENRIQUE OYARCE GENERAL',folio:'525',emision:'24/02/2026',vencimiento:'27/04/2026',dias:-10,tramo:'Al día',monto:314160,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'599',emision:'12/04/2026',vencimiento:'30/04/2026',dias:-13,tramo:'Al día',monto:618800,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'598',emision:'12/04/2026',vencimiento:'30/04/2026',dias:-13,tramo:'Al día',monto:773500,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'395',emision:'02/01/2026',vencimiento:'30/04/2026',dias:-13,tramo:'Al día',monto:1547000,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'523',emision:'23/02/2026',vencimiento:'30/04/2026',dias:-13,tramo:'Al día',monto:569379,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'522',emision:'23/02/2026',vencimiento:'30/04/2026',dias:-13,tramo:'Al día',monto:369495,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'521',emision:'23/02/2026',vencimiento:'30/04/2026',dias:-13,tramo:'Al día',monto:437920,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'465',emision:'23/01/2026',vencimiento:'30/04/2026',dias:-13,tramo:'Al día',monto:618800,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'485',emision:'02/02/2026',vencimiento:'30/04/2026',dias:-13,tramo:'Al día',monto:380800,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA SAN FRANCISCO LTDA',folio:'459',emision:'21/01/2026',vencimiento:'30/04/2026',dias:-13,tramo:'Al día',monto:364551,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA SAN FRANCISCO LTDA',folio:'458',emision:'21/01/2026',vencimiento:'30/04/2026',dias:-13,tramo:'Al día',monto:1373528,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA SAN FRANCISCO LTDA',folio:'457',emision:'21/01/2026',vencimiento:'30/04/2026',dias:-13,tramo:'Al día',monto:2812833,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA COMERCIAL SIEMBRA SPA',folio:'479',emision:'29/01/2026',vencimiento:'30/04/2026',dias:-13,tramo:'Al día',monto:495944,estado:'Al día',condicion:'Crédito'},
+  // +90d CRÍTICO — corte 29/04/2026
+  {rtc:'Jorge Caroca',cliente:'AGRICOLA RIBERA LIMITADA',folio:'425',emision:'13/01/2026',vencimiento:'15/01/2026',dias:104,tramo:'+90d',monto:1473696,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'AGROINSUMOS KULLIN',folio:'416',emision:'12/01/2026',vencimiento:'22/01/2026',dias:97,tramo:'+90d',monto:499300,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'AGROINSUMOS KULLIN',folio:'415',emision:'12/01/2026',vencimiento:'22/01/2026',dias:97,tramo:'+90d',monto:111206,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'AGROINSUMOS KULLIN',folio:'414',emision:'12/01/2026',vencimiento:'22/01/2026',dias:97,tramo:'+90d',monto:310709,estado:'Crítico',condicion:'Crédito'},
+  // 61-90d RIESGO
+  {rtc:'Jorge Caroca',cliente:'MAGALY DEL CARMEN ORELLANA PINO',folio:'272',emision:'17/10/2025',vencimiento:'15/02/2026',dias:73,tramo:'61-90d',monto:182047,estado:'Riesgo',condicion:'Crédito'},
+  // 31-60d ALERTA
+  {rtc:'Pablo Laratro',cliente:'AGRICOLA FRANCISCA MONTES E.I.R.L',folio:'483',emision:'02/02/2026',vencimiento:'04/03/2026',dias:56,tramo:'31-60d',monto:711620,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Francisco Velásquez',cliente:'AGRICOLA GOMEZ SPA',folio:'347',emision:'12/12/2025',vencimiento:'08/03/2026',dias:52,tramo:'31-60d',monto:1190000,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Jorge Caroca',cliente:'AGRICOLA QUINQUILHUE SPA',folio:'552',emision:'11/03/2026',vencimiento:'11/03/2026',dias:49,tramo:'31-60d',monto:93689,estado:'Alerta',condicion:'Contado'},
+  {rtc:'Pablo Laratro',cliente:'AGRICOLA LOS ALAMOS LTDA',folio:'501',emision:'10/02/2026',vencimiento:'12/03/2026',dias:48,tramo:'31-60d',monto:446250,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'JOSE CRISTOBAL GONZALEZ CORREA',folio:'494',emision:'10/02/2026',vencimiento:'12/03/2026',dias:48,tramo:'31-60d',monto:170789,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'AGRICOLA LUIS ANTONIO HERRERA AVENDANO E.I.R.L.',folio:'555',emision:'13/03/2026',vencimiento:'13/03/2026',dias:47,tramo:'31-60d',monto:357000,estado:'Alerta',condicion:'Contado'},
+  {rtc:'Jorge Caroca',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'439',emision:'05/01/2026',vencimiento:'17/03/2026',dias:43,tramo:'31-60d',monto:2915500,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'CARLOS HUMBERTO CASTRO VALENZUELA',folio:'565',emision:'17/03/2026',vencimiento:'17/03/2026',dias:43,tramo:'31-60d',monto:198730,estado:'Alerta',condicion:'Crédito'},
+  // 0-30d NORMAL
+  {rtc:'Rodrigo Encina',cliente:'AGRICOLA TUNICHE LIMITADA',folio:'545',emision:'05/03/2026',vencimiento:'20/03/2026',dias:40,tramo:'31-60d',monto:162316,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Oficina',cliente:'JUAN FRANCISCO VARGAS MANCILLA',folio:'453',emision:'20/01/2026',vencimiento:'21/03/2026',dias:39,tramo:'31-60d',monto:170259,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Francisco Velásquez',cliente:'LEONARDO ENRIQUE OYARCE GENERAL',folio:'525',emision:'24/02/2026',vencimiento:'27/03/2026',dias:33,tramo:'31-60d',monto:314160,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'440',emision:'05/01/2026',vencimiento:'29/03/2026',dias:31,tramo:'31-60d',monto:2707250,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Javier Almeida',cliente:'BRIGITTE ELENA PARDO CONTRERAS',folio:'559',emision:'16/03/2026',vencimiento:'30/03/2026',dias:30,tramo:'0-30d',monto:368757,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Javier Almeida',cliente:'BRIGITTE ELENA PARDO CONTRERAS',folio:'558',emision:'16/03/2026',vencimiento:'30/03/2026',dias:30,tramo:'0-30d',monto:420001,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Javier Almeida',cliente:'BRIGITTE ELENA PARDO CONTRERAS',folio:'557',emision:'16/03/2026',vencimiento:'30/03/2026',dias:30,tramo:'0-30d',monto:358285,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA COMERCIAL SIEMBRA SPA',folio:'480',emision:'29/01/2026',vencimiento:'30/03/2026',dias:30,tramo:'0-30d',monto:72055,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'438',emision:'06/01/2026',vencimiento:'06/04/2026',dias:23,tramo:'0-30d',monto:2290750,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'437',emision:'08/01/2026',vencimiento:'08/04/2026',dias:21,tramo:'0-30d',monto:1041250,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Jorge Caroca',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'436',emision:'12/01/2026',vencimiento:'09/04/2026',dias:20,tramo:'0-30d',monto:1874250,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'CARLOS HUMBERTO CASTRO VALENZUELA',folio:'595',emision:'10/04/2026',vencimiento:'10/04/2026',dias:19,tramo:'0-30d',monto:97580,estado:'Normal',condicion:'Contado'},
+  {rtc:'Rayen Bernazar',cliente:'CRR SERVICIOS SPA',folio:'596',emision:'10/04/2026',vencimiento:'10/04/2026',dias:19,tramo:'0-30d',monto:39826,estado:'Normal',condicion:'Contado'},
+  {rtc:'Francisco Velásquez',cliente:'JUAN ENRIQUE VARGAS ALZAMORA',folio:'602',emision:'12/04/2026',vencimiento:'11/04/2026',dias:18,tramo:'0-30d',monto:1071000,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'AGRICOLA TUNICHE LIMITADA',folio:'571',emision:'19/03/2026',vencimiento:'13/04/2026',dias:16,tramo:'0-30d',monto:533775,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'AGRICOLA TUNICHE LIMITADA',folio:'570',emision:'19/03/2026',vencimiento:'13/04/2026',dias:16,tramo:'0-30d',monto:228175,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Jorge Caroca',cliente:'VILLEGAS Y BERRIOS Y CIA LTDA',folio:'433',emision:'14/01/2026',vencimiento:'14/04/2026',dias:15,tramo:'0-30d',monto:1496776,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Jorge Caroca',cliente:'VILLEGAS Y BERRIOS Y CIA LTDA',folio:'432',emision:'14/01/2026',vencimiento:'14/04/2026',dias:15,tramo:'0-30d',monto:727709,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'AGRICOLA GEOAGRO LTDA',folio:'442',emision:'15/01/2026',vencimiento:'15/04/2026',dias:14,tramo:'0-30d',monto:1785000,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'AGRICOLA GEOAGRO LTDA',folio:'441',emision:'15/01/2026',vencimiento:'15/04/2026',dias:14,tramo:'0-30d',monto:410550,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Francisco Velásquez',cliente:'PONTIFICIA UNIVERSIDAD CATOLICA DE VALPARAISO',folio:'564',emision:'17/03/2026',vencimiento:'16/04/2026',dias:13,tramo:'0-30d',monto:2305625,estado:'Normal',condicion:'Crédito'},
+  // Al día / por vencer
+  {rtc:'Pablo Laratro',cliente:'AGRICOLA DON PEDRO SPA',folio:'451',emision:'20/01/2026',vencimiento:'20/04/2026',dias:9,tramo:'0-30d',monto:1990870,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Valentina Muñoz',cliente:'COMERCIAL COPELEC SA',folio:'574',emision:'23/03/2026',vencimiento:'20/04/2026',dias:9,tramo:'0-30d',monto:755326,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'AGRICOLA FRANCISCA MONTES E.I.R.L',folio:'577',emision:'25/03/2026',vencimiento:'24/04/2026',dias:5,tramo:'0-30d',monto:1361360,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'RAUL JOFRE Y COMPAQIA LIMITADA',folio:'475',emision:'27/01/2026',vencimiento:'26/04/2026',dias:3,tramo:'0-30d',monto:451238,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Francisco Velásquez',cliente:'LEONARDO ENRIQUE OYARCE GENERAL',folio:'525',emision:'24/02/2026',vencimiento:'27/04/2026',dias:2,tramo:'0-30d',monto:314160,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'599',emision:'12/04/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:618800,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'598',emision:'12/04/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:773500,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'395',emision:'02/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:1547000,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'523',emision:'23/02/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:569379,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'465',emision:'23/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:618800,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA SAN FRANCISCO LTDA',folio:'457',emision:'21/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:2812833,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA SAN FRANCISCO LTDA',folio:'458',emision:'21/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:1373528,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA SAN FRANCISCO LTDA',folio:'459',emision:'21/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:364551,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA COMERCIAL SIEMBRA SPA',folio:'479',emision:'29/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:495944,estado:'Al día',condicion:'Crédito'},
 ];
 
 // Perú data
