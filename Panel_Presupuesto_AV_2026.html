@@ -14,6 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel Presupuesto · AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="avboard_data.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
 
 // =====================================================
@@ -268,7 +269,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
     </div>
   </div>
   <div class="hcorte">
-    <div>Datos reales: <b>Chile 12/04 · Perú 10/04/2026</b></div>
+    <div>Datos reales: <b>Chile 11/05 · Perú 11/05/2026</b></div>
     <div style="font-size:8px;margin-top:2px;">TC=950 CLP/USD · L. Aguirre = zona unificada Aguirre/Navarro · Ppto oficial aprobado</div>
   </div>
   <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
@@ -292,8 +293,8 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
   <div class="kpi cl"><div class="klbl">Ppto T1 Chile</div><div class="kval">170.8M</div><div class="ksub">CLP Ene–Mar oficial</div></div>
   <div class="kpi cl"><div class="klbl">Real T1 Chile</div><div class="kval ok">176.3M</div><div class="ksub">+5.5M sobre ppto ✅</div></div>
   <div class="kpi am"><div class="klbl">Ppto Anual</div><div class="kval">861.3M</div><div class="ksub">CLP · USD 906.7K</div></div>
-  <div class="kpi ok"><div class="klbl">Abril Definitivo</div><div class="kval ok">130.4M</div><div class="ksub">CLP · Real al 29/04 cierre · YTD 5m: 331.9M</div></div>
-  <div class="kpi rd"><div class="klbl">Pendiente May–Dic</div><div class="kval rd">685M</div><div class="ksub">CLP · ppto restante H2</div></div>
+  <div class="kpi ok"><div class="klbl">Abril Definitivo</div><div class="kval ok">130.4M</div><div class="ksub">CLP · Real definitivo · YTD 5m: 332.0M</div></div>
+  <div class="kpi rd"><div class="klbl">Pendiente Jun–Dic</div><div class="kval rd">597M</div><div class="ksub">CLP · ppto restante</div></div>
 </div>
 
 <!-- Tabla ppto 12 meses Chile -->
@@ -448,22 +449,24 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
         <td class="cp" style="font-weight:700;color:var(--text);">861.321</td>
       </tr>
       <tr class="cur"><td style="font-weight:700;">Real CLP (K)</td>
-        <td class="cr hit">88.231</td><td class="cr miss">35.652</td><td class="cr hit">52.371</td><td class="cr miss">8.840*</td>
+        <td class="cr hit">88.231</td><td class="cr miss">35.652</td><td class="cr hit">52.371</td><td class="cr hit">130.374</td>
+        <td class="cr miss">25.333*</td><td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td>
         <td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td>
-        <td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td>
-        <td class="cr hit">176.254</td>
+        <td class="cr hit">331.961</td>
       </tr>
       <tr><td style="color:var(--dim);">% Cumpl.</td>
         <td style="text-align:right;"><span class="pb pbok">105.6%</span></td>
         <td style="text-align:right;"><span class="pb pbw">85.7%</span></td>
         <td style="text-align:right;"><span class="pb pbok">124.7%</span></td>
-        <td style="text-align:right;"><span class="pb pbnp">19.0%*</span></td>
-        <td colspan="8" style="text-align:center;color:var(--muted);font-size:8px;">Pendiente May–Dic · Ppto restante: CLP 685M</td>
-        <td style="text-align:right;"><span class="pb pbok">103.2%</span></td>
+        <td style="text-align:right;"><span class="pb pbok">280.8%</span></td>
+        <td style="text-align:right;"><span class="pb pbd">49.7%*</span></td>
+        <td colspan="7" style="text-align:center;color:var(--muted);font-size:8px;">Pendiente Jun–Dic · Ppto restante: CLP 597M</td>
+        <td style="text-align:right;"><span class="pb pbok">125.5%</span></td>
       </tr>
       <tr><td style="color:var(--dim);">Gap CLP (K)</td>
-        <td class="gp">+4.673</td><td class="gn">–5.950</td><td class="gp">+10.371</td><td class="gn">–37.591*</td>
-        <td colspan="9" style="text-align:right;color:var(--muted);font-size:8px;font-family:'DM Mono';padding-right:8px;">Ppto restante H2: CLP 685M</td>
+        <td class="gp">+4.673</td><td class="gn">–5.950</td><td class="gp">+10.371</td><td class="gp">+83.943</td>
+        <td class="gn">–25.667*</td>
+        <td colspan="8" style="text-align:right;color:var(--muted);font-size:8px;font-family:'DM Mono';padding-right:8px;">Ppto restante Jun–Dic: CLP 597M</td>
       </tr>
       <tr><td style="color:var(--dim);">Ppto USD</td>
         <td class="cp">87.956</td><td class="cp">43.792</td><td class="cp">44.211</td><td class="cp">48.875</td>
@@ -474,7 +477,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
     </tbody>
   </table>
   </div>
-  <div style="margin-top:5px;font-size:8px;color:var(--muted);font-family:'DM Mono';">* Abril parcial al 12/04/2026 · H2 Chile muy fuerte: Sep CLP 110.8M · Oct CLP 112.7M</div>
+  <div style="margin-top:5px;font-size:8px;color:var(--muted);font-family:'DM Mono';">* Mayo parcial al 08/05/2026 · H2 Chile muy fuerte: Sep CLP 110.8M · Oct CLP 112.7M</div>
 </div>
 
 <hr class="sep">
@@ -485,17 +488,17 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
   <div><div class="c-name pe">Perú</div><div style="font-size:9px;color:var(--muted);">USD · Ppto anual USD 1,137,034 · L. Aguirre = zona unificada Aguirre/Navarro</div></div>
   <div class="c-line"></div>
   <div class="c-kpi">
-    <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Real YTD / Ppto T1</div>
-    <strong class="pe">USD 229,259</strong>
-    <div style="font-size:9px;color:var(--amber);">95.8% Ppto T1 · Infante con brecha alta</div>
+    <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Real YTD 5m</div>
+    <strong class="pe">USD 325,103</strong>
+    <div style="font-size:9px;color:var(--amber);">93.8% Ppto 5m · Infante con brecha alta</div>
   </div>
 </div>
 
 <div class="krow krow4" style="margin-bottom:16px;">
   <div class="kpi pe"><div class="klbl">Ppto Anual Perú</div><div class="kval">1.137M</div><div class="ksub">USD total oficial 2026</div></div>
-  <div class="kpi pe"><div class="klbl">Real YTD (inc. Abr)</div><div class="kval pe">229.3K</div><div class="ksub">USD · 19.4% del anual</div></div>
-  <div class="kpi am"><div class="klbl">Ppto T1 (Ene–Mar)</div><div class="kval am">213.4K</div><div class="ksub">USD · Real T1: 204.5K (95.8%)</div></div>
-  <div class="kpi am"><div class="klbl">Ppto Abril oficial</div><div class="kval am">71.3K</div><div class="ksub">USD · Real al 10/04: 16.0K</div></div>
+  <div class="kpi pe"><div class="klbl">Real YTD 5m</div><div class="kval pe">325.1K</div><div class="ksub">USD · 28.6% del anual</div></div>
+  <div class="kpi am"><div class="klbl">Ppto T1 (Ene–Mar)</div><div class="kval am">213.4K</div><div class="ksub">USD · Real T1: 196.4K (92.0%)</div></div>
+  <div class="kpi ok"><div class="klbl">Abril Definitivo</div><div class="kval ok">63.7K</div><div class="ksub">USD · corte 11/05 · Ppto: 71.3K (89.4%)</div></div>
 </div>
 
 <!-- Tabla ppto Perú 12 meses -->
@@ -647,27 +650,29 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
         <td class="cp" style="font-weight:700;color:var(--text);">1.137.034</td>
       </tr>
       <tr class="cur-pe"><td style="font-weight:700;">Real USD</td>
-        <td class="cr hit">73.511</td><td class="cr miss">39.409</td><td class="cr miss">91.616</td><td class="cr miss">16.010*</td>
+        <td class="cr hit">70.232</td><td class="cr miss">38.180</td><td class="cr miss">87.966</td><td class="cr miss">63.734</td>
+        <td class="cr hit">64.991*</td><td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td>
         <td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td>
-        <td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td>
-        <td style="font-family:'DM Mono';font-size:9px;text-align:right;color:var(--blue);">229.259</td>
+        <td style="font-family:'DM Mono';font-size:9px;text-align:right;color:var(--blue);">325.103</td>
       </tr>
       <tr><td style="color:var(--dim);">% Cumpl.</td>
-        <td style="text-align:right;"><span class="pb pbok">142.3%</span></td>
-        <td style="text-align:right;"><span class="pb pbd">67.4%</span></td>
-        <td style="text-align:right;"><span class="pb pbw">88.8%</span></td>
-        <td style="text-align:right;"><span class="pb pbnp">22.5%*</span></td>
-        <td colspan="8" style="text-align:center;color:var(--muted);font-size:8px;">Pendiente May–Dic · Ppto restante: USD 916.487 · H2 muy fuerte</td>
-        <td style="text-align:right;"><span class="pb pbw">19.4%</span></td>
+        <td style="text-align:right;"><span class="pb pbok">135.9%</span></td>
+        <td style="text-align:right;"><span class="pb pbd">65.3%</span></td>
+        <td style="text-align:right;"><span class="pb pbw">85.2%</span></td>
+        <td style="text-align:right;"><span class="pb pbw">89.4%</span></td>
+        <td style="text-align:right;"><span class="pb pbok">104.9%*</span></td>
+        <td colspan="7" style="text-align:center;color:var(--muted);font-size:8px;">Pendiente Jun–Dic · Ppto restante: USD 811.931 · H2 muy fuerte</td>
+        <td style="text-align:right;"><span class="pb pbw">93.8%</span></td>
       </tr>
       <tr><td style="color:var(--dim);">Gap USD</td>
-        <td class="gp">+21.837</td><td class="gn">–19.080</td><td class="gn">–11.606</td><td class="gn">–55.289*</td>
-        <td colspan="9" style="text-align:right;color:var(--muted);font-size:8px;font-family:'DM Mono';padding-right:8px;">Ago: USD 178K · Oct: USD 165K · meses clave</td>
+        <td class="gp">+18.558</td><td class="gn">–20.309</td><td class="gn">–15.256</td><td class="gn">–7.565</td>
+        <td class="gp">+3.045*</td>
+        <td colspan="8" style="text-align:right;color:var(--muted);font-size:8px;font-family:'DM Mono';padding-right:8px;">Ago: USD 178K · Oct: USD 165K · meses clave</td>
       </tr>
     </tbody>
   </table>
   </div>
-  <div style="margin-top:5px;font-size:8px;color:var(--muted);font-family:'DM Mono';">* Abril parcial al 10/04/2026</div>
+  <div style="margin-top:5px;font-size:8px;color:var(--muted);font-family:'DM Mono';">* Mayo parcial al 11/05/2026 · Abr definitivo</div>
 </div>
 
 <hr class="sep">
@@ -695,7 +700,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:9px;">
           <div><div style="color:var(--muted);">Ppto Anual</div><div style="font-family:'DM Mono';color:var(--dim);">CLP 861.3M</div></div>
           <div><div style="color:var(--muted);">en USD (TC 950)</div><div style="font-family:'DM Mono';color:var(--dim);">USD 906.7K</div></div>
-          <div><div style="color:var(--muted);">Real T1 USD</div><div style="font-family:'DM Mono';color:var(--green);">USD 185.5K</div></div>
+          <div><div style="color:var(--muted);">Real YTD 5m USD</div><div style="font-family:'DM Mono';color:var(--green);">USD 349.4K</div></div>
         </div>
       </div>
       <div style="background:rgba(74,158,219,0.06);border:1px solid var(--bdr-b);border-radius:8px;padding:14px;">
@@ -705,8 +710,8 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:9px;">
           <div><div style="color:var(--muted);">Ppto Anual</div><div style="font-family:'DM Mono';color:var(--dim);">USD 1.137M</div></div>
-          <div><div style="color:var(--muted);">Real T1</div><div style="font-family:'DM Mono';color:var(--blue);">USD 204.5K</div></div>
-          <div><div style="color:var(--muted);">YTD inc. Abr</div><div style="font-family:'DM Mono';color:var(--blue);">USD 229.3K</div></div>
+          <div><div style="color:var(--muted);">Real T1</div><div style="font-family:'DM Mono';color:var(--blue);">USD 196.4K</div></div>
+          <div><div style="color:var(--muted);">YTD 5m</div><div style="font-family:'DM Mono';color:var(--blue);">USD 325.1K</div></div>
         </div>
       </div>
       <div style="background:var(--s2);border:1px solid var(--bdr);border-radius:8px;padding:14px;">
@@ -716,8 +721,8 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:9px;">
           <div><div style="color:var(--muted);">Ppto Anual Grupo</div><div style="font-family:'DM Mono';font-size:11px;color:var(--text);">USD 2.044M</div></div>
-          <div><div style="color:var(--muted);">Real T1 Grupo</div><div style="font-family:'DM Mono';font-size:11px;color:var(--green);">USD 390.0K</div></div>
-          <div><div style="color:var(--muted);">YTD al 10/04</div><div style="font-family:'DM Mono';font-size:11px;color:var(--green);">USD 415.4K</div></div>
+          <div><div style="color:var(--muted);">Real T1 Grupo</div><div style="font-family:'DM Mono';font-size:11px;color:var(--green);">USD 381.9K</div></div>
+          <div><div style="color:var(--muted);">YTD 5m al 11/05</div><div style="font-family:'DM Mono';font-size:11px;color:var(--green);">USD 674.5K</div></div>
         </div>
       </div>
       <div style="background:rgba(245,166,35,0.05);border:1px solid rgba(245,166,35,0.2);border-radius:8px;padding:12px;">
@@ -744,7 +749,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 </div>
 
 <div class="ftr">
-  <div>AV Latam BI Platform · Panel Presupuesto · Ppto oficial 2026 · Real: Chile 12/04 · Perú 10/04 · TC=950</div>
+  <div>AV Latam BI Platform · Panel Presupuesto · Ppto oficial 2026 · Real: Chile 11/05 · Perú 11/05 · TC=950</div>
   <div class="npills">
     <a href="dashboard.html" class="np">🏠 Inicio</a>
     <a href="Executive_Board_View_AV_Latam_2026.html" class="np">📋 Board View</a>
@@ -761,18 +766,18 @@ const G='#7AB648',G2='#5a8a35',A='#F5A623',R='#E74C3C',RD='#C0392B',B='#4A9EDB';
 const GD='rgba(122,182,72,0.1)',BD='rgba(74,158,219,0.1)';
 const MESES=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 
-// DATA OFICIAL CHILE
+// DATA OFICIAL CHILE — corte 11/05/2026 · fuente: avboard_data.js
 const CH_PPTO=[83558,41602,42000,46431,51000,49730,62800,76500,110800,112700,97500,86700];
-const CH_REAL =[88231,35652,52371,14599,0,0,0,0,0,0,0,0];
+const CH_REAL =[88231,35652,52371,130374,25333,0,0,0,0,0,0,0]; // Abr definitivo · May parcial 08/05
 
-// DATA OFICIAL PERÚ
+// DATA OFICIAL PERÚ — corte 11/05/2026 · fuente: avboard_data.js
 const PE_PPTO=[51674,58489,103222,71299,61946,78710,100675,178180,125564,165842,98481,42952];
-const PE_REAL =[73511,39409,91616,24722,0,0,0,0,0,0,0,0];
+const PE_REAL =[70232,38180,87966,63734,64991,0,0,0,0,0,0,0]; // 5 meses · May parcial 11/05
 
 // Acumulados
 const ac = arr => arr.reduce((a,v,i) => { a.push((a[i-1]||0)+(v||0)); return a; }, []);
-const CH_PA=ac(CH_PPTO), CH_RA=ac(CH_REAL.map((v,i)=>i<4?v:null));
-const PE_PA=ac(PE_PPTO), PE_RA=ac(PE_REAL.map((v,i)=>i<4?v:null));
+const CH_PA=ac(CH_PPTO), CH_RA=ac(CH_REAL.map((v,i)=>i<5?v:null));
+const PE_PA=ac(PE_PPTO), PE_RA=ac(PE_REAL.map((v,i)=>i<5?v:null));
 
 // CH RTC barras
 chRTCChart = new Chart(document.getElementById('cChileRTC'),{
@@ -780,7 +785,7 @@ chRTCChart = new Chart(document.getElementById('cChileRTC'),{
     labels:['Caroca','Laratro','Encina','Velásquez','Veverka','Muñoz'],
     datasets:[
       {label:'Ppto T1',data:[33000,54100,29200,32860,18000,3600],backgroundColor:'rgba(255,255,255,0.05)',borderColor:'rgba(255,255,255,0.14)',borderWidth:1,borderRadius:3},
-      {label:'Real T1',data:[63294,54594,28396,31490,8810,4236],backgroundColor:[G,A,A,R,RD,G],borderRadius:3}
+      {label:'Real T1',data:[53123,52893,27593,29600,8810,4236],backgroundColor:[G,A,A,R,RD,G],borderRadius:3}
     ]
   },
   options:{responsive:true,maintainAspectRatio:false,
@@ -794,7 +799,7 @@ chCurvaChart = new Chart(document.getElementById('cChileCurva'),{
     labels:MESES,
     datasets:[
       {label:'Ppto Acumulado',data:CH_PA,borderColor:'rgba(255,255,255,0.2)',borderDash:[6,4],borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(255,255,255,0.25)',tension:0.3,fill:false},
-      {label:'Real Acumulado',data:[88231,123883,176254,190853,null,null,null,null,null,null,null,null],borderColor:G,backgroundColor:'rgba(122,182,72,0.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:G,tension:0.3,fill:true},
+      {label:'Real Acumulado',data:[88231,123883,176254,306628,331961,null,null,null,null,null,null,null],borderColor:G,backgroundColor:'rgba(122,182,72,0.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:G,tension:0.3,fill:true},
     ]
   },
   options:{responsive:true,maintainAspectRatio:false,
@@ -822,7 +827,7 @@ peRTCChart = new Chart(document.getElementById('cPeruRTC'),{
     labels:['O. Infante','L. Aguirre','O. Atalaya','A. Gonzales','P. Valladares'],
     datasets:[
       {label:'Ppto Anual',data:[485058,223930,248424,37250,142372],backgroundColor:'rgba(74,158,219,0.08)',borderColor:'rgba(74,158,219,0.18)',borderWidth:1,borderRadius:3},
-      {label:'Real YTD',data:[85432,74347,59072,696,1000],backgroundColor:[A,G,G,R,R],borderRadius:3}
+      {label:'Real YTD 5m',data:[121072,128047,64589,696,1800],backgroundColor:[A,G,G,R,R],borderRadius:3}
     ]
   },
   options:{responsive:true,maintainAspectRatio:false,
@@ -836,7 +841,7 @@ peCurvaChart = new Chart(document.getElementById('cPeruCurva'),{
     labels:MESES,
     datasets:[
       {label:'Ppto Acumulado',data:PE_PA,borderColor:'rgba(74,158,219,0.35)',borderDash:[6,4],borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(74,158,219,0.4)',tension:0.3,fill:false},
-      {label:'Real Acumulado',data:[73511,112920,204537,229259,null,null,null,null,null,null,null,null],borderColor:B,backgroundColor:'rgba(74,158,219,0.09)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:B,tension:0.3,fill:true}
+      {label:'Real Acumulado',data:[70232,108412,196378,260112,325103,null,null,null,null,null,null,null],borderColor:B,backgroundColor:'rgba(74,158,219,0.09)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:B,tension:0.3,fill:true}
     ]
   },
   options:{responsive:true,maintainAspectRatio:false,
@@ -876,6 +881,18 @@ new Chart(document.getElementById('cGrupo'),{
       y:{stacked:true,grid:{color:GD},border:{color:GD},ticks:{callback:v=>'USD '+(v/1000).toFixed(0)+'K'}}
     }}
 });
+
+// ── AVBOARD hook (fuente única) ───────────────────────────────────────────────
+// Los arrays CH_REAL / PE_REAL ya usan valores de avboard_data.js (corte 11/05).
+// Si AVBOARD está disponible, podemos verificar integridad en consola.
+(function(){
+  if(typeof AVBOARD==='undefined') return;
+  try{
+    var cv=AVBOARD.chile.ventas, pv=AVBOARD.peru.ventas;
+    var clYTD=(cv.ytd_5m/1e6).toFixed(1), peYTD=(pv.ytd_5m/1000).toFixed(0);
+    console.log('[Panel Presupuesto] Chile YTD='+clYTD+'M · Perú YTD=USD '+peYTD+'K');
+  }catch(e){}
+})();
 
 function cerrarSesion() {
   sessionStorage.removeItem('av_auth');
