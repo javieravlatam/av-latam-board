@@ -14,6 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel Comercial · Perú · AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="avboard_data.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -305,12 +306,12 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
         <div style="position:relative;width:130px;height:130px;flex-shrink:0;">
           <canvas id="cDonut"></canvas>
           <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
-            <div style="font-family:'Bebas Neue';font-size:24px;color:var(--amber);line-height:1;">95.9%</div>
-            <div style="font-size:9px;color:var(--muted);">YTD T1</div>
+            <div style="font-family:'Bebas Neue';font-size:24px;color:var(--amber);line-height:1;" id="av-pe-donut-pct">95.9%</div>
+            <div style="font-size:9px;color:var(--muted);" id="av-pe-donut-lbl">YTD T1</div>
           </div>
         </div>
         <div style="flex:1;">
-          <div class="mes-bars">
+          <div class="mes-bars" id="av-pe-bars">
             <div class="mes-row">
               <div class="mes-lbl">Enero</div>
               <div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:100%;background:var(--green);"></div></div>
@@ -342,7 +343,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       </div>
 
       <!-- Margen mensual -->
-      <div class="margen-strip">
+      <div class="margen-strip" id="av-pe-margen-strip">
         <div class="mg-item">
           <div class="mg-val" style="color:var(--green);">142.3%</div>
           <div class="mg-lbl">Enero</div>
@@ -499,7 +500,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   </div>
 
   <!-- CxC PERÚ -->
-  <div class="sec">Cuentas por Cobrar · Perú <span>corte 20/04/2026 · cartera activa</span></div>
+  <div class="sec">Cuentas por Cobrar · Perú <span id="av-pe-cxc-sec">corte 20/04/2026 · cartera activa</span></div>
 
   <div class="g2" style="margin-bottom:0;">
     <div class="panel">
@@ -509,8 +510,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
         <tbody>
           <tr>
             <td><strong>Aguirre/Navarro</strong></td>
-            <td class="mono r amber">36,925</td>
-            <td><div style="text-align:right;font-family:'DM Mono';font-size:10px;color:var(--amber);">36.9%</div><div class="mb"><div class="mbf" style="width:36.9%;background:var(--amber);"></div></div></td>
+            <td class="mono r amber" id="av-pe-cxc-an-monto">36,925</td>
+            <td id="av-pe-cxc-an-pct"><div style="text-align:right;font-family:'DM Mono';font-size:10px;color:var(--amber);">36.9%</div><div class="mb"><div class="mbf" style="width:36.9%;background:var(--amber);"></div></div></td>
             <td class="c"><span class="pb pb-am">ALERTA</span></td>
           </tr>
           <tr>
@@ -540,7 +541,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
         </tbody>
         <tfoot><tr>
           <td>TOTAL ACTIVO</td>
-          <td class="mono r" style="color:var(--blue);">99,926</td>
+          <td class="mono r" style="color:var(--blue);" id="av-pe-cxc-total">99,926</td>
           <td class="r mono">100%</td>
           <td class="c"><span class="pb pb-am">Monitoreo</span></td>
         </tr></tfoot>
@@ -559,23 +560,23 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <div style="margin-top:12px;display:flex;flex-direction:column;gap:5px;">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:rgba(122,182,72,0.07);border-radius:4px;">
           <span style="font-size:10px;color:var(--green);">Al día / Normal</span>
-          <span style="font-family:'DM Mono';font-size:10px;color:var(--green);">USD 50,765 · 50.8%</span>
+          <span style="font-family:'DM Mono';font-size:10px;color:var(--green);" id="av-pe-tramo-aldía">USD 50,765 · 50.8%</span>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:rgba(122,182,72,0.05);border-radius:4px;">
           <span style="font-size:10px;color:var(--green);">0–30d en cobro</span>
-          <span style="font-family:'DM Mono';font-size:10px;color:var(--green);">USD 10,857 · 10.9%</span>
+          <span style="font-family:'DM Mono';font-size:10px;color:var(--green);" id="av-pe-tramo-030">USD 10,857 · 10.9%</span>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:rgba(245,166,35,0.06);border-radius:4px;">
           <span style="font-size:10px;color:var(--amber);">31–60d Alerta</span>
-          <span style="font-family:'DM Mono';font-size:10px;color:var(--amber);">USD 5,096 · 5.1%</span>
+          <span style="font-family:'DM Mono';font-size:10px;color:var(--amber);" id="av-pe-tramo-3160">USD 5,096 · 5.1%</span>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:rgba(230,126,34,0.06);border-radius:4px;">
           <span style="font-size:10px;color:#E67E22;">61–90d Riesgo</span>
-          <span style="font-family:'DM Mono';font-size:10px;color:#E67E22;">USD 2,392 · 2.4%</span>
+          <span style="font-family:'DM Mono';font-size:10px;color:#E67E22;" id="av-pe-tramo-6190">USD 2,392 · 2.4%</span>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:rgba(231,76,60,0.08);border-radius:4px;">
           <span style="font-size:10px;color:var(--red);">+90d Crítico</span>
-          <span style="font-family:'DM Mono';font-size:10px;color:var(--red);font-weight:700;">USD 30,816 · 30.8%</span>
+          <span style="font-family:'DM Mono';font-size:10px;color:var(--red);font-weight:700;" id="av-pe-tramo-90">USD 30,816 · 30.8%</span>
         </div>
       </div>
     </div>
@@ -706,6 +707,132 @@ new Chart(document.getElementById('cCxC'),{
     }
   }
 });
+
+// ── AVBOARD populate ────────────────────────────────────────────────────────
+(function(){
+  if(typeof AVBOARD==='undefined') return;
+  try{
+    var D=AVBOARD, pv=D.peru.ventas, pc=D.peru.cxc;
+    function set(id,html){var el=document.getElementById(id);if(el)el.innerHTML=html;}
+    function fN(n){return n.toLocaleString('en-US');}
+    function pct(n){return (n*100).toFixed(1)+'%';}
+    function bc(r){return r>=1?'var(--green)':r>=0.85?'var(--amber)':'var(--red)';}
+
+    // ── Barras mensuales ──────────────────────────────────────────────────────
+    var mons=['Enero','Febrero','Marzo','Abril','Mayo'];
+    var mr=pv.mensual_real.slice(0,5), mp=pv.mensual_ppto.slice(0,5);
+    var bh='';
+    mr.forEach(function(r,i){
+      var ratio=r/mp[i], w=Math.min(ratio*100,100).toFixed(1), c=bc(ratio);
+      bh+='<div class="mes-row">'+
+        '<div class="mes-lbl">'+(mons[i]+(i===4?'*':''))+'</div>'+
+        '<div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:'+w+'%;background:'+c+';"></div></div>'+
+        '<div class="mes-pct" style="color:'+c+';">'+pct(ratio)+'</div>'+
+      '</div>';
+    });
+    var ytdR=pv.cumplimiento_5m, ytdC=bc(ytdR);
+    bh+='<div class="mes-row">'+
+      '<div class="mes-lbl" style="font-weight:700;">YTD 5m</div>'+
+      '<div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:'+Math.min(ytdR*100,100).toFixed(1)+'%;background:'+ytdC+';"></div></div>'+
+      '<div class="mes-pct" style="color:'+ytdC+';font-weight:700;">'+pct(ytdR)+'</div>'+
+    '</div>';
+    set('av-pe-bars',bh);
+
+    // ── Donut center ──────────────────────────────────────────────────────────
+    set('av-pe-donut-pct',pct(ytdR));
+    set('av-pe-donut-lbl','YTD 5m');
+
+    // ── Margen strip — expandir a 5 meses ─────────────────────────────────────
+    var ms=document.getElementById('av-pe-margen-strip');
+    if(ms) ms.style.gridTemplateColumns='repeat(5,1fr)';
+    var mh='';
+    mr.forEach(function(r,i){
+      var ratio=r/mp[i], c=bc(ratio);
+      mh+='<div class="mg-item">'+
+        '<div class="mg-val" style="color:'+c+';">'+pct(ratio)+'</div>'+
+        '<div class="mg-lbl">'+mons[i]+'</div>'+
+      '</div>';
+    });
+    set('av-pe-margen-strip',mh);
+
+    // ── CxC sección — fecha ───────────────────────────────────────────────────
+    set('av-pe-cxc-sec','corte '+pc.corte+' · cartera activa');
+
+    // ── CxC tabla — Aguirre/Navarro ───────────────────────────────────────────
+    var an=pc.por_vendedor.aguirre_navarro;
+    set('av-pe-cxc-an-monto',fN(an.total));
+    set('av-pe-cxc-an-pct',
+      '<div style="text-align:right;font-family:\'DM Mono\';font-size:10px;color:var(--amber);">'+(an.pct*100).toFixed(1)+'%</div>'+
+      '<div class="mb"><div class="mbf" style="width:'+(an.pct*100).toFixed(1)+'%;background:var(--amber);"></div></div>');
+
+    // ── CxC total activo ──────────────────────────────────────────────────────
+    set('av-pe-cxc-total',fN(pc.total));
+
+    // ── CxC tramos legend ─────────────────────────────────────────────────────
+    var t=pc.tramos, tp=pc.tramos_pct;
+    set('av-pe-tramo-aldía','USD '+fN(t.no_vencida)+' · '+(tp.no_vencida*100).toFixed(1)+'%');
+    set('av-pe-tramo-030',  'USD '+fN(t.t030)      +' · '+(tp.t030*100).toFixed(1)+'%');
+    set('av-pe-tramo-3160', 'USD '+fN(t.t3160)     +' · '+(tp.t3160*100).toFixed(1)+'%');
+    set('av-pe-tramo-6190', 'USD '+fN(t.t6190)     +' · '+(tp.t6190*100).toFixed(1)+'%');
+    set('av-pe-tramo-90',   'USD '+fN(t.t90)        +' · '+(tp.t90*100).toFixed(1)+'%');
+
+    // ── Chart: cDonut — gauge YTD ─────────────────────────────────────────────
+    var cD=Chart.getChart(document.getElementById('cDonut'));
+    if(cD){
+      var ex=parseFloat((ytdR*100).toFixed(1));
+      cD.data.datasets[0].data=[ex, Math.max(0,parseFloat((100-ex).toFixed(1)))];
+      cD.update();
+    }
+
+    // ── Chart: cStack — mensual por zona ──────────────────────────────────────
+    var cSt=Chart.getChart(document.getElementById('cStack'));
+    if(cSt){
+      var rtc=pv.rtc_mensual_real;
+      cSt.data.labels=['Enero','Febrero','Marzo','Abril','Mayo (parc.)'];
+      cSt.data.datasets[0].data=rtc.infante.slice(0,5).map(function(v){return v||0;});
+      cSt.data.datasets[1].data=rtc.aguirre.slice(0,5).map(function(v){return v||0;});
+      cSt.data.datasets[2].data=rtc.atalaya.slice(0,5).map(function(v){return v||0;});
+      cSt.data.datasets[3].data=rtc.gonzales.slice(0,5).map(function(v,i){return (v||0)+(rtc.valladares[i]||0);});
+      cSt.update();
+    }
+
+    // ── Chart: cBarras — ppto anual vs real YTD ───────────────────────────────
+    var cB=Chart.getChart(document.getElementById('cBarras'));
+    if(cB){
+      var pve=pv.por_vendedor;
+      cB.data.datasets[1].data=[
+        pve.infante.ytd,
+        (pve.aguirre.ytd||0)+(pve.navarro.ytd||0),
+        pve.atalaya.ytd,
+        pve.valladares.ytd,
+        pve.gonzales.ytd
+      ];
+      cB.update();
+    }
+
+    // ── Chart: cCurva — acumulado 12 meses ───────────────────────────────────
+    var cCv=Chart.getChart(document.getElementById('cCurva'));
+    if(cCv){
+      var running=0, realAc=[];
+      for(var i=0;i<12;i++){
+        running+=(pv.mensual_real[i]||0);
+        realAc.push(i<5?running:null);
+      }
+      cCv.data.datasets[1].data=realAc;
+      cCv.update();
+    }
+
+    // ── Chart: cCxC — donut tramos ────────────────────────────────────────────
+    var cCx=Chart.getChart(document.getElementById('cCxC'));
+    if(cCx){
+      cCx.data.datasets[0].data=[
+        tp.no_vencida*100, tp.t030*100, tp.t3160*100, tp.t6190*100, tp.t90*100
+      ];
+      cCx.update();
+    }
+
+  }catch(e){}
+})();
 
 function cerrarSesion() {
   sessionStorage.removeItem('av_auth');
