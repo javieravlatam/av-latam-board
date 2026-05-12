@@ -275,7 +275,7 @@
   </div>
   <div class="header-corte">
     <div class="corte-label">Corte de Datos</div>
-    <div class="corte-date">Chile 11/05 · Perú 11/05 · CxC 08/05</div>
+    <div id="av-eb-header-corte" class="corte-date">Chile 11/05 · Perú 11/05 · CxC 08/05</div>
   </div>
   <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
 </header>
@@ -291,30 +291,30 @@
     <!-- KPI Grupo -->
     <div class="kpi-card">
       <div class="kpi-label">Venta Grupo YTD</div>
-      <div class="kpi-value green">USD 675K</div>
-      <div class="kpi-sub">Chile USD 349.4K + Perú USD 325.1K</div>
-      <div class="kpi-badge badge-green">CHILE 143.6% PPTO 4m 🚀</div>
+      <div id="av-eb-grupo-ytd" class="kpi-value green">USD 675K</div>
+      <div id="av-eb-grupo-sub" class="kpi-sub">Chile USD 349.4K + Perú USD 325.1K</div>
+      <div id="av-eb-grupo-badge" class="kpi-badge badge-green">CHILE 143.6% PPTO 4m 🚀</div>
     </div>
     <!-- KPI Chile -->
     <div class="kpi-card">
       <div class="kpi-label">Chile YTD 5m · CLP</div>
-      <div class="kpi-value">331.9M</div>
-      <div class="kpi-sub">Ppto Ene–Abr: CLP 213.6M</div>
-      <div class="kpi-badge badge-green">143.6% del Ppto 4m 🟢</div>
+      <div id="av-eb-chile-ytd" class="kpi-value">331.9M</div>
+      <div id="av-eb-chile-sub" class="kpi-sub">Ppto Ene–Abr: CLP 213.6M</div>
+      <div id="av-eb-chile-badge" class="kpi-badge badge-green">143.6% del Ppto 4m 🟢</div>
     </div>
     <!-- KPI Peru -->
     <div class="kpi-card amber">
       <div class="kpi-label">Perú YTD 5m · USD</div>
-      <div class="kpi-value amber">325K</div>
-      <div class="kpi-sub">Ppto referencial: USD 213.4K</div>
-      <div class="kpi-badge badge-amber">Aguirre 97K · Infante 121K</div>
+      <div id="av-eb-peru-ytd" class="kpi-value amber">325K</div>
+      <div id="av-eb-peru-sub" class="kpi-sub">Ppto referencial: USD 213.4K</div>
+      <div id="av-eb-peru-badge" class="kpi-badge badge-amber">Aguirre 97K · Infante 121K</div>
     </div>
     <!-- KPI Margen Neto Chile -->
     <div class="kpi-card red">
       <div class="kpi-label">Margen Neto Real · Chile</div>
-      <div class="kpi-value red">17.9%</div>
-      <div class="kpi-sub">Meta corporativa: 25.0%</div>
-      <div class="kpi-badge badge-red">GAP –7.1 pp · 2 RTC en ultimátum</div>
+      <div id="av-eb-mn-chile" class="kpi-value red">17.9%</div>
+      <div id="av-eb-mn-chile-sub" class="kpi-sub">Meta corporativa: 25.0%</div>
+      <div id="av-eb-mn-chile-badge" class="kpi-badge badge-red">GAP –7.1 pp · 2 RTC en ultimátum</div>
     </div>
     <!-- KPI Margen Neto Perú -->
     <div class="kpi-card" style="opacity:0.75;">
@@ -328,7 +328,7 @@
   <!-- ══════════════════════════════════════════
        BLOQUE 2: GRUPO CONSOLIDADO
   ══════════════════════════════════════════ -->
-  <div class="section-title">Venta Consolidada por País <span>TC = 950 CLP/USD</span></div>
+  <div class="section-title">Venta Consolidada por País <span id="av-eb-tc-label">TC = 950 CLP/USD</span></div>
 
   <div class="grid-2" style="margin-bottom:24px;">
     <div class="panel">
@@ -340,14 +340,14 @@
         <div class="cons-pais">Chile</div>
         <div class="cons-bar-wrap">
           <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-bottom:4px;">
-            <span>CLP 331.9M (5m)</span><span>Ppto 4m: 213.6M</span>
+            <span id="av-eb-cons-chile-clp">CLP 331.9M (5m)</span><span id="av-eb-cons-chile-ppto">Ppto 4m: 213.6M</span>
           </div>
           <div class="prog-wrap">
             <div class="prog-fill" style="width:100%;background:var(--green);"></div>
           </div>
         </div>
-        <div class="cons-val">USD 349.4K</div>
-        <div class="cons-pct-badge" style="color:var(--green);">143.6%</div>
+        <div id="av-eb-cons-chile-usd" class="cons-val">USD 349.4K</div>
+        <div id="av-eb-cons-chile-pct" class="cons-pct-badge" style="color:var(--green);">143.6%</div>
       </div>
 
       <!-- Perú -->
@@ -356,21 +356,21 @@
         <div class="cons-pais">Perú</div>
         <div class="cons-bar-wrap">
           <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-bottom:4px;">
-            <span>USD 325.1K (5m)</span><span>Ppto T1: 213.4K</span>
+            <span id="av-eb-cons-peru-usd-bar">USD 325.1K (5m)</span><span id="av-eb-cons-peru-ppto">Ppto T1: 213.4K</span>
           </div>
           <div class="prog-wrap">
             <div class="prog-fill" style="width:100%;background:var(--amber);"></div>
           </div>
         </div>
-        <div class="cons-val">USD 325.1K</div>
-        <div class="cons-pct-badge" style="color:var(--green);">152.5%</div>
+        <div id="av-eb-cons-peru-usd" class="cons-val">USD 325.1K</div>
+        <div id="av-eb-cons-peru-pct" class="cons-pct-badge" style="color:var(--green);">152.5%</div>
       </div>
 
       <!-- Grupo total -->
       <div style="background:var(--surface3);border-radius:8px;padding:14px 16px;margin-top:8px;display:flex;justify-content:space-between;align-items:center;">
         <div>
           <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Grupo Total YTD</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green);">USD 674,538</div>
+          <div id="av-eb-grupo-total" style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green);">USD 674,538</div>
         </div>
         <div style="text-align:right;">
           <div style="font-size:10px;color:var(--text-muted);">Sem anterior estimado</div>
@@ -514,7 +514,7 @@
       </div>
       <div class="pl-row highlight" style="border-top: 1px solid var(--border);margin-top:4px;">
         <div class="pl-label" style="font-weight:700;font-size:13px;">Margen Neto Real</div>
-        <div class="pl-val warn" style="font-size:14px;font-weight:700;">17.9%</div>
+        <div id="av-eb-pl-mn-chile" class="pl-val warn" style="font-size:14px;font-weight:700;">17.9%</div>
       </div>
       <div style="margin-top:10px;padding:8px 10px;background:rgba(231,76,60,0.08);border-radius:6px;border-left:2px solid var(--red);">
         <div style="font-size:10px;color:var(--red);">GAP vs meta 25%</div>
@@ -625,7 +625,7 @@
       <div class="pl-section-head">Ingresos</div>
       <div class="pl-row highlight">
         <div class="pl-label">Venta Neta Perú YTD 5m</div>
-        <div class="pl-val pos">USD 325,104</div>
+        <div id="av-eb-pl-peru-ytd" class="pl-val pos">USD 325,104</div>
       </div>
       <div class="pl-section-head">Costos Directos</div>
       <div class="pl-row">
@@ -691,7 +691,7 @@
   <!-- ══════════════════════════════════════════
        BLOQUE 5: CUENTAS POR COBRAR
   ══════════════════════════════════════════ -->
-  <div class="section-title">Cuentas por Cobrar <span>Chile 17/04 · Perú 17/04</span></div>
+  <div class="section-title">Cuentas por Cobrar <span id="av-eb-cxc-section">Chile 08/05 · Perú 10/05</span></div>
 
   <div class="grid-2" style="margin-bottom:24px;">
     <!-- CxC Chile -->
@@ -700,12 +700,12 @@
       <div class="grid-2" style="gap:12px;margin-bottom:16px;">
         <div style="background:var(--surface2);border-radius:8px;padding:14px;text-align:center;">
           <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Total Cartera</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--text);">CLP 134.7M</div>
+          <div id="av-eb-cxc-chile-total" style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--text);">CLP 134.7M</div>
           <div style="font-size:10px;color:var(--text-dim);margin-top:4px;">Agrocomercial + Agroveca Chile</div>
         </div>
         <div style="background:rgba(231,76,60,0.08);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;">
           <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">+90d CRÍTICO</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--red);">CLP 15.9M</div>
+          <div id="av-eb-cxc-chile-90d" style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--red);">CLP 15.9M</div>
           <div style="font-size:10px;color:var(--text-dim);margin-top:4px;">Loma Larga 12.4M · Kullin 1.5M · Ribera 1.5M</div>
         </div>
       </div>
@@ -749,12 +749,12 @@
       <div class="grid-2" style="gap:12px;margin-bottom:16px;">
         <div style="background:var(--surface2);border-radius:8px;padding:14px;text-align:center;">
           <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Cartera Activa</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--text);">USD 118K</div>
+          <div id="av-eb-cxc-peru-total" style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--text);">USD 118K</div>
           <div style="font-size:10px;color:var(--text-dim);margin-top:4px;">excl. USD 196.8K PAGADO A SUPRA</div>
         </div>
         <div style="background:rgba(122,182,72,0.07);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;">
           <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">+90d vencida</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--amber);">USD 23.6K</div>
+          <div id="av-eb-cxc-peru-90d" style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--amber);">USD 23.6K</div>
           <div style="font-size:10px;color:var(--text-dim);margin-top:4px;">Paodisa · Agrofer · Luna · otros</div>
         </div>
       </div>
@@ -1158,7 +1158,7 @@
 <div class="footer">
   <div class="footer-left">
     <div style="font-weight:600;color:var(--text-dim);margin-bottom:2px;">Agroveca Grupo Latam · BI Platform</div>
-    <div>Corte: Chile 11/05 · Perú 11/05 · CxC 08/05/2026 · TC CLP/USD 950</div>
+    <div id="av-eb-footer-corte">Corte: Chile 11/05 · Perú 11/05 · CxC 08/05/2026 · TC CLP/USD 950</div>
   </div>
   <div class="nav-pills">
     <a href="dashboard.html" class="nav-pill">🏠 Inicio</a>
@@ -1168,6 +1168,7 @@
   </div>
 </div>
 
+<script src="avboard_data.js"></script>
 <script>
 Chart.defaults.color = '#8fa892';
 Chart.defaults.font.family = "'DM Mono', monospace";
@@ -1359,6 +1360,140 @@ function cerrarSesion() {
 }
 
 // ── IEC FILTRO PRODUCTOS ──
+// ── AVBOARD POPULATE ─────────────────────────────────────────────
+(function() {
+  if (typeof AVBOARD === 'undefined') {
+    console.warn('[AVBOARD] avboard_data.js no disponible — usando valores estáticos');
+    return;
+  }
+  try {
+    var D = AVBOARD;
+    var cv = D.chile.ventas, cc = D.chile.cxc;
+    var pv = D.peru.ventas, pc = D.peru.cxc;
+
+    function set(id, html) { var el = document.getElementById(id); if (el) el.innerHTML = html; }
+    function K(n)   { return Math.round(n / 1000); }
+    function K1(n)  { return (n / 1000).toFixed(1); }
+    function M(n)   { return (n / 1e6).toFixed(1); }
+    function pct(v) { return (v * 100).toFixed(1) + '%'; }
+    function fUsd(n){ return n.toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:0}); }
+
+    var cHV = D.meta.cortes.chile_ventas;   // '11/05/2026'
+    var cHC = D.meta.cortes.chile_cxc;      // '08/05/2026'
+    var cPV = D.meta.cortes.peru_ventas;    // '11/05/2026'
+    var cPC = D.meta.cortes.peru_cxc;       // '10/05/2026'
+    var sHV = cHV.slice(0,5), sPV = cPV.slice(0,5);
+    var sHC = cHC.slice(0,5), sPC = cPC.slice(0,5);
+
+    // Header
+    set('av-eb-header-corte', 'Chile '+sHV+' · Perú '+sPV+' · CxC '+sHC);
+
+    // KPI Grupo
+    set('av-eb-grupo-ytd',   'USD '+K(D.grupo_ytd_usd())+'K');
+    var chUsdK = K1(D.chile_ytd() / D.tc());
+    var peUsdK = K1(D.peru_ytd());
+    set('av-eb-grupo-sub',   'Chile USD '+chUsdK+'K + Perú USD '+K1(D.peru_ytd())+'K');
+    set('av-eb-grupo-badge', 'CHILE '+pct(cv.cumplimiento_4m)+' PPTO 4m 🚀');
+
+    // KPI Chile
+    set('av-eb-chile-ytd',   M(D.chile_ytd())+'M');
+    set('av-eb-chile-sub',   'Ppto Ene–Abr: CLP '+M(cv.ppto_4m)+'M');
+    set('av-eb-chile-badge', pct(cv.cumplimiento_4m)+' del Ppto 4m 🟢');
+
+    // KPI Perú
+    set('av-eb-peru-ytd',    K(D.peru_ytd())+'K');
+    set('av-eb-peru-sub',    'Ppto 5m ref.: USD '+K(pv.ppto_5m)+'K');
+    set('av-eb-peru-badge',  'Aguirre '+K(pv.por_vendedor.aguirre.ytd)+'K · Infante '+K(pv.por_vendedor.infante.ytd)+'K');
+
+    // KPI MN Chile
+    set('av-eb-mn-chile',       pct(cv.mn_real));
+    set('av-eb-mn-chile-sub',   'Meta corporativa: '+pct(cv.mn_meta));
+    var gap = ((cv.mn_meta - cv.mn_real)*100).toFixed(1);
+    set('av-eb-mn-chile-badge', 'GAP –'+gap+' pp · 2 RTC en ultimátum');
+
+    // TC label
+    set('av-eb-tc-label', 'TC = '+D.tc()+' CLP/USD');
+
+    // Consolidado Chile
+    set('av-eb-cons-chile-clp',  'CLP '+M(D.chile_ytd())+'M (5m)');
+    set('av-eb-cons-chile-ppto', 'Ppto 4m: '+M(cv.ppto_4m)+'M');
+    set('av-eb-cons-chile-usd',  'USD '+K1(D.chile_ytd()/D.tc())+'K');
+    set('av-eb-cons-chile-pct',  pct(cv.cumplimiento_4m));
+
+    // Consolidado Perú
+    set('av-eb-cons-peru-usd-bar', 'USD '+K1(D.peru_ytd())+'K (5m)');
+    set('av-eb-cons-peru-ppto',   'Ppto 5m: '+K(pv.ppto_5m)+'K');
+    set('av-eb-cons-peru-usd',    'USD '+K1(D.peru_ytd())+'K');
+    set('av-eb-cons-peru-pct',    pct(pv.cumplimiento_5m));
+
+    // Grupo total
+    set('av-eb-grupo-total', 'USD '+fUsd(D.grupo_ytd_usd()));
+
+    // CEO P&L
+    set('av-eb-pl-mn-chile',  pct(cv.mn_real));
+    set('av-eb-pl-peru-ytd',  'USD '+fUsd(D.peru_ytd()));
+
+    // CxC section
+    set('av-eb-cxc-section',    'Chile '+sHC+' · Perú '+sPC);
+    set('av-eb-cxc-chile-total','CLP '+M(cc.total)+'M');
+    set('av-eb-cxc-chile-90d',  'CLP '+M(D.cxc_chile_t90())+'M');
+    set('av-eb-cxc-peru-total', 'USD '+K(pc.total)+'K');
+    set('av-eb-cxc-peru-90d',   'USD '+(D.cxc_peru_t90()/1000).toFixed(1)+'K');
+
+    // Footer
+    set('av-eb-footer-corte', 'Corte: Chile '+sHV+' · Perú '+sPV+' · CxC '+sHC+'/'+cHC.slice(6)+' · TC CLP/USD '+D.tc());
+
+    // ── Actualizar charts con datos AVBOARD ────────────────────────
+    // Chart 1: Grupo mensual (5 meses)
+    var cGrupo = Chart.getChart(document.getElementById('chartGrupo'));
+    if (cGrupo) {
+      cGrupo.data.labels = ['Ene','Feb','Mar','Abr','May (parc.)'];
+      cGrupo.data.datasets[0].data = cv.mensual_real.slice(0,5).map(function(v){ return v ? Math.round(v/D.tc()) : 0; });
+      cGrupo.data.datasets[1].data = pv.mensual_real.slice(0,5).map(function(v){ return v || 0; });
+      cGrupo.update();
+    }
+
+    // Chart 3: Perú por vendedor (horizontal)
+    var cPeru = Chart.getChart(document.getElementById('chartPeruRTC'));
+    if (cPeru) {
+      var pvd = pv.por_vendedor;
+      cPeru.data.labels = ['O. Infante','O. Atalaya','Aguirre/Navarro','A. Gonzales','P. Valladares'];
+      cPeru.data.datasets[0].data = [
+        pvd.infante.ytd,
+        pvd.atalaya.ytd,
+        pvd.aguirre.ytd + (pvd.navarro ? pvd.navarro.ytd : 0),
+        pvd.gonzales.ytd,
+        pvd.valladares.ytd
+      ];
+      cPeru.update();
+    }
+
+    // Chart 5: CxC Chile donut (en M CLP)
+    var cCxC = Chart.getChart(document.getElementById('chartCxCChile'));
+    if (cCxC) {
+      cCxC.data.datasets[0].data = [
+        parseFloat(M(cc.tramos.t030)),
+        parseFloat(M(cc.tramos.t3160)),
+        parseFloat(M(cc.tramos.t6190)),
+        parseFloat(M(cc.tramos.t90))
+      ];
+      cCxC.update();
+    }
+
+    // Chart 6: Perú mensual (5 meses)
+    var cPeruMes = Chart.getChart(document.getElementById('chartPeruMes'));
+    if (cPeruMes) {
+      cPeruMes.data.labels = ['Enero','Febrero','Marzo','Abril','Mayo (parc.)'];
+      cPeruMes.data.datasets[0].data = pv.mensual_real.slice(0,5).map(function(v){ return v || 0; });
+      cPeruMes.update();
+    }
+
+    console.log('[AVBOARD] ✅ Executive_Board actualizado · '+D.meta.version);
+  } catch(e) {
+    console.error('[AVBOARD] Error al poblar Executive Board:', e);
+  }
+})();
+
 function iecFiltro(key, btn) {
   // update buttons
   var btns = document.querySelectorAll('#iec-filtro-btns button');
