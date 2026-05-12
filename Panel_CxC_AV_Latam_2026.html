@@ -14,6 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel CxC · Cobranza AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="avboard_data.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -226,32 +227,32 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
   <div class="kpi-strip">
     <div class="kpi">
       <div class="kpi-lbl">Total Chile CxC</div>
-      <div class="kpi-val">134.7M</div>
-      <div class="kpi-sub">CLP · 2 entidades · 08/05</div>
+      <div class="kpi-val" id="av-kpi-ch-total">134.7M</div>
+      <div class="kpi-sub" id="av-kpi-ch-sub">CLP · 2 entidades · 08/05</div>
     </div>
     <div class="kpi amber">
       <div class="kpi-lbl">Chile Vencida</div>
-      <div class="kpi-val amber">36.2M</div>
+      <div class="kpi-val amber" id="av-kpi-ch-vencida">36.2M</div>
       <div class="kpi-sub">CLP · 26.9% cartera</div>
     </div>
     <div class="kpi red">
       <div class="kpi-lbl">Chile +90 días</div>
-      <div class="kpi-val red">15.9M</div>
+      <div class="kpi-val red" id="av-kpi-ch-90">15.9M</div>
       <div class="kpi-sub">CLP · 4 cuentas · CRÍTICO</div>
     </div>
     <div class="kpi blue">
       <div class="kpi-lbl">Total Perú CxC</div>
-      <div class="kpi-val blue">118.0K</div>
-      <div class="kpi-sub">USD · sin SUPRA · 10/05</div>
+      <div class="kpi-val blue" id="av-kpi-pe-total">118.0K</div>
+      <div class="kpi-sub" id="av-kpi-pe-sub">USD · sin SUPRA · 10/05</div>
     </div>
     <div class="kpi amber">
       <div class="kpi-lbl">Perú +90d</div>
-      <div class="kpi-val amber">23.6K</div>
+      <div class="kpi-val amber" id="av-kpi-pe-90">23.6K</div>
       <div class="kpi-sub">USD · 5 cuentas históricas</div>
     </div>
     <div class="kpi orange">
       <div class="kpi-lbl">Perú SUPRA</div>
-      <div class="kpi-val orange">196.8K</div>
+      <div class="kpi-val orange" id="av-kpi-pe-supra">196.8K</div>
       <div class="kpi-sub">USD · tratamiento separado</div>
     </div>
   </div>
@@ -336,11 +337,11 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
             </tr>
             <tr class="total-row">
               <td>TOTAL CHILE</td>
-              <td class="r" style="font-family:'DM Mono';">134,698,594</td>
+              <td class="r" style="font-family:'DM Mono';" id="av-ch-total-monto">134,698,594</td>
               <td class="r" style="font-family:'DM Mono';">100%</td>
-              <td class="r" style="font-family:'DM Mono';color:var(--red);">36,209,379</td>
-              <td class="r" style="font-family:'DM Mono';color:var(--red);">15,873,883</td>
-              <td class="c"><span class="tramo t-90">73.1% al día</span></td>
+              <td class="r" style="font-family:'DM Mono';color:var(--red);" id="av-ch-total-vencida">36,209,379</td>
+              <td class="r" style="font-family:'DM Mono';color:var(--red);" id="av-ch-total-t90">15,873,883</td>
+              <td class="c"><span class="tramo t-90" id="av-ch-aldía-pct">73.1% al día</span></td>
             </tr>
           </tbody>
         </table>
@@ -361,59 +362,59 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
           <tbody>
             <tr>
               <td><strong>O. Infante</strong></td>
-              <td class="monto warn">28,153</td>
-              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--red);">28.2%</span><div class="pb"><div class="pb-fill" style="width:28.2%;background:var(--red);"></div></div></td>
-              <td class="monto danger">15,881</td>
-              <td class="monto danger">4,598</td>
+              <td class="monto warn" id="av-pe-inf-total">28,153</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--red);" id="av-pe-inf-pct">23.9%</span><div class="pb"><div class="pb-fill" id="av-pe-inf-bar" style="width:23.9%;background:var(--red);"></div></div></td>
+              <td class="monto danger" id="av-pe-inf-vencida">15,881</td>
+              <td class="monto danger" id="av-pe-inf-t90">4,598</td>
               <td class="c"><span class="tramo t-crit">CRÍTICO</span></td>
             </tr>
             <tr>
               <td><strong>J. Geldres</strong></td>
-              <td class="monto danger">10,874</td>
-              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--red);">10.9%</span><div class="pb"><div class="pb-fill" style="width:10.9%;background:var(--red);"></div></div></td>
-              <td class="monto danger">10,874</td>
-              <td class="monto danger">10,874</td>
+              <td class="monto danger" id="av-pe-gel-total">10,874</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--red);" id="av-pe-gel-pct">9.2%</span><div class="pb"><div class="pb-fill" id="av-pe-gel-bar" style="width:9.2%;background:var(--red);"></div></div></td>
+              <td class="monto danger" id="av-pe-gel-vencida">10,874</td>
+              <td class="monto danger" id="av-pe-gel-t90">10,874</td>
               <td class="c"><span class="tramo t-crit">CRÍTICO</span></td>
             </tr>
             <tr>
               <td><strong>O. Atalaya</strong></td>
-              <td class="monto danger">15,343</td>
-              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--red);">15.4%</span><div class="pb"><div class="pb-fill" style="width:15.4%;background:var(--red);"></div></div></td>
-              <td class="monto danger">15,343</td>
-              <td class="monto danger">15,343</td>
+              <td class="monto danger" id="av-pe-ata-total">15,343</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--red);" id="av-pe-ata-pct">13.0%</span><div class="pb"><div class="pb-fill" id="av-pe-ata-bar" style="width:13.0%;background:var(--red);"></div></div></td>
+              <td class="monto danger" id="av-pe-ata-vencida">15,343</td>
+              <td class="monto danger" id="av-pe-ata-t90">15,343</td>
               <td class="c"><span class="tramo t-crit">CRÍTICO</span></td>
             </tr>
             <tr>
               <td><strong>Aguirre / Navarro</strong><br><span style="font-size:9px;color:var(--text-muted);">Zona unificada · ampliada 10/05 (ESAN, UVICA, AGROLATINA)</span></td>
-              <td class="monto ok">58,942</td>
-              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--amber);">49.9%</span><div class="pb"><div class="pb-fill" style="width:49.9%;background:var(--amber);"></div></div></td>
-              <td class="monto ok">1,432</td>
+              <td class="monto ok" id="av-pe-an-total">58,942</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--amber);" id="av-pe-an-pct">49.9%</span><div class="pb"><div class="pb-fill" id="av-pe-an-bar" style="width:49.9%;background:var(--amber);"></div></div></td>
+              <td class="monto ok" id="av-pe-an-vencida">1,432</td>
               <td class="monto ok">–</td>
               <td class="c"><span class="tramo t-6190">RIESGO</span></td>
             </tr>
             <tr>
               <td style="color:var(--text-muted);">A. Gonzalez / P. Valladares</td>
-              <td class="monto ok" style="color:var(--text-muted);">1,600</td>
-              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--text-muted);">1.6%</span></td>
-              <td class="monto warn">800</td>
+              <td class="monto ok" style="color:var(--text-muted);" id="av-pe-gv-total">1,600</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--text-muted);" id="av-pe-gv-pct">1.4%</span></td>
+              <td class="monto warn" id="av-pe-gv-vencida">800</td>
               <td class="monto ok">–</td>
               <td class="c">–</td>
             </tr>
             <tr>
               <td style="color:var(--text-muted);font-style:italic;">G. Pradenas / Sin asignar</td>
-              <td class="monto ok" style="color:var(--text-muted);">7,030</td>
-              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--text-muted);">7.0%</span></td>
-              <td class="monto warn">4,830</td>
+              <td class="monto ok" style="color:var(--text-muted);" id="av-pe-pr-total">7,030</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--text-muted);" id="av-pe-pr-pct">6.0%</span></td>
+              <td class="monto warn" id="av-pe-pr-vencida">4,830</td>
               <td class="monto ok">–</td>
               <td class="c">–</td>
             </tr>
             <tr class="total-row">
               <td>TOTAL PERÚ</td>
-              <td class="r" style="font-family:'DM Mono';">117,964</td>
+              <td class="r" style="font-family:'DM Mono';" id="av-pe-total-monto">117,964</td>
               <td class="r" style="font-family:'DM Mono';">100%</td>
-              <td class="r" style="font-family:'DM Mono';color:var(--red);">38,664</td>
-              <td class="r" style="font-family:'DM Mono';color:var(--red);">23,620</td>
-              <td class="c"><span class="tramo t-90">32.8% vencida</span></td>
+              <td class="r" style="font-family:'DM Mono';color:var(--red);" id="av-pe-total-vencida">38,664</td>
+              <td class="r" style="font-family:'DM Mono';color:var(--red);" id="av-pe-total-t90">23,621</td>
+              <td class="c"><span class="tramo t-90" id="av-pe-vencida-pct">32.8% vencida</span></td>
             </tr>
           </tbody>
         </table>
@@ -636,19 +637,19 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
           <div style="display:flex;flex-direction:column;gap:6px;">
             <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(192,57,43,0.1);border-radius:4px;">
               <span style="font-size:11px;color:var(--red);">+90d Crítico</span>
-              <span style="font-family:'DM Mono';font-size:11px;color:var(--red);font-weight:700;">CLP 15,873,883</span>
+              <span style="font-family:'DM Mono';font-size:11px;color:var(--red);font-weight:700;" id="av-ch-exp-t90">CLP 15,873,883</span>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(230,126,34,0.08);border-radius:4px;">
               <span style="font-size:11px;color:var(--orange);">61-90d Riesgo</span>
-              <span style="font-family:'DM Mono';font-size:11px;color:var(--orange);">CLP 7,350,061</span>
+              <span style="font-family:'DM Mono';font-size:11px;color:var(--orange);" id="av-ch-exp-t6190">CLP 7,350,061</span>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(245,166,35,0.08);border-radius:4px;">
               <span style="font-size:11px;color:var(--amber);">31-60d Alerta</span>
-              <span style="font-family:'DM Mono';font-size:11px;color:var(--amber);">CLP 12,985,435</span>
+              <span style="font-family:'DM Mono';font-size:11px;color:var(--amber);" id="av-ch-exp-t3160">CLP 12,985,435</span>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(192,57,43,0.15);border-radius:4px;border-top:1px solid var(--border-dim);">
               <span style="font-size:11px;font-weight:700;">TOTAL VENCIDO &gt;30d</span>
-              <span style="font-family:'DM Mono';font-size:12px;font-weight:700;color:var(--red);">CLP 36,209,379</span>
+              <span style="font-family:'DM Mono';font-size:12px;font-weight:700;color:var(--red);" id="av-ch-exp-total">CLP 36,209,379</span>
             </div>
           </div>
         </div>
@@ -751,19 +752,19 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
           <div style="display:flex;flex-direction:column;gap:6px;">
             <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(192,57,43,0.1);border-radius:4px;">
               <span style="font-size:11px;color:var(--red);">+90d Crítico</span>
-              <span style="font-family:'DM Mono';font-size:11px;color:var(--red);font-weight:700;">USD 23,620</span>
+              <span style="font-family:'DM Mono';font-size:11px;color:var(--red);font-weight:700;" id="av-pe-exp-t90">USD 23,621</span>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(230,126,34,0.08);border-radius:4px;">
               <span style="font-size:11px;color:var(--orange);">31-90d Riesgo</span>
-              <span style="font-family:'DM Mono';font-size:11px;color:var(--orange);">USD 4,494</span>
+              <span style="font-family:'DM Mono';font-size:11px;color:var(--orange);" id="av-pe-exp-t6190">USD 4,509</span>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(245,166,35,0.08);border-radius:4px;">
               <span style="font-size:11px;color:var(--amber);">0-30d En cobro</span>
-              <span style="font-family:'DM Mono';font-size:11px;color:var(--amber);">USD 10,534</span>
+              <span style="font-family:'DM Mono';font-size:11px;color:var(--amber);" id="av-pe-exp-t030">USD 10,534</span>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(230,126,34,0.1);border-radius:4px;border-top:1px solid var(--border-dim);">
               <span style="font-size:11px;font-weight:700;">TOTAL VENCIDO ACTIVO</span>
-              <span style="font-family:'DM Mono';font-size:12px;font-weight:700;color:var(--red);">USD 38,648</span>
+              <span style="font-family:'DM Mono';font-size:12px;font-weight:700;color:var(--red);" id="av-pe-exp-total">USD 38,664</span>
             </div>
           </div>
         </div>
@@ -1061,6 +1062,118 @@ function cerrarSesion() {
   sessionStorage.removeItem('av_role');
   window.location.href = 'index.html';
 }
+
+// ── AVBOARD populate ─────────────────────────────────────────────────────────
+(function(){
+  if(typeof AVBOARD==='undefined') return;
+  try{
+    var cc=AVBOARD.chile.cxc, pc=AVBOARD.peru.cxc;
+    function set(id,html){var el=document.getElementById(id);if(el)el.innerHTML=html;}
+    function setW(id,w){var el=document.getElementById(id);if(el)el.style.width=w;}
+    function fC(n){return (n/1e6).toFixed(1)+'M';}
+    function fP(n){return (n/1000).toFixed(1)+'K';}
+    function fN(n){return n.toLocaleString('en-US');}
+    function pct(n){return (n*100).toFixed(1)+'%';}
+
+    // ── KPI Strip ─────────────────────────────────────────────────────────────
+    set('av-kpi-ch-total',  fC(cc.total));
+    set('av-kpi-ch-vencida',fC(cc.vencida));
+    set('av-kpi-ch-90',     fC(cc.tramos.t90));
+    set('av-kpi-ch-sub',    'CLP · 2 entidades · '+cc.corte.substring(0,5));
+    set('av-kpi-pe-total',  fP(pc.total));
+    set('av-kpi-pe-90',     fP(pc.tramos.t90));
+    set('av-kpi-pe-supra',  fP(pc.supra));
+    set('av-kpi-pe-sub',    'USD · sin SUPRA · '+pc.corte.substring(0,5));
+
+    // ── Chile RTC total row ───────────────────────────────────────────────────
+    set('av-ch-total-monto',   fN(cc.total));
+    set('av-ch-total-vencida', fN(cc.vencida));
+    set('av-ch-total-t90',     fN(cc.tramos.t90));
+    set('av-ch-aldía-pct',     pct(cc.tramos_pct.t030)+' al día');
+
+    // ── Perú vendedor: porcentajes y totales ──────────────────────────────────
+    var pv=pc.por_vendedor;
+    set('av-pe-inf-pct',  pct(pv.infante.pct));           setW('av-pe-inf-bar',  pct(pv.infante.pct));
+    set('av-pe-gel-pct',  pct(pv.geldres.pct));           setW('av-pe-gel-bar',  pct(pv.geldres.pct));
+    set('av-pe-ata-pct',  pct(pv.atalaya.pct));           setW('av-pe-ata-bar',  pct(pv.atalaya.pct));
+    set('av-pe-an-pct',   pct(pv.aguirre_navarro.pct));   setW('av-pe-an-bar',   pct(pv.aguirre_navarro.pct));
+    set('av-pe-gv-pct',   pct(pv.gonzales_valladares.pct));
+    set('av-pe-pr-pct',   pct(pv.pradenas_sin_asignar.pct));
+    set('av-pe-inf-total',   fN(pv.infante.total));
+    set('av-pe-gel-total',   fN(pv.geldres.total));
+    set('av-pe-ata-total',   fN(pv.atalaya.total));
+    set('av-pe-an-total',    fN(pv.aguirre_navarro.total));
+    set('av-pe-gv-total',    fN(pv.gonzales_valladares.total));
+    set('av-pe-pr-total',    fN(pv.pradenas_sin_asignar.total));
+    set('av-pe-inf-vencida', fN(pv.infante.vencida));
+    set('av-pe-gel-vencida', fN(pv.geldres.vencida));
+    set('av-pe-ata-vencida', fN(pv.atalaya.vencida));
+    set('av-pe-an-vencida',  fN(pv.aguirre_navarro.vencida));
+    set('av-pe-gv-vencida',  fN(pv.gonzales_valladares.vencida));
+    set('av-pe-pr-vencida',  fN(pv.pradenas_sin_asignar.vencida));
+    set('av-pe-inf-t90',     fN(pv.infante.t90));
+    set('av-pe-gel-t90',     fN(pv.geldres.t90));
+    set('av-pe-ata-t90',     fN(pv.atalaya.t90));
+
+    // ── Perú total row ────────────────────────────────────────────────────────
+    set('av-pe-total-monto',   fN(pc.total));
+    set('av-pe-total-vencida', fN(pc.vencida));
+    set('av-pe-total-t90',     fN(pc.tramos.t90));
+    set('av-pe-vencida-pct',   pct(pc.vencida/pc.total)+' vencida');
+
+    // ── Exposición Chile ──────────────────────────────────────────────────────
+    set('av-ch-exp-t90',   'CLP '+fN(cc.tramos.t90));
+    set('av-ch-exp-t6190', 'CLP '+fN(cc.tramos.t6190));
+    set('av-ch-exp-t3160', 'CLP '+fN(cc.tramos.t3160));
+    set('av-ch-exp-total', 'CLP '+fN(cc.vencida));
+
+    // ── Exposición Perú ───────────────────────────────────────────────────────
+    set('av-pe-exp-t90',   'USD '+fN(pc.tramos.t90));
+    set('av-pe-exp-t6190', 'USD '+fN(pc.tramos.t3160+pc.tramos.t6190));
+    set('av-pe-exp-t030',  'USD '+fN(pc.tramos.t030));
+    set('av-pe-exp-total', 'USD '+fN(pc.vencida));
+
+    // ── Donut Chile (cCH) ─────────────────────────────────────────────────────
+    var cCH=Chart.getChart(document.getElementById('cCH'));
+    if(cCH){
+      var t=cc.tramos, tp=cc.tramos_pct;
+      cCH.data.labels=[
+        '0–30d Al día ('+pct(tp.t030)+')',
+        '31–60d Alerta ('+pct(tp.t3160)+')',
+        '61–90d Riesgo ('+pct(tp.t6190)+')',
+        '+90d Crítico ('+pct(tp.t90)+')'
+      ];
+      cCH.data.datasets[0].data=[
+        parseFloat((t.t030/1e6).toFixed(1)),
+        parseFloat((t.t3160/1e6).toFixed(1)),
+        parseFloat((t.t6190/1e6).toFixed(1)),
+        parseFloat((t.t90/1e6).toFixed(1))
+      ];
+      cCH.update();
+    }
+
+    // ── Donut Perú (cPE) ──────────────────────────────────────────────────────
+    var cPE=Chart.getChart(document.getElementById('cPE'));
+    if(cPE){
+      var tp2=pc.tramos, tpPct=pc.tramos_pct;
+      cPE.data.labels=[
+        'Al día / futuro ('+pct(tpPct.no_vencida)+')',
+        '0–30d en cobro ('+pct(tpPct.t030)+')',
+        '31–60d Alerta ('+pct(tpPct.t3160)+')',
+        '61–90d Riesgo ('+pct(tpPct.t6190)+')',
+        '+90d Crítico ('+pct(tpPct.t90)+')'
+      ];
+      cPE.data.datasets[0].data=[
+        parseFloat((tp2.no_vencida/1000).toFixed(2)),
+        parseFloat((tp2.t030/1000).toFixed(2)),
+        parseFloat((tp2.t3160/1000).toFixed(2)),
+        parseFloat((tp2.t6190/1000).toFixed(2)),
+        parseFloat((tp2.t90/1000).toFixed(2))
+      ];
+      cPE.update();
+    }
+  }catch(e){}
+})();
 </script>
 </body>
 </html>
