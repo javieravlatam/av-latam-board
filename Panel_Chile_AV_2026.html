@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<script>
+  /* AV Auth Guard · sesión activa mientras la pestaña esté abierta */
+  (function(){
+    if(sessionStorage.getItem('av_auth')!=='7cd4374e16e78510de24a08115c3b44f6d0d72762d41054e6ef8fa0cb5e0c45b')
+      window.location.replace('index.html');
+    if(sessionStorage.getItem('av_role')==='jefe')
+      window.location.replace('Panel_Jefes_Index.html');
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Comercial · Chile · AV Latam 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080e09;--s1:#0f1a10;--s2:#162118;--s3:#1c2b1e;
+  --green:#7AB648;--green2:#5a8a35;--amber:#F5A623;
+  --red:#E74C3C;--red2:#C0392B;--blue:#4A9EDB;
+  --text:#e8f0e9;--dim:#8fa892;--muted:#5a7060;
+  --bdr:rgba(122,182,72,0.18);--bdim:rgba(122,182,72,0.07);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh}
+
+.hdr{background:linear-gradient(180deg,#0c1a0d,var(--bg));border-bottom:1px solid var(--bdr);
+  padding:14px 28px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100}
+.hdr-l{display:flex;align-items:center;gap:13px}
+.logo{width:38px;height:38px;background:var(--green);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue';font-size:17px;color:var(--bg)}
+.htitle{font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;color:var(--green)}
+.hsub{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.hcorte{font-family:'DM Mono';font-size:10px;color:var(--dim);text-align:right}
+.hcorte b{color:var(--green)}
+.hnav{display:flex;gap:6px;flex-wrap:wrap}
+.hnav a{background:var(--s2);border:1px solid var(--bdim);border-radius:6px;
+  padding:4px 12px;font-size:10px;color:var(--dim);text-decoration:none;transition:all .2s}
+.hnav a:hover,.hnav a.active{background:var(--green);color:var(--bg);border-color:var(--green)}
+
+.page{max-width:1440px;margin:0 auto;padding:20px 28px 60px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+
+.kpi{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;padding:14px 16px;position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--green)}
+.kpi.am::after{background:var(--amber)}.kpi.rd::after{background:var(--red)}
+.klbl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px}
+.kval{font-family:'Bebas Neue';font-size:26px;line-height:1}
+.kval.ok{color:var(--green)}.kval.am{color:var(--amber)}.kval.rd{color:var(--red)}
+.ksub{font-family:'DM Mono';font-size:9px;color:var(--muted);margin-top:3px}
+.kbadge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:8px;font-weight:700;margin-top:5px}
+.kb-ok{background:rgba(122,182,72,0.15);color:var(--green)}
+.kb-am{background:rgba(245,166,35,0.15);color:var(--amber)}
+.kb-rd{background:rgba(231,76,60,0.15);color:var(--red)}
+
+.panel{background:var(--s1);border:1px solid var(--bdr);border-radius:11px;padding:16px 18px}
+.ptitle{font-family:'Bebas Neue';font-size:12px;letter-spacing:2px;color:var(--green);
+  margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.ptag{font-family:'DM Mono';font-size:9px;color:var(--muted);font-weight:400}
+
+.sema-list{display:flex;flex-direction:column;gap:0}
+.sema-row{display:flex;align-items:center;gap:12px;padding:11px 10px;
+  border-bottom:1px solid var(--bdim);transition:background .15s}
+.sema-row:last-child{border-bottom:none}
+.sema-row:hover{background:var(--s2)}
+.sema-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.sd-ok{background:var(--green);box-shadow:0 0 7px rgba(122,182,72,0.5)}
+.sd-am{background:var(--amber)}.sd-rd{background:var(--red)}.sd-rd2{background:var(--red2)}
+.sema-info{flex:1;min-width:0}
+.sema-name{font-weight:700;font-size:13px}
+.sema-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.sema-pct{font-family:'Bebas Neue';font-size:22px;flex-shrink:0}
+.pct-ok{color:var(--green)}.pct-am{color:var(--amber)}.pct-rd{color:var(--red)}
+
+.mes-bars{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.mes-row{display:flex;align-items:center;gap:8px}
+.mes-lbl{font-size:11px;color:var(--dim);width:58px;flex-shrink:0}
+.mes-bar-wrap{flex:1;background:var(--s3);border-radius:3px;height:8px;overflow:hidden}
+.mes-bar-fill{height:100%;border-radius:3px}
+.mes-pct{font-family:'DM Mono';font-size:10px;width:46px;text-align:right;flex-shrink:0}
+
+.tbl{width:100%;border-collapse:collapse;font-size:10px}
+.tbl thead th{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;
+  padding:0 7px 8px;border-bottom:1px solid var(--bdim);font-weight:500;text-align:right}
+.tbl thead th:first-child{text-align:left}
+.tbl tbody tr{border-bottom:1px solid var(--bdim)}
+.tbl tbody tr:last-child{border-bottom:none}
+.tbl tbody tr:hover{background:var(--s2)}
+.tbl td{padding:9px 7px;vertical-align:middle}
+.tbl tfoot tr{background:var(--s3);border-top:1px solid var(--bdr)}
+.tbl tfoot td{padding:9px 7px;font-weight:700;font-size:11px}
+.mono{font-family:'DM Mono';font-size:10px}.r{text-align:right}.c{text-align:center}
+.pb{display:inline-block;padding:1px 6px;border-radius:3px;font-size:8px;font-weight:700}
+.pb-ok{background:rgba(122,182,72,0.15);color:var(--green)}
+.pb-am{background:rgba(245,166,35,0.15);color:var(--amber)}
+.pb-rd{background:rgba(231,76,60,0.15);color:var(--red)}
+.mb{background:var(--s3);border-radius:2px;height:3px;margin-top:3px;overflow:hidden}
+.mbf{height:100%;border-radius:2px}
+
+.margen-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+  background:var(--s2);border-radius:8px;padding:12px;margin-top:8px}
+.mg-item{text-align:center}
+.mg-val{font-family:'DM Mono';font-size:15px;font-weight:700}
+.mg-lbl{font-size:9px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:1px}
+
+.alerta{border-radius:8px;padding:12px 14px;margin-bottom:10px;border-left:3px solid}
+.alerta.ok{background:rgba(122,182,72,0.06);border-color:var(--green)}
+.alerta.am{background:rgba(245,166,35,0.06);border-color:var(--amber)}
+.alerta.rd{background:rgba(231,76,60,0.07);border-color:var(--red)}
+.alerta.rd2{background:rgba(192,57,43,0.08);border-color:var(--red2)}
+.alerta-t{font-size:11px;font-weight:700;margin-bottom:4px}
+.alerta-b{font-size:10px;color:var(--dim);line-height:1.6}
+
+.sec{font-family:'Bebas Neue';font-size:14px;letter-spacing:3px;color:var(--green);
+  border-left:3px solid var(--green);padding-left:10px;margin:22px 0 14px;
+  display:flex;align-items:center;gap:8px}
+.sec span{font-family:'DM Mono';font-size:9px;color:var(--muted);font-weight:400}
+
+.ch{position:relative}.ch-xl{height:280px}.ch-lg{height:240px}.ch-md{height:200px}
+
+.ftr{border-top:1px solid var(--bdim);padding:14px 28px;
+  display:flex;justify-content:space-between;align-items:center;margin-top:20px;
+  font-size:9px;color:var(--muted)}
+.np{background:var(--s2);border:1px solid var(--bdr);border-radius:6px;
+  padding:5px 11px;font-size:10px;color:var(--dim);text-decoration:none;transition:all .2s}
+.np:hover{background:var(--green);color:var(--bg);border-color:var(--green)}
+.npills{display:flex;gap:7px}
+.sep{margin:24px 0;border:none;border-top:1px solid var(--bdim)}
+@media(max-width:960px){.g2,.g3,.g5{grid-template-columns:1fr}}
+
+  .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
+  .btn-logout:hover { background:rgba(231,76,60,0.10); }
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-l">
+    <div class="logo">CL</div>
+    <div>
+      <div class="htitle">Panel Comercial · 🇨🇱 Chile</div>
+      <div class="hsub">Jefe Comercial · Ene–Abr 2026</div>
+    </div>
+  </div>
+  <div class="hnav">
+    <a href="dashboard.html">← Países</a>
+    <a href="Panel_General_AV_2026.html">🌎 General</a>
+    <a href="Panel_Chile_AV_2026.html" class="active">🇨🇱 Chile</a>
+    <a href="Panel_Peru_AV_2026.html">🇵🇪 Perú</a>
+    <a href="Panel_Ecuador_AV_2026.html">🇪🇨 Ecuador</a>
+  </div>
+  <div class="hcorte">
+    <div>Corte ventas <b>29/04/2026</b> · CxC <b>29/04/2026</b></div>
+    <div style="font-size:8px;margin-top:1px;">TC = 950 CLP/USD · Ppto anual CLP 861,321,350</div>
+  </div>
+  <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
+</header>
+
+<div class="page">
+
+  <!-- KPI STRIP -->
+  <div class="g5" style="margin-bottom:18px;">
+    <div class="kpi">
+      <div class="klbl">YTD Chile</div>
+      <div class="kval ok">199.6M</div>
+      <div class="ksub">CLP al 29/04/2026</div>
+      <span class="kbadge kb-ok">93.5% ppto Ene-Abr</span>
+    </div>
+    <div class="kpi">
+      <div class="klbl">YTD en USD</div>
+      <div class="kval ok">210,154</div>
+      <div class="ksub">CLP 199.6M / TC 950</div>
+      <span class="kbadge kb-ok">T1: 105.4% ✅</span>
+    </div>
+    <div class="kpi am">
+      <div class="klbl">Abril Parcial</div>
+      <div class="kval am">23.4M</div>
+      <div class="ksub">CLP al 29/04 · 50.4% ppto</div>
+      <span class="kbadge kb-am">Laratro 8.3M · Caroca 10.2M</span>
+    </div>
+    <div class="kpi rd">
+      <div class="klbl">MN Real Chile</div>
+      <div class="kval rd">17.9%</div>
+      <div class="ksub">Meta corporativa: 25%</div>
+      <span class="kbadge kb-rd">Gap –7.1pp · 2 ultimátum</span>
+    </div>
+    <div class="kpi am">
+      <div class="klbl">CxC Total Chile</div>
+      <div class="kval am">39.3M</div>
+      <div class="ksub">CLP · corte 29/04/2026</div>
+      <span class="kbadge kb-am">+90d: CLP 2.4M ✅</span>
+    </div>
+  </div>
+
+  <!-- SEMAFORO + BARRAS MENSUALES -->
+  <div class="g2" style="margin-bottom:15px;align-items:start;">
+
+    <div class="panel">
+      <div class="ptitle">SEMÁFORO RTC · CHILE <span class="ptag">CORTE 29/04 · MN REAL</span></div>
+      <div class="sema-list">
+
+        <div class="sema-row">
+          <span style="font-size:15px;">⭐</span>
+          <div class="sema-info">
+            <div class="sema-name">J. Caroca <span style="font-size:10px;color:var(--green);font-weight:400;">MN 39.2%</span></div>
+            <div class="sema-sub">YTD CLP 63.3M · T1 161% ppto · Abr +10.2M · Referente del grupo</div>
+          </div>
+          <div class="sema-pct pct-ok">161.0%</div>
+          <div class="sema-dot sd-ok"></div>
+        </div>
+
+        <div class="sema-row">
+          <span style="font-size:15px;">⚠️</span>
+          <div class="sema-info">
+            <div class="sema-name">P. Laratro <span style="font-size:10px;color:var(--amber);font-weight:400;">MN 19.6%</span></div>
+            <div class="sema-sub">YTD CLP 61.2M · T1 97.8% · Abr +8.3M · Estructura alta</div>
+          </div>
+          <div class="sema-pct pct-am">97.8%</div>
+          <div class="sema-dot sd-am"></div>
+        </div>
+
+        <div class="sema-row">
+          <span style="font-size:15px;">⚠️</span>
+          <div class="sema-info">
+            <div class="sema-name">R. Encina <span style="font-size:10px;color:var(--amber);font-weight:400;">MN 21.9%</span></div>
+            <div class="sema-sub">YTD CLP 29.4M · T1 94.5% · Abr +1.8M · Camioneta desde Mayo</div>
+          </div>
+          <div class="sema-pct pct-am">94.5%</div>
+          <div class="sema-dot sd-am"></div>
+        </div>
+
+        <div class="sema-row">
+          <span style="font-size:15px;">🔴</span>
+          <div class="sema-info">
+            <div class="sema-name">F. Velásquez <span style="font-size:10px;color:var(--red);font-weight:400;">MN 2.8% · ULTIMÁTUM</span></div>
+            <div class="sema-sub">YTD CLP 32.7M · T1 90.1% · Abr +3.1M · Ppto anual CLP 253.9M</div>
+          </div>
+          <div class="sema-pct pct-rd">90.1%</div>
+          <div class="sema-dot sd-rd"></div>
+        </div>
+
+        <div class="sema-row">
+          <span style="font-size:15px;">❌</span>
+          <div class="sema-info">
+            <div class="sema-name">I. Veverka <span style="font-size:10px;color:var(--red2);font-weight:400;">MN –28.7% · INVIABLE</span></div>
+            <div class="sema-sub">YTD CLP 8.8M · T1 48.9% · Zona en evaluación cierre Q3</div>
+          </div>
+          <div class="sema-pct pct-rd">48.9%</div>
+          <div class="sema-dot sd-rd2"></div>
+        </div>
+
+        <div class="sema-row">
+          <span style="font-size:15px;">✅</span>
+          <div class="sema-info">
+            <div class="sema-name">V. Muñoz</div>
+            <div class="sema-sub">YTD CLP 4.2M · T1 117.7% · Por encima de objetivo</div>
+          </div>
+          <div class="sema-pct pct-ok">117.7%</div>
+          <div class="sema-dot sd-ok"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Barras mensuales + totales -->
+    <div class="panel">
+      <div class="ptitle">CUMPLIMIENTO MENSUAL <span class="ptag">CLP · Real vs Ppto</span></div>
+
+      <div class="mes-bars" style="margin-bottom:14px;">
+        <div class="mes-row">
+          <div class="mes-lbl">Enero</div>
+          <div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:100%;background:var(--green);"></div></div>
+          <div class="mes-pct" style="color:var(--green);">105.6%</div>
+        </div>
+        <div class="mes-row">
+          <div class="mes-lbl">Febrero</div>
+          <div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:85.7%;background:var(--amber);"></div></div>
+          <div class="mes-pct" style="color:var(--amber);">85.7%</div>
+        </div>
+        <div class="mes-row">
+          <div class="mes-lbl">Marzo</div>
+          <div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:100%;background:var(--green);"></div></div>
+          <div class="mes-pct" style="color:var(--green);">124.7%</div>
+        </div>
+        <div class="mes-row">
+          <div class="mes-lbl">Abril</div>
+          <div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:50.4%;background:var(--amber);"></div></div>
+          <div class="mes-pct" style="color:var(--amber);">50.4%</div>
+        </div>
+        <div class="mes-row">
+          <div class="mes-lbl" style="font-weight:700;">YTD T1</div>
+          <div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:100%;background:var(--green);"></div></div>
+          <div class="mes-pct" style="color:var(--green);font-weight:700;">105.4%</div>
+        </div>
+      </div>
+
+      <div class="margen-strip">
+        <div class="mg-item">
+          <div class="mg-val" style="color:var(--green);">88.2M</div>
+          <div class="mg-lbl">Enero</div>
+        </div>
+        <div class="mg-item">
+          <div class="mg-val" style="color:var(--amber);">35.7M</div>
+          <div class="mg-lbl">Febrero</div>
+        </div>
+        <div class="mg-item">
+          <div class="mg-val" style="color:var(--green);">52.4M</div>
+          <div class="mg-lbl">Marzo</div>
+        </div>
+        <div class="mg-item">
+          <div class="mg-val" style="color:var(--amber);">23.4M</div>
+          <div class="mg-lbl">Abril</div>
+        </div>
+      </div>
+      <div style="font-size:9px;color:var(--muted);margin-top:6px;">Ene-Abr acum: CLP 199.6M · 93.5% ppto · TC 950 CLP/USD</div>
+    </div>
+  </div>
+
+  <!-- TABLA + CHART BARRAS RTC -->
+  <div class="sec">Desempeño por RTC <span>YTD vs Ppto · Margen Neto Real</span></div>
+
+  <div class="g2" style="margin-bottom:15px;align-items:start;">
+    <div class="panel">
+      <div class="ptitle">DETALLE YTD POR RTC <span class="ptag">CLP · Real vs Ppto T1 y Anual</span></div>
+      <table class="tbl">
+        <thead><tr>
+          <th style="text-align:left;">RTC</th>
+          <th>Real T1</th><th>Ppto T1</th><th style="text-align:center;">%</th>
+          <th>Abr Real</th><th>MN Real</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td>⭐ <strong style="color:var(--green);">J. Caroca</strong></td>
+            <td class="mono r" style="color:var(--green);">53,123K</td>
+            <td class="mono r">33,000K</td>
+            <td class="c"><span class="pb pb-ok">161.0%</span><div class="mb"><div class="mbf" style="width:100%;background:var(--green);"></div></div></td>
+            <td class="mono r" style="color:var(--green);">10,171K</td>
+            <td class="mono r" style="color:var(--green);">39.2%</td>
+          </tr>
+          <tr>
+            <td>⚠️ P. Laratro</td>
+            <td class="mono r" style="color:var(--amber);">52,893K</td>
+            <td class="mono r">54,100K</td>
+            <td class="c"><span class="pb pb-am">97.8%</span><div class="mb"><div class="mbf" style="width:97.8%;background:var(--amber);"></div></div></td>
+            <td class="mono r" style="color:var(--green);">8,305K</td>
+            <td class="mono r" style="color:var(--amber);">19.6%</td>
+          </tr>
+          <tr>
+            <td>⚠️ R. Encina</td>
+            <td class="mono r" style="color:var(--amber);">27,593K</td>
+            <td class="mono r">29,200K</td>
+            <td class="c"><span class="pb pb-am">94.5%</span><div class="mb"><div class="mbf" style="width:94.5%;background:var(--amber);"></div></div></td>
+            <td class="mono r" style="color:var(--amber);">1,763K</td>
+            <td class="mono r" style="color:var(--amber);">21.9%</td>
+          </tr>
+          <tr>
+            <td>🔴 F. Velásquez</td>
+            <td class="mono r" style="color:var(--red);">29,600K</td>
+            <td class="mono r">32,860K</td>
+            <td class="c"><span class="pb pb-am">90.1%</span><div class="mb"><div class="mbf" style="width:90.1%;background:var(--red);"></div></div></td>
+            <td class="mono r" style="color:var(--amber);">3,113K</td>
+            <td class="mono r" style="color:var(--red);">2.8%</td>
+          </tr>
+          <tr>
+            <td>❌ I. Veverka</td>
+            <td class="mono r" style="color:var(--red2);">8,810K</td>
+            <td class="mono r">18,000K</td>
+            <td class="c"><span class="pb pb-rd">48.9%</span><div class="mb"><div class="mbf" style="width:48.9%;background:var(--red2);"></div></div></td>
+            <td class="mono r">–</td>
+            <td class="mono r" style="color:var(--red2);">–28.7%</td>
+          </tr>
+          <tr>
+            <td>✅ V. Muñoz</td>
+            <td class="mono r" style="color:var(--green);">4,236K</td>
+            <td class="mono r">3,600K</td>
+            <td class="c"><span class="pb pb-ok">117.7%</span><div class="mb"><div class="mbf" style="width:100%;background:var(--green);"></div></div></td>
+            <td class="mono r">–</td>
+            <td class="mono r">S/D</td>
+          </tr>
+        </tbody>
+        <tfoot><tr>
+          <td>TOTAL T1</td>
+          <td class="mono r" style="color:var(--green);">176,254K</td>
+          <td class="mono r">170,760K</td>
+          <td class="c"><span class="pb pb-ok">103.2%</span></td>
+          <td class="mono r" style="color:var(--amber);">23,392K</td>
+          <td class="mono r" style="color:var(--amber);">17.9%</td>
+        </tr></tfoot>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="ptitle">PPTO vs REAL POR RTC · T1 <span class="ptag">CLP millones</span></div>
+      <div class="ch ch-lg"><canvas id="cRTC"></canvas></div>
+    </div>
+  </div>
+
+  <!-- CHARTS: Mensual + Curva -->
+  <div class="g2" style="margin-bottom:15px;">
+    <div class="panel">
+      <div class="ptitle">VENTA MENSUAL APILADA · CHILE <span class="ptag">CLP millones · por RTC</span></div>
+      <div class="ch ch-lg"><canvas id="cStack"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="ptitle">CURVA ACUMULADA CHILE 2026 <span class="ptag">CLP · ppto vs real · 12 meses</span></div>
+      <div class="ch ch-lg"><canvas id="cCurva"></canvas></div>
+    </div>
+  </div>
+
+  <!-- DIAGNÓSTICO CEO -->
+  <div class="sec">Diagnóstico CEO · Acciones Q2 <span>Margen Neto Real · modelo P&amp;L por zona</span></div>
+
+  <div class="g2" style="margin-bottom:15px;">
+    <div>
+      <div class="alerta ok">
+        <div class="alerta-t" style="color:var(--green);">⭐ CAROCA — REFERENTE (MN 39.2%) · AMPLIAR ZONA</div>
+        <div class="alerta-b">Genera el 55% de la utilidad real de Chile. YTD CLP 63.3M (161% ppto T1). Abril sólido +10.2M. Ppto anual CLP 131.6M — ya ejecutó 48% en T1. <strong style="color:var(--green);">Considerar expansión territorial Q3.</strong></div>
+      </div>
+      <div class="alerta am" style="margin-top:10px;">
+        <div class="alerta-t" style="color:var(--amber);">⚠️ LARATRO — ESTRUCTURA ALTA (MN 19.6%)</div>
+        <div class="alerta-b">Venta sólida pero margen bajo meta. Necesita CLP 9.5M adicional/mes para alcanzar 25%. Ppto Mayo fuerte: CLP 22.5M. Agosto y Septiembre son meses clave (25M y 25M). Revisar costos de zona Q2.</div>
+      </div>
+      <div class="alerta am" style="margin-top:10px;">
+        <div class="alerta-t" style="color:var(--amber);">⚠️ ENCINA — CAMIONETA DESDE MAYO (MN 21.9%)</div>
+        <div class="alerta-b">MN borderline. Camioneta entra en Mayo (+CLP 550K/mes). Meta mínima desde Mayo: <strong style="color:var(--amber);">CLP 10.2M/mes</strong>. Ppto Mayo: CLP 5M (bajo). Si no alcanza en Mayo-Junio → revisión de zona en Julio.</div>
+      </div>
+    </div>
+    <div>
+      <div class="alerta rd">
+        <div class="alerta-t" style="color:var(--red);">🔴 VELÁSQUEZ — ULTIMÁTUM 60 DÍAS (MN 2.8%)</div>
+        <div class="alerta-b">MN operacionalmente crítico. Ppto anual CLP 253.9M — H2 muy fuerte (Jul 38M, Sep 48M, Oct 50M). Necesita doblar venta mensual. <strong style="color:var(--red);">Plazo: Mayo-Junio. Si no alcanza MN ≥25% → fusión de zona.</strong> Abril con 1.9M sigue bajo.</div>
+      </div>
+      <div class="alerta rd2" style="margin-top:10px;">
+        <div class="alerta-t" style="color:var(--red2);">❌ VEVERKA — ZONA INVIABLE (MN –28.7%)</div>
+        <div class="alerta-b">MN negativo. La empresa subsidia cada venta. YTD 8.8M (48.9% ppto). Sin recovery en T2 → <strong style="color:var(--red2);">cierre/absorción de zona en Junio 2026. En evaluación formal de directorio.</strong></div>
+      </div>
+      <div style="background:rgba(122,182,72,0.06);border:1px solid var(--bdr);border-radius:8px;padding:12px;margin-top:10px;">
+        <div style="font-family:'Bebas Neue';font-size:12px;letter-spacing:2px;color:var(--green);margin-bottom:8px;">📅 HITOS CLAVE H2 · CHILE</div>
+        <div style="font-family:'DM Mono';font-size:10px;color:var(--dim);line-height:2;">
+          Mayo:  CLP 51M ppto · Encina + camioneta activa<br>
+          Junio: CLP 49.7M ppto · Velásquez en evaluación<br>
+          <span style="color:var(--amber);">Julio: CLP 62.8M · Velásquez pico 38M</span><br>
+          <span style="color:var(--amber);">Sep-Oct: CLP 110.8M + 112.7M ← PICO AÑO</span><br>
+          <span style="color:var(--red);">Pendiente May–Dic: CLP 685M · 79.5% del ppto anual</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CxC CHILE -->
+  <div class="sec">Cuentas por Cobrar · Chile <span>corte 29/04/2026 · +90d reducido a CLP 2.4M ✅</span></div>
+
+  <div class="g2">
+    <div class="panel">
+      <div class="ptitle" style="color:var(--red);">CxC CHILE · POR RTC <span class="ptag">CLP · corte 29/04</span></div>
+      <table class="tbl">
+        <thead><tr><th style="text-align:left;">RTC</th><th>Monto CLP</th><th>% Cartera</th><th style="text-align:center;">Tramo crítico</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>P. Laratro</strong></td>
+            <td class="mono r" style="color:var(--red);">27,382,596</td>
+            <td><div style="text-align:right;font-family:'DM Mono';font-size:10px;color:var(--red);">45.4%</div><div class="mb"><div class="mbf" style="width:45.4%;background:var(--red);"></div></div></td>
+            <td class="c"><span class="pb pb-rd">+90d Loma Larga</span></td>
+          </tr>
+          <tr>
+            <td><strong>R. Encina</strong></td>
+            <td class="mono r" style="color:var(--amber);">12,704,454</td>
+            <td><div style="text-align:right;font-family:'DM Mono';font-size:10px;color:var(--amber);">21.1%</div><div class="mb"><div class="mbf" style="width:21.1%;background:var(--amber);"></div></div></td>
+            <td class="c"><span class="pb pb-am">0–30d Normal</span></td>
+          </tr>
+          <tr>
+            <td><strong>J. Caroca</strong></td>
+            <td class="mono r" style="color:var(--amber);">12,958,417</td>
+            <td><div style="text-align:right;font-family:'DM Mono';font-size:10px;color:var(--amber);">21.5%</div><div class="mb"><div class="mbf" style="width:21.5%;background:var(--amber);"></div></div></td>
+            <td class="c"><span class="pb pb-rd">+90d Goyaservice</span></td>
+          </tr>
+          <tr>
+            <td>F. Velásquez</td>
+            <td class="mono r">5,194,945</td>
+            <td><div style="text-align:right;font-family:'DM Mono';font-size:10px;">8.6%</div><div class="mb"><div class="mbf" style="width:8.6%;background:var(--green);"></div></div></td>
+            <td class="c"><span class="pb pb-ok">0–30d Normal</span></td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);">Otros</td>
+            <td class="mono r" style="color:var(--muted);">2,112,454</td>
+            <td><div style="text-align:right;font-family:'DM Mono';font-size:10px;color:var(--muted);">3.5%</div></td>
+            <td class="c">–</td>
+          </tr>
+        </tbody>
+        <tfoot><tr>
+          <td>TOTAL CHILE</td>
+          <td class="mono r" style="color:var(--red);">60,352,866</td>
+          <td class="r mono">100%</td>
+          <td class="c"><span class="pb pb-rd">16.3% +90d</span></td>
+        </tr></tfoot>
+      </table>
+      <div style="margin-top:10px;padding:8px 12px;background:rgba(231,76,60,0.08);border-radius:6px;border-left:2px solid var(--red);font-size:10px;color:var(--dim);">
+        <strong style="color:var(--red);">Alerta:</strong> Loma Larga LTDA (Laratro) escaló a <strong>CLP 13.8M</strong> con 103 días + Goyaservice (Caroca) CLP 4.2M con 104 días. Total +90d: <strong style="color:var(--red);">CLP 9.9M — gestión urgente</strong>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="ptitle">CxC CHILE · TRAMOS <span class="ptag">CLP millones</span></div>
+      <div class="ch ch-md"><canvas id="cCxC"></canvas></div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:5px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:rgba(122,182,72,0.07);border-radius:4px;">
+          <span style="font-size:10px;color:var(--green);">0–30d Al día</span>
+          <span style="font-family:'DM Mono';font-size:10px;color:var(--green);">CLP 21.9M · 55.6%</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:rgba(245,166,35,0.06);border-radius:4px;">
+          <span style="font-size:10px;color:var(--amber);">31–60d Alerta</span>
+          <span style="font-family:'DM Mono';font-size:10px;color:var(--amber);">CLP 11.0M · 27.9%</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:rgba(230,126,34,0.06);border-radius:4px;">
+          <span style="font-size:10px;color:#E67E22;">61–90d Riesgo</span>
+          <span style="font-family:'DM Mono';font-size:10px;color:#E67E22;">CLP 4.1M · 10.4%</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:rgba(245,166,35,0.06);border-radius:4px;">
+          <span style="font-size:10px;color:var(--amber);">+90d</span>
+          <span style="font-family:'DM Mono';font-size:10px;color:var(--amber);font-weight:700;">CLP 2.4M · 6.1% ✅</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="ftr">
+  <div>AV Latam BI Platform · Panel Chile · Corte ventas 29/04 · CxC 29/04/2026 · TC 950 CLP/USD · Ppto anual CLP 861,321,350</div>
+  <div class="npills">
+    <a href="dashboard.html" class="np">🏠 Inicio</a>
+    <a href="Executive_Board_View_AV_Latam_2026.html" class="np">📋 Board View</a>
+    <a href="Dashboard_Comercial_AV_Latam_2026.html" class="np">📊 Dashboard</a>
+    <a href="Panel_CxC_AV_Latam_2026.html" class="np">💰 CxC</a>
+    <a href="Panel_Presupuesto_AV_2026.html" class="np">📈 Presupuesto</a>
+  </div>
+</div>
+
+<script>
+Chart.defaults.color = '#8fa892';
+Chart.defaults.font.family = "'DM Mono', monospace";
+Chart.defaults.font.size = 10;
+const G='#7AB648',G2='#5a8a35',A='#F5A623',R='#E74C3C',RD='#C0392B',B='#4A9EDB',O='#E67E22';
+const GD='rgba(122,182,72,0.1)';
+
+// RTC barras T1
+new Chart(document.getElementById('cRTC'),{
+  type:'bar',
+  data:{
+    labels:['Caroca','Laratro','Encina','Velásquez','Veverka','Muñoz'],
+    datasets:[
+      {label:'Ppto T1',data:[33000,54100,29200,32860,18000,3600],backgroundColor:'rgba(255,255,255,0.05)',borderColor:'rgba(255,255,255,0.15)',borderWidth:1,borderRadius:3},
+      {label:'Real T1',data:[53123,52893,27593,29600,8810,4236],backgroundColor:[G,A,A,R,RD,G],borderRadius:3}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},
+    scales:{x:{grid:{color:GD},border:{color:GD}},y:{grid:{color:GD},border:{color:GD},ticks:{callback:v=>(v/1000).toFixed(0)+'M'}}}}
+});
+
+// Stacked mensual
+new Chart(document.getElementById('cStack'),{
+  type:'bar',
+  data:{
+    labels:['Enero','Febrero','Marzo','Abril'],
+    datasets:[
+      {label:'Caroca',    data:[14820,6389,31913,10171], backgroundColor:G,   borderRadius:2},
+      {label:'Laratro',   data:[37028,10379,5487,8305],  backgroundColor:A,   borderRadius:2},
+      {label:'Encina',    data:[13511,7263,6819,1763],    backgroundColor:G2,  borderRadius:2},
+      {label:'Velásquez', data:[14491,9912,5197,3113],   backgroundColor:R,   borderRadius:2},
+      {label:'Veverka',   data:[6186,944,1680,0],        backgroundColor:RD,  borderRadius:2},
+      {label:'Muñoz',     data:[2196,766,1275,0],        backgroundColor:'#3a5a3a', borderRadius:2},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top',labels:{boxWidth:10,padding:8}}},
+    scales:{
+      x:{stacked:true,grid:{color:GD},border:{color:GD}},
+      y:{stacked:true,grid:{color:GD},border:{color:GD},ticks:{callback:v=>(v/1000000).toFixed(0)+'M'}}
+    }}
+});
+
+// Curva acumulada 12 meses Chile
+const CH_PPTO=[83558,41602,42000,46431,51000,49730,62800,76500,110800,112700,97500,86700];
+const acum=arr=>arr.reduce((a,v,i)=>{a.push((a[i-1]||0)+(v||0));return a;},[]);
+const pptoAc=acum(CH_PPTO);
+new Chart(document.getElementById('cCurva'),{
+  type:'line',
+  data:{
+    labels:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+    datasets:[
+      {label:'Ppto Acumulado',data:pptoAc,borderColor:'rgba(255,255,255,0.22)',borderDash:[6,4],borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(255,255,255,0.3)',tension:0.3,fill:false},
+      {label:'Real Acumulado',data:[88231,123883,176254,199646,null,null,null,null,null,null,null,null],borderColor:G,backgroundColor:'rgba(122,182,72,0.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:G,tension:0.3,fill:true},
+      {type:'bar',label:'Ppto Mensual',data:CH_PPTO,backgroundColor:'rgba(255,255,255,0.04)',borderColor:'rgba(255,255,255,0.08)',borderWidth:1,borderRadius:2}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},
+    scales:{x:{grid:{color:GD},border:{color:GD}},y:{grid:{color:GD},border:{color:GD},ticks:{callback:v=>(v/1000).toFixed(0)+'M'}}}}
+});
+
+// CxC donut tramos
+new Chart(document.getElementById('cCxC'),{
+  type:'doughnut',
+  data:{
+    labels:['0–30d (55.6%)','31–60d (27.9%)','61–90d (10.4%)','+90d (6.1%)'],
+    datasets:[{
+      data:[21.9,11.0,4.1,2.4],
+      backgroundColor:[G,A,O,R],
+      borderColor:'#080e09',borderWidth:3
+    }]
+  },
+  options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
+    plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:8}},
+      tooltip:{callbacks:{label:ctx=>ctx.label+': CLP '+ctx.parsed+'M'}}}}
+});
+
+function cerrarSesion() {
+  sessionStorage.removeItem('av_auth');
+  sessionStorage.removeItem('av_role');
+  window.location.href = 'index.html';
+}
+</script>
+</body>
+</html>

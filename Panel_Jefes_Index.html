@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<script>
+  /* AV Auth Guard · sesión activa mientras la pestaña esté abierta */
+  (function(){
+    if(sessionStorage.getItem('av_auth')!=='7cd4374e16e78510de24a08115c3b44f6d0d72762d41054e6ef8fa0cb5e0c45b')
+      window.location.replace('index.html');
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Jefes Comerciales · AV Latam 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080e09;--s1:#0f1a10;--s2:#162118;--s3:#1c2b1e;
+  --green:#7AB648;--amber:#F5A623;--red:#E74C3C;--red2:#C0392B;
+  --blue:#4A9EDB;--purple:#9B59B6;
+  --text:#e8f0e9;--dim:#8fa892;--muted:#5a7060;
+  --bdr:rgba(122,182,72,0.18);--bdim:rgba(122,182,72,0.07);
+  --bbdr:rgba(74,158,219,0.22);--bbdim:rgba(74,158,219,0.08);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh}
+
+/* HEADER */
+.hdr{background:linear-gradient(180deg,#0c1a0d,var(--bg));border-bottom:1px solid var(--bdr);
+  padding:14px 28px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100}
+.hdr-l{display:flex;align-items:center;gap:13px}
+.logo{width:38px;height:38px;background:var(--green);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue';font-size:16px;color:var(--bg);letter-spacing:0}
+.htitle{font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;color:var(--green)}
+.hsub{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.hcorte{font-family:'DM Mono';font-size:10px;color:var(--dim);text-align:right}
+.hcorte b{color:var(--green)}
+.np{background:var(--s2);border:1px solid var(--bdr);border-radius:6px;
+  padding:5px 12px;font-size:10px;color:var(--dim);text-decoration:none;transition:all .2s}
+.np:hover{background:var(--green);color:var(--bg);border-color:var(--green)}
+
+/* PAGE */
+.page{max-width:1300px;margin:0 auto;padding:28px 32px 60px}
+
+/* INTRO */
+.intro{background:var(--s1);border:1px solid var(--bdr);border-radius:12px;
+  padding:18px 24px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.intro-title{font-family:'Bebas Neue';font-size:17px;letter-spacing:2px;color:var(--green);margin-bottom:4px}
+.intro-sub{font-size:11px;color:var(--dim)}
+.intro-kpis{display:flex;gap:20px;flex-shrink:0}
+.ik{text-align:center}
+.ik-val{font-family:'Bebas Neue';font-size:22px;line-height:1}
+.ik-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+/* SECCIÓN TÍTULO */
+.sec{font-family:'Bebas Neue';font-size:13px;letter-spacing:3px;color:var(--green);
+  border-left:3px solid var(--green);padding-left:10px;margin:24px 0 14px;
+  display:flex;align-items:center;gap:10px}
+.sec span{font-family:'DM Mono';font-size:9px;color:var(--muted);font-weight:400}
+
+/* COUNTRY CARDS */
+.country-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+
+.country-card{background:var(--s1);border:1px solid;border-radius:14px;
+  overflow:hidden;text-decoration:none;color:inherit;transition:all .25s;display:block}
+.country-card.cl{border-color:var(--bdr)}
+.country-card.pe{border-color:var(--bbdr)}
+.country-card:hover{transform:translateY(-2px)}
+.country-card.cl:hover{box-shadow:0 8px 32px rgba(122,182,72,0.12)}
+.country-card.pe:hover{box-shadow:0 8px 32px rgba(74,158,219,0.12)}
+
+/* Card header */
+.cc-head{padding:18px 22px 14px;display:flex;align-items:center;justify-content:space-between}
+.cc-flag{font-size:32px;margin-right:12px}
+.cc-title{font-family:'Bebas Neue';font-size:22px;letter-spacing:2px}
+.cc-title.cl{color:var(--green)}.cc-title.pe{color:var(--blue)}
+.cc-sub{font-size:10px;color:var(--muted)}
+.cc-corte{font-family:'DM Mono';font-size:10px;color:var(--muted);text-align:right}
+.cc-pct{font-family:'Bebas Neue';font-size:40px;line-height:1}
+.cc-pct.ok{color:var(--green)}.cc-pct.am{color:var(--amber)}.cc-pct.rd{color:var(--red)}
+
+/* Stats strip */
+.cc-stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid;padding:14px 22px;gap:0}
+.cc-stats.cl{border-color:var(--bdim)}.cc-stats.pe{border-color:var(--bbdim)}
+.cc-stat{text-align:center;padding:0 8px;border-right:1px solid}
+.cc-stat:last-child{border-right:none}
+.cc-stat.cl .cc-stat-border{border-color:var(--bdim)}
+.cs-val{font-family:'DM Mono';font-size:13px;font-weight:600}
+.cs-val.ok{color:var(--green)}.cs-val.am{color:var(--amber)}.cs-val.rd{color:var(--red)}.cs-val.nt{color:var(--dim)}
+.cs-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px}
+
+/* Semaforo mini */
+.cc-sema{padding:10px 22px 12px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.sm-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.sm-ok{background:var(--green);box-shadow:0 0 5px rgba(122,182,72,0.5)}
+.sm-am{background:var(--amber)}.sm-rd{background:var(--red)}.sm-rd2{background:var(--red2)}
+.sm-item{display:flex;align-items:center;gap:4px;background:var(--s2);border-radius:5px;padding:3px 8px}
+.sm-name{font-size:10px;font-weight:600}
+.sm-pct{font-family:'DM Mono';font-size:9px;margin-left:4px}
+
+/* Alerts strip */
+.cc-alerts{padding:10px 22px 14px;display:flex;flex-direction:column;gap:6px}
+.cc-alert{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:6px;font-size:10px}
+.cc-alert.ok{background:rgba(122,182,72,0.06);border:1px solid rgba(122,182,72,0.15)}
+.cc-alert.am{background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15)}
+.cc-alert.rd{background:rgba(231,76,60,0.07);border:1px solid rgba(231,76,60,0.2)}
+.ca-icon{font-size:13px;flex-shrink:0;margin-top:1px}
+.ca-text{color:var(--dim);line-height:1.5}
+.ca-text b{color:var(--text)}
+
+/* CTA */
+.cc-cta{padding:12px 22px;border-top:1px solid;display:flex;align-items:center;justify-content:space-between}
+.cc-cta.cl{border-color:var(--bdim)}.cc-cta.pe{border-color:var(--bbdim)}
+.cta-btn{font-family:'DM Mono';font-size:10px;letter-spacing:1px;padding:6px 16px;border-radius:6px;font-weight:600}
+.cta-btn.cl{color:var(--green);background:rgba(122,182,72,0.1);border:1px solid rgba(122,182,72,0.3)}
+.cta-btn.pe{color:var(--blue);background:rgba(74,158,219,0.1);border:1px solid rgba(74,158,219,0.3)}
+.cta-hint{font-size:9px;color:var(--muted)}
+
+/* MINI CHART */
+.cc-chart{padding:0 22px 14px}
+.ch{position:relative}.ch-sm{height:110px}
+
+/* IEC STRIP */
+.iec-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.iec-kpi{background:var(--s1);border:1px solid;border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.iec-icon{font-size:24px;flex-shrink:0}
+.iec-body{min-width:0}
+.iec-val{font-family:'Bebas Neue';font-size:24px;line-height:1;margin-bottom:2px}
+.iec-lbl{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;line-height:1.4}
+
+/* IEC COMPARE BAR */
+.iec-bar-wrap{height:6px;background:var(--s3);border-radius:3px;margin-top:4px;overflow:hidden}
+.iec-bar-fill{height:100%;border-radius:3px}
+
+/* ALERTAS CLAVE */
+.ak-item{display:flex;align-items:flex-start;gap:9px;padding:9px 12px;border-radius:7px;margin-bottom:7px;font-size:11px}
+.ak-item:last-child{margin-bottom:0}
+.ak-item.rd{background:rgba(231,76,60,0.07);border:1px solid rgba(231,76,60,0.2)}
+.ak-item.am{background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15)}
+.ak-item.ok{background:rgba(122,182,72,0.06);border:1px solid rgba(122,182,72,0.15)}
+.ak-ico{font-size:14px;flex-shrink:0;margin-top:1px}
+.ak-txt{color:var(--dim);line-height:1.5}
+.ak-txt b{color:var(--text)}
+.ak-tag{display:inline-block;font-size:8px;font-weight:700;letter-spacing:1px;padding:1px 5px;border-radius:3px;margin-right:4px;vertical-align:middle}
+.ak-tag.cl{background:rgba(122,182,72,0.15);color:var(--green)}
+.ak-tag.pe{background:rgba(74,158,219,0.15);color:var(--blue)}
+
+/* IEC COMPARE PANEL */
+.iec-cmp{background:var(--s1);border:1px solid var(--bdr);border-radius:11px;padding:16px 18px}
+.iec-cmp-row{margin-bottom:14px}
+.iec-cmp-row:last-child{margin-bottom:0}
+.iec-cmp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.iec-cmp-name{font-size:11px;font-weight:600}
+.iec-cmp-val{font-family:'DM Mono';font-size:12px;font-weight:700}
+
+/* SHORTCUTS */
+.shortcuts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.sc{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;padding:14px 16px;
+  text-decoration:none;color:inherit;transition:all .2s;display:block}
+.sc:hover{border-color:var(--green);background:var(--s2);transform:translateY(-1px)}
+.sc-icon{font-size:22px;margin-bottom:8px}
+.sc-title{font-family:'Bebas Neue';font-size:13px;letter-spacing:1.5px;color:var(--green);margin-bottom:4px}
+.sc-sub{font-size:10px;color:var(--muted);line-height:1.5}
+
+/* CXC RESUMEN */
+.cxc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.cxc-panel{background:var(--s1);border:1px solid;border-radius:11px;padding:16px 18px}
+.cxc-panel.cl{border-color:var(--bdr)}.cxc-panel.pe{border-color:var(--bbdr)}
+.ptitle{font-family:'Bebas Neue';font-size:12px;letter-spacing:2px;margin-bottom:12px;
+  display:flex;align-items:center;justify-content:space-between}
+.ptitle.cl{color:var(--green)}.ptitle.pe{color:var(--blue)}
+.ptag{font-family:'DM Mono';font-size:9px;color:var(--muted);font-weight:400}
+
+.cxc-row{display:flex;align-items:center;justify-content:space-between;
+  padding:8px 0;border-bottom:1px solid var(--bdim);font-size:11px}
+.cxc-row:last-child{border-bottom:none}
+.cxc-lbl{color:var(--dim)}.cxc-val{font-family:'DM Mono';font-size:11px;font-weight:600}
+
+/* INSTRUCCION JEFES */
+.inst-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.inst-panel{background:var(--s1);border:1px solid var(--bdr);border-radius:11px;padding:16px 18px}
+.inst-head{font-family:'Bebas Neue';font-size:13px;letter-spacing:2px;margin-bottom:12px}
+.inst-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--bdim);font-size:11px}
+.inst-item:last-child{border-bottom:none}
+.inst-num{font-family:'Bebas Neue';font-size:18px;width:22px;flex-shrink:0;line-height:1.1}
+.inst-text{color:var(--dim);line-height:1.6}
+.inst-text b{color:var(--text)}
+
+/* FOOTER */
+.ftr{border-top:1px solid var(--bdim);padding:14px 28px;
+  display:flex;justify-content:space-between;align-items:center;margin-top:20px;
+  font-size:9px;color:var(--muted)}
+.npills{display:flex;gap:7px}
+
+@media(max-width:900px){.country-grid,.shortcuts,.cxc-grid,.inst-grid{grid-template-columns:1fr}}
+
+  .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
+  .btn-logout:hover { background:rgba(231,76,60,0.10); }
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-l">
+    <div class="logo">JC</div>
+    <div>
+      <div class="htitle">Panel Jefes Comerciales · AV Latam 2026</div>
+      <div class="hsub">Vista de Gestión por País · Semana 15</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <a href="index.html" class="np">🏠 Inicio</a>
+    <a href="Panel_Jefes_Chile_2026.html" class="np">🇨🇱 Chile</a>
+    <a href="Panel_Jefes_Peru_2026.html" class="np">🇵🇪 Perú</a>
+  </div>
+  <div class="hcorte">
+    <div>Chile <b>26/04</b> · Perú <b>24/04</b> · CxC <b>27/04/2026</b></div>
+    <div style="font-size:8px;margin-top:1px;">TC = 950 CLP/USD · Semana 17 · Grupo YTD USD 480K</div>
+  </div>
+  <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
+</header>
+
+<div class="page">
+
+  <!-- INTRO GRUPO -->
+  <div class="intro">
+    <div>
+      <div class="intro-title">Resumen Semanal · Grupo AV Latam · Semana 17</div>
+      <div class="intro-sub">Corte Chile 26/04 · Perú 24/04 · CxC 27/04/2026 · Datos actualizados para gestión de jefes de país</div>
+    </div>
+    <div class="intro-kpis">
+      <div class="ik">
+        <div class="ik-val" style="color:var(--green);">USD 480K</div>
+        <div class="ik-lbl">Grupo YTD</div>
+      </div>
+      <div style="width:1px;background:var(--bdim);"></div>
+      <div class="ik">
+        <div class="ik-val" style="color:var(--green);">CLP 199.6M</div>
+        <div class="ik-lbl">Chile YTD</div>
+      </div>
+      <div style="width:1px;background:var(--bdim);"></div>
+      <div class="ik">
+        <div class="ik-val" style="color:var(--blue);">USD 270K</div>
+        <div class="ik-lbl">Perú YTD</div>
+      </div>
+      <div style="width:1px;background:var(--bdim);"></div>
+      <div class="ik">
+        <div class="ik-val" style="color:var(--red);">CLP 62M</div>
+        <div class="ik-lbl">CxC Chile ⚠️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ IEC STRIP · KPIs Eficiencia Comercial ══ -->
+  <div class="iec-strip">
+    <div class="iec-kpi" style="border-color:rgba(231,76,60,0.4)">
+      <div class="iec-icon">🇨🇱</div>
+      <div class="iec-body">
+        <div class="iec-val" style="color:var(--red)">43.1%</div>
+        <div class="iec-lbl">IEC Chile 2026 YTD<br>🔴 Precio bajo piso · 56.1% tx</div>
+      </div>
+    </div>
+    <div class="iec-kpi" style="border-color:rgba(122,182,72,0.4)">
+      <div class="iec-icon">🇵🇪</div>
+      <div class="iec-body">
+        <div class="iec-val" style="color:var(--green)">92.1%</div>
+        <div class="iec-lbl">IEC Perú 2026 YTD<br>✅ Posición saludable · 22.4% tx</div>
+      </div>
+    </div>
+    <div class="iec-kpi" style="border-color:rgba(231,76,60,0.3)">
+      <div class="iec-icon">🚨</div>
+      <div class="iec-body">
+        <div class="iec-val" style="color:var(--red)">7</div>
+        <div class="iec-lbl">Alertas activas<br>4 críticas Chile · 3 monitoreo Perú</div>
+      </div>
+    </div>
+    <div class="iec-kpi" style="border-color:rgba(245,166,35,0.35)">
+      <div class="iec-icon">💳</div>
+      <div class="iec-body">
+        <div class="iec-val" style="color:var(--amber)">+90d</div>
+        <div class="iec-lbl">CxC Crítico activo<br>CLP 8.4M Chile · USD 28.8K Perú</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHORTCUTS -->
+  <div class="sec">Acceso Rápido a Paneles <span>todos actualizados al corte semanal</span></div>
+  <div class="shortcuts" style="grid-template-columns:repeat(3,1fr)">
+    <a href="Panel_Jefes_Grupo_AV_2026.html" class="sc">
+      <div class="sc-icon">🌎</div>
+      <div class="sc-title">Grupo AV</div>
+      <div class="sc-sub">Consolidado Chile + Perú<br>Ventas · CxC · Eficiencia grupo</div>
+    </a>
+    <a href="Panel_Jefes_Chile_2026.html" class="sc">
+      <div class="sc-icon">🇨🇱</div>
+      <div class="sc-title">Chile</div>
+      <div class="sc-sub">YTD CLP 765.9M · Ppto 861.3M<br>Vendedores · Clientes · CxC · Pricing</div>
+    </a>
+    <a href="Panel_Jefes_Peru_2026.html" class="sc">
+      <div class="sc-icon">🇵🇪</div>
+      <div class="sc-title">Perú</div>
+      <div class="sc-sub">YTD USD 229K · Ppto USD 1.137M<br>Vendedores · Clientes · CxC</div>
+    </a>
+  </div>
+
+  <!-- COUNTRY CARDS -->
+  <div class="sec">Estado por País <span>resumen ejecutivo para jefe de país</span></div>
+  <div class="country-grid">
+
+    <!-- ── CHILE ── -->
+    <a href="Panel_Jefes_Chile_2026.html" class="country-card cl">
+      <div class="cc-head">
+        <div style="display:flex;align-items:center;">
+          <span class="cc-flag">🇨🇱</span>
+          <div>
+            <div class="cc-title cl">Chile</div>
+            <div class="cc-sub">Corte 12/04/2026 · TC 950 · Ppto anual CLP 861.3M</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="cc-pct ok">105.4%</div>
+          <div style="font-size:9px;color:var(--muted);">Ppto T1 ✅</div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="cc-stats cl" style="border-color:var(--bdim);">
+        <div class="cc-stat" style="border-color:var(--bdim);">
+          <div class="cs-val ok">199.6M</div>
+          <div class="cs-lbl">YTD CLP</div>
+        </div>
+        <div class="cc-stat" style="border-color:var(--bdim);">
+          <div class="cs-val ok">USD 200.9K</div>
+          <div class="cs-lbl">YTD USD</div>
+        </div>
+        <div class="cc-stat" style="border-color:var(--bdim);">
+          <div class="cs-val am">17.9%</div>
+          <div class="cs-lbl">MN Real</div>
+        </div>
+        <div class="cc-stat" style="border-color:var(--bdim);">
+          <div class="cs-val rd">CLP 62M</div>
+          <div class="cs-lbl">CxC Total</div>
+        </div>
+      </div>
+
+      <!-- Semáforo mini -->
+      <div class="cc-sema">
+        <span style="font-size:9px;color:var(--muted);margin-right:2px;">RTCs:</span>
+        <div class="sm-item"><div class="sm-dot sm-ok"></div><span class="sm-name" style="color:var(--green);">Caroca</span><span class="sm-pct" style="color:var(--green);">161%</span></div>
+        <div class="sm-item"><div class="sm-dot sm-ok"></div><span class="sm-name" style="color:var(--green);">Muñoz</span><span class="sm-pct" style="color:var(--green);">118%</span></div>
+        <div class="sm-item"><div class="sm-dot sm-am"></div><span class="sm-name" style="color:var(--amber);">Laratro</span><span class="sm-pct" style="color:var(--amber);">98%</span></div>
+        <div class="sm-item"><div class="sm-dot sm-am"></div><span class="sm-name" style="color:var(--amber);">Encina</span><span class="sm-pct" style="color:var(--amber);">95%</span></div>
+        <div class="sm-item"><div class="sm-dot sm-rd"></div><span class="sm-name" style="color:var(--red);">Velásquez</span><span class="sm-pct" style="color:var(--red);">90%</span></div>
+        <div class="sm-item"><div class="sm-dot sm-rd2"></div><span class="sm-name" style="color:var(--red2);">Veverka</span><span class="sm-pct" style="color:var(--red2);">49%</span></div>
+      </div>
+
+      <!-- Alertas -->
+      <div class="cc-alerts">
+        <div class="cc-alert rd">
+          <span class="ca-icon">🚨</span>
+          <div class="ca-text"><b>CxC subió a CLP 62M (+34M vs semana ant.)</b> — Goyaservice 99d + Loma Larga 91–98d = CLP 8.4M en +90d. Gestión urgente Caroca y Laratro.</div>
+        </div>
+        <div class="cc-alert am">
+          <span class="ca-icon">⚠️</span>
+          <div class="ca-text"><b>MN real 17.9%</b> (meta 25%) — Velásquez y Veverka en ultimátum. Encina con camioneta desde Mayo: meta 10.2M/mes.</div>
+        </div>
+        <div class="cc-alert ok">
+          <span class="ca-icon">✅</span>
+          <div class="ca-text"><b>Caroca YTD CLP 63.3M (161% ppto)</b> — genera 55% de la utilidad real. Abril: +10.2M. Referente del grupo completo.</div>
+        </div>
+      </div>
+
+      <!-- Mini chart barras mensuales -->
+      <div class="cc-chart">
+        <canvas id="cChileMini" height="90"></canvas>
+      </div>
+
+      <div class="cc-cta cl">
+        <span class="cta-hint">Click para ver panel completo →</span>
+        <span class="cta-btn cl">ABRIR PANEL JEFES CHILE</span>
+      </div>
+    </a>
+
+    <!-- ── PERÚ ── -->
+    <a href="Panel_Jefes_Peru_2026.html" class="country-card pe">
+      <div class="cc-head">
+        <div style="display:flex;align-items:center;">
+          <span class="cc-flag">🇵🇪</span>
+          <div>
+            <div class="cc-title pe">Perú</div>
+            <div class="cc-sub">Corte 29/04/2026 · Ppto anual USD 1,137,034</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="cc-pct am">95.9%</div>
+          <div style="font-size:9px;color:var(--muted);">Ppto T1</div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="cc-stats pe" style="border-color:var(--bbdim);">
+        <div class="cc-stat" style="border-color:var(--bbdim);">
+          <div class="cs-val" style="color:var(--blue);">USD 229K</div>
+          <div class="cs-lbl">YTD</div>
+        </div>
+        <div class="cc-stat" style="border-color:var(--bbdim);">
+          <div class="cs-val am">80.5%</div>
+          <div class="cs-lbl">vs Ppto Ene-Abr</div>
+        </div>
+        <div class="cc-stat" style="border-color:var(--bbdim);">
+          <div class="cs-val" style="color:var(--blue);">USD 104K</div>
+          <div class="cs-lbl">CxC Activa</div>
+        </div>
+        <div class="cc-stat" style="border-color:var(--bbdim);">
+          <div class="cs-val rd">USD 28.8K</div>
+          <div class="cs-lbl">CxC +90d</div>
+        </div>
+      </div>
+
+      <!-- Semáforo mini -->
+      <div class="cc-sema">
+        <span style="font-size:9px;color:var(--muted);margin-right:2px;">Zonas:</span>
+        <div class="sm-item"><div class="sm-dot sm-ok"></div><span class="sm-name" style="color:var(--green);">Aguirre/Nav.</span><span class="sm-pct" style="color:var(--green);">204%</span></div>
+        <div class="sm-item"><div class="sm-dot sm-ok"></div><span class="sm-name" style="color:var(--green);">Atalaya</span><span class="sm-pct" style="color:var(--green);">110%</span></div>
+        <div class="sm-item"><div class="sm-dot sm-am"></div><span class="sm-name" style="color:var(--amber);">Infante</span><span class="sm-pct" style="color:var(--amber);">62%</span></div>
+        <div class="sm-item"><div class="sm-dot sm-rd"></div><span class="sm-name" style="color:var(--red);">Gonzales</span><span class="sm-pct" style="color:var(--red);">17%</span></div>
+        <div class="sm-item"><div class="sm-dot sm-rd"></div><span class="sm-name" style="color:var(--red);">Valladares</span><span class="sm-pct" style="color:var(--red);">18%</span></div>
+      </div>
+
+      <!-- Alertas -->
+      <div class="cc-alerts">
+        <div class="cc-alert am">
+          <span class="ca-icon">⚠️</span>
+          <div class="ca-text"><b>Infante: 62.4% T1 con ppto anual USD 485K</b> — brecha –USD 43K. Abril mejora (22.5K). Necesita USD 390K en May–Dic. Aceleración urgente.</div>
+        </div>
+        <div class="cc-alert rd">
+          <span class="ca-icon">🚨</span>
+          <div class="ca-text"><b>CxC +90d: USD 28.8K</b> — Atalaya (Agrofer 198d + Olmos 335d) y Geldres (PAODISA 475–635d). Gestión inmediata jefe país.</div>
+        </div>
+        <div class="cc-alert ok">
+          <span class="ca-icon">⭐</span>
+          <div class="ca-text"><b>Aguirre/Navarro: 204.1% del ppto T1</b> — referente del grupo completo. H2 con pico Agosto USD 178K. Asignar ppto Q2 formalmente.</div>
+        </div>
+      </div>
+
+      <!-- Mini chart -->
+      <div class="cc-chart">
+        <canvas id="cPeruMini" height="90"></canvas>
+      </div>
+
+      <div class="cc-cta pe">
+        <span class="cta-hint">Click para ver panel completo →</span>
+        <span class="cta-btn pe">ABRIR PANEL PERÚ</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- ══ IEC COMPARACIÓN + ALERTAS CLAVE ══ -->
+  <div class="sec">Eficiencia Comercial · Alertas Clave <span>IEC 2026 YTD · datos reales Ene–Abr · precios vs piso propuesto</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:16px;margin-bottom:24px">
+
+    <!-- IEC Comparación Chile vs Perú -->
+    <div class="iec-cmp">
+      <div style="font-family:'Bebas Neue';font-size:12px;letter-spacing:2px;color:var(--green);margin-bottom:14px">
+        📊 IEC · Chile vs Perú 2026 YTD
+      </div>
+
+      <div class="iec-cmp-row">
+        <div class="iec-cmp-head">
+          <span class="iec-cmp-name">🇨🇱 Chile</span>
+          <span class="iec-cmp-val" style="color:var(--red)">43.1%</span>
+        </div>
+        <div class="iec-bar-wrap">
+          <div class="iec-bar-fill" style="width:43.1%;background:var(--red)"></div>
+        </div>
+        <div style="font-size:9px;color:var(--muted);margin-top:3px">CLP 73.2M bajo piso · Impacto 16.3M</div>
+      </div>
+
+      <div class="iec-cmp-row">
+        <div class="iec-cmp-head">
+          <span class="iec-cmp-name">🇵🇪 Perú</span>
+          <span class="iec-cmp-val" style="color:var(--green)">92.1%</span>
+        </div>
+        <div class="iec-bar-wrap">
+          <div class="iec-bar-fill" style="width:92.1%;background:var(--green)"></div>
+        </div>
+        <div style="font-size:9px;color:var(--muted);margin-top:3px">USD 13.0K bajo piso · Impacto USD 1.7K</div>
+      </div>
+
+      <div style="margin-top:14px;padding:10px;background:var(--s2);border-radius:7px;font-size:10px;color:var(--dim);line-height:1.6">
+        <span style="color:var(--red);font-weight:700">Chile requiere acción inmediata.</span><br>
+        IEC objetivo: ≥85%. Brecha actual: −41.9pp.<br>
+        <span style="color:var(--muted);font-size:9px">Base: facturas con precio unitario · piso propuesto gerencia</span>
+      </div>
+
+      <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+        <div style="background:rgba(231,76,60,0.07);border:1px solid rgba(231,76,60,0.2);border-radius:6px;padding:8px;text-align:center">
+          <div style="font-family:'DM Mono';font-size:14px;color:var(--red);font-weight:700">6/7</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px">Vendedores CL<br>con IEC &lt;100%</div>
+        </div>
+        <div style="background:rgba(122,182,72,0.07);border:1px solid rgba(122,182,72,0.2);border-radius:6px;padding:8px;text-align:center">
+          <div style="font-family:'DM Mono';font-size:14px;color:var(--green);font-weight:700">4/6</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px">Vendedores PE<br>con IEC ≥90%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alertas Clave -->
+    <div style="background:var(--s1);border:1px solid var(--bdr);border-radius:11px;padding:16px 18px">
+      <div style="font-family:'Bebas Neue';font-size:12px;letter-spacing:2px;color:var(--red);margin-bottom:14px">
+        🚨 Alertas Clave · Acción Directiva
+      </div>
+
+      <div class="ak-item rd">
+        <span class="ak-ico">📉</span>
+        <div class="ak-txt">
+          <span class="ak-tag cl">CL</span>
+          <b>F. Velásquez — IEC 23.1% · impacto CLP 6.8M</b><br>
+          Mayor brecha absoluta del grupo. 59% de sus transacciones bajo piso. Revisar condiciones con clientes activos esta semana.
+        </div>
+      </div>
+
+      <div class="ak-item rd">
+        <span class="ak-ico">📦</span>
+        <div class="ak-txt">
+          <span class="ak-tag cl">CL</span>
+          <b>AV HUMIC ROOT · IEC 8.2% · gap −25.8% · impacto CLP 4.4M</b><br>
+          Producto más afectado de Chile. 15 de 18 transacciones bajo piso. Escalar a gerencia para ajuste de política de precio.
+        </div>
+      </div>
+
+      <div class="ak-item rd">
+        <span class="ak-ico">🏢</span>
+        <div class="ak-txt">
+          <span class="ak-tag cl">CL</span>
+          <b>Fruticola Río Blanco + Cial. La Colonia — IEC 0% · impacto acum. CLP 3.9M</b><br>
+          Todas sus compras YTD están bajo el piso propuesto. Gap −34% y −21% respectivamente. Renegociación o revisión de condiciones.
+        </div>
+      </div>
+
+      <div class="ak-item am">
+        <span class="ak-ico">⚠️</span>
+        <div class="ak-txt">
+          <span class="ak-tag pe">PE</span>
+          <b>Agricola Huarmey S.A.C. — IEC 0% · impacto USD 990</b><br>
+          Todo comprado bajo piso. Cliente de Atalaya. Revisar condiciones acordadas para próximos pedidos.
+        </div>
+      </div>
+
+      <div class="ak-item am">
+        <span class="ak-ico">👤</span>
+        <div class="ak-txt">
+          <span class="ak-tag pe">PE</span>
+          <b>Patricia Valladares — IEC 16.7% · 3/4 tx bajo piso</b><br>
+          Vendedora nueva sin política de precios establecida. Capacitar en límites de negociación antes de Junio.
+        </div>
+      </div>
+
+      <div style="margin-top:10px;font-size:9px;color:var(--muted)">
+        Ver análisis completo por vendedor/producto/cliente →
+        <a href="Panel_Jefes_Chile_2026.html" style="color:var(--green)">Panel Chile ↗</a> ·
+        <a href="Panel_Jefes_Peru_2026.html" style="color:var(--blue)">Panel Perú ↗</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CXC RESUMEN -->
+  <div class="sec">Resumen Cobranza · Acción Requerida <span>corte 12–13/04/2026</span></div>
+  <div class="cxc-grid">
+
+    <div class="cxc-panel cl">
+      <div class="ptitle cl">🇨🇱 CxC CHILE · RESUMEN <span class="ptag">CLP · corte 12/04</span></div>
+      <div class="cxc-row"><span class="cxc-lbl">Total cartera</span><span class="cxc-val" style="color:var(--red);">CLP 61,968,951</span></div>
+      <div class="cxc-row"><span class="cxc-lbl">0–30d Al día</span><span class="cxc-val ok">CLP 39,618,168 · 63.9%</span></div>
+      <div class="cxc-row"><span class="cxc-lbl">31–60d Alerta</span><span class="cxc-val am">CLP 7,810,341 · 12.6%</span></div>
+      <div class="cxc-row"><span class="cxc-lbl">61–90d Riesgo</span><span class="cxc-val" style="color:#E67E22;">CLP 6,149,755 · 9.9%</span></div>
+      <div class="cxc-row"><span class="cxc-lbl" style="font-weight:700;">+90d CRÍTICO</span><span class="cxc-val rd">CLP 8,390,687 · 13.5% ⚠️</span></div>
+      <div style="margin-top:10px;padding:8px 10px;background:rgba(231,76,60,0.07);border-radius:6px;border-left:2px solid var(--red);font-size:10px;color:var(--dim);">
+        <strong style="color:var(--red);">Goyaservice SPA</strong> (Caroca · 99d · CLP 4.19M) + <strong style="color:var(--red);">Loma Larga LTDA ×3</strong> (Laratro · 91–98d · CLP 4.2M)<br>
+        <strong>→ Reporte Jefe País: lunes 14/04</strong>
+      </div>
+    </div>
+
+    <div class="cxc-panel pe">
+      <div class="ptitle pe">🇵🇪 CxC PERÚ · RESUMEN <span class="ptag">USD · corte 27/04</span></div>
+      <div class="cxc-row"><span class="cxc-lbl">No vencida</span><span class="cxc-val ok">USD 48,665 · en plazo</span></div>
+      <div class="cxc-row"><span class="cxc-lbl">0–30d en cobro</span><span class="cxc-val ok">USD 9,530 · gestión normal</span></div>
+      <div class="cxc-row"><span class="cxc-lbl">31–90d Alerta/Riesgo</span><span class="cxc-val am">USD 6,888 · seguimiento</span></div>
+      <div class="cxc-row"><span class="cxc-lbl" style="font-weight:700;">+90d CRÍTICO</span><span class="cxc-val rd">USD 28,792 · 44.5% ⚠️</span></div>
+      <div style="margin-top:10px;padding:8px 10px;background:rgba(231,76,60,0.07);border-radius:6px;border-left:2px solid var(--red);font-size:10px;color:var(--dim);">
+        <strong style="color:var(--red);">Atalaya:</strong> Agrofer 198d (USD 9.5K) + Corp.Olmos 335d (USD 5.9K) · <strong style="color:var(--red);">Geldres:</strong> PAODISA ×4 facturas 475–635d (USD 10.9K)<br>
+        <strong>→ Gestión inmediata: sem. 17</strong>
+      </div>
+      <div style="margin-top:6px;padding:6px 10px;background:var(--s2);border-radius:6px;font-size:9px;color:var(--muted);">
+        SUPRA: USD 196,841 (tratamiento contable separado)
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INSTRUCCIONES JEFES PAÍS -->
+  <div class="sec">Instrucciones Jefe País · Semana 17 <span>acciones concretas al 28/04</span></div>
+  <div class="inst-grid">
+
+    <div class="inst-panel">
+      <div class="inst-head" style="color:var(--green);">🇨🇱 JEFE PAÍS CHILE</div>
+      <div class="inst-item">
+        <div class="inst-num" style="color:var(--red);">1</div>
+        <div class="inst-text"><b style="color:var(--red);">URGENTE — CxC +90d CLP 8.4M.</b> Gestión directa con Caroca (Goyaservice) y Laratro (Loma Larga). Compromiso de pago o acciones formales. Reporte GG el lunes 14/04.</div>
+      </div>
+      <div class="inst-item">
+        <div class="inst-num" style="color:var(--red);">2</div>
+        <div class="inst-text"><b style="color:var(--red);">Velásquez — ultimátum activo.</b> Revisar cierre semana y confirmar actividad. Mayo es el mes de evaluación formal. Si MN no alcanza 25% → fusión de zona.</div>
+      </div>
+      <div class="inst-item">
+        <div class="inst-num" style="color:var(--red);">3</div>
+        <div class="inst-text"><b style="color:var(--red);">Veverka — zona en evaluación cierre.</b> Confirmar actividad Abril. Sin recovery → cierre formal Junio. Preparar plan de absorción de zona.</div>
+      </div>
+      <div class="inst-item">
+        <div class="inst-num" style="color:var(--amber);">4</div>
+        <div class="inst-text"><b>Encina — camioneta entra en Mayo.</b> Confirmar meta: CLP 10.2M/mes desde Mayo. Ppto Mayo: CLP 5M (bajo). Necesita pipeline sólido para superar objetivo.</div>
+      </div>
+      <div class="inst-item">
+        <div class="inst-num" style="color:var(--green);">5</div>
+        <div class="inst-text"><b>Caroca — ampliar zona.</b> Explorar expansión territorial Q3. Modelo de éxito a replicar. Ppto H2 fuerte: Sep 21M + Oct 8.7M.</div>
+      </div>
+    </div>
+
+    <div class="inst-panel">
+      <div class="inst-head" style="color:var(--blue);">🇵🇪 JEFE PAÍS PERÚ</div>
+      <div class="inst-item">
+        <div class="inst-num" style="color:var(--red);">1</div>
+        <div class="inst-text"><b style="color:var(--red);">URGENTE — CxC +90d USD 28.8K.</b> Atalaya gestiona Agrofer (198d) y Corp.Olmos (335d). Geldres/PAODISA requiere proceso formal de cobranza. Reporte GG esta semana.</div>
+      </div>
+      <div class="inst-item">
+        <div class="inst-num" style="color:var(--amber);">2</div>
+        <div class="inst-text"><b>Infante — aceleración urgente.</b> YTD USD 94K vs ppto anual USD 485K. Necesita USD 390K en May–Dic. Abril mejora con 22.5K. Plan de actividad semanal para Mayo.</div>
+      </div>
+      <div class="inst-item">
+        <div class="inst-num" style="color:var(--amber);">3</div>
+        <div class="inst-text"><b>Aguirre/Navarro — asignar ppto Q2.</b> Zona más eficiente del grupo. Ppto actual USD 223,930 anual ya superado en T1 (204.1%). Incorporar formalmente al plan Q2.</div>
+      </div>
+      <div class="inst-item">
+        <div class="inst-num" style="color:var(--red);">4</div>
+        <div class="inst-text"><b style="color:var(--red);">Gonzales y Valladares — activación.</b> Sin actividad ahora, no hay cierres en Agosto (pico USD 178K). Plan de prospección esta semana. Ppto H2 fuerte para ambos.</div>
+      </div>
+      <div class="inst-item">
+        <div class="inst-num" style="color:var(--green);">5</div>
+        <div class="inst-text"><b>Preparar para Agosto.</b> Mayor mes del año: USD 178K. La cartera para ese cierre se construye en Mayo, Junio y Julio. Coordinación con Infante, Atalaya y Aguirre.</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="ftr">
+  <div>AV Latam BI Platform · Panel Jefes Comerciales · Semana 17 · Chile 26/04 · Perú 24/04 · CxC 27/04/2026</div>
+  <div class="npills">
+    <a href="index.html" class="np">🏠 Inicio</a>
+    <a href="Panel_Jefes_Grupo_AV_2026.html" class="np">🌎 Grupo AV</a>
+    <a href="Panel_Jefes_Chile_2026.html" class="np">🇨🇱 Chile</a>
+    <a href="Panel_Jefes_Peru_2026.html" class="np">🇵🇪 Perú</a>
+  </div>
+</div>
+
+<script>
+Chart.defaults.color = '#8fa892';
+Chart.defaults.font.family = "'DM Mono', monospace";
+Chart.defaults.font.size = 9;
+const G='#7AB648',A='#F5A623',R='#E74C3C',B='#4A9EDB',G2='#5a8a35',RD='#C0392B';
+const GD='rgba(122,182,72,0.1)',BD='rgba(74,158,219,0.1)';
+
+// Mini chart Chile — barras mensuales ppto vs real
+new Chart(document.getElementById('cChileMini'),{
+  type:'bar',
+  data:{
+    labels:['Ene','Feb','Mar','Abr*'],
+    datasets:[
+      {label:'Ppto',data:[83558,41602,42000,46431],backgroundColor:'rgba(255,255,255,0.06)',borderRadius:2,borderColor:'rgba(255,255,255,0.1)',borderWidth:1},
+      {label:'Real',data:[88231,35652,52371,14599],backgroundColor:[G,R,G,A],borderRadius:2}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top',labels:{boxWidth:8,padding:8,font:{size:9}}}},
+    scales:{
+      x:{grid:{color:GD},border:{color:GD}},
+      y:{grid:{color:GD},border:{color:GD},ticks:{callback:v=>(v/1000).toFixed(0)+'M'}}
+    }
+  }
+});
+
+// Mini chart Perú
+new Chart(document.getElementById('cPeruMini'),{
+  type:'bar',
+  data:{
+    labels:['Ene','Feb','Mar','Abr*'],
+    datasets:[
+      {label:'Ppto',data:[51674,58489,103222,71299],backgroundColor:'rgba(74,158,219,0.12)',borderRadius:2,borderColor:'rgba(74,158,219,0.2)',borderWidth:1},
+      {label:'Real',data:[73511,39409,91616,24722],backgroundColor:[G,R,A,A],borderRadius:2}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top',labels:{boxWidth:8,padding:8,font:{size:9}}}},
+    scales:{
+      x:{grid:{color:BD},border:{color:BD}},
+      y:{grid:{color:BD},border:{color:BD},ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'}}
+    }
+  }
+});
+
+function cerrarSesion() {
+  sessionStorage.removeItem('av_auth');
+  sessionStorage.removeItem('av_role');
+  window.location.href = 'index.html';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<script>
+  /* AV Auth Guard · sesión activa mientras la pestaña esté abierta */
+  (function(){
+    if(sessionStorage.getItem('av_auth')!=='7cd4374e16e78510de24a08115c3b44f6d0d72762d41054e6ef8fa0cb5e0c45b')
+      window.location.replace('index.html');
+    if(sessionStorage.getItem('av_role')==='jefe')
+      window.location.replace('Panel_Jefes_Index.html');
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel CxC · Cobranza AV Latam 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #080e09; --surface: #0f1a10; --surface2: #162118; --surface3: #1c2b1e;
+  --green: #7AB648; --amber: #F5A623; --orange: #E67E22;
+  --red: #E74C3C; --red-dark: #C0392B; --blue: #4A9EDB;
+  --text: #e8f0e9; --text-dim: #8fa892; --text-muted: #5a7060;
+  --border: rgba(122,182,72,0.18); --border-dim: rgba(122,182,72,0.08);
+}
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; min-height: 100vh; }
+
+/* ── HEADER ── */
+.header {
+  background: linear-gradient(180deg,#0c1a0d 0%,var(--bg) 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 28px; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 200;
+}
+.header-left { display: flex; align-items: center; gap: 14px; }
+.logo { width: 36px; height: 36px; background: var(--red); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue'; font-size: 16px; color: #fff; }
+.header-title { font-family: 'Bebas Neue'; font-size: 20px; letter-spacing: 2px; color: var(--red); }
+.header-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+.corte { font-family: 'DM Mono'; font-size: 11px; color: var(--text-dim); text-align: right; }
+.corte span { color: var(--green); }
+
+/* ── LAYOUT ── */
+.page { max-width: 1440px; margin: 0 auto; padding: 20px 28px 60px; }
+
+/* ── ALERTA BANNER ── */
+.alerta-banner {
+  background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.35);
+  border-radius: 10px; padding: 14px 20px; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 16px;
+}
+.alerta-icon { font-size: 24px; }
+.alerta-text { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+.alerta-text strong { color: var(--red); }
+
+/* ── KPI STRIP ── */
+.kpi-strip { display: grid; grid-template-columns: repeat(6,1fr); gap: 12px; margin-bottom: 20px; }
+.kpi {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 16px; position: relative; overflow: hidden;
+}
+.kpi::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background: var(--green); }
+.kpi.red::before { background: var(--red); }
+.kpi.amber::before { background: var(--amber); }
+.kpi.orange::before { background: var(--orange); }
+.kpi.blue::before { background: var(--blue); }
+.kpi-lbl { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; }
+.kpi-val { font-family: 'Bebas Neue'; font-size: 26px; line-height: 1; }
+.kpi-val.red { color: var(--red); } .kpi-val.amber { color: var(--amber); }
+.kpi-val.orange { color: var(--orange); } .kpi-val.green { color: var(--green); }
+.kpi-val.blue { color: var(--blue); }
+.kpi-sub { font-family: 'DM Mono'; font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+
+/* ── SECTION TITLE ── */
+.sec { font-family: 'Bebas Neue'; font-size: 15px; letter-spacing: 3px; color: var(--green); border-left: 3px solid var(--green); padding-left: 10px; margin: 24px 0 14px; display: flex; align-items: center; gap: 10px; }
+.sec.red { color: var(--red); border-left-color: var(--red); }
+.sec.blue { color: var(--blue); border-left-color: var(--blue); }
+.sec span { font-family: 'DM Mono'; font-size: 10px; color: var(--text-muted); font-weight: 400; letter-spacing: 1px; }
+
+/* ── TABS ── */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border-dim); margin-bottom: 0; }
+.tab { padding: 10px 22px; font-size: 12px; font-weight: 500; cursor: pointer; border-radius: 8px 8px 0 0; color: var(--text-muted); transition: all 0.2s; border: 1px solid transparent; border-bottom: none; background: transparent; position: relative; top: 1px; }
+.tab.active { background: var(--surface); color: var(--green); border-color: var(--border); border-bottom-color: var(--surface); }
+.tab-content { display: none; padding-top: 20px; }
+.tab-content.active { display: block; }
+
+/* ── GRID ── */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+/* ── PANEL ── */
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+.panel-title { font-family: 'Bebas Neue'; font-size: 13px; letter-spacing: 2px; color: var(--green); margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+.panel-title.red { color: var(--red); }
+.panel-title.amber { color: var(--amber); }
+.panel-title.blue { color: var(--blue); }
+.pt-tag { font-family: 'DM Mono'; font-size: 9px; color: var(--text-muted); font-weight: 400; }
+
+/* ── TABLA MAESTRA ── */
+.tbl { width: 100%; border-collapse: collapse; font-size: 11px; }
+.tbl thead th { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.2px; padding: 0 8px 10px; border-bottom: 1px solid var(--border-dim); font-weight: 500; white-space: nowrap; }
+.tbl thead th.r { text-align: right; }
+.tbl thead th.c { text-align: center; }
+.tbl tbody tr { border-bottom: 1px solid var(--border-dim); transition: background 0.15s; }
+.tbl tbody tr:last-child { border-bottom: none; }
+.tbl tbody tr:hover { background: var(--surface2); }
+.tbl td { padding: 9px 8px; vertical-align: middle; }
+.tbl td.r { text-align: right; }
+.tbl td.c { text-align: center; }
+
+/* TRAMO BADGES */
+.tramo {
+  display: inline-block; padding: 2px 8px; border-radius: 4px;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.5px; white-space: nowrap;
+}
+.t-ok   { background: rgba(122,182,72,0.15); color: var(--green); }
+.t-030  { background: rgba(122,182,72,0.12); color: var(--green); }
+.t-3160 { background: rgba(245,166,35,0.15); color: var(--amber); }
+.t-6190 { background: rgba(230,126,34,0.15); color: var(--orange); }
+.t-90   { background: rgba(231,76,60,0.2); color: var(--red); }
+.t-crit { background: rgba(192,57,43,0.25); color: #ff6b5b; border: 1px solid rgba(192,57,43,0.4); }
+
+/* ESTADO ICONS */
+.est { font-size: 11px; }
+
+/* MORA CELL */
+.mora { font-family: 'DM Mono'; font-size: 11px; }
+.mora.neg { color: var(--green); }
+.mora.low { color: var(--amber); }
+.mora.mid { color: var(--orange); }
+.mora.high { color: var(--red); font-weight: 600; }
+.mora.crit { color: #ff4444; font-weight: 700; }
+
+/* MONTO CELL */
+.monto { font-family: 'DM Mono'; font-size: 11px; text-align: right; }
+.monto.ok { color: var(--text-dim); }
+.monto.warn { color: var(--amber); }
+.monto.danger { color: var(--red); font-weight: 600; }
+
+/* RTC HEADER ROW */
+.rtc-hdr { background: var(--surface2); }
+.rtc-hdr td { padding: 7px 8px; font-weight: 700; font-size: 11px; color: var(--text); border-bottom: 1px solid var(--border); }
+.rtc-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 9px; margin-left: 8px; font-weight: 600; }
+
+/* FILTER BAR */
+.filter-bar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+.filter-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 5px 14px; font-size: 11px; color: var(--text-dim); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+.filter-btn:hover, .filter-btn.active { background: var(--green); color: var(--bg); border-color: var(--green); }
+.filter-btn.red-act { background: var(--red); border-color: var(--red); color: #fff; }
+.filter-search { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 11px; color: var(--text); outline: none; min-width: 200px; }
+.filter-search:focus { border-color: var(--green); }
+.filter-label { font-size: 10px; color: var(--text-muted); margin-left: auto; }
+
+/* PROGRESS BARS */
+.pb { background: var(--surface3); border-radius: 3px; height: 5px; overflow: hidden; margin-top: 3px; }
+.pb-fill { height: 100%; border-radius: 3px; }
+
+/* CHART BOX */
+.ch { position: relative; height: 220px; }
+.ch-sm { position: relative; height: 180px; }
+
+/* RESUMEN RTC CARD */
+.rtc-card { background: var(--surface2); border: 1px solid var(--border-dim); border-radius: 10px; padding: 14px 16px; position: relative; overflow: hidden; }
+.rtc-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; }
+.rtc-card.ok::before { background: var(--green); }
+.rtc-card.warn::before { background: var(--amber); }
+.rtc-card.danger::before { background: var(--red); }
+.rtc-card-name { font-weight: 700; font-size: 13px; margin-bottom: 6px; }
+.rtc-card-row { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; }
+.rtc-card-lbl { color: var(--text-muted); }
+.rtc-card-val { font-family: 'DM Mono'; font-size: 11px; }
+
+/* ACCIÓN REQUERIDA */
+.accion { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 9px; font-weight: 700; letter-spacing: 0.5px; }
+.a-urg { background: rgba(231,76,60,0.2); color: var(--red); border: 1px solid rgba(231,76,60,0.4); }
+.a-seg { background: rgba(245,166,35,0.15); color: var(--amber); }
+.a-mon { background: rgba(122,182,72,0.12); color: var(--green); }
+
+/* SUMMARY TOTALS ROW */
+.total-row td { background: var(--surface3); font-weight: 700; font-size: 12px; padding: 10px 8px; }
+
+/* FOOTER */
+.footer { border-top: 1px solid var(--border-dim); padding: 16px 28px; display: flex; justify-content: space-between; align-items: center; margin-top: 32px; font-size: 10px; color: var(--text-muted); }
+.nav-pills { display: flex; gap: 8px; }
+.np { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 11px; color: var(--text-dim); text-decoration: none; transition: all 0.2s; }
+.np:hover { background: var(--green); color: var(--bg); border-color: var(--green); }
+
+@media(max-width:900px){.kpi-strip{grid-template-columns:repeat(3,1fr);}.g2,.g3{grid-template-columns:1fr;}}
+
+  .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
+  .btn-logout:hover { background:rgba(231,76,60,0.10); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <div class="logo">CxC</div>
+    <div>
+      <div class="header-title">Panel de Cobranza · AV Latam 2026</div>
+      <div class="header-sub">Seguimiento por País y RTC · Gestión de Recuperación</div>
+    </div>
+  </div>
+  <div class="corte">
+    <div>Chile <span>08/05/2026</span> · Perú <span>10/05/2026</span></div>
+    <div style="color:var(--text-muted);font-size:9px;margin-top:2px;">TC = 950 CLP/USD · Fecha análisis: 08/05/2026 · Agrocomercial + Agroveca Chile</div>
+  </div>
+  <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
+</header>
+
+<div class="page">
+
+  <!-- ALERTA BANNER -->
+  <div class="alerta-banner">
+    <div class="alerta-icon">🚨</div>
+    <div class="alerta-text">
+      <strong>ALERTA CRÍTICA — LOMA LARGA NO RESUELTA.</strong>
+      Chile +90d: <strong>CLP 15.9M CRÍTICO</strong> — Loma Larga <strong style="color:var(--red)">CLP 12.4M en 2 entidades (92-114d)</strong> · Kullin CLP 1.5M · Ribera CLP 1.5M.
+      Perú acumula <strong>USD 23.6K vencidos</strong> en cuentas +90 días. Cartera total Chile (2 entidades): CLP 134.7M.
+      Se requiere acción inmediata por parte de los Jefes de País y RTCs responsables.
+    </div>
+  </div>
+
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi">
+      <div class="kpi-lbl">Total Chile CxC</div>
+      <div class="kpi-val">134.7M</div>
+      <div class="kpi-sub">CLP · 2 entidades · 08/05</div>
+    </div>
+    <div class="kpi amber">
+      <div class="kpi-lbl">Chile Vencida</div>
+      <div class="kpi-val amber">36.2M</div>
+      <div class="kpi-sub">CLP · 26.9% cartera</div>
+    </div>
+    <div class="kpi red">
+      <div class="kpi-lbl">Chile +90 días</div>
+      <div class="kpi-val red">15.9M</div>
+      <div class="kpi-sub">CLP · 4 cuentas · CRÍTICO</div>
+    </div>
+    <div class="kpi blue">
+      <div class="kpi-lbl">Total Perú CxC</div>
+      <div class="kpi-val blue">118.0K</div>
+      <div class="kpi-sub">USD · sin SUPRA · 10/05</div>
+    </div>
+    <div class="kpi amber">
+      <div class="kpi-lbl">Perú +90d</div>
+      <div class="kpi-val amber">23.6K</div>
+      <div class="kpi-sub">USD · 5 cuentas históricas</div>
+    </div>
+    <div class="kpi orange">
+      <div class="kpi-lbl">Perú SUPRA</div>
+      <div class="kpi-val orange">196.8K</div>
+      <div class="kpi-sub">USD · tratamiento separado</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('consolidado',this)">📊 Consolidado Grupo</div>
+    <div class="tab" onclick="switchTab('chile',this)">🇨🇱 Chile · Detalle CxC</div>
+    <div class="tab" onclick="switchTab('peru',this)">🇵🇪 Perú · Detalle CxC</div>
+    <div class="tab" onclick="switchTab('criticas',this)">🚨 Cuentas Críticas</div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       TAB: CONSOLIDADO
+  ═══════════════════════════════ -->
+  <div id="tab-consolidado" class="tab-content active">
+    <div class="g2" style="margin-bottom:16px;">
+      <div class="panel">
+        <div class="panel-title">COMPOSICIÓN CARTERA CHILE <span class="pt-tag">CLP · por tramo</span></div>
+        <div class="ch"><canvas id="cCH"></canvas></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title blue">COMPOSICIÓN CARTERA PERÚ <span class="pt-tag">USD · por tramo</span></div>
+        <div class="ch"><canvas id="cPE"></canvas></div>
+      </div>
+    </div>
+
+    <div class="sec">Resumen por RTC / Vendedor <span>Total cartera + mora crítica</span></div>
+    <div class="g2">
+      <!-- Chile por RTC -->
+      <div class="panel">
+        <div class="panel-title">CHILE · CxC POR RTC <span class="pt-tag">CLP · ordenado por riesgo</span></div>
+        <table class="tbl">
+          <thead><tr>
+            <th>RTC</th>
+            <th class="r">Total CLP</th>
+            <th class="r">% Cartera</th>
+            <th class="r">Vencido</th>
+            <th class="r">+90d</th>
+            <th class="c">Riesgo</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>J.P. Neira</strong><br><span style="font-size:9px;color:var(--text-muted);">Loma Larga+Ribera</span></td>
+              <td class="monto danger">39,464,290</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--red);">29.3%</span><div class="pb"><div class="pb-fill" style="width:29.3%;background:var(--red);"></div></div></td>
+              <td class="monto danger">16,395,630</td>
+              <td class="monto danger">13,895,630</td>
+              <td class="c"><span class="tramo t-crit">CRÍTICO</span></td>
+            </tr>
+            <tr>
+              <td><strong>P. Laratro</strong><br><span style="font-size:9px;color:var(--text-muted);">incl. Kullin SPA</span></td>
+              <td class="monto warn">44,939,482</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--amber);">33.4%</span><div class="pb"><div class="pb-fill" style="width:33.4%;background:var(--amber);"></div></div></td>
+              <td class="monto warn">3,043,466</td>
+              <td class="monto danger">1,460,166</td>
+              <td class="c"><span class="tramo t-crit">CRÍTICO</span></td>
+            </tr>
+            <tr>
+              <td>R. Encina</td>
+              <td class="monto ok">19,344,022</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--amber);">14.4%</span><div class="pb"><div class="pb-fill" style="width:14.4%;background:var(--amber);"></div></div></td>
+              <td class="monto warn">11,693,785</td>
+              <td class="monto ok">–</td>
+              <td class="c"><span class="tramo t-3160">ALERTA</span></td>
+            </tr>
+            <tr>
+              <td>F. Velásquez</td>
+              <td class="monto ok">14,358,540</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--text-muted);">10.7%</span><div class="pb"><div class="pb-fill" style="width:10.7%;background:var(--green);"></div></div></td>
+              <td class="monto ok">–</td>
+              <td class="monto ok">–</td>
+              <td class="c"><span class="tramo t-ok">NORMAL</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--text-muted);">J. Caroca + Otros</td>
+              <td class="monto ok" style="color:var(--text-muted);">16,592,260</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--text-muted);">12.3%</span></td>
+              <td class="monto warn" style="color:var(--text-muted);">4,607,317</td>
+              <td class="monto danger">518,087</td>
+              <td class="c"><span class="tramo t-6190">RIESGO</span></td>
+            </tr>
+            <tr class="total-row">
+              <td>TOTAL CHILE</td>
+              <td class="r" style="font-family:'DM Mono';">134,698,594</td>
+              <td class="r" style="font-family:'DM Mono';">100%</td>
+              <td class="r" style="font-family:'DM Mono';color:var(--red);">36,209,379</td>
+              <td class="r" style="font-family:'DM Mono';color:var(--red);">15,873,883</td>
+              <td class="c"><span class="tramo t-90">73.1% al día</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Perú por vendedor -->
+      <div class="panel">
+        <div class="panel-title blue">PERÚ · CxC POR VENDEDOR <span class="pt-tag">USD · ordenado por riesgo</span></div>
+        <table class="tbl">
+          <thead><tr>
+            <th>Vendedor</th>
+            <th class="r">Total USD</th>
+            <th class="r">% Cartera</th>
+            <th class="r">Vencido</th>
+            <th class="r">+90d</th>
+            <th class="c">Riesgo</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>O. Infante</strong></td>
+              <td class="monto warn">28,153</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--red);">28.2%</span><div class="pb"><div class="pb-fill" style="width:28.2%;background:var(--red);"></div></div></td>
+              <td class="monto danger">15,881</td>
+              <td class="monto danger">4,598</td>
+              <td class="c"><span class="tramo t-crit">CRÍTICO</span></td>
+            </tr>
+            <tr>
+              <td><strong>J. Geldres</strong></td>
+              <td class="monto danger">10,874</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--red);">10.9%</span><div class="pb"><div class="pb-fill" style="width:10.9%;background:var(--red);"></div></div></td>
+              <td class="monto danger">10,874</td>
+              <td class="monto danger">10,874</td>
+              <td class="c"><span class="tramo t-crit">CRÍTICO</span></td>
+            </tr>
+            <tr>
+              <td><strong>O. Atalaya</strong></td>
+              <td class="monto danger">15,343</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--red);">15.4%</span><div class="pb"><div class="pb-fill" style="width:15.4%;background:var(--red);"></div></div></td>
+              <td class="monto danger">15,343</td>
+              <td class="monto danger">15,343</td>
+              <td class="c"><span class="tramo t-crit">CRÍTICO</span></td>
+            </tr>
+            <tr>
+              <td><strong>Aguirre / Navarro</strong><br><span style="font-size:9px;color:var(--text-muted);">Zona unificada · ampliada 10/05 (ESAN, UVICA, AGROLATINA)</span></td>
+              <td class="monto ok">58,942</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--amber);">49.9%</span><div class="pb"><div class="pb-fill" style="width:49.9%;background:var(--amber);"></div></div></td>
+              <td class="monto ok">1,432</td>
+              <td class="monto ok">–</td>
+              <td class="c"><span class="tramo t-6190">RIESGO</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--text-muted);">A. Gonzalez / P. Valladares</td>
+              <td class="monto ok" style="color:var(--text-muted);">1,600</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--text-muted);">1.6%</span></td>
+              <td class="monto warn">800</td>
+              <td class="monto ok">–</td>
+              <td class="c">–</td>
+            </tr>
+            <tr>
+              <td style="color:var(--text-muted);font-style:italic;">G. Pradenas / Sin asignar</td>
+              <td class="monto ok" style="color:var(--text-muted);">7,030</td>
+              <td style="text-align:right;"><span style="font-family:'DM Mono';font-size:10px;color:var(--text-muted);">7.0%</span></td>
+              <td class="monto warn">4,830</td>
+              <td class="monto ok">–</td>
+              <td class="c">–</td>
+            </tr>
+            <tr class="total-row">
+              <td>TOTAL PERÚ</td>
+              <td class="r" style="font-family:'DM Mono';">117,964</td>
+              <td class="r" style="font-family:'DM Mono';">100%</td>
+              <td class="r" style="font-family:'DM Mono';color:var(--red);">38,664</td>
+              <td class="r" style="font-family:'DM Mono';color:var(--red);">23,620</td>
+              <td class="c"><span class="tramo t-90">32.8% vencida</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       TAB: CHILE DETALLE
+  ═══════════════════════════════ -->
+  <div id="tab-chile" class="tab-content">
+    <div class="filter-bar">
+      <span style="font-size:10px;color:var(--text-muted);">FILTRAR:</span>
+      <div class="filter-btn active" onclick="filterCH('all',this)">Todos</div>
+      <div class="filter-btn" onclick="filterCH('critico',this)" style="color:var(--red);">🔴 Crítico (+90d)</div>
+      <div class="filter-btn" onclick="filterCH('riesgo',this)" style="color:var(--orange);">🟠 Riesgo (61-90d)</div>
+      <div class="filter-btn" onclick="filterCH('alerta',this)" style="color:var(--amber);">🟡 Alerta (31-60d)</div>
+      <div class="filter-btn" onclick="filterCH('normal',this)" style="color:var(--green);">🟢 Normal</div>
+      <input class="filter-search" id="searchCH" placeholder="Buscar cliente o RTC..." onkeyup="searchCHF(this.value)">
+      <div class="filter-label" id="ch-count">84 facturas · CLP 134,698,594</div>
+    </div>
+
+    <table class="tbl" id="tbl-chile">
+      <thead><tr>
+        <th>RTC</th>
+        <th>Cliente</th>
+        <th class="c">Folio</th>
+        <th class="r">Emisión</th>
+        <th class="r">Vencimiento</th>
+        <th class="c">Días Mora</th>
+        <th class="c">Tramo</th>
+        <th class="r">Monto CLP</th>
+        <th class="c">Estado</th>
+        <th class="c">Condición</th>
+        <th class="c">Acción</th>
+      </tr></thead>
+      <tbody id="tbody-chile">
+        <!-- Generado por JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════
+       TAB: PERÚ DETALLE
+  ═══════════════════════════════ -->
+  <div id="tab-peru" class="tab-content">
+    <div class="filter-bar">
+      <span style="font-size:10px;color:var(--text-muted);">FILTRAR:</span>
+      <div class="filter-btn active" onclick="filterPE('all',this)">Todos</div>
+      <div class="filter-btn" onclick="filterPE('critico',this)" style="color:var(--red);">🔴 Crítico (+90d)</div>
+      <div class="filter-btn" onclick="filterPE('riesgo',this)" style="color:var(--orange);">🟠 Riesgo (61-90d)</div>
+      <div class="filter-btn" onclick="filterPE('alerta',this)" style="color:var(--amber);">🟡 Alerta (31-60d)</div>
+      <div class="filter-btn" onclick="filterPE('normal',this)" style="color:var(--green);">🟢 Al día</div>
+      <div class="filter-btn" onclick="filterPE('supra',this)" style="color:var(--text-muted);">⚫ SUPRA</div>
+      <input class="filter-search" id="searchPE" placeholder="Buscar cliente o vendedor..." onkeyup="searchPEF(this.value)">
+      <div class="filter-label" id="pe-count">131 entradas · USD 117,964</div>
+    </div>
+
+    <table class="tbl" id="tbl-peru">
+      <thead><tr>
+        <th>Vendedor</th>
+        <th>Cliente</th>
+        <th class="r">Emisión</th>
+        <th class="r">Vencimiento</th>
+        <th class="c">Días Mora</th>
+        <th class="c">Tramo</th>
+        <th class="r">Saldo USD</th>
+        <th class="c">Estado</th>
+        <th class="c">Acción</th>
+      </tr></thead>
+      <tbody id="tbody-peru">
+        <!-- Generado por JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════
+       TAB: CUENTAS CRÍTICAS
+  ═══════════════════════════════ -->
+  <div id="tab-criticas" class="tab-content">
+    <div class="sec red">Cuentas Prioritarias para Cobranza <span>Acción inmediata requerida · Jefe País responsable</span></div>
+
+    <!-- CHILE CRÍTICAS -->
+    <div class="panel" style="margin-bottom:16px;border-color:rgba(231,76,60,0.35);">
+      <div class="panel-title red">🇨🇱 CHILE — CUENTAS CRÍTICAS Y EN RIESGO <span class="pt-tag">CLP · jefe país: Antonio Abelló</span></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <!-- Crítico +90d -->
+        <div style="background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.4);border-radius:8px;padding:14px;">
+          <div style="font-size:10px;color:var(--red);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:8px;">🔴 +90 DÍAS · CRÍTICO</div>
+          <table class="tbl">
+            <thead><tr><th>Cliente</th><th>RTC</th><th class="c">Días</th><th class="r">CLP</th><th class="c">Acción</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>AGRICOLA RIBERA LTDA</strong><br><span style="font-size:9px;color:var(--red);">⬆ Escaló desde Riesgo · 104d</span></td>
+                <td>J. Caroca</td>
+                <td class="c"><span class="mora crit">104d</span></td>
+                <td class="monto danger">1,473,696</td>
+                <td class="c"><span class="accion a-urg">URGENTE</span></td>
+              </tr>
+              <tr>
+                <td><strong>AGROINSUMOS KULLIN</strong><br><span style="font-size:9px;color:var(--red);">3 facturas · escaló desde 61-90d</span></td>
+                <td>P. Laratro</td>
+                <td class="c"><span class="mora crit">97d</span></td>
+                <td class="monto danger">921,215</td>
+                <td class="c"><span class="accion a-urg">URGENTE</span></td>
+              </tr>
+              <tr style="background:rgba(122,182,72,0.08);">
+                <td><del style="color:var(--text-muted);">GOYASERVICE SPA</del></td>
+                <td style="color:var(--text-muted);">J. Caroca</td>
+                <td class="c"><span style="color:var(--green);font-size:10px;">PAGADO ✅</span></td>
+                <td class="monto ok" style="color:var(--green);">4,194,750</td>
+                <td class="c"><span style="color:var(--green);font-size:10px;">RESUELTO</span></td>
+              </tr>
+              <tr>
+                <td><strong>LOMA LARGA LTDA</strong><br><span style="font-size:9px;color:var(--red);">Agrocomercial · 92d · CLP 2,891,224</span><br><span style="font-size:9px;color:var(--red);">Agroveca Chile · 114d · CLP 9,530,710</span></td>
+                <td>Neira / Laratro</td>
+                <td class="c"><span class="mora crit">92-114d</span></td>
+                <td class="monto danger">12,421,934</td>
+                <td class="c"><span class="accion a-urg">URGENTE</span></td>
+              </tr>
+              <tr style="background:var(--surface3);">
+                <td colspan="3"><strong>Subtotal +90d activo</strong></td>
+                <td class="r" style="font-family:'DM Mono';font-weight:700;color:var(--red);">15,873,883</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px;padding:8px;background:rgba(0,0,0,0.2);border-radius:4px;font-size:10px;color:var(--text-dim);">
+            🔴 <strong style="color:var(--red);">LOMA LARGA ACTIVO 12.4M</strong> (2 entidades · Neira/Laratro · 92-114 días). Goyaservice ✅ PAGADO. Ribera (1.47M, 104d) y Kullin (1.46M) también activos.<br>
+            <strong style="color:var(--red);">Medida:</strong> Loma Larga — PRIORIDAD MÁXIMA, gestión directa. Bloqueo crédito Ribera + Kullin. Reporte urgente a GG.
+          </div>
+        </div>
+        <!-- 61-90d Riesgo -->
+        <div style="background:rgba(230,126,34,0.08);border:1px solid rgba(230,126,34,0.35);border-radius:8px;padding:14px;">
+          <div style="font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:8px;">🟠 61–90 DÍAS · RIESGO</div>
+          <table class="tbl">
+            <thead><tr><th>Cliente</th><th>RTC</th><th class="c">Días</th><th class="r">CLP</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>MAGALY ORELLANA PINO</td><td>J. Caroca</td>
+                <td class="c"><span class="mora high">73d</span></td>
+                <td class="monto danger">182,047</td>
+              </tr>
+              <tr>
+                <td>Loma Larga (Agrocomercial · 3 facturas)<br><span style="font-size:9px;color:var(--red);">61-90d · P. Laratro</span></td><td>P. Laratro</td>
+                <td class="c"><span class="mora high">61-90d</span></td>
+                <td class="monto danger">4,574,844</td>
+              </tr>
+              <tr>
+                <td>Otras cuentas 61-90d<br><span style="font-size:9px;color:var(--text-muted);">Agroveca Chile · ver Tab Chile</span></td><td>Varios</td>
+                <td class="c"><span class="mora high">61-90d</span></td>
+                <td class="monto danger">2,593,170</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:6px;font-size:10px;color:var(--text-dim);">Total 61–90d: <strong style="color:var(--orange);">CLP 7,350,061</strong> · Loma Larga activa en ambos tramos · Kullin en +90d</div>
+        </div>
+      </div>
+
+      <!-- 31-60d Alerta -->
+      <div style="background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.2);border-radius:8px;padding:14px;margin-bottom:12px;">
+        <div style="font-size:10px;color:var(--amber);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:8px;">🟡 31–60 DÍAS · ALERTA · Seguimiento prioritario</div>
+        <table class="tbl">
+          <thead><tr><th>Cliente</th><th>RTC</th><th class="c">Días</th><th class="r">CLP</th><th class="c">Acción</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>SOC. AGRIC. TIERRA DE BACO</strong></td><td>J. Caroca</td>
+              <td class="c"><span class="mora mid">31d</span></td>
+              <td class="monto warn">2,915,500</td>
+              <td class="c"><span class="accion a-seg">SEGUIMIENTO</span></td>
+            </tr>
+            <tr>
+              <td>AGRICOLA GOMEZ SPA</td><td>F. Velásquez</td>
+              <td class="c"><span class="mora mid">40d</span></td>
+              <td class="monto warn">1,190,000</td>
+              <td class="c"><span class="accion a-seg">SEGUIMIENTO</span></td>
+            </tr>
+            <tr>
+              <td>AGRIC. FRANCISCA MONTES</td><td>P. Laratro</td>
+              <td class="c"><span class="mora mid">44d</span></td>
+              <td class="monto warn">711,620</td>
+              <td class="c"><span class="accion a-seg">SEGUIMIENTO</span></td>
+            </tr>
+            <tr>
+              <td>AGRICOLA LOS ALAMOS LTDA</td><td>P. Laratro</td>
+              <td class="c"><span class="mora mid">36d</span></td>
+              <td class="monto warn">446,250</td>
+              <td class="c"><span class="accion a-seg">SEGUIMIENTO</span></td>
+            </tr>
+            <tr>
+              <td>Otras cuentas 31-60d</td><td>Varios</td>
+              <td class="c"><span class="mora mid">31-42d</span></td>
+              <td class="monto warn">4,931,922</td>
+              <td class="c"><span class="accion a-seg">SEGUIMIENTO</span></td>
+            </tr>
+            <tr style="background:var(--surface3);">
+              <td colspan="3"><strong>Subtotal 31-60d</strong></td>
+              <td class="r" style="font-family:'DM Mono';font-weight:700;color:var(--amber);">11,015,500</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Instrucción jefe país -->
+      <div style="background:var(--surface2);border-radius:8px;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">📋 INSTRUCCIÓN JEFE PAÍS CHILE</div>
+          <div style="font-size:11px;color:var(--text-dim);line-height:1.8;">
+            1. <strong style="color:var(--red);">🔴 LOMA LARGA (92-114d · 12.4M)</strong> — PRIORIDAD MÁXIMA. 2 entidades (Neira + Laratro). Reunión ejecutiva urgente. Copia a GG.<br>
+            2. <strong style="color:var(--red);">RIBERA (104d · 1.47M)</strong> — Gestión directa. Bloqueo crédito inmediato.<br>
+            3. <strong style="color:var(--red);">KULLIN (97d+ · 1.46M)</strong> — Compromiso de pago o acciones legales.<br>
+            4. <strong style="color:var(--amber);">TIERRA DE BACO + ENCINA</strong> — Seguimiento 31-60d. Acuerdo de pago parcial.<br>
+            5. ✅ Goyaservice RESUELTO. Reporte de avance: <strong>lunes 18/05</strong> a GG. Corte 08/05.
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">📊 RESUMEN EXPOSICIÓN CHILE</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(192,57,43,0.1);border-radius:4px;">
+              <span style="font-size:11px;color:var(--red);">+90d Crítico</span>
+              <span style="font-family:'DM Mono';font-size:11px;color:var(--red);font-weight:700;">CLP 15,873,883</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(230,126,34,0.08);border-radius:4px;">
+              <span style="font-size:11px;color:var(--orange);">61-90d Riesgo</span>
+              <span style="font-family:'DM Mono';font-size:11px;color:var(--orange);">CLP 7,350,061</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(245,166,35,0.08);border-radius:4px;">
+              <span style="font-size:11px;color:var(--amber);">31-60d Alerta</span>
+              <span style="font-family:'DM Mono';font-size:11px;color:var(--amber);">CLP 12,985,435</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(192,57,43,0.15);border-radius:4px;border-top:1px solid var(--border-dim);">
+              <span style="font-size:11px;font-weight:700;">TOTAL VENCIDO &gt;30d</span>
+              <span style="font-family:'DM Mono';font-size:12px;font-weight:700;color:var(--red);">CLP 36,209,379</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PERÚ CRÍTICAS -->
+    <div class="panel" style="border-color:rgba(74,158,219,0.35);">
+      <div class="panel-title blue">🇵🇪 PERÚ — CUENTAS CRÍTICAS Y EN RIESGO <span class="pt-tag">USD · jefe país: Francisco Velázquez</span></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <!-- Crítico +90d -->
+        <div style="background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.4);border-radius:8px;padding:14px;">
+          <div style="font-size:10px;color:var(--red);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:8px;">🔴 +90 DÍAS · CRÍTICO</div>
+          <table class="tbl">
+            <thead><tr><th>Cliente</th><th>Vendedor</th><th class="c">Días</th><th class="r">USD</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>PAODISA S.A.</strong><br><span style="font-size:9px;color:var(--text-muted);">4 facturas · 2024</span></td><td>J. Geldres</td>
+                <td class="c"><span class="mora crit">468-628d</span></td>
+                <td class="monto danger">10,874.40</td>
+              </tr>
+              <tr>
+                <td><strong>AGROFER MJ E.I.R.L.</strong></td><td>O. Atalaya</td>
+                <td class="c"><span class="mora crit">191d</span></td>
+                <td class="monto danger">9,493.00</td>
+              </tr>
+              <tr>
+                <td>EPIC FARMS S.A.C.<br><span style="font-size:9px;color:var(--red);">Escaló desde 61-90d</span></td><td>A. Gonzalez</td>
+                <td class="c"><span class="mora crit">107d</span></td>
+                <td class="monto danger">600.00</td>
+              </tr>
+              <tr>
+                <td>INVERSIONES AJS</td><td>O. Infante</td>
+                <td class="c"><span class="mora crit">323d</span></td>
+                <td class="monto danger">304.00</td>
+              </tr>
+              <tr>
+                <td>LUNA QUINTANILLA (2 folios)</td><td>O. Infante</td>
+                <td class="c"><span class="mora crit">97-143d</span></td>
+                <td class="monto danger">2,349.05</td>
+              </tr>
+              <tr style="background:rgba(0,0,0,0.15);">
+                <td colspan="3" style="font-size:9px;color:var(--text-muted);font-style:italic;">⚫ CORP. OLMOS + AMFRESH (2) → PAGADO A SUPRA (factoring)</td>
+                <td class="r" style="font-size:9px;color:var(--text-muted);">excl.</td>
+              </tr>
+              <tr style="background:var(--surface3);">
+                <td colspan="3"><strong>Subtotal +90d activo</strong></td>
+                <td class="r" style="font-family:'DM Mono';font-weight:700;color:var(--red);">23,620.45</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- 31-90d Riesgo/Alerta -->
+        <div style="background:rgba(230,126,34,0.06);border:1px solid rgba(230,126,34,0.3);border-radius:8px;padding:14px;">
+          <div style="font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:8px;">🟠🟡 31–90 DÍAS · RIESGO / ALERTA</div>
+          <table class="tbl">
+            <thead><tr><th>Cliente</th><th>Vendedor</th><th class="c">Días</th><th class="r">USD</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>SOC. AGRICOLA 3P (2 facturas)</td><td>N. Navarro</td>
+                <td class="c"><span class="mora high">63-81d</span></td>
+                <td class="monto warn">1,345.20</td>
+              </tr>
+              <tr>
+                <td>PROC. AGROINDUSTRIALES</td><td>O. Infante</td>
+                <td class="c"><span class="mora low">48d</span></td>
+                <td class="monto warn">3,149.00</td>
+              </tr>
+              <tr style="background:rgba(0,0,0,0.12);">
+                <td colspan="3" style="font-size:9px;color:var(--text-muted);font-style:italic;">Epic + Luna (folio 841) escalaron a +90d · Bioinsumos: resuelto</td>
+                <td></td>
+              </tr>
+              <tr style="background:var(--surface3);">
+                <td colspan="3"><strong>Subtotal 31-90d</strong></td>
+                <td class="r" style="font-family:'DM Mono';font-weight:700;color:var(--orange);">4,494.20</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:8px;padding:8px;background:rgba(0,0,0,0.2);border-radius:4px;font-size:10px;color:var(--text-dim);">
+            <strong style="color:var(--amber);">Nota Pradenas:</strong> Guillermo Pradenas no aparece como vendedor activo del equipo actual. Verificar responsable de gestión.
+          </div>
+        </div>
+      </div>
+
+      <!-- Instrucción Perú -->
+      <div style="background:var(--surface2);border-radius:8px;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">📋 INSTRUCCIÓN JEFE PAÍS PERÚ</div>
+          <div style="font-size:11px;color:var(--text-dim);line-height:1.8;">
+            1. <strong style="color:var(--red);">PAODISA (Geldres)</strong> — 468-648 días. Proceso formal de cobranza activo. Verificar colateral.<br>
+            2. <strong style="color:var(--red);">AGROFER (Atalaya)</strong> — 211d · USD 9,493. Acuerdo de pago urgente o acciones legales.<br>
+            3. <strong style="color:var(--red);">LUNA QUINTANILLA (Infante)</strong> — 97-143d · USD 2,349. Bloqueo si no paga esta semana.<br>
+            4. <strong style="color:var(--amber);">SOC. AGRICOLA 3P (Navarro)</strong> — 63-81d. Gestión directa.<br>
+            5. ⚫ CORP. OLMOS + AMFRESH → en SUPRA (factoring). Reporte: <strong>lunes 18/05</strong> a GG. Corte 10/05.
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">📊 RESUMEN EXPOSICIÓN PERÚ</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(192,57,43,0.1);border-radius:4px;">
+              <span style="font-size:11px;color:var(--red);">+90d Crítico</span>
+              <span style="font-family:'DM Mono';font-size:11px;color:var(--red);font-weight:700;">USD 23,620</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(230,126,34,0.08);border-radius:4px;">
+              <span style="font-size:11px;color:var(--orange);">31-90d Riesgo</span>
+              <span style="font-family:'DM Mono';font-size:11px;color:var(--orange);">USD 4,494</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(245,166,35,0.08);border-radius:4px;">
+              <span style="font-size:11px;color:var(--amber);">0-30d En cobro</span>
+              <span style="font-family:'DM Mono';font-size:11px;color:var(--amber);">USD 10,534</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(230,126,34,0.1);border-radius:4px;border-top:1px solid var(--border-dim);">
+              <span style="font-size:11px;font-weight:700;">TOTAL VENCIDO ACTIVO</span>
+              <span style="font-family:'DM Mono';font-size:12px;font-weight:700;color:var(--red);">USD 38,648</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-criticas -->
+
+</div><!-- /page -->
+
+<div class="footer">
+  <div>AV Latam BI Platform · Panel CxC · Chile 08/05 · Perú 10/05/2026 · 2 entidades CHL</div>
+  <div class="nav-pills">
+    <a href="dashboard.html" class="np">🏠 Inicio</a>
+    <a href="Executive_Board_View_AV_Latam_2026.html" class="np">📋 Board View</a>
+    <a href="Dashboard_Comercial_AV_Latam_2026.html" class="np">📊 Dashboard</a>
+  </div>
+</div>
+
+<script>
+Chart.defaults.color = '#8fa892';
+Chart.defaults.font.family = "'DM Mono', monospace";
+Chart.defaults.font.size = 10;
+
+const G='#7AB648',A='#F5A623',O='#E67E22',R='#E74C3C',RD='#C0392B',B='#4A9EDB';
+
+// ── CHART Chile tramos (2 entidades · corte 08/05/2026)
+new Chart(document.getElementById('cCH'), {
+  type: 'doughnut',
+  data: {
+    labels: ['0–30d Al día (73.1%)', '31–60d Alerta (9.6%)', '61–90d Riesgo (5.5%)', '+90d Crítico (11.8%)'],
+    datasets: [{ data: [98.5,13.0,7.4,15.9], backgroundColor:[G,A,O,R], borderColor:'#080e09', borderWidth:3 }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false, cutout:'60%',
+    plugins:{ legend:{position:'bottom',labels:{boxWidth:10,padding:10}},
+      tooltip:{callbacks:{label:ctx=>ctx.label+': CLP '+ctx.parsed+'M'}} }
+  }
+});
+
+// ── CHART Perú tramos (excl. SUPRA · corte 10/05/2026)
+new Chart(document.getElementById('cPE'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Al día / futuro (67.2%)', '0–30d en cobro (8.9%)', '31–60d Alerta (2.7%)', '61–90d Riesgo (1.2%)', '+90d Crítico (20.0%)'],
+    datasets: [{ data: [79.30,10.53,3.15,1.36,23.62], backgroundColor:[G,'#5ab648',A,O,R], borderColor:'#080e09', borderWidth:3 }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false, cutout:'60%',
+    plugins:{ legend:{position:'bottom',labels:{boxWidth:10,padding:10}},
+      tooltip:{callbacks:{label:ctx=>ctx.label+': USD '+ctx.parsed.toFixed(1)+'K'}} }
+  }
+});
+
+// ── DATOS CHILE
+const chileData = [
+  // +90d CRÍTICO — corte 29/04/2026
+  {rtc:'Jorge Caroca',cliente:'AGRICOLA RIBERA LIMITADA',folio:'425',emision:'13/01/2026',vencimiento:'15/01/2026',dias:104,tramo:'+90d',monto:1473696,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'AGROINSUMOS KULLIN',folio:'416',emision:'12/01/2026',vencimiento:'22/01/2026',dias:97,tramo:'+90d',monto:499300,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'AGROINSUMOS KULLIN',folio:'415',emision:'12/01/2026',vencimiento:'22/01/2026',dias:97,tramo:'+90d',monto:111206,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'AGROINSUMOS KULLIN',folio:'414',emision:'12/01/2026',vencimiento:'22/01/2026',dias:97,tramo:'+90d',monto:310709,estado:'Crítico',condicion:'Crédito'},
+  // 61-90d RIESGO
+  {rtc:'Jorge Caroca',cliente:'MAGALY DEL CARMEN ORELLANA PINO',folio:'272',emision:'17/10/2025',vencimiento:'15/02/2026',dias:73,tramo:'61-90d',monto:182047,estado:'Riesgo',condicion:'Crédito'},
+  // 31-60d ALERTA
+  {rtc:'Pablo Laratro',cliente:'AGRICOLA FRANCISCA MONTES E.I.R.L',folio:'483',emision:'02/02/2026',vencimiento:'04/03/2026',dias:56,tramo:'31-60d',monto:711620,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Francisco Velásquez',cliente:'AGRICOLA GOMEZ SPA',folio:'347',emision:'12/12/2025',vencimiento:'08/03/2026',dias:52,tramo:'31-60d',monto:1190000,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Jorge Caroca',cliente:'AGRICOLA QUINQUILHUE SPA',folio:'552',emision:'11/03/2026',vencimiento:'11/03/2026',dias:49,tramo:'31-60d',monto:93689,estado:'Alerta',condicion:'Contado'},
+  {rtc:'Pablo Laratro',cliente:'AGRICOLA LOS ALAMOS LTDA',folio:'501',emision:'10/02/2026',vencimiento:'12/03/2026',dias:48,tramo:'31-60d',monto:446250,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'JOSE CRISTOBAL GONZALEZ CORREA',folio:'494',emision:'10/02/2026',vencimiento:'12/03/2026',dias:48,tramo:'31-60d',monto:170789,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'AGRICOLA LUIS ANTONIO HERRERA AVENDANO E.I.R.L.',folio:'555',emision:'13/03/2026',vencimiento:'13/03/2026',dias:47,tramo:'31-60d',monto:357000,estado:'Alerta',condicion:'Contado'},
+  {rtc:'Jorge Caroca',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'439',emision:'05/01/2026',vencimiento:'17/03/2026',dias:43,tramo:'31-60d',monto:2915500,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'CARLOS HUMBERTO CASTRO VALENZUELA',folio:'565',emision:'17/03/2026',vencimiento:'17/03/2026',dias:43,tramo:'31-60d',monto:198730,estado:'Alerta',condicion:'Crédito'},
+  // 0-30d NORMAL
+  {rtc:'Rodrigo Encina',cliente:'AGRICOLA TUNICHE LIMITADA',folio:'545',emision:'05/03/2026',vencimiento:'20/03/2026',dias:40,tramo:'31-60d',monto:162316,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Oficina',cliente:'JUAN FRANCISCO VARGAS MANCILLA',folio:'453',emision:'20/01/2026',vencimiento:'21/03/2026',dias:39,tramo:'31-60d',monto:170259,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Francisco Velásquez',cliente:'LEONARDO ENRIQUE OYARCE GENERAL',folio:'525',emision:'24/02/2026',vencimiento:'27/03/2026',dias:33,tramo:'31-60d',monto:314160,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'440',emision:'05/01/2026',vencimiento:'29/03/2026',dias:31,tramo:'31-60d',monto:2707250,estado:'Alerta',condicion:'Crédito'},
+  {rtc:'Javier Almeida',cliente:'BRIGITTE ELENA PARDO CONTRERAS',folio:'559',emision:'16/03/2026',vencimiento:'30/03/2026',dias:30,tramo:'0-30d',monto:368757,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Javier Almeida',cliente:'BRIGITTE ELENA PARDO CONTRERAS',folio:'558',emision:'16/03/2026',vencimiento:'30/03/2026',dias:30,tramo:'0-30d',monto:420001,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Javier Almeida',cliente:'BRIGITTE ELENA PARDO CONTRERAS',folio:'557',emision:'16/03/2026',vencimiento:'30/03/2026',dias:30,tramo:'0-30d',monto:358285,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA COMERCIAL SIEMBRA SPA',folio:'480',emision:'29/01/2026',vencimiento:'30/03/2026',dias:30,tramo:'0-30d',monto:72055,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'438',emision:'06/01/2026',vencimiento:'06/04/2026',dias:23,tramo:'0-30d',monto:2290750,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'437',emision:'08/01/2026',vencimiento:'08/04/2026',dias:21,tramo:'0-30d',monto:1041250,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Jorge Caroca',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'436',emision:'12/01/2026',vencimiento:'09/04/2026',dias:20,tramo:'0-30d',monto:1874250,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'CARLOS HUMBERTO CASTRO VALENZUELA',folio:'595',emision:'10/04/2026',vencimiento:'10/04/2026',dias:19,tramo:'0-30d',monto:97580,estado:'Normal',condicion:'Contado'},
+  {rtc:'Rayen Bernazar',cliente:'CRR SERVICIOS SPA',folio:'596',emision:'10/04/2026',vencimiento:'10/04/2026',dias:19,tramo:'0-30d',monto:39826,estado:'Normal',condicion:'Contado'},
+  {rtc:'Francisco Velásquez',cliente:'JUAN ENRIQUE VARGAS ALZAMORA',folio:'602',emision:'12/04/2026',vencimiento:'11/04/2026',dias:18,tramo:'0-30d',monto:1071000,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'AGRICOLA TUNICHE LIMITADA',folio:'571',emision:'19/03/2026',vencimiento:'13/04/2026',dias:16,tramo:'0-30d',monto:533775,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'AGRICOLA TUNICHE LIMITADA',folio:'570',emision:'19/03/2026',vencimiento:'13/04/2026',dias:16,tramo:'0-30d',monto:228175,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Jorge Caroca',cliente:'VILLEGAS Y BERRIOS Y CIA LTDA',folio:'433',emision:'14/01/2026',vencimiento:'14/04/2026',dias:15,tramo:'0-30d',monto:1496776,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Jorge Caroca',cliente:'VILLEGAS Y BERRIOS Y CIA LTDA',folio:'432',emision:'14/01/2026',vencimiento:'14/04/2026',dias:15,tramo:'0-30d',monto:727709,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'AGRICOLA GEOAGRO LTDA',folio:'442',emision:'15/01/2026',vencimiento:'15/04/2026',dias:14,tramo:'0-30d',monto:1785000,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'AGRICOLA GEOAGRO LTDA',folio:'441',emision:'15/01/2026',vencimiento:'15/04/2026',dias:14,tramo:'0-30d',monto:410550,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Francisco Velásquez',cliente:'PONTIFICIA UNIVERSIDAD CATOLICA DE VALPARAISO',folio:'564',emision:'17/03/2026',vencimiento:'16/04/2026',dias:13,tramo:'0-30d',monto:2305625,estado:'Normal',condicion:'Crédito'},
+  // Al día / por vencer
+  {rtc:'Pablo Laratro',cliente:'AGRICOLA DON PEDRO SPA',folio:'451',emision:'20/01/2026',vencimiento:'20/04/2026',dias:9,tramo:'0-30d',monto:1990870,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Valentina Muñoz',cliente:'COMERCIAL COPELEC SA',folio:'574',emision:'23/03/2026',vencimiento:'20/04/2026',dias:9,tramo:'0-30d',monto:755326,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'AGRICOLA FRANCISCA MONTES E.I.R.L',folio:'577',emision:'25/03/2026',vencimiento:'24/04/2026',dias:5,tramo:'0-30d',monto:1361360,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'RAUL JOFRE Y COMPAQIA LIMITADA',folio:'475',emision:'27/01/2026',vencimiento:'26/04/2026',dias:3,tramo:'0-30d',monto:451238,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Francisco Velásquez',cliente:'LEONARDO ENRIQUE OYARCE GENERAL',folio:'525',emision:'24/02/2026',vencimiento:'27/04/2026',dias:2,tramo:'0-30d',monto:314160,estado:'Normal',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'599',emision:'12/04/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:618800,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'598',emision:'12/04/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:773500,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'395',emision:'02/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:1547000,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'523',emision:'23/02/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:569379,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'465',emision:'23/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:618800,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA SAN FRANCISCO LTDA',folio:'457',emision:'21/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:2812833,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA SAN FRANCISCO LTDA',folio:'458',emision:'21/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:1373528,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA SAN FRANCISCO LTDA',folio:'459',emision:'21/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:364551,estado:'Al día',condicion:'Crédito'},
+  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA COMERCIAL SIEMBRA SPA',folio:'479',emision:'29/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:495944,estado:'Al día',condicion:'Crédito'},
+];
+
+// Perú data
+const peruData = [
+  {vendedor:'JOSE GELDRES',cliente:'PAODISA S.A.',folio:'453',emision:'01/07/2024',vencimiento:'31/07/2024',dias:628,tramo:'+90d',monto:1477.5,estado:'Crítico'},
+  {vendedor:'JOSE GELDRES',cliente:'PAODISA S.A.',folio:'509',emision:'05/09/2024',vencimiento:'04/11/2024',dias:532,tramo:'+90d',monto:1773,estado:'Crítico'},
+  {vendedor:'JOSE GELDRES',cliente:'PAODISA S.A.',folio:'538',emision:'26/09/2024',vencimiento:'25/11/2024',dias:511,tramo:'+90d',monto:3546,estado:'Crítico'},
+  {vendedor:'JOSE GELDRES',cliente:'PAODISA S.A.',folio:'579',emision:'08/11/2024',vencimiento:'07/01/2025',dias:468,tramo:'+90d',monto:4077.9,estado:'Crítico'},
+  {vendedor:'OSCAR INFANTE',cliente:'AMFRESH PERU AGRISIL S.R.L.',folio:'918',emision:'23/01/2025',vencimiento:'23/04/2025',dias:362,tramo:'+90d',monto:2624,estado:'Crítico'},
+  {vendedor:'OSCAR INFANTE',cliente:'AMFRESH PERU AGRISIL S.R.L.',folio:'958',emision:'26/02/2026',vencimiento:'27/05/2025',dias:328,tramo:'+90d',monto:665,estado:'Crítico'},
+  {vendedor:'OMAR ATALAYA',cliente:'CORPORACION AGRICOLA OLMOS S.A',folio:'960',emision:'26/02/2026',vencimiento:'27/05/2025',dias:328,tramo:'+90d',monto:5850.44,estado:'Crítico'},
+  {vendedor:'OSCAR INFANTE',cliente:'INVERSIONES AJS S.A.C.',folio:'941',emision:'12/02/2025',vencimiento:'12/06/2025',dias:312,tramo:'+90d',monto:304,estado:'Crítico'},
+  {vendedor:'OMAR ATALAYA',cliente:'AGROFER MJ E.I.R.L.',folio:'671',emision:'13/06/2025',vencimiento:'11/10/2025',dias:191,tramo:'+90d',monto:9493,estado:'Crítico'},
+  {vendedor:'OSCAR INFANTE',cliente:'LUNA QUINTANILLA BRYAN ALEXANDER',folio:'743',emision:'10/09/2025',vencimiento:'09/12/2025',dias:132,tramo:'+90d',monto:1005.05,estado:'Crítico'},
+  {vendedor:'ANTONIO GONZALEZ',cliente:'EPIC FARMS S.A.C.',folio:'917',emision:'23/01/2026',vencimiento:'23/01/2026',dias:87,tramo:'61-90d',monto:600,estado:'Riesgo'},
+  {vendedor:'OSCAR INFANTE',cliente:'LUNA QUINTANILLA BRYAN ALEXANDER',folio:'841',emision:'04/11/2025',vencimiento:'02/02/2026',dias:77,tramo:'61-90d',monto:1344,estado:'Riesgo'},
+  {vendedor:'NICOLL NAVARRO',cliente:'SOCIEDAD AGRICOLA 3P S.A.C.',folio:'847',emision:'11/11/2025',vencimiento:'09/02/2026',dias:70,tramo:'61-90d',monto:448.4,estado:'Riesgo'},
+  {vendedor:'GUILLERMO PRADENAS',cliente:'SERVICIOS BIOINSUMOS PERU SOCIEDAD ANONIMA CERRADA.',folio:'817',emision:'23/10/2025',vencimiento:'20/02/2026',dias:59,tramo:'31-60d',monto:1050,estado:'Alerta'},
+  {vendedor:'NICOLL NAVARRO',cliente:'SOCIEDAD AGRICOLA 3P S.A.C.',folio:'908',emision:'13/01/2026',vencimiento:'27/02/2026',dias:52,tramo:'31-60d',monto:896.8,estado:'Alerta'},
+  {vendedor:'OSCAR INFANTE',cliente:'PROCESOS AGROINDUSTRIALES SOCIEDAD ANONIMA',folio:'907',emision:'13/01/2026',vencimiento:'14/03/2026',dias:37,tramo:'31-60d',monto:3149,estado:'Alerta'},
+  {vendedor:'PATRICIA VALLADARES',cliente:'SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA',folio:'972',emision:'05/03/2026',vencimiento:'04/04/2026',dias:16,tramo:'0-30d',monto:200,estado:'Normal'},
+  {vendedor:'OSCAR INFANTE',cliente:'POB S.A.C.',folio:'939',emision:'12/02/2026',vencimiento:'13/04/2026',dias:7,tramo:'0-30d',monto:3640,estado:'Normal'},
+  {vendedor:'Sin asignar',cliente:'SERVICIOS BIOINSUMOS PERU SOCIEDAD ANONIMA CERRADA.',folio:'887',emision:'16/12/2025',vencimiento:'15/04/2026',dias:5,tramo:'0-30d',monto:3780,estado:'Normal'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'948',emision:'18/02/2026',vencimiento:'19/04/2026',dias:1,tramo:'0-30d',monto:87,estado:'Normal'},
+  {vendedor:'OSCAR INFANTE',cliente:'MANUELITA FYH S.A.C.',folio:'983',emision:'20/03/2026',vencimiento:'19/04/2026',dias:1,tramo:'0-30d',monto:3150,estado:'Normal'},
+  {vendedor:'Sin asignar',cliente:'SERVICIOS BIOINSUMOS PERU SOCIEDAD ANONIMA CERRADA.',folio:'891',emision:'22/12/2025',vencimiento:'21/04/2026',dias:-1,tramo:'Al día',monto:2200,estado:'Al día'},
+  {vendedor:'NICOLL NAVARRO',cliente:'CORPORACION AGROLATINA S.A.C',folio:'916',emision:'22/01/2026',vencimiento:'22/04/2026',dias:-2,tramo:'Al día',monto:400,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA',folio:'930',emision:'05/02/2026',vencimiento:'06/05/2026',dias:-16,tramo:'Al día',monto:1404,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'977',emision:'12/03/2026',vencimiento:'11/05/2026',dias:-21,tramo:'Al día',monto:2646,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'CORPORACION AGROLATINA S.A.C',folio:'936',emision:'11/02/2026',vencimiento:'12/05/2026',dias:-22,tramo:'Al día',monto:400,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'937',emision:'12/02/2026',vencimiento:'13/05/2026',dias:-23,tramo:'Al día',monto:2208.96,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'982',emision:'19/03/2026',vencimiento:'18/05/2026',dias:-28,tramo:'Al día',monto:280,estado:'Al día'},
+  {vendedor:'PATRICIA VALLADARES',cliente:'SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA',folio:'984',emision:'20/03/2026',vencimiento:'19/05/2026',dias:-29,tramo:'Al día',monto:400,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'989',emision:'26/03/2026',vencimiento:'25/05/2026',dias:-35,tramo:'Al día',monto:250,estado:'Al día'},
+  {vendedor:'PATRICIA VALLADARES',cliente:'SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA',folio:'998',emision:'31/03/2026',vencimiento:'30/05/2026',dias:-40,tramo:'Al día',monto:400,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'CORPORACION ESAN E & F SOCIEDAD ANONIMA CERRADA',folio:'965',emision:'02/03/2026',vencimiento:'31/05/2026',dias:-41,tramo:'Al día',monto:6112.4,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA',folio:'969',emision:'04/03/2026',vencimiento:'02/06/2026',dias:-43,tramo:'Al día',monto:2761.2,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'CORPORACION ESAN E & F SOCIEDAD ANONIMA CERRADA',folio:'970',emision:'04/03/2026',vencimiento:'02/06/2026',dias:-43,tramo:'Al día',monto:10522.06,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'1006',emision:'08/04/2026',vencimiento:'07/06/2026',dias:-48,tramo:'Al día',monto:300,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1010',emision:'16/04/2026',vencimiento:'15/06/2026',dias:-56,tramo:'Al día',monto:300,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'1011',emision:'16/04/2026',vencimiento:'15/06/2026',dias:-56,tramo:'Al día',monto:300,estado:'Al día'},
+  {vendedor:'OSCAR INFANTE',cliente:'LUNA QUINTANILLA BRYAN ALEXANDER',folio:'981',emision:'18/03/2026',vencimiento:'16/06/2026',dias:-57,tramo:'Al día',monto:522,estado:'Al día'},
+  {vendedor:'OSCAR INFANTE',cliente:'INVERSIONES AJS S.A.C.',folio:'952',emision:'23/02/2026',vencimiento:'23/06/2026',dias:-64,tramo:'Al día',monto:222,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'CORPORACION AGROLATINA S.A.C.',folio:'992',emision:'30/03/2026',vencimiento:'28/06/2026',dias:-69,tramo:'Al día',monto:2000,estado:'Al día'},
+  {vendedor:'OSCAR INFANTE',cliente:'AMFRESH PERU AGRISIL S.R.L.',folio:'993',emision:'31/03/2026',vencimiento:'29/06/2026',dias:-70,tramo:'Al día',monto:11248,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA',folio:'967',emision:'03/03/2026',vencimiento:'30/06/2026',dias:-71,tramo:'Al día',monto:936,estado:'Al día'},
+  {vendedor:'OSCAR INFANTE',cliente:'INVERSIONES AJS S.A.C.',folio:'986',emision:'23/03/2026',vencimiento:'27/07/2026',dias:-98,tramo:'Al día',monto:280,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1003',emision:'07/04/2026',vencimiento:'05/08/2026',dias:-107,tramo:'Al día',monto:936,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1004',emision:'07/04/2026',vencimiento:'05/08/2026',dias:-107,tramo:'Al día',monto:936,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1009',emision:'15/04/2026',vencimiento:'13/08/2026',dias:-115,tramo:'Al día',monto:2800,estado:'Al día'},
+];
+
+function tramoClass(t){
+  if(t==='Al día'||t==='0-30d') return 't-030';
+  if(t==='31-60d') return 't-3160';
+  if(t==='61-90d') return 't-6190';
+  if(t==='+90d') return 't-crit';
+  if(t==='SUPRA') return 't-ok';
+  return 't-030';
+}
+function moraClass(d){
+  if(d===null||d<=0) return 'neg';
+  if(d<=30) return 'low';
+  if(d<=60) return 'mid';
+  if(d<=90) return 'high';
+  return 'crit';
+}
+function accionBadge(estado){
+  if(estado==='Crítico') return '<span class="accion a-urg">URGENTE</span>';
+  if(estado==='Riesgo')  return '<span class="accion a-seg">SEGUIMIENTO</span>';
+  if(estado==='Alerta')  return '<span class="accion a-seg">SEGUIMIENTO</span>';
+  return '<span class="accion a-mon">MONITOREO</span>';
+}
+
+// Render Chile
+function renderChile(data){
+  const tb = document.getElementById('tbody-chile');
+  let html='', total=0, cnt=0;
+  let currentRTC='';
+  const byRTC={};
+  data.forEach(r=>{ if(!byRTC[r.rtc]) byRTC[r.rtc]=[]; byRTC[r.rtc].push(r); });
+  
+  // Sort by risk
+  const rtcOrder = ['JORGE CAROCA','PABLO LARATRO','RAYEN BERNAZAR','RODRIGO ENCINA','FRANCISCO VELASQUEZ','IVAN VEVERKA','OFICINA','JAVIER ALMEIDA'];
+  
+  data.forEach(r=>{
+    total+=r.monto; cnt++;
+    const mc=moraClass(r.dias);
+    const diasStr = r.dias<0?`<span class="mora neg">+${Math.abs(r.dias)}d</span>`:`<span class="mora ${mc}">${r.dias}d</span>`;
+    html+=`<tr data-rtc="${r.rtc}" data-estado="${r.estado.toLowerCase()}" data-cliente="${r.cliente.toLowerCase()}">
+      <td style="font-size:10px;white-space:nowrap;">${r.rtc}</td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${r.cliente}">${r.cliente}</td>
+      <td class="c" style="font-family:'DM Mono';font-size:10px;">${r.folio}</td>
+      <td class="r" style="font-family:'DM Mono';font-size:10px;white-space:nowrap;">${r.emision}</td>
+      <td class="r" style="font-family:'DM Mono';font-size:10px;white-space:nowrap;">${r.vencimiento}</td>
+      <td class="c">${diasStr}</td>
+      <td class="c"><span class="tramo ${tramoClass(r.tramo)}">${r.tramo}</span></td>
+      <td class="r" style="font-family:'DM Mono';font-size:11px;font-weight:${r.dias>60?'700':'400'};color:${r.dias>90?'var(--red)':r.dias>60?'var(--orange)':r.dias>30?'var(--amber)':'var(--text-dim)'};">${r.monto.toLocaleString('es-CL')}</td>
+      <td class="c"><span class="tramo ${r.estado==='Crítico'?'t-crit':r.estado==='Riesgo'?'t-6190':r.estado==='Alerta'?'t-3160':'t-030'}">${r.estado}</span></td>
+      <td class="c" style="font-size:10px;">${r.condicion}</td>
+      <td class="c">${accionBadge(r.estado)}</td>
+    </tr>`;
+  });
+  // Total row
+  html+=`<tr class="total-row"><td colspan="7">TOTAL (${cnt} facturas)</td><td class="r" style="font-family:'DM Mono';">${total.toLocaleString('es-CL')}</td><td colspan="3"></td></tr>`;
+  tb.innerHTML=html;
+  document.getElementById('ch-count').textContent=`${cnt} facturas · CLP ${total.toLocaleString('es-CL')}`;
+}
+
+function renderPeru(data){
+  const tb = document.getElementById('tbody-peru');
+  let html='',total=0,cnt=0;
+  data.forEach(r=>{
+    total+=r.monto; cnt++;
+    const mc=moraClass(r.dias);
+    const diasStr = r.dias===null?'–':r.dias<0?`<span class="mora neg">+${Math.abs(r.dias)}d</span>`:`<span class="mora ${mc}">${r.dias}d</span>`;
+    const isSupra = r.vendedor==='PAGADO A SUPRA';
+    html+=`<tr data-vendedor="${r.vendedor.toLowerCase()}" data-estado="${r.estado.toLowerCase()}" data-cliente="${r.cliente.toLowerCase()}">
+      <td style="font-size:10px;white-space:nowrap;${isSupra?'color:var(--text-muted);':''}">${r.vendedor}</td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${isSupra?'color:var(--text-muted);':''}" title="${r.cliente}">${r.cliente}</td>
+      <td class="r" style="font-family:'DM Mono';font-size:10px;">${r.emision}</td>
+      <td class="r" style="font-family:'DM Mono';font-size:10px;">${r.vencimiento}</td>
+      <td class="c">${diasStr}</td>
+      <td class="c"><span class="tramo ${tramoClass(r.tramo)}">${r.tramo}</span></td>
+      <td class="r" style="font-family:'DM Mono';font-size:11px;font-weight:${r.dias!==null&&r.dias>60?'700':'400'};color:${r.dias!==null&&r.dias>90?'var(--red)':r.dias!==null&&r.dias>60?'var(--orange)':r.dias!==null&&r.dias>30?'var(--amber)':isSupra?'var(--text-muted)':'var(--text-dim)'};">${r.monto.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
+      <td class="c"><span class="tramo ${r.estado==='Crítico'?'t-crit':r.estado==='Riesgo'?'t-6190':r.estado==='Alerta'?'t-3160':r.estado==='SUPRA'?'t-ok':'t-030'}">${r.estado}</span></td>
+      <td class="c">${isSupra?'':accionBadge(r.estado)}</td>
+    </tr>`;
+  });
+  html+=`<tr class="total-row"><td colspan="6">TOTAL (${cnt} registros)</td><td class="r" style="font-family:'DM Mono';">USD ${total.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</td><td colspan="2"></td></tr>`;
+  tb.innerHTML=html;
+  document.getElementById('pe-count').textContent=`${cnt} registros · USD ${total.toLocaleString('en-US',{minimumFractionDigits:0})}`;
+}
+
+// Filters
+let chFilter='all',peFilter='all';
+
+function filterCH(f,el){
+  chFilter=f;
+  document.querySelectorAll('#tab-chile .filter-btn').forEach(b=>b.classList.remove('active','red-act'));
+  el.classList.add('active');
+  applyFilterCH();
+}
+function filterPE(f,el){
+  peFilter=f;
+  document.querySelectorAll('#tab-peru .filter-btn').forEach(b=>b.classList.remove('active','red-act'));
+  el.classList.add('active');
+  applyFilterPE();
+}
+function applyFilterCH(){
+  const q=document.getElementById('searchCH').value.toLowerCase();
+  let filtered=chileData;
+  if(chFilter!=='all') filtered=filtered.filter(r=>r.estado.toLowerCase()===chFilter||(chFilter==='riesgo'&&r.dias>60&&r.dias<=90)||(chFilter==='critico'&&r.dias>90)||(chFilter==='alerta'&&r.dias>30&&r.dias<=60)||(chFilter==='normal'&&r.dias<=30));
+  if(q) filtered=filtered.filter(r=>r.cliente.toLowerCase().includes(q)||r.rtc.toLowerCase().includes(q));
+  renderChile(filtered);
+}
+function applyFilterPE(){
+  const q=document.getElementById('searchPE').value.toLowerCase();
+  let filtered=peruData;
+  if(peFilter==='all') filtered=filtered;
+  else if(peFilter==='supra') filtered=filtered.filter(r=>r.vendedor==='PAGADO A SUPRA');
+  else if(peFilter==='normal') filtered=filtered.filter(r=>r.tramo==='Al día'&&r.vendedor!=='PAGADO A SUPRA');
+  else if(peFilter==='critico') filtered=filtered.filter(r=>r.tramo==='+90d');
+  else if(peFilter==='riesgo') filtered=filtered.filter(r=>r.tramo==='61-90d');
+  else if(peFilter==='alerta') filtered=filtered.filter(r=>r.tramo==='31-60d'||r.tramo==='0-30d'&&r.dias>0);
+  if(q) filtered=filtered.filter(r=>r.cliente.toLowerCase().includes(q)||r.vendedor.toLowerCase().includes(q));
+  renderPeru(filtered);
+}
+function searchCHF(v){ applyFilterCH(); }
+function searchPEF(v){ applyFilterPE(); }
+
+// Initial render
+renderChile(chileData);
+renderPeru(peruData);
+
+// Tabs
+function switchTab(t,el){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+t).classList.add('active');
+}
+
+function cerrarSesion() {
+  sessionStorage.removeItem('av_auth');
+  sessionStorage.removeItem('av_role');
+  window.location.href = 'index.html';
+}
+</script>
+</body>
+</html>
