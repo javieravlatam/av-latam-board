@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script>
+(function(){
+  if(sessionStorage.getItem('av_auth')!=='7cd4374e16e78510de24a08115c3b44f6d0d72762d41054e6ef8fa0cb5e0c45b')
+    window.location.replace('index.html');
+})();
+</script>
+<title>Panel Clientes · AV Latam 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#0e0d09;--s1:#161410;--s2:#1c1a13;--s3:#23201a;--s4:#2a2720;
+  --border:rgba(255,255,255,0.07);--bdim:rgba(255,255,255,0.04);
+  --text:#e8dfc8;--dim:#8a8070;--muted:#5a5448;
+  --green:#7ab648;--blue:#4a9edb;--amber:#f5a623;--red:#e74c3c;--orange:#e67e22;--purple:#9b59b6;
+  --font:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13px;min-height:100vh;overflow-x:hidden}
+
+/* ── HEADER ── */
+.hdr{background:linear-gradient(180deg,var(--s1),var(--bg) 180%);border-bottom:1px solid var(--border);
+  padding:10px 20px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:200;gap:16px}
+.hdr-brand{display:flex;align-items:center;gap:10px}
+.hdr-logo{width:34px;height:34px;background:var(--amber);border-radius:8px;display:flex;
+  align-items:center;justify-content:center;font-family:'Bebas Neue';font-size:15px;color:#000;flex-shrink:0}
+.hdr-title{font-family:'Bebas Neue';font-size:18px;letter-spacing:2px;color:var(--amber)}
+.hdr-sub{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px}
+.hdr-nav{display:flex;gap:6px;align-items:center}
+.hnav-btn{background:var(--s2);border:1px solid var(--border);border-radius:6px;
+  padding:5px 12px;font-size:10px;color:var(--dim);text-decoration:none;
+  transition:all .2s;cursor:pointer;font-family:var(--font);white-space:nowrap}
+.hnav-btn:hover{background:var(--amber);color:#000;border-color:var(--amber)}
+.btn-logout{background:transparent;border:1px solid rgba(231,76,60,0.4);border-radius:6px;
+  padding:5px 12px;font-size:11px;color:var(--red);cursor:pointer;font-family:var(--font);
+  transition:all .2s;white-space:nowrap}
+.btn-logout:hover{background:rgba(231,76,60,0.1)}
+
+/* ── KPI STRIP ── */
+.kpi-strip{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;padding:12px 20px;
+  background:var(--s1);border-bottom:1px solid var(--border)}
+.kpi{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;
+  display:flex;flex-direction:column;gap:2px}
+.kpi-l{font-size:8.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);font-weight:700}
+.kpi-v{font-size:20px;font-weight:800;line-height:1.1;margin:2px 0}
+.kpi-s{font-size:9px;color:var(--dim);line-height:1.3}
+.kpi.cl{border-color:rgba(122,182,72,0.25)}
+.kpi.amber{border-color:rgba(245,166,35,0.25)}
+.kpi.red{border-color:rgba(231,76,60,0.3)}
+.kpi.blue{border-color:rgba(74,158,219,0.25)}
+.kpi.purple{border-color:rgba(155,89,182,0.25)}
+.g{color:var(--green)}.a{color:var(--amber)}.r{color:var(--red)}.b{color:var(--blue)}.p{color:var(--purple)}
+
+/* ── FILTER BAR ── */
+.filter-bar{background:var(--s1);border-bottom:1px solid var(--border);padding:8px 20px;
+  display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.fg{display:flex;flex-direction:column;gap:3px;min-width:0}
+.flbl{font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:700}
+select,input[type=text]{background:var(--s2);color:var(--text);border:1px solid var(--border);
+  border-radius:6px;padding:5px 9px;font-size:11px;font-family:var(--font);cursor:pointer;
+  min-width:110px;transition:border-color .2s}
+select:focus,input[type=text]:focus{outline:none;border-color:var(--amber)}
+input[type=text]{min-width:160px}
+input::placeholder{color:var(--muted)}
+.btn-reset{background:rgba(231,76,60,0.12);color:var(--red);border:1px solid rgba(231,76,60,0.3);
+  border-radius:6px;padding:5px 14px;font-size:11px;cursor:pointer;font-family:var(--font);
+  transition:all .2s;height:28px}
+.btn-reset:hover{background:rgba(231,76,60,0.25)}
+.filter-count{font-size:10px;color:var(--amber);font-weight:700;padding:0 4px;align-self:center}
+
+/* ── CHIPS / QUICK FILTERS ── */
+.chips{padding:8px 20px;background:var(--bg);border-bottom:1px solid var(--bdim);
+  display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.chip{padding:3px 10px;border-radius:20px;font-size:9.5px;font-weight:700;letter-spacing:.5px;
+  cursor:pointer;border:1px solid var(--border);color:var(--dim);background:var(--s2);
+  transition:all .15s;white-space:nowrap}
+.chip:hover{border-color:var(--amber);color:var(--amber)}
+.chip.on{background:rgba(245,166,35,0.15);border-color:var(--amber);color:var(--amber)}
+.chip-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;align-self:center}
+
+/* ── LAYOUT SPLIT ── */
+.layout{display:grid;grid-template-columns:1fr 400px;min-height:calc(100vh - 200px)}
+.layout.no-detail{grid-template-columns:1fr 0px}
+.layout.no-detail .detail-panel{display:none}
+.ranking-side{border-right:1px solid var(--border);overflow:hidden;display:flex;flex-direction:column}
+.detail-panel{background:var(--s1);overflow-y:auto;max-height:calc(100vh - 200px);position:sticky;top:200px}
+
+/* ── RANKING ── */
+.ranking-header{padding:10px 20px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);background:var(--s1)}
+.rh-title{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:700}
+.rh-count{font-size:11px;color:var(--amber);font-weight:700}
+.tbl-wrap{overflow-x:auto;flex:1}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+thead{background:var(--s2);position:sticky;top:0;z-index:10}
+thead th{padding:8px 10px;text-align:left;font-size:8.5px;text-transform:uppercase;
+  letter-spacing:1px;color:var(--muted);font-weight:700;white-space:nowrap;
+  border-bottom:1px solid var(--border)}
+th.sortable{cursor:pointer;user-select:none;transition:color .15s}
+th.sortable:hover{color:var(--text)}
+th.sort-asc::after{content:' ↑';color:var(--amber)}
+th.sort-desc::after{content:' ↓';color:var(--amber)}
+tbody tr{border-bottom:1px solid var(--bdim);cursor:pointer;transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,0.025)}
+tbody tr.sel{background:rgba(245,166,35,0.07);border-left:2px solid var(--amber)}
+tbody tr.priority{background:rgba(231,76,60,0.04)}
+td{padding:7px 10px;vertical-align:middle}
+td.r{text-align:right}
+td.c{text-align:center}
+.mono{font-family:var(--mono);font-size:11px}
+.nombre-cell{max-width:200px}
+.nombre-txt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;font-size:12px}
+.nombre-sub{font-size:9.5px;color:var(--dim);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:10px;
+  font-size:9px;font-weight:700;letter-spacing:.3px;white-space:nowrap}
+.b-g{background:rgba(122,182,72,0.15);color:var(--green);border:1px solid rgba(122,182,72,0.3)}
+.b-a{background:rgba(245,166,35,0.15);color:var(--amber);border:1px solid rgba(245,166,35,0.3)}
+.b-r{background:rgba(231,76,60,0.15);color:var(--red);border:1px solid rgba(231,76,60,0.3)}
+.b-n{background:var(--s3);color:var(--muted);border:1px solid var(--bdim)}
+.b-b{background:rgba(74,158,219,0.15);color:var(--blue);border:1px solid rgba(74,158,219,0.3)}
+.b-p{background:rgba(155,89,182,0.15);color:var(--purple);border:1px solid rgba(155,89,182,0.3)}
+
+/* IEC mini bar */
+.iec-inline{display:flex;align-items:center;gap:5px}
+.iec-track{width:50px;height:4px;background:var(--s3);border-radius:3px;overflow:hidden;flex-shrink:0}
+.iec-fill{height:100%;border-radius:3px;transition:width .3s}
+.iec-txt{font-family:var(--mono);font-size:10px;white-space:nowrap}
+
+/* Score pill */
+.score-pill{display:inline-flex;align-items:center;justify-content:center;
+  width:36px;height:22px;border-radius:11px;font-size:10px;font-weight:800;
+  font-family:var(--mono)}
+
+/* Estado icon cell */
+.estado-cell{font-size:15px;text-align:center}
+
+/* ── DETAIL PANEL ── */
+.dp-header{padding:14px 16px;border-bottom:1px solid var(--border);
+  background:rgba(245,166,35,0.04);display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.dp-nombre{font-weight:800;font-size:13px;color:var(--text);line-height:1.3}
+.dp-sub{font-size:9.5px;color:var(--dim);margin-top:3px}
+.dp-close{cursor:pointer;color:var(--muted);font-size:18px;line-height:1;flex-shrink:0;
+  transition:color .15s;padding:2px 6px}
+.dp-close:hover{color:var(--red)}
+.dp-score{text-align:right;flex-shrink:0}
+.dp-score-val{font-family:var(--mono);font-size:22px;font-weight:900}
+.dp-score-lbl{font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+
+/* Detail tabs */
+.dtab-nav{display:flex;gap:0;border-bottom:1px solid var(--border);overflow-x:auto;padding:0 14px}
+.dtab{padding:8px 13px;cursor:pointer;font-size:10.5px;font-weight:600;color:var(--muted);
+  border-bottom:2px solid transparent;transition:all .15s;user-select:none;white-space:nowrap}
+.dtab.on{color:var(--amber);border-bottom-color:var(--amber)}
+.dtab:hover{color:var(--text)}
+.dtab-panel{display:none;padding:14px 16px}
+.dtab-panel.on{display:block}
+
+/* Detail internals */
+.metric-row{display:flex;justify-content:space-between;align-items:center;
+  padding:7px 0;border-bottom:1px solid var(--bdim);font-size:11px}
+.metric-row:last-child{border-bottom:none}
+.metric-lbl{color:var(--dim)}
+.metric-val{font-family:var(--mono);font-weight:700;font-size:12px}
+.sec-head{font-size:8.5px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);
+  font-weight:700;margin:12px 0 8px}
+.alert-item{padding:7px 10px;border-radius:6px;font-size:10.5px;margin-bottom:5px;line-height:1.5}
+.alert-item:last-child{margin-bottom:0}
+.ai-rd{background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);color:#e8c8c8}
+.ai-am{background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.2);color:#e8d8b0}
+.ai-gn{background:rgba(122,182,72,0.07);border:1px solid rgba(122,182,72,0.2);color:#c8e0b0}
+.ai-bl{background:rgba(74,158,219,0.07);border:1px solid rgba(74,158,219,0.2);color:#b0d0f0}
+.chart-wrap{position:relative;background:var(--s2);border:1px solid var(--border);
+  border-radius:8px;padding:12px;margin-bottom:12px}
+.chart-title{font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);
+  font-weight:700;margin-bottom:10px}
+.chart-canvas{height:160px;position:relative}
+.chart-canvas-sm{height:120px;position:relative}
+.prod-row{display:flex;align-items:center;gap:8px;padding:5px 0;
+  border-bottom:1px solid var(--bdim);font-size:10.5px}
+.prod-row:last-child{border-bottom:none}
+.prod-bar-wrap{flex:1;height:4px;background:var(--s3);border-radius:3px;overflow:hidden;max-width:80px}
+.prod-bar-fill{height:100%;border-radius:3px;background:var(--amber)}
+.prod-name{color:var(--dim);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px}
+.prod-pct{font-family:var(--mono);font-size:10px;color:var(--amber);font-weight:700;width:34px;text-align:right}
+.prod-monto{font-family:var(--mono);font-size:9.5px;color:var(--muted);width:72px;text-align:right}
+
+/* Mensual bars (evolución) */
+.evol-bars{display:flex;align-items:flex-end;gap:5px;height:80px;margin:8px 0}
+.evol-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.evol-bar-fill{width:100%;border-radius:3px 3px 0 0;transition:height .3s;min-height:2px}
+.evol-bar-lbl{font-size:8.5px;color:var(--muted);text-align:center}
+.evol-bar-val{font-size:8px;color:var(--dim);text-align:center;font-family:var(--mono)}
+
+/* CxC detail */
+.cxc-alert{padding:10px 12px;border-radius:7px;margin-bottom:8px;font-size:11px}
+.cxc-tramo{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700}
+
+/* Empty state */
+.empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:12px;line-height:2}
+.empty-icon{font-size:32px;margin-bottom:8px}
+
+/* ── CHARTS SECTION (abajo, global) ── */
+.charts-section{padding:16px 20px;border-top:1px solid var(--border);background:var(--bg);
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.chart-card{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:14px}
+.chart-card-title{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);
+  font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.chart-card canvas{display:block}
+
+/* CxC sin match section */
+.cxc-orphans{padding:12px 20px;background:rgba(231,76,60,0.04);border-top:1px solid rgba(231,76,60,0.15)}
+.orphan-title{font-size:9px;color:var(--red);text-transform:uppercase;letter-spacing:1.5px;
+  font-weight:700;margin-bottom:8px}
+.orphan-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;
+  border-bottom:1px solid var(--bdim);font-size:10.5px}
+.orphan-row:last-child{border-bottom:none}
+
+/* Footer */
+footer{text-align:center;padding:14px 20px;font-size:9px;color:var(--muted);
+  border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.ftr-nav{display:flex;gap:6px}
+
+/* Utils */
+.text-r{text-align:right}
+.nowrap{white-space:nowrap}
+.bold{font-weight:700}
+.separator{width:1px;background:var(--border);height:24px;margin:0 4px}
+
+@media(max-width:1100px){
+  .layout{grid-template-columns:1fr}
+  .layout .detail-panel{position:fixed;right:0;top:0;bottom:0;width:400px;z-index:300;
+    background:var(--s1);border-left:1px solid var(--border);transform:translateX(100%);
+    transition:transform .25s;overflow-y:auto}
+  .layout.show-detail .detail-panel{transform:translateX(0)}
+  .kpi-strip{grid-template-columns:repeat(4,1fr)}
+  .charts-section{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+  .kpi-strip{grid-template-columns:repeat(2,1fr)}
+  .charts-section{grid-template-columns:1fr}
+  .hdr-nav{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-brand">
+    <div class="hdr-logo">AV</div>
+    <div>
+      <div class="hdr-title">Panel Clientes · AV Latam 2026</div>
+      <div class="hdr-sub">CRM Ejecutivo · Corte 11/05 · Chile + Perú</div>
+    </div>
+  </div>
+  <div class="hdr-nav">
+    <a href="dashboard.html" class="hnav-btn">🏠 Inicio</a>
+    <a href="Panel_IEC_Auditoria_2026.html" class="hnav-btn">⚡ IEC</a>
+    <a href="Panel_Productos_AV_2026.html" class="hnav-btn">📦 Productos</a>
+    <a href="Panel_CxC_AV_Latam_2026.html" class="hnav-btn">📋 CxC</a>
+    <div class="separator"></div>
+    <button class="btn-logout" onclick="cerrarSesion()">🔐 Salir</button>
+  </div>
+</header>
+
+<!-- KPI STRIP -->
+<div class="kpi-strip" id="kpi-strip">
+  <div class="kpi cl">
+    <div class="kpi-l">Clientes Activos</div>
+    <div class="kpi-v g" id="kpi-activos">—</div>
+    <div class="kpi-s" id="kpi-activos-s">—</div>
+  </div>
+  <div class="kpi amber">
+    <div class="kpi-l">Dormidos</div>
+    <div class="kpi-v a" id="kpi-dormidos">—</div>
+    <div class="kpi-s" id="kpi-dormidos-s">Solo 1 mes activo</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-l">Concentración Top10</div>
+    <div class="kpi-v" id="kpi-conc">—</div>
+    <div class="kpi-s" id="kpi-conc-s">del revenue total</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-l">Ticket Promedio</div>
+    <div class="kpi-v" id="kpi-ticket">—</div>
+    <div class="kpi-s" id="kpi-ticket-s">por documento</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-l">IEC Promedio</div>
+    <div class="kpi-v" id="kpi-iec">—</div>
+    <div class="kpi-s" id="kpi-iec-s">clientes con dato</div>
+  </div>
+  <div class="kpi red">
+    <div class="kpi-l">Mora Crítica</div>
+    <div class="kpi-v r" id="kpi-mora">—</div>
+    <div class="kpi-s" id="kpi-mora-s">&gt;90 días mora</div>
+  </div>
+  <div class="kpi purple">
+    <div class="kpi-l">Mono-Producto</div>
+    <div class="kpi-v p" id="kpi-mono">—</div>
+    <div class="kpi-s">Cross-selling opp.</div>
+  </div>
+  <div class="kpi blue">
+    <div class="kpi-l">Oportunidades</div>
+    <div class="kpi-v b" id="kpi-opps">—</div>
+    <div class="kpi-s">insights generados</div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="fg">
+    <span class="flbl">País</span>
+    <select id="f-pais" onchange="onPaisChange()">
+      <option value="CL">🇨🇱 Chile</option>
+      <option value="PE">🇵🇪 Perú</option>
+      <option value="GRUPO">🌎 Grupo</option>
+    </select>
+  </div>
+  <div class="fg">
+    <span class="flbl">Vendedor</span>
+    <select id="f-vend" onchange="applyFilters()">
+      <option value="todos">Todos</option>
+    </select>
+  </div>
+  <div class="fg">
+    <span class="flbl">Estado</span>
+    <select id="f-estado" onchange="applyFilters()">
+      <option value="todos">Todos los clientes</option>
+      <option value="con_mora">Con mora activa</option>
+      <option value="mora_critica">Mora crítica +90d</option>
+      <option value="iec_critico">IEC crítico &lt;43%</option>
+      <option value="iec_bajo">IEC bajo &lt;70%</option>
+      <option value="sin_iec">Sin IEC (N/D)</option>
+      <option value="mono_mes">Solo 1 mes activo</option>
+      <option value="mono_prod">Mono-producto</option>
+      <option value="creciente">Crecimiento fuerte</option>
+    </select>
+  </div>
+  <div class="fg">
+    <span class="flbl">Buscar cliente</span>
+    <input type="text" id="f-busq" placeholder="Nombre o vendedor..." oninput="applyFilters()">
+  </div>
+  <div class="fg">
+    <span class="flbl">Ordenar por</span>
+    <select id="f-sort" onchange="applyFilters()">
+      <option value="ranking">Ranking (revenue)</option>
+      <option value="score">Score</option>
+      <option value="iec">IEC %</option>
+      <option value="mora">Mora (días)</option>
+      <option value="frecuencia">Frecuencia</option>
+      <option value="skus">N° SKUs</option>
+    </select>
+  </div>
+  <button class="btn-reset" onclick="resetFilters()">✕ Limpiar</button>
+  <span class="filter-count" id="filter-count"></span>
+</div>
+
+<!-- QUICK CHIPS -->
+<div class="chips">
+  <span class="chip-lbl">Filtros rápidos:</span>
+  <span class="chip" data-chip="mora_critica" onclick="toggleChip(this,'mora_critica')">💀 Mora +90d</span>
+  <span class="chip" data-chip="iec_critico"  onclick="toggleChip(this,'iec_critico')">🔴 IEC crítico</span>
+  <span class="chip" data-chip="sin_iec"      onclick="toggleChip(this,'sin_iec')">❓ Sin IEC</span>
+  <span class="chip" data-chip="mono_mes"     onclick="toggleChip(this,'mono_mes')">💤 Dormidos</span>
+  <span class="chip" data-chip="creciente"    onclick="toggleChip(this,'creciente')">🚀 Crecimiento</span>
+  <span class="chip" data-chip="mono_prod"    onclick="toggleChip(this,'mono_prod')">📦 Mono-producto</span>
+  <span class="chip" data-chip="con_mora"     onclick="toggleChip(this,'con_mora')">⚠️ Con mora</span>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="layout no-detail" id="main-layout">
+  <!-- RANKING -->
+  <div class="ranking-side">
+    <div class="ranking-header">
+      <span class="rh-title">Ranking de clientes</span>
+      <span class="rh-count" id="ranking-count">—</span>
+    </div>
+    <div class="tbl-wrap" id="tbl-wrap">
+      <table id="ranking-table">
+        <thead>
+          <tr>
+            <th style="width:32px">#</th>
+            <th class="sortable" data-col="nombre" onclick="sortBy('nombre')">Cliente</th>
+            <th class="sortable" data-col="vendedor" onclick="sortBy('vendedor')">Vendedor</th>
+            <th class="sortable r" data-col="ytd" onclick="sortBy('ytd')">Venta YTD</th>
+            <th class="sortable c" data-col="score" onclick="sortBy('score')">Score</th>
+            <th class="sortable" data-col="iec" onclick="sortBy('iec')">IEC</th>
+            <th class="sortable r" data-col="cxc" onclick="sortBy('cxc')">CxC</th>
+            <th class="sortable c" data-col="frecuencia" onclick="sortBy('frecuencia')">Frec.</th>
+            <th class="sortable c" data-col="skus" onclick="sortBy('skus')">#SKU</th>
+            <th class="c">Estado</th>
+          </tr>
+        </thead>
+        <tbody id="ranking-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 360° DETAIL PANEL -->
+  <div class="detail-panel" id="detail-panel">
+    <div id="dp-content">
+      <div class="empty">
+        <div class="empty-icon">👆</div>
+        Selecciona un cliente<br>para ver su ficha 360°
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GRÁFICOS GLOBALES -->
+<div class="charts-section" id="charts-section">
+  <div class="chart-card">
+    <div class="chart-card-title">
+      <span>Evolución mensual de clientes activos</span>
+    </div>
+    <canvas id="chart-evol-global" height="160"></canvas>
+  </div>
+  <div class="chart-card">
+    <div class="chart-card-title">
+      <span>Concentración de revenue</span>
+    </div>
+    <canvas id="chart-conc" height="160"></canvas>
+  </div>
+  <div class="chart-card">
+    <div class="chart-card-title">
+      <span>Distribución IEC por cliente</span>
+    </div>
+    <canvas id="chart-iec-dist" height="160"></canvas>
+  </div>
+</div>
+
+<!-- CxC SIN MATCH (clientes históricos con deuda) -->
+<div class="cxc-orphans" id="cxc-orphans-section">
+  <div class="orphan-title">⚠️ Deuda activa — clientes sin compras en período YTD (históricos)</div>
+  <div id="cxc-orphans-body"></div>
+</div>
+
+<footer>
+  <div>AV Latam BI Platform · Panel Clientes 2026 · v1.0 · Motor: avboard_clientes.js</div>
+  <div class="ftr-nav">
+    <a href="dashboard.html" class="hnav-btn">🏠 Inicio</a>
+    <a href="Panel_IEC_Auditoria_2026.html" class="hnav-btn">⚡ IEC</a>
+  </div>
+</footer>
+
+<script src="avboard_clientes.js"></script>
+<script>
+/* ══════════════════════════════════════════
+   ESTADO GLOBAL
+══════════════════════════════════════════ */
+let PAIS_ACT = 'CL';
+let filteredList = [];
+let selectedId = null;
+let activeChip = null;
+let sortCol = 'ranking';
+let sortDir = 1;
+
+// Chart instances (created once, updated)
+let chartEvolGlobal = null;
+let chartConc = null;
+let chartIECDist = null;
+let chartEvolDetalle = null;
+let chartProdsDetalle = null;
+
+/* ══════════════════════════════════════════
+   FORMATEO
+══════════════════════════════════════════ */
+function fmt(n, dec) {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  return (+n).toLocaleString('es-CL', {minimumFractionDigits: dec||0, maximumFractionDigits: dec||0});
+}
+function fmtK(n) {
+  if (!n) return '—';
+  if (Math.abs(n) >= 1000000) return (n/1000000).toFixed(1) + 'M';
+  if (Math.abs(n) >= 1000) return (n/1000).toFixed(0) + 'K';
+  return fmt(n);
+}
+function fmtPct(v) {
+  if (v === null || v === undefined || isNaN(v)) return '—';
+  return (v*100).toFixed(1) + '%';
+}
+function monedaLabel(pais) {
+  return pais === 'PE' ? 'USD' : 'CLP';
+}
+
+/* ══════════════════════════════════════════
+   ESTADO / ICONOGRAFÍA
+══════════════════════════════════════════ */
+function estado(c) {
+  if (c.cxc.max_mora > 90) return 'critico';
+  if (c.cxc.max_mora > 60 || (c.iec.pct !== null && c.iec.pct < 0.43)) return 'riesgo';
+  if (c.cxc.max_mora > 30 || (c.iec.pct !== null && c.iec.pct < 0.70) || c.ventas.meses_activos === 1) return 'alerta';
+  if (c.iec.pct === null) return 'sin_datos';
+  if (c.iec.pct >= 0.92 && c.ventas.frecuencia >= 0.6) return 'oportunidad';
+  return 'ok';
+}
+
+function estadoIcon(e) {
+  const icons = {
+    critico: '💀', riesgo: '🔴', alerta: '⚠️',
+    sin_datos: '❓', ok: '✅', oportunidad: '🚀'
+  };
+  return icons[e] || '❓';
+}
+
+function estadoBadge(e) {
+  const cfg = {
+    critico:    ['b-r','CRÍTICO'],
+    riesgo:     ['b-r','RIESGO'],
+    alerta:     ['b-a','ALERTA'],
+    sin_datos:  ['b-n','SIN IEC'],
+    ok:         ['b-g','SANO'],
+    oportunidad:['b-b','🚀 OPP']
+  };
+  const [cls, lbl] = cfg[e] || ['b-n','—'];
+  return `<span class="badge ${cls}">${lbl}</span>`;
+}
+
+function iecBadge(pct) {
+  if (pct === null) return '<span class="badge b-n">❓ N/D</span>';
+  const p = pct * 100;
+  if (p < 43) return `<span class="badge b-r">🔴 ${p.toFixed(0)}%</span>`;
+  if (p < 70) return `<span class="badge b-a">⚠️ ${p.toFixed(0)}%</span>`;
+  if (p < 92) return `<span class="badge b-g">${p.toFixed(0)}%</span>`;
+  return `<span class="badge b-b">✅ ${p.toFixed(0)}%</span>`;
+}
+
+function scoreCls(s) {
+  if (s >= 70) return 'var(--green)';
+  if (s >= 50) return 'var(--amber)';
+  return 'var(--red)';
+}
+
+function iecColor(pct) {
+  if (pct === null) return 'var(--muted)';
+  if (pct < 0.70) return 'var(--red)';
+  if (pct < 0.85) return 'var(--amber)';
+  return 'var(--green)';
+}
+
+function cxcBadge(c) {
+  if (c.cxc.saldo <= 0) return '<span class="badge b-g">Sin deuda</span>';
+  const cls = c.cxc.max_mora > 90 ? 'b-r' : c.cxc.max_mora > 60 ? 'b-r' : c.cxc.max_mora > 30 ? 'b-a' : 'b-n';
+  return `<span class="badge ${cls}">${c.cxc.tramo || '?'}</span>`;
+}
+
+/* ══════════════════════════════════════════
+   FILTROS Y PAÍS
+══════════════════════════════════════════ */
+function onPaisChange() {
+  PAIS_ACT = document.getElementById('f-pais').value;
+  populateVendedorSelect();
+  applyFilters();
+}
+
+function populateVendedorSelect() {
+  const sel = document.getElementById('f-vend');
+  const prev = sel.value;
+  sel.innerHTML = '<option value="todos">Todos</option>';
+  const vends = getVendedores(PAIS_ACT);
+  vends.forEach(v => {
+    const o = document.createElement('option');
+    o.value = v; o.textContent = v;
+    sel.appendChild(o);
+  });
+  if (vends.includes(prev)) sel.value = prev;
+}
+
+function toggleChip(el, estado_val) {
+  // Si ya está activo este chip, desactivar
+  if (activeChip === estado_val) {
+    activeChip = null;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+    document.getElementById('f-estado').value = 'todos';
+  } else {
+    activeChip = estado_val;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+    el.classList.add('on');
+    document.getElementById('f-estado').value = estado_val;
+  }
+  applyFilters();
+}
+
+function applyFilters() {
+  const vend  = document.getElementById('f-vend').value;
+  const est   = document.getElementById('f-estado').value;
+  const busq  = document.getElementById('f-busq').value;
+  const sortV = document.getElementById('f-sort').value;
+  sortCol = sortV;
+
+  // Sync chip
+  if (est !== 'todos') {
+    document.querySelectorAll('.chip').forEach(c => {
+      if (c.dataset.chip === est) c.classList.add('on');
+      else c.classList.remove('on');
+    });
+    activeChip = est;
+  }
+
+  filteredList = filtrarClientes(PAIS_ACT, {vendedor: vend, estado: est, busqueda: busq});
+
+  // Ordenar
+  filteredList = sortClientes(filteredList, sortCol);
+
+  renderKPIs(filteredList);
+  renderRanking(filteredList);
+  renderGlobalCharts(filteredList);
+
+  const total = PAIS_ACT === 'GRUPO' ? CLIENTES_CL.length + CLIENTES_PE.length
+              : PAIS_ACT === 'PE' ? CLIENTES_PE.length : CLIENTES_CL.length;
+  document.getElementById('filter-count').textContent =
+    filteredList.length < total ? `${filteredList.length} / ${total}` : '';
+}
+
+function resetFilters() {
+  document.getElementById('f-vend').value = 'todos';
+  document.getElementById('f-estado').value = 'todos';
+  document.getElementById('f-busq').value = '';
+  document.getElementById('f-sort').value = 'ranking';
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  activeChip = null;
+  sortCol = 'ranking';
+  applyFilters();
+}
+
+function sortClientes(arr, col) {
+  return arr.slice().sort((a, b) => {
+    let va, vb;
+    if (col === 'nombre')    { va = a.nombre; vb = b.nombre; }
+    else if (col === 'vendedor') { va = a.vendedor; vb = b.vendedor; }
+    else if (col === 'ytd')  { va = a.ventas.ytd; vb = b.ventas.ytd; return vb - va; }
+    else if (col === 'score'){ return b.score - a.score; }
+    else if (col === 'iec')  { va = a.iec.pct ?? -1; vb = b.iec.pct ?? -1; return vb - va; }
+    else if (col === 'mora') { return b.cxc.max_mora - a.cxc.max_mora; }
+    else if (col === 'frecuencia') { return b.ventas.frecuencia - a.ventas.frecuencia; }
+    else if (col === 'skus') { return b.productos.n_skus - a.productos.n_skus; }
+    else { return (a.ranking || 9999) - (b.ranking || 9999); }
+    if (va < vb) return -1;
+    if (va > vb) return 1;
+    return 0;
+  });
+}
+
+function sortBy(col) {
+  if (sortCol === col) sortDir *= -1;
+  else { sortCol = col; sortDir = -1; }
+  // Update header
+  document.querySelectorAll('th[data-col]').forEach(th => {
+    th.classList.remove('sort-asc','sort-desc');
+    if (th.dataset.col === col) th.classList.add(sortDir < 0 ? 'sort-desc' : 'sort-asc');
+  });
+  filteredList = sortClientes(filteredList, col);
+  if (sortDir > 0) filteredList.reverse();
+  renderRanking(filteredList);
+}
+
+/* ══════════════════════════════════════════
+   KPIs
+══════════════════════════════════════════ */
+function renderKPIs(arr) {
+  const kpis = calcKPIs(arr);
+  const moneda = PAIS_ACT === 'PE' ? 'USD' : (PAIS_ACT === 'GRUPO' ? '' : 'CLP');
+
+  document.getElementById('kpi-activos').textContent = kpis.n;
+  const meta = PAIS_ACT === 'PE' ? META_PE : META_CL;
+  document.getElementById('kpi-activos-s').textContent =
+    moneda ? `${moneda} ${fmtK(kpis.venta)} YTD` : `CLP+USD total`;
+
+  const dormidos = arr.filter(c => c.ventas.meses_activos === 1).length;
+  document.getElementById('kpi-dormidos').textContent = dormidos;
+  document.getElementById('kpi-dormidos-s').textContent =
+    `${(dormidos/kpis.n*100).toFixed(0)}% de la cartera`;
+
+  document.getElementById('kpi-conc').textContent = kpis.conc + '%';
+  document.getElementById('kpi-conc-s').textContent =
+    `Top 10 concentran`;
+
+  const ticketStr = moneda ? `${moneda} ${fmtK(kpis.ticket)}` : fmtK(kpis.ticket);
+  document.getElementById('kpi-ticket').textContent = ticketStr;
+
+  document.getElementById('kpi-iec').textContent =
+    kpis.iec_avg !== null ? kpis.iec_avg + '%' : 'N/D';
+  const conIec = arr.filter(c => c.iec.pct !== null).length;
+  document.getElementById('kpi-iec-s').textContent = `${conIec}/${kpis.n} con dato`;
+
+  const moraCrit = arr.filter(c => c.cxc.max_mora > 90).length;
+  document.getElementById('kpi-mora').textContent = moraCrit;
+  const saldoCrit = arr.filter(c => c.cxc.max_mora > 90).reduce((s,c)=>s+c.cxc.saldo,0);
+  document.getElementById('kpi-mora-s').textContent =
+    moraCrit > 0 ? `CLP ${fmtK(saldoCrit)} expuesto` : 'Sin mora crítica ✅';
+
+  const mono = arr.filter(c => c.productos.es_mono).length;
+  document.getElementById('kpi-mono').textContent = mono;
+
+  const opps = arr.reduce((s,c)=>s+c.oportunidades.length,0);
+  document.getElementById('kpi-opps').textContent = opps;
+}
+
+/* ══════════════════════════════════════════
+   RANKING TABLE
+══════════════════════════════════════════ */
+function renderRanking(arr) {
+  document.getElementById('ranking-count').textContent =
+    `${arr.length} cliente${arr.length !== 1 ? 's' : ''}`;
+  const tbody = document.getElementById('ranking-body');
+
+  if (!arr.length) {
+    tbody.innerHTML = '<tr><td colspan="10" class="empty">Sin resultados para los filtros seleccionados</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = arr.map((c, i) => {
+    const e = estado(c);
+    const isPriority = c.nombre.includes('JOSE MARIA') && c.pais === 'CL';
+    const isBoden = c.nombre.includes('BODEN') && c.pais === 'CL';
+    const dormido = c.ventas.meses_activos === 1;
+    const moneda = c.pais === 'PE' ? 'USD' : 'CLP';
+
+    // IEC inline bar
+    let iecCell;
+    if (c.iec.pct === null) {
+      iecCell = `<span class="badge b-n">❓ N/D</span>`;
+    } else {
+      const pct = c.iec.pct * 100;
+      const color = iecColor(c.iec.pct);
+      iecCell = `<div class="iec-inline">
+        <div class="iec-track"><div class="iec-fill" style="width:${pct}%;background:${color}"></div></div>
+        <span class="iec-txt" style="color:${color}">${pct.toFixed(0)}%</span>
+      </div>`;
+    }
+
+    // CxC
+    const cxcStr = c.cxc.saldo > 0
+      ? `<span class="badge ${c.cxc.max_mora > 60 ? 'b-r' : c.cxc.max_mora > 30 ? 'b-a' : 'b-n'}">${c.cxc.tramo}</span>`
+      : '';
+
+    // Score pill
+    const scoreColor = scoreCls(c.score);
+    const scorePill = `<div class="score-pill" style="background:${scoreColor}22;color:${scoreColor};border:1px solid ${scoreColor}44">${c.score}</div>`;
+
+    // Frecuencia
+    const frecDots = '●'.repeat(c.ventas.meses_activos) + '○'.repeat(5 - c.ventas.meses_activos);
+    const frecColor = c.ventas.meses_activos >= 4 ? 'var(--green)'
+      : c.ventas.meses_activos >= 2 ? 'var(--amber)' : 'var(--red)';
+
+    // Nombre cell
+    const tags = [];
+    if (isPriority) tags.push('⭐');
+    if (dormido) tags.push('💤');
+    if (isBoden) tags.push('❓');
+    const tagStr = tags.length ? ` <span style="font-size:11px">${tags.join('')}</span>` : '';
+
+    const vendedorShort = c.vendedor.split(' ')[0];
+
+    return `<tr data-id="${c.id}" onclick="selectCliente('${c.id}')"
+      class="${selectedId === c.id ? 'sel' : ''} ${isPriority ? 'priority' : ''}">
+      <td class="mono c" style="color:var(--muted)">${c.ranking || (i+1)}</td>
+      <td class="nombre-cell">
+        <div class="nombre-txt">${c.nombre.length > 28 ? c.nombre.slice(0,27)+'…' : c.nombre}${tagStr}</div>
+        <div class="nombre-sub">${c.pais} · ${c.region || c.pais}</div>
+      </td>
+      <td style="color:var(--dim);font-size:10.5px;white-space:nowrap">${vendedorShort}</td>
+      <td class="mono r" style="white-space:nowrap">${moneda === 'CLP' ? fmtK(c.ventas.ytd) : '$'+fmtK(c.ventas.ytd)}</td>
+      <td class="c">${scorePill}</td>
+      <td>${iecCell}</td>
+      <td class="r">${cxcStr}</td>
+      <td class="c">
+        <span style="font-size:9px;letter-spacing:-1px;color:${frecColor};font-family:var(--mono)"
+          title="${c.ventas.meses_activos}/5 meses activos">${frecDots}</span>
+      </td>
+      <td class="c mono" style="color:var(--dim)">${c.productos.n_skus}</td>
+      <td class="estado-cell" title="${e}">${estadoIcon(e)}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════════
+   SELECCIÓN Y PANEL 360°
+══════════════════════════════════════════ */
+function selectCliente(id) {
+  if (selectedId === id) {
+    // Deseleccionar
+    selectedId = null;
+    document.querySelectorAll('tbody tr').forEach(r => r.classList.remove('sel'));
+    document.getElementById('main-layout').classList.add('no-detail');
+    document.getElementById('main-layout').classList.remove('show-detail');
+    document.getElementById('dp-content').innerHTML =
+      '<div class="empty"><div class="empty-icon">👆</div>Selecciona un cliente<br>para ver su ficha 360°</div>';
+    return;
+  }
+
+  selectedId = id;
+  document.querySelectorAll('tbody tr').forEach(r => {
+    r.classList.toggle('sel', r.dataset.id === id);
+  });
+  document.getElementById('main-layout').classList.remove('no-detail');
+  document.getElementById('main-layout').classList.add('show-detail');
+
+  // Encontrar cliente
+  const c = [...CLIENTES_CL, ...CLIENTES_PE].find(x => x.id === id);
+  if (!c) return;
+  renderDetalle(c);
+}
+
+function renderDetalle(c) {
+  const e = estado(c);
+  const moneda = c.pais === 'PE' ? 'USD' : 'CLP';
+  const isPriority = c.nombre.includes('JOSE MARIA') && c.pais === 'CL';
+
+  const dp = document.getElementById('dp-content');
+
+  // Score color
+  const scColor = scoreCls(c.score);
+
+  dp.innerHTML = `
+  <!-- Header -->
+  <div class="dp-header">
+    <div style="flex:1;min-width:0">
+      <div class="dp-nombre">${isPriority ? '⭐ ' : ''}${c.nombre}</div>
+      <div class="dp-sub">
+        ${c.pais === 'CL' ? '🇨🇱' : '🇵🇪'} ${c.pais} · ${c.region || c.pais} · ${c.vendedor}
+        · ${estadoIcon(e)} ${e.replace('_',' ').toUpperCase()}
+      </div>
+    </div>
+    <div class="dp-score">
+      <div class="dp-score-val" style="color:${scColor}">${c.score}</div>
+      <div class="dp-score-lbl">SCORE</div>
+    </div>
+    <span class="dp-close" onclick="selectCliente('${c.id}')">✕</span>
+  </div>
+
+  <!-- Tabs -->
+  <div class="dtab-nav">
+    <div class="dtab on" onclick="showDtab('resumen',this)">Resumen</div>
+    <div class="dtab" onclick="showDtab('evol',this)">Evolución</div>
+    <div class="dtab" onclick="showDtab('prods',this)">Productos</div>
+    <div class="dtab" onclick="showDtab('iec',this)">IEC</div>
+    <div class="dtab" onclick="showDtab('cxc',this)">CxC</div>
+    <div class="dtab" onclick="showDtab('opps',this)">Oportunidades</div>
+  </div>
+
+  <!-- Tab: Resumen -->
+  <div class="dtab-panel on" id="dp-resumen">
+    <div class="sec-head">Métricas clave</div>
+    <div class="metric-row"><span class="metric-lbl">Venta YTD</span>
+      <span class="metric-val">${moneda} ${fmt(c.ventas.ytd)}</span></div>
+    <div class="metric-row"><span class="metric-lbl">Transacciones</span>
+      <span class="metric-val">${c.ventas.n_tx} (${c.ventas.n_docs} doc.)</span></div>
+    <div class="metric-row"><span class="metric-lbl">Ticket promedio</span>
+      <span class="metric-val">${moneda} ${fmt(c.ventas.ticket_prom)}</span></div>
+    <div class="metric-row"><span class="metric-lbl">Meses activos</span>
+      <span class="metric-val">${c.ventas.meses_activos}/5
+        <span style="font-size:10px;color:var(--dim)">(${(c.ventas.frecuencia*100).toFixed(0)}% frec.)</span>
+      </span></div>
+    <div class="metric-row"><span class="metric-lbl">Tendencia</span>
+      <span class="metric-val">${
+        c.ventas.tendencia === 'creciente' ? '📈 Creciente' :
+        c.ventas.tendencia === 'cayendo'   ? '📉 Cayendo' : '➡️ Estable'
+      }${c.ventas.tendencia_pct ? ` <span style="font-size:10px;color:var(--dim)">${c.ventas.tendencia_pct > 0 ? '+' : ''}${c.ventas.tendencia_pct}%</span>` : ''}</span></div>
+    <div class="metric-row"><span class="metric-lbl">SKUs distintos</span>
+      <span class="metric-val">${c.productos.n_skus}${c.productos.es_mono ? ' <span class="badge b-a" style="font-size:8px">MONO</span>' : ''}</span></div>
+    <div class="metric-row"><span class="metric-lbl">IEC</span>
+      <span class="metric-val" style="color:${iecColor(c.iec.pct)}">${c.iec.pct !== null ? (c.iec.pct*100).toFixed(1)+'%' : '❓ Sin dato'}</span></div>
+    <div class="metric-row"><span class="metric-lbl">Factor comisión</span>
+      <span class="metric-val">${c.iec.factor !== null ? (c.iec.factor*100).toFixed(0)+'%' : '—'}</span></div>
+    <div class="metric-row"><span class="metric-lbl">CxC saldo</span>
+      <span class="metric-val" style="color:${c.cxc.saldo > 0 ? 'var(--amber)' : 'var(--green)'}">
+        ${c.cxc.saldo > 0 ? 'CLP '+fmt(c.cxc.saldo) : 'Sin deuda ✅'}
+      </span></div>
+    ${isPriority ? `<div style="margin-top:12px;padding:8px 10px;background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-radius:6px;font-size:10px;color:var(--red)">
+      ⭐ <b>Cliente prioritario.</b> Mayor revenue Chile (21.8%). IEC 11.5% — CLP 53M bajo piso. Requiere acción inmediata en pricing.</div>` : ''}
+  </div>
+
+  <!-- Tab: Evolución -->
+  <div class="dtab-panel" id="dp-evol">
+    <div class="chart-wrap">
+      <div class="chart-title">Venta mensual (${moneda})</div>
+      <div class="chart-canvas-sm"><canvas id="chartEvolDetalle"></canvas></div>
+    </div>
+    <div class="sec-head">Desglose por mes</div>
+    ${['ENERO','FEBRERO','MARZO','ABRIL','MAYO'].map(mes => {
+      const v = c.ventas.mensual[mes] || 0;
+      const maxV = Math.max(...Object.values(c.ventas.mensual), 1);
+      const pct = (v / maxV * 100).toFixed(0);
+      const color = v > 0 ? 'var(--amber)' : 'var(--s3)';
+      return `<div class="metric-row">
+        <span class="metric-lbl">${mes.slice(0,3)}</span>
+        <div style="flex:1;margin:0 10px;height:4px;background:var(--s3);border-radius:2px;overflow:hidden">
+          <div style="width:${pct}%;height:100%;background:${color};border-radius:2px"></div>
+        </div>
+        <span class="metric-val">${v > 0 ? moneda+' '+fmtK(v) : '—'}</span>
+      </div>`;
+    }).join('')}
+  </div>
+
+  <!-- Tab: Productos -->
+  <div class="dtab-panel" id="dp-prods">
+    <div class="sec-head">Top productos (por revenue)</div>
+    ${c.productos.top.length === 0 ? '<div class="empty">Sin detalle de productos</div>' :
+      c.productos.top.map(p => `
+      <div class="prod-row">
+        <div class="prod-name" title="${p.prod}">${p.prod.length > 32 ? p.prod.slice(0,31)+'…' : p.prod}</div>
+        <div class="prod-bar-wrap"><div class="prod-bar-fill" style="width:${p.pct}%"></div></div>
+        <div class="prod-pct">${p.pct.toFixed(0)}%</div>
+        <div class="prod-monto">${moneda} ${fmtK(p.monto)}</div>
+      </div>`).join('')
+    }
+    <div class="chart-wrap" style="margin-top:12px">
+      <div class="chart-title">Mix de productos</div>
+      <div class="chart-canvas-sm"><canvas id="chartProdsDetalle"></canvas></div>
+    </div>
+    ${c.productos.es_mono ? `<div class="alert-item ai-am" style="margin-top:10px">
+      📦 <b>Cliente mono-producto</b> — Oportunidad de ampliar portafolio. Actualmente 90%+ en un solo SKU.</div>` : ''}
+  </div>
+
+  <!-- Tab: IEC -->
+  <div class="dtab-panel" id="dp-iec">
+    ${c.iec.pct === null ? `
+    <div class="alert-item ai-am" style="margin:8px 0">
+      ❓ <b>Sin precio piso mapeado</b><br>
+      Este cliente no está incluido en la política de precios piso actual. No se puede calcular su IEC ni factor de comisión.
+      ${c.nombre.includes('BODEN') ? '<br><br>⚠️ <b>BODEN SPA</b> — segundo cliente más grande (CLP 38.6M). Incluir en política IEC es prioritario.' : ''}
+    </div>` : `
+    <div class="metric-row"><span class="metric-lbl">IEC del cliente</span>
+      <span class="metric-val" style="color:${iecColor(c.iec.pct)}">${(c.iec.pct*100).toFixed(1)}%</span></div>
+    <div class="metric-row"><span class="metric-lbl">Factor comisión</span>
+      <span class="metric-val">${(c.iec.factor*100).toFixed(0)}%
+        ${c.iec.factor < 0.70 ? '<span class="badge b-r" style="font-size:8px">PENALIZADO</span>' :
+          c.iec.factor >= 1.0 ? '<span class="badge b-b" style="font-size:8px">BONUS</span>' : ''}
+      </span></div>
+    <div class="metric-row"><span class="metric-lbl">Tx elegibles</span>
+      <span class="metric-val">${c.iec.tx_elegible}</span></div>
+    <div class="metric-row"><span class="metric-lbl">Tx cumplen precio piso</span>
+      <span class="metric-val" style="color:${c.iec.tx_cumple===c.iec.tx_elegible?'var(--green)':'var(--amber)'}">
+        ${c.iec.tx_cumple} / ${c.iec.tx_elegible}</span></div>
+    <div class="metric-row"><span class="metric-lbl">Monto elegible</span>
+      <span class="metric-val">CLP ${fmt(c.iec.monto_elegible)}</span></div>
+    <div class="metric-row" style="border-bottom:none"><span class="metric-lbl">Monto bajo piso</span>
+      <span class="metric-val" style="color:${c.iec.monto_bajo_piso > 0 ? 'var(--red)' : 'var(--green)'}">
+        CLP ${fmt(c.iec.monto_bajo_piso)}
+        ${c.iec.monto_bajo_piso > 0 ? `<span style="font-size:9px;color:var(--muted)"> (${(c.iec.monto_bajo_piso/c.iec.monto_elegible*100).toFixed(0)}%)</span>` : ''}
+      </span></div>
+    <!-- Gauge visual -->
+    <div style="margin-top:14px;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:12px">
+      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Escala IEC</div>
+      <div style="height:8px;border-radius:4px;background:linear-gradient(to right,var(--red),var(--amber),var(--green));position:relative;overflow:visible;margin-bottom:6px">
+        <div style="position:absolute;top:-3px;left:calc(${Math.min(c.iec.pct*100,100)}% - 7px);width:14px;height:14px;background:white;border-radius:50%;border:2px solid var(--bg);box-shadow:0 0 6px rgba(0,0,0,0.5)"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:8.5px;color:var(--muted)">
+        <span>0%</span><span>43%</span><span>70%</span><span>85%</span><span>95%+</span>
+      </div>
+    </div>`}
+    ${c.alertas.filter(a => a.toLowerCase().includes('iec') || a.toLowerCase().includes('piso')).map(a =>
+      `<div class="alert-item ai-rd" style="margin-top:8px">${a}</div>`
+    ).join('')}
+  </div>
+
+  <!-- Tab: CxC -->
+  <div class="dtab-panel" id="dp-cxc">
+    ${c.cxc.saldo <= 0 ? `<div class="alert-item ai-gn">✅ Sin deuda pendiente en el período</div>` : `
+    <div class="cxc-alert ${c.cxc.max_mora > 90 ? 'ai-rd' : c.cxc.max_mora > 60 ? 'ai-rd' : c.cxc.max_mora > 30 ? 'ai-am' : 'ai-bl'}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <b>${c.cxc.estado}</b>
+        <span class="cxc-tramo ${c.cxc.max_mora > 90 ? 'b-r badge' : c.cxc.max_mora > 60 ? 'b-r badge' : c.cxc.max_mora > 30 ? 'b-a badge' : 'b-b badge'}">${c.cxc.tramo}</span>
+      </div>
+      <div class="metric-row"><span class="metric-lbl">Saldo pendiente</span>
+        <span class="metric-val">CLP ${fmt(c.cxc.saldo)}</span></div>
+      <div class="metric-row" style="border:none"><span class="metric-lbl">Días mora máx.</span>
+        <span class="metric-val" style="color:${c.cxc.max_mora > 60 ? 'var(--red)' : 'var(--amber)'}">
+          ${c.cxc.max_mora > 0 ? c.cxc.max_mora + ' días' : 'Al día'}
+        </span></div>
+    </div>`}
+    ${c.alertas.filter(a => a.toLowerCase().includes('mora') || a.toLowerCase().includes('cobran')).map(a =>
+      `<div class="alert-item ai-rd" style="margin-top:8px">${a}</div>`
+    ).join('')}
+    <div class="sec-head">Fuente CxC</div>
+    <div style="font-size:10px;color:var(--muted);line-height:1.7">
+      Corte: 08/05/2026<br>
+      Archivos: Agroveca + AGrocomercial<br>
+      Nota: CxC Perú en USD no disponible en esta versión.
+    </div>
+  </div>
+
+  <!-- Tab: Oportunidades -->
+  <div class="dtab-panel" id="dp-opps">
+    ${c.insights.length === 0 && c.oportunidades.length === 0 && c.alertas.length === 0
+      ? '<div class="empty">Sin alertas ni oportunidades detectadas</div>'
+      : ''}
+    ${c.insights.length > 0 ? `<div class="sec-head">💡 Insights</div>
+      ${c.insights.map(i => `<div class="alert-item ai-gn">${i}</div>`).join('')}` : ''}
+    ${c.oportunidades.length > 0 ? `<div class="sec-head">🚀 Oportunidades</div>
+      ${c.oportunidades.map(o => `<div class="alert-item ai-bl">${o}</div>`).join('')}` : ''}
+    ${c.alertas.length > 0 ? `<div class="sec-head">⚠️ Alertas</div>
+      ${c.alertas.map(a => `<div class="alert-item ai-am">${a}</div>`).join('')}` : ''}
+  </div>
+  `;
+
+  // Render charts after DOM is inserted
+  setTimeout(() => {
+    renderEvolDetalleChart(c, moneda);
+    renderProdsDetalleChart(c, moneda);
+  }, 50);
+}
+
+function showDtab(id, el) {
+  document.querySelectorAll('.dtab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.dtab-panel').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+  const panel = document.getElementById('dp-' + id);
+  if (panel) panel.classList.add('on');
+}
+
+/* ══════════════════════════════════════════
+   CHARTS DE DETALLE (sin destroy)
+══════════════════════════════════════════ */
+function renderEvolDetalleChart(c, moneda) {
+  const ctx = document.getElementById('chartEvolDetalle');
+  if (!ctx) return;
+  const meses = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO'];
+  const vals = meses.map(m => c.ventas.mensual[m] || 0);
+  const labels = meses.map(m => m.slice(0,3));
+  const colors = vals.map(v => v > 0 ? 'rgba(245,166,35,0.8)' : 'rgba(90,84,72,0.4)');
+
+  if (chartEvolDetalle) {
+    chartEvolDetalle.data.labels = labels;
+    chartEvolDetalle.data.datasets[0].data = vals;
+    chartEvolDetalle.data.datasets[0].backgroundColor = colors;
+    chartEvolDetalle.options.plugins.tooltip.callbacks.label = (ctx2) =>
+      `${moneda} ${fmt(ctx2.raw)}`;
+    chartEvolDetalle.update('none');
+  } else {
+    chartEvolDetalle = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          data: vals,
+          backgroundColor: colors,
+          borderRadius: 4,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: {display: false},
+          tooltip: {
+            callbacks: {label: (ctx2) => `${moneda} ${fmt(ctx2.raw)}`}
+          }
+        },
+        scales: {
+          x: {grid: {display: false}, ticks: {color: '#5a5448', font: {size: 9}}},
+          y: {grid: {color: 'rgba(255,255,255,0.04)'}, ticks: {color: '#5a5448', font: {size: 9},
+            callback: v => fmtK(v)}}
+        }
+      }
+    });
+  }
+}
+
+function renderProdsDetalleChart(c, moneda) {
+  const ctx = document.getElementById('chartProdsDetalle');
+  if (!ctx || !c.productos.top.length) return;
+  const labels = c.productos.top.map(p => p.prod.length > 20 ? p.prod.slice(0,19)+'…' : p.prod);
+  const vals = c.productos.top.map(p => p.monto);
+  const colors = ['#f5a623','#7ab648','#4a9edb','#e74c3c','#9b59b6'];
+
+  if (chartProdsDetalle) {
+    chartProdsDetalle.data.labels = labels;
+    chartProdsDetalle.data.datasets[0].data = vals;
+    chartProdsDetalle.update('none');
+  } else {
+    chartProdsDetalle = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels,
+        datasets: [{data: vals, backgroundColor: colors, borderWidth: 1, borderColor: '#0e0d09'}]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        cutout: '60%',
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: {color: '#8a8070', font: {size: 9}, boxWidth: 10, padding: 8}
+          },
+          tooltip: {
+            callbacks: {label: (ctx2) => `${moneda} ${fmtK(ctx2.raw)} (${c.productos.top[ctx2.dataIndex]?.pct.toFixed(0)}%)`}
+          }
+        }
+      }
+    });
+  }
+}
+
+/* ══════════════════════════════════════════
+   GRÁFICOS GLOBALES
+══════════════════════════════════════════ */
+function renderGlobalCharts(arr) {
+  renderEvolGlobal(arr);
+  renderConcChart(arr);
+  renderIECDist(arr);
+}
+
+function renderEvolGlobal(arr) {
+  const ctx = document.getElementById('chart-evol-global');
+  if (!ctx) return;
+  const meses = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO'];
+  const labels = meses.map(m => m.slice(0,3));
+  const vals = meses.map(mes => arr.filter(c => (c.ventas.mensual[mes] || 0) > 0).length);
+
+  if (chartEvolGlobal) {
+    chartEvolGlobal.data.labels = labels;
+    chartEvolGlobal.data.datasets[0].data = vals;
+    chartEvolGlobal.update('none');
+  } else {
+    chartEvolGlobal = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Clientes activos',
+          data: vals,
+          backgroundColor: 'rgba(122,182,72,0.7)',
+          borderRadius: 5,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: {display: false},
+          tooltip: {callbacks: {label: ctx2 => `${ctx2.raw} clientes activos`}}
+        },
+        scales: {
+          x: {grid: {display: false}, ticks: {color: '#5a5448', font: {size: 10}}},
+          y: {grid: {color: 'rgba(255,255,255,0.04)'}, ticks: {color: '#5a5448', font: {size: 10}},
+            beginAtZero: true}
+        }
+      }
+    });
+  }
+}
+
+function renderConcChart(arr) {
+  const ctx = document.getElementById('chart-conc');
+  if (!ctx) return;
+  const total = arr.reduce((s,c) => s + c.ventas.ytd, 0);
+  const sorted = arr.slice().sort((a,b) => b.ventas.ytd - a.ventas.ytd);
+  const top10v = sorted.slice(0,10).reduce((s,c) => s + c.ventas.ytd, 0);
+  const resto = total - top10v;
+  const labels = ['Top 10', 'Resto (' + (arr.length - 10) + ')'];
+  const vals = [top10v, Math.max(0, resto)];
+
+  if (chartConc) {
+    chartConc.data.labels = labels;
+    chartConc.data.datasets[0].data = vals;
+    chartConc.update('none');
+  } else {
+    chartConc = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels,
+        datasets: [{
+          data: vals,
+          backgroundColor: ['rgba(245,166,35,0.8)', 'rgba(90,84,72,0.4)'],
+          borderWidth: 1, borderColor: '#161410'
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+          legend: {labels: {color: '#8a8070', font: {size: 10}, boxWidth: 12}},
+          tooltip: {callbacks: {
+            label: ctx2 => {
+              const pct = total > 0 ? (ctx2.raw / total * 100).toFixed(1) : 0;
+              return `${pct}% del revenue`;
+            }
+          }}
+        }
+      }
+    });
+  }
+}
+
+function renderIECDist(arr) {
+  const ctx = document.getElementById('chart-iec-dist');
+  if (!ctx) return;
+  const buckets = ['0-43%', '43-70%', '70-85%', '85-95%', '95%+', 'N/D'];
+  const counts = [0,0,0,0,0,0];
+  arr.forEach(c => {
+    if (c.iec.pct === null) { counts[5]++; return; }
+    const p = c.iec.pct;
+    if (p < 0.43) counts[0]++;
+    else if (p < 0.70) counts[1]++;
+    else if (p < 0.85) counts[2]++;
+    else if (p < 0.95) counts[3]++;
+    else counts[4]++;
+  });
+  const colors = [
+    'rgba(231,76,60,0.8)', 'rgba(230,126,34,0.8)',
+    'rgba(245,166,35,0.8)', 'rgba(122,182,72,0.7)',
+    'rgba(74,158,219,0.8)', 'rgba(90,84,72,0.5)'
+  ];
+
+  if (chartIECDist) {
+    chartIECDist.data.datasets[0].data = counts;
+    chartIECDist.update('none');
+  } else {
+    chartIECDist = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: buckets,
+        datasets: [{
+          data: counts,
+          backgroundColor: colors,
+          borderRadius: 4,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: {display: false},
+          tooltip: {callbacks: {label: ctx2 => `${ctx2.raw} clientes`}}
+        },
+        scales: {
+          x: {grid: {display: false}, ticks: {color: '#5a5448', font: {size: 9}}},
+          y: {grid: {color: 'rgba(255,255,255,0.04)'}, ticks: {color: '#5a5448', font: {size: 9}},
+            beginAtZero: true}
+        }
+      }
+    });
+  }
+}
+
+/* ══════════════════════════════════════════
+   CXC SIN MATCH
+══════════════════════════════════════════ */
+function renderCxcOrphans() {
+  const body = document.getElementById('cxc-orphans-body');
+  if (!CXC_SIN_MATCH_CL || !CXC_SIN_MATCH_CL.length) {
+    document.getElementById('cxc-orphans-section').style.display = 'none';
+    return;
+  }
+  body.innerHTML = CXC_SIN_MATCH_CL.map(c => `
+    <div class="orphan-row">
+      <span style="color:var(--text)">${c.nombre}</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="badge ${c.max_mora > 90 ? 'b-r' : c.max_mora > 60 ? 'b-r' : 'b-a'}">${c.tramo}</span>
+        <span style="font-family:var(--mono);font-size:10.5px;color:var(--dim)">CLP ${fmt(c.saldo)}</span>
+        <span style="font-size:10px;color:var(--muted)">${c.max_mora > 0 ? c.max_mora+'d mora' : 'al día'}</span>
+      </div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════════════
+   SESIÓN
+══════════════════════════════════════════ */
+function cerrarSesion() {
+  sessionStorage.removeItem('av_auth');
+  window.location.replace('index.html');
+}
+
+/* ══════════════════════════════════════════
+   INIT (sin DOMContentLoaded)
+══════════════════════════════════════════ */
+Chart.defaults.color = '#8a8070';
+Chart.defaults.font.family = "'DM Mono', monospace";
+Chart.defaults.font.size = 10;
+
+populateVendedorSelect();
+applyFilters();
+renderCxcOrphans();
+</script>
+</body>
+</html>
