@@ -880,14 +880,49 @@ function renderDetalle(c) {
       </span></div>
     ${isPriority ? `<div style="margin-top:12px;padding:8px 10px;background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-radius:6px;font-size:10px;color:var(--red)">
       ⭐ <b>Cliente prioritario.</b> Mayor revenue Chile (21.8%). IEC 11.5% — CLP 53M bajo piso. Requiere acción inmediata en pricing.</div>` : ''}
+    ${renderRecomendacion(c, e)}
   </div>
 
   <!-- Tab: Evolución -->
   <div class="dtab-panel" id="dp-evol">
     <div class="chart-wrap">
-      <div class="chart-title">Venta mensual (${moneda})</div>
+      <div class="chart-title" style="display:flex;justify-content:space-between;align-items:center">
+        <span>Venta mensual (${moneda})</span>
+        <span style="font-size:9px;color:var(--dim);font-weight:normal">${c.ventas.tendencia === 'creciente' ? '📈' : c.ventas.tendencia === 'cayendo' ? '📉' : '➡️'} ${c.ventas.tendencia}${c.ventas.tendencia_pct ? ' '+c.ventas.tendencia_pct+'%' : ''}</span>
+      </div>
       <div class="chart-canvas-sm"><canvas id="chartEvolDetalle"></canvas></div>
     </div>
+
+    <!-- Strip métricas de actividad -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:12px">
+      <div style="background:var(--s2);padding:9px 10px;text-align:center">
+        <div style="font-size:8px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:3px">Transacciones</div>
+        <div style="font-family:var(--mono);font-size:18px;font-weight:800;color:var(--text)">${c.ventas.n_tx}</div>
+        <div style="font-size:8.5px;color:var(--dim)">${c.ventas.n_docs} doc${c.ventas.n_docs !== 1?'s':''}</div>
+      </div>
+      <div style="background:var(--s2);padding:9px 10px;text-align:center">
+        <div style="font-size:8px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:3px">Ticket promedio</div>
+        <div style="font-family:var(--mono);font-size:18px;font-weight:800;color:var(--amber)">${fmtK(c.ventas.ticket_prom)}</div>
+        <div style="font-size:8.5px;color:var(--dim)">${moneda}</div>
+      </div>
+      <div style="background:var(--s2);padding:9px 10px;text-align:center">
+        <div style="font-size:8px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:3px">Meses activos</div>
+        <div style="font-family:var(--mono);font-size:18px;font-weight:800;color:${c.ventas.meses_activos >= 4 ? 'var(--green)' : c.ventas.meses_activos >= 2 ? 'var(--amber)' : 'var(--red)'}">${c.ventas.meses_activos}/5</div>
+        <div style="font-size:8.5px;color:var(--dim)">${(c.ventas.frecuencia*100).toFixed(0)}% frec.</div>
+      </div>
+    </div>
+
+    <!-- Actividad mensual (activo / inactivo) -->
+    <div style="display:flex;gap:4px;margin-bottom:12px">
+      ${['ENERO','FEBRERO','MARZO','ABRIL','MAYO'].map(mes => {
+        const activo = (c.ventas.mensual[mes] || 0) > 0;
+        return `<div style="flex:1;text-align:center">
+          <div style="height:5px;border-radius:3px;background:${activo ? 'var(--amber)' : 'var(--s3)'};margin-bottom:4px"></div>
+          <div style="font-size:8px;color:${activo ? 'var(--text)' : 'var(--muted)'};font-weight:${activo?700:400}">${mes.slice(0,3)}</div>
+        </div>`;
+      }).join('')}
+    </div>
+
     <div class="sec-head">Desglose por mes</div>
     ${['ENERO','FEBRERO','MARZO','ABRIL','MAYO'].map(mes => {
       const v = c.ventas.mensual[mes] || 0;
@@ -1011,6 +1046,109 @@ function renderDetalle(c) {
     renderEvolDetalleChart(c, moneda);
     renderProdsDetalleChart(c, moneda);
   }, 50);
+}
+
+/* ══════════════════════════════════════════
+   RECOMENDACIÓN COMERCIAL AUTOMÁTICA
+══════════════════════════════════════════ */
+function generarRecomendacion(c, e) {
+  const moneda = c.pais === 'PE' ? 'USD' : 'CLP';
+  const recs = [];
+
+  const altaRevenue  = c.ranking <= 20;
+  const iecCrit      = c.iec.pct !== null && c.iec.pct < 0.43;
+  const iecBajo      = c.iec.pct !== null && c.iec.pct < 0.70;
+  const iecBueno     = c.iec.pct !== null && c.iec.pct >= 0.92;
+  const moraCrit     = c.cxc.max_mora > 90;
+  const moraAlta     = c.cxc.max_mora > 60;
+  const moraMed      = c.cxc.max_mora > 30;
+  const dormido      = c.ventas.meses_activos <= 1;
+  const mono         = c.productos.es_mono;
+  const frecAlta     = c.ventas.frecuencia >= 0.8;
+  const scoreAlto    = c.score >= 70;
+  const sinIEC       = c.iec.pct === null;
+  const pctBajoPiso  = c.iec.monto_elegible > 0
+    ? (c.iec.monto_bajo_piso / c.iec.monto_elegible * 100).toFixed(0)
+    : null;
+
+  // 1 — Mora crítica
+  if (moraCrit && altaRevenue) {
+    recs.push({tipo:'critico', titulo:'🔴 Riesgo estratégico',
+      texto:`Top-${c.ranking} por revenue con mora >90 días. No ampliar cartera. Escalar cobranza a gerencia. Monto expuesto: ${moneda} ${fmtK(c.cxc.saldo)}.`});
+  } else if (moraCrit) {
+    recs.push({tipo:'critico', titulo:'🔴 Mora crítica — suspender crédito',
+      texto:`Más de 90 días sin pago (${c.cxc.max_mora}d). Suspender nuevos despachos hasta regularizar deuda de ${moneda} ${fmtK(c.cxc.saldo)}.`});
+  } else if (moraAlta) {
+    recs.push({tipo:'alerta', titulo:'⚠️ Priorizar cobranza antes de expansión',
+      texto:`Mora ${c.cxc.max_mora} días. Resolver deuda de ${moneda} ${fmtK(c.cxc.saldo)} antes de cualquier acción comercial. Confirmar fecha de pago.`});
+  } else if (moraMed) {
+    recs.push({tipo:'accion', titulo:'📋 Seguimiento CxC activo',
+      texto:`Mora ${c.cxc.max_mora} días (tramo ${c.cxc.tramo}). Confirmar compromiso de pago. No ampliar línea de crédito hasta regularizar.`});
+  }
+
+  // 2 — IEC crítico + alto revenue
+  if (iecCrit && altaRevenue) {
+    recs.push({tipo:'critico', titulo:'🔴 Urgente: pricing fuera de política',
+      texto:`Top-${c.ranking} con IEC ${(c.iec.pct*100).toFixed(0)}%. ${moneda} ${fmtK(c.iec.monto_bajo_piso)} vendido bajo precio piso (${pctBajoPiso}% del monto elegible). Renegociar condiciones en próxima visita — pérdida directa de margen.`});
+  } else if (iecCrit) {
+    recs.push({tipo:'alerta', titulo:'⚠️ Revisar política de precios',
+      texto:`IEC ${(c.iec.pct*100).toFixed(0)}% — ${pctBajoPiso}% del monto elegible bajo precio piso. Revisar lista de precios con vendedor ${c.vendedor.split(' ')[0]}.`});
+  } else if (iecBajo) {
+    recs.push({tipo:'accion', titulo:'💡 Ajustar condiciones comerciales',
+      texto:`IEC ${(c.iec.pct*100).toFixed(0)}% bajo umbral 70%. Revisar las ${c.iec.tx_elegible - c.iec.tx_cumple} transacciones bajo piso (${moneda} ${fmtK(c.iec.monto_bajo_piso)}). Ajustar descuentos o aplicar política de precio mínimo.`});
+  }
+
+  // 3 — Alto revenue + sin IEC
+  if (sinIEC && altaRevenue) {
+    recs.push({tipo:'accion', titulo:'❓ Incluir en política IEC',
+      texto:`Top-${c.ranking} por revenue (${moneda} ${fmtK(c.ventas.ytd)} YTD) sin precio piso mapeado. Incluir en próxima actualización para medir eficiencia correctamente.`});
+  }
+
+  // 4 — Mono-producto activo
+  if (mono && !dormido) {
+    const topProd = c.productos.top[0]?.prod || 'producto principal';
+    const prodStr = topProd.length > 38 ? topProd.slice(0,37)+'…' : topProd;
+    recs.push({tipo:'oportunidad', titulo:'📦 Oportunidad de cross-selling',
+      texto:`Concentrado en "${prodStr}". ${frecAlta ? 'Alta frecuencia de compra — momento ideal para ampliar portafolio.' : 'En próximo pedido, presentar al menos 2 productos complementarios.'}`});
+  }
+
+  // 5 — Dormido
+  if (dormido) {
+    const lastEntry = Object.entries(c.ventas.mensual).filter(([,v]) => v > 0).pop();
+    recs.push({tipo:'accion', titulo:'💤 Campaña de reactivación',
+      texto:`Solo activo ${c.ventas.meses_activos}/5 meses${lastEntry ? ` (último: ${lastEntry[0]})` : ''}. Ticket histórico: ${moneda} ${fmtK(c.ventas.ticket_prom)}. Coordinar visita o propuesta personalizada.`});
+  }
+
+  // 6 — Cliente estratégico
+  if (scoreAlto && iecBueno && frecAlta && !moraMed) {
+    recs.push({tipo:'estrategico', titulo:'🚀 Cliente estratégico — expandir relación',
+      texto:`Score ${c.score}/100, IEC ${(c.iec.pct*100).toFixed(0)}%, ${c.ventas.meses_activos}/5 meses activos. Perfil ideal. Proponer volúmenes incrementales y condiciones preferenciales.`});
+  } else if (scoreAlto && !moraMed && !iecBajo) {
+    recs.push({tipo:'oportunidad', titulo:'💰 Potencial de crecimiento',
+      texto:`Score ${c.score}/100 con comportamiento sólido${sinIEC ? ' (IEC pendiente de mapeo)' : ''}. Revisar presupuesto asignado y evaluar incremento de meta en próximo trimestre.`});
+  }
+
+  // Fallback
+  if (recs.length === 0) {
+    recs.push({tipo:'ok', titulo:'✅ Sin acciones urgentes',
+      texto:'Cliente dentro de parámetros normales. Mantener seguimiento periódico y confirmar condiciones en renovación de período.'});
+  }
+
+  return recs;
+}
+
+function renderRecomendacion(c, e) {
+  const recs = generarRecomendacion(c, e);
+  const clsMap = {
+    critico:'ai-rd', alerta:'ai-am', accion:'ai-am',
+    oportunidad:'ai-bl', estrategico:'ai-gn', ok:'ai-gn'
+  };
+  return `
+    <div class="sec-head" style="margin-top:14px;border-top:1px solid var(--bdim);padding-top:12px">🎯 Recomendación Comercial</div>
+    ${recs.map(r => `<div class="alert-item ${clsMap[r.tipo]||'ai-am'}" style="margin-bottom:6px">
+      <div style="font-weight:700;font-size:10.5px;margin-bottom:3px">${r.titulo}</div>
+      <div style="font-size:10px;line-height:1.55;opacity:0.9">${r.texto}</div>
+    </div>`).join('')}`;
 }
 
 function showDtab(id, el) {

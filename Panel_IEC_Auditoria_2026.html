@@ -117,8 +117,22 @@ th.sort-desc::after{content:' ↓';color:var(--amber)}
 .heat-cell{border-radius:4px;padding:3px 8px;font-weight:700;font-family:var(--mono)}
 /* FOOTER */
 footer{text-align:center;padding:16px;font-size:9px;color:var(--muted);border-top:1px solid var(--border);margin-top:20px}
+/* IMPACTO COMERCIAL */
+.ic-summary{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:16px}
+.ic-card{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.ic-label{font-size:8.5px;text-transform:uppercase;letter-spacing:1.1px;color:var(--muted);font-weight:700;margin-bottom:3px}
+.ic-val{font-size:20px;font-weight:800;line-height:1.1;margin-bottom:2px}
+.ic-sub{font-size:9.5px;color:var(--dim);line-height:1.4}
+.rec-item{padding:9px 12px;border-radius:7px;margin-bottom:7px;font-size:11px;line-height:1.6}
+.rec-item:last-child{margin-bottom:0}
+.rec-crit{background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.25);color:#e8c8c8}
+.rec-alerta{background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.2);color:#e8d8b0}
+.rec-ok{background:rgba(122,182,72,0.07);border:1px solid rgba(122,182,72,0.2);color:#c8e0b0}
+.rec-oportunidad{background:rgba(74,158,219,0.07);border:1px solid rgba(74,158,219,0.2);color:#b0d0f0}
+.sim-box{background:rgba(74,158,219,0.05);border:1px solid rgba(74,158,219,0.18);border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.sim-val{font-size:26px;font-weight:900;font-family:var(--mono);line-height:1}
 /* RESPONSIVE */
-@media(max-width:900px){.kpi-strip{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:1fr}}
+@media(max-width:900px){.kpi-strip{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:1fr}.ic-summary{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
@@ -245,6 +259,7 @@ footer{text-align:center;padding:16px;font-size:9px;color:var(--muted);border-to
   <div class="tnav" onclick="showTab('transacciones')">🔍 Transacciones</div>
   <div class="tnav" onclick="showTab('heatmap')">🔥 Mapa Calor</div>
   <div class="tnav" onclick="showTab('cobertura')">⚠️ Sin Cobertura</div>
+  <div class="tnav" onclick="showTab('impacto')">⚡ Impacto Comercial</div>
 </div>
 
 <!-- TAB: VENDEDORES -->
@@ -402,6 +417,11 @@ footer{text-align:center;padding:16px;font-size:9px;color:var(--muted);border-to
   <div id="coverageList"></div>
 </div>
 
+<!-- TAB: IMPACTO COMERCIAL -->
+<div class="tab-panel main" id="tab-impacto">
+  <div id="ic-content"><div class="empty">Selecciona un país o vendedor para ver el análisis de impacto comercial.</div></div>
+</div>
+
 <footer>IEC Auditoria · AV LATAM 2026 · Datos corte 11/05/2026 · No mostrar márgenes ni costos</footer>
 
 <script>
@@ -550,6 +570,7 @@ function updateAll(){
   renderTransacciones();
   renderHeatmap();
   renderCoverage();
+  renderImpacto();
   document.getElementById('txCount').textContent = filteredTx.length;
   document.getElementById('txPeriod').textContent = PAIS==='CL'?'Chile · CLP':'Perú · USD';
 }
@@ -868,7 +889,7 @@ function showTab(name){
   document.querySelectorAll('.tnav').forEach(n=>n.classList.remove('active'));
   const panel=document.getElementById('tab-'+name);
   if(panel) panel.classList.add('active');
-  const tabs=['vendedores','productos','clientes','transacciones','heatmap','cobertura'];
+  const tabs=['vendedores','productos','clientes','transacciones','heatmap','cobertura','impacto'];
   const idx=tabs.indexOf(name);
   document.querySelectorAll('.tnav')[idx]?.classList.add('active');
 }
@@ -895,6 +916,247 @@ function sortTable(tblId, colIdx){
     th.classList.remove('sort-asc','sort-desc');
     if(i===colIdx) th.classList.add(asc?'sort-asc':'sort-desc');
   });
+}
+
+// ============================================================
+// IMPACTO COMERCIAL IEC
+// ============================================================
+function renderImpacto() {
+  const el = filteredTx.filter(t => t.elegible);
+  const totalElig = el.reduce((s,t) => s + t.total, 0);
+  const totalSP   = el.reduce((s,t) => s + t.sp,    0);
+  const totalBP   = el.reduce((s,t) => s + t.bp,    0);
+  const iec    = totalElig > 0 ? totalSP / totalElig : 0;
+  const factor = getFactor(iec);
+  const ic = getIecColor(iec);
+  const fc = getFactorColor(factor);
+
+  // Agrupar por folio → IEC factura
+  const folioMap = {};
+  el.forEach(t => {
+    if (!folioMap[t.folio]) folioMap[t.folio] = {folio:t.folio, cliente:t.cliente, vendedor:t.vendedor, sp:0, elig:0, bp:0};
+    folioMap[t.folio].sp   += t.sp;
+    folioMap[t.folio].elig += t.total;
+    folioMap[t.folio].bp   += t.bp;
+  });
+  const folios = Object.values(folioMap).map(f => ({...f, iec: f.elig > 0 ? f.sp / f.elig : null}));
+
+  // Stats resumen
+  const vendFilt  = document.getElementById('fVend').value;
+  const vendLabel = vendFilt !== 'TODOS' ? vendFilt : `${[...new Set(filteredTx.map(t=>t.vendedor))].length} vendedor(es)`;
+  const facturasTotal = folios.length;
+  const facturasCrit  = folios.filter(f => f.iec !== null && f.iec < 0.43).length;
+  const lineasBP = el.filter(t => t.cumple === false);
+  const clientesCrit = new Set(lineasBP.map(t => t.cliente)).size;
+
+  // Qué perjudicó: líneas bajo piso, mayor bp primero
+  const perjudico = [...lineasBP].sort((a,b) => b.bp - a.bp).slice(0, 25);
+
+  // Qué ayudó: facturas con sp>0, mayor sp primero
+  const ayudo = folios.filter(f => f.sp > 0).sort((a,b) => b.sp - a.sp).slice(0, 15);
+
+  // Simulación: top 3 facturas por bp
+  const criticas = folios.filter(f => f.bp > 0).sort((a,b) => b.bp - a.bp).slice(0, 3);
+  const bpSim    = criticas.reduce((s,f) => s + f.bp, 0);
+  const iecSim   = totalElig > 0 ? (totalSP + bpSim) / totalElig : 0;
+  const mejora   = iecSim - iec;
+
+  // Recomendaciones
+  const recs = generarRecsIEC(el, folios, iec, factor, totalElig);
+
+  function trunc(s, n){ return s.length > n ? s.slice(0, n-1)+'…' : s; }
+
+  const html = `
+    <div class="sec-title">⚡ Impacto Comercial IEC · ${vendLabel}</div>
+
+    <!-- RESUMEN VENDEDOR -->
+    <div class="ic-summary">
+      <div class="ic-card" style="border-color:${ic}44">
+        <div class="ic-label">IEC del período</div>
+        <div class="ic-val" style="color:${ic}">${fmtPct(iec)}</div>
+        <div class="ic-sub">factor: <b style="color:${fc}">${factor}%</b></div>
+      </div>
+      <div class="ic-card">
+        <div class="ic-label">Venta elegible</div>
+        <div class="ic-val kpi-blue">${fmt(totalElig)}</div>
+        <div class="ic-sub">con precio piso</div>
+      </div>
+      <div class="ic-card">
+        <div class="ic-label">Venta bajo piso</div>
+        <div class="ic-val kpi-red">${fmt(totalBP)}</div>
+        <div class="ic-sub">${fmtPct(totalElig>0?totalBP/totalElig:0)} del elegible</div>
+      </div>
+      <div class="ic-card">
+        <div class="ic-label">Facturas críticas</div>
+        <div class="ic-val" style="color:${facturasCrit>0?'var(--red)':'var(--green)'}">${facturasCrit}</div>
+        <div class="ic-sub">de ${facturasTotal} facturas</div>
+      </div>
+      <div class="ic-card">
+        <div class="ic-label">Líneas bajo piso</div>
+        <div class="ic-val kpi-red">${lineasBP.length}</div>
+        <div class="ic-sub">de ${el.length} líneas elegibles</div>
+      </div>
+      <div class="ic-card">
+        <div class="ic-label">Clientes críticos</div>
+        <div class="ic-val kpi-amber">${clientesCrit}</div>
+        <div class="ic-sub">con líneas bajo piso</div>
+      </div>
+    </div>
+
+    <!-- QUÉ PERJUDICÓ -->
+    <div class="sec-title" style="margin-top:6px">🔴 Qué perjudicó tu IEC — líneas bajo precio piso (mayor → menor impacto)</div>
+    ${!perjudico.length
+      ? '<div style="padding:14px 0;font-size:11px;color:var(--green)">✅ Sin líneas bajo precio piso en el período filtrado.</div>'
+      : `<div class="tbl-wrap">
+      <table>
+        <thead><tr>
+          <th>Cliente</th><th>Folio</th><th>Producto</th>
+          <th class="r">P. Venta</th><th class="r">P. Piso</th>
+          <th class="c">IEC Línea</th><th class="r">Impacto Negativo</th>
+        </tr></thead>
+        <tbody>${perjudico.map(t => {
+          const impacto = totalElig > 0 ? t.bp / totalElig : 0;
+          return `<tr>
+            <td style="white-space:nowrap" title="${t.cliente}">${trunc(t.cliente,22)}</td>
+            <td class="mono">${t.folio}</td>
+            <td title="${t.producto} · ${t.formato}">${trunc(t.producto,20)} <span style="color:var(--muted);font-size:9.5px">${t.formato||''}</span></td>
+            <td class="mono r" style="color:var(--red)">${fmtRaw(t.pv)}</td>
+            <td class="mono r" style="color:var(--dim)">${fmtRaw(t.pp)}</td>
+            <td class="c"><span class="badge b-crit">0% ✗</span></td>
+            <td class="mono r" style="color:var(--red)">−${(impacto*100).toFixed(2)} pp</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>`}
+
+    <!-- QUÉ AYUDÓ -->
+    <div class="sec-title" style="margin-top:6px">✅ Qué ayudó tu IEC — facturas sobre precio piso (mayor → menor impacto)</div>
+    ${!ayudo.length
+      ? '<div style="padding:14px 0;font-size:11px;color:var(--muted)">Sin facturas sobre precio piso en el período.</div>'
+      : `<div class="tbl-wrap">
+      <table>
+        <thead><tr>
+          <th>Cliente</th><th>Folio</th><th>Vendedor</th>
+          <th class="r">Venta Elegible</th>
+          <th class="c">IEC Factura</th><th class="c">Estado Factura</th>
+          <th class="r">Impacto Positivo</th>
+        </tr></thead>
+        <tbody>${ayudo.map(f => {
+          const impacto = totalElig > 0 ? f.sp / totalElig : 0;
+          const estadoFact = f.bp > 0
+            ? '<span class="badge b-ok">Mixta</span>'
+            : '<span class="badge b-good">Limpia ✓</span>';
+          const lineasComp  = f.bp === 0 ? '' : `<div style="font-size:8.5px;color:var(--muted);margin-top:2px">tiene líneas bajo piso</div>`;
+          return `<tr>
+            <td title="${f.cliente}">${trunc(f.cliente,22)}</td>
+            <td class="mono">${f.folio}</td>
+            <td style="font-size:10.5px;color:var(--dim)">${f.vendedor.split(' ')[0]}</td>
+            <td class="mono r">${fmt(f.elig)}</td>
+            <td class="c">${getIecBadge(f.iec)}</td>
+            <td class="c">${estadoFact}${lineasComp}</td>
+            <td class="mono r" style="color:var(--green)">+${(impacto*100).toFixed(2)} pp</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>`}
+
+    <!-- SIMULACIÓN -->
+    <div class="sec-title" style="margin-top:6px">📊 Simulación de mejora</div>
+    <div class="sim-box">
+      ${criticas.length === 0
+        ? '<div style="color:var(--green);font-size:12px">✅ Sin facturas con monto bajo piso — el IEC está en línea con la política.</div>'
+        : `<div style="font-size:10.5px;color:var(--dim);margin-bottom:14px">
+        Si las <b style="color:var(--text)">${criticas.length} factura${criticas.length>1?'s':''} más crítica${criticas.length>1?'s':''}</b>
+        (folio${criticas.length>1?'s':''} ${criticas.map(f=>'<b style="color:var(--text)">'+f.folio+'</b>').join(', ')})
+        hubieran cumplido precio piso en todas sus líneas:
+      </div>
+      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:14px">
+        <div style="text-align:center">
+          <div style="font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">IEC actual</div>
+          <div class="sim-val" style="color:${ic}">${fmtPct(iec)}</div>
+        </div>
+        <div style="font-size:26px;color:var(--muted)">→</div>
+        <div style="text-align:center">
+          <div style="font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">IEC simulado</div>
+          <div class="sim-val" style="color:${getIecColor(iecSim)}">${fmtPct(iecSim)}</div>
+        </div>
+        <div style="text-align:center;padding:0 14px;border-left:1px solid var(--border);border-right:1px solid var(--border)">
+          <div style="font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Mejora</div>
+          <div class="sim-val" style="color:var(--green)">+${(mejora*100).toFixed(1)} pp</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Factor simulado</div>
+          <div class="sim-val" style="color:${getFactorColor(getFactor(iecSim))}">${getFactor(iecSim)}%</div>
+        </div>
+      </div>
+      <div style="font-size:9.5px;color:var(--muted);border-top:1px solid var(--border);padding-top:10px">
+        Facturas incluidas: ${criticas.map(f =>
+          `<span style="margin-right:14px">· <b style="color:var(--text)">Folio ${f.folio}</b> — ${trunc(f.cliente,24)} — IEC factura: <b style="color:${getIecColor(f.iec)}">${fmtPct(f.iec)}</b></span>`
+        ).join('')}
+      </div>`}
+    </div>
+
+    <!-- RECOMENDACIONES -->
+    <div class="sec-title">🎯 Recomendaciones automáticas</div>
+    ${recs.map(r => `<div class="rec-item rec-${r.tipo}">${r.txt}</div>`).join('')}
+  `;
+
+  document.getElementById('ic-content').innerHTML = html;
+}
+
+function generarRecsIEC(elTx, folios, iec, factor, totalElig) {
+  const recs = [];
+  const lineasBP = elTx.filter(t => t.cumple === false);
+  const linesOK  = elTx.filter(t => t.cumple === true).length;
+
+  // IEC global
+  if (iec < 0.43) {
+    recs.push({tipo:'crit', txt:'🔴 <b>Pricing fuera de política</b> — La mayoría de la venta elegible está bajo precio piso. Se requiere plan de acción inmediato con cada cliente afectado.'});
+  } else if (iec < 0.70) {
+    recs.push({tipo:'alerta', txt:'⚠️ <b>Revisar pricing</b> — IEC bajo 70%. Identifica las facturas críticas y revisa las condiciones acordadas cliente a cliente.'});
+  } else if (iec >= 0.92) {
+    recs.push({tipo:'ok', txt:'✅ <b>Excelente disciplina de precios</b> — IEC sobre 92%. Mantén esta práctica; es el estándar de referencia del equipo.'});
+  }
+
+  // Cliente que más arrastra
+  const cliMap = {};
+  lineasBP.forEach(t => { cliMap[t.cliente] = (cliMap[t.cliente]||0) + t.bp; });
+  const topCli = Object.entries(cliMap).sort((a,b) => b[1]-a[1])[0];
+  if (topCli && totalElig > 0 && topCli[1]/totalElig > 0.10) {
+    recs.push({tipo:'alerta', txt:`⚠️ <b>Cliente crítico</b> — "${topCli[0].length>30?topCli[0].slice(0,29)+'…':topCli[0]}" concentra el ${(topCli[1]/totalElig*100).toFixed(0)}% del monto bajo piso. Renegociar condiciones en próxima visita.`});
+  }
+
+  // SKU más destructivo
+  const skuMap = {};
+  lineasBP.forEach(t => { skuMap[t.producto] = (skuMap[t.producto]||0) + t.bp; });
+  const topSKU = Object.entries(skuMap).sort((a,b) => b[1]-a[1])[0];
+  if (topSKU && totalElig > 0 && topSKU[1]/totalElig > 0.08) {
+    recs.push({tipo:'alerta', txt:`📦 <b>SKU destructivo</b> — "${topSKU[0]}" arrastra el ${(topSKU[1]/totalElig*100).toFixed(0)}% del monto bajo piso. Revisar política de precio mínimo para este producto.`});
+  }
+
+  // Oportunidad de mix (muchas líneas OK pero bajo IEC global)
+  if (elTx.length > 0 && linesOK/elTx.length > 0.65 && iec < 0.85) {
+    recs.push({tipo:'oportunidad', txt:`💡 <b>Oportunidad de mix</b> — el ${(linesOK/elTx.length*100).toFixed(0)}% de las líneas cumple precio piso, pero pocos tickets grandes fuera de política arrastran el IEC. Enfócate en esos casos específicos.`});
+  }
+
+  // Exceso de descuento (gap > 20%)
+  const highGap = elTx.filter(t => t.pp && t.pv && t.pv < t.pp && (t.pp-t.pv)/t.pp > 0.20);
+  if (highGap.length > 0) {
+    const prods = [...new Set(highGap.map(t=>t.producto))].slice(0,2).join(', ');
+    recs.push({tipo:'alerta', txt:`💸 <b>Exceso de descuento</b> — ${highGap.length} línea${highGap.length>1?'s':''} vendida${highGap.length>1?'s':''} más del 20% bajo precio piso (${prods}). Verificar si existe autorización de excepción.`});
+  }
+
+  // Facturas limpias como referencia positiva
+  const limpias = folios.filter(f => f.iec !== null && f.iec >= 0.92 && f.bp === 0);
+  if (limpias.length > 0 && iec < 0.85) {
+    recs.push({tipo:'ok', txt:`✅ <b>${limpias.length} factura${limpias.length>1?'s':''} completamente sobre precio piso</b> — identifica qué clientes y SKUs generan estos resultados para replicar la práctica.`});
+  }
+
+  if (recs.length === 0) {
+    recs.push({tipo:'ok', txt:'✅ <b>Sin alertas adicionales</b> — comportamiento comercial dentro de parámetros normales.'});
+  }
+
+  return recs;
 }
 
 // ============================================================
