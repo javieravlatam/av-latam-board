@@ -419,7 +419,45 @@ footer{text-align:center;padding:16px;font-size:9px;color:var(--muted);border-to
 
 <!-- TAB: IMPACTO COMERCIAL -->
 <div class="tab-panel main" id="tab-impacto">
-  <div id="ic-content"><div class="empty">Selecciona un país o vendedor para ver el análisis de impacto comercial.</div></div>
+
+  <!-- Selector local — independiente de filtros globales -->
+  <div style="background:var(--s2);border:1px solid rgba(245,166,35,0.35);border-radius:10px;padding:14px 18px;margin-bottom:16px">
+    <div style="font-size:9px;color:var(--amber);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px">📍 Selección para Radiografía IEC</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+      <div class="filter-group">
+        <span class="filter-label">País</span>
+        <select id="ic-pais" onchange="onIcChange()">
+          <option value="CL">🇨🇱 Chile</option>
+          <option value="PE">🇵🇪 Perú</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Período</span>
+        <select id="ic-mes" onchange="onIcChange()">
+          <option value="TODOS">YTD 2026</option>
+          <option value="ENERO">Enero</option>
+          <option value="FEBRERO">Febrero</option>
+          <option value="MARZO">Marzo</option>
+          <option value="ABRIL">Abril</option>
+          <option value="MAYO">Mayo</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Vendedor</span>
+        <select id="ic-vend" onchange="onIcVendChange()" style="min-width:210px">
+          <option value="">— Selecciona un vendedor —</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido dinámico -->
+  <div id="ic-content">
+    <div class="empty" style="padding:50px 20px">
+      <div style="font-size:32px;margin-bottom:10px">👆</div>
+      Selecciona un vendedor para ver su radiografía IEC.
+    </div>
+  </div>
 </div>
 
 <footer>IEC Auditoria · AV LATAM 2026 · Datos corte 11/05/2026 · No mostrar márgenes ni costos</footer>
@@ -439,6 +477,10 @@ let filteredTx = [];
 let selectedVend = null;
 let selectedProd = null;
 let sortState = {};
+// Estado local del tab Impacto Comercial
+let icPais = 'CL';
+let icMes  = 'TODOS';
+let icVend = '';
 
 function getTx(){ return PAIS === 'CL' ? TX_CL : TX_PE; }
 
@@ -919,13 +961,63 @@ function sortTable(tblId, colIdx){
 }
 
 // ============================================================
-// IMPACTO COMERCIAL IEC
+// IMPACTO COMERCIAL — SELECTORES LOCALES
+// ============================================================
+function populateIcVend() {
+  const TX = icPais === 'CL' ? TX_CL : TX_PE;
+  let tx = TX;
+  if (icMes !== 'TODOS') tx = tx.filter(t => t.mes && t.mes.trim().startsWith(icMes.slice(0,3)));
+  const vends = [...new Set(tx.map(t => t.vendedor))].sort();
+  const sel = document.getElementById('ic-vend');
+  if (!sel) return;
+  const prev = icVend;
+  sel.innerHTML = '<option value="">— Selecciona un vendedor —</option>' +
+    vends.map(v => `<option value="${v}"${v===prev?' selected':''}>${v}</option>`).join('');
+  icVend = vends.includes(prev) ? prev : '';
+  sel.value = icVend;
+}
+
+function onIcChange() {
+  icPais = document.getElementById('ic-pais').value;
+  icMes  = document.getElementById('ic-mes').value;
+  icVend = '';
+  populateIcVend();
+  renderImpacto();
+}
+
+function onIcVendChange() {
+  icVend = document.getElementById('ic-vend').value;
+  renderImpacto();
+}
+
+// ============================================================
+// IMPACTO COMERCIAL IEC — RADIOGRAFÍA VENDEDOR
 // ============================================================
 function renderImpacto() {
-  const el = filteredTx.filter(t => t.elegible);
+  const container = document.getElementById('ic-content');
+  if (!container) return;
+
+  if (!icVend) {
+    container.innerHTML = `<div class="empty" style="padding:50px 20px">
+      <div style="font-size:32px;margin-bottom:10px">👆</div>
+      Selecciona un vendedor para ver su radiografía IEC.
+    </div>`;
+    return;
+  }
+
+  const TX      = icPais === 'CL' ? TX_CL : TX_PE;
+  const moneda  = icPais === 'CL' ? 'CLP' : 'USD';
+  const fmtN    = n => icPais === 'CL'
+    ? Math.round(n).toLocaleString('es-CL')
+    : n.toFixed(2);
+
+  let tx = TX.filter(t => t.vendedor === icVend);
+  if (icMes !== 'TODOS') tx = tx.filter(t => t.mes && t.mes.trim().startsWith(icMes.slice(0,3)));
+
+  const el       = tx.filter(t => t.elegible);
   const totalElig = el.reduce((s,t) => s + t.total, 0);
-  const totalSP   = el.reduce((s,t) => s + t.sp,    0);
-  const totalBP   = el.reduce((s,t) => s + t.bp,    0);
+  const totalSP   = el.reduce((s,t) => s + t.sp,   0);
+  const totalBP   = el.reduce((s,t) => s + t.bp,   0);
   const iec    = totalElig > 0 ? totalSP / totalElig : 0;
   const factor = getFactor(iec);
   const ic = getIecColor(iec);
@@ -941,65 +1033,145 @@ function renderImpacto() {
   });
   const folios = Object.values(folioMap).map(f => ({...f, iec: f.elig > 0 ? f.sp / f.elig : null}));
 
-  // Stats resumen
-  const vendFilt  = document.getElementById('fVend').value;
-  const vendLabel = vendFilt !== 'TODOS' ? vendFilt : `${[...new Set(filteredTx.map(t=>t.vendedor))].length} vendedor(es)`;
-  const facturasTotal = folios.length;
-  const facturasCrit  = folios.filter(f => f.iec !== null && f.iec < 0.43).length;
-  const lineasBP = el.filter(t => t.cumple === false);
-  const clientesCrit = new Set(lineasBP.map(t => t.cliente)).size;
+  // Agregar productos al folioMap (para tabla "qué ayudó")
+  el.forEach(t => {
+    if (!folioMap[t.folio].prods) folioMap[t.folio].prods = [];
+    if (!folioMap[t.folio].prods.includes(t.producto)) folioMap[t.folio].prods.push(t.producto);
+  });
+  const foliosP = Object.values(folioMap).map(f => ({...f, iec: f.elig > 0 ? f.sp / f.elig : null}));
+
+  // Stats
+  const mesLabel      = icMes === 'TODOS' ? 'Todo el período' : icMes;
+  const facturasTotal = foliosP.length;
+  const facturasCrit  = foliosP.filter(f => f.iec !== null && f.iec < 0.43).length;
+  const facturasCrit2 = foliosP.filter(f => f.iec !== null && f.iec < 0.70 && f.iec >= 0.43).length;
+  const factLimpias   = foliosP.filter(f => f.bp === 0 && f.elig > 0).length;
+  const lineasBP      = el.filter(t => t.cumple === false);
+  const lineasOK      = el.filter(t => t.cumple === true);
+  const clientesCrit  = new Set(lineasBP.map(t => t.cliente)).size;
+  const clientesTotal = new Set(el.map(t => t.cliente)).size;
+  const pctOK         = el.length > 0 ? lineasOK.length / el.length : 0;
+
+  // Formateo local según icPais
+  const fmtL    = n => fmt(n, icPais);
+  const fmtRawL = n => { if(!n||isNaN(n)) return '—'; return icPais==='CL' ? Math.round(n).toLocaleString('es-CL') : n.toFixed(2); };
+  function trunc(s, n){ return s && s.length > n ? s.slice(0, n-1)+'…' : (s||''); }
 
   // Qué perjudicó: líneas bajo piso, mayor bp primero
   const perjudico = [...lineasBP].sort((a,b) => b.bp - a.bp).slice(0, 25);
 
   // Qué ayudó: facturas con sp>0, mayor sp primero
-  const ayudo = folios.filter(f => f.sp > 0).sort((a,b) => b.sp - a.sp).slice(0, 15);
+  const ayudo = foliosP.filter(f => f.sp > 0).sort((a,b) => b.sp - a.sp).slice(0, 15);
 
-  // Simulación: top 3 facturas por bp
-  const criticas = folios.filter(f => f.bp > 0).sort((a,b) => b.bp - a.bp).slice(0, 3);
-  const bpSim    = criticas.reduce((s,f) => s + f.bp, 0);
-  const iecSim   = totalElig > 0 ? (totalSP + bpSim) / totalElig : 0;
-  const mejora   = iecSim - iec;
+  // === SIMULACIÓN 3 ESCENARIOS ===
+  // Escenario 1: top 3 facturas por bp
+  const sim1F   = foliosP.filter(f => f.bp > 0).sort((a,b) => b.bp - a.bp).slice(0, 3);
+  const iecSim1 = totalElig > 0 ? (totalSP + sim1F.reduce((s,f)=>s+f.bp,0)) / totalElig : 0;
+
+  // Escenario 2: top 5 SKUs por bp
+  const skuBP   = {};
+  lineasBP.forEach(t => { skuBP[t.producto] = (skuBP[t.producto]||0) + t.bp; });
+  const sim2SKUs   = Object.entries(skuBP).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const sim2SKUset = new Set(sim2SKUs.map(([k])=>k));
+  const iecSim2    = totalElig > 0 ? (totalSP + lineasBP.filter(t=>sim2SKUset.has(t.producto)).reduce((s,t)=>s+t.bp,0)) / totalElig : 0;
+
+  // Escenario 3: top 3 clientes por bp
+  const cliBP   = {};
+  lineasBP.forEach(t => { cliBP[t.cliente] = (cliBP[t.cliente]||0) + t.bp; });
+  const sim3Clis   = Object.entries(cliBP).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const sim3Cliset = new Set(sim3Clis.map(([k])=>k));
+  const iecSim3    = totalElig > 0 ? (totalSP + lineasBP.filter(t=>sim3Cliset.has(t.cliente)).reduce((s,t)=>s+t.bp,0)) / totalElig : 0;
 
   // Recomendaciones
-  const recs = generarRecsIEC(el, folios, iec, factor, totalElig);
-
-  function trunc(s, n){ return s.length > n ? s.slice(0, n-1)+'…' : s; }
+  const recs = generarRecsIEC(el, foliosP, iec, factor, totalElig);
 
   const html = `
-    <div class="sec-title">⚡ Impacto Comercial IEC · ${vendLabel}</div>
+    <!-- HEADER -->
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+      <div>
+        <div style="font-size:15px;font-weight:700;color:var(--text)">⚡ Radiografía IEC — ${icVend}</div>
+        <div style="font-size:10.5px;color:var(--dim);margin-top:3px">${icPais} · ${mesLabel} · ${facturasTotal} facturas · ${clientesTotal} clientes</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">IEC del período</div>
+        <div style="font-size:34px;font-weight:800;color:${ic};font-family:monospace;line-height:1">${fmtPct(iec)}</div>
+        <div style="font-size:10.5px;margin-top:4px">Factor: <b style="color:${fc}">${factor}%</b></div>
+      </div>
+    </div>
 
-    <!-- RESUMEN VENDEDOR -->
-    <div class="ic-summary">
-      <div class="ic-card" style="border-color:${ic}44">
+    <!-- FÓRMULA IEC VISUAL -->
+    <div style="background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:16px">
+      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;text-align:center">Fórmula IEC = Σ Venta sobre piso ÷ Σ Venta elegible</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap">
+        <div style="text-align:center;min-width:100px">
+          <div style="font-size:8.5px;color:var(--green);text-transform:uppercase;margin-bottom:4px">Σ Sobre piso (SP)</div>
+          <div style="font-size:20px;font-weight:700;color:var(--green);font-family:monospace">${fmtN(totalSP)}</div>
+        </div>
+        <div style="font-size:24px;color:var(--muted);font-weight:300">÷</div>
+        <div style="text-align:center;min-width:100px">
+          <div style="font-size:8.5px;color:var(--text);text-transform:uppercase;margin-bottom:4px">Σ Elegible</div>
+          <div style="font-size:20px;font-weight:700;color:var(--text);font-family:monospace">${fmtN(totalElig)}</div>
+        </div>
+        <div style="font-size:24px;color:var(--muted);font-weight:300">=</div>
+        <div style="text-align:center;min-width:80px">
+          <div style="font-size:8.5px;color:var(--muted);text-transform:uppercase;margin-bottom:4px">IEC</div>
+          <div style="font-size:26px;font-weight:800;color:${ic};font-family:monospace">${fmtPct(iec)}</div>
+        </div>
+        <div style="width:1px;height:52px;background:var(--border)"></div>
+        <div style="text-align:center;min-width:100px">
+          <div style="font-size:8.5px;color:var(--red);text-transform:uppercase;margin-bottom:4px">Σ Bajo piso (BP)</div>
+          <div style="font-size:20px;font-weight:700;color:var(--red);font-family:monospace">${fmtN(totalBP)}</div>
+          <div style="font-size:8px;color:var(--muted);margin-top:2px">SP + BP = Elig ✓</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9 MÉTRICAS -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
+      <div class="ic-card" style="border-color:${ic}55">
         <div class="ic-label">IEC del período</div>
         <div class="ic-val" style="color:${ic}">${fmtPct(iec)}</div>
-        <div class="ic-sub">factor: <b style="color:${fc}">${factor}%</b></div>
+        <div class="ic-sub">Factor: <b style="color:${fc}">${factor}%</b></div>
       </div>
       <div class="ic-card">
         <div class="ic-label">Venta elegible</div>
-        <div class="ic-val kpi-blue">${fmt(totalElig)}</div>
-        <div class="ic-sub">con precio piso</div>
+        <div class="ic-val kpi-blue">${fmtL(totalElig)}</div>
+        <div class="ic-sub">con precio piso activo</div>
       </div>
       <div class="ic-card">
         <div class="ic-label">Venta bajo piso</div>
-        <div class="ic-val kpi-red">${fmt(totalBP)}</div>
+        <div class="ic-val kpi-red">${fmtL(totalBP)}</div>
         <div class="ic-sub">${fmtPct(totalElig>0?totalBP/totalElig:0)} del elegible</div>
       </div>
       <div class="ic-card">
-        <div class="ic-label">Facturas críticas</div>
-        <div class="ic-val" style="color:${facturasCrit>0?'var(--red)':'var(--green)'}">${facturasCrit}</div>
-        <div class="ic-sub">de ${facturasTotal} facturas</div>
+        <div class="ic-label">Facturas totales</div>
+        <div class="ic-val kpi-blue">${facturasTotal}</div>
+        <div class="ic-sub">${facturasCrit} críticas · ${facturasCrit2} en alerta</div>
       </div>
       <div class="ic-card">
-        <div class="ic-label">Líneas bajo piso</div>
-        <div class="ic-val kpi-red">${lineasBP.length}</div>
-        <div class="ic-sub">de ${el.length} líneas elegibles</div>
+        <div class="ic-label">Líneas elegibles</div>
+        <div class="ic-val kpi-blue">${el.length}</div>
+        <div class="ic-sub">${lineasBP.length} bajo piso · ${lineasOK.length} OK</div>
       </div>
       <div class="ic-card">
-        <div class="ic-label">Clientes críticos</div>
+        <div class="ic-label">% Líneas OK</div>
+        <div class="ic-val" style="color:${pctOK>=0.85?'var(--green)':pctOK>=0.70?'var(--amber)':'var(--red)'}">${fmtPct(pctOK)}</div>
+        <div class="ic-sub">líneas sobre precio piso</div>
+      </div>
+      <div class="ic-card">
+        <div class="ic-label">Clientes afectados</div>
         <div class="ic-val kpi-amber">${clientesCrit}</div>
-        <div class="ic-sub">con líneas bajo piso</div>
+        <div class="ic-sub">de ${clientesTotal} clientes activos</div>
+      </div>
+      <div class="ic-card">
+        <div class="ic-label">Factor IEC</div>
+        <div class="ic-val" style="color:${fc}">${factor}%</div>
+        <div class="ic-sub">escala de comisión</div>
+      </div>
+      <div class="ic-card" style="border-color:var(--green)44">
+        <div class="ic-label">Facturas limpias</div>
+        <div class="ic-val" style="color:var(--green)">${factLimpias}</div>
+        <div class="ic-sub">100% sobre precio piso</div>
       </div>
     </div>
 
@@ -1012,17 +1184,20 @@ function renderImpacto() {
         <thead><tr>
           <th>Cliente</th><th>Folio</th><th>Producto</th>
           <th class="r">P. Venta</th><th class="r">P. Piso</th>
-          <th class="c">IEC Línea</th><th class="r">Impacto Negativo</th>
+          <th class="c">Gap%</th><th class="r">Bajo Piso</th>
+          <th class="r">Impacto</th>
         </tr></thead>
         <tbody>${perjudico.map(t => {
           const impacto = totalElig > 0 ? t.bp / totalElig : 0;
+          const gap = t.pp > 0 && t.pv < t.pp ? (t.pp - t.pv) / t.pp : 0;
           return `<tr>
-            <td style="white-space:nowrap" title="${t.cliente}">${trunc(t.cliente,22)}</td>
+            <td title="${t.cliente}">${trunc(t.cliente,22)}</td>
             <td class="mono">${t.folio}</td>
-            <td title="${t.producto} · ${t.formato}">${trunc(t.producto,20)} <span style="color:var(--muted);font-size:9.5px">${t.formato||''}</span></td>
-            <td class="mono r" style="color:var(--red)">${fmtRaw(t.pv)}</td>
-            <td class="mono r" style="color:var(--dim)">${fmtRaw(t.pp)}</td>
-            <td class="c"><span class="badge b-crit">0% ✗</span></td>
+            <td title="${t.producto} · ${t.formato}">${trunc(t.producto,18)} <span style="color:var(--muted);font-size:9px">${t.formato||''}</span></td>
+            <td class="mono r" style="color:var(--red)">${fmtRawL(t.pv)}</td>
+            <td class="mono r" style="color:var(--dim)">${fmtRawL(t.pp)}</td>
+            <td class="c"><span style="color:${gap>0.20?'var(--red)':gap>0.10?'var(--amber)':'var(--dim)'};font-size:10px;font-weight:700">${gap>0?'-'+(gap*100).toFixed(1)+'%':'—'}</span></td>
+            <td class="mono r" style="color:var(--red)">${fmtL(t.bp)}</td>
             <td class="mono r" style="color:var(--red)">−${(impacto*100).toFixed(2)} pp</td>
           </tr>`;
         }).join('')}</tbody>
@@ -1036,9 +1211,9 @@ function renderImpacto() {
       : `<div class="tbl-wrap">
       <table>
         <thead><tr>
-          <th>Cliente</th><th>Folio</th><th>Vendedor</th>
+          <th>Cliente</th><th>Folio</th><th>Productos</th>
           <th class="r">Venta Elegible</th>
-          <th class="c">IEC Factura</th><th class="c">Estado Factura</th>
+          <th class="c">IEC Factura</th><th class="c">Estado</th>
           <th class="r">Impacto Positivo</th>
         </tr></thead>
         <tbody>${ayudo.map(f => {
@@ -1046,58 +1221,91 @@ function renderImpacto() {
           const estadoFact = f.bp > 0
             ? '<span class="badge b-ok">Mixta</span>'
             : '<span class="badge b-good">Limpia ✓</span>';
-          const lineasComp  = f.bp === 0 ? '' : `<div style="font-size:8.5px;color:var(--muted);margin-top:2px">tiene líneas bajo piso</div>`;
+          const prods = (f.prods||[]);
+          const prodsList = prods.slice(0,3).map(p=>trunc(p,18)).join('<br>')
+            + (prods.length>3?`<br><span style="color:var(--muted);font-size:8px">+${prods.length-3} más</span>`:'');
           return `<tr>
             <td title="${f.cliente}">${trunc(f.cliente,22)}</td>
             <td class="mono">${f.folio}</td>
-            <td style="font-size:10.5px;color:var(--dim)">${f.vendedor.split(' ')[0]}</td>
-            <td class="mono r">${fmt(f.elig)}</td>
+            <td style="font-size:9.5px;color:var(--dim)">${prodsList}</td>
+            <td class="mono r">${fmtL(f.elig)}</td>
             <td class="c">${getIecBadge(f.iec)}</td>
-            <td class="c">${estadoFact}${lineasComp}</td>
+            <td class="c">${estadoFact}</td>
             <td class="mono r" style="color:var(--green)">+${(impacto*100).toFixed(2)} pp</td>
           </tr>`;
         }).join('')}</tbody>
       </table>
     </div>`}
 
-    <!-- SIMULACIÓN -->
-    <div class="sec-title" style="margin-top:6px">📊 Simulación de mejora</div>
-    <div class="sim-box">
-      ${criticas.length === 0
-        ? '<div style="color:var(--green);font-size:12px">✅ Sin facturas con monto bajo piso — el IEC está en línea con la política.</div>'
-        : `<div style="font-size:10.5px;color:var(--dim);margin-bottom:14px">
-        Si las <b style="color:var(--text)">${criticas.length} factura${criticas.length>1?'s':''} más crítica${criticas.length>1?'s':''}</b>
-        (folio${criticas.length>1?'s':''} ${criticas.map(f=>'<b style="color:var(--text)">'+f.folio+'</b>').join(', ')})
-        hubieran cumplido precio piso en todas sus líneas:
+    <!-- SIMULACIÓN 3 ESCENARIOS -->
+    <div class="sec-title" style="margin-top:6px">📊 Simulación de mejora — 3 escenarios</div>
+    ${totalBP === 0
+      ? '<div class="sim-box"><div style="color:var(--green);font-size:12px">✅ Sin venta bajo precio piso — IEC en línea con la política.</div></div>'
+      : `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+      <div class="sim-box">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📄 Top ${sim1F.length} facturas críticas</div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px;gap:6px">
+          <div style="text-align:center">
+            <div style="font-size:8px;color:var(--muted);margin-bottom:3px">Actual</div>
+            <div class="sim-val" style="color:${ic};font-size:17px">${fmtPct(iec)}</div>
+          </div>
+          <div style="font-size:14px;color:var(--muted)">→</div>
+          <div style="text-align:center">
+            <div style="font-size:8px;color:var(--muted);margin-bottom:3px">Simulado</div>
+            <div class="sim-val" style="color:${getIecColor(iecSim1)};font-size:17px">${fmtPct(iecSim1)}</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:8px;color:var(--muted);margin-bottom:3px">Mejora</div>
+            <div class="sim-val" style="color:var(--green);font-size:17px">+${((iecSim1-iec)*100).toFixed(1)}pp</div>
+          </div>
+        </div>
+        <div style="font-size:9px;color:var(--muted)">Factor: ${factor}% → <b style="color:${getFactorColor(getFactor(iecSim1))}">${getFactor(iecSim1)}%</b></div>
+        <div style="font-size:8px;color:var(--muted);margin-top:5px;border-top:1px solid var(--border);padding-top:5px">Folios: ${sim1F.map(f=>`#${f.folio}`).join(', ')}</div>
       </div>
-      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:14px">
-        <div style="text-align:center">
-          <div style="font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">IEC actual</div>
-          <div class="sim-val" style="color:${ic}">${fmtPct(iec)}</div>
+      <div class="sim-box">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📦 Top ${sim2SKUs.length} SKUs más críticos</div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px;gap:6px">
+          <div style="text-align:center">
+            <div style="font-size:8px;color:var(--muted);margin-bottom:3px">Actual</div>
+            <div class="sim-val" style="color:${ic};font-size:17px">${fmtPct(iec)}</div>
+          </div>
+          <div style="font-size:14px;color:var(--muted)">→</div>
+          <div style="text-align:center">
+            <div style="font-size:8px;color:var(--muted);margin-bottom:3px">Simulado</div>
+            <div class="sim-val" style="color:${getIecColor(iecSim2)};font-size:17px">${fmtPct(iecSim2)}</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:8px;color:var(--muted);margin-bottom:3px">Mejora</div>
+            <div class="sim-val" style="color:var(--green);font-size:17px">+${((iecSim2-iec)*100).toFixed(1)}pp</div>
+          </div>
         </div>
-        <div style="font-size:26px;color:var(--muted)">→</div>
-        <div style="text-align:center">
-          <div style="font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">IEC simulado</div>
-          <div class="sim-val" style="color:${getIecColor(iecSim)}">${fmtPct(iecSim)}</div>
-        </div>
-        <div style="text-align:center;padding:0 14px;border-left:1px solid var(--border);border-right:1px solid var(--border)">
-          <div style="font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Mejora</div>
-          <div class="sim-val" style="color:var(--green)">+${(mejora*100).toFixed(1)} pp</div>
-        </div>
-        <div style="text-align:center">
-          <div style="font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Factor simulado</div>
-          <div class="sim-val" style="color:${getFactorColor(getFactor(iecSim))}">${getFactor(iecSim)}%</div>
-        </div>
+        <div style="font-size:9px;color:var(--muted)">Factor: ${factor}% → <b style="color:${getFactorColor(getFactor(iecSim2))}">${getFactor(iecSim2)}%</b></div>
+        <div style="font-size:8px;color:var(--muted);margin-top:5px;border-top:1px solid var(--border);padding-top:5px">${sim2SKUs.map(([k])=>trunc(k,14)).join(', ')}</div>
       </div>
-      <div style="font-size:9.5px;color:var(--muted);border-top:1px solid var(--border);padding-top:10px">
-        Facturas incluidas: ${criticas.map(f =>
-          `<span style="margin-right:14px">· <b style="color:var(--text)">Folio ${f.folio}</b> — ${trunc(f.cliente,24)} — IEC factura: <b style="color:${getIecColor(f.iec)}">${fmtPct(f.iec)}</b></span>`
-        ).join('')}
-      </div>`}
-    </div>
+      <div class="sim-box">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">🏢 Top ${sim3Clis.length} clientes críticos</div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px;gap:6px">
+          <div style="text-align:center">
+            <div style="font-size:8px;color:var(--muted);margin-bottom:3px">Actual</div>
+            <div class="sim-val" style="color:${ic};font-size:17px">${fmtPct(iec)}</div>
+          </div>
+          <div style="font-size:14px;color:var(--muted)">→</div>
+          <div style="text-align:center">
+            <div style="font-size:8px;color:var(--muted);margin-bottom:3px">Simulado</div>
+            <div class="sim-val" style="color:${getIecColor(iecSim3)};font-size:17px">${fmtPct(iecSim3)}</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:8px;color:var(--muted);margin-bottom:3px">Mejora</div>
+            <div class="sim-val" style="color:var(--green);font-size:17px">+${((iecSim3-iec)*100).toFixed(1)}pp</div>
+          </div>
+        </div>
+        <div style="font-size:9px;color:var(--muted)">Factor: ${factor}% → <b style="color:${getFactorColor(getFactor(iecSim3))}">${getFactor(iecSim3)}%</b></div>
+        <div style="font-size:8px;color:var(--muted);margin-top:5px;border-top:1px solid var(--border);padding-top:5px">${sim3Clis.map(([k])=>trunc(k,14)).join(', ')}</div>
+      </div>
+    </div>`}
 
-    <!-- RECOMENDACIONES -->
-    <div class="sec-title">🎯 Recomendaciones automáticas</div>
+    <!-- ACCIONES RECOMENDADAS -->
+    <div class="sec-title" style="margin-top:6px">🎯 Acciones recomendadas</div>
     ${recs.map(r => `<div class="rec-item rec-${r.tipo}">${r.txt}</div>`).join('')}
   `;
 
@@ -1164,6 +1372,7 @@ function generarRecsIEC(elTx, folios, iec, factor, totalElig) {
 // ============================================================
 populateFilters();
 applyFilters();
+populateIcVend();
 </script>
 </body>
 </html>
