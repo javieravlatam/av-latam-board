@@ -177,6 +177,27 @@ function cerrarSesion() {
     font-family: 'DM Mono', monospace; font-size: 10px; color: var(--green);
   }
 
+  /* EXECUTIVE CARD */
+  .card.executive {
+    background: linear-gradient(135deg, #0f1a10 0%, #1a1408 100%);
+    border-color: rgba(192,160,96,0.35);
+  }
+  .card.executive::before { background: linear-gradient(90deg, #C0A060, #8a6830); }
+  .card.executive:hover { border-color: #C0A060; box-shadow: 0 8px 40px rgba(192,160,96,0.15); }
+  .card.executive .card-title { color: #C0A060; }
+  .card.executive .card-cta { color: rgba(192,160,96,0.6); border-top-color: rgba(192,160,96,0.12); }
+  .card.executive:hover .card-cta { color: #C0A060; }
+  .section-label.exec-label { color: rgba(192,160,96,0.5); }
+  .section-label.exec-label::after { background: rgba(192,160,96,0.1); }
+  .exec-lock-badge {
+    display: inline-block; background: rgba(192,160,96,0.1);
+    border: 1px solid rgba(192,160,96,0.25); border-radius: 4px;
+    padding: 2px 8px; font-size: 9px; color: #8a7040;
+    text-transform: uppercase; letter-spacing: 1px;
+    font-family: 'DM Mono', monospace; margin-left: 8px;
+    vertical-align: middle;
+  }
+
   /* FOOTER */
   .footer {
     margin-top: auto; padding: 20px 32px;
@@ -527,6 +548,33 @@ function cerrarSesion() {
         </div>
       </div>
       <div class="card-cta">ABRIR CxC →</div>
+    </a>
+
+  </div>
+
+
+  <div class="section-label exec-label">Acceso Ejecutivo <span class="exec-lock-badge">🔒 Restringido</span></div>
+  <div class="cards" style="grid-template-columns:1fr;">
+
+    <a href="Executive_Intelligence_2026.html" class="card executive">
+      <div class="card-icon">⬡</div>
+      <div class="card-title">Executive Intelligence</div>
+      <div class="card-desc">Módulo de acceso exclusivo para Gerencia General y Directorio. Situación ejecutiva consolidada, performance por RTC, riesgo comercial, pricing estratégico, análisis de concentración e insights de decisión.</div>
+      <div class="card-stats">
+        <div class="card-stat">
+          <span class="cs-label">Módulos disponibles</span>
+          <span class="cs-val" style="color:#C0A060;">6 · Situación · Vendedores · Riesgo · Pricing · Concentración · Insights</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Acceso</span>
+          <span class="cs-val" style="color:#8a7040;">Clave ejecutiva · Solo Gerencia / Directorio</span>
+        </div>
+        <div class="card-stat">
+          <span class="cs-label">Datos disponibles</span>
+          <span class="cs-val" style="color:#C0A060;">Chile + Perú · IEC · CxC · Pricing · Clientes</span>
+        </div>
+      </div>
+      <div class="card-cta">ABRIR EXECUTIVE INTELLIGENCE →</div>
     </a>
 
   </div>

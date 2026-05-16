@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Executive Intelligence · Agroveca Grupo LATAM 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:         #080e09;
+  --surface:    #0f1a10;
+  --surface2:   #162118;
+  --surface3:   #1c2a1e;
+  --gold:       #C0A060;
+  --gold-dim:   #8a7040;
+  --gold-glow:  rgba(192,160,96,0.15);
+  --gold-border:rgba(192,160,96,0.25);
+  --green:      #7AB648;
+  --amber:      #F5A623;
+  --red:        #E74C3C;
+  --blue:       #4A9EDB;
+  --text:       #e8f0e9;
+  --text-dim:   #8fa892;
+  --text-muted: #5a7060;
+  --border:     rgba(192,160,96,0.18);
+  --border-dim: rgba(192,160,96,0.08);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ═══════════════════════════════════════
+   AUTH OVERLAY
+═══════════════════════════════════════ */
+#auth-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #080e09;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+}
+.auth-card {
+  background: var(--surface);
+  border: 1px solid var(--gold-border);
+  border-radius: 20px;
+  padding: 48px 56px;
+  text-align: center;
+  box-shadow: 0 0 80px rgba(192,160,96,0.08), 0 0 20px rgba(0,0,0,0.8);
+  max-width: 360px; width: 90%;
+}
+.auth-logo {
+  width: 72px; height: 72px;
+  background: linear-gradient(135deg, var(--gold) 0%, #8a6830 100%);
+  border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 34px; color: #080e09;
+  margin: 0 auto 20px;
+  box-shadow: 0 0 32px rgba(192,160,96,0.3);
+}
+.auth-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px; letter-spacing: 4px;
+  color: var(--gold); margin-bottom: 4px;
+}
+.auth-subtitle {
+  font-size: 11px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 2px;
+  margin-bottom: 32px;
+}
+.auth-label {
+  font-size: 10px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 1.5px;
+  margin-bottom: 10px; display: block;
+}
+.auth-input {
+  width: 100%; padding: 14px 20px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; color: var(--text);
+  font-family: 'DM Mono', monospace; font-size: 22px;
+  text-align: center; letter-spacing: 12px;
+  outline: none; transition: border-color 0.2s;
+  -webkit-text-security: disc;
+  margin-bottom: 16px;
+}
+.auth-input:focus { border-color: var(--gold); }
+.auth-btn {
+  width: 100%; padding: 13px;
+  background: linear-gradient(135deg, var(--gold) 0%, #8a6830 100%);
+  border: none; border-radius: 10px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px; letter-spacing: 3px;
+  color: #080e09; cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.auth-btn:hover { opacity: 0.9; }
+.auth-btn:active { transform: scale(0.98); }
+.auth-error {
+  margin-top: 12px; font-size: 12px;
+  color: var(--red); min-height: 18px;
+  font-family: 'DM Mono', monospace;
+}
+.auth-restricted {
+  margin-top: 20px; font-size: 10px;
+  color: var(--text-muted); line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════
+   MAIN CONTENT
+═══════════════════════════════════════ */
+#main-content { display: none; flex-direction: column; min-height: 100vh; }
+#main-content.visible { display: flex; }
+
+/* HEADER */
+.ex-header {
+  padding: 20px 32px;
+  background: linear-gradient(90deg, var(--surface) 0%, rgba(15,26,16,0.8) 100%);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+  backdrop-filter: blur(8px);
+}
+.ex-logo-wrap { display: flex; align-items: center; gap: 14px; }
+.ex-logo-mark {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--gold) 0%, #8a6830 100%);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px; color: #080e09;
+  box-shadow: 0 0 16px rgba(192,160,96,0.25);
+  flex-shrink: 0;
+}
+.ex-logo-text { line-height: 1; }
+.ex-logo-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px; letter-spacing: 3px; color: var(--gold);
+}
+.ex-logo-sub {
+  font-size: 9px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 1.5px; margin-top: 2px;
+}
+.ex-header-right { display: flex; align-items: center; gap: 16px; }
+.ex-badge {
+  background: rgba(192,160,96,0.1); border: 1px solid var(--gold-border);
+  border-radius: 6px; padding: 4px 12px;
+  font-size: 9px; color: var(--gold);
+  text-transform: uppercase; letter-spacing: 1.5px;
+}
+.ex-corte {
+  font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted);
+}
+.btn-ex-logout {
+  background: transparent; border: 1px solid rgba(192,160,96,0.3);
+  border-radius: 6px; padding: 5px 12px; font-size: 11px;
+  color: var(--gold-dim); cursor: pointer;
+  font-family: 'DM Sans', sans-serif; transition: all .2s;
+}
+.btn-ex-logout:hover { background: rgba(192,160,96,0.08); color: var(--gold); }
+
+/* TABS */
+.ex-tabs {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-dim);
+  padding: 0 32px;
+  display: flex; gap: 4px; overflow-x: auto;
+  scrollbar-width: none;
+}
+.ex-tabs::-webkit-scrollbar { display: none; }
+.ex-tab {
+  padding: 14px 20px; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--text-muted); cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap; transition: all 0.2s;
+  background: none; border-top: none; border-left: none; border-right: none;
+  font-family: 'DM Sans', sans-serif;
+}
+.ex-tab:hover { color: var(--gold); }
+.ex-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+.ex-tab-num {
+  display: inline-block; width: 16px; height: 16px;
+  background: var(--surface2); border-radius: 4px;
+  font-size: 9px; line-height: 16px; text-align: center;
+  margin-right: 6px; font-weight: 600; color: var(--text-muted);
+}
+.ex-tab.active .ex-tab-num {
+  background: rgba(192,160,96,0.2); color: var(--gold);
+}
+
+/* MODULE PANELS */
+.ex-modules { flex: 1; padding: 32px; max-width: 1200px; margin: 0 auto; width: 100%; }
+.ex-module { display: none; }
+.ex-module.active { display: block; }
+
+/* MODULE HEADER */
+.mod-header { margin-bottom: 28px; }
+.mod-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px; letter-spacing: 3px; color: var(--gold); line-height: 1;
+}
+.mod-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+.mod-divider {
+  height: 1px; background: var(--border-dim);
+  margin: 12px 0 24px;
+  position: relative;
+}
+.mod-divider::before {
+  content: ''; position: absolute;
+  left: 0; top: 0; width: 80px; height: 1px;
+  background: var(--gold);
+}
+
+/* KPI GRID */
+.kpi-grid { display: grid; gap: 16px; margin-bottom: 28px; }
+.kpi-grid-4 { grid-template-columns: repeat(4, 1fr); }
+.kpi-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.kpi-grid-2 { grid-template-columns: repeat(2, 1fr); }
+.kpi-card {
+  background: var(--surface); border: 1px solid var(--border-dim);
+  border-radius: 12px; padding: 20px;
+  position: relative; overflow: hidden;
+}
+.kpi-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: var(--gold);
+}
+.kpi-card.red::before   { background: var(--red); }
+.kpi-card.amber::before { background: var(--amber); }
+.kpi-card.green::before { background: var(--green); }
+.kpi-card.blue::before  { background: var(--blue); }
+.kpi-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+.kpi-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px; line-height: 1; color: var(--text);
+}
+.kpi-value.gold  { color: var(--gold); }
+.kpi-value.green { color: var(--green); }
+.kpi-value.amber { color: var(--amber); }
+.kpi-value.red   { color: var(--red); }
+.kpi-value.blue  { color: var(--blue); }
+.kpi-sub { font-size: 10px; color: var(--text-muted); margin-top: 6px; font-family: 'DM Mono', monospace; }
+.kpi-delta {
+  font-size: 10px; margin-top: 4px;
+  font-family: 'DM Mono', monospace;
+}
+.delta-up   { color: var(--green); }
+.delta-down { color: var(--red); }
+.delta-warn { color: var(--amber); }
+
+/* TABLES */
+.ex-table-wrap {
+  background: var(--surface); border: 1px solid var(--border-dim);
+  border-radius: 12px; overflow: hidden; margin-bottom: 24px;
+}
+.ex-table-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-dim);
+  font-size: 10px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 1.5px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.ex-table-header span { color: var(--gold); font-size: 12px; letter-spacing: 0; text-transform: none; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  padding: 10px 16px; font-size: 9px;
+  color: var(--text-muted); text-transform: uppercase;
+  letter-spacing: 1px; text-align: left;
+  border-bottom: 1px solid var(--border-dim);
+}
+tbody tr { border-bottom: 1px solid var(--border-dim); transition: background 0.15s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(192,160,96,0.04); }
+tbody td { padding: 12px 16px; font-size: 12px; }
+.td-mono { font-family: 'DM Mono', monospace; font-size: 11px; }
+.td-right { text-align: right; }
+.td-center { text-align: center; }
+
+/* BADGE */
+.badge {
+  display: inline-block; padding: 2px 8px;
+  border-radius: 4px; font-size: 9px;
+  text-transform: uppercase; letter-spacing: 1px;
+  font-family: 'DM Mono', monospace; font-weight: 500;
+}
+.badge-red    { background: rgba(231,76,60,0.15); color: var(--red); border: 1px solid rgba(231,76,60,0.3); }
+.badge-amber  { background: rgba(245,166,35,0.15); color: var(--amber); border: 1px solid rgba(245,166,35,0.3); }
+.badge-green  { background: rgba(122,182,72,0.12); color: var(--green); border: 1px solid rgba(122,182,72,0.25); }
+.badge-gold   { background: rgba(192,160,96,0.12); color: var(--gold); border: 1px solid var(--gold-border); }
+.badge-blue   { background: rgba(74,158,219,0.12); color: var(--blue); border: 1px solid rgba(74,158,219,0.3); }
+.badge-muted  { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border-dim); }
+
+/* IEC BAR */
+.iec-bar-wrap { display: flex; align-items: center; gap: 10px; }
+.iec-bar-bg { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+.iec-bar-fill { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
+.iec-bar-label { font-family: 'DM Mono', monospace; font-size: 10px; min-width: 38px; text-align: right; }
+
+/* ALERT CARDS */
+.alert-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; }
+.alert-card {
+  background: var(--surface); border-radius: 10px;
+  padding: 16px 18px; border-left: 3px solid var(--border);
+}
+.alert-card.red    { border-left-color: var(--red); }
+.alert-card.amber  { border-left-color: var(--amber); }
+.alert-card.gold   { border-left-color: var(--gold); }
+.alert-card.green  { border-left-color: var(--green); }
+.alert-tag {
+  font-size: 9px; text-transform: uppercase; letter-spacing: 1px;
+  font-family: 'DM Mono', monospace; margin-bottom: 6px;
+}
+.alert-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.alert-body  { font-size: 11px; color: var(--text-dim); line-height: 1.5; }
+
+/* CHART CONTAINER */
+.chart-wrap {
+  background: var(--surface); border: 1px solid var(--border-dim);
+  border-radius: 12px; padding: 20px; margin-bottom: 24px;
+}
+.chart-title { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; }
+.chart-canvas-wrap { position: relative; }
+
+/* 2-COL LAYOUT */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+
+/* INSIGHT CARD */
+.insight-card {
+  background: var(--surface); border: 1px solid var(--border-dim);
+  border-radius: 12px; padding: 20px; margin-bottom: 12px;
+}
+.insight-card.priority-alta  { border-color: rgba(231,76,60,0.35); }
+.insight-card.priority-media { border-color: rgba(245,166,35,0.3); }
+.insight-card.priority-baja  { border-color: rgba(192,160,96,0.2); }
+.insight-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.insight-num {
+  font-family: 'Bebas Neue', sans-serif; font-size: 28px;
+  color: var(--surface3); line-height: 1; min-width: 28px;
+}
+.insight-meta { flex: 1; }
+.insight-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.insight-tags { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+.insight-body { font-size: 12px; color: var(--text-dim); line-height: 1.7; }
+.insight-action {
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid var(--border-dim);
+  font-size: 11px; color: var(--gold);
+  font-family: 'DM Mono', monospace;
+}
+.insight-action::before { content: '→ '; }
+
+/* SECTION LABEL */
+.sec-label {
+  font-size: 9px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 2px;
+  margin-bottom: 14px; margin-top: 8px;
+  display: flex; align-items: center; gap: 10px;
+}
+.sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border-dim); }
+
+/* FOOTER */
+.ex-footer {
+  padding: 16px 32px;
+  border-top: 1px solid var(--border-dim);
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 10px; color: var(--text-muted);
+}
+.ex-footer-gold { font-family: 'DM Mono', monospace; color: var(--gold-dim); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .kpi-grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .kpi-grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .two-col, .three-col, .alert-grid { grid-template-columns: 1fr; }
+  .ex-modules { padding: 20px 16px; }
+}
+@media (max-width: 600px) {
+  .kpi-grid-4, .kpi-grid-3, .kpi-grid-2 { grid-template-columns: 1fr; }
+  .ex-header { padding: 14px 16px; }
+  .ex-tabs { padding: 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     AUTH OVERLAY
+═══════════════════════════════════════════════ -->
+<div id="auth-overlay">
+  <div class="auth-card">
+    <div class="auth-logo">EI</div>
+    <div class="auth-title">Executive Intelligence</div>
+    <div class="auth-subtitle">Agroveca Grupo LATAM · 2026</div>
+    <label class="auth-label" for="auth-pin">Clave de acceso ejecutivo</label>
+    <input
+      type="password"
+      id="auth-pin"
+      class="auth-input"
+      maxlength="4"
+      placeholder="····"
+      autocomplete="off"
+      inputmode="numeric"
+    >
+    <button class="auth-btn" onclick="doAuth()">ACCEDER</button>
+    <div class="auth-error" id="auth-err"></div>
+    <div class="auth-restricted">Módulo de acceso restringido<br>Gerencia General · Directorio</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════════════ -->
+<div id="main-content">
+
+  <!-- HEADER -->
+  <div class="ex-header">
+    <div class="ex-logo-wrap">
+      <div class="ex-logo-mark">EI</div>
+      <div class="ex-logo-text">
+        <div class="ex-logo-title">Executive Intelligence</div>
+        <div class="ex-logo-sub">Agroveca Grupo LATAM · Temporada 2026</div>
+      </div>
+    </div>
+    <div class="ex-header-right">
+      <div class="ex-badge">🔒 Acceso Ejecutivo</div>
+      <div class="ex-corte" id="hdr-corte">Corte: cargando…</div>
+      <button class="btn-ex-logout" onclick="cerrarSesionEjec()">Salir</button>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="ex-tabs">
+    <button class="ex-tab active" onclick="showTab(0)">
+      <span class="ex-tab-num">1</span>Situación Ejecutiva
+    </button>
+    <button class="ex-tab" onclick="showTab(1)">
+      <span class="ex-tab-num">2</span>Performance Vendedores
+    </button>
+    <button class="ex-tab" onclick="showTab(2)">
+      <span class="ex-tab-num">3</span>Riesgo Comercial
+    </button>
+    <button class="ex-tab" onclick="showTab(3)">
+      <span class="ex-tab-num">4</span>Pricing Estratégico
+    </button>
+    <button class="ex-tab" onclick="showTab(4)">
+      <span class="ex-tab-num">5</span>Concentración
+    </button>
+    <button class="ex-tab" onclick="showTab(5)">
+      <span class="ex-tab-num">6</span>Insights Ejecutivos
+    </button>
+  </div>
+
+  <!-- MODULES -->
+  <div class="ex-modules">
+
+    <!-- ═══════════════════════════════════
+         MÓDULO 1 · SITUACIÓN EJECUTIVA
+    ═══════════════════════════════════ -->
+    <div class="ex-module active" id="mod-0">
+      <div class="mod-header">
+        <div class="mod-title">Situación Ejecutiva</div>
+        <div class="mod-subtitle">Vista consolidada del Grupo LATAM · Temporada 2026</div>
+        <div class="mod-divider"></div>
+      </div>
+
+      <!-- KPIs grupo -->
+      <div class="kpi-grid kpi-grid-4" id="sit-kpis">
+        <div class="kpi-card gold">
+          <div class="kpi-label">Grupo YTD 5m</div>
+          <div class="kpi-value gold" id="s-grupo-ytd">—</div>
+          <div class="kpi-sub" id="s-grupo-sub">Chile + Perú</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Chile YTD</div>
+          <div class="kpi-value green" id="s-chile-ytd">—</div>
+          <div class="kpi-sub" id="s-chile-sub">—</div>
+          <div class="kpi-delta delta-up" id="s-chile-ppto">—</div>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-label">Perú YTD</div>
+          <div class="kpi-value blue" id="s-peru-ytd">—</div>
+          <div class="kpi-sub" id="s-peru-sub">—</div>
+          <div class="kpi-delta delta-up" id="s-peru-ppto">—</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">MN Real Chile</div>
+          <div class="kpi-value amber" id="s-mn-real">—</div>
+          <div class="kpi-sub" id="s-mn-sub">Meta 25%</div>
+          <div class="kpi-delta delta-down" id="s-mn-gap">—</div>
+        </div>
+      </div>
+
+      <!-- Evolución mensual chart -->
+      <div class="chart-wrap">
+        <div class="chart-title">Evolución Mensual · Real vs Presupuesto (CLP)</div>
+        <div class="chart-canvas-wrap" style="height:220px">
+          <canvas id="chart-evol"></canvas>
+        </div>
+      </div>
+
+      <!-- KPIs secundarios -->
+      <div class="kpi-grid kpi-grid-3">
+        <div class="kpi-card">
+          <div class="kpi-label">RTC activos LATAM</div>
+          <div class="kpi-value gold" id="s-rtc">—</div>
+          <div class="kpi-sub">Chile + Perú</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">IEC Chile YTD</div>
+          <div class="kpi-value red" id="s-iec-cl">—</div>
+          <div class="kpi-sub" id="s-iec-cl-sub">—</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">IEC Perú YTD</div>
+          <div class="kpi-value green" id="s-iec-pe">97.9%</div>
+          <div class="kpi-sub">Precio piso respetado · Saludable</div>
+        </div>
+      </div>
+
+      <!-- Chile vs Perú -->
+      <div class="two-col">
+        <div class="ex-table-wrap">
+          <div class="ex-table-header">Distribución YTD por País <span id="s-dist-corte">—</span></div>
+          <table>
+            <thead><tr>
+              <th>País</th><th>Real YTD (USD)</th><th>% Grupo</th><th>vs Ppto 4m</th>
+            </tr></thead>
+            <tbody id="tbl-dist-pais"></tbody>
+          </table>
+        </div>
+        <div class="ex-table-wrap">
+          <div class="ex-table-header">Presupuesto Anual 2026 <span>por país</span></div>
+          <table>
+            <thead><tr>
+              <th>País</th><th>Ppto Anual</th><th>YTD Real</th><th>Avance</th>
+            </tr></thead>
+            <tbody id="tbl-ppto-anual"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════
+         MÓDULO 2 · PERFORMANCE VENDEDORES
+    ═══════════════════════════════════ -->
+    <div class="ex-module" id="mod-1">
+      <div class="mod-header">
+        <div class="mod-title">Performance Vendedores</div>
+        <div class="mod-subtitle">Análisis por RTC · Chile y Perú · Real T1 vs Presupuesto</div>
+        <div class="mod-divider"></div>
+      </div>
+
+      <div class="sec-label">Chile · Vendedores RTC</div>
+      <div class="ex-table-wrap">
+        <div class="ex-table-header">Ranking Chile por Real T1 <span>Ene–Mar 2026</span></div>
+        <table>
+          <thead><tr>
+            <th>#</th><th>Vendedor</th><th>Real T1 (CLP)</th><th>Ppto T1 (CLP)</th><th>Cum. T1</th><th>IEC YTD</th><th>Estado</th>
+          </tr></thead>
+          <tbody id="tbl-chile-rtc"></tbody>
+        </table>
+      </div>
+
+      <div class="sec-label">Perú · Vendedores</div>
+      <div class="ex-table-wrap">
+        <div class="ex-table-header">Ranking Perú por YTD 5m <span>Ene–May parcial 2026</span></div>
+        <table>
+          <thead><tr>
+            <th>#</th><th>Vendedor</th><th>YTD 5m (USD)</th><th>Mayo (USD)</th><th>IEC</th><th>Estado</th>
+          </tr></thead>
+          <tbody id="tbl-peru-rtc"></tbody>
+        </table>
+      </div>
+
+      <!-- KPIs equipo -->
+      <div class="kpi-grid kpi-grid-4">
+        <div class="kpi-card green">
+          <div class="kpi-label">Top Chile T1</div>
+          <div class="kpi-value green" id="perf-top-cl">—</div>
+          <div class="kpi-sub" id="perf-top-cl-sub">—</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">Bajo ppto Chile</div>
+          <div class="kpi-value red" id="perf-bajo-cl">—</div>
+          <div class="kpi-sub">RTC bajo 100% T1</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Top Perú YTD</div>
+          <div class="kpi-value blue" id="perf-top-pe">—</div>
+          <div class="kpi-sub" id="perf-top-pe-sub">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">IEC único saludable CL</div>
+          <div class="kpi-value gold" id="perf-iec-ok">—</div>
+          <div class="kpi-sub">≥ 70% objetivo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════
+         MÓDULO 3 · RIESGO COMERCIAL
+    ═══════════════════════════════════ -->
+    <div class="ex-module" id="mod-2">
+      <div class="mod-header">
+        <div class="mod-title">Riesgo Comercial</div>
+        <div class="mod-subtitle">CxC · Morosidad · Alertas críticas por país</div>
+        <div class="mod-divider"></div>
+      </div>
+
+      <!-- KPIs CxC -->
+      <div class="kpi-grid kpi-grid-4">
+        <div class="kpi-card">
+          <div class="kpi-label">CxC Total Chile</div>
+          <div class="kpi-value gold" id="r-cxc-cl-total">—</div>
+          <div class="kpi-sub" id="r-cxc-cl-corte">—</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">Mora +90d Chile</div>
+          <div class="kpi-value red" id="r-cxc-cl-90">—</div>
+          <div class="kpi-sub" id="r-cxc-cl-90-pct">—</div>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-label">CxC Total Perú</div>
+          <div class="kpi-value blue" id="r-cxc-pe-total">—</div>
+          <div class="kpi-sub" id="r-cxc-pe-corte">—</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Mora +90d Perú</div>
+          <div class="kpi-value amber" id="r-cxc-pe-90">—</div>
+          <div class="kpi-sub" id="r-cxc-pe-90-pct">—</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <!-- Tramos Chile -->
+        <div class="ex-table-wrap">
+          <div class="ex-table-header">CxC Chile · Tramos de Mora <span>2 entidades</span></div>
+          <table>
+            <thead><tr><th>Tramo</th><th>Monto (CLP)</th><th>%</th><th>Estado</th></tr></thead>
+            <tbody id="tbl-tramos-cl"></tbody>
+          </table>
+        </div>
+        <!-- Por RTC Chile -->
+        <div class="ex-table-wrap">
+          <div class="ex-table-header">CxC Chile · Por RTC <span id="r-rtc-corte">—</span></div>
+          <table>
+            <thead><tr><th>RTC</th><th>Total (CLP)</th><th>Vencida</th><th>Riesgo</th></tr></thead>
+            <tbody id="tbl-cxc-rtc"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Clientes críticos -->
+      <div class="sec-label">Cuentas críticas +90d · Acción requerida</div>
+      <div class="ex-table-wrap">
+        <div class="ex-table-header">Clientes con mora crítica <span>Chile · Prioridad máxima</span></div>
+        <table>
+          <thead><tr>
+            <th>Cliente</th><th>RTC</th><th>Días mora</th><th>Monto (CLP)</th><th>Alerta</th>
+          </tr></thead>
+          <tbody id="tbl-criticos"></tbody>
+        </table>
+      </div>
+
+      <!-- Perú CxC -->
+      <div class="sec-label">Perú · CxC</div>
+      <div class="kpi-grid kpi-grid-3">
+        <div class="kpi-card">
+          <div class="kpi-label">CxC Total Perú</div>
+          <div class="kpi-value blue" id="r-pe-total2">—</div>
+          <div class="kpi-sub">USD · corte 10/05/2026</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Vencida Perú</div>
+          <div class="kpi-value amber" id="r-pe-venc">—</div>
+          <div class="kpi-sub" id="r-pe-venc-pct">—</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">+90d Perú</div>
+          <div class="kpi-value red" id="r-pe-90">—</div>
+          <div class="kpi-sub" id="r-pe-90-sub">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════
+         MÓDULO 4 · PRICING ESTRATÉGICO
+    ═══════════════════════════════════ -->
+    <div class="ex-module" id="mod-3">
+      <div class="mod-header">
+        <div class="mod-title">Pricing Estratégico</div>
+        <div class="mod-subtitle">IEC · Precio piso · Impacto potencial · Chile</div>
+        <div class="mod-divider"></div>
+      </div>
+
+      <!-- KPIs pricing -->
+      <div class="kpi-grid kpi-grid-4">
+        <div class="kpi-card red">
+          <div class="kpi-label">IEC Global Chile</div>
+          <div class="kpi-value red" id="p-iec-global">—</div>
+          <div class="kpi-sub">Meta ≥ 70% · Crítico</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Impacto Potencial</div>
+          <div class="kpi-value amber" id="p-impacto">—</div>
+          <div class="kpi-sub">CLP YTD bajo piso</div>
+        </div>
+        <div class="kpi-card gold">
+          <div class="kpi-label">Único RTC ≥ 70%</div>
+          <div class="kpi-value gold" id="p-iec-top">—</div>
+          <div class="kpi-sub" id="p-iec-top-sub">—</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">RTC Crítico</div>
+          <div class="kpi-value red" id="p-iec-worst">—</div>
+          <div class="kpi-sub" id="p-iec-worst-sub">—</div>
+        </div>
+      </div>
+
+      <!-- IEC por vendedor -->
+      <div class="ex-table-wrap">
+        <div class="ex-table-header">IEC por Vendedor Chile <span>Recalculado precios piso 14/05/2026</span></div>
+        <table>
+          <thead><tr>
+            <th>Vendedor</th><th>IEC %</th><th>Barra</th><th>Factor Comisión</th><th>Diagnóstico</th>
+          </tr></thead>
+          <tbody id="tbl-iec-vend"></tbody>
+        </table>
+      </div>
+
+      <!-- Escala de factores -->
+      <div class="sec-label">Escala de factores de comisión</div>
+      <div class="kpi-grid kpi-grid-4">
+        <div class="kpi-card red">
+          <div class="kpi-label">IEC &lt; 70%</div>
+          <div class="kpi-value red">20%</div>
+          <div class="kpi-sub">Factor comisión aplicado</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">70% – 84.9%</div>
+          <div class="kpi-value amber">70%</div>
+          <div class="kpi-sub">Reducción significativa</div>
+        </div>
+        <div class="kpi-card" style="--accent:var(--green)">
+          <div class="kpi-label">85% – 94.9%</div>
+          <div class="kpi-value" style="color:var(--green)">80–90%</div>
+          <div class="kpi-sub">85–91.9% → 80% · 92–94.9% → 90%</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">≥ 95%</div>
+          <div class="kpi-value green">105%</div>
+          <div class="kpi-sub">Premio por excelencia</div>
+        </div>
+      </div>
+
+      <!-- Oportunidad -->
+      <div class="alert-grid">
+        <div class="alert-card amber">
+          <div class="alert-tag" style="color:var(--amber)">⚡ Oportunidad Directa</div>
+          <div class="alert-title">CLP 149.8M bajo precio piso YTD</div>
+          <div class="alert-body">Si se recupera el precio piso en todas las transacciones actuales, el ingreso adicional asciende a CLP 149.8M en el período Ene–May 2026.</div>
+        </div>
+        <div class="alert-card red">
+          <div class="alert-tag" style="color:var(--red)">🚨 Riesgo Velásquez</div>
+          <div class="alert-title">IEC 13.3% · Mayor brecha del equipo</div>
+          <div class="alert-body">Sebastián Velásquez opera 86.7% de sus ventas bajo precio piso. Factor comisión 20%. Requiere intervención inmediata y auditoría de transacciones.</div>
+        </div>
+        <div class="alert-card gold">
+          <div class="alert-tag" style="color:var(--gold)">🎯 Referente</div>
+          <div class="alert-title">Veverka · único sobre 70%</div>
+          <div class="alert-body">Rodrigo Veverka con IEC 78% es el único vendedor con factor de comisión sobre 70%. Su metodología de precios puede replicarse al equipo.</div>
+        </div>
+        <div class="alert-card green">
+          <div class="alert-tag" style="color:var(--green)">✅ Perú</div>
+          <div class="alert-title">IEC 97.9% · Precio piso respetado</div>
+          <div class="alert-body">Perú mantiene disciplina de precios con IEC de 97.9% en el período. Este nivel genera factor de comisión 105%. Modelo a exportar.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════
+         MÓDULO 5 · CONCENTRACIÓN
+    ═══════════════════════════════════ -->
+    <div class="ex-module" id="mod-4">
+      <div class="mod-header">
+        <div class="mod-title">Concentración</div>
+        <div class="mod-subtitle">Dependencia de clientes · Riesgo de portafolio · Diversificación</div>
+        <div class="mod-divider"></div>
+      </div>
+
+      <!-- KPIs concentración -->
+      <div class="kpi-grid kpi-grid-4">
+        <div class="kpi-card blue">
+          <div class="kpi-label">Clientes activos Chile</div>
+          <div class="kpi-value blue" id="conc-cl-tot">—</div>
+          <div class="kpi-sub">Con al menos 1 compra YTD</div>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-label">Clientes activos Perú</div>
+          <div class="kpi-value blue" id="conc-pe-tot">—</div>
+          <div class="kpi-sub">Con al menos 1 compra YTD</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Mora crítica Chile</div>
+          <div class="kpi-value amber" id="conc-mora-cl">—</div>
+          <div class="kpi-sub">Clientes con IEC bajo 70%</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">IEC bajo 70% Chile</div>
+          <div class="kpi-value red" id="conc-iec-bajo">—</div>
+          <div class="kpi-sub">sobre total clientes CL</div>
+        </div>
+      </div>
+
+      <!-- Top clientes Chile -->
+      <div class="two-col">
+        <div>
+          <div class="sec-label">Top 10 Clientes Chile · Score Integral</div>
+          <div class="ex-table-wrap">
+            <div class="ex-table-header">Score = IEC×30% + Freq×25% + CxC×25% + Div×10% + Vol×10% <span>Chile</span></div>
+            <table>
+              <thead><tr><th>#</th><th>Cliente</th><th>Score</th><th>IEC</th><th>Estado</th></tr></thead>
+              <tbody id="tbl-top-cl"></tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="sec-label">Top 10 Clientes Perú · Score Integral</div>
+          <div class="ex-table-wrap">
+            <div class="ex-table-header">Ranking por score consolidado <span>Perú</span></div>
+            <table>
+              <thead><tr><th>#</th><th>Cliente</th><th>Score</th><th>IEC</th><th>Estado</th></tr></thead>
+              <tbody id="tbl-top-pe"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- CxC por RTC concentración -->
+      <div class="sec-label">Concentración CxC Chile · Por RTC</div>
+      <div class="ex-table-wrap">
+        <div class="ex-table-header">Exposición cartera por vendedor <span>Chile · corte 08/05/2026</span></div>
+        <table>
+          <thead><tr>
+            <th>RTC</th><th>CxC Total (CLP)</th><th>% Cartera</th><th>Vencida</th><th>+90d</th><th>Riesgo</th>
+          </tr></thead>
+          <tbody id="tbl-conc-rtc"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════
+         MÓDULO 6 · INSIGHTS EJECUTIVOS
+    ═══════════════════════════════════ -->
+    <div class="ex-module" id="mod-5">
+      <div class="mod-header">
+        <div class="mod-title">Insights Ejecutivos</div>
+        <div class="mod-subtitle">Decisiones clave · Alertas · Oportunidades · Temporada 2026</div>
+        <div class="mod-divider"></div>
+      </div>
+
+      <!-- Semáforo ejecutivo -->
+      <div class="sec-label">Semáforo de situación LATAM</div>
+      <div class="kpi-grid kpi-grid-3" id="semaforo-grid">
+        <div class="kpi-card green">
+          <div class="kpi-label">🟢 Saludable</div>
+          <div class="kpi-value green" id="sem-verde">—</div>
+          <div class="kpi-sub" id="sem-verde-sub">indicadores OK</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">🟡 En vigilancia</div>
+          <div class="kpi-value amber" id="sem-amber">—</div>
+          <div class="kpi-sub" id="sem-amber-sub">requieren atención</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">🔴 Acción urgente</div>
+          <div class="kpi-value red" id="sem-rojo">—</div>
+          <div class="kpi-sub" id="sem-rojo-sub">intervención inmediata</div>
+        </div>
+      </div>
+
+      <!-- Insights card list -->
+      <div class="sec-label">Decisiones ejecutivas recomendadas</div>
+      <div id="insights-list"></div>
+    </div>
+
+  </div><!-- /ex-modules -->
+
+  <div class="ex-footer">
+    <div>Agroveca Grupo LATAM · Executive Intelligence · Temporada 2026</div>
+    <div class="ex-footer-gold" id="footer-corte">Cargando datos…</div>
+  </div>
+
+</div><!-- /main-content -->
+
+
+<!-- ═══════════════════════════════════════════════
+     DATA LAYERS
+═══════════════════════════════════════════════ -->
+<script src="avboard_data.js"></script>
+<script src="avboard_clientes.js"></script>
+
+<!-- ═══════════════════════════════════════════════
+     AUTH LOGIC
+═══════════════════════════════════════════════ -->
+<script>
+var EX_HASH = '6195df46a1ee6b6984140dc3c3e6d772765010745d6c3f1ddd736ddbbd564cca';
+var EX_KEY  = 'av_exec_auth';
+
+function sha256(str) {
+  var msgBuffer = new TextEncoder().encode(str);
+  return crypto.subtle.digest('SHA-256', msgBuffer).then(function(hashBuffer) {
+    var hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+  });
+}
+
+function doAuth() {
+  var pin = document.getElementById('auth-pin').value;
+  if (!pin) { showAuthErr('Ingrese la clave de acceso'); return; }
+  sha256(pin).then(function(hash) {
+    if (hash === EX_HASH) {
+      sessionStorage.setItem(EX_KEY, hash);
+      document.getElementById('auth-overlay').style.display = 'none';
+      document.getElementById('main-content').classList.add('visible');
+      initDashboard();
+    } else {
+      showAuthErr('Clave incorrecta · Acceso denegado');
+      document.getElementById('auth-pin').value = '';
+    }
+  });
+}
+
+function showAuthErr(msg) {
+  document.getElementById('auth-err').textContent = msg;
+  setTimeout(function(){ document.getElementById('auth-err').textContent = ''; }, 3000);
+}
+
+function cerrarSesionEjec() {
+  sessionStorage.removeItem(EX_KEY);
+  window.location.href = 'dashboard.html';
+}
+
+// Check existing session on load
+(function() {
+  if (sessionStorage.getItem(EX_KEY) === EX_HASH) {
+    document.getElementById('auth-overlay').style.display = 'none';
+    document.getElementById('main-content').classList.add('visible');
+    initDashboard();
+  }
+  // Enter key on PIN input
+  document.getElementById('auth-pin').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') doAuth();
+  });
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════
+     DASHBOARD LOGIC
+═══════════════════════════════════════════════ -->
+<script>
+
+/* ── Helpers ─────────────────────────────────────── */
+function set(id, html) {
+  var el = document.getElementById(id);
+  if (el) el.innerHTML = html;
+}
+function M(n)    { return (n/1e6).toFixed(1) + 'M'; }
+function K(n)    { return Math.round(n/1000) + 'K'; }
+function pct(v)  { return (v*100).toFixed(1) + '%'; }
+function fClp(n) { return 'CLP ' + Math.round(n).toLocaleString('es-CL'); }
+function fUsd(n) { return 'USD ' + Math.round(n).toLocaleString('en-US'); }
+function fN(n)   { return Math.round(n).toLocaleString('es-CL'); }
+function fPct(v) { return (v*100).toFixed(1) + '%'; }
+function trunc(s,n) { return s && s.length>n ? s.slice(0,n-1)+'…' : (s||'—'); }
+
+function iecColor(v) {
+  if (v >= 0.95) return 'var(--green)';
+  if (v >= 0.70) return 'var(--amber)';
+  if (v >= 0.43) return 'var(--amber)';
+  return 'var(--red)';
+}
+function iecBadge(v) {
+  if (v === null || isNaN(v)) return '<span class="badge badge-muted">N/D</span>';
+  if (v >= 0.95) return '<span class="badge badge-green">' + pct(v) + '</span>';
+  if (v >= 0.70) return '<span class="badge badge-amber">' + pct(v) + '</span>';
+  return '<span class="badge badge-red">' + pct(v) + '</span>';
+}
+function estadoBadge(estado) {
+  var m = {
+    'SALUDABLE':  'badge-green',
+    'VIGILAN':    'badge-amber',
+    'VIGILANCIA': 'badge-amber',
+    'RIESGO':     'badge-amber',
+    'MORA':       'badge-red',
+    'MORA_ALTA':  'badge-red',
+    'CRITICO':    'badge-red',
+    'CRÍTICO':    'badge-red',
+    'INACTIVO':   'badge-muted'
+  };
+  var cls = m[estado] || m[(estado||'').toUpperCase()] || 'badge-muted';
+  return '<span class="badge ' + cls + '">' + (estado||'—') + '</span>';
+}
+function factorLabel(iec) {
+  if (iec >= 0.95) return '105% 🏆';
+  if (iec >= 0.92) return '90%';
+  if (iec >= 0.85) return '80%';
+  if (iec >= 0.70) return '70%';
+  return '20% ⚠';
+}
+function iecBarHtml(v) {
+  var color = iecColor(v);
+  var w = Math.round(v*100);
+  return '<div class="iec-bar-wrap">' +
+    '<div class="iec-bar-bg"><div class="iec-bar-fill" style="width:' + w + '%;background:' + color + '"></div></div>' +
+    '<div class="iec-bar-label" style="color:' + color + '">' + fPct(v) + '</div>' +
+  '</div>';
+}
+
+/* ── Tab navigation ──────────────────────────────── */
+var tabs    = document.querySelectorAll('.ex-tab');
+var modules = document.querySelectorAll('.ex-module');
+
+function showTab(idx) {
+  tabs.forEach(function(t,i)    { t.classList.toggle('active', i===idx); });
+  modules.forEach(function(m,i) { m.classList.toggle('active', i===idx); });
+}
+
+/* ── Chart ───────────────────────────────────────── */
+var evolChart = null;
+
+function renderEvolChart(cv) {
+  var meses  = ['Ene','Feb','Mar','Abr','May'];
+  var real   = meses.map(function(_, i){ return Math.round((cv.mensual_real[i]||0)/1e6*10)/10; });
+  var ppto   = meses.map(function(_, i){ return Math.round((cv.mensual_ppto[i]||0)/1e6*10)/10; });
+  var ctx    = document.getElementById('chart-evol').getContext('2d');
+  var cfg    = {
+    type: 'bar',
+    data: {
+      labels: meses,
+      datasets: [
+        {
+          label: 'Real (CLP M)',
+          data: real,
+          backgroundColor: real.map(function(v,i){ return v >= ppto[i]*0.9 ? 'rgba(122,182,72,0.7)' : 'rgba(245,166,35,0.7)'; }),
+          borderRadius: 4, borderSkipped: false
+        },
+        {
+          label: 'Ppto (CLP M)',
+          data: ppto,
+          type: 'line',
+          borderColor: 'rgba(192,160,96,0.6)',
+          backgroundColor: 'transparent',
+          pointBackgroundColor: 'var(--gold)',
+          pointRadius: 4, tension: 0.3, borderWidth: 1.5
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#8fa892', font: { size: 10 }, boxWidth: 12 } }
+      },
+      scales: {
+        x: { ticks: { color: '#5a7060', font: { size: 10 } }, grid: { display: false } },
+        y: { ticks: { color: '#5a7060', font: { size: 10 }, callback: function(v){ return v+'M'; } },
+             grid: { color: 'rgba(192,160,96,0.06)' } }
+      }
+    }
+  };
+
+  if (evolChart) {
+    evolChart.data.labels = cfg.data.labels;
+    evolChart.data.datasets = cfg.data.datasets;
+    evolChart.update('none');
+  } else {
+    evolChart = new Chart(ctx, cfg);
+  }
+}
+
+/* ── INIT ────────────────────────────────────────── */
+function initDashboard() {
+  if (typeof AVBOARD === 'undefined') {
+    console.warn('[EI] avboard_data.js no disponible');
+    return;
+  }
+
+  var D  = AVBOARD;
+  var cv = D.chile.ventas;
+  var cc = D.chile.cxc;
+  var pv = D.peru.ventas;
+  var pc = D.peru.cxc;
+
+  /* ── Header ── */
+  set('hdr-corte', 'Corte: Chile ' + D.meta.cortes.chile_ventas + ' · Perú ' + D.meta.cortes.peru_ventas);
+  set('footer-corte', 'Corte Chile ' + D.meta.cortes.chile_ventas + ' · Perú ' + D.meta.cortes.peru_ventas + ' · CxC ' + D.meta.cortes.chile_cxc);
+
+  /* ══════════════════════════════════
+     MÓDULO 1 · SITUACIÓN EJECUTIVA
+  ══════════════════════════════════ */
+  var grupoYtdUsd = D.grupo_ytd_usd ? D.grupo_ytd_usd() : D.grupo.ytd_usd;
+  var chileYtdClp = D.chile_ytd     ? D.chile_ytd()     : cv.ytd_5m;
+  var peruYtdUsd  = D.peru_ytd      ? D.peru_ytd()      : pv.ytd_5m;
+
+  set('s-grupo-ytd',   'USD ' + K(grupoYtdUsd));
+  set('s-grupo-sub',   'Chile CLP ' + M(chileYtdClp) + ' + Perú USD ' + K(peruYtdUsd));
+  set('s-chile-ytd',   'CLP ' + M(chileYtdClp));
+  set('s-chile-sub',   'Ene–May parcial · ' + D.meta.cortes.chile_ventas);
+  set('s-chile-ppto',  '↑ ' + fPct(cv.cumplimiento_4m) + ' ppto 4m');
+  set('s-peru-ytd',    'USD ' + K(peruYtdUsd));
+  set('s-peru-sub',    'Ene–May parcial · ' + D.meta.cortes.peru_ventas);
+  set('s-peru-ppto',   '→ ' + fPct(pv.cumplimiento_5m) + ' ppto 5m');
+  set('s-mn-real',     fPct(cv.mn_real));
+  set('s-mn-sub',      'Meta 25% · gap –' + ((cv.mn_meta-cv.mn_real)*100).toFixed(1) + 'pp');
+  set('s-mn-gap',      '↓ Brecha: ' + ((cv.mn_meta-cv.mn_real)*100).toFixed(1) + 'pp bajo meta');
+  set('s-rtc',         (D.grupo.rtc_activos || 12) + '');
+  set('s-iec-cl',      fPct(cv.iec.total));
+  set('s-iec-cl-sub',  'CLP ' + M(cv.iec.impacto_potencial_clp) + ' bajo piso YTD');
+
+  set('s-dist-corte',  'al ' + D.meta.cortes.chile_ventas);
+
+  // Tabla distribución países
+  var chileUsd = chileYtdClp / D.meta.tc_clp_usd;
+  var distPais = [
+    { pais:'🇨🇱 Chile', usd: chileUsd,  pct: chileUsd/grupoYtdUsd, ppto: fPct(cv.cumplimiento_4m)+' (4m)' },
+    { pais:'🇵🇪 Perú',  usd: peruYtdUsd, pct: peruYtdUsd/grupoYtdUsd, ppto: fPct(pv.cumplimiento_5m)+' (5m)' }
+  ];
+  var htmlDist = distPais.map(function(r) {
+    return '<tr><td>' + r.pais + '</td>' +
+      '<td class="td-mono">USD ' + fN(r.usd) + '</td>' +
+      '<td class="td-mono">' + fPct(r.pct) + '</td>' +
+      '<td class="td-mono" style="color:var(--green)">' + r.ppto + '</td></tr>';
+  }).join('');
+  set('tbl-dist-pais', htmlDist);
+
+  // Tabla presupuesto anual
+  var pptoAnualRows = [
+    { pais:'🇨🇱 Chile', pptoA: 'CLP '+M(cv.ppto_anual), ytdR: 'CLP '+M(chileYtdClp), av: fPct(chileYtdClp/cv.ppto_anual) },
+    { pais:'🇵🇪 Perú',  pptoA: 'USD '+K(pv.ppto_anual), ytdR: 'USD '+K(peruYtdUsd),  av: fPct(peruYtdUsd/pv.ppto_anual) }
+  ];
+  set('tbl-ppto-anual', pptoAnualRows.map(function(r){
+    return '<tr><td>' + r.pais + '</td><td class="td-mono">' + r.pptoA + '</td>' +
+      '<td class="td-mono">' + r.ytdR + '</td>' +
+      '<td class="td-mono" style="color:var(--amber)">' + r.av + '</td></tr>';
+  }).join(''));
+
+  renderEvolChart(cv);
+
+  /* ══════════════════════════════════
+     MÓDULO 2 · PERFORMANCE VENDEDORES
+  ══════════════════════════════════ */
+  var rtcChile = [
+    { nombre:'Caroca',    key:'caroca',    iec: cv.iec.caroca    },
+    { nombre:'Laratro',   key:'laratro',   iec: cv.iec.laratro   },
+    { nombre:'Encina',    key:'encina',    iec: cv.iec.encina    },
+    { nombre:'Velásquez', key:'velasquez', iec: cv.iec.velasquez },
+    { nombre:'Veverka',   key:'veverka',   iec: cv.iec.veverka   },
+    { nombre:'Muñoz',     key:'munoz',     iec: cv.iec.munoz     }
+  ];
+  rtcChile.sort(function(a,b){ return (cv.rtc_real_t1[b.key]||0)-(cv.rtc_real_t1[a.key]||0); });
+
+  var htmlCL = rtcChile.map(function(r,i) {
+    var real = cv.rtc_real_t1[r.key] || 0;
+    var ppto = cv.rtc_ppto_t1[r.key] || 0;
+    var cum  = ppto > 0 ? real/ppto : null;
+    var cumColor = cum === null ? 'var(--text-muted)' : cum >= 1 ? 'var(--green)' : 'var(--red)';
+    var diagn = r.iec >= 0.70 ? '<span class="badge badge-green">OK</span>' :
+                r.iec >= 0.43 ? '<span class="badge badge-amber">ALERTA</span>' :
+                                '<span class="badge badge-red">CRÍTICO</span>';
+    return '<tr>' +
+      '<td class="td-center td-mono">' + (i+1) + '</td>' +
+      '<td>' + r.nombre + '</td>' +
+      '<td class="td-mono">CLP ' + fN(real) + '</td>' +
+      '<td class="td-mono" style="color:var(--text-muted)">CLP ' + fN(ppto) + '</td>' +
+      '<td class="td-mono" style="color:' + cumColor + '">' + (cum!==null ? fPct(cum) : '—') + '</td>' +
+      '<td>' + iecBarHtml(r.iec) + '</td>' +
+      '<td>' + diagn + '</td>' +
+    '</tr>';
+  }).join('');
+  set('tbl-chile-rtc', htmlCL);
+
+  // Perú vendedores
+  var rtcPe = [];
+  if (pv.por_vendedor) {
+    Object.keys(pv.por_vendedor).forEach(function(k) {
+      var v = pv.por_vendedor[k];
+      rtcPe.push({ nombre: v.nombre || k, ytd: v.ytd, mayo: v.mayo || 0 });
+    });
+    rtcPe.sort(function(a,b){ return b.ytd - a.ytd; });
+  }
+  var htmlPE = rtcPe.map(function(r,i) {
+    return '<tr>' +
+      '<td class="td-center td-mono">' + (i+1) + '</td>' +
+      '<td>' + r.nombre + '</td>' +
+      '<td class="td-mono" style="color:var(--blue)">USD ' + fN(r.ytd) + '</td>' +
+      '<td class="td-mono">USD ' + fN(r.mayo) + '</td>' +
+      '<td><span class="badge badge-green">97.9%</span></td>' +
+      '<td><span class="badge badge-green">SALUDABLE</span></td>' +
+    '</tr>';
+  }).join('');
+  set('tbl-peru-rtc', htmlPE);
+
+  // KPIs performance
+  var topCL = rtcChile.reduce(function(a,b){ return (cv.rtc_real_t1[a.key]||0)>(cv.rtc_real_t1[b.key]||0)?a:b; });
+  var bajoCL = rtcChile.filter(function(r){ var real=cv.rtc_real_t1[r.key]||0; var ppto=cv.rtc_ppto_t1[r.key]||1; return real/ppto < 1; });
+  var topPE  = rtcPe[0];
+  var iecOk  = rtcChile.filter(function(r){ return r.iec >= 0.70; });
+  set('perf-top-cl',     'CLP ' + M(cv.rtc_real_t1[topCL.key]||0));
+  set('perf-top-cl-sub', topCL.nombre + ' · T1 más alto');
+  set('perf-bajo-cl',    bajoCL.length + ' RTC');
+  set('perf-top-pe',     'USD ' + K(topPE ? topPE.ytd : 0));
+  set('perf-top-pe-sub', (topPE ? topPE.nombre : '—') + ' · YTD líder');
+  set('perf-iec-ok',     iecOk.length + ' / ' + rtcChile.length);
+
+  /* ══════════════════════════════════
+     MÓDULO 3 · RIESGO COMERCIAL
+  ══════════════════════════════════ */
+  set('r-cxc-cl-total',  'CLP ' + M(cc.total));
+  set('r-cxc-cl-corte',  'Corte ' + D.meta.cortes.chile_cxc);
+  set('r-cxc-cl-90',     'CLP ' + M(cc.tramos.t90));
+  set('r-cxc-cl-90-pct', fPct(cc.tramos_pct.t90) + ' del total · CRÍTICO');
+  set('r-cxc-pe-total',  pc ? fUsd(pc.total) : 'USD —');
+  set('r-cxc-pe-corte',  'Corte ' + D.meta.cortes.peru_cxc);
+  set('r-cxc-pe-90',     pc ? fUsd(pc.tramos ? pc.tramos.t90||0 : 0) : '—');
+  set('r-cxc-pe-90-pct', pc ? fPct(pc.tramos_pct ? pc.tramos_pct.t90||0 : 0.237) + ' del total' : '—');
+  set('r-rtc-corte',     D.meta.cortes.chile_cxc);
+
+  // Tramos Chile
+  var tramos = [
+    { label: '+90 días',  monto: cc.tramos.t90,   pct: cc.tramos_pct.t90,   cls: 'badge-red' },
+    { label: '61–90 días',monto: cc.tramos.t6190,  pct: cc.tramos_pct.t6190, cls: 'badge-amber' },
+    { label: '31–60 días',monto: cc.tramos.t3160,  pct: cc.tramos_pct.t3160, cls: 'badge-amber' },
+    { label: '0–30 días', monto: cc.tramos.t030,   pct: cc.tramos_pct.t030,  cls: 'badge-green' }
+  ];
+  set('tbl-tramos-cl', tramos.map(function(t) {
+    return '<tr><td>' + t.label + '</td>' +
+      '<td class="td-mono">CLP ' + fN(t.monto) + '</td>' +
+      '<td class="td-mono">' + fPct(t.pct) + '</td>' +
+      '<td><span class="badge ' + t.cls + '">' + (t.cls==='badge-red'?'CRÍTICO':t.cls==='badge-green'?'NORMAL':'ALERTA') + '</span></td>' +
+    '</tr>';
+  }).join(''));
+
+  // Por RTC
+  var rtcCxc = cc.por_rtc || {};
+  var rtcCxcRows = Object.keys(rtcCxc).map(function(k){
+    var r = rtcCxc[k];
+    return { rtc: k, total: r.total, pct: r.pct, vencida: r.vencida||0, t90: r.t90||0, riesgo: r.riesgo };
+  }).sort(function(a,b){ return b.total-a.total; });
+  set('tbl-cxc-rtc', rtcCxcRows.map(function(r) {
+    var cls = r.riesgo==='CRÍTICO'?'badge-red':r.riesgo==='ALERTA'?'badge-amber':r.riesgo==='RIESGO'?'badge-amber':'badge-green';
+    return '<tr>' +
+      '<td style="text-transform:capitalize">' + r.rtc + '</td>' +
+      '<td class="td-mono">CLP ' + fN(r.total) + '</td>' +
+      '<td class="td-mono">' + fPct(r.pct) + '</td>' +
+      '<td class="td-mono" style="color:var(--amber)">CLP ' + fN(r.vencida) + '</td>' +
+      '<td class="td-mono" style="color:var(--red)">CLP ' + fN(r.t90) + '</td>' +
+      '<td><span class="badge ' + cls + '">' + r.riesgo + '</span></td>' +
+    '</tr>';
+  }).join(''));
+
+  // Clientes críticos
+  var criticos = (cc.cuentas_criticas || []).filter(function(c){ return c.estado !== 'RESUELTO'; });
+  set('tbl-criticos', criticos.map(function(c) {
+    var cls = c.estado==='CRÍTICO' ? 'badge-red' : c.estado==='RIESGO' ? 'badge-amber' : 'badge-muted';
+    return '<tr>' +
+      '<td>' + trunc(c.cliente, 32) + '</td>' +
+      '<td style="color:var(--text-muted)">' + (c.rtc||'—') + '</td>' +
+      '<td class="td-mono">' + (c.dias||'—') + 'd</td>' +
+      '<td class="td-mono" style="color:var(--red)">CLP ' + fN(c.monto) + '</td>' +
+      '<td><span class="badge ' + cls + '">' + (c.alerta||c.estado) + '</span></td>' +
+    '</tr>';
+  }).join(''));
+
+  // Perú CxC
+  if (pc) {
+    set('r-pe-total2',   fUsd(pc.total));
+    set('r-pe-venc',     fUsd(pc.vencida||0));
+    set('r-pe-venc-pct', fPct((pc.vencida||0)/pc.total) + ' del total');
+    set('r-pe-90',       pc.tramos ? fUsd(pc.tramos.t90||0) : 'USD —');
+    set('r-pe-90-sub',   'Mora crítica · corte ' + D.meta.cortes.peru_cxc);
+  }
+
+  /* ══════════════════════════════════
+     MÓDULO 4 · PRICING ESTRATÉGICO
+  ══════════════════════════════════ */
+  set('p-iec-global',   fPct(cv.iec.total));
+  set('p-impacto',      'CLP ' + M(cv.iec.impacto_potencial_clp));
+  set('p-iec-top',      fPct(cv.iec.veverka));
+  set('p-iec-top-sub',  'Veverka · único ≥ 70%');
+  set('p-iec-worst',    fPct(cv.iec.velasquez));
+  set('p-iec-worst-sub','Velásquez · mayor brecha');
+
+  var iecVend = [
+    { nombre:'Veverka',   iec: cv.iec.veverka },
+    { nombre:'Muñoz',     iec: cv.iec.munoz },
+    { nombre:'Laratro',   iec: cv.iec.laratro },
+    { nombre:'Encina',    iec: cv.iec.encina },
+    { nombre:'Caroca',    iec: cv.iec.caroca },
+    { nombre:'Velásquez', iec: cv.iec.velasquez }
+  ].sort(function(a,b){ return b.iec-a.iec; });
+
+  set('tbl-iec-vend', iecVend.map(function(v) {
+    var diagn = v.iec >= 0.70 ? 'Factor OK' : v.iec >= 0.43 ? 'Bajo meta' : 'Crítico — intervenir';
+    var dColor = v.iec >= 0.70 ? 'var(--green)' : v.iec >= 0.43 ? 'var(--amber)' : 'var(--red)';
+    return '<tr>' +
+      '<td>' + v.nombre + '</td>' +
+      '<td>' + iecBadge(v.iec) + '</td>' +
+      '<td style="min-width:140px">' + iecBarHtml(v.iec) + '</td>' +
+      '<td class="td-mono">' + factorLabel(v.iec) + '</td>' +
+      '<td style="color:' + dColor + ';font-size:11px">' + diagn + '</td>' +
+    '</tr>';
+  }).join(''));
+
+  /* ══════════════════════════════════
+     MÓDULO 5 · CONCENTRACIÓN
+  ══════════════════════════════════ */
+  var clientes_cl = typeof CLIENTES_CL !== 'undefined' ? CLIENTES_CL : [];
+  var clientes_pe = typeof CLIENTES_PE !== 'undefined' ? CLIENTES_PE : [];
+
+  set('conc-cl-tot',  clientes_cl.length || '—');
+  set('conc-pe-tot',  clientes_pe.length || '—');
+  set('conc-mora-cl', '3');  // de avboard_data cc.cuentas_criticas críticos
+  set('conc-iec-bajo', clientes_cl.filter(function(c){ return c.iec < 0.70; }).length + ' clientes');
+
+  // Top 10 Chile por score
+  var topCLclientes = clientes_cl.slice().sort(function(a,b){ return b.score-a.score; }).slice(0,10);
+  set('tbl-top-cl', topCLclientes.map(function(c,i) {
+    return '<tr>' +
+      '<td class="td-center td-mono">' + (i+1) + '</td>' +
+      '<td style="font-size:11px">' + trunc(c.nombre, 28) + '</td>' +
+      '<td class="td-mono" style="color:var(--gold)">' + (c.score*100).toFixed(0) + 'pts</td>' +
+      '<td>' + iecBadge(c.iec) + '</td>' +
+      '<td>' + estadoBadge(c.estado) + '</td>' +
+    '</tr>';
+  }).join(''));
+
+  // Top 10 Perú por score
+  var topPEclientes = clientes_pe.slice().sort(function(a,b){ return b.score-a.score; }).slice(0,10);
+  set('tbl-top-pe', topPEclientes.map(function(c,i) {
+    return '<tr>' +
+      '<td class="td-center td-mono">' + (i+1) + '</td>' +
+      '<td style="font-size:11px">' + trunc(c.nombre, 28) + '</td>' +
+      '<td class="td-mono" style="color:var(--blue)">' + (c.score*100).toFixed(0) + 'pts</td>' +
+      '<td>' + iecBadge(c.iec) + '</td>' +
+      '<td>' + estadoBadge(c.estado) + '</td>' +
+    '</tr>';
+  }).join(''));
+
+  // CxC por RTC concentración
+  set('tbl-conc-rtc', rtcCxcRows.map(function(r) {
+    var cls = r.riesgo==='CRÍTICO'?'badge-red':r.riesgo==='ALERTA'?'badge-amber':r.riesgo==='RIESGO'?'badge-amber':'badge-green';
+    return '<tr>' +
+      '<td style="text-transform:capitalize">' + r.rtc + '</td>' +
+      '<td class="td-mono">CLP ' + fN(r.total) + '</td>' +
+      '<td class="td-mono">' + fPct(r.pct) + '</td>' +
+      '<td class="td-mono" style="color:var(--amber)">CLP ' + fN(r.vencida) + '</td>' +
+      '<td class="td-mono" style="color:var(--red)">CLP ' + fN(r.t90) + '</td>' +
+      '<td><span class="badge ' + cls + '">' + r.riesgo + '</span></td>' +
+    '</tr>';
+  }).join(''));
+
+  /* ══════════════════════════════════
+     MÓDULO 6 · INSIGHTS EJECUTIVOS
+  ══════════════════════════════════ */
+
+  // Semáforo
+  set('sem-verde',     '5');
+  set('sem-verde-sub', 'Chile ppto · Perú IEC · Veverka IEC · Caroca T1 · Perú ventas');
+  set('sem-amber',     '4');
+  set('sem-amber-sub', 'MN Chile · IEC grupo · CxC Encina · Ppto Perú 91%');
+  set('sem-rojo',      '3');
+  set('sem-rojo-sub',  'IEC Velásquez · Mora LOMA LARGA · IEC global 36%');
+
+  // Insights
+  var insights = [
+    {
+      prioridad: 'alta',
+      num: '01',
+      titulo: 'Precio piso Chile: intervención inmediata',
+      tags: ['IEC · 36%', 'CLP 149.8M en riesgo', 'Chile'],
+      cuerpo: 'El 64% de las ventas Chile se realizan bajo precio piso. Sebastián Velásquez opera al 13.3% de IEC — 86.7% de sus transacciones están bajo piso. El impacto acumulado YTD es CLP 149.8M en margen perdido. Se recomienda auditoría inmediata, reunión por vendedor y establecer umbral mínimo como condición de despacho.',
+      accion: 'Reunión de equipo Chile · Auditoría por vendedor · Activar alerta automática de precio'
+    },
+    {
+      prioridad: 'alta',
+      num: '02',
+      titulo: 'LOMA LARGA: mora +114 días — riesgo de incobrabilidad',
+      tags: ['CxC', 'CLP 12.4M', 'CRÍTICO'],
+      cuerpo: 'LOMA LARGA LTDA acumula CLP 12.4M entre 92 y 114 días de mora en 2 entidades (Agrocomercial + Agroveca Chile). Es la exposición individual más grande del portafolio. El riesgo de paso a incobrables es alto si no se formaliza acuerdo de pago esta semana.',
+      accion: 'Gestión directa desde Gerencia · Formalizar acuerdo · Detener nuevo crédito'
+    },
+    {
+      prioridad: 'alta',
+      num: '03',
+      titulo: 'Margen neto Chile: 17.9% vs meta 25% — brecha –7.1pp',
+      tags: ['MN Chile', '–7.1pp', 'T1 2026'],
+      cuerpo: 'El margen neto real de Chile en T1 es 17.9%, 7.1pp bajo la meta de 25%. El precio bajo piso (IEC 36%) y la concentración de ventas en SKUs de bajo margen son los principales drivers. Recuperar IEC al 70% puede cerrar aprox. 4–5pp de la brecha.',
+      accion: 'Análisis de mix de productos · Implementar precio piso como filtro · Meta IEC 70% Q2'
+    },
+    {
+      prioridad: 'media',
+      num: '04',
+      titulo: 'Veverka: replicar metodología de precios al equipo',
+      tags: ['IEC 78%', 'Best practice', 'Chile'],
+      cuerpo: 'Rodrigo Veverka es el único vendedor Chile con IEC sobre 70% (78%). Su metodología de negociación y respeto al precio piso puede formalizarse como práctica estándar. Propuesta: sesión de coaching interno donde Veverka comparte su proceso de presentación de precios.',
+      accion: 'Workshop interno · Documentar proceso Veverka · Replicar en 30 días'
+    },
+    {
+      prioridad: 'media',
+      num: '05',
+      titulo: 'Perú: modelo exportable — IEC 97.9% con crecimiento 93.8% ppto',
+      tags: ['IEC Perú', 'USD 325K YTD', 'Modelo'],
+      cuerpo: 'Perú combina disciplina de precios (IEC 97.9%) con crecimiento sólido (93.8% ppto 5m). Aguirre logró USD 97K sin presupuesto asignado formal. El modelo operativo Perú — lista de precios respetada, proceso de despacho limpio — debe documentarse y servir de referencia para Chile.',
+      accion: 'Documentar proceso Perú · Establecer IEC mínimo Chile · Benchmark mensual'
+    },
+    {
+      prioridad: 'baja',
+      num: '06',
+      titulo: 'Presupuesto 2026: Chile 143.6% ppto 4m — oportunidad de revisión al alza',
+      tags: ['Ppto Chile', '143.6%', 'Revisión'],
+      cuerpo: 'Chile superó el presupuesto 4 meses en 143.6% (CLP 306.6M vs 213.6M ppto). El presupuesto anual de CLP 861M puede estar subestimado dado el ritmo actual. Se recomienda revisar y actualizar metas, especialmente de los RTC con mayor momentum (Caroca, Laratro en Abr).',
+      accion: 'Revisión ppto Q2 · Ajustar metas con nuevo floor de precios · Proyección H2'
+    }
+  ];
+
+  var htmlInsights = insights.map(function(ins) {
+    var tagsHtml = ins.tags.map(function(t){ return '<span class="badge badge-gold">' + t + '</span>'; }).join('');
+    return '<div class="insight-card priority-' + ins.prioridad + '">' +
+      '<div class="insight-header">' +
+        '<div class="insight-num">' + ins.num + '</div>' +
+        '<div class="insight-meta">' +
+          '<div class="insight-title">' + ins.titulo + '</div>' +
+          '<div class="insight-tags">' + tagsHtml + '</div>' +
+        '</div>' +
+        '<span class="badge ' + (ins.prioridad==='alta'?'badge-red':ins.prioridad==='media'?'badge-amber':'badge-muted') + '">' + ins.prioridad.toUpperCase() + '</span>' +
+      '</div>' +
+      '<div class="insight-body">' + ins.cuerpo + '</div>' +
+      '<div class="insight-action">' + ins.accion + '</div>' +
+    '</div>';
+  }).join('');
+  set('insights-list', htmlInsights);
+}
+</script>
+
+</body>
+</html>
