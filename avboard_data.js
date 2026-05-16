@@ -154,14 +154,16 @@ var AVBOARD = (function() {
 
     // ── IEC · Índice de Eficiencia Comercial ─────
     // IEC = % del valor de ventas a precio piso o superior
+    // Recalculado con precios piso actualizados al 14/05/2026
     iec: {
-      total:     0.453,   // 45.3% · CLP 79.1M bajo piso identificado
-      velasquez: 0.231,   // 23.1% · mayor brecha absoluta CLP 6.8M
-      laratro:   null,    // T/B/D
-      caroca:    null,    // T/B/D
-      encina:    null,    // T/B/D
-      veverka:   null,    // T/B/D
-      impacto_potencial_clp: 25400000  // +CLP 25.4M YTD si se ajustan precios piso
+      total:     0.360,   // 36.0% · CLP 149.8M bajo piso identificado
+      velasquez: 0.133,   // 13.3% · mayor brecha relativa
+      laratro:   0.398,   // 39.8%
+      caroca:    0.620,   // 62.0%
+      encina:    0.316,   // 31.6%
+      veverka:   0.780,   // 78.0% — único sobre 70%
+      munoz:     0.495,   // 49.5% — Valentina Muñoz
+      impacto_potencial_clp: 149791772  // CLP 149.8M bajo piso YTD si se ajustan
     },
 
     // ── Margen neto ──────────────────────────────
