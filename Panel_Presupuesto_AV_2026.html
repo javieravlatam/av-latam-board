@@ -779,10 +779,10 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
   var clYTD = AVBOARD.chile&&AVBOARD.chile.ventas ? AVBOARD.chile.ventas.ytd_5m : undefined;
   var peYTD = AVBOARD.peru&&AVBOARD.peru.ventas  ? AVBOARD.peru.ventas.ytd_5m  : undefined;
   var clOK  = (clYTD === 342940920);
-  var peOK  = (peYTD === 334136);
+  var peOK  = (peYTD === 335872);
   console.log('[AVBOARD] versión:', AVBOARD.meta&&AVBOARD.meta.version);
   console.log('[AVBOARD] Chile YTD CLP:', clYTD, clOK?'✅':'❌ esperado: 342940920');
-  console.log('[AVBOARD] Perú YTD USD:',  peYTD, peOK?'✅':'❌ esperado: 334136');
+  console.log('[AVBOARD] Perú YTD USD:',  peYTD, peOK?'✅':'❌ esperado: 335872');
   console.log('[AVBOARD] cortes:', AVBOARD.meta&&AVBOARD.meta.cortes);
   if(!clOK||!peOK){
     showError('caché desactualizado — CL:'+clYTD+' PE:'+peYTD+' — forzar recarga Ctrl+Shift+R');
@@ -935,13 +935,20 @@ new Chart(document.getElementById('cGrupo'),{
     var t1CL=cv.mensual_real.slice(0,3).reduce(function(a,b){return a+b;},0);
     var may5CL=cv.mensual_real[4]||0;
     var t1CLppto=cv.mensual_ppto?cv.mensual_ppto.slice(0,3).reduce(function(a,b){return a+b;},0):167160000;
+    // Fallback NaN-safe: si cumplimiento_5m no existe en avboard_data.js, calcularlo
+    var clCumpl5m = (cv.cumplimiento_5m != null && !isNaN(cv.cumplimiento_5m))
+      ? cv.cumplimiento_5m
+      : (clPpto5m > 0 ? clYTD / clPpto5m : null);
+    var clCumpl4m = (cv.cumplimiento_4m != null && !isNaN(cv.cumplimiento_4m))
+      ? cv.cumplimiento_4m
+      : (cv.ppto_4m > 0 ? cv.ytd_4m / cv.ppto_4m : null);
     set('av-ppto-cl-ytd-hero','CLP '+Mm(clYTD));
-    set('av-ppto-cl-cumpl-hero',Pc(cv.cumplimiento_5m)+' Ppto 5m · T1 '+Pc(t1CL/t1CLppto));
+    set('av-ppto-cl-cumpl-hero',(clCumpl5m!=null?Pc(clCumpl5m):'N/D')+' Ppto 5m · T1 '+Pc(t1CL/t1CLppto));
     set('av-ppto-cl-ytd-val',Mm(clYTD));
     set('av-ppto-cl-ytd-sub','CLP · al '+cortesCL);
     set('av-ppto-cl-ppto5m',Mm(clPpto5m));
-    set('av-ppto-cl-cumpl-val',Pc(cv.cumplimiento_5m));
-    set('av-ppto-cl-cumpl-sub','4m '+Pc(cv.cumplimiento_4m)+' · May '+Mm(may5CL));
+    set('av-ppto-cl-cumpl-val',clCumpl5m!=null?Pc(clCumpl5m):'N/D');
+    set('av-ppto-cl-cumpl-sub','4m '+(clCumpl4m!=null?Pc(clCumpl4m):'N/D')+' · May '+Mm(may5CL));
     set('av-ppto-cl-pend',Mm(clPptoA-clYTD));
     // ── Chile tabla mes a mes ──────────────────────────────────────────────────
     var clAbrR=Math.round(cv.mensual_real[3]/1000), clMayR=Math.round(cv.mensual_real[4]/1000);
@@ -965,16 +972,19 @@ new Chart(document.getElementById('cGrupo'),{
     if(gmE){gmE.className=clGapMay>=0?'gp':'gn';gmE.textContent=(clGapMay>=0?'+':'')+clGapMay.toLocaleString('es-CL')+'*';}
     // ── Perú KPIs ──────────────────────────────────────────────────────────────
     var peYTD=pv.ytd_5m, pePpto5m=pv.ppto_5m, pePptoA=pv.ppto_anual||1137034;
-    var peCumpl5m=pv.cumplimiento_5m;
+    // Fallback NaN-safe para cumplimiento Perú
+    var peCumpl5m = (pv.cumplimiento_5m != null && !isNaN(pv.cumplimiento_5m))
+      ? pv.cumplimiento_5m
+      : (pePpto5m > 0 ? peYTD / pePpto5m : null);
     var t1PE=pv.mensual_real.slice(0,3).reduce(function(a,b){return a+b;},0);
     var t1PEppto=pv.mensual_ppto?pv.mensual_ppto.slice(0,3).reduce(function(a,b){return a+b;},0):213385;
     var may5PE=pv.mensual_real[4]||0, mayPEppto=PE_PPTO[4]||1;
     set('av-ppto-pe-ytd-hero','USD '+Math.round(peYTD).toLocaleString('en-US'));
-    set('av-ppto-pe-cumpl-hero',Pc(peCumpl5m)+' Ppto 5m');
+    set('av-ppto-pe-cumpl-hero',(peCumpl5m!=null?Pc(peCumpl5m):'N/D')+' Ppto 5m');
     set('av-ppto-pe-ytd-val',Kk(peYTD));
     set('av-ppto-pe-ytd-sub','USD · al '+cortesPE);
     set('av-ppto-pe-ppto5m',Kk(pePpto5m));
-    set('av-ppto-pe-cumpl-val',Pc(peCumpl5m));
+    set('av-ppto-pe-cumpl-val',peCumpl5m!=null?Pc(peCumpl5m):'N/D');
     set('av-ppto-pe-cumpl-sub','T1 '+Pc(t1PE/t1PEppto)+' · May '+Pc(may5PE/mayPEppto));
     set('av-ppto-pe-pend',Kk(pePptoA-peYTD));
     // ── Perú tabla mes a mes ───────────────────────────────────────────────────

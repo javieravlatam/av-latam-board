@@ -11,22 +11,22 @@
  * Cortes:
  *   Chile ventas → 18/05/2026
  *   Chile CxC    → 17/05/2026 (2 entidades)
- *   Perú ventas  → 22/05/2026
+ *   Perú ventas  → 18/05/2026
  *   Perú CxC     → 10/05/2026
  *
- * Actualizado: 2026-05-25
+ * Actualizado: 2026-05-18
  */
 
 var AVBOARD = (function() {
 
   var meta = {
-    version:      '2026-05-25',
+    version:      '2026-05-20',
     tc_clp_usd:   950,
     meta_mn:      0.25,
     cortes: {
       chile_ventas: '18/05/2026',
       chile_cxc:    '17/05/2026',
-      peru_ventas:  '22/05/2026',
+      peru_ventas:  '15/05/2026',
       peru_cxc:     '10/05/2026'
     },
     meses: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
@@ -34,7 +34,7 @@ var AVBOARD = (function() {
 
   var grupo = {
     ytd_usd:      696862,
-    ytd_clp:      662019320,
+    ytd_clp:      662018900,
     chile_ytd_usd: 360990,
     peru_ytd_usd:  335872,
     rtc_activos:  12,
@@ -50,6 +50,7 @@ var AVBOARD = (function() {
     ppto_4m:         213591350,
     ppto_5m:         264591350,
     cumplimiento_4m: 1.4507,
+    cumplimiento_5m: 1.2961,
     cumplimiento_t1: 1.0544,
     mensual_real:  [88231364, 35651978, 52370709, 133601745, 33085124, 0, 0, 0, 0, 0, 0, 0],
     mensual_ppto:  [83558032, 41601950, 42000000, 46431368, 51000000, 49730000, 62800000, 76500000, 110800000, 112700000, 97500000, 86700000],
@@ -271,14 +272,14 @@ var AVBOARD = (function() {
     ppto_4m:      284684,
     ppto_5m:      346630,
     cumplimiento_4m: 0.9137,
-    cumplimiento_5m: 0.969,
-    mensual_real: [70232, 38180, 87967, 63734, 75759, 0, 0, 0, 0, 0, 0, 0],
+    cumplimiento_5m: 0.9690,
+    mensual_real: [70232, 38180, 87967, 63734, 74023, 0, 0, 0, 0, 0, 0, 0],
     mensual_ppto: [51674, 58489, 103222, 71299, 61946, 78710, 100675, 178180, 125564, 165842, 98481, 42952],
     por_vendedor: {
       aguirre: {
         nombre: "Lisbeth Aguirre",
-        ytd:    98043,
-        mayo:   49431
+        ytd:    97107,
+        mayo:   48495
       },
       atalaya: {
         nombre: "Omar Atalaya",
@@ -307,8 +308,8 @@ var AVBOARD = (function() {
       },
       valladares: {
         nombre: "Patricia Valladares",
-        ytd:    2600,
-        mayo:   1400
+        ytd:    1800,
+        mayo:   600
       }
     },
     rtc_ppto_anual: {
@@ -319,13 +320,13 @@ var AVBOARD = (function() {
       valladares: 142372
     },
     rtc_mensual_real: {
-      aguirre: [0, 6184, 28681, 13747, 49431, 0, 0, 0, 0, 0, 0, 0],
+      aguirre: [0, 6184, 28681, 13747, 48495, 0, 0, 0, 0, 0, 0, 0],
       atalaya: [29881, 8108, 20000, 6600, 0, 0, 0, 0, 0, 0, 0, 0],
       diaz: [0, 0, 0, 6300, 2600, 0, 0, 0, 0, 0, 0, 0],
       gonzales: [600, 0, 96, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       infante: [16511, 16188, 38190, 36887, 22328, 0, 0, 0, 0, 0, 0, 0],
       navarro: [23240, 7700, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      valladares: [0, 0, 1000, 200, 1400, 0, 0, 0, 0, 0, 0, 0]
+      valladares: [0, 0, 1000, 200, 600, 0, 0, 0, 0, 0, 0, 0]
     },
     iec: {
       total: null, aguirre: null, infante: null,

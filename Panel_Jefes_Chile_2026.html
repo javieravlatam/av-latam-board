@@ -384,7 +384,7 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
 <!-- ══════════════════════════════════════════════ -->
 <div id="tab-cxc" class="tab-content">
 
-  <div class="sec">Cobranzas Chile · Corte 17/05/2026 <span>Cartera activa total: CLP 134.7M</span></div>
+  <div class="sec">Cobranzas Chile · Corte 17/05/2026 <span>Cartera activa total: CLP 162.2M</span></div>
 
   <div class="cxc-grid" style="margin-bottom:20px">
     <div class="cxc-card" style="background:rgba(122,182,72,0.07);border:1px solid rgba(122,182,72,0.25)">
@@ -849,10 +849,10 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
   var clYTD = AVBOARD.chile&&AVBOARD.chile.ventas ? AVBOARD.chile.ventas.ytd_5m : undefined;
   var peYTD = AVBOARD.peru&&AVBOARD.peru.ventas  ? AVBOARD.peru.ventas.ytd_5m  : undefined;
   var clOK  = (clYTD === 342940920);
-  var peOK  = (peYTD === 334136);
+  var peOK  = (peYTD === 335872);
   console.log('[AVBOARD] versión:', AVBOARD.meta&&AVBOARD.meta.version);
   console.log('[AVBOARD] Chile YTD CLP:', clYTD, clOK?'✅':'❌ esperado: 342940920');
-  console.log('[AVBOARD] Perú YTD USD:',  peYTD, peOK?'✅':'❌ esperado: 334136');
+  console.log('[AVBOARD] Perú YTD USD:',  peYTD, peOK?'✅':'❌ esperado: 335872');
   console.log('[AVBOARD] cortes:', AVBOARD.meta&&AVBOARD.meta.cortes);
   if(!clOK||!peOK){
     showError('caché desactualizado — CL:'+clYTD+' PE:'+peYTD+' — forzar recarga Ctrl+Shift+R');
