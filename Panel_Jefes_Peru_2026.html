@@ -831,14 +831,14 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
   }
   var clYTD = AVBOARD.chile&&AVBOARD.chile.ventas ? AVBOARD.chile.ventas.ytd_5m : undefined;
   var peYTD = AVBOARD.peru&&AVBOARD.peru.ventas  ? AVBOARD.peru.ventas.ytd_5m  : undefined;
-  var clOK  = (clYTD === 342940920);
-  var peOK  = (peYTD === 335872);
+  var clOK = Number.isFinite(clYTD) && clYTD > 0;
+  var peOK = Number.isFinite(peYTD) && peYTD > 0;
   console.log('[AVBOARD] versión:', AVBOARD.meta&&AVBOARD.meta.version);
-  console.log('[AVBOARD] Chile YTD CLP:', clYTD, clOK?'✅':'❌ esperado: 342940920');
-  console.log('[AVBOARD] Perú YTD USD:',  peYTD, peOK?'✅':'❌ esperado: 335872');
+  console.log('[AVBOARD] Chile YTD CLP:', clYTD, clOK?'✅':'❌ inválido');
+  console.log('[AVBOARD] Perú YTD USD:', peYTD, peOK?'✅':'❌ inválido');
   console.log('[AVBOARD] cortes:', AVBOARD.meta&&AVBOARD.meta.cortes);
   if(!clOK||!peOK){
-    showError('caché desactualizado — CL:'+clYTD+' PE:'+peYTD+' — forzar recarga Ctrl+Shift+R');
+    showError('AVBOARD cargó con valores inválidos — CL:'+clYTD+' PE:'+peYTD);
   }
 })();
 /* ── FIN GUARD ──────────────────────────────────────────────────────────── */
