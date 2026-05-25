@@ -11,6 +11,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Panel Jefes · Perú 2026 · AV Latam</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="avboard_data.js?v=20260520"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -157,8 +158,8 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
     <a href="Panel_CxC_AV_Latam_2026.html" class="np">📋 CxC Detalle</a>
   </div>
   <div class="hcorte">
-    <div>Perú · <b>Real: Ene–Abr 2026 (al 29 Abr)</b></div>
-    <div style="color:var(--muted)">Ppto Anual 2026 · Ref. 2025 · CxC Abr 2026</div>
+    <div>Perú · <b id="jpe-corte-hdr">Real: Ene–May 2026 (al 15/05)</b></div>
+    <div style="color:var(--muted)" id="jpe-corte-sub">Ppto Anual 2026 · Ref. 2025 · corte 15/05/2026</div>
   </div>
   <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
 </div>
@@ -168,19 +169,19 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
 <!-- KPI BANNER -->
 <div class="kpis">
   <div class="kpi">
-    <div class="kpi-lbl">Real 2026 · Acum Ene–Abr</div>
-    <div class="kpi-val kpi-b">USD 270.0K</div>
-    <div class="kpi-sub">vs 2025 mismo período: 212.4K (+27.1%)</div>
+    <div class="kpi-lbl" id="jpe-kpi-ytd-lbl">Real 2026 · Acum Ene–May</div>
+    <div class="kpi-val kpi-b" id="jpe-kpi-ytd-val">USD 334.1K</div>
+    <div class="kpi-sub" id="jpe-kpi-ytd-sub">5 meses · corte 15/05/2026</div>
   </div>
   <div class="kpi">
-    <div class="kpi-lbl">Cumplimiento vs Ppto 4m</div>
-    <div class="kpi-val kpi-a">95.9%</div>
-    <div class="kpi-sub">Ene–Mar: 95.8% · Abr: 91.7% vs ppto mes</div>
+    <div class="kpi-lbl" id="jpe-kpi-cumpl-lbl">Cumplimiento vs Ppto 5m</div>
+    <div class="kpi-val kpi-a" id="jpe-kpi-cumpl-val">96.4%</div>
+    <div class="kpi-sub" id="jpe-kpi-cumpl-sub">334.1K vs ppto 346.6K (Ene–May)</div>
   </div>
   <div class="kpi">
     <div class="kpi-lbl">Ppto 2026 · Anual</div>
     <div class="kpi-val kpi-a">USD 1,137K</div>
-    <div class="kpi-sub">Pendiente: 867K · 7 vendedores activos</div>
+    <div class="kpi-sub">Pendiente: 803K · 7 vendedores activos</div>
   </div>
   <div class="kpi">
     <div class="kpi-lbl">CxC Vencido Activo</div>
@@ -189,8 +190,8 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
   </div>
   <div class="kpi">
     <div class="kpi-lbl">Top Vendedor 2026</div>
-    <div class="kpi-val kpi-b" style="font-size:16px">O. INFANTE</div>
-    <div class="kpi-sub">USD 108.5K · 40.2% del real YTD</div>
+    <div class="kpi-val kpi-b" id="jpe-kpi-top-val" style="font-size:16px">O. INFANTE</div>
+    <div class="kpi-sub" id="jpe-kpi-top-sub">USD 130.1K · 38.9% del real YTD</div>
   </div>
 </div>
 
@@ -218,7 +219,7 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
   <div class="tbl-wrap">
     <div class="tbl-head">
       <div class="tbl-head-title">Detalle mensual · Ppto 2026 vs Real 2026 · Referencia Real 2025</div>
-      <div style="font-size:10px;color:var(--muted)">Ene–Abr cerrado (al 29/04) · Mayo–Dic pendientes de ejecución</div>
+      <div style="font-size:10px;color:var(--muted)" id="jpe-note-corte">Ene–May parcial · pendientes de ejecución restantes</div>
     </div>
     <table class="tbl">
       <thead>
@@ -252,7 +253,7 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
     </div>
   </div>
 
-  <div class="sec">Ranking Real 2026 (Ene–Abr) <span>vs Presupuesto Anual 2026 · Ref. Real 2025</span></div>
+  <div class="sec">Ranking Real 2026 (Ene–May) <span>vs Presupuesto Anual 2026 · Ref. Real 2025</span></div>
   <div class="tbl-wrap" style="margin-bottom:20px">
     <table class="tbl">
       <thead>
@@ -292,7 +293,7 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
     <div style="font-size:11px;color:var(--dim)">Top cliente 2026 es <strong style="color:var(--blue)">Bomarea S.R.L. (19.1%, Atalaya)</strong> — nuevo. Top 5 concentran <strong style="color:var(--amber)">56.2%</strong>. AMFRESH (CxC crítico 2025) sigue comprando en 2026 — gestionar cobro activo. Family Farms y POB reasignados exitosamente desde Geldres.</div>
   </div>
 
-  <div class="sec">Top 15 Clientes Perú · Real 2026 Ene–Abr <span>Por facturación acumulada · 92.2% del total YTD</span></div>
+  <div class="sec">Top 15 Clientes Perú · Real 2026 Ene–May <span>Por facturación acumulada · del total YTD</span></div>
   <div class="tbl-wrap">
     <table class="tbl">
       <thead>
@@ -334,16 +335,16 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
 <div id="tab-productos" class="tab-content">
 
   <div style="background:rgba(74,158,219,0.07);border:1px solid rgba(74,158,219,0.2);border-radius:8px;padding:12px 16px;margin-bottom:20px">
-    <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">📦 Portafolio Perú 2026 · Ene–Abr</div>
+    <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">📦 Portafolio Perú 2026 · Ene–May</div>
     <div style="font-size:11px;color:var(--dim)"><strong style="color:var(--text)">VECASIL FORTE domina con 35.4%</strong> del total facturado. Los 4 primeros productos concentran el <strong style="color:var(--amber)">76.0%</strong> del mix. REGALIA MAX es el segundo más importante (20.1%). El portafolio es estrecho: 9 productos explican el 90% de las ventas.</div>
   </div>
 
-  <div class="sec">Top Productos Perú · Real 2026 Ene–Abr <span>Por facturación · 10 productos = 90.9% del total</span></div>
+  <div class="sec">Top Productos Perú · Real 2026 Ene–May <span>Por facturación</span></div>
 
   <div class="tbl-wrap" style="margin-bottom:20px">
     <div class="tbl-head">
       <div class="tbl-head-title">Ranking de productos por venta acumulada · USD</div>
-      <div style="font-size:10px;color:var(--muted)">Real 2026 Ene–Abr · Total: USD 269,970</div>
+      <div style="font-size:10px;color:var(--muted)" id="jpe-products-total">Real 2026 YTD · Total: USD —</div>
     </div>
     <table class="tbl">
       <thead>
@@ -559,7 +560,7 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
   </div>
 
   <!-- ──────────────────────────────────────────── -->
-  <div class="sec" style="margin-top:22px">Eficiencia Comercial (IEC) · Perú · Real 2026 YTD <span>Ene–Abr 2026 · vs precio piso propuesto · sin revelar costos ni márgenes</span></div>
+  <div class="sec" style="margin-top:22px">Eficiencia Comercial (IEC) · Perú · Real 2026 YTD <span>Ene–May 2026 · vs precio piso propuesto · sin revelar costos ni márgenes</span></div>
 
   <!-- KPI row -->
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
@@ -804,7 +805,7 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
 </div><!-- /page -->
 
 <div class="footer">
-  <div>AV Latam BI Platform · Jefes País · Perú · Real Ene–Abr 2026 (al 29/04)</div>
+  <div id="jpe-footer-txt">AV Latam BI Platform · Jefes País · Perú</div>
   <div class="hnav">
     <a href="Panel_Jefes_Index.html" class="np">🏠 Hub Jefes</a>
     <a href="Panel_Jefes_Chile_2026.html" class="np">🇨🇱 Chile</a>
@@ -813,6 +814,36 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
 </div>
 
 <script>
+/* ── AVBOARD GUARD ─────────────────────────────────────────────────────── */
+(function initFromAVBOARD(){
+  function showError(msg){
+    if(document.getElementById('avboard-error-banner')) return;
+    var b=document.createElement('div');
+    b.id='avboard-error-banner';
+    b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#E74C3C;color:#fff;padding:14px 20px;font-family:"DM Mono",monospace;font-size:13px;text-align:center;letter-spacing:.5px;box-shadow:0 2px 8px rgba(0,0,0,.4);';
+    b.innerHTML='<b>⛔ ERROR AVBOARD:</b> '+msg;
+    document.body.insertBefore(b,document.body.firstChild);
+    console.error('[AVBOARD ERROR]',msg);
+  }
+  if(typeof AVBOARD==='undefined'){
+    showError('avboard_data.js no cargó — datos no disponibles. Forzar recarga: Ctrl+Shift+R');
+    return;
+  }
+  var clYTD = AVBOARD.chile&&AVBOARD.chile.ventas ? AVBOARD.chile.ventas.ytd_5m : undefined;
+  var peYTD = AVBOARD.peru&&AVBOARD.peru.ventas  ? AVBOARD.peru.ventas.ytd_5m  : undefined;
+  var clOK  = (clYTD === 342940920);
+  var peOK  = (peYTD === 334136);
+  console.log('[AVBOARD] versión:', AVBOARD.meta&&AVBOARD.meta.version);
+  console.log('[AVBOARD] Chile YTD CLP:', clYTD, clOK?'✅':'❌ esperado: 342940920');
+  console.log('[AVBOARD] Perú YTD USD:',  peYTD, peOK?'✅':'❌ esperado: 334136');
+  console.log('[AVBOARD] cortes:', AVBOARD.meta&&AVBOARD.meta.cortes);
+  if(!clOK||!peOK){
+    showError('caché desactualizado — CL:'+clYTD+' PE:'+peYTD+' — forzar recarga Ctrl+Shift+R');
+  }
+})();
+/* ── FIN GUARD ──────────────────────────────────────────────────────────── */
+
+
 Chart.defaults.color='#8fa892';
 Chart.defaults.font.family="'DM Mono',monospace";
 Chart.defaults.font.size=10;
@@ -823,9 +854,13 @@ const MESES_FULL=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agos
 
 // ── DATA ──
 // 2026 real (null = meses sin dato cerrado)
-const real2026=[73.5,39.4,91.6,65.4,null,null,null,null,null,null,null,null];
+var real2026=(typeof AVBOARD!=='undefined')
+  ? AVBOARD.peru.ventas.mensual_real.map(function(v){return v>0?parseFloat((v/1000).toFixed(1)):null;})
+  : [73.5,39.4,91.6,65.4,74.0,null,null,null,null,null,null,null];
 // 2026 real absoluto (USD) por mes
-const real2026usd=[73511,39409,91616,65433,null,null,null,null,null,null,null,null];
+var real2026usd=(typeof AVBOARD!=='undefined')
+  ? AVBOARD.peru.ventas.mensual_real.map(function(v){return v>0?Math.round(v):null;})
+  : [73511,39409,91616,65433,74023,null,null,null,null,null,null,null];
 
 // 2025 referencia
 const real2025=[59.1,36.7,70.9,42.5,24.3,27.8,48.1,53.0,70.9,120.6,82.5,54.0];
@@ -881,7 +916,7 @@ new Chart(document.getElementById('chartVentas'),{
 // ── TABLA VENTAS ──
 (function(){
   let html='',tot26=0,totPpto=0,tot25=0;
-  const mesesConData=4; // Ene-Abr con datos
+  const mesesConData=real2026.filter(function(v){return v!==null;}).length;
   const ppto4m=ppto2026.slice(0,mesesConData).reduce((a,b)=>a+b,0);
 
   real2026.forEach((r26,i)=>{
@@ -892,7 +927,8 @@ new Chart(document.getElementById('chartVentas'),{
     const delta25=hasDato?((r26-r25)/r25*100):null;
     const badgeCumpl=!hasDato?'b-nd':cumpl>=100?'b-ok':cumpl>=80?'b-warn':'b-crit';
     const badgeDelta=!hasDato?'b-nd':delta25>=0?'b-ok':'b-warn';
-    const isPartial=i===3; // Abril parcial
+    const lastDataIdx=real2026.reduce(function(l,v,i){return v!==null?i:l;},-1);
+    const isPartial=i===lastDataIdx; // último mes con datos = parcial
 
     if(hasDato){tot26+=r26; tot25+=r25;}
     totPpto+=pp;
@@ -944,19 +980,19 @@ new Chart(document.getElementById('chartVentas'),{
 
 // ── VENDEDORES DATA 2026 ──
 const vendedoresData=[
-  {nombre:'OSCAR INFANTE',     corto:'O. Infante',    real26:108.5, real25:219.5, ppto:485.1,
-   ppto4m:153.5,
-   meses26:[16.5,16.2,38.9,36.9,null,null,null,null,null,null,null,null],
+  {nombre:'OSCAR INFANTE',     corto:'O. Infante',    real26:130.1, real25:219.5, ppto:485.1,
+   ppto4m:180.4,
+   meses26:[16.5,16.2,38.9,36.9,22.3,null,null,null,null,null,null,null],
    pptoMes:[18.2,29.7,66.8,38.8,26.9,24.9,24.3,67.3,52.6,51.3,60.4,23.8]},
-  {nombre:'OMAR ATALAYA',      corto:'O. Atalaya',    real26:66.9, real25:20.3,  ppto:248.4,
-   ppto4m:71.9,
+  {nombre:'OMAR ATALAYA',      corto:'O. Atalaya',    real26:64.6, real25:20.3,  ppto:248.4,
+   ppto4m:94.7,
    meses26:[30.1,9.0,20.0,7.8,null,null,null,null,null,null,null,null],
    pptoMes:[22.2,19.3,12.1,18.3,22.8,27.6,25.8,28.8,23.1,18.5,16.4,13.5]},
-  {nombre:'LISBETH AGUIRRE',   corto:'L. Aguirre',    real26:52.4, real25:162.8, ppto:223.9,
-   ppto4m:44.6,
-   meses26:[0,6.5,31.6,14.3,null,null,null,null,null,null,null,null],
+  {nombre:'LISBETH AGUIRRE',   corto:'L. Aguirre',    real26:97.1, real25:162.8, ppto:223.9,
+   ppto4m:51.6,
+   meses26:[0,6.5,31.6,14.3,48.5,null,null,null,null,null,null,null],
    pptoMes:[11.2,9.2,15.0,9.2,7.0,9.2,15.5,37.6,29.8,60.3,15.8,4.3]},
-  {nombre:'NICOLL NAVARRO',    corto:'N. Navarro',    real26:34.0, real25:0, ppto:null,
+  {nombre:'NICOLL NAVARRO',    corto:'N. Navarro',    real26:30.9, real25:0, ppto:null,
    ppto4m:null,
    meses26:[26.3,7.7,0,0,null,null,null,null,null,null,null,null],
    pptoMes:null},
@@ -966,15 +1002,15 @@ const vendedoresData=[
    pptoMes:null},
   {nombre:'ANTONIO GONZALES',  corto:'A. Gonzalez',   real26:0.7, real25:4.8,  ppto:37.3,
    ppto4m:4.0,
-   meses26:[0.6,0,0.1,0,null,null,null,null,null,null,null,null],
+   meses26:[0.6,0,0.1,0,0.6,null,null,null,null,null,null,null],
    pptoMes:[0,0,4.0,0,0,7.0,7.0,19.3,0,0,0,0]},
   {nombre:'SUSAN DIAZ',       corto:'S. Diaz',       real26:6.3,  real25:0,    ppto:null,
    ppto4m:null,
    meses26:[0,0,0,6.3,null,null,null,null,null,null,null,null],
    pptoMes:null},
-  {nombre:'JOSE GELDRES',      corto:'J. Geldres ★',  real26:0, real25:275.1, ppto:null,
+  {nombre:'JOSE GELDRES',      corto:'J. Geldres ★',  real26:0.0, real25:275.1, ppto:null,
    ppto4m:null,
-   meses26:[0,0,0,0,null,null,null,null,null,null,null,null],
+   meses26:[0,0,0,0,2.6,null,null,null,null,null,null,null],
    pptoMes:null, inactivo2026:true},
 ];
 
@@ -1238,6 +1274,69 @@ function cerrarSesion() {
   sessionStorage.removeItem('av_role');
   window.location.href = 'index.html';
 }
+
+// ── POPULATE DESDE AVBOARD ──
+(function(){
+  if(typeof AVBOARD==='undefined') return;
+  try{
+    var pv=AVBOARD.peru.ventas, mt=AVBOARD.meta.cortes;
+    var corte=mt.peru_ventas||'';
+    var ytdK=parseFloat((pv.ytd_5m/1000).toFixed(1));
+    var p5mK=parseFloat((pv.ppto_5m/1000).toFixed(1));
+    var cumplPct=Math.round(pv.ytd_5m/pv.ppto_5m*100*10)/10;
+    var nMeses=real2026.filter(function(v){return v!==null;}).length;
+    var meses=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    var dd=corte?corte.split('/'):[];
+    var mesNom=dd.length>1?meses[parseInt(dd[1])]:'May';
+    var anio=dd.length>2?dd[2].slice(2):'26';
+    var mesRango=meses[nMeses]||mesNom;
+
+    // Header
+    var h=document.getElementById('jpe-corte-hdr');
+    if(h) h.textContent='Real: Ene–'+mesRango+' 20'+anio+' (al '+corte+')';
+    var s=document.getElementById('jpe-corte-sub');
+    if(s) s.textContent='Ppto Anual 2026 · Ref. 2025 · corte '+corte;
+
+    // KPIs
+    var set=function(id,txt){var el=document.getElementById(id);if(el)el.textContent=txt;};
+    set('jpe-kpi-ytd-lbl','Real 2026 · Acum Ene–'+mesRango);
+    set('jpe-kpi-ytd-val','USD '+ytdK+'K');
+    set('jpe-kpi-ytd-sub',nMeses+' meses · corte '+corte);
+    var cumplClass=cumplPct>=100?'kpi-g':(cumplPct>=85?'kpi-a':'kpi-r');
+    var elC=document.getElementById('jpe-kpi-cumpl-val');
+    if(elC){elC.textContent=cumplPct+'%';elC.className='kpi-val '+cumplClass;}
+    set('jpe-kpi-cumpl-lbl','Cumplimiento vs Ppto '+nMeses+'m');
+    set('jpe-kpi-cumpl-sub',ytdK+'K vs ppto '+p5mK+'K (Ene–'+mesRango+')');
+
+    // Top vendedor desde por_vendedor
+    var pve=pv.por_vendedor||{};
+    var topK='',topNom='',topV=0;
+    var nomMap={aguirre:'L. AGUIRRE',infante:'O. INFANTE',atalaya:'O. ATALAYA',
+                gonzales:'P. GONZALES',valladares:'R. VALLADARES'};
+    Object.keys(pve).forEach(function(k){
+      if(pve[k].ytd>topV){topV=pve[k].ytd;topK=k;}
+    });
+    if(topK){
+      topNom=nomMap[topK]||topK.toUpperCase();
+      var topKtxt=Math.round(topV/1000*10)/10;
+      var topPct=Math.round(topV/pv.ytd_5m*100*10)/10;
+      set('jpe-kpi-top-val',topNom);
+      set('jpe-kpi-top-sub','USD '+topKtxt+'K · '+topPct+'% del real YTD');
+    }
+
+    // Notas y footer dinámicos
+    set('jpe-note-corte','Ene–'+mesRango+' · corte '+corte+' · meses restantes pendientes');
+    set('jpe-products-total','Real 2026 YTD · Total: USD '+ytdK+'K');
+    set('jpe-footer-txt','AV Latam BI Platform · Jefes País · Perú · Real Ene–'+mesRango+' 2026 (al '+corte+')');
+
+    // chartVentas — actualizar dataset Real 2026
+    var chV=Chart.getChart(document.getElementById('chartVentas'));
+    if(chV){
+      chV.data.datasets[1].data=real2026;
+      chV.update('none');
+    }
+  }catch(e){console.warn('[AVBOARD][JPE]',e);}
+})();
 </script>
 </body>
 </html>

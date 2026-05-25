@@ -11,6 +11,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Panel Jefes · Chile 2026 · AV Latam</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="avboard_data.js?v=20260520"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -156,8 +157,8 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
     <a href="Panel_CxC_AV_Latam_2026.html" class="np">📋 CxC Detalle</a>
   </div>
   <div class="hcorte">
-    <div>Jefatura País Chile · <b>Corte: Abr 2026 (Ene–Abr 26)</b></div>
-    <div style="color:var(--muted)">Real 2026 YTD · CxC Abr 2026</div>
+    <div>Jefatura País Chile · <b id="jch-corte-hdr">Corte: May 2026 (Ene–May 26)</b></div>
+    <div style="color:var(--muted)" id="jch-corte-sub">Real 2026 YTD · corte 18/05/2026</div>
   </div>
   <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
 </div>
@@ -167,14 +168,14 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
 <!-- KPI BANNER -->
 <div class="kpis">
   <div class="kpi">
-    <div class="kpi-lbl">Real 2026 · Acum Ene–Abr</div>
-    <div class="kpi-val kpi-g">CLP 199.6M</div>
-    <div class="kpi-sub">T1 105.4% del ppto · Abr parcial</div>
+    <div class="kpi-lbl" id="jch-kpi-ytd-lbl">Real 2026 · Acum Ene–May</div>
+    <div class="kpi-val kpi-g" id="jch-kpi-ytd-val">CLP 342.9M</div>
+    <div class="kpi-sub" id="jch-kpi-ytd-sub">5 meses · corte 18/05/2026</div>
   </div>
   <div class="kpi">
-    <div class="kpi-lbl">Cumplimiento vs Ppto 4m</div>
-    <div class="kpi-val kpi-a">90.5%</div>
-    <div class="kpi-sub">199.6M vs ppto 213.6M (Ene–Abr)</div>
+    <div class="kpi-lbl" id="jch-kpi-cumpl-lbl">Cumplimiento vs Ppto 5m</div>
+    <div class="kpi-val kpi-g" id="jch-kpi-cumpl-val">129.6%</div>
+    <div class="kpi-sub" id="jch-kpi-cumpl-sub">342.9M vs ppto 264.6M (Ene–May)</div>
   </div>
   <div class="kpi">
     <div class="kpi-lbl">Presupuesto 2026 · Anual</div>
@@ -269,32 +270,32 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
         </div>
       </div>
       <div style="margin-top:10px;padding:9px 12px;background:var(--s2);border-radius:7px;display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:10px;font-weight:600;color:var(--text)">YTD Ene–Abr</span>
-        <span style="font-family:'DM Mono';font-size:14px;color:var(--amber);font-weight:700">90.5%</span>
-        <span style="font-size:10px;color:var(--dim)">199.6M / 213.6M</span>
-        <span class="badge b-warn">Brecha −14.0M</span>
+        <span style="font-size:10px;font-weight:600;color:var(--text)" id="jch-ytd-strip-lbl">YTD —</span>
+        <span style="font-family:'DM Mono';font-size:14px;color:var(--amber);font-weight:700" id="jch-ytd-strip-pct">—%</span>
+        <span style="font-size:10px;color:var(--dim)" id="jch-ytd-strip-vals">— / —</span>
+        <span class="badge b-warn" id="jch-ytd-strip-brecha">Brecha —</span>
       </div>
     </div>
 
     <!-- Donut cumplimiento YTD -->
     <div class="chart-wrap">
-      <div class="chart-title">Cumplimiento YTD · Real 2026 vs Ppto Ene–Abr</div>
+      <div class="chart-title" id="jch-donut-title">Cumplimiento YTD · Real 2026 vs Ppto Ene–May</div>
       <div style="position:relative;height:210px">
         <canvas id="chartCumplCL"></canvas>
         <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-65%);text-align:center;pointer-events:none">
-          <div style="font-family:'Bebas Neue';font-size:36px;color:var(--amber);line-height:1">90.5%</div>
+          <div id="jch-donut-pct" style="font-family:'Bebas Neue';font-size:36px;color:var(--amber);line-height:1">—%</div>
           <div style="font-size:8px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:3px">Cumpl. YTD</div>
-          <div style="font-size:9px;color:var(--dim);margin-top:1px">Ene–Abr 2026</div>
+          <div id="jch-donut-lbl" style="font-size:9px;color:var(--dim);margin-top:1px">—</div>
         </div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
         <div style="padding:8px;background:rgba(122,182,72,0.07);border-radius:5px;text-align:center">
-          <div style="font-family:'DM Mono';font-size:14px;color:var(--green);font-weight:700">199.6M</div>
+          <div id="jch-donut-real" style="font-family:'DM Mono';font-size:14px;color:var(--green);font-weight:700">—M</div>
           <div style="font-size:8px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:1px">Real 2026 YTD</div>
         </div>
         <div style="padding:8px;background:rgba(231,76,60,0.06);border-radius:5px;text-align:center">
-          <div style="font-family:'DM Mono';font-size:14px;color:var(--red);font-weight:700">−14.0M</div>
-          <div style="font-size:8px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:1px">Brecha vs Ppto 4m</div>
+          <div id="jch-donut-brecha" style="font-family:'DM Mono';font-size:14px;color:var(--red);font-weight:700">—M</div>
+          <div id="jch-donut-brecha-lbl" style="font-size:8px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:1px">Brecha vs Ppto —m</div>
         </div>
       </div>
     </div>
@@ -383,7 +384,7 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
 <!-- ══════════════════════════════════════════════ -->
 <div id="tab-cxc" class="tab-content">
 
-  <div class="sec">Cobranzas Chile · Corte 08/05/2026 <span>Cartera activa total: CLP 134.7M</span></div>
+  <div class="sec">Cobranzas Chile · Corte 17/05/2026 <span>Cartera activa total: CLP 134.7M</span></div>
 
   <div class="cxc-grid" style="margin-bottom:20px">
     <div class="cxc-card" style="background:rgba(122,182,72,0.07);border:1px solid rgba(122,182,72,0.25)">
@@ -408,7 +409,7 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
     </div>
   </div>
 
-  <div class="sec">Clientes Críticos Chile <span>Vencimiento mayor a 90 días · Corte 08/05</span></div>
+  <div class="sec">Clientes Críticos Chile <span>Vencimiento mayor a 90 días · Corte 17/05</span></div>
   <div class="tbl-wrap" style="margin-bottom:20px">
     <table class="tbl">
       <thead>
@@ -447,7 +448,7 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
     </table>
   </div>
 
-  <div class="sec">Eficiencia Comercial (IEC) · Chile · Real 2026 YTD <span>Ene–Abr 2026 · vs precio piso propuesto · sin revelar costos ni márgenes</span></div>
+  <div class="sec">Eficiencia Comercial (IEC) · Chile · Real 2026 YTD <span>Ene–May 2026 · vs precio piso propuesto · sin revelar costos ni márgenes</span></div>
 
   <!-- KPI row -->
   <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px">
@@ -822,7 +823,7 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
 </div><!-- /page -->
 
 <div class="footer">
-  <div>AV Latam BI Platform · Jefes País · Chile · Real Ene–Abr 2026</div>
+  <div id="jch-footer-txt">AV Latam BI Platform · Jefes País · Chile</div>
   <div class="hnav">
     <a href="Panel_Jefes_Index.html" class="np">🏠 Hub Jefes</a>
     <a href="Panel_CxC_AV_Latam_2026.html" class="np">📋 CxC</a>
@@ -830,6 +831,36 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
 </div>
 
 <script>
+/* ── AVBOARD GUARD ─────────────────────────────────────────────────────── */
+(function initFromAVBOARD(){
+  function showError(msg){
+    if(document.getElementById('avboard-error-banner')) return;
+    var b=document.createElement('div');
+    b.id='avboard-error-banner';
+    b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#E74C3C;color:#fff;padding:14px 20px;font-family:"DM Mono",monospace;font-size:13px;text-align:center;letter-spacing:.5px;box-shadow:0 2px 8px rgba(0,0,0,.4);';
+    b.innerHTML='<b>⛔ ERROR AVBOARD:</b> '+msg;
+    document.body.insertBefore(b,document.body.firstChild);
+    console.error('[AVBOARD ERROR]',msg);
+  }
+  if(typeof AVBOARD==='undefined'){
+    showError('avboard_data.js no cargó — datos no disponibles. Forzar recarga: Ctrl+Shift+R');
+    return;
+  }
+  var clYTD = AVBOARD.chile&&AVBOARD.chile.ventas ? AVBOARD.chile.ventas.ytd_5m : undefined;
+  var peYTD = AVBOARD.peru&&AVBOARD.peru.ventas  ? AVBOARD.peru.ventas.ytd_5m  : undefined;
+  var clOK  = (clYTD === 342940920);
+  var peOK  = (peYTD === 334136);
+  console.log('[AVBOARD] versión:', AVBOARD.meta&&AVBOARD.meta.version);
+  console.log('[AVBOARD] Chile YTD CLP:', clYTD, clOK?'✅':'❌ esperado: 342940920');
+  console.log('[AVBOARD] Perú YTD USD:',  peYTD, peOK?'✅':'❌ esperado: 334136');
+  console.log('[AVBOARD] cortes:', AVBOARD.meta&&AVBOARD.meta.cortes);
+  if(!clOK||!peOK){
+    showError('caché desactualizado — CL:'+clYTD+' PE:'+peYTD+' — forzar recarga Ctrl+Shift+R');
+  }
+})();
+/* ── FIN GUARD ──────────────────────────────────────────────────────────── */
+
+
 Chart.defaults.color='#8fa892';
 Chart.defaults.font.family="'DM Mono',monospace";
 Chart.defaults.font.size=10;
@@ -841,7 +872,9 @@ const LABELS=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV',
 const real2024=[77.4,46.1,37.4,72.1,18.2,33.8,42.7,24.8,41.5,109.0,67.3,53.4];
 const real2025=[61.5,57.9,38.9,44.2,131.5,36.8,33.9,75.0,101.1,134.5,43.6,7.0];
 const ppto2026=[83.6,41.6,42.0,46.4,51.0,49.7,62.8,76.5,110.8,112.7,97.5,86.7];
-const real2026=[88.2,35.7,52.4,23.4,null,null,null,null,null,null,null,null];
+var real2026=(typeof AVBOARD!=='undefined')
+  ? AVBOARD.chile.ventas.mensual_real.map(function(v){return v>0?parseFloat((v/1e6).toFixed(1)):null;})
+  : Array(12).fill(null);
 
 const vendedoresData=[
   {nombre:'FRANCISCO VELÁSQUEZ', corto:'F. Velásquez', real:240.1, ppto:253.9,
@@ -931,7 +964,8 @@ new Chart(document.getElementById('chartVentas'),{
   ppto2026.forEach((pp,i)=>{
     const v26=real2026[i], v25=real2025[i];
     const hasData=v26!==null;
-    const isPartial=i===3; // ABR parcial
+    const lastDataIdx=real2026.reduce(function(l,v,i){return v!==null?i:l;},-1);
+    const isPartial=i===lastDataIdx; // último mes con datos = parcial
     if(hasData) {tot26+=v26; totPpto+=pp;}
     tot25+=v25;
     const cumpl=hasData?(v26/pp*100).toFixed(1):null;
@@ -1146,6 +1180,80 @@ function cerrarSesion() {
   sessionStorage.removeItem('av_role');
   window.location.href = 'index.html';
 }
+
+// ── POPULATE DESDE AVBOARD ──
+(function(){
+  if(typeof AVBOARD==='undefined') return;
+  try{
+    var cv=AVBOARD.chile.ventas, mt=AVBOARD.meta.cortes;
+    var corte=mt.chile_ventas||'';
+    var ytdM=parseFloat((cv.ytd_5m/1e6).toFixed(1));
+    var p5m=parseFloat((cv.ppto_5m/1e6).toFixed(1));
+    var cumplPct=Math.round(cv.ytd_5m/cv.ppto_5m*100*10)/10;
+    var brechaM=parseFloat((cv.ytd_5m/1e6-cv.ppto_5m/1e6).toFixed(1));
+
+    // Header
+    var meses=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    var dd=corte?corte.split('/'):[];
+    var mesNom=dd.length>1?meses[parseInt(dd[1])]:'May';
+    var anio=dd.length>2?dd[2].slice(2):'26';
+    var nMeses=real2026.filter(function(v){return v!==null;}).length;
+    var mesRango=meses[nMeses]||mesNom;
+    var h=document.getElementById('jch-corte-hdr');
+    if(h) h.textContent='Corte: '+mesNom+' 20'+anio+' (Ene–'+mesRango+' '+anio+')';
+    var s=document.getElementById('jch-corte-sub');
+    if(s) s.textContent='Real 2026 YTD · corte '+corte;
+
+    // KPIs
+    var set=function(id,txt){var el=document.getElementById(id);if(el)el.textContent=txt;};
+    set('jch-kpi-ytd-lbl','Real 2026 · Acum Ene–'+mesRango);
+    set('jch-kpi-ytd-val','CLP '+ytdM+'M');
+    set('jch-kpi-ytd-sub',nMeses+' meses · corte '+corte);
+    var cumplClass=cumplPct>=100?'kpi-g':(cumplPct>=85?'kpi-a':'kpi-r');
+    var elCumpl=document.getElementById('jch-kpi-cumpl-val');
+    if(elCumpl){elCumpl.textContent=cumplPct+'%';elCumpl.className='kpi-val '+cumplClass;}
+    set('jch-kpi-cumpl-lbl','Cumplimiento vs Ppto '+nMeses+'m');
+    set('jch-kpi-cumpl-sub',ytdM+'M vs ppto '+p5m+'M (Ene–'+mesRango+')');
+    // Strip YTD + donut + footer
+    set('jch-ytd-strip-lbl','YTD Ene–'+mesRango);
+    set('jch-ytd-strip-pct',cumplPct+'%');
+    set('jch-ytd-strip-vals',ytdM+'M / '+p5m+'M');
+    set('jch-ytd-strip-brecha','Brecha '+(brechaM>=0?'+':'')+brechaM+'M');
+    set('jch-donut-pct',cumplPct+'%');
+    set('jch-donut-lbl','Ene–'+mesRango+' 2026');
+    set('jch-donut-title','Cumplimiento YTD · Real 2026 vs Ppto Ene–'+mesRango);
+    set('jch-donut-real',ytdM+'M');
+    var absB=Math.abs(brechaM);
+    set('jch-donut-brecha',(brechaM>=0?'+':'-')+absB+'M');
+    set('jch-donut-brecha-lbl','Brecha vs Ppto '+nMeses+'m');
+    set('jch-footer-txt','AV Latam BI Platform · Jefes País · Chile · Real Ene–'+mesRango+' 2026 (al '+corte+')');
+
+    // chartVentas — actualizar dataset Real 2026 por si cambió
+    var chV=Chart.getChart(document.getElementById('chartVentas'));
+    if(chV){
+      chV.data.datasets[1].data=real2026;
+      chV.update('none');
+    }
+
+    // chartCumplCL — doughnut cumplimiento
+    var chD=Chart.getChart(document.getElementById('chartCumplCL'));
+    if(chD){
+      var exceso=brechaM>0;
+      var absBrecha=Math.abs(brechaM);
+      chD.data.datasets[0].data=exceso?[p5m,brechaM]:[ytdM,absBrecha];
+      chD.data.datasets[0].backgroundColor=exceso
+        ?['rgba(122,182,72,0.70)','rgba(74,158,219,0.35)']
+        :['rgba(122,182,72,0.75)','rgba(231,76,60,0.35)'];
+      chD.data.datasets[0].borderColor=exceso
+        ?['rgba(122,182,72,1)','rgba(74,158,219,0.5)']
+        :['rgba(122,182,72,1)','rgba(231,76,60,0.5)'];
+      chD.data.labels=exceso
+        ?['Ppto '+nMeses+'m ('+p5m+'M)','Exceso vs Ppto ('+brechaM+'M)']
+        :['Real 2026 YTD ('+ytdM+'M)','Brecha Ppto '+nMeses+'m ('+absBrecha+'M)'];
+      chD.update();
+    }
+  }catch(e){console.warn('[AVBOARD][JCH]',e);}
+})();
 </script>
 </body>
 </html>

@@ -11,6 +11,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Panel Jefes · Grupo AV LATAM 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="avboard_data.js?v=20260520"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -159,8 +160,8 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
     <a href="Panel_CxC_AV_Latam_2026.html" class="np">📋 CxC</a>
   </div>
   <div class="hcorte">
-    <div>Vista Consolidada Grupo · <b>Corte: Dic 2025</b></div>
-    <div style="color:var(--muted)">Ppto 2026 · CxC 10/05/2026 · Multi-moneda</div>
+    <div>Vista Consolidada Grupo · <b id="grp-corte-hdr">Real 2026 YTD</b></div>
+    <div style="color:var(--muted)" id="grp-corte-sub">Ppto 2026 · Multi-moneda · TC 950</div>
   </div>
   <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
 </div>
@@ -228,8 +229,8 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
         <span class="cc-v" style="color:var(--green)">CLP 765.9M</span>
       </div>
       <div class="cc-metric" style="background:rgba(122,182,72,0.08);border-radius:6px;padding:4px 6px;margin:-2px 0">
-        <span class="cc-k" style="color:var(--green)">Real 2026 YTD (4m)</span>
-        <span class="cc-v" style="color:var(--green);font-size:15px">CLP 199.6M</span>
+        <span class="cc-k" style="color:var(--green)" id="grp-cl-ytd-lbl">Real 2026 YTD</span>
+        <span class="cc-v" style="color:var(--green);font-size:15px" id="grp-cl-ytd-val">—</span>
       </div>
       <div class="cc-metric">
         <span class="cc-k">Presupuesto 2026</span>
@@ -237,11 +238,11 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
       </div>
       <div class="cc-metric">
         <span class="cc-k">Gap vs Ppto 2026</span>
-        <span class="cc-v" style="color:var(--amber)">+95.4M por crecer</span>
+        <span class="cc-v" style="color:var(--amber)" id="grp-cl-gap-val">—</span>
       </div>
       <div class="cc-metric">
         <span class="cc-k">CxC Vencido (+90d)</span>
-        <span class="cc-v" style="color:var(--red)">CLP 15.9M</span>
+        <span class="cc-v" style="color:var(--red)" id="grp-cl-cxc-val">—</span>
       </div>
       <div class="cc-metric">
         <span class="cc-k">Top Vendedor 2025</span>
@@ -270,8 +271,8 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
         <span class="cc-v" style="color:var(--blue)">USD 690.4K</span>
       </div>
       <div class="cc-metric" style="background:rgba(74,158,219,0.08);border-radius:6px;padding:4px 6px;margin:-2px 0">
-        <span class="cc-k" style="color:var(--blue)">Real 2026 YTD (4m · c.29/04)</span>
-        <span class="cc-v" style="color:var(--blue);font-size:15px">USD 270K</span>
+        <span class="cc-k" style="color:var(--blue)" id="grp-pe-ytd-lbl">Real 2026 YTD</span>
+        <span class="cc-v" style="color:var(--blue);font-size:15px" id="grp-pe-ytd-val">—</span>
       </div>
       <div class="cc-metric">
         <span class="cc-k">Presupuesto 2026</span>
@@ -279,11 +280,11 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
       </div>
       <div class="cc-metric">
         <span class="cc-k">Gap vs Ppto 2026</span>
-        <span class="cc-v" style="color:var(--amber)">+446.6K por crecer (+64.7%)</span>
+        <span class="cc-v" style="color:var(--amber)" id="grp-pe-gap-val">—</span>
       </div>
       <div class="cc-metric">
         <span class="cc-k">CxC Vencido (+90d)</span>
-        <span class="cc-v" style="color:var(--red)">USD 23.6K (20.0% cartera)</span>
+        <span class="cc-v" style="color:var(--red)" id="grp-pe-cxc-val">—</span>
       </div>
       <div class="cc-metric">
         <span class="cc-k">Top Vendedor 2025</span>
@@ -645,7 +646,7 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
     <div style="flex:1">
       <div class="alert-badge" style="color:var(--orange)">RIESGO · 🇨🇱 CHILE · CxC VENCIDA</div>
       <div class="alert-title">CLP 15.9M vencido +90d — Loma Larga concentra el 78% de la cartera crítica chilena</div>
-      <div class="alert-desc">Loma Larga LTDA (Neira/Laratro, 2 entidades, 92–114d, CLP 12.4M) concentra el 78% del +90d. Agricola Ribera agrega CLP 1.5M y Kullin CLP 1.5M consolidado (2 entidades). Goyaservice ✅ PAGADO. Corte 08/05/2026.</div>
+      <div class="alert-desc">Loma Larga LTDA (Neira/Laratro, 2 entidades, 92–114d, CLP 12.4M) concentra el 78% del +90d. Agricola Ribera agrega CLP 1.5M y Kullin CLP 1.5M consolidado (2 entidades). Goyaservice ✅ PAGADO. Corte 17/05/2026.</div>
       <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
         <span class="badge b-risk">CLP 15.9M vencido +90d</span>
         <span class="badge b-risk">3 clientes urgentes</span>
@@ -767,6 +768,36 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
 </div>
 
 <script>
+/* ── AVBOARD GUARD ─────────────────────────────────────────────────────── */
+(function initFromAVBOARD(){
+  function showError(msg){
+    if(document.getElementById('avboard-error-banner')) return;
+    var b=document.createElement('div');
+    b.id='avboard-error-banner';
+    b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#E74C3C;color:#fff;padding:14px 20px;font-family:"DM Mono",monospace;font-size:13px;text-align:center;letter-spacing:.5px;box-shadow:0 2px 8px rgba(0,0,0,.4);';
+    b.innerHTML='<b>⛔ ERROR AVBOARD:</b> '+msg;
+    document.body.insertBefore(b,document.body.firstChild);
+    console.error('[AVBOARD ERROR]',msg);
+  }
+  if(typeof AVBOARD==='undefined'){
+    showError('avboard_data.js no cargó — datos no disponibles. Forzar recarga: Ctrl+Shift+R');
+    return;
+  }
+  var clYTD = AVBOARD.chile&&AVBOARD.chile.ventas ? AVBOARD.chile.ventas.ytd_5m : undefined;
+  var peYTD = AVBOARD.peru&&AVBOARD.peru.ventas  ? AVBOARD.peru.ventas.ytd_5m  : undefined;
+  var clOK  = (clYTD === 342940920);
+  var peOK  = (peYTD === 334136);
+  console.log('[AVBOARD] versión:', AVBOARD.meta&&AVBOARD.meta.version);
+  console.log('[AVBOARD] Chile YTD CLP:', clYTD, clOK?'✅':'❌ esperado: 342940920');
+  console.log('[AVBOARD] Perú YTD USD:',  peYTD, peOK?'✅':'❌ esperado: 334136');
+  console.log('[AVBOARD] cortes:', AVBOARD.meta&&AVBOARD.meta.cortes);
+  if(!clOK||!peOK){
+    showError('caché desactualizado — CL:'+clYTD+' PE:'+peYTD+' — forzar recarga Ctrl+Shift+R');
+  }
+})();
+/* ── FIN GUARD ──────────────────────────────────────────────────────────── */
+
+
 /* ─── DATOS ─── */
 const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 
@@ -778,16 +809,20 @@ const clPpto26  = [83.6,41.6,42.0,46.4,51.0,49.7,62.8,76.5,110.8,112.7,97.5,86.7
 const peReal25  = [59.1,36.7,70.9,42.5,24.3,27.8,48.1,53.0,70.9,120.6,82.5,54.0];
 const pePpto26  = [51.7,58.5,103.2,71.3,61.9,78.7,100.7,178.2,125.6,165.8,98.5,43.0];
 
-// Real 2026 YTD (Ene–Abr corte 24/04)
-const clReal26  = [88.2,35.7,52.4,23.4,null,null,null,null,null,null,null,null];
-const peReal26  = [73.5,39.4,91.6,65.4,null,null,null,null,null,null,null,null];
+// Real 2026 YTD — siempre desde AVBOARD (nunca fallback con data antigua)
+var clReal26 = (typeof AVBOARD!=='undefined')
+  ? AVBOARD.chile.ventas.mensual_real.map(function(v){return v>0?parseFloat((v/1e6).toFixed(1)):null;})
+  : Array(12).fill(null);
+var peReal26 = (typeof AVBOARD!=='undefined')
+  ? AVBOARD.peru.ventas.mensual_real.map(function(v){return v>0?parseFloat((v/1000).toFixed(1)):null;})
+  : Array(12).fill(null);
 
 const clTotal25 = clReal25.reduce((a,b)=>a+b,0);
 const clTotal26 = clPpto26.reduce((a,b)=>a+b,0);
 const peTotal25 = peReal25.reduce((a,b)=>a+b,0);
 const peTotal26 = pePpto26.reduce((a,b)=>a+b,0);
-const clYTD26   = clReal26.reduce((a,b)=>a+(b||0),0);
-const peYTD26   = peReal26.reduce((a,b)=>a+(b||0),0);
+const clYTD26   = clReal26.reduce(function(a,b){return a+(b||0);},0);
+const peYTD26   = peReal26.reduce(function(a,b){return a+(b||0);},0);
 
 // Vendedores Chile
 const vendChile = [
@@ -1049,6 +1084,71 @@ function cerrarSesion() {
   sessionStorage.removeItem('av_role');
   window.location.href = 'index.html';
 }
+
+// ── POPULATE DESDE AVBOARD ──
+(function(){
+  if(typeof AVBOARD==='undefined'){
+    console.warn('[AVBOARD][GRUPO] avboard_data.js no disponible');
+    return;
+  }
+  try{
+    var cv=AVBOARD.chile.ventas, pv=AVBOARD.peru.ventas;
+    var cc=AVBOARD.chile.cxc, mt=AVBOARD.meta.cortes;
+    var set=function(id,txt){var el=document.getElementById(id);if(el)el.textContent=txt;};
+    var meses=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    var nCL=clReal26.filter(function(v){return v!==null;}).length;
+    var nPE=peReal26.filter(function(v){return v!==null;}).length;
+    var mesNomCL=meses[nCL]||'';
+    var mesNomPE=meses[nPE]||'';
+    var clYtdM=parseFloat((cv.ytd_5m/1e6).toFixed(1));
+    var peYtdK=parseFloat((pv.ytd_5m/1000).toFixed(1));
+    var clGap=parseFloat((cv.ppto_anual/1e6-clYtdM).toFixed(1));
+    var peGap=parseFloat((pv.ppto_anual/1000-peYtdK).toFixed(1));
+    var cxc90M=parseFloat((cc.tramos.t90/1e6).toFixed(1));
+
+    // Header
+    var cDate=mt.chile_ventas||'';
+    set('grp-corte-hdr','Real 2026 · Ene–'+mesNomCL+' CL / Ene–'+mesNomPE+' PE');
+    set('grp-corte-sub','CL '+mt.chile_ventas+' · PE '+mt.peru_ventas+' · TC 950');
+
+    // Country cards
+    set('grp-cl-ytd-lbl','Real 2026 YTD ('+nCL+'m · c.'+mt.chile_ventas+')');
+    set('grp-cl-ytd-val','CLP '+clYtdM+'M');
+    set('grp-cl-gap-val','+'+clGap+'M por crecer');
+    set('grp-cl-cxc-val','CLP '+cxc90M+'M');
+    set('grp-pe-ytd-lbl','Real 2026 YTD ('+nPE+'m · c.'+mt.peru_ventas+')');
+    set('grp-pe-ytd-val','USD '+peYtdK+'K');
+    set('grp-pe-gap-val','+'+peGap+'K por crecer');
+    var pe90 = AVBOARD.peru && AVBOARD.peru.cxc ? AVBOARD.peru.cxc.t90||0 : 0;
+    set('grp-pe-cxc-val','USD '+Math.round(pe90/1000*10)/10+'K');
+
+    // Actualizar charts Chile/Peru con clReal26/peReal26 (ya calculados desde AVBOARD al inicio)
+    var chCL=Chart.getChart(document.getElementById('chartChile'));
+    if(chCL){chCL.data.datasets[1].data=clReal26;chCL.update('none');}
+    var chPE=Chart.getChart(document.getElementById('chartPeru'));
+    if(chPE){chPE.data.datasets[1].data=peReal26;chPE.update('none');}
+
+    // Actualizar CxC Chile donut desde AVBOARD
+    var chCxcCL=Chart.getChart(document.getElementById('chartCxcChile'));
+    if(chCxcCL && cc.tramos){
+      var t=cc.tramos;
+      var tot=cc.total||1;
+      var d0=parseFloat((t.t0/1e6).toFixed(1)), d30=parseFloat((t.t30/1e6).toFixed(1));
+      var d60=parseFloat((t.t60/1e6).toFixed(1)), d90=parseFloat((t.t90/1e6).toFixed(1));
+      chCxcCL.data.datasets[0].data=[d0,d30,d60,d90];
+      chCxcCL.data.labels=[
+        '0–30d Normal ('+Math.round(t.t0/tot*100)+'%)',
+        '31–60d Alerta ('+Math.round(t.t30/tot*100)+'%)',
+        '61–90d Riesgo ('+Math.round(t.t60/tot*100)+'%)',
+        '+90d Crítico ('+Math.round(t.t90/tot*100)+'%)'
+      ];
+      chCxcCL.options.plugins.tooltip.callbacks.label=function(c){
+        return c.label+': CLP '+c.raw+'M ('+Math.round(c.raw/parseFloat((tot/1e6).toFixed(1))*100)+'%)';
+      };
+      chCxcCL.update();
+    }
+  }catch(e){console.warn('[AVBOARD][GRUPO]',e);}
+})();
 </script>
 
 </body>

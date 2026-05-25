@@ -14,7 +14,7 @@
  *   Perú ventas  → 18/05/2026
  *   Perú CxC     → 10/05/2026
  *
- * Actualizado: 2026-05-20
+ * Actualizado: 2026-05-18
  */
 
 var AVBOARD = (function() {
@@ -26,7 +26,7 @@ var AVBOARD = (function() {
     cortes: {
       chile_ventas: '18/05/2026',
       chile_cxc:    '17/05/2026',
-      peru_ventas:  '18/05/2026',
+      peru_ventas:  '15/05/2026',
       peru_cxc:     '10/05/2026'
     },
     meses: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
@@ -50,6 +50,7 @@ var AVBOARD = (function() {
     ppto_4m:         213591350,
     ppto_5m:         264591350,
     cumplimiento_4m: 1.4507,
+    cumplimiento_5m: 1.2961,
     cumplimiento_t1: 1.0544,
     mensual_real:  [88231364, 35651978, 52370709, 133601745, 33085124, 0, 0, 0, 0, 0, 0, 0],
     mensual_ppto:  [83558032, 41601950, 42000000, 46431368, 51000000, 49730000, 62800000, 76500000, 110800000, 112700000, 97500000, 86700000],

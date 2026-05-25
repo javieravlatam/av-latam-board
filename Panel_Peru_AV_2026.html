@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel Comercial · Perú · AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js"></script>
+<script src="avboard_data.js?v=20260520"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -180,7 +180,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     <div class="logo">PE</div>
     <div>
       <div class="htitle">Panel Comercial · 🇵🇪 Perú</div>
-      <div class="hsub">Jefe Comercial · Ene–Abr 2026</div>
+      <div class="hsub" id="av-pe-hsub">Jefe Comercial · Ene–May 2026</div>
     </div>
   </div>
   <div class="hnav">
@@ -191,7 +191,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     <a href="Panel_Ecuador_AV_2026.html">🇪🇨 Ecuador</a>
   </div>
   <div class="hcorte">
-    <div>Corte <b>11/05/2026</b> · CxC <b>10/05/2026</b></div>
+    <div>Corte <b>15/05/2026</b> · CxC <b>10/05/2026</b></div>
     <div style="font-size:8px;margin-top:1px;">Aguirre/Navarro = zona unificada · Ppto anual USD 1,137,034</div>
   </div>
   <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
@@ -203,27 +203,27 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   <div class="g5" style="margin-bottom:18px;">
     <div class="kpi blue">
       <div class="klbl">Ventas YTD</div>
-      <div class="kval blue">USD 325K</div>
-      <div class="ksub">al 11/05/2026 · 5 meses</div>
-      <span class="kbadge kb-am">95.9% del Ppto Ene-Abr</span>
+      <div class="kval blue" id="av-pe-kpi-ytd-val">—</div>
+      <div class="ksub" id="av-pe-kpi-ytd-sub">—</div>
+      <span class="kbadge kb-am" id="av-pe-kpi-ytd-badge">—</span>
     </div>
     <div class="kpi ok">
-      <div class="klbl">Mejor Mes · Marzo</div>
-      <div class="kval ok">USD 91.6K</div>
+      <div class="klbl" id="av-pe-kpi-best-lbl">Mejor Mes · Marzo</div>
+      <div class="kval ok" id="av-pe-kpi-best-val">USD 91.6K</div>
       <div class="ksub">⭐ Récord histórico</div>
-      <span class="kbadge kb-am">88.8% del ppto mar</span>
+      <span class="kbadge kb-am" id="av-pe-kpi-best-badge">88.8% del ppto mar</span>
     </div>
     <div class="kpi am">
-      <div class="klbl">Abril Completo</div>
-      <div class="kval ok">USD 65.0K</div>
-      <div class="ksub">al 11/05 · Aguirre 48.5K + Infante 13.3K</div>
-      <span class="kbadge kb-ok">~80.7% del ppto abr</span>
+      <div class="klbl" id="av-pe-kpi-may-lbl">Abril Completo</div>
+      <div class="kval ok" id="av-pe-kpi-may-val">USD 65.0K</div>
+      <div class="ksub" id="av-pe-kpi-may-sub">al 11/05 · Aguirre 48.5K + Infante 13.3K</div>
+      <span class="kbadge kb-ok" id="av-pe-kpi-may-badge">~80.7% del ppto abr</span>
     </div>
     <div class="kpi am">
       <div class="klbl">Brecha vs Ppto T1</div>
-      <div class="kval am">–USD 8.8K</div>
-      <div class="ksub">Real 204.5K / Ppto 213.4K</div>
-      <span class="kbadge kb-am">95.9% cumplimiento T1</span>
+      <div class="kval am" id="av-pe-kpi-brecha-val">–USD 8.8K</div>
+      <div class="ksub" id="av-pe-kpi-brecha-sub">Real 204.5K / Ppto 213.4K</div>
+      <span class="kbadge kb-am" id="av-pe-kpi-brecha-badge">95.9% cumplimiento T1</span>
     </div>
     <div class="kpi rd">
       <div class="klbl">RTCs Críticos</div>
@@ -237,14 +237,14 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   <div class="g2" style="margin-bottom:15px;align-items:start;">
 
     <div class="panel">
-      <div class="ptitle">SEMÁFORO RTC · PERÚ <span class="ptag">CORTE 11/05</span></div>
+      <div class="ptitle">SEMÁFORO RTC · PERÚ <span class="ptag" id="av-pe-sema-corte">CORTE 11/05</span></div>
       <div class="sema-list">
 
         <div class="sema-row">
           <span class="sema-star">⭐</span>
           <div class="sema-info">
             <div class="sema-name">Aguirre / Navarro <span style="font-size:9px;color:var(--muted);font-weight:400;">zona unificada</span></div>
-            <div class="sema-sub">YTD USD 97,107 · Mayo USD 48,495 · Aguirre lidera grupo 🚀</div>
+            <div class="sema-sub" id="av-sema-sub-aguirre">YTD USD 97,107 · Mayo USD 48,495 · Aguirre lidera grupo 🚀</div>
           </div>
           <div class="sema-pct pct-ok">204.1%</div>
           <div class="sema-dot sd-ok"></div>
@@ -254,7 +254,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
           <span class="sema-star" style="color:var(--green)">✅</span>
           <div class="sema-info">
             <div class="sema-name">O. Atalaya</div>
-            <div class="sema-sub">YTD USD 64,589 · Referente constante · sin venta Mayo</div>
+            <div class="sema-sub" id="av-sema-sub-atalaya">YTD USD 64,589 · Referente constante · sin venta Mayo</div>
           </div>
           <div class="sema-pct pct-ok">110.1%</div>
           <div class="sema-dot sd-ok"></div>
@@ -264,7 +264,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
           <span class="sema-star" style="color:var(--amber)">⚠️</span>
           <div class="sema-info">
             <div class="sema-name">O. Infante</div>
-            <div class="sema-sub">YTD USD 121,072 · Ppto anual USD 485K · Mayo USD 13,296</div>
+            <div class="sema-sub" id="av-sema-sub-infante">YTD USD 121,072 · Ppto anual USD 485K · Mayo USD 13,296</div>
           </div>
           <div class="sema-pct pct-am">62.4%</div>
           <div class="sema-dot sd-am"></div>
@@ -274,7 +274,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
           <span class="sema-star" style="color:var(--red)">🔴</span>
           <div class="sema-info">
             <div class="sema-name">A. Gonzales</div>
-            <div class="sema-sub">YTD USD 696 · Mar solo USD 96 · Ppto H2 activa desde Jun</div>
+            <div class="sema-sub" id="av-sema-sub-gonzales">YTD USD 696 · Mar solo USD 96 · Ppto H2 activa desde Jun</div>
           </div>
           <div class="sema-pct pct-rd">17.4%</div>
           <div class="sema-dot sd-rd"></div>
@@ -284,7 +284,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
           <span class="sema-star" style="color:var(--red)">🔴</span>
           <div class="sema-info">
             <div class="sema-name">P. Valladares</div>
-            <div class="sema-sub">YTD USD 1,000 · Mar primera venta · Ppto Oct USD 35.8K</div>
+            <div class="sema-sub" id="av-sema-sub-valladares">YTD USD 1,000 · Mar primera venta · Ppto Oct USD 35.8K</div>
           </div>
           <div class="sema-pct pct-rd">17.7%</div>
           <div class="sema-dot sd-rd"></div>
@@ -338,7 +338,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
               <div class="mes-pct" style="color:var(--amber);font-weight:700;">95.9%</div>
             </div>
           </div>
-          <div style="font-size:9px;color:var(--muted);margin-top:6px;">* Mayo parcial al 11/05/2026</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:6px;">* Mayo parcial al 15/05/2026</div>
         </div>
       </div>
 
@@ -361,7 +361,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   </div>
 
   <!-- DETALLE POR ZONA + CHART -->
-  <div class="sec">Desempeño por Zona <span>YTD vs Ppto · corte 11/05/2026</span></div>
+  <div class="sec">Desempeño por Zona <span>YTD vs Ppto · <span id="av-pe-zona-corte">corte 15/05/2026</span></span></div>
 
   <div class="g2" style="margin-bottom:15px;align-items:start;">
     <div class="panel">
@@ -370,7 +370,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
         <thead><tr>
           <th style="text-align:left;">Zona</th>
           <th>Real T1</th><th>Ppto T1</th><th style="text-align:center;">% T1</th>
-          <th>Abr Real</th><th>YTD</th><th>Ppto Anual</th>
+          <th id="pe-th-ultmes">Mayo Real</th><th>YTD 5m</th><th>Ppto Anual</th>
         </tr></thead>
         <tbody>
           <tr>
@@ -378,8 +378,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
             <td class="mono r" style="color:var(--green);">48,866</td>
             <td class="mono r">35,370</td>
             <td class="c"><span class="pb pb-ok">138.2%</span><div class="mb"><div class="mbf" style="width:100%;background:var(--green);"></div></div></td>
-            <td class="mono r" style="color:var(--green);">48,495</td>
-            <td class="mono r" style="color:var(--green);">97,107</td>
+            <td class="mono r" style="color:var(--green);" id="pe-td-aguirre-may">48,495</td>
+            <td class="mono r" style="color:var(--green);" id="pe-td-aguirre-ytd">97,107</td>
             <td class="mono r">223,930</td>
           </tr>
           <tr>
@@ -387,8 +387,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
             <td class="mono r" style="color:var(--green);">107,776</td>
             <td class="mono r">114,735</td>
             <td class="c"><span class="pb pb-ok">93.9%</span><div class="mb"><div class="mbf" style="width:93.9%;background:var(--green);"></div></div></td>
-            <td class="mono r" style="color:var(--green);">13,296</td>
-            <td class="mono r" style="color:var(--green);">121,072</td>
+            <td class="mono r" style="color:var(--green);" id="pe-td-infante-may">—</td>
+            <td class="mono r" style="color:var(--green);" id="pe-td-infante-ytd">—</td>
             <td class="mono r">485,058</td>
           </tr>
           <tr>
@@ -396,8 +396,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
             <td class="mono r" style="color:var(--green);">64,589</td>
             <td class="mono r">53,634</td>
             <td class="c"><span class="pb pb-ok">120.4%</span><div class="mb"><div class="mbf" style="width:100%;background:var(--green);"></div></div></td>
-            <td class="mono r" style="color:var(--text-muted);">–</td>
-            <td class="mono r" style="color:var(--green);">64,589</td>
+            <td class="mono r" id="pe-td-atalaya-may">—</td>
+            <td class="mono r" style="color:var(--green);" id="pe-td-atalaya-ytd">—</td>
             <td class="mono r">248,424</td>
           </tr>
           <tr>
@@ -405,8 +405,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
             <td class="mono r" style="color:var(--amber);">30,940</td>
             <td class="mono r">–</td>
             <td class="c"><span class="pb pb-am">–</span><div class="mb"><div class="mbf" style="width:60%;background:var(--amber);"></div></div></td>
-            <td class="mono r">–</td>
-            <td class="mono r" style="color:var(--amber);">30,940</td>
+            <td class="mono r" id="pe-td-navarro-may">—</td>
+            <td class="mono r" style="color:var(--amber);" id="pe-td-navarro-ytd">—</td>
             <td class="mono r">–</td>
           </tr>
           <tr>
@@ -414,8 +414,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
             <td class="mono r" style="color:var(--red);">696</td>
             <td class="mono r">4,000</td>
             <td class="c"><span class="pb pb-rd">17.4%</span><div class="mb"><div class="mbf" style="width:17.4%;background:var(--red);"></div></div></td>
-            <td class="mono r">–</td>
-            <td class="mono r" style="color:var(--red);">696</td>
+            <td class="mono r" id="pe-td-gonzales-may">—</td>
+            <td class="mono r" style="color:var(--red);" id="pe-td-gonzales-ytd">—</td>
             <td class="mono r">37,250</td>
           </tr>
           <tr>
@@ -423,18 +423,18 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
             <td class="mono r" style="color:var(--red);">1,200</td>
             <td class="mono r">5,646</td>
             <td class="c"><span class="pb pb-rd">21.3%</span><div class="mb"><div class="mbf" style="width:21.3%;background:var(--red);"></div></div></td>
-            <td class="mono r" style="color:var(--green);">600</td>
-            <td class="mono r" style="color:var(--red);">1,800</td>
+            <td class="mono r" id="pe-td-valladares-may">—</td>
+            <td class="mono r" style="color:var(--red);" id="pe-td-valladares-ytd">—</td>
             <td class="mono r">142,372</td>
           </tr>
         </tbody>
         <tfoot><tr>
           <td>TOTAL</td>
-          <td class="mono r" style="color:var(--blue);">254,067</td>
+          <td class="mono r" style="color:var(--blue);" id="pe-tfoot-t1">—</td>
           <td class="mono r">213,385</td>
-          <td class="c"><span class="pb pb-ok">119.0%</span></td>
-          <td class="mono r" style="color:var(--blue);">62,391</td>
-          <td class="mono r" style="color:var(--blue);">325,104</td>
+          <td class="c"><span class="pb pb-ok" id="pe-tfoot-cumpl">—</span></td>
+          <td class="mono r" style="color:var(--blue);" id="pe-tfoot-may">—</td>
+          <td class="mono r" style="color:var(--blue);" id="pe-tfoot-ytd">—</td>
           <td class="mono r">1,137,034</td>
         </tr></tfoot>
       </table>
@@ -465,7 +465,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     <div>
       <div class="alerta ok">
         <div class="alerta-t" style="color:var(--green);">✅ AGUIRRE/NAVARRO — REFERENTE GRUPO (204.1%)</div>
-        <div class="alerta-b">Aguirre lidera Mayo con USD 48,495 — zona más dinámica del grupo. YTD USD 97,107 (+122% del ppto). <strong style="color:var(--green);">Infante consolida YTD USD 121K (25.1% del ppto anual)</strong>. Atalaya sin venta en Mayo — verificar cartera activa. Grupo Perú YTD 5m: USD 325K.</div>
+        <div class="alerta-b" id="av-pe-alerta-aguirre">Aguirre lidera Mayo con USD 48,495 — zona más dinámica del grupo. YTD USD 97,107 (+122% del ppto). <strong style="color:var(--green);">Infante consolida YTD USD 130.1K (26.8% del ppto anual)</strong>. Atalaya sin venta en Mayo — verificar cartera activa. Grupo Perú YTD 5m: USD 334.1K.</div>
       </div>
       <div class="alerta ok" style="margin-top:10px;">
         <div class="alerta-t" style="color:var(--green);">✅ O. ATALAYA — CUMPLIENDO (110.1%)</div>
@@ -585,7 +585,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 </div>
 
 <div class="ftr">
-  <div>AV Latam BI Platform · Panel Perú · Corte ventas 11/05 · CxC 10/05/2026 · Ppto oficial USD 1,137,034</div>
+  <div id="av-pe-footer-txt">AV Latam BI Platform · Panel Perú · Corte ventas 15/05 · CxC 10/05/2026 · Ppto oficial USD 1,137,034</div>
   <div class="npills">
     <a href="dashboard.html" class="np">🏠 Inicio</a>
     <a href="Executive_Board_View_AV_Latam_2026.html" class="np">📋 Board View</a>
@@ -596,6 +596,36 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 </div>
 
 <script>
+/* ── AVBOARD GUARD ─────────────────────────────────────────────────────── */
+(function initFromAVBOARD(){
+  function showError(msg){
+    if(document.getElementById('avboard-error-banner')) return;
+    var b=document.createElement('div');
+    b.id='avboard-error-banner';
+    b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#E74C3C;color:#fff;padding:14px 20px;font-family:"DM Mono",monospace;font-size:13px;text-align:center;letter-spacing:.5px;box-shadow:0 2px 8px rgba(0,0,0,.4);';
+    b.innerHTML='<b>⛔ ERROR AVBOARD:</b> '+msg;
+    document.body.insertBefore(b,document.body.firstChild);
+    console.error('[AVBOARD ERROR]',msg);
+  }
+  if(typeof AVBOARD==='undefined'){
+    showError('avboard_data.js no cargó — datos no disponibles. Forzar recarga: Ctrl+Shift+R');
+    return;
+  }
+  var clYTD = AVBOARD.chile&&AVBOARD.chile.ventas ? AVBOARD.chile.ventas.ytd_5m : undefined;
+  var peYTD = AVBOARD.peru&&AVBOARD.peru.ventas  ? AVBOARD.peru.ventas.ytd_5m  : undefined;
+  var clOK  = (clYTD === 342940920);
+  var peOK  = (peYTD === 334136);
+  console.log('[AVBOARD] versión:', AVBOARD.meta&&AVBOARD.meta.version);
+  console.log('[AVBOARD] Chile YTD CLP:', clYTD, clOK?'✅':'❌ esperado: 342940920');
+  console.log('[AVBOARD] Perú YTD USD:',  peYTD, peOK?'✅':'❌ esperado: 334136');
+  console.log('[AVBOARD] cortes:', AVBOARD.meta&&AVBOARD.meta.cortes);
+  if(!clOK||!peOK){
+    showError('caché desactualizado — CL:'+clYTD+' PE:'+peYTD+' — forzar recarga Ctrl+Shift+R');
+  }
+})();
+/* ── FIN GUARD ──────────────────────────────────────────────────────────── */
+
+
 Chart.defaults.color = '#8fa892';
 Chart.defaults.font.family = "'DM Mono', monospace";
 Chart.defaults.font.size = 10;
@@ -830,6 +860,102 @@ new Chart(document.getElementById('cCxC'),{
       ];
       cCx.update();
     }
+
+    // ── KPI Strip principal ───────────────────────────────────────────────────
+    var pve=pv.por_vendedor||{}, corteStr=D.meta.cortes.peru_ventas;
+    var K1=function(n){return (n/1000).toFixed(1);};
+    var fN2=function(n){return n.toLocaleString('en-US');};
+    var MNMS=['Enero','Febrero','Marzo','Abril','Mayo'];
+    var mr5=pv.mensual_real.slice(0,5), mp5=pv.mensual_ppto.slice(0,5);
+    // YTD
+    set('av-pe-kpi-ytd-val','USD '+Math.round(pv.ytd_5m/1000)+'K');
+    set('av-pe-kpi-ytd-sub','al '+corteStr+' · 5 meses');
+    var c5m=pv.cumplimiento_5m||pv.cumplimiento_4m;
+    var badgeEl=document.getElementById('av-pe-kpi-ytd-badge');
+    if(badgeEl){badgeEl.className='kbadge '+(c5m>=1?'kb-ok':c5m>=0.85?'kb-am':'kb-rd');badgeEl.innerHTML=(c5m*100).toFixed(1)+'% del Ppto Ene-May';}
+    set('av-pe-hsub','Jefe Comercial · Ene–May 2026 · al '+corteStr);
+    // Mejor mes
+    var bIdx=mr5.indexOf(Math.max.apply(null,mr5));
+    set('av-pe-kpi-best-lbl','Mejor Mes · '+MNMS[bIdx]);
+    set('av-pe-kpi-best-val','USD '+K1(mr5[bIdx])+'K');
+    var bPct=mr5[bIdx]/mp5[bIdx];
+    var bBd=document.getElementById('av-pe-kpi-best-badge');
+    if(bBd){bBd.className='kbadge '+(bPct>=1?'kb-ok':bPct>=0.85?'kb-am':'kb-rd');bBd.innerHTML=(bPct*100).toFixed(1)+'% del ppto '+MNMS[bIdx].substring(0,3).toLowerCase();}
+    // Mayo KPI
+    var mayR=mr5[4]||0, mayP=mp5[4]||1, mayPct=mayR/mayP;
+    set('av-pe-kpi-may-lbl','Mayo Parcial');
+    set('av-pe-kpi-may-val','USD '+K1(mayR)+'K');
+    set('av-pe-kpi-may-sub','al '+corteStr+' · parcial');
+    var mayBd=document.getElementById('av-pe-kpi-may-badge');
+    if(mayBd){mayBd.className='kbadge '+(mayPct>=1?'kb-ok':mayPct>=0.85?'kb-am':'kb-rd');mayBd.innerHTML=(mayPct*100).toFixed(1)+'% del ppto may';}
+    // Brecha vs Ppto T1 (Ene-Mar)
+    var t1R=mr5.slice(0,3).reduce(function(a,b){return a+b;},0);
+    var t1P=mp5.slice(0,3).reduce(function(a,b){return a+b;},0);
+    var t1G=t1R-t1P, t1Pct=t1R/t1P;
+    set('av-pe-kpi-brecha-val',(t1G>=0?'+':'–')+'USD '+K1(Math.abs(t1G))+'K');
+    set('av-pe-kpi-brecha-sub','Real '+K1(t1R)+'K / Ppto '+K1(t1P)+'K · T1');
+    var brBd=document.getElementById('av-pe-kpi-brecha-badge');
+    if(brBd){brBd.className='kbadge '+(t1Pct>=1?'kb-ok':t1Pct>=0.85?'kb-am':'kb-rd');brBd.innerHTML=(t1Pct*100).toFixed(1)+'% cumplimiento T1';}
+    // Semáforo corte tag
+    set('av-pe-sema-corte','CORTE '+corteStr.substring(0,5));
+    // Semáforo sema-sub por vendedor
+    if(pve.aguirre&&pve.navarro){
+      set('av-sema-sub-aguirre','YTD USD '+fN2(pve.aguirre.ytd)+' · Mayo USD '+fN2(pve.aguirre.mayo)+' · Aguirre lidera grupo 🚀');
+    }
+    if(pve.atalaya){
+      var atSub='YTD USD '+fN2(pve.atalaya.ytd)+' · Referente constante · '+(pve.atalaya.mayo>0?'Mayo USD '+fN2(pve.atalaya.mayo):'sin venta Mayo');
+      set('av-sema-sub-atalaya',atSub);
+    }
+    if(pve.infante){
+      set('av-sema-sub-infante','YTD USD '+fN2(pve.infante.ytd)+' · Ppto anual USD 485K · Mayo USD '+fN2(pve.infante.mayo));
+    }
+    if(pve.gonzales){
+      set('av-sema-sub-gonzales','YTD USD '+fN2(pve.gonzales.ytd)+' · Ppto H2 activa desde Jun');
+    }
+    if(pve.valladares){
+      set('av-sema-sub-valladares','YTD USD '+fN2(pve.valladares.ytd)+' · Ppto Oct USD 35.8K');
+    }
+
+    // ── Tabla Detalle YTD por Zona ──────────────────────────────────────────
+    var fN3=function(v){return v>0?v.toLocaleString('en-US'):'–';};
+    var corteVtas=D.meta.cortes.peru_ventas||'15/05/2026';
+    set('av-pe-zona-corte','corte '+corteVtas);
+    // Cabecera columna último mes
+    var thMes=document.getElementById('pe-th-ultmes');
+    var mesNms=['','Ene','Feb','Mar','Abr','Mayo','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    var dd=corteVtas.split('/');
+    if(thMes&&dd.length>1) thMes.textContent=mesNms[parseInt(dd[1])]||'Mayo'+' Real';
+    // Filas por vendedor
+    var vendMap={aguirre:'aguirre',infante:'infante',atalaya:'atalaya',
+                 navarro:'navarro',gonzales:'gonzales',valladares:'valladares'};
+    Object.keys(vendMap).forEach(function(k){
+      var v=pve[k];
+      if(!v) return;
+      var el=document.getElementById('pe-td-'+k+'-may');
+      if(el) el.textContent=fN3(v.mayo);
+      var el2=document.getElementById('pe-td-'+k+'-ytd');
+      if(el2) el2.textContent=fN3(v.ytd);
+    });
+    // Tfoot totales
+    var t4m=pv.mensual_real.slice(0,4).reduce(function(a,b){return a+b;},0);
+    var mayTotal=pv.mensual_real[4]||0;
+    var pptoT1=213385, pptoA=pv.ppto_anual||1137034;
+    set('pe-tfoot-t1', t4m.toLocaleString('en-US'));
+    set('pe-tfoot-cumpl', (t4m/pptoT1*100).toFixed(1)+'%');
+    set('pe-tfoot-may', mayTotal.toLocaleString('en-US'));
+    set('pe-tfoot-ytd', pv.ytd_5m.toLocaleString('en-US'));
+    // Alerta dinámica Aguirre/Infante
+    var infYtdK=(pve.infante?(pve.infante.ytd/1000).toFixed(1):0);
+    var infPct=(pve.infante?Math.round(pve.infante.ytd/pptoA*100):0);
+    var grupoYtdK=(pv.ytd_5m/1000).toFixed(1);
+    set('av-pe-alerta-aguirre','Aguirre lidera Mayo con USD '+fN3(pve.aguirre?pve.aguirre.mayo:0)+
+      ' — zona más dinámica del grupo. YTD USD '+fN3(pve.aguirre?pve.aguirre.ytd:0)+' (+122% del ppto). '+
+      '<strong style="color:var(--green);">Infante consolida YTD USD '+infYtdK+'K ('+infPct+'% del ppto anual)</strong>. '+
+      'Atalaya sin venta en Mayo — verificar cartera activa. '+
+      'Grupo Perú YTD 5m: USD '+grupoYtdK+'K.');
+    // Footer
+    set('av-pe-footer-txt','AV Latam BI Platform · Panel Perú · Corte ventas '+corteVtas+
+      ' · CxC '+D.meta.cortes.peru_cxc+' · Ppto oficial USD '+pptoA.toLocaleString('en-US'));
 
   }catch(e){}
 })();

@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel CxC · Cobranza AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js"></script>
+<script src="avboard_data.js?v=20260520"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -204,8 +204,8 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
     </div>
   </div>
   <div class="corte">
-    <div>Chile <span>08/05/2026</span> · Perú <span>10/05/2026</span></div>
-    <div style="color:var(--text-muted);font-size:9px;margin-top:2px;">TC = 950 CLP/USD · Fecha análisis: 08/05/2026 · Agrocomercial + Agroveca Chile</div>
+    <div>Chile <span id="av-cxc-corte-cl">08/05/2026</span> · Perú <span id="av-cxc-corte-pe">10/05/2026</span></div>
+    <div style="color:var(--text-muted);font-size:9px;margin-top:2px;" id="av-cxc-corte-sub">TC = 950 CLP/USD · Agrocomercial + Agroveca Chile</div>
   </div>
   <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
 </header>
@@ -629,7 +629,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
             2. <strong style="color:var(--red);">RIBERA (104d · 1.47M)</strong> — Gestión directa. Bloqueo crédito inmediato.<br>
             3. <strong style="color:var(--red);">KULLIN (97d+ · 1.46M)</strong> — Compromiso de pago o acciones legales.<br>
             4. <strong style="color:var(--amber);">TIERRA DE BACO + ENCINA</strong> — Seguimiento 31-60d. Acuerdo de pago parcial.<br>
-            5. ✅ Goyaservice RESUELTO. Reporte de avance: <strong>lunes 18/05</strong> a GG. Corte 08/05.
+            5. ✅ Goyaservice RESUELTO. Reporte de avance: <strong>lunes 18/05</strong> a GG. Corte <span id="av-cxc-alerta-corte">—</span>.
           </div>
         </div>
         <div>
@@ -776,7 +776,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
 </div><!-- /page -->
 
 <div class="footer">
-  <div>AV Latam BI Platform · Panel CxC · Chile 08/05 · Perú 10/05/2026 · 2 entidades CHL</div>
+  <div id="av-cxc-footer-txt">AV Latam BI Platform · Panel CxC · 2 entidades CHL</div>
   <div class="nav-pills">
     <a href="dashboard.html" class="np">🏠 Inicio</a>
     <a href="Executive_Board_View_AV_Latam_2026.html" class="np">📋 Board View</a>
@@ -785,6 +785,36 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
 </div>
 
 <script>
+/* ── AVBOARD GUARD ─────────────────────────────────────────────────────── */
+(function initFromAVBOARD(){
+  function showError(msg){
+    if(document.getElementById('avboard-error-banner')) return;
+    var b=document.createElement('div');
+    b.id='avboard-error-banner';
+    b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#E74C3C;color:#fff;padding:14px 20px;font-family:"DM Mono",monospace;font-size:13px;text-align:center;letter-spacing:.5px;box-shadow:0 2px 8px rgba(0,0,0,.4);';
+    b.innerHTML='<b>⛔ ERROR AVBOARD:</b> '+msg;
+    document.body.insertBefore(b,document.body.firstChild);
+    console.error('[AVBOARD ERROR]',msg);
+  }
+  if(typeof AVBOARD==='undefined'){
+    showError('avboard_data.js no cargó — datos no disponibles. Forzar recarga: Ctrl+Shift+R');
+    return;
+  }
+  var clYTD = AVBOARD.chile&&AVBOARD.chile.ventas ? AVBOARD.chile.ventas.ytd_5m : undefined;
+  var peYTD = AVBOARD.peru&&AVBOARD.peru.ventas  ? AVBOARD.peru.ventas.ytd_5m  : undefined;
+  var clOK  = (clYTD === 342940920);
+  var peOK  = (peYTD === 334136);
+  console.log('[AVBOARD] versión:', AVBOARD.meta&&AVBOARD.meta.version);
+  console.log('[AVBOARD] Chile YTD CLP:', clYTD, clOK?'✅':'❌ esperado: 342940920');
+  console.log('[AVBOARD] Perú YTD USD:',  peYTD, peOK?'✅':'❌ esperado: 334136');
+  console.log('[AVBOARD] cortes:', AVBOARD.meta&&AVBOARD.meta.cortes);
+  if(!clOK||!peOK){
+    showError('caché desactualizado — CL:'+clYTD+' PE:'+peYTD+' — forzar recarga Ctrl+Shift+R');
+  }
+})();
+/* ── FIN GUARD ──────────────────────────────────────────────────────────── */
+
+
 Chart.defaults.color = '#8fa892';
 Chart.defaults.font.family = "'DM Mono', monospace";
 Chart.defaults.font.size = 10;
@@ -1172,7 +1202,34 @@ function cerrarSesion() {
       ];
       cPE.update();
     }
-  }catch(e){}
+
+    // ── Header corte ─────────────────────────────────────────────────────────
+    set('av-cxc-corte-cl', cc.corte);
+    set('av-cxc-corte-pe', pc.corte);
+    set('av-cxc-corte-sub', 'TC = 950 CLP/USD · '+cc.corte+' · Agrocomercial + Agroveca Chile');
+    set('av-cxc-alerta-corte', cc.corte);
+    set('av-cxc-footer-txt', 'AV Latam BI Platform · Panel CxC · Chile '+cc.corte+' · Perú '+pc.corte+' · 2 entidades CHL');
+
+    // ── Tabla Chile desde AVBOARD.cuentas_criticas ────────────────────────────
+    if(cc.cuentas_criticas && cc.cuentas_criticas.length>0){
+      // Convert cuentas_criticas from AVBOARD to chileData format for renderChile
+      var mapRTC={'laratro':'PABLO LARATRO','velasquez':'FRANCISCO VELASQUEZ','caroca':'JORGE CAROCA',
+        'encina':'RODRIGO ENCINA','veverka':'IVAN VEVERKA','munoz':'VALENTINA MUÑOZ',
+        'franco_riffo':'JUAN PABLO NEIRA','neira':'JUAN PABLO NEIRA','otros':'OFICINA'};
+      var avChile=cc.cuentas_criticas.map(function(c){
+        var estStr=c.estado==='CRÍTICO'?'Crítico':c.estado==='ALERTA'?'Alerta':'Monitoreo';
+        var trStr=c.dias>90?'+90d':c.dias>60?'61-90d':c.dias>30?'31-60d':'0-30d';
+        return {rtc:c.rtc||'',cliente:c.cliente,folio:'',emision:'',vencimiento:'',
+          dias:c.dias,tramo:trStr,monto:c.monto,estado:estStr,condicion:'Crédito'};
+      });
+      if(avChile.length>0){
+        chileData.length=0;
+        avChile.forEach(function(r){chileData.push(r);});
+        renderChile(chileData);
+      }
+    }
+
+  }catch(e){console.warn('[CxC] populate error:',e);}
 })();
 </script>
 </body>

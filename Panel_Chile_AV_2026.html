@@ -146,7 +146,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     <div class="logo">CL</div>
     <div>
       <div class="htitle">Panel Comercial · 🇨🇱 Chile</div>
-      <div class="hsub">Jefe Comercial · Ene–Abr 2026</div>
+      <div id="av-cl-hsub" class="hsub">Jefe Comercial · Ene–May 2026</div>
     </div>
   </div>
   <div class="hnav">
@@ -157,7 +157,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     <a href="Panel_Ecuador_AV_2026.html">🇪🇨 Ecuador</a>
   </div>
   <div id="av-cl-hdr-corte" class="hcorte">
-    <div>Corte ventas <b>29/04/2026</b> · CxC <b>29/04/2026</b></div>
+    <div>Corte ventas <b>—</b> · CxC <b>—</b></div>
     <div style="font-size:8px;margin-top:1px;">TC = 950 CLP/USD · Ppto anual CLP 861,321,350</div>
   </div>
   <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
@@ -169,21 +169,21 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   <div class="g5" style="margin-bottom:18px;">
     <div class="kpi">
       <div id="av-cl-kpi-ytd-lbl" class="klbl">YTD Chile 5m</div>
-      <div id="av-cl-kpi-ytd-val" class="kval ok">199.6M</div>
-      <div id="av-cl-kpi-ytd-sub" class="ksub">CLP al 29/04/2026</div>
-      <span id="av-cl-kpi-ytd-badge" class="kbadge kb-ok">93.5% ppto Ene-Abr</span>
+      <div id="av-cl-kpi-ytd-val" class="kval ok">—</div>
+      <div id="av-cl-kpi-ytd-sub" class="ksub">—</div>
+      <span id="av-cl-kpi-ytd-badge" class="kbadge kb-ok">—</span>
     </div>
     <div class="kpi">
       <div class="klbl">YTD en USD</div>
-      <div id="av-cl-kpi-usd-val" class="kval ok">210,154</div>
-      <div id="av-cl-kpi-usd-sub" class="ksub">CLP 199.6M / TC 950</div>
-      <span id="av-cl-kpi-usd-badge" class="kbadge kb-ok">T1: 105.4% ✅</span>
+      <div id="av-cl-kpi-usd-val" class="kval ok">—</div>
+      <div id="av-cl-kpi-usd-sub" class="ksub">—</div>
+      <span id="av-cl-kpi-usd-badge" class="kbadge kb-ok">—</span>
     </div>
     <div class="kpi am">
-      <div id="av-cl-kpi-abr-lbl" class="klbl">Abril Parcial</div>
-      <div id="av-cl-kpi-abr-val" class="kval am">23.4M</div>
-      <div id="av-cl-kpi-abr-sub" class="ksub">CLP al 29/04 · 50.4% ppto</div>
-      <span id="av-cl-kpi-abr-badge" class="kbadge kb-am">Laratro 8.3M · Caroca 10.2M</span>
+      <div id="av-cl-kpi-abr-lbl" class="klbl">Mayo Parcial</div>
+      <div id="av-cl-kpi-abr-val" class="kval am">—</div>
+      <div id="av-cl-kpi-abr-sub" class="ksub">—</div>
+      <span id="av-cl-kpi-abr-badge" class="kbadge kb-am">—</span>
     </div>
     <div class="kpi rd">
       <div class="klbl">MN Real Chile</div>
@@ -193,9 +193,9 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     </div>
     <div class="kpi am">
       <div class="klbl">CxC Total Chile</div>
-      <div id="av-cl-kpi-cxc-val" class="kval am">39.3M</div>
-      <div id="av-cl-kpi-cxc-sub" class="ksub">CLP · corte 29/04/2026</div>
-      <span id="av-cl-kpi-cxc-badge" class="kbadge kb-am">+90d: CLP 2.4M ✅</span>
+      <div id="av-cl-kpi-cxc-val" class="kval am">—</div>
+      <div id="av-cl-kpi-cxc-sub" class="ksub">—</div>
+      <span id="av-cl-kpi-cxc-badge" class="kbadge kb-am">—</span>
     </div>
   </div>
 
@@ -203,7 +203,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   <div class="g2" style="margin-bottom:15px;align-items:start;">
 
     <div class="panel">
-      <div class="ptitle">SEMÁFORO RTC · CHILE <span id="av-cl-sema-tag" class="ptag">CORTE 29/04 · MN REAL</span></div>
+      <div class="ptitle">SEMÁFORO RTC · CHILE <span id="av-cl-sema-tag" class="ptag">MN REAL</span></div>
       <div class="sema-list">
 
         <div class="sema-row">
@@ -273,53 +273,10 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     <div class="panel">
       <div class="ptitle">CUMPLIMIENTO MENSUAL <span class="ptag">CLP · Real vs Ppto</span></div>
 
-      <div id="av-cl-mes-container" class="mes-bars" style="margin-bottom:14px;">
-        <div class="mes-row">
-          <div class="mes-lbl">Enero</div>
-          <div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:100%;background:var(--green);"></div></div>
-          <div class="mes-pct" style="color:var(--green);">105.6%</div>
-        </div>
-        <div class="mes-row">
-          <div class="mes-lbl">Febrero</div>
-          <div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:85.7%;background:var(--amber);"></div></div>
-          <div class="mes-pct" style="color:var(--amber);">85.7%</div>
-        </div>
-        <div class="mes-row">
-          <div class="mes-lbl">Marzo</div>
-          <div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:100%;background:var(--green);"></div></div>
-          <div class="mes-pct" style="color:var(--green);">124.7%</div>
-        </div>
-        <div class="mes-row">
-          <div class="mes-lbl">Abril</div>
-          <div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:100%;background:var(--green);"></div></div>
-          <div class="mes-pct" style="color:var(--green);">280.8%</div>
-        </div>
-        <div class="mes-row">
-          <div class="mes-lbl" style="font-weight:700;">YTD T1</div>
-          <div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:100%;background:var(--green);"></div></div>
-          <div class="mes-pct" style="color:var(--green);font-weight:700;">105.4%</div>
-        </div>
-      </div>
+      <div id="av-cl-mes-container" class="mes-bars" style="margin-bottom:14px;"></div>
 
-      <div id="av-cl-margen-strip" class="margen-strip">
-        <div class="mg-item">
-          <div class="mg-val" style="color:var(--green);">88.2M</div>
-          <div class="mg-lbl">Enero</div>
-        </div>
-        <div class="mg-item">
-          <div class="mg-val" style="color:var(--amber);">35.7M</div>
-          <div class="mg-lbl">Febrero</div>
-        </div>
-        <div class="mg-item">
-          <div class="mg-val" style="color:var(--green);">52.4M</div>
-          <div class="mg-lbl">Marzo</div>
-        </div>
-        <div class="mg-item">
-          <div class="mg-val" style="color:var(--amber);">23.4M</div>
-          <div class="mg-lbl">Abril</div>
-        </div>
-      </div>
-      <div id="av-cl-mes-acum" style="font-size:9px;color:var(--muted);margin-top:6px;">Ene-Abr acum: CLP 199.6M · 93.5% ppto · TC 950 CLP/USD</div>
+      <div id="av-cl-margen-strip" class="margen-strip"></div>
+      <div id="av-cl-mes-acum" style="font-size:9px;color:var(--muted);margin-top:6px;">—</div>
     </div>
   </div>
 
@@ -543,8 +500,38 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   </div>
 </div>
 
-<script src="avboard_data.js"></script>
+<script src="avboard_data.js?v=20260520"></script>
 <script>
+/* ── AVBOARD GUARD ─────────────────────────────────────────────────────── */
+(function initFromAVBOARD(){
+  function showError(msg){
+    if(document.getElementById('avboard-error-banner')) return;
+    var b=document.createElement('div');
+    b.id='avboard-error-banner';
+    b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#E74C3C;color:#fff;padding:14px 20px;font-family:"DM Mono",monospace;font-size:13px;text-align:center;letter-spacing:.5px;box-shadow:0 2px 8px rgba(0,0,0,.4);';
+    b.innerHTML='<b>⛔ ERROR AVBOARD:</b> '+msg;
+    document.body.insertBefore(b,document.body.firstChild);
+    console.error('[AVBOARD ERROR]',msg);
+  }
+  if(typeof AVBOARD==='undefined'){
+    showError('avboard_data.js no cargó — datos no disponibles. Forzar recarga: Ctrl+Shift+R');
+    return;
+  }
+  var clYTD = AVBOARD.chile&&AVBOARD.chile.ventas ? AVBOARD.chile.ventas.ytd_5m : undefined;
+  var peYTD = AVBOARD.peru&&AVBOARD.peru.ventas  ? AVBOARD.peru.ventas.ytd_5m  : undefined;
+  var clOK  = (clYTD === 342940920);
+  var peOK  = (peYTD === 334136);
+  console.log('[AVBOARD] versión:', AVBOARD.meta&&AVBOARD.meta.version);
+  console.log('[AVBOARD] Chile YTD CLP:', clYTD, clOK?'✅':'❌ esperado: 342940920');
+  console.log('[AVBOARD] Perú YTD USD:',  peYTD, peOK?'✅':'❌ esperado: 334136');
+  console.log('[AVBOARD] cortes:', AVBOARD.meta&&AVBOARD.meta.cortes);
+  if(!clOK||!peOK){
+    showError('caché desactualizado — CL:'+clYTD+' PE:'+peYTD+' — forzar recarga Ctrl+Shift+R');
+  }
+})();
+/* ── FIN GUARD ──────────────────────────────────────────────────────────── */
+
+
 Chart.defaults.color = '#8fa892';
 Chart.defaults.font.family = "'DM Mono', monospace";
 Chart.defaults.font.size = 10;
@@ -598,7 +585,7 @@ new Chart(document.getElementById('cCurva'),{
     labels:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
     datasets:[
       {label:'Ppto Acumulado',data:pptoAc,borderColor:'rgba(255,255,255,0.22)',borderDash:[6,4],borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(255,255,255,0.3)',tension:0.3,fill:false},
-      {label:'Real Acumulado',data:[88231,123883,176254,199646,null,null,null,null,null,null,null,null],borderColor:G,backgroundColor:'rgba(122,182,72,0.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:G,tension:0.3,fill:true},
+      {label:'Real Acumulado',data:[null,null,null,null,null,null,null,null,null,null,null,null],borderColor:G,backgroundColor:'rgba(122,182,72,0.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:G,tension:0.3,fill:true},
       {type:'bar',label:'Ppto Mensual',data:CH_PPTO,backgroundColor:'rgba(255,255,255,0.04)',borderColor:'rgba(255,255,255,0.08)',borderWidth:1,borderRadius:2}
     ]
   },
@@ -651,6 +638,7 @@ function cerrarSesion() {
     var sHC = cHC.slice(0, 5);              // '08/05'
 
     // ── Header ───────────────────────────────────────────────────
+    set('av-cl-hsub', 'Jefe Comercial · Ene–May 2026 · al ' + cHV);
     set('av-cl-hdr-corte',
       '<div>Corte ventas <b>' + cHV + '</b> · CxC <b>' + cHC + '</b></div>' +
       '<div style="font-size:8px;margin-top:1px;">TC = ' + D.tc() + ' CLP/USD · Ppto anual CLP 861,321,350</div>');
@@ -659,7 +647,7 @@ function cerrarSesion() {
     set('av-cl-kpi-ytd-lbl',   'YTD Chile 5m');
     set('av-cl-kpi-ytd-val',   M(cv.ytd_5m) + 'M');
     set('av-cl-kpi-ytd-sub',   'CLP al ' + cHV);
-    set('av-cl-kpi-ytd-badge', pct(cv.cumplimiento_4m) + ' ppto Ene-Abr');
+    set('av-cl-kpi-ytd-badge', pct(cv.cumplimiento_5m) + ' ppto Ene-May');
 
     // ── KPI 2: YTD USD ───────────────────────────────────────────
     var chUsd = Math.round(cv.ytd_5m / D.tc());
@@ -725,7 +713,7 @@ function cerrarSesion() {
 
     // ── Acumulado text ────────────────────────────────────────────
     set('av-cl-mes-acum',
-      'Ene-Abr acum: CLP ' + M(cv.ytd_4m) + 'M · ' + pct(cv.cumplimiento_4m) + ' ppto ' +
+      'Ene-May acum: CLP ' + M(cv.ytd_5m) + 'M · ' + pct(cv.cumplimiento_5m) + ' ppto ' +
       '· May parcial: CLP ' + M(cv.mayo_parcial) + 'M · TC ' + D.tc() + ' CLP/USD');
 
     // ── CxC sección ───────────────────────────────────────────────
