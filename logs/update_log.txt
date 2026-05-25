@@ -32,3 +32,20 @@ ACCIONES:
   · CxC Chile CLP 162,180,611 · +90d CLP 18,226,627
 VALIDACIÓN JS: ✅ OK
 ======================================================================
+
+======================================================================
+CORTE: 2026-05-25 16:48
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 24-05-2026.xlsx
+  - AGROVECA PERU -  VENTAS  AL 22.05.2026.xlsx
+  - Cuentas Cobrar  AGrocomercial 17-05.xlsx
+  - Cuentas Cobrar Agroveca 24-05.xlsx
+  - precios piso CHile .xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 24/05/2026
+  · avboard_clientes.js regenerado · 133 clientes CL
+  · Panel_IEC TX_CL · 1332 transacciones
+  · IEC Chile 32.9% · BP CLP 146,241,846
+  · CxC Chile CLP 162,180,611 · +90d CLP 19,512,720
+VALIDACIÓN JS: ✅ OK
+======================================================================
