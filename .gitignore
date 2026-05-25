@@ -1,0 +1,7 @@
+
+# macOS
+.DS_Store
+
+# Archivos fuente de actualización
+inbox/*.xlsx
+inbox/*.xls
