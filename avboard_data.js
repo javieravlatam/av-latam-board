@@ -11,7 +11,7 @@
  * Cortes:
  *   Chile ventas → 31/05/2026
  *   Chile CxC    → 17/05/2026 (2 entidades)
- *   Perú ventas  → 29/05/2026
+ *   Perú ventas  → 02/06/2026
  *   Perú CxC     → 10/05/2026
  *
  * Actualizado: 2026-06-03
@@ -26,17 +26,17 @@ var AVBOARD = (function() {
     cortes: {
       chile_ventas: '31/05/2026',
       chile_cxc:    '17/05/2026',
-      peru_ventas:  '29/05/2026',
+      peru_ventas:  '02/06/2026',
       peru_cxc:     '10/05/2026'
     },
     meses: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
   };
 
   var grupo = {
-    ytd_usd:      730371,
-    ytd_clp:      693852760,
+    ytd_usd:      746599,
+    ytd_clp:      709269360,
     chile_ytd_usd: 386099,
-    peru_ytd_usd:  344272,
+    peru_ytd_usd:  360500,
     rtc_activos:  12,
     mn_chile:     0.179,
     mn_peru:      null
@@ -273,20 +273,20 @@ var AVBOARD = (function() {
   };
 
   var peru_ventas = {
-    ytd_5m:       344272,
-    ytd_4m:       260113,
+    ytd_5m:       360500,
+    ytd_4m:       259813,
     mayo_parcial: 84159,
     ppto_anual:   1137034,
     ppto_4m:      284684,
     ppto_5m:      346630,
-    cumplimiento_4m: 0.9137,
-    cumplimiento_5m: 0.9932,
-    mensual_real: [70232, 38180, 87967, 63734, 84159, 0, 0, 0, 0, 0, 0, 0],
+    cumplimiento_4m: 0.9126,
+    cumplimiento_5m: 1.04,
+    mensual_real: [70232, 38180, 87967, 63434, 84159, 0, 0, 0, 0, 0, 0, 0],
     mensual_ppto: [51674, 58489, 103222, 71299, 61946, 78710, 100675, 178180, 125564, 165842, 98481, 42952],
     por_vendedor: {
       aguirre: {
         nombre: "Lisbeth Aguirre",
-        ytd:    98043,
+        ytd:    103811,
         mayo:   49431
       },
       atalaya: {
@@ -296,7 +296,7 @@ var AVBOARD = (function() {
       },
       diaz: {
         nombre: "Susan Diaz",
-        ytd:    8900,
+        ytd:    16960,
         mayo:   2600
       },
       gonzales: {
@@ -316,7 +316,7 @@ var AVBOARD = (function() {
       },
       valladares: {
         nombre: "Patricia Valladares",
-        ytd:    2600,
+        ytd:    5000,
         mayo:   1400
       }
     },
@@ -328,7 +328,7 @@ var AVBOARD = (function() {
       valladares: 142372
     },
     rtc_mensual_real: {
-      aguirre: [0, 6184, 28681, 13747, 49431, 0, 0, 0, 0, 0, 0, 0],
+      aguirre: [0, 6184, 28681, 13447, 49431, 0, 0, 0, 0, 0, 0, 0],
       atalaya: [29881, 8108, 20000, 6600, 8400, 0, 0, 0, 0, 0, 0, 0],
       diaz: [0, 0, 0, 6300, 2600, 0, 0, 0, 0, 0, 0, 0],
       gonzales: [600, 0, 96, 0, 0, 0, 0, 0, 0, 0, 0, 0],
