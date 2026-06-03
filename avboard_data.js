@@ -9,49 +9,49 @@
  * ╚══════════════════════════════════════════════════════════════════╝
  *
  * Cortes:
- *   Chile ventas → 24/05/2026
+ *   Chile ventas → 31/05/2026
  *   Chile CxC    → 17/05/2026 (2 entidades)
- *   Perú ventas  → 22/05/2026
+ *   Perú ventas  → 29/05/2026
  *   Perú CxC     → 10/05/2026
  *
- * Actualizado: 2026-05-25
+ * Actualizado: 2026-06-03
  */
 
 var AVBOARD = (function() {
 
   var meta = {
-    version:      '2026-05-25',
+    version:      '2026-06-03',
     tc_clp_usd:   950,
     meta_mn:      0.25,
     cortes: {
-      chile_ventas: '24/05/2026',
+      chile_ventas: '31/05/2026',
       chile_cxc:    '17/05/2026',
-      peru_ventas:  '22/05/2026',
+      peru_ventas:  '29/05/2026',
       peru_cxc:     '10/05/2026'
     },
     meses: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
   };
 
   var grupo = {
-    ytd_usd:      703550,
-    ytd_clp:      668372760,
-    chile_ytd_usd: 367678,
-    peru_ytd_usd:  335872,
+    ytd_usd:      730371,
+    ytd_clp:      693852760,
+    chile_ytd_usd: 386099,
+    peru_ytd_usd:  344272,
     rtc_activos:  12,
     mn_chile:     0.179,
     mn_peru:      null
   };
 
   var chile_ventas = {
-    ytd_5m:          349294360,
+    ytd_5m:          366794360,
     ytd_4m:          306612701,
-    mayo_parcial:    42681659,
+    mayo_parcial:    60181659,
     ppto_anual:      861321350,
     ppto_4m:         213591350,
     ppto_5m:         264591350,
     cumplimiento_4m: 1.4355,
     cumplimiento_t1: 1.0544,
-    mensual_real:  [88231364, 35651978, 52370709, 130358650, 42681659, 0, 0, 0, 0, 0, 0, 0],
+    mensual_real:  [88231364, 35651978, 52370709, 130358650, 60181659, 0, 0, 0, 0, 0, 0, 0],
     mensual_ppto:  [83558032, 41601950, 42000000, 46431368, 51000000, 49730000, 62800000, 76500000, 110800000, 112700000, 97500000, 86700000],
     rtc_real_t1:   {
       caroca: 53122658,
@@ -71,10 +71,10 @@ var AVBOARD = (function() {
     rtc_mensual_real: {
       almeida: [0, 0, 0, 0, 210000, 0, 0, 0, 0, 0, 0, 0],
       caroca: [14820273, 6389076, 31913309, 10171393, 9822200, 0, 0, 0, 0, 0, 0, 0],
-      encina: [13510783, 7262717, 6819022, 5495612, 8733784, 0, 0, 0, 0, 0, 0, 0],
-      laratro: [37027580, 10378585, 5487150, 100069145, 4753675, 0, 0, 0, 0, 0, 0, 0],
+      encina: [13510783, 7262717, 6819022, 5495612, 8815784, 0, 0, 0, 0, 0, 0, 0],
+      laratro: [37027580, 10378585, 5487150, 100069145, 18073675, 0, 0, 0, 0, 0, 0, 0],
       munoz: [2195728, 765600, 1274728, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      velasquez: [14491000, 9912000, 5196500, 14622500, 19162000, 0, 0, 0, 0, 0, 0, 0],
+      velasquez: [14491000, 9912000, 5196500, 14622500, 23260000, 0, 0, 0, 0, 0, 0, 0],
       veverka: [6186000, 944000, 1680000, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
     rtc_mensual_ppto: {
@@ -85,14 +85,14 @@ var AVBOARD = (function() {
       veverka: [6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000]
     },
     iec: {
-      total: 0.329,
+      total: 0.310,
       velasquez: 0.143,
-      laratro: 0.382,
+      laratro: 0.346,
       caroca: 0.671,
-      encina: 0.294,
+      encina: 0.293,
       veverka: 0.936,
       munoz: 0.531,
-      impacto_potencial_clp: 146241846
+      impacto_potencial_clp: 159463846
     },
     mn_real:  0.179,
     mn_meta:  0.250
@@ -102,8 +102,8 @@ var AVBOARD = (function() {
     corte:    '17/05/2026',
     entidades: 2,
     total:    162180611,
-    vencida:  38674641,
-    al_dia:   123505970,
+    vencida:  52229455,
+    al_dia:   109951156,
     por_entidad: {
       agrocomercial: {
         nombre: 'Agrocomercial',
@@ -121,28 +121,28 @@ var AVBOARD = (function() {
         tramos: {
           t90:   13180918,
           t6190: 1291650,
-          t3160: 0,
-          t030:  42853278
+          t3160: 13554814,
+          t030:  29298464
         }
       }
     },
     tramos: {
       t90:   19512720,
       t6190: 8952791,
-      t3160: 10209130,
-      t030:  123505970
+      t3160: 23763944,
+      t030:  109951156
     },
     tramos_pct: {
       t90:   0.1203,
       t6190: 0.0552,
-      t3160: 0.0629,
-      t030:  0.7615
+      t3160: 0.1465,
+      t030:  0.678
     },
     por_rtc: {
       laratro: {
         total:   48832443,
         pct:     0.3011,
-        vencida: 11017456,
+        vencida: 26999156,
         t90:     1460166,
         riesgo: 'CRÍTICO'
       },
@@ -160,18 +160,18 @@ var AVBOARD = (function() {
         t90:     0,
         riesgo: 'RIESGO'
       },
-      neira: {
-        total:   19212870,
-        pct:     0.1185,
-        vencida: 9965856,
-        t90:     3754844,
+      franco_riffo: {
+        total:   22107427,
+        pct:     0.1363,
+        vencida: 22107427,
+        t90:     9530710,
         riesgo: 'CRÍTICO'
       },
-      franco_riffo: {
-        total:   12860413,
-        pct:     0.0793,
-        vencida: 9530710,
-        t90:     9530710,
+      neira: {
+        total:   9965856,
+        pct:     0.0614,
+        vencida: 9965856,
+        t90:     3754844,
         riesgo: 'CRÍTICO'
       },
       caroca: {
@@ -184,7 +184,7 @@ var AVBOARD = (function() {
       veverka: {
         total:   5152700,
         pct:     0.0318,
-        vencida: 0,
+        vencida: 533120,
         t90:     0,
         riesgo: 'NORMAL'
       },
@@ -207,7 +207,7 @@ var AVBOARD = (function() {
       {
         cliente: "AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA",
         rtc: "FRANCO RIFFO / JUAN PABLO NEIRA",
-        dias: 132,
+        dias: 138,
         monto: 13285554,
         estado: "CRÍTICO",
         alerta: "PRIORIDAD_MAXIMA"
@@ -223,7 +223,7 @@ var AVBOARD = (function() {
       {
         cliente: "COMERCIAL COPELEC S.A.",
         rtc: "VALENTINA MUÑOZ",
-        dias: 108,
+        dias: 114,
         monto: 1307077,
         estado: "CRÍTICO",
         alerta: "URGENTE"
@@ -231,7 +231,7 @@ var AVBOARD = (function() {
       {
         cliente: "RAMADA DE CAMPOS SPA",
         rtc: "JORGE CAROCA",
-        dias: 93,
+        dias: 99,
         monto: 1286093,
         estado: "CRÍTICO",
         alerta: "URGENTE"
@@ -247,7 +247,7 @@ var AVBOARD = (function() {
       {
         cliente: "MAGALY DEL CARMEN ORELLANA PINO",
         rtc: "JORGE CAROCA",
-        dias: 116,
+        dias: 122,
         monto: 700134,
         estado: "CRÍTICO",
         alerta: "URGENTE"
@@ -255,7 +255,7 @@ var AVBOARD = (function() {
       {
         cliente: "AGROINSUMOS KULLIN SPA",
         rtc: "PABLO LARATRO",
-        dias: 127,
+        dias: 133,
         monto: 538951,
         estado: "CRÍTICO",
         alerta: "URGENTE"
@@ -273,15 +273,15 @@ var AVBOARD = (function() {
   };
 
   var peru_ventas = {
-    ytd_5m:       335872,
+    ytd_5m:       344272,
     ytd_4m:       260113,
-    mayo_parcial: 75759,
+    mayo_parcial: 84159,
     ppto_anual:   1137034,
     ppto_4m:      284684,
     ppto_5m:      346630,
     cumplimiento_4m: 0.9137,
-    cumplimiento_5m: 0.969,
-    mensual_real: [70232, 38180, 87967, 63734, 75759, 0, 0, 0, 0, 0, 0, 0],
+    cumplimiento_5m: 0.9932,
+    mensual_real: [70232, 38180, 87967, 63734, 84159, 0, 0, 0, 0, 0, 0, 0],
     mensual_ppto: [51674, 58489, 103222, 71299, 61946, 78710, 100675, 178180, 125564, 165842, 98481, 42952],
     por_vendedor: {
       aguirre: {
@@ -291,8 +291,8 @@ var AVBOARD = (function() {
       },
       atalaya: {
         nombre: "Omar Atalaya",
-        ytd:    64589,
-        mayo:   0
+        ytd:    72989,
+        mayo:   8400
       },
       diaz: {
         nombre: "Susan Diaz",
@@ -329,7 +329,7 @@ var AVBOARD = (function() {
     },
     rtc_mensual_real: {
       aguirre: [0, 6184, 28681, 13747, 49431, 0, 0, 0, 0, 0, 0, 0],
-      atalaya: [29881, 8108, 20000, 6600, 0, 0, 0, 0, 0, 0, 0, 0],
+      atalaya: [29881, 8108, 20000, 6600, 8400, 0, 0, 0, 0, 0, 0, 0],
       diaz: [0, 0, 0, 6300, 2600, 0, 0, 0, 0, 0, 0, 0],
       gonzales: [600, 0, 96, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       infante: [16511, 16188, 38190, 36887, 22328, 0, 0, 0, 0, 0, 0, 0],
