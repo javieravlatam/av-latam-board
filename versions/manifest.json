@@ -1,0 +1,71 @@
+[
+  {
+    "version": "2026-06-03_2031",
+    "timestamp": "2026-06-03T20:31:19.071841",
+    "fecha_ejecucion": "2026-06-03",
+    "hora_ejecucion": "20:31",
+    "auditoria": "N/D",
+    "kpis": {
+      "chile_ytd_clp": 366794360,
+      "chile_ppto_5m_clp": 264591350,
+      "chile_ppto_anual_clp": 861321350,
+      "chile_cumpl_5m": null,
+      "corte_chile": null,
+      "peru_ytd_usd": 360500,
+      "peru_ppto_5m_usd": 346630,
+      "peru_ppto_anual_usd": 1137034,
+      "peru_cumpl_5m": 1.04,
+      "corte_peru": null,
+      "grupo_ytd_usd": 746599,
+      "grupo_ppto_anual_usd": null,
+      "cxc_chile_total": null,
+      "cxc_chile_t90": null,
+      "semana": null
+    },
+    "archivos_copiados": {
+      "libro_base": "versions/base/libro_base_AV_2026_2026-06-03_2031.xlsx",
+      "avboard_data": "versions/data/avboard_data_2026-06-03_2031.js",
+      "avboard_clientes": "versions/data/avboard_clientes_2026-06-03_2031.js",
+      "AVBOARD_PANEL_AUDIT_REPORT": "versions/logs/audit_report_2026-06-03_2031.md",
+      "update_log": "versions/logs/update_log_2026-06-03_2031.txt",
+      "resumen_actualizacion": "versions/logs/resumen_2026-06-03_2031.md",
+      "alertas": "versions/logs/alertas_2026-06-03_2031.md"
+    }
+  },
+  {
+    "version": "2026-06-03_2129",
+    "timestamp": "2026-06-03T21:29:39.206428",
+    "fecha_ejecucion": "2026-06-03",
+    "hora_ejecucion": "21:29",
+    "auditoria": "N/D",
+    "kpis": {
+      "chile_ytd_clp": 366794360,
+      "chile_ppto_5m_clp": 264591350,
+      "chile_ppto_anual_clp": 861321350,
+      "chile_cumpl_5m": null,
+      "corte_chile": "31/05/2026",
+      "peru_ytd_usd": 360500,
+      "peru_ppto_5m_usd": 346630,
+      "peru_ppto_anual_usd": 1137034,
+      "peru_cumpl_5m": 1.04,
+      "corte_peru": "02/06/2026",
+      "grupo_ytd_usd": 746599,
+      "grupo_ppto_anual_usd": null,
+      "cxc_chile_total": 162180611,
+      "cxc_chile_t90": 6331802,
+      "cxc_peru_total": null,
+      "cxc_peru_t90": null,
+      "grupo_ppto_nota": "ppto_anual no existe en grupo — calcular externamente si se necesita",
+      "semana": null
+    },
+    "archivos_copiados": {
+      "libro_base": "versions/base/libro_base_AV_2026_2026-06-03_2129.xlsx",
+      "avboard_data": "versions/data/avboard_data_2026-06-03_2129.js",
+      "avboard_clientes": "versions/data/avboard_clientes_2026-06-03_2129.js",
+      "AVBOARD_PANEL_AUDIT_REPORT": "versions/logs/audit_report_2026-06-03_2129.md",
+      "update_log": "versions/logs/update_log_2026-06-03_2129.txt",
+      "resumen_actualizacion": "versions/logs/resumen_2026-06-03_2129.md",
+      "alertas": "versions/logs/alertas_2026-06-03_2129.md"
+    }
+  }
+]
