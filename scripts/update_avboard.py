@@ -57,12 +57,52 @@ NOW   = datetime.now().strftime('%Y-%m-%d %H:%M')
 # ── Constantes de negocio (estáticas — solo cambian si cambia el presupuesto) ─
 TC_CLP_USD = 950
 
-# Presupuesto Chile (CLP)
-PPTO_MENSUAL_CL = [83558032, 41601950, 42000000, 46431368, 51000000,
-                   49730000, 62800000, 76500000, 110800000, 112700000, 97500000, 86700000]
-PPTO_ANUAL_CL   = sum(PPTO_MENSUAL_CL)   # 861,321,350
+# Presupuesto Chile y Perú desde Libro Base, con fallback LEGACY
+import sys as _sys_pb
+import os as _os_pb
 
-# Presupuesto Chile por RTC (CLP)
+_scripts_dir_pb = _os_pb.path.dirname(_os_pb.path.abspath(__file__))
+if _scripts_dir_pb not in _sys_pb.path:
+    _sys_pb.path.insert(0, _scripts_dir_pb)
+
+try:
+    from ppto_libro_base import get_ppto_all
+    _ppto = get_ppto_all()
+except Exception as _ppto_err:
+    print(f"⚠️  No se pudo cargar presupuesto desde Libro Base: {_ppto_err}")
+    print("⚠️  Usando presupuesto LEGACY")
+    from ppto_libro_base import PPTO_MENSUAL_CL_LEGACY, PPTO_MENSUAL_PE_LEGACY
+    _ppto = {
+        "chile": {
+            "mensual": list(PPTO_MENSUAL_CL_LEGACY),
+            "ppto_4m": sum(PPTO_MENSUAL_CL_LEGACY[:4]),
+            "ppto_5m": sum(PPTO_MENSUAL_CL_LEGACY[:5]),
+            "anual": sum(PPTO_MENSUAL_CL_LEGACY),
+            "source": "LEGACY",
+            "warning": str(_ppto_err),
+        },
+        "peru": {
+            "mensual": list(PPTO_MENSUAL_PE_LEGACY),
+            "ppto_4m": sum(PPTO_MENSUAL_PE_LEGACY[:4]),
+            "ppto_5m": sum(PPTO_MENSUAL_PE_LEGACY[:5]),
+            "anual": sum(PPTO_MENSUAL_PE_LEGACY),
+            "source": "LEGACY",
+            "warning": str(_ppto_err),
+        },
+    }
+
+PPTO_MENSUAL_CL = _ppto["chile"]["mensual"]
+PPTO_ANUAL_CL   = _ppto["chile"]["anual"]
+PPTO_SOURCE_CL  = _ppto["chile"]["source"]
+
+PPTO_MENSUAL_PE = _ppto["peru"]["mensual"]
+PPTO_ANUAL_PE   = _ppto["peru"]["anual"]
+PPTO_SOURCE_PE  = _ppto["peru"]["source"]
+
+print(f"  Ppto Chile [{PPTO_SOURCE_CL}]: 5m={sum(PPTO_MENSUAL_CL[:5]):,.0f} / anual={PPTO_ANUAL_CL:,.0f} CLP")
+print(f"  Ppto Perú  [{PPTO_SOURCE_PE}]: 5m={sum(PPTO_MENSUAL_PE[:5]):,.1f} / anual={PPTO_ANUAL_PE:,.1f} USD")
+
+# Presupuesto Chile por RTC (CLP) — legacy operativo para distribución por RTC
 PPTO_RTC_CL = {
     'caroca':    [12500000, 6000000, 14500000,  8831000, 12500000,  8730000,  6000000, 25500000, 10800000,  8700000,  5000000, 12500000],
     'laratro':   [36000000,10600000,  7500000, 16600000, 22500000, 10000000,  7800000, 21000000, 25000000, 20000000, 37500000, 19500000],
@@ -70,10 +110,6 @@ PPTO_RTC_CL = {
     'velasquez': [14858000,11502000,  6500000, 10000000,  5000000, 20000000, 38000000, 12000000, 48000000, 50000000, 18000000, 20000000],
     'veverka':   [ 6000000, 6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000],
 }
-
-# Presupuesto Perú (USD)
-PPTO_MENSUAL_PE = [51674, 58489, 103222, 71299, 61946, 78710, 100675, 178180, 125564, 165842, 98481, 42952]
-PPTO_ANUAL_PE   = sum(PPTO_MENSUAL_PE)   # 1,137,034
 
 PPTO_RTC_ANUAL_PE = {
     'infante':    485058,
