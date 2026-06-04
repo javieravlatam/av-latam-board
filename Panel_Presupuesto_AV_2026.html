@@ -971,7 +971,7 @@ new Chart(document.getElementById('cGrupo'),{
     var gmE=document.getElementById('cl-gap-may');
     if(gmE){gmE.className=clGapMay>=0?'gp':'gn';gmE.textContent=(clGapMay>=0?'+':'')+clGapMay.toLocaleString('es-CL')+'*';}
     // ── Perú KPIs ──────────────────────────────────────────────────────────────
-    var peYTD=pv.ytd_5m, pePpto5m=pv.ppto_5m, pePptoA=pv.ppto_anual||1137034;
+    var peYTD=pv.ytd_5m, pePpto5m=pv.ppto_5m, pePptoA=pv.ppto_anual;
     // Fallback NaN-safe para cumplimiento Perú
     var peCumpl5m = (pv.cumplimiento_5m != null && !isNaN(pv.cumplimiento_5m))
       ? pv.cumplimiento_5m
