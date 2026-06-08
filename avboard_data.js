@@ -9,22 +9,22 @@
  * ╚══════════════════════════════════════════════════════════════════╝
  *
  * Cortes:
- *   Chile ventas → 31/05/2026
+ *   Chile ventas → 07/06/2026
  *   Chile CxC    → 17/05/2026 (2 entidades)
  *   Perú ventas  → 02/06/2026
  *   Perú CxC     → 10/05/2026
  *
- * Actualizado: 2026-06-03
+ * Actualizado: 2026-06-08
  */
 
 var AVBOARD = (function() {
 
   var meta = {
-    version:      '2026-06-03',
+    version:      '2026-06-08',
     tc_clp_usd:   950,
     meta_mn:      0.25,
     cortes: {
-      chile_ventas: '31/05/2026',
+      chile_ventas: '07/06/2026',
       chile_cxc:    '17/05/2026',
       peru_ventas:  '02/06/2026',
       peru_cxc:     '10/05/2026'
@@ -33,9 +33,9 @@ var AVBOARD = (function() {
   };
 
   var grupo = {
-    ytd_usd:      746599,
-    ytd_clp:      709269360,
-    chile_ytd_usd: 386099,
+    ytd_usd:      752519,
+    ytd_clp:      714892581,
+    chile_ytd_usd: 392019,
     peru_ytd_usd:  360500,
     rtc_activos:  12,
     mn_chile:     0.179,
@@ -43,7 +43,7 @@ var AVBOARD = (function() {
   };
 
   var chile_ventas = {
-    ytd_5m:          366794360,
+    ytd_5m:          372417581,
     ytd_4m:          306612701,
     mayo_parcial:    60181659,
     ppto_anual:      792640368.0,
@@ -51,7 +51,7 @@ var AVBOARD = (function() {
     ppto_5m:         246979768,
     cumplimiento_4m: 1.5867,
     cumplimiento_t1: 1.1857,
-    mensual_real:  [88231364, 35651978, 52370709, 130358650, 60181659, 0, 0, 0, 0, 0, 0, 0],
+    mensual_real:  [88231364, 35651978, 52370709, 130358650, 60181659, 5623221, 0, 0, 0, 0, 0, 0],
     mensual_ppto:  [72303400.0, 36596500.0, 39746700.0, 44598368.0, 53734800.0, 71112400.0, 37720500.0, 82581300.0, 102341400.0, 93908900.0, 86921300.0, 71074800.0],
     rtc_real_t1:   {
       caroca: 53122658,
@@ -70,11 +70,11 @@ var AVBOARD = (function() {
     },
     rtc_mensual_real: {
       almeida: [0, 0, 0, 0, 210000, 0, 0, 0, 0, 0, 0, 0],
-      caroca: [14820273, 6389076, 31913309, 10171393, 9822200, 0, 0, 0, 0, 0, 0, 0],
-      encina: [13510783, 7262717, 6819022, 5495612, 8815784, 0, 0, 0, 0, 0, 0, 0],
-      laratro: [37027580, 10378585, 5487150, 100069145, 18073675, 0, 0, 0, 0, 0, 0, 0],
+      caroca: [14820273, 6389076, 31913309, 10171393, 9822200, 3962020, 0, 0, 0, 0, 0, 0],
+      encina: [13510783, 7262717, 6819022, 5495612, 8815784, 150201, 0, 0, 0, 0, 0, 0],
+      laratro: [37027580, 10378585, 5487150, 100069145, 18073675, 315000, 0, 0, 0, 0, 0, 0],
       munoz: [2195728, 765600, 1274728, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      velasquez: [14491000, 9912000, 5196500, 14622500, 23260000, 0, 0, 0, 0, 0, 0, 0],
+      velasquez: [14491000, 9912000, 5196500, 14622500, 23260000, 1196000, 0, 0, 0, 0, 0, 0],
       veverka: [6186000, 944000, 1680000, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
     rtc_mensual_ppto: {
@@ -85,14 +85,14 @@ var AVBOARD = (function() {
       veverka: [6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000]
     },
     iec: {
-      total: 0.310,
+      total: 0.312,
       velasquez: 0.143,
-      laratro: 0.346,
-      caroca: 0.671,
+      laratro: 0.345,
+      caroca: 0.690,
       encina: 0.293,
       veverka: 0.936,
       munoz: 0.531,
-      impacto_potencial_clp: 159463846
+      impacto_potencial_clp: 160134241
     },
     mn_real:  0.179,
     mn_meta:  0.250
@@ -101,9 +101,9 @@ var AVBOARD = (function() {
   var chile_cxc = {
     corte:    '17/05/2026',
     entidades: 2,
-    total:    162180611,
-    vencida:  52229455,
-    al_dia:   109951156,
+    total:    128596669,
+    vencida:  42698745,
+    al_dia:   85897924,
     por_entidad: {
       agrocomercial: {
         nombre: 'Agrocomercial',
@@ -117,87 +117,87 @@ var AVBOARD = (function() {
       },
       agroveca_chile: {
         nombre: 'Agroveca Chile',
-        total:  57325846,
+        total:  23741904,
         tramos: {
-          t90:   13180918,
+          t90:   3650208,
           t6190: 1291650,
           t3160: 13554814,
-          t030:  29298464
+          t030:  5245232
         }
       }
     },
     tramos: {
-      t90:   19512720,
+      t90:   9982010,
       t6190: 8952791,
       t3160: 23763944,
-      t030:  109951156
+      t030:  85897924
     },
     tramos_pct: {
-      t90:   0.1203,
-      t6190: 0.0552,
-      t3160: 0.1465,
-      t030:  0.678
+      t90:   0.0776,
+      t6190: 0.0696,
+      t3160: 0.1848,
+      t030:  0.668
     },
     por_rtc: {
-      laratro: {
-        total:   48832443,
-        pct:     0.3011,
-        vencida: 26999156,
-        t90:     1460166,
-        riesgo: 'CRÍTICO'
-      },
       velasquez: {
         total:   41948928,
-        pct:     0.2587,
+        pct:     0.3262,
         vencida: 19111995,
         t90:     0,
         riesgo: 'RIESGO'
       },
+      laratro: {
+        total:   24779211,
+        pct:     0.1927,
+        vencida: 11017456,
+        t90:     1460166,
+        riesgo: 'CRÍTICO'
+      },
       encina: {
         total:   22486724,
-        pct:     0.1387,
+        pct:     0.1749,
         vencida: 6940354,
         t90:     0,
         riesgo: 'RIESGO'
       },
       franco_riffo: {
-        total:   22107427,
-        pct:     0.1363,
-        vencida: 22107427,
-        t90:     9530710,
-        riesgo: 'CRÍTICO'
+        total:   12576717,
+        pct:     0.0978,
+        vencida: 12576717,
+        t90:     0,
+        riesgo: 'RIESGO'
       },
       neira: {
         total:   9965856,
-        pct:     0.0614,
+        pct:     0.0775,
         vencida: 9965856,
         t90:     3754844,
         riesgo: 'CRÍTICO'
       },
       caroca: {
         total:   9007332,
-        pct:     0.0555,
+        pct:     0.07,
         vencida: 8387651,
         t90:     3459923,
         riesgo: 'CRÍTICO'
       },
       veverka: {
         total:   5152700,
-        pct:     0.0318,
+        pct:     0.0401,
         vencida: 533120,
         t90:     0,
         riesgo: 'NORMAL'
       },
       munoz: {
         total:   1393053,
-        pct:     0.0086,
+        pct:     0.0108,
         vencida: 1393053,
         t90:     1307077,
         riesgo: 'CRÍTICO'
       },
       otros: {
         total:   1286148,
-        pct:     0.0079,
+        pct:     0.01,
         vencida: 852735,
         t90:     0,
         riesgo: 'RIESGO'
@@ -206,11 +206,11 @@ var AVBOARD = (function() {
     cuentas_criticas: [
       {
         cliente: "AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA",
-        rtc: "FRANCO RIFFO / JUAN PABLO NEIRA",
-        dias: 138,
-        monto: 13285554,
+        rtc: "JUAN PABLO NEIRA",
+        dias: 102,
+        monto: 3754844,
         estado: "CRÍTICO",
-        alerta: "PRIORIDAD_MAXIMA"
+        alerta: "URGENTE"
       },
       {
         cliente: "AGRICOLA RIBERA LIMITADA",
@@ -223,7 +223,7 @@ var AVBOARD = (function() {
       {
         cliente: "COMERCIAL COPELEC S.A.",
         rtc: "VALENTINA MUÑOZ",
-        dias: 114,
+        dias: 121,
         monto: 1307077,
         estado: "CRÍTICO",
         alerta: "URGENTE"
@@ -231,7 +231,7 @@ var AVBOARD = (function() {
       {
         cliente: "RAMADA DE CAMPOS SPA",
         rtc: "JORGE CAROCA",
-        dias: 99,
+        dias: 106,
         monto: 1286093,
         estado: "CRÍTICO",
         alerta: "URGENTE"
@@ -247,7 +247,7 @@ var AVBOARD = (function() {
       {
         cliente: "MAGALY DEL CARMEN ORELLANA PINO",
         rtc: "JORGE CAROCA",
-        dias: 122,
+        dias: 129,
         monto: 700134,
         estado: "CRÍTICO",
         alerta: "URGENTE"
@@ -255,7 +255,7 @@ var AVBOARD = (function() {
       {
         cliente: "AGROINSUMOS KULLIN SPA",
         rtc: "PABLO LARATRO",
-        dias: 133,
+        dias: 140,
         monto: 538951,
         estado: "CRÍTICO",
         alerta: "URGENTE"
