@@ -11,32 +11,32 @@
  * Cortes:
  *   Chile ventas → 07/06/2026
  *   Chile CxC    → 17/05/2026 (2 entidades)
- *   Perú ventas  → 02/06/2026
+ *   Perú ventas  → 17/06/2026
  *   Perú CxC     → 10/05/2026
  *
- * Actualizado: 2026-06-08
+ * Actualizado: 2026-06-19
  */
 
 var AVBOARD = (function() {
 
   var meta = {
-    version:      '2026-06-08',
+    version:      '2026-06-19',
     tc_clp_usd:   950,
     meta_mn:      0.25,
     cortes: {
       chile_ventas: '07/06/2026',
       chile_cxc:    '17/05/2026',
-      peru_ventas:  '02/06/2026',
+      peru_ventas:  '17/06/2026',
       peru_cxc:     '10/05/2026'
     },
     meses: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
   };
 
   var grupo = {
-    ytd_usd:      752519,
-    ytd_clp:      714892581,
+    ytd_usd:      757605,
+    ytd_clp:      719724281,
     chile_ytd_usd: 392019,
-    peru_ytd_usd:  360500,
+    peru_ytd_usd:  365586,
     rtc_activos:  12,
     mn_chile:     0.179,
     mn_peru:      null
@@ -273,20 +273,20 @@ var AVBOARD = (function() {
   };
 
   var peru_ventas = {
-    ytd_5m:       360500,
+    ytd_5m:       365586,
     ytd_4m:       259813,
     mayo_parcial: 84159,
     ppto_anual:   1380014.8,
     ppto_4m:      292677.2,
     ppto_5m:      358399.2,
     cumplimiento_4m: 0.8877,
-    cumplimiento_5m: 1.0059,
+    cumplimiento_5m: 1.0201,
     mensual_real: [70232, 38180, 87967, 63434, 84159, 0, 0, 0, 0, 0, 0, 0],
     mensual_ppto: [54018.4, 60698.8, 103228.0, 74732.0, 65722.0, 104999.0, 127929.0, 208900.0, 211628.0, 182802.0, 108220.0, 77137.6],
     por_vendedor: {
       aguirre: {
         nombre: "Lisbeth Aguirre",
-        ytd:    103811,
+        ytd:    105597,
         mayo:   49431
       },
       atalaya: {
@@ -296,7 +296,7 @@ var AVBOARD = (function() {
       },
       diaz: {
         nombre: "Susan Diaz",
-        ytd:    16960,
+        ytd:    17220,
         mayo:   2600
       },
       gonzales: {
@@ -306,17 +306,17 @@ var AVBOARD = (function() {
       },
       infante: {
         nombre: "Oscar Infante",
-        ytd:    130104,
+        ytd:    146424,
         mayo:   22328
       },
       navarro: {
         nombre: "Nicoll Navarro",
-        ytd:    30940,
+        ytd:    14620,
         mayo:   0
       },
       valladares: {
         nombre: "Patricia Valladares",
-        ytd:    5000,
+        ytd:    8040,
         mayo:   1400
       }
     },
@@ -332,8 +332,8 @@ var AVBOARD = (function() {
       atalaya: [29881, 8108, 20000, 6600, 8400, 0, 0, 0, 0, 0, 0, 0],
       diaz: [0, 0, 0, 6300, 2600, 0, 0, 0, 0, 0, 0, 0],
       gonzales: [600, 0, 96, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      infante: [16511, 16188, 38190, 36887, 22328, 0, 0, 0, 0, 0, 0, 0],
-      navarro: [23240, 7700, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      infante: [32831, 16188, 38190, 36887, 22328, 0, 0, 0, 0, 0, 0, 0],
+      navarro: [6920, 7700, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       valladares: [0, 0, 1000, 200, 1400, 0, 0, 0, 0, 0, 0, 0]
     },
     iec: {
