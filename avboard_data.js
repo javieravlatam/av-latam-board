@@ -9,49 +9,49 @@
  * ╚══════════════════════════════════════════════════════════════════╝
  *
  * Cortes:
- *   Chile ventas → 07/06/2026
+ *   Chile ventas → 21/06/2026
  *   Chile CxC    → 17/05/2026 (2 entidades)
- *   Perú ventas  → 17/06/2026
+ *   Perú ventas  → 19/06/2026
  *   Perú CxC     → 10/05/2026
  *
- * Actualizado: 2026-06-19
+ * Actualizado: 2026-06-22
  */
 
 var AVBOARD = (function() {
 
   var meta = {
-    version:      '2026-06-19',
+    version:      '2026-06-22',
     tc_clp_usd:   950,
     meta_mn:      0.25,
     cortes: {
-      chile_ventas: '07/06/2026',
+      chile_ventas: '21/06/2026',
       chile_cxc:    '17/05/2026',
-      peru_ventas:  '17/06/2026',
+      peru_ventas:  '19/06/2026',
       peru_cxc:     '10/05/2026'
     },
     meses: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
   };
 
   var grupo = {
-    ytd_usd:      757605,
-    ytd_clp:      719724281,
-    chile_ytd_usd: 392019,
-    peru_ytd_usd:  365586,
+    ytd_usd:      791105,
+    ytd_clp:      751549367,
+    chile_ytd_usd: 412919,
+    peru_ytd_usd:  378186,
     rtc_activos:  12,
     mn_chile:     0.179,
     mn_peru:      null
   };
 
   var chile_ventas = {
-    ytd_5m:          372417581,
-    ytd_4m:          306612701,
+    ytd_5m:          392272667,
+    ytd_4m:          304047745,
     mayo_parcial:    60181659,
     ppto_anual:      792640368.0,
     ppto_4m:         193244968,
     ppto_5m:         246979768,
-    cumplimiento_4m: 1.5867,
+    cumplimiento_4m: 1.5734,
     cumplimiento_t1: 1.1857,
-    mensual_real:  [88231364, 35651978, 52370709, 130358650, 60181659, 5623221, 0, 0, 0, 0, 0, 0],
+    mensual_real:  [88231364, 35651978, 52370709, 127793694, 60181659, 28043263, 0, 0, 0, 0, 0, 0],
     mensual_ppto:  [72303400.0, 36596500.0, 39746700.0, 44598368.0, 53734800.0, 71112400.0, 37720500.0, 82581300.0, 102341400.0, 93908900.0, 86921300.0, 71074800.0],
     rtc_real_t1:   {
       caroca: 53122658,
@@ -69,12 +69,12 @@ var AVBOARD = (function() {
       veverka:   18000000
     },
     rtc_mensual_real: {
-      almeida: [0, 0, 0, 0, 210000, 0, 0, 0, 0, 0, 0, 0],
-      caroca: [14820273, 6389076, 31913309, 10171393, 9822200, 3962020, 0, 0, 0, 0, 0, 0],
-      encina: [13510783, 7262717, 6819022, 5495612, 8815784, 150201, 0, 0, 0, 0, 0, 0],
-      laratro: [37027580, 10378585, 5487150, 100069145, 18073675, 315000, 0, 0, 0, 0, 0, 0],
+      almeida: [0, 0, 0, 0, 210000, 330000, 0, 0, 0, 0, 0, 0],
+      caroca: [14820273, 6389076, 31913309, 10171393, 9822200, 23454020, 0, 0, 0, 0, 0, 0],
+      encina: [13510783, 7262717, 6819022, 5495612, 8815784, 486243, 0, 0, 0, 0, 0, 0],
+      laratro: [37027580, 10378585, 5487150, 97504189, 18073675, 1827000, 0, 0, 0, 0, 0, 0],
       munoz: [2195728, 765600, 1274728, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      velasquez: [14491000, 9912000, 5196500, 14622500, 23260000, 1196000, 0, 0, 0, 0, 0, 0],
+      velasquez: [14491000, 9912000, 5196500, 14622500, 23260000, 1806000, 0, 0, 0, 0, 0, 0],
       veverka: [6186000, 944000, 1680000, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
     rtc_mensual_ppto: {
@@ -85,14 +85,14 @@ var AVBOARD = (function() {
       veverka: [6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000, 6000000]
     },
     iec: {
-      total: 0.312,
-      velasquez: 0.143,
-      laratro: 0.345,
-      caroca: 0.690,
-      encina: 0.293,
+      total: 0.303,
+      velasquez: 0.144,
+      laratro: 0.328,
+      caroca: 0.684,
+      encina: 0.290,
       veverka: 0.936,
       munoz: 0.531,
-      impacto_potencial_clp: 160134241
+      impacto_potencial_clp: 161837652
     },
     mn_real:  0.179,
     mn_meta:  0.250
@@ -101,9 +101,9 @@ var AVBOARD = (function() {
   var chile_cxc = {
     corte:    '17/05/2026',
     entidades: 2,
-    total:    128596669,
-    vencida:  42698745,
-    al_dia:   85897924,
+    total:    138511571,
+    vencida:  57858879,
+    al_dia:   80652692,
     por_entidad: {
       agrocomercial: {
         nombre: 'Agrocomercial',
@@ -117,98 +117,146 @@ var AVBOARD = (function() {
       },
       agroveca_chile: {
         nombre: 'Agroveca Chile',
-        total:  23741904,
+        total:  33656806,
         tramos: {
-          t90:   3650208,
-          t6190: 1291650,
-          t3160: 13554814,
-          t030:  5245232
+          t90:   23647064,
+          t6190: 9247014,
+          t3160: 762728,
+          t030:  0
         }
       }
     },
     tramos: {
-      t90:   9982010,
-      t6190: 8952791,
-      t3160: 23763944,
-      t030:  85897924
+      t90:   29978866,
+      t6190: 16908155,
+      t3160: 10971858,
+      t030:  80652692
     },
     tramos_pct: {
-      t90:   0.0776,
-      t6190: 0.0696,
-      t3160: 0.1848,
-      t030:  0.668
+      t90:   0.2164,
+      t6190: 0.1221,
+      t3160: 0.0792,
+      t030:  0.5823
     },
     por_rtc: {
       velasquez: {
         total:   41948928,
-        pct:     0.3262,
+        pct:     0.3029,
         vencida: 19111995,
         t90:     0,
         riesgo: 'RIESGO'
       },
-      laratro: {
-        total:   24779211,
-        pct:     0.1927,
-        vencida: 11017456,
-        t90:     1460166,
-        riesgo: 'CRÍTICO'
-      },
       encina: {
         total:   22486724,
-        pct:     0.1749,
+        pct:     0.1623,
         vencida: 6940354,
         t90:     0,
         riesgo: 'RIESGO'
       },
-      franco_riffo: {
-        total:   12576717,
-        pct:     0.0978,
-        vencida: 12576717,
-        t90:     0,
-        riesgo: 'RIESGO'
+      laratro: {
+        total:   20577619,
+        pct:     0.1486,
+        vencida: 6815864,
+        t90:     2858024,
+        riesgo: 'CRÍTICO'
+      },
+      otros: {
+        total:   19904603,
+        pct:     0.1437,
+        vencida: 19471190,
+        t90:     18618455,
+        riesgo: 'CRÍTICO'
       },
       neira: {
         total:   9965856,
-        pct:     0.0775,
+        pct:     0.0719,
         vencida: 9965856,
         t90:     3754844,
         riesgo: 'CRÍTICO'
       },
+      franco_riffo: {
+        total:   9247014,
+        pct:     0.0668,
+        vencida: 9247014,
+        t90:     0,
+        riesgo: 'RIESGO'
+      },
       caroca: {
-        total:   9007332,
-        pct:     0.07,
-        vencida: 8387651,
-        t90:     3459923,
+        total:   7101558,
+        pct:     0.0513,
+        vencida: 7101558,
+        t90:     2173830,
         riesgo: 'CRÍTICO'
       },
       veverka: {
-        total:   5152700,
-        pct:     0.0401,
-        vencida: 533120,
-        t90:     0,
-        riesgo: 'NORMAL'
+        total:   5886216,
+        pct:     0.0425,
+        vencida: 1266636,
+        t90:     1266636,
+        riesgo: 'CRÍTICO'
       },
       munoz: {
         total:   1393053,
-        pct:     0.0108,
+        pct:     0.0101,
         vencida: 1393053,
         t90:     1307077,
         riesgo: 'CRÍTICO'
-      },
-      otros: {
-        total:   1286148,
-        pct:     0.01,
-        vencida: 852735,
-        t90:     0,
-        riesgo: 'RIESGO'
       }
     },
     cuentas_criticas: [
+      {
+        cliente: "NIVALDO ANTONIO FLORES EGAÑA",
+        rtc: "CAPEL",
+        dias: 597,
+        monto: 5318824,
+        estado: "CRÍTICO",
+        alerta: "PRIORIDAD_MAXIMA"
+      },
+      {
+        cliente: "TRANSACCIONES AGRICOLAS SPA",
+        rtc: "JOSÉ LORENZONI",
+        dias: 193,
+        monto: 3856957,
+        estado: "CRÍTICO",
+        alerta: "URGENTE"
+      },
       {
         cliente: "AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA",
         rtc: "JUAN PABLO NEIRA",
         dias: 102,
         monto: 3754844,
+        estado: "CRÍTICO",
+        alerta: "URGENTE"
+      },
+      {
+        cliente: "AGRICOLA LOS QUILLAYES SPA",
+        rtc: "GUILLERMO PRADENAS",
+        dias: 367,
+        monto: 2813517,
+        estado: "CRÍTICO",
+        alerta: "URGENTE"
+      },
+      {
+        cliente: "AGRIC LOS SAUSALES LTDA",
+        rtc: "CAPEL",
+        dias: 395,
+        monto: 2523276,
+        estado: "CRÍTICO",
+        alerta: "URGENTE"
+      },
+      {
+        cliente: "AGROINSUMOS KULLIN SPA",
+        rtc: "PABLO LARATRO",
+        dias: 176,
+        monto: 1936809,
+        estado: "CRÍTICO",
+        alerta: "URGENTE"
+      },
+      {
+        cliente: "LOS PARRONALES DE CAMARICO S A",
+        rtc: "CAPEL",
+        dias: 387,
+        monto: 1877820,
         estado: "CRÍTICO",
         alerta: "URGENTE"
       },
@@ -223,16 +271,24 @@ var AVBOARD = (function() {
       {
         cliente: "COMERCIAL COPELEC S.A.",
         rtc: "VALENTINA MUÑOZ",
-        dias: 121,
+        dias: 135,
         monto: 1307077,
         estado: "CRÍTICO",
         alerta: "URGENTE"
       },
       {
-        cliente: "RAMADA DE CAMPOS SPA",
-        rtc: "JORGE CAROCA",
-        dias: 106,
-        monto: 1286093,
+        cliente: "SOC AGRICOLA VIENTO NORTE LTDA",
+        rtc: "IVÁN VEVERKA",
+        dias: 326,
+        monto: 961996,
+        estado: "CRÍTICO",
+        alerta: "URGENTE"
+      },
+      {
+        cliente: "AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA",
+        rtc: "GUILLERMO PRADENAS",
+        dias: 408,
+        monto: 948192,
         estado: "CRÍTICO",
         alerta: "URGENTE"
       },
@@ -245,18 +301,50 @@ var AVBOARD = (function() {
         alerta: "URGENTE"
       },
       {
+        cliente: "VICENTE ADAN LAGOS SALDANA",
+        rtc: "GUILLERMO PRADENAS",
+        dias: 524,
+        monto: 742655,
+        estado: "CRÍTICO",
+        alerta: "URGENTE"
+      },
+      {
         cliente: "MAGALY DEL CARMEN ORELLANA PINO",
         rtc: "JORGE CAROCA",
-        dias: 129,
+        dias: 143,
         monto: 700134,
         estado: "CRÍTICO",
         alerta: "URGENTE"
       },
       {
-        cliente: "AGROINSUMOS KULLIN SPA",
-        rtc: "PABLO LARATRO",
-        dias: 140,
-        monto: 538951,
+        cliente: "PEDRO JUAN BUGUENO TELLO",
+        rtc: "IVÁN VEVERKA",
+        dias: 668,
+        monto: 304640,
+        estado: "CRÍTICO",
+        alerta: "URGENTE"
+      },
+      {
+        cliente: "ROMERO Y RIQUELME SPA",
+        rtc: "GUILLERMO PRADENAS",
+        dias: 493,
+        monto: 240975,
+        estado: "CRÍTICO",
+        alerta: "URGENTE"
+      },
+      {
+        cliente: "NEWEN BOTANICUM SPA",
+        rtc: "JOSELIN MUÑOZ",
+        dias: 698,
+        monto: 150289,
+        estado: "CRÍTICO",
+        alerta: "URGENTE"
+      },
+      {
+        cliente: "GERALDINE MORILLO",
+        rtc: "JOSELIN MUÑOZ",
+        dias: 698,
+        monto: 145950,
         estado: "CRÍTICO",
         alerta: "URGENTE"
       },
@@ -273,14 +361,14 @@ var AVBOARD = (function() {
   };
 
   var peru_ventas = {
-    ytd_5m:       365586,
+    ytd_5m:       378186,
     ytd_4m:       259813,
     mayo_parcial: 84159,
     ppto_anual:   1380014.8,
     ppto_4m:      292677.2,
     ppto_5m:      358399.2,
     cumplimiento_4m: 0.8877,
-    cumplimiento_5m: 1.0201,
+    cumplimiento_5m: 1.0552,
     mensual_real: [70232, 38180, 87967, 63434, 84159, 0, 0, 0, 0, 0, 0, 0],
     mensual_ppto: [54018.4, 60698.8, 103228.0, 74732.0, 65722.0, 104999.0, 127929.0, 208900.0, 211628.0, 182802.0, 108220.0, 77137.6],
     por_vendedor: {
@@ -291,7 +379,7 @@ var AVBOARD = (function() {
       },
       atalaya: {
         nombre: "Omar Atalaya",
-        ytd:    72989,
+        ytd:    85589,
         mayo:   8400
       },
       diaz: {
