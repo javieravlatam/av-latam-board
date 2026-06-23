@@ -320,20 +320,17 @@ def extract_peru_ventas(path):
         'SUSAN DÍAZ': 'diaz',
     }
 
-    mes_cols_pe = ['01 ENERO 2026', '02. FEBRERO 2026', '03. MARZO 2026',
-                   '04. ABRIL 2026', '05. MAYO 2026']
-
-    # Find the month columns in df
+    # Detectar dinámicamente TODAS las columnas de mes presentes en el archivo
+    # (antes esto estaba fijo a 5 meses Ene-May vía mes_cols_pe/range(5) — cuando
+    #  el corte avanzó a Junio, "Total general" ya incluía Junio pero el desglose
+    #  mensual_pe no, y quedaba desincronizado del ytd_5m real. Ver MESES_FULL global.)
     available_cols = {}
     for col in df.columns:
-        for i, mc in enumerate(mes_cols_pe):
-            if mc.upper() in str(col).upper() or (f'0{i+1}' in str(col) and MESES[i].upper() in str(col).upper()):
+        col_up = str(col).upper()
+        for i, m_name in enumerate(MESES_FULL):
+            if m_name in col_up:
                 available_cols[i] = col
                 break
-        # Alternative: look for month numbers
-        for i, m_name in enumerate(['ENERO','FEBRERO','MARZO','ABRIL','MAYO']):
-            if m_name in str(col).upper():
-                available_cols[i] = col
 
     por_vendedor = {}
     rtc_mensual_pe = {}
@@ -353,7 +350,7 @@ def extract_peru_ventas(path):
             continue
 
         monthly = []
-        for i in range(5):
+        for i in range(12):
             col = available_cols.get(i)
             if col and col in row.index:
                 val = pd.to_numeric(row[col], errors='coerce')
@@ -370,9 +367,9 @@ def extract_peru_ventas(path):
             'ytd': round(ytd),
             'mayo': round(monthly[4]) if len(monthly) > 4 else 0,
         }
-        rtc_mensual_pe[matched_key] = [round(v) for v in monthly] + [0]*7
+        rtc_mensual_pe[matched_key] = [round(v) for v in monthly]
 
-        for i, v in enumerate(monthly[:5]):
+        for i, v in enumerate(monthly):
             mensual_pe[i] += round(v)
 
     ytd_5m_pe = sum(round(v['ytd']) for v in por_vendedor.values())

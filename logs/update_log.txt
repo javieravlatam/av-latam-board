@@ -282,3 +282,77 @@ PENDIENTE DE JAVIER:
     panel abierto para confirmar que todos coinciden.
 VALIDACIÓN JS: ✅ OK (py_compile + prueba de regex en sandbox)
 ======================================================================
+
+======================================================================
+CORTE: 2026-06-23 17:18
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 21-06-2026.xlsx
+  - AGROVECA PERU -  VENTAS  AL 22.06.2026.xlsx
+  - Cuentas Cobrar  AGrocomercial 17-05.xlsx
+  - Cuentas Cobrar Agroveca 21-06.xlsx
+  - precios piso CHile .xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 21/06/2026
+  · avboard_clientes.js regenerado · 145 clientes CL
+  · Panel_IEC TX_CL · 1470 transacciones
+  · IEC Chile 30.3% · BP CLP 161,837,652
+  · CxC Chile CLP 138,511,571 · +90d CLP 29,978,866
+  · Cache-busting ?v=20260623 sincronizado en 0 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
+
+======================================================================
+CORTE: 2026-06-23 19:05
+TIPO: FIX ESTRUCTURAL — BUG DE INTEGRIDAD DE DATOS (no caché)
+ARCHIVOS PROCESADOS: ninguno — Javier reportó que dentro del MISMO panel
+  (Presupuesto) la barra general ya mostraba la venta correcta, pero el
+  gráfico de curva acumulada Perú seguía en USD 343k cuando el total real
+  era USD 380k, y pidió auditar todos los paneles para que coincidan.
+DIAGNÓSTICO:
+  · Descartado wiring/caché: Panel_Presupuesto_AV_2026.html lee
+    correctamente AVBOARD.peru.ventas.mensual_real para la curva — el
+    problema no estaba en el HTML sino en el dato fuente.
+  · Causa raíz en scripts/update_avboard.py: extract_peru_ventas() tenía
+    una ventana FIJA de 5 meses (lista mes_cols_pe + range(5)), mientras
+    extract_chile_ventas() ya detectaba los meses dinámicamente vía
+    MESES_FULL. Al llegar el corte de junio, el Excel de Perú agregó la
+    columna "06. JUNIO 2026" (~USD 36,414) que el "Total general" del
+    Excel sí incluye (de ahí ytd_5m=380,386) pero que la extracción
+    mensual fija nunca leía → mensual_real solo sumaba 343,972.
+    Esto rompía la coherencia interna del propio avboard_data.js entre
+    el KPI principal y el arreglo mensual que alimenta gráficos de curva/
+    real-vs-ppto — afecta a TODOS los paneles que grafican la serie
+    mensual de Perú, no solo Presupuesto.
+  · El self-check verificarIntegridad() de avboard_data.js YA detectaba
+    este desajuste internamente (console.warn), pero no se mostraba en
+    pantalla — quedaba silencioso.
+ACCIONES:
+  · extract_peru_ventas() reescrita para detectar dinámicamente las 12
+    columnas de mes vía MESES_FULL (mismo patrón que Chile) — sin
+    hardcodear meses ni cantidad de columnas.
+  · Pipeline completo re-ejecutado (python3 scripts/update_avboard.py):
+    avboard_data.js regenerado con peru.ventas.mensual_real =
+    [70232, 38180, 87967, 63434, 84159, 36414, 0,0,0,0,0,0],
+    suma exacta = 380,386 = ytd_5m (diff antes: 36,414 · diff ahora: 0).
+    Chile no se tocó (sigue sumando 392,272,667 = ytd_5m, diff 0).
+  · Integridad verificada: [AVBOARD] ✅ Integridad OK, sin errores en
+    verificarIntegridad().
+  · Auditoría del resto de paneles (grep de AVBOARD.peru y de cifras
+    "343" hardcodeadas en los 13 HTML que cargan avboard_data.js):
+    ningún panel tiene una copia propia/hardcodeada de la curva Perú —
+    todos leen en vivo de AVBOARD.peru.ventas.mensual_real, así que el
+    fix en la fuente se propaga automáticamente a los 13 sin tocar HTML.
+  · Pendiente fuera de alcance (ya documentado antes, no es parte de
+    este bug): Panel_Productos_AV_2026.html, Panel_Rentabilidad_AV_2026.html,
+    Panel_Ecuador_AV_2026.html, Panel_General_AV_2026.html,
+    Panel_IEC_Auditoria_2026.html siguen sin migrar a avboard_data.js
+    (valores hardcodeados, migración pendiente — no afectados por este
+    fix ni por el de caché).
+PENDIENTE DE JAVIER:
+  · Commit + push de avboard_data.js + scripts/update_avboard.py + logs/
+    (este entorno no tiene credenciales de GitHub).
+  · Hard refresh (Cmd+Shift+R) en Panel_Presupuesto y confirmar que la
+    curva acumulada y real-vs-ppto de Perú ya cierran en ~380k.
+VALIDACIÓN JS: ✅ OK (verificarIntegridad sin errores · pipeline completo
+  ejecutado end-to-end exitosamente)
+======================================================================
