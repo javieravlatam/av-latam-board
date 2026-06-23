@@ -219,3 +219,66 @@ ACCIONES:
   · CxC Chile CLP 138,511,571 · +90d CLP 29,978,866
 VALIDACIÓN JS: ✅ OK
 ======================================================================
+
+======================================================================
+CORTE: 2026-06-23 16:30
+TIPO: FIX (no procesamiento de inbox)
+ARCHIVOS PROCESADOS: ninguno — diagnóstico solicitado por Javier (dashboard no reflejaba el push de "act 22 junio mañana")
+DIAGNÓSTICO:
+  · Commit ee1405b confirmado en origin/main — el push SÍ llegó a GitHub
+  · GitHub Pages activo y sirviendo (https://javieravlatam.github.io/av-latam-board/)
+  · Causa raíz: query param ?v= de cache-busting en <script src="avboard_data.js?v=...">
+    estaba fijo en fechas viejas (20260520 / 20260603) en 11 paneles, y 3 paneles
+    cargaban avboard_data.js / avboard_clientes.js SIN ningún ?v= — el navegador
+    seguía sirviendo la copia cacheada de esa URL exacta y nunca volvía a pedir
+    el archivo nuevo, aunque el contenido en GitHub ya estuviera actualizado.
+ACCIONES:
+  · ?v= actualizado a 20260623 en: Dashboard_Comercial_AV_Latam_2026.html,
+    Executive_Board_View_AV_Latam_2026.html, Executive_Intelligence_2026.html (data+clientes),
+    Panel_Chile_AV_2026.html, Panel_Clientes_AV_2026.html, Panel_CxC_AV_Latam_2026.html,
+    Panel_Jefes_Chile_2026.html, Panel_Jefes_Grupo_AV_2026.html, Panel_Jefes_Index.html,
+    Panel_Jefes_Peru_2026.html, Panel_Peru_AV_2026.html, Panel_Presupuesto_AV_2026.html,
+    dashboard.html (13 archivos · solo se tocó el query string, sin cambios visuales/estructurales)
+  · PENDIENTE (no migrado a avboard_data.js — fuera de alcance de este fix):
+    Panel_Productos_AV_2026.html, Panel_Rentabilidad_AV_2026.html,
+    Panel_Ecuador_AV_2026.html, Panel_General_AV_2026.html, Panel_IEC_Auditoria_2026.html
+  · Pendiente de Javier: commit + push (este entorno no tiene credenciales de GitHub)
+VALIDACIÓN JS: ✅ OK (solo se modificó el query string del script tag)
+======================================================================
+
+======================================================================
+CORTE: 2026-06-23 18:15
+TIPO: FIX ESTRUCTURAL (no procesamiento de inbox)
+ARCHIVOS PROCESADOS: ninguno — Javier reportó que el dashboard sigue
+  inconsistente entre paneles (ej. Presupuesto mostraba la venta nueva,
+  el resto no) DESPUÉS del diagnóstico de las 16:30.
+DIAGNÓSTICO:
+  · Causa: el fix de las 16:30 (bump de ?v= en 13 paneles) seguía sin
+    commit/push — origin/main todavía en ee1405b. El sitio en vivo
+    conserva los ?v= viejos, así que cada panel sigue dependiendo del
+    estado de caché individual del navegador → inconsistencia entre
+    paneles, no es un bug nuevo.
+ACCIONES (fix estructural, no solo parche puntual):
+  · scripts/update_avboard.py: nueva función sync_cache_busting() +
+    constante CACHE_V. Se ejecuta automáticamente en cada corrida de
+    main(), después de generar avboard_data.js/avboard_clientes.js:
+    reescribe el ?v= en TODOS los <script src="avboard_data.js..."> y
+    avboard_clientes.js de los paneles HTML al mismo valor (fecha de
+    la corrida), sin tocar nada más del archivo.
+  · Probado en copia temporal (no en el repo real): solo cambia el
+    query string del script tag en los 13 paneles esperados — cero
+    cambios visuales/estructurales.
+  · .gitignore: agregado __pycache__/ y *.pyc (quedaron generados al
+    probar el script con py_compile).
+  · Efecto esperado a futuro: Javier ya no necesita acordarse de
+    bumpear el ?v= a mano — cada vez que corra
+    ACTUALIZAR_AVBOARD.command / update_avboard.py, los 13 paneles
+    quedan sincronizados entre sí automáticamente.
+PENDIENTE DE JAVIER:
+  · Commit + push de TODO lo acumulado hoy (13 HTML con ?v=20260623 +
+    scripts/update_avboard.py + .gitignore + logs/) — este entorno no
+    tiene credenciales de GitHub.
+  · Después del push, hacer un hard refresh (Cmd+Shift+R) en cada
+    panel abierto para confirmar que todos coinciden.
+VALIDACIÓN JS: ✅ OK (py_compile + prueba de regex en sandbox)
+======================================================================

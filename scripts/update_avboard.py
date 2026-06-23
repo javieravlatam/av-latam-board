@@ -53,6 +53,7 @@ PANEL_IEC       = REPO / 'Panel_IEC_Auditoria_2026.html'
 
 TODAY = date.today().strftime('%d/%m/%Y')
 NOW   = datetime.now().strftime('%Y-%m-%d %H:%M')
+CACHE_V = datetime.now().strftime('%Y%m%d')   # cache-busting ?v= para <script src="avboard_*.js">, igual en cada corrida
 
 # ── Constantes de negocio (estáticas — solo cambian si cambia el presupuesto) ─
 TC_CLP_USD = 950
@@ -1264,6 +1265,44 @@ def update_panel_iec(tx_cl, corte_date):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+#  6.5 SINCRONIZAR CACHE-BUSTING (?v=) EN TODOS LOS PANELES HTML
+# ══════════════════════════════════════════════════════════════════════════════
+
+def sync_cache_busting():
+    """
+    Actualiza el query param ?v= de TODOS los <script src="avboard_data.js...">
+    y <script src="avboard_clientes.js..."> en cada panel HTML del repo, usando
+    CACHE_V (fecha de esta corrida).
+
+    Por qué existe: cada corrida regenera avboard_data.js / avboard_clientes.js,
+    pero si el ?v= del script tag no cambia, el navegador sigue sirviendo la
+    copia cacheada de esos archivos y el panel queda "congelado" aunque el dato
+    en GitHub ya esté actualizado — los paneles dejan de coincidir entre sí
+    según el caché de cada uno. Bug detectado y corregido a mano el 2026-06-23;
+    desde ahora se sincroniza automáticamente en cada corrida.
+
+    Solo reemplaza el query string del script tag — NO toca diseño ni estructura.
+    """
+    patterns = [
+        (re.compile(r'(src=["\'])avboard_data\.js(?:\?v=\d{8})?(["\'])'), 'avboard_data.js'),
+        (re.compile(r'(src=["\'])avboard_clientes\.js(?:\?v=\d{8})?(["\'])'), 'avboard_clientes.js'),
+    ]
+    changed = []
+    for path in sorted(REPO.glob('*.html')):
+        try:
+            content = path.read_text(encoding='utf-8')
+        except Exception:
+            continue
+        new_content = content
+        for pattern, fname in patterns:
+            new_content = pattern.sub(r'\1' + fname + '?v=' + CACHE_V + r'\2', new_content)
+        if new_content != content:
+            path.write_text(new_content, encoding='utf-8')
+            changed.append(path.name)
+    return changed
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 #  7. LOGS
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -1469,6 +1508,11 @@ def main():
     n_tx  = update_panel_iec(tx_cl, cortes['chile_ventas'])
     print(f"   → {n_tx} transacciones · corte {cortes['chile_ventas']}")
 
+    # 8.5 Sincronizar cache-busting en todos los paneles
+    print(f"\n🔄 Sincronizando cache-busting (?v={CACHE_V}) en paneles HTML...")
+    panels_synced = sync_cache_busting()
+    print(f"   → {len(panels_synced)} paneles actualizados: {', '.join(panels_synced) if panels_synced else '(ninguno — ya estaban al día)'}")
+
     # 9. Logs
     print("\n📋 Actualizando logs...")
     archivos = [v.name for v in files.values()]
@@ -1478,6 +1522,7 @@ def main():
         f"Panel_IEC TX_CL · {n_tx} transacciones",
         f"IEC Chile {iec_cl['total']:.1%} · BP CLP {iec_cl['bp_total']:,}",
         f"CxC Chile CLP {cl_cxc['total']:,} · +90d CLP {cl_cxc['tramos']['t90']:,}",
+        f"Cache-busting ?v={CACHE_V} sincronizado en {len(panels_synced)} paneles HTML",
     ]
     summary = {
         'archivos_procesados': archivos,

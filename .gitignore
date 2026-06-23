@@ -2,6 +2,10 @@
 # macOS
 .DS_Store
 
+# Python
+__pycache__/
+*.pyc
+
 # Archivos fuente de actualización
 inbox/*.xlsx
 inbox/*.xls
