@@ -11,32 +11,32 @@
  * Cortes:
  *   Chile ventas → 21/06/2026
  *   Chile CxC    → 17/05/2026 (2 entidades)
- *   Perú ventas  → 19/06/2026
+ *   Perú ventas  → 22/06/2026
  *   Perú CxC     → 10/05/2026
  *
- * Actualizado: 2026-06-22
+ * Actualizado: 2026-06-23
  */
 
 var AVBOARD = (function() {
 
   var meta = {
-    version:      '2026-06-22',
+    version:      '2026-06-23',
     tc_clp_usd:   950,
     meta_mn:      0.25,
     cortes: {
       chile_ventas: '21/06/2026',
       chile_cxc:    '17/05/2026',
-      peru_ventas:  '19/06/2026',
+      peru_ventas:  '22/06/2026',
       peru_cxc:     '10/05/2026'
     },
     meses: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
   };
 
   var grupo = {
-    ytd_usd:      791105,
-    ytd_clp:      751549367,
+    ytd_usd:      793305,
+    ytd_clp:      753639367,
     chile_ytd_usd: 412919,
-    peru_ytd_usd:  378186,
+    peru_ytd_usd:  380386,
     rtc_activos:  12,
     mn_chile:     0.179,
     mn_peru:      null
@@ -361,20 +361,20 @@ var AVBOARD = (function() {
   };
 
   var peru_ventas = {
-    ytd_5m:       378186,
+    ytd_5m:       380386,
     ytd_4m:       259813,
     mayo_parcial: 84159,
     ppto_anual:   1380014.8,
     ppto_4m:      292677.2,
     ppto_5m:      358399.2,
     cumplimiento_4m: 0.8877,
-    cumplimiento_5m: 1.0552,
+    cumplimiento_5m: 1.0613,
     mensual_real: [70232, 38180, 87967, 63434, 84159, 0, 0, 0, 0, 0, 0, 0],
     mensual_ppto: [54018.4, 60698.8, 103228.0, 74732.0, 65722.0, 104999.0, 127929.0, 208900.0, 211628.0, 182802.0, 108220.0, 77137.6],
     por_vendedor: {
       aguirre: {
         nombre: "Lisbeth Aguirre",
-        ytd:    105597,
+        ytd:    107797,
         mayo:   49431
       },
       atalaya: {
