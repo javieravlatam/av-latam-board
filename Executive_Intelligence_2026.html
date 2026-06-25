@@ -907,8 +907,8 @@ tbody td { padding: 12px 16px; font-size: 12px; }
 <!-- ═══════════════════════════════════════════════
      DATA LAYERS
 ═══════════════════════════════════════════════ -->
-<script src="avboard_data.js?v=20260623"></script>
-<script src="avboard_clientes.js?v=20260623"></script>
+<script src="avboard_data.js?v=20260625"></script>
+<script src="avboard_clientes.js?v=20260625"></script>
 
 <!-- ═══════════════════════════════════════════════
      AUTH LOGIC
@@ -1040,7 +1040,9 @@ function showTab(idx) {
 var evolChart = null;
 
 function renderEvolChart(cv) {
-  var meses  = ['Ene','Feb','Mar','Abr','May'];
+  var mesesFullEI = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var nRealEI = cv.mensual_real.filter(function(v){return v>0;}).length || 5;
+  var meses  = mesesFullEI.slice(0, nRealEI);
   var real   = meses.map(function(_, i){ return Math.round((cv.mensual_real[i]||0)/1e6*10)/10; });
   var ppto   = meses.map(function(_, i){ return Math.round((cv.mensual_ppto[i]||0)/1e6*10)/10; });
   var ctx    = document.getElementById('chart-evol').getContext('2d');
@@ -1101,6 +1103,12 @@ function initDashboard() {
   var pv = D.peru.ventas;
   var pc = D.peru.cxc;
 
+  var mesesFullEILong = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  var nRealCL_EI = cv.mensual_real.filter(function(v){return v>0;}).length || 5;
+  var nRealPE_EI = pv.mensual_real.filter(function(v){return v>0;}).length || 5;
+  var curMesCL_EI = mesesFullEILong[nRealCL_EI-1];
+  var curMesPE_EI = mesesFullEILong[nRealPE_EI-1];
+
   /* ── Header ── */
   set('hdr-corte', 'Corte: Chile ' + D.meta.cortes.chile_ventas + ' · Perú ' + D.meta.cortes.peru_ventas);
   set('footer-corte', 'Corte Chile ' + D.meta.cortes.chile_ventas + ' · Perú ' + D.meta.cortes.peru_ventas + ' · CxC ' + D.meta.cortes.chile_cxc);
@@ -1115,11 +1123,11 @@ function initDashboard() {
   set('s-grupo-ytd',   'USD ' + K(grupoYtdUsd));
   set('s-grupo-sub',   'Chile CLP ' + M(chileYtdClp) + ' + Perú USD ' + K(peruYtdUsd));
   set('s-chile-ytd',   'CLP ' + M(chileYtdClp));
-  set('s-chile-sub',   'Ene–May parcial · ' + D.meta.cortes.chile_ventas);
+  set('s-chile-sub',   'Ene–' + curMesCL_EI + ' parcial · ' + D.meta.cortes.chile_ventas);
   set('s-chile-ppto',  '↑ ' + fPct(cv.cumplimiento_4m) + ' ppto 4m');
   set('s-peru-ytd',    'USD ' + K(peruYtdUsd));
-  set('s-peru-sub',    'Ene–May parcial · ' + D.meta.cortes.peru_ventas);
-  set('s-peru-ppto',   '→ ' + fPct(pv.cumplimiento_5m) + ' ppto 5m');
+  set('s-peru-sub',    'Ene–' + curMesPE_EI + ' parcial · ' + D.meta.cortes.peru_ventas);
+  set('s-peru-ppto',   '→ ' + fPct(pv.cumplimiento_5m) + ' ppto ' + nRealPE_EI + 'm');
   set('s-mn-real',     fPct(cv.mn_real));
   set('s-mn-sub',      'Meta 25% · gap –' + ((cv.mn_meta-cv.mn_real)*100).toFixed(1) + 'pp');
   set('s-mn-gap',      '↓ Brecha: ' + ((cv.mn_meta-cv.mn_real)*100).toFixed(1) + 'pp bajo meta');
@@ -1133,7 +1141,7 @@ function initDashboard() {
   var chileUsd = chileYtdClp / D.meta.tc_clp_usd;
   var distPais = [
     { pais:'🇨🇱 Chile', usd: chileUsd,  pct: chileUsd/grupoYtdUsd, ppto: fPct(cv.cumplimiento_4m)+' (4m)' },
-    { pais:'🇵🇪 Perú',  usd: peruYtdUsd, pct: peruYtdUsd/grupoYtdUsd, ppto: fPct(pv.cumplimiento_5m)+' (5m)' }
+    { pais:'🇵🇪 Perú',  usd: peruYtdUsd, pct: peruYtdUsd/grupoYtdUsd, ppto: fPct(pv.cumplimiento_5m)+' ('+nRealPE_EI+'m)' }
   ];
   var htmlDist = distPais.map(function(r) {
     return '<tr><td>' + r.pais + '</td>' +

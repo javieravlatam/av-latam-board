@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel Comercial · Perú · AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=20260623"></script>
+<script src="avboard_data.js?v=20260625"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -749,13 +749,15 @@ new Chart(document.getElementById('cCxC'),{
     function bc(r){return r>=1?'var(--green)':r>=0.85?'var(--amber)':'var(--red)';}
 
     // ── Barras mensuales ──────────────────────────────────────────────────────
-    var mons=['Enero','Febrero','Marzo','Abril','Mayo'];
-    var mr=pv.mensual_real.slice(0,5), mp=pv.mensual_ppto.slice(0,5);
+    var monsFull=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    var nRealPE=pv.mensual_real.filter(function(v){return v>0;}).length || 5;
+    var mons=monsFull.slice(0,nRealPE);
+    var mr=pv.mensual_real.slice(0,nRealPE), mp=pv.mensual_ppto.slice(0,nRealPE);
     var bh='';
     mr.forEach(function(r,i){
       var ratio=r/mp[i], w=Math.min(ratio*100,100).toFixed(1), c=bc(ratio);
       bh+='<div class="mes-row">'+
-        '<div class="mes-lbl">'+(mons[i]+(i===4?'*':''))+'</div>'+
+        '<div class="mes-lbl">'+(mons[i]+(i===nRealPE-1?'*':''))+'</div>'+
         '<div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:'+w+'%;background:'+c+';"></div></div>'+
         '<div class="mes-pct" style="color:'+c+';">'+pct(ratio)+'</div>'+
       '</div>';
@@ -772,9 +774,9 @@ new Chart(document.getElementById('cCxC'),{
     set('av-pe-donut-pct',pct(ytdR));
     set('av-pe-donut-lbl','YTD 5m');
 
-    // ── Margen strip — expandir a 5 meses ─────────────────────────────────────
+    // ── Margen strip — expandir a N meses reales ──────────────────────────────
     var ms=document.getElementById('av-pe-margen-strip');
-    if(ms) ms.style.gridTemplateColumns='repeat(5,1fr)';
+    if(ms) ms.style.gridTemplateColumns='repeat('+nRealPE+',1fr)';
     var mh='';
     mr.forEach(function(r,i){
       var ratio=r/mp[i], c=bc(ratio);
@@ -818,11 +820,11 @@ new Chart(document.getElementById('cCxC'),{
     var cSt=Chart.getChart(document.getElementById('cStack'));
     if(cSt){
       var rtc=pv.rtc_mensual_real;
-      cSt.data.labels=['Enero','Febrero','Marzo','Abril','Mayo (parc.)'];
-      cSt.data.datasets[0].data=rtc.infante.slice(0,5).map(function(v){return v||0;});
-      cSt.data.datasets[1].data=rtc.aguirre.slice(0,5).map(function(v){return v||0;});
-      cSt.data.datasets[2].data=rtc.atalaya.slice(0,5).map(function(v){return v||0;});
-      cSt.data.datasets[3].data=rtc.gonzales.slice(0,5).map(function(v,i){return (v||0)+(rtc.valladares[i]||0);});
+      cSt.data.labels=monsFull.slice(0,nRealPE).map(function(m,i){return i===nRealPE-1?m+' (parc.)':m;});
+      cSt.data.datasets[0].data=rtc.infante.slice(0,nRealPE).map(function(v){return v||0;});
+      cSt.data.datasets[1].data=rtc.aguirre.slice(0,nRealPE).map(function(v){return v||0;});
+      cSt.data.datasets[2].data=rtc.atalaya.slice(0,nRealPE).map(function(v){return v||0;});
+      cSt.data.datasets[3].data=rtc.gonzales.slice(0,nRealPE).map(function(v,i){return (v||0)+(rtc.valladares[i]||0);});
       cSt.update();
     }
 
@@ -846,7 +848,7 @@ new Chart(document.getElementById('cCxC'),{
       var running=0, realAc=[];
       for(var i=0;i<12;i++){
         running+=(pv.mensual_real[i]||0);
-        realAc.push(i<5?running:null);
+        realAc.push(i<nRealPE?running:null);
       }
       cCv.data.datasets[1].data=realAc;
       cCv.update();
@@ -865,15 +867,16 @@ new Chart(document.getElementById('cCxC'),{
     var pve=pv.por_vendedor||{}, corteStr=D.meta.cortes.peru_ventas;
     var K1=function(n){return (n/1000).toFixed(1);};
     var fN2=function(n){return n.toLocaleString('en-US');};
-    var MNMS=['Enero','Febrero','Marzo','Abril','Mayo'];
-    var mr5=pv.mensual_real.slice(0,5), mp5=pv.mensual_ppto.slice(0,5);
+    var MNMS=monsFull.slice(0,nRealPE);
+    var curMesNm=MNMS[nRealPE-1];
+    var mr5=pv.mensual_real.slice(0,nRealPE), mp5=pv.mensual_ppto.slice(0,nRealPE);
     // YTD
     set('av-pe-kpi-ytd-val','USD '+Math.round(pv.ytd_5m/1000)+'K');
-    set('av-pe-kpi-ytd-sub','al '+corteStr+' · 5 meses');
+    set('av-pe-kpi-ytd-sub','al '+corteStr+' · '+nRealPE+' meses');
     var c5m=pv.cumplimiento_5m||pv.cumplimiento_4m;
     var badgeEl=document.getElementById('av-pe-kpi-ytd-badge');
-    if(badgeEl){badgeEl.className='kbadge '+(c5m>=1?'kb-ok':c5m>=0.85?'kb-am':'kb-rd');badgeEl.innerHTML=(c5m*100).toFixed(1)+'% del Ppto Ene-May';}
-    set('av-pe-hsub','Jefe Comercial · Ene–May 2026 · al '+corteStr);
+    if(badgeEl){badgeEl.className='kbadge '+(c5m>=1?'kb-ok':c5m>=0.85?'kb-am':'kb-rd');badgeEl.innerHTML=(c5m*100).toFixed(1)+'% del Ppto Ene-'+curMesNm.substring(0,3);}
+    set('av-pe-hsub','Jefe Comercial · Ene–'+curMesNm+' 2026 · al '+corteStr);
     // Mejor mes
     var bIdx=mr5.indexOf(Math.max.apply(null,mr5));
     set('av-pe-kpi-best-lbl','Mejor Mes · '+MNMS[bIdx]);
@@ -881,13 +884,13 @@ new Chart(document.getElementById('cCxC'),{
     var bPct=mr5[bIdx]/mp5[bIdx];
     var bBd=document.getElementById('av-pe-kpi-best-badge');
     if(bBd){bBd.className='kbadge '+(bPct>=1?'kb-ok':bPct>=0.85?'kb-am':'kb-rd');bBd.innerHTML=(bPct*100).toFixed(1)+'% del ppto '+MNMS[bIdx].substring(0,3).toLowerCase();}
-    // Mayo KPI
-    var mayR=mr5[4]||0, mayP=mp5[4]||1, mayPct=mayR/mayP;
-    set('av-pe-kpi-may-lbl','Mayo Parcial');
+    // Mes en curso KPI (parcial)
+    var mayR=mr5[nRealPE-1]||0, mayP=mp5[nRealPE-1]||1, mayPct=mayR/mayP;
+    set('av-pe-kpi-may-lbl',curMesNm+' Parcial');
     set('av-pe-kpi-may-val','USD '+K1(mayR)+'K');
     set('av-pe-kpi-may-sub','al '+corteStr+' · parcial');
     var mayBd=document.getElementById('av-pe-kpi-may-badge');
-    if(mayBd){mayBd.className='kbadge '+(mayPct>=1?'kb-ok':mayPct>=0.85?'kb-am':'kb-rd');mayBd.innerHTML=(mayPct*100).toFixed(1)+'% del ppto may';}
+    if(mayBd){mayBd.className='kbadge '+(mayPct>=1?'kb-ok':mayPct>=0.85?'kb-am':'kb-rd');mayBd.innerHTML=(mayPct*100).toFixed(1)+'% del ppto '+curMesNm.substring(0,3).toLowerCase();}
     // Brecha vs Ppto T1 (Ene-Mar)
     var t1R=mr5.slice(0,3).reduce(function(a,b){return a+b;},0);
     var t1P=mp5.slice(0,3).reduce(function(a,b){return a+b;},0);
@@ -938,7 +941,7 @@ new Chart(document.getElementById('cCxC'),{
     });
     // Tfoot totales
     var t4m=pv.mensual_real.slice(0,4).reduce(function(a,b){return a+b;},0);
-    var mayTotal=pv.mensual_real[4]||0;
+    var mayTotal=pv.mensual_real[nRealPE-1]||0;
     var pptoT1=213385, pptoA=pv.ppto_anual||1137034;
     set('pe-tfoot-t1', t4m.toLocaleString('en-US'));
     set('pe-tfoot-cumpl', (t4m/pptoT1*100).toFixed(1)+'%');
@@ -948,10 +951,10 @@ new Chart(document.getElementById('cCxC'),{
     var infYtdK=(pve.infante?(pve.infante.ytd/1000).toFixed(1):0);
     var infPct=(pve.infante?Math.round(pve.infante.ytd/pptoA*100):0);
     var grupoYtdK=(pv.ytd_5m/1000).toFixed(1);
-    set('av-pe-alerta-aguirre','Aguirre lidera Mayo con USD '+fN3(pve.aguirre?pve.aguirre.mayo:0)+
+    set('av-pe-alerta-aguirre','Aguirre lidera '+curMesNm+' con USD '+fN3(pve.aguirre?pve.aguirre.mayo:0)+
       ' — zona más dinámica del grupo. YTD USD '+fN3(pve.aguirre?pve.aguirre.ytd:0)+' (+122% del ppto). '+
       '<strong style="color:var(--green);">Infante consolida YTD USD '+infYtdK+'K ('+infPct+'% del ppto anual)</strong>. '+
-      'Atalaya sin venta en Mayo — verificar cartera activa. '+
+      'Atalaya sin venta en '+curMesNm+' — verificar cartera activa. '+
       'Grupo Perú YTD 5m: USD '+grupoYtdK+'K.');
     // Footer
     set('av-pe-footer-txt','AV Latam BI Platform · Panel Perú · Corte ventas '+corteVtas+

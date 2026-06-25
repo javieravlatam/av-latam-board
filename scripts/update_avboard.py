@@ -21,7 +21,7 @@ Reglas:
   - Valida sintaxis JS antes de escribir
 """
 
-import os, sys, re, json, glob, subprocess, textwrap
+import os, sys, re, json, glob, subprocess, textwrap, math, unicodedata
 from datetime import datetime, date
 from pathlib import Path
 
@@ -120,23 +120,10 @@ PPTO_RTC_ANUAL_PE = {
     'valladares': 142372,
 }
 
-# Rentabilidad (alertas estáticas — no cambian con corte)
-RENTABILIDAD = {
-    'alertas_nivel1': [
-        {'pais': 'CL', 'sku': 'HUMIC ROOT (formato N/D)', 'margen': -0.335, 'accion': 'REVISAR_O_DESCONTINUAR'},
-        {'pais': 'CL', 'sku': 'PLUS MICRO MIX 1L',        'margen': -0.143, 'accion': 'SUBIR_PRECIO_O_DESCONTINUAR'},
-    ],
-    'alertas_nivel2': [
-        {'pais': 'CL', 'sku': 'PLUS MICRO MIX (formato N/D)', 'margen': 0.090},
-        {'pais': 'CL', 'sku': 'PLUS ZINC (formato N/D)',       'margen': 0.031},
-        {'pais': 'CL', 'sku': 'PLUS ZINC MANGANESO 1L',        'margen': 0.059},
-    ],
-    'impacto_clp': 25400000,
-    'skus_bajo_piso_chile': 71,
-    'skus_bajo_piso_peru':   5,
-    'skus_sin_costo_chile': 11,
-    'skus_sin_costo_peru':   4,
-}
+# NOTA: la antigua tabla estática RENTABILIDAD (alertas hardcodeadas) fue
+# reemplazada 2026-06-24 por compute_productos(), que calcula rentabilidad
+# real por país×producto×formato desde precios piso + ventas. Ver sección
+# "MÓDULO PRODUCTOS" más abajo.
 
 MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
 MESES_FULL = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO',
@@ -201,6 +188,11 @@ def detect_inbox_files():
     if piso:
         files['piso_chile'] = piso[0]
 
+    # Precio piso Perú
+    piso_pe = list(INBOX.glob('precio piso peru*.xlsx'))
+    if piso_pe:
+        files['piso_peru'] = piso_pe[0]
+
     return files
 
 
@@ -258,6 +250,11 @@ def extract_chile_ventas(path):
     ytd_5m = sum(mensual.get(m, 0) for m in MESES_FULL)
     n_months = len(months_with_data)
     ytd_4m = sum(mensual.get(MESES_FULL[i], 0) for i in range(min(4, n_months)))
+    # Último mes con datos reales (el nombre 'mayo_parcial' se mantiene por
+    # compatibilidad con los paneles, pero apunta dinámicamente al mes más
+    # reciente con ventas — antes quedaba fijo en 'MAYO' aunque el corte avanzara)
+    ultimo_mes_idx = n_months - 1 if n_months > 0 else 4
+    mayo_parcial_dinamico = mensual.get(MESES_FULL[ultimo_mes_idx], 0) if n_months > 0 else mensual.get('MAYO', 0)
 
     # T1 por RTC (Jan-Mar)
     rtc_t1 = {}
@@ -270,14 +267,22 @@ def extract_chile_ventas(path):
     n_ppto = min(4, n_months)
     ppto_4m = sum(PPTO_MENSUAL_CL[:4])
     cumpl_4m = round(ytd_4m / ppto_4m, 4) if ppto_4m > 0 else 0
+    # ppto_5m / cumplimiento_5m: ANTES sumaba siempre los primeros 5 meses de
+    # presupuesto aunque ytd_5m (numerador) ya sumara más meses reales (ej. al
+    # llegar Junio) — esto inflaba el % de cumplimiento mostrado. Ahora el
+    # presupuesto usado como denominador sigue la misma ventana dinámica
+    # (n_months) que el numerador, para que ambos midan el mismo período.
+    ppto_5m = sum(PPTO_MENSUAL_CL[:n_months]) if n_months > 0 else sum(PPTO_MENSUAL_CL[:5])
+    cumpl_5m = round(ytd_5m / ppto_5m, 4) if ppto_5m > 0 else 0
 
     return {
         'ytd_5m':       ytd_5m,
         'ytd_4m':       ytd_4m,
-        'mayo_parcial': mensual.get('MAYO', 0),
+        'mayo_parcial': mayo_parcial_dinamico,
         'ppto_4m':      int(ppto_4m),
-        'ppto_5m':      int(sum(PPTO_MENSUAL_CL[:5])),
+        'ppto_5m':      int(ppto_5m),
         'cumplimiento_4m': cumpl_4m,
+        'cumplimiento_5m': cumpl_5m,
         'mensual':      [mensual.get(m, 0) for m in MESES_FULL],
         'rtc_t1':       rtc_t1,
         'rtc_mensual':  rtc_mensual,
@@ -332,6 +337,13 @@ def extract_peru_ventas(path):
                 available_cols[i] = col
                 break
 
+    # Mismo principio que arriba: el índice del "mes actual/parcial" (antes
+    # fijo en 4 = Mayo) ahora sigue dinámicamente al último mes con columna
+    # detectada en el Excel, para que 'mayo'/'mayo_parcial' avancen solos
+    # cuando el corte avanza (ej. a Junio) sin quedar pegados en Mayo.
+    n_months_pe  = len(available_cols)
+    last_idx_pe  = max(available_cols.keys()) if available_cols else 4
+
     por_vendedor = {}
     rtc_mensual_pe = {}
     mensual_pe = [0] * 12
@@ -365,7 +377,7 @@ def extract_peru_ventas(path):
         por_vendedor[matched_key] = {
             'nombre': vend_name.title(),
             'ytd': round(ytd),
-            'mayo': round(monthly[4]) if len(monthly) > 4 else 0,
+            'mayo': round(monthly[last_idx_pe]) if last_idx_pe < len(monthly) else 0,
         }
         rtc_mensual_pe[matched_key] = [round(v) for v in monthly]
 
@@ -377,13 +389,17 @@ def extract_peru_ventas(path):
 
     ppto_4m_pe = sum(PPTO_MENSUAL_PE[:4])
     cumpl_4m_pe = round(ytd_4m_pe / ppto_4m_pe, 4) if ppto_4m_pe > 0 else 0
-    ppto_5m_pe = sum(PPTO_MENSUAL_PE[:5])
+    # ppto_5m_pe: igual que en Chile, el denominador ahora sigue la misma
+    # ventana dinámica (n_months_pe) que ytd_5m_pe — antes quedaba fijo en
+    # 5 meses de presupuesto aunque ya hubiera 6+ meses de venta real,
+    # inflando el % de cumplimiento.
+    ppto_5m_pe = sum(PPTO_MENSUAL_PE[:n_months_pe]) if n_months_pe > 0 else sum(PPTO_MENSUAL_PE[:5])
     cumpl_5m_pe = round(ytd_5m_pe / ppto_5m_pe, 4) if ppto_5m_pe > 0 else 0
 
     return {
         'ytd_5m':          ytd_5m_pe,
         'ytd_4m':          ytd_4m_pe,
-        'mayo_parcial':    mensual_pe[4],
+        'mayo_parcial':    mensual_pe[last_idx_pe] if n_months_pe > 0 else mensual_pe[4],
         'cumplimiento_4m': cumpl_4m_pe,
         'cumplimiento_5m': cumpl_5m_pe,
         'mensual':         mensual_pe,
@@ -545,38 +561,198 @@ def extract_cxc_chile(agro_path, avch_path):
 #  3. CÁLCULO IEC
 # ══════════════════════════════════════════════════════════════════════════════
 
+# ──────────────────────────────────────────────────────────────────────────────
+#  3.0 NORMALIZACIÓN DE NOMBRES Y FORMATOS (compartida Chile + Perú)
+# ──────────────────────────────────────────────────────────────────────────────
+#  Los nombres de producto en ventas (Chile y Perú) llegan con variantes de
+#  marca (VECA/AV), tildes, separadores (' - ', ' X ', sin separador), typos
+#  y ruido de empaque/lote. Esta sección centraliza esa limpieza para que
+#  TODO el sistema (IEC, TX_CL, módulo Productos) use la misma lógica de
+#  matching contra las tablas de precio piso — evita que un mismo SKU se
+#  trate distinto en dos partes del pipeline.
+
+NAME_NORMALIZE = {
+    # Aliases originales (Panel_IEC, desde antes de este módulo)
+    'VECA MOVE': 'AV MOVE', 'VECA ROOT MAX': 'AV ROOT MAX', 'VECASIL FORTE': 'AV SILFORTE',
+    'VECA HUMIC ROOT': 'AV HUMIC ROOT', 'CYTOPRIME': 'AV CYTO PRIME', 'CYTO PRIME': 'AV CYTO PRIME',
+    'VECA PLUS POTASIO': 'AV PLUS POTASIO', 'VECA PLUS MAGNESIO': 'AV PLUS MAGNESIO',
+    'VECA MICROMIX': 'AV MICROMIX', 'VECA PLUS CALCIO': 'AV PLUS CALCIO',
+    'VECA PLUS ZINC': 'AV PLUS ZINC', 'VECA PLUS FOSFORO': 'AV PLUS FOSFORO',
+    # Aliases adicionales — validados contra Libro de Ventas 21-06-2026 +
+    # AGROVECA PERU VENTAS 22.06.2026 vs precios piso CL/PE (módulo Productos, 2026-06-24)
+    'ALGAP': 'AV ALGAP 30', 'ALGAP 30': 'AV ALGAP 30',
+    'AV MAX FULVIC': 'AV MAX FULVIC 45%', 'VECA MAX FULVIC': 'AV MAX FULVIC 45%',
+    'VECA FULVIC': 'AV MAX FULVIC 45%',
+    'AV AMINSUGAR': 'AV AMIN SUGAR',
+    'AV BIOVECA FOLIAR': 'BIOVECA FOLIAR', 'AV BIOVECA RAIZ': 'BIOVECA RAIZ',
+    'AV BIOVECA RAÍZ': 'BIOVECA RAIZ', 'BIOVECA RAÍZ': 'BIOVECA RAIZ',
+    'AV BIOVECA NEMA OFF': 'BIOVECA NEMA OFF', 'AV BIOVECA NEMAOFF': 'BIOVECA NEMA OFF',
+    'BIOVECA NEMAOFF': 'BIOVECA NEMA OFF', 'AV BIOVECA PRADERAS': 'BIOVECA PRADERAS',
+    'AV BIOVECA INVERNAL': 'BIOVECA INVERNAL',
+    'AV PLUS NP MIX': 'AV PLUS NP-MIX',
+    'VECA CALCIO BORO': 'AV PLUS CALCIO BORO', 'CALCIO BORO': 'AV PLUS CALCIO BORO',
+    'VECA PLUC HIERRO': 'AV PLUS HIERRO',
+    'VECA BLANCE': 'AV BALANCE',
+    'AV MAX GREEN GUARDIAN': 'GREEN GUARDIAN MAX',
+    # Específicos de Perú (CONCEPTO de ventas sin marca o con typos)
+    'VECASIL': 'AV SILFORTE', 'AV SILIFORTE': 'AV SILFORTE', 'VECA SILFORTE': 'AV SILFORTE',
+    'VECA ZINC': 'AV PLUS ZINC',
+    'VECA MANGANESO': 'AV PLUS ZINC MANGANESO', 'VECA PLUS MANGANESO': 'AV PLUS ZINC MANGANESO',
+    'HUMIC ROOT': 'AV HUMIC ROOT', 'VECA POTASIO': 'AV PLUS POTASIO',
+    'BIOSOLARIS': 'AV BIOSOLARIS', 'MAGNESIO': 'AV PLUS MAGNESIO',
+    'AV MAGNESIO': 'AV PLUS MAGNESIO', 'VECA MAGNESIO': 'AV PLUS MAGNESIO',
+    # Aliases adicionales — detectados al construir compute_productos() contra
+    # Libro de Ventas 21-06-2026 (Chile), validados 1:1 contra precios piso CHile:
+    # mismo producto, nombre con "PLUS"/orden de palabras distinto al de piso.
+    'AV PLUS MANGANESO': 'AV PLUS ZINC MANGANESO',
+    'VECA MICROMIX': 'AV PLUS MICRO MIX', 'AV MICROMIX': 'AV PLUS MICRO MIX',
+    'AV NUTRI MIX': 'AV PLUS NUTRI MIX', 'NUTRI MIX': 'AV PLUS NUTRI MIX',
+    'VECA NUTRI MIX': 'AV PLUS NUTRI MIX',
+    'AV PLUS AMIN': 'AV AMIN',
+    'PK DEFENDER MAX': 'PK-DEFEND MAX',
+    'AV PLUS ROOT MAX': 'AV ROOT MAX',
+    'AV CALCIO': 'AV PLUS CALCIO', 'AV BORO': 'AV PLUS BORO',
+    'AV SOLARIS': 'AV BIOSOLARIS', 'BIORAIZ': 'BIOVECA RAIZ', 'RAIZ': 'BIOVECA RAIZ',
+    'BIOFOLIAR': 'BIOVECA FOLIAR', 'BALANCE': 'AV BALANCE',
+}
+
+# Typos puntuales detectados en CONCEPTO de ventas Perú — se corrigen ANTES
+# de pasar por NAME_NORMALIZE (sustitución de substring, no es alias de marca).
+TYPO_FIX_PE = {
+    'MANGNESIO': 'MAGNESIO',     # falta una 'A'
+    'SILIFORTE': 'SILFORTE',     # letra de más
+    'NUTRIMIX':  'NUTRI MIX',    # falta espacio (AV PLUS NUTRIMIX → AV PLUS NUTRI MIX)
+}
+
+_UNIT_MAP = {
+    'L': 'L', 'LT': 'L', 'LTS': 'L', 'LTRS': 'L', 'LITRO': 'L', 'LITROS': 'L',
+    'GR': 'GR', 'GRS': 'GR', 'G': 'GR', 'GRAMO': 'GR', 'GRAMOS': 'GR',
+    'KG': 'KG', 'KGS': 'KG', 'KILO': 'KG', 'KILOS': 'KG',
+    'ML': 'ML', 'CC': 'ML',
+}
+
+
+def strip_accents(s):
+    """Quita tildes/diacríticos (RAÍZ -> RAIZ) — solo para claves de matching,
+    nunca para texto que se muestra al usuario."""
+    return ''.join(c for c in unicodedata.normalize('NFD', str(s)) if unicodedata.category(c) != 'Mn')
+
+
+def normalize_fmt(raw):
+    """Canonicaliza un formato/unidad: '20LT'/'20 LTS' -> '20 L', '250GRS' -> '250 GR'."""
+    s = str(raw).strip().upper().replace(',', '.')
+    s = re.sub(r'\(.*?\)', '', s).strip()  # quita anotaciones tipo '(VECA)'
+    if not s or s == 'NAN':
+        return ''
+    m = re.match(r'^(\d+(?:\.\d+)?)\s*([A-ZÀ-Ü]+)\.?$', s)
+    if not m:
+        return s
+    num, unit = m.groups()
+    if num.endswith('.0'):
+        num = num[:-2]
+    return f"{num} {_UNIT_MAP.get(unit, unit)}"
+
+
+def normalize_prod_name(name):
+    """Normaliza nombre de producto para DISPLAY: corrige marca VECA->AV y
+    aliases conocidos, pero conserva tildes/formato original cuando no hay
+    alias aplicable (no se usa para matching — ver _normalize_key)."""
+    upper = str(name).strip().upper()
+    upper = re.sub(r'\(.*?\)', '', upper).strip()  # notas de empaque/lote/moneda
+    upper = NAME_NORMALIZE.get(upper, upper)
+    upper = upper.replace('VECA ', 'AV ').replace('VECASIL', 'AV SIL').replace('AV-', 'AV ')
+    upper = re.sub(r'\s{2,}', ' ', upper).strip()
+    upper = NAME_NORMALIZE.get(upper, upper)
+    return upper
+
+
+def _normalize_key(name):
+    """Clave de matching contra tablas de precio piso: normalize_prod_name + sin tildes."""
+    return strip_accents(normalize_prod_name(name))
+
+
+_FMT_UNIT_RE = r'(?:LTS?|LITROS?|GRS?|GRAMOS?|KGS?|KILOS?|ML|CC)'
+
+
+def parse_producto_formato(name):
+    """Extrae (producto_base, formato) tolerando separador '-', 'X' o ninguno,
+    y ruido posterior a la unidad (ej. '(VECA)', '(PRECIO EN USD)', códigos).
+    A diferencia de la versión original, NO exige que el formato sea lo
+    último en el string — basta con que aparezca tras el nombre."""
+    s = str(name).strip()
+    if not s or s.upper() == 'NAN':
+        return '', ''
+    patterns = [
+        r'^(.+?)\s*-\s*(\d[\d.,]*\s*[A-Za-zÀ-ÿ%]+)\b',     # separador '-'
+        r'^(.+?)\s+X\s*(\d[\d.,]*\s*[A-Za-zÀ-ÿ%]+)\b',      # separador 'X'/'x'
+        r'^(.+?)\s+(\d[\d.,]*\s*' + _FMT_UNIT_RE + r')\b',  # sin separador (unidad reconocida)
+    ]
+    for pat in patterns:
+        m = re.match(pat, s, re.IGNORECASE)
+        if m:
+            prod = m.group(1).strip().upper()
+            fmt  = normalize_fmt(m.group(2))
+            if prod and fmt:
+                return prod, fmt
+    return s.upper(), ''
+
+
+def buscar_piso_chile(piso, prod_base_raw, fmt):
+    """Busca entrada de piso Chile por (producto, formato) ya normalizados.
+    piso: dict devuelto por load_piso_chile."""
+    return piso.get((_normalize_key(prod_base_raw), fmt))
+
+
 def load_piso_chile(piso_path):
-    """Carga tabla de precios piso Chile como dict (prod_upper, fmt_upper) -> pp."""
+    """Carga tabla de precios piso Chile: dict (prod_norm, fmt) -> {pp, costo_unidad,
+    margen_calc, margen_propuesto, clasif}.
+
+    Nota: el FORMATO '5 L (VECA)' es una fila duplicada de '5 L' con valores
+    de costo/precio IDÉNTICOS (verificado 2026-06-24 contra el archivo real —
+    no es una variante de costo distinta), por lo que se trata como el mismo
+    formato tras limpiar la anotación '(VECA)'.
+    """
     df = pd.read_excel(piso_path, sheet_name='Pricing Piso Chile', header=4)
     df.columns = [str(c).strip() for c in df.columns]
-    pp_col = [c for c in df.columns if 'PRECIO PISO' in c.upper() and 'CALCULADO' in c.upper()][0]
-    prop_col = [c for c in df.columns if 'NUEVO PRECIO' in c.upper() or 'PROPUESTO' in c.upper()]
-    prop_col = prop_col[0] if prop_col else None
+    pp_col    = [c for c in df.columns if 'PRECIO PISO' in c.upper() and 'CALCULADO' in c.upper()][0]
+    prop_col  = [c for c in df.columns if 'NUEVO PRECIO' in c.upper() or 'PROPUESTO' in c.upper()]
+    prop_col  = prop_col[0] if prop_col else None
+    costo_col = [c for c in df.columns if 'COSTO' in c.upper() and 'UNIDAD' in c.upper()][0]
+    marg_col  = [c for c in df.columns if 'MARGEN' in c.upper() and 'CALC' in c.upper()][0]
+    margp_col = [c for c in df.columns if 'MARGEN' in c.upper() and 'PROPUESTO' in c.upper()]
+    margp_col = margp_col[0] if margp_col else None
+    clasif_col = [c for c in df.columns if 'CLASIF' in c.upper()]
+    clasif_col = clasif_col[0] if clasif_col else None
 
     piso = {}
     for _, row in df.iterrows():
         prod = str(row.get('PRODUCTO', '')).strip().upper()
-        fmt  = str(row.get('FORMATO',  '')).strip().upper()
+        fmt_raw = str(row.get('FORMATO', '')).strip().upper()
         if not prod or prod == 'NAN':
             continue
+        fmt = normalize_fmt(fmt_raw)
+        if not fmt:
+            continue
+
         pp_val = pd.to_numeric(row.get(prop_col, np.nan) if prop_col else np.nan, errors='coerce')
         if pd.isna(pp_val):
             pp_val = pd.to_numeric(row[pp_col], errors='coerce')
-        if pd.notna(pp_val):
-            piso[(prod, fmt)] = round(float(pp_val))
+        costo_u = pd.to_numeric(row.get(costo_col, np.nan), errors='coerce')
+        marg_calc = pd.to_numeric(row.get(marg_col, np.nan), errors='coerce')
+        marg_prop = pd.to_numeric(row.get(margp_col, np.nan), errors='coerce') if margp_col else np.nan
+        clasif = str(row.get(clasif_col, '')).strip() if clasif_col else ''
+
+        piso[(_normalize_key(prod), fmt)] = {
+            'pp':               round(float(pp_val)) if pd.notna(pp_val) else None,
+            'costo_unidad':     round(float(costo_u), 2) if pd.notna(costo_u) else None,
+            'margen_calc':      round(float(marg_calc), 4) if pd.notna(marg_calc) else None,
+            'margen_propuesto': round(float(marg_prop), 4) if pd.notna(marg_prop) else None,
+            'clasif':           clasif,
+        }
     return piso
 
 
-def parse_producto_formato(name):
-    """Extrae (producto_base, formato) de 'PRODUCTO - FORMATO'."""
-    name = str(name).strip()
-    m = re.match(r'^(.+?)\s*-\s*(\d[\d,.]* *\w+)\s*$', name)
-    if m:
-        return m.group(1).strip().upper(), m.group(2).strip().upper()
-    return name.upper(), ''
-
-
-def compute_iec_chile(df_ventas, piso_dict):
+def compute_iec_chile(df_ventas, piso):
     """Calcula IEC por transacción. Retorna df enriquecido + resumen por vendedor + por cliente."""
     df = df_ventas.copy()
     df['total_n'] = pd.to_numeric(df['Total'], errors='coerce').fillna(0)
@@ -584,7 +760,8 @@ def compute_iec_chile(df_ventas, piso_dict):
     df['prod_base'], df['fmt_parsed'] = zip(*df['Producto'].apply(parse_producto_formato))
 
     def get_pp(row):
-        return piso_dict.get((row['prod_base'], row['fmt_parsed']), None)
+        entry = buscar_piso_chile(piso, row['prod_base'], row['fmt_parsed'])
+        return entry['pp'] if entry else None
 
     df['pp'] = df.apply(get_pp, axis=1)
 
@@ -647,6 +824,307 @@ def iec_factor(pct):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+#  3.5 MÓDULO PRODUCTOS — rentabilidad real por país × producto × formato
+# ══════════════════════════════════════════════════════════════════════════════
+# Reemplaza la antigua tabla estática RENTABILIDAD. Cruza ventas reales contra
+# precios piso (costo fábrica/unidad) para calcular margen real por SKU y
+# detectar productos que destruyen margen, están subvaluados o no tienen
+# costo cargado en la tabla piso (SIN_COSTO). Perú es best-effort: el piso
+# perú está en 4 tramos fijos (1/20/200/1000 L) pero las ventas registran
+# litros reales por transacción — se asigna al tramo más cercano en escala
+# logarítmica (nearest_tier_pe). Validado 2026-06-24 contra Libro de Ventas
+# 21-06-2026 + AGROVECA PERU VENTAS 22.06.2026: reconciliación exacta
+# (sum(productos.ventas) == sum(Total/DOLARES) en ambos países, diff=0).
+
+def _es_no_clasificable(prod_raw):
+    """Detecta filas que no son SKUs reales: bolsones genéricos ('PRODUCTOS
+    VARIOS', 'Prodructos de 1 litro') o servicios de laboratorio ('ANÁLISIS
+    FOLIAR', 'ANALSIS SUELO', con o sin tilde/typo). Estas filas se excluyen
+    de los cálculos de margen (no son productos con costo/piso asociado) pero
+    se conservan en el detalle para trazabilidad."""
+    s = strip_accents(str(prod_raw).strip().upper())
+    partes = s.split(' ')
+    primera = partes[0] if partes else ''
+    segunda = partes[1] if len(partes) > 1 else ''
+    if primera in ('PRODUCTOS', 'PRODUCTO', 'PRODRUCTOS', 'PRODRUCTO') and segunda in ('VARIOS', 'VARIO', 'DE'):
+        return True
+    return primera in ('ANALISIS', 'ANALSIS', 'ANALSIIS')
+
+
+def compute_productos_chile(df_ventas, piso):
+    """Agrega ventas Chile por (producto, formato) y cruza contra piso para
+    calcular costo/margen real. 'Cantidad' en Libro de Ventas está en unidad
+    base (litro/kg) — igual que 'COSTO $/UNIDAD' de piso — por lo que
+    costo_total = costo_unidad × cantidad sin conversión de envases
+    (verificado 2026-06-24: Cantidad × Precio Uni == Total exactamente)."""
+    df = df_ventas.copy()
+    df['total_n'] = pd.to_numeric(df['Total'], errors='coerce').fillna(0)
+    df['cant_n']  = pd.to_numeric(df['Cantidad'], errors='coerce').fillna(0)
+    df['prod_base'], df['fmt_parsed'] = zip(*df['Producto'].apply(parse_producto_formato))
+
+    grupos = {}
+    for _, row in df.iterrows():
+        prod_raw, fmt = row['prod_base'], row['fmt_parsed']
+        total, cant = float(row['total_n']), float(row['cant_n'])
+        if total == 0 and cant == 0:
+            continue
+        if _es_no_clasificable(prod_raw):
+            forzado = 'NO_CLASIFICABLE'
+        elif not fmt:
+            forzado = 'FORMATO_NO_IDENTIFICADO'
+        else:
+            forzado = None
+        prod_disp = normalize_prod_name(prod_raw)
+        key = (prod_disp, fmt or '?')
+        g = grupos.setdefault(key, {'producto': prod_disp, 'formato': fmt or '?',
+                                     'ventas': 0.0, 'cantidad': 0.0, 'forzado': forzado})
+        g['ventas'] += total
+        g['cantidad'] += cant
+        if forzado:
+            g['forzado'] = forzado
+
+    productos = []
+    for (prod_disp, fmt), g in grupos.items():
+        entry = buscar_piso_chile(piso, prod_disp, fmt) if fmt != '?' else None
+        ventas = round(g['ventas'])
+        cantidad = round(g['cantidad'], 2)
+        precio_prom = round(ventas / cantidad, 2) if cantidad else None
+        if g['forzado']:
+            estado = g['forzado']
+            costo_unidad = entry['costo_unidad'] if entry else None
+        elif entry and entry.get('costo_unidad') is not None:
+            estado = 'OK'
+            costo_unidad = entry['costo_unidad']
+        else:
+            estado = 'SIN_COSTO'
+            costo_unidad = None
+        costo_total  = round(costo_unidad * cantidad) if costo_unidad is not None else None
+        margen_total = round(ventas - costo_total) if costo_total is not None else None
+        margen_pct   = round(margen_total / ventas, 4) if (margen_total is not None and ventas) else None
+        productos.append({
+            'pais': 'CL', 'producto': prod_disp, 'formato': fmt,
+            'ventas': ventas, 'cantidad': cantidad, 'precio_uni_prom': precio_prom,
+            'costo_unidad': costo_unidad, 'costo_total': costo_total,
+            'margen_total': margen_total, 'margen_pct': margen_pct,
+            'piso': entry['pp'] if entry else None, 'clasif': entry['clasif'] if entry else None,
+            'estado': estado,
+        })
+    return productos
+
+
+_QTY_UNIT_PE_RE = re.compile(
+    r'^(\d+(?:[.,]\d+)?)\s*(?:LTS?|TLS|[ÑN]TS|LITROS?)?\.?\s*(.+)$', re.IGNORECASE
+)
+
+
+def _clean_pe_name(raw):
+    """Limpia ruido de envase/lote del CONCEPTO de venta Perú: '(CILINDRO...)
+    LOTE:...', '(BIDON...) LOTE...', 'BOTELLA1LT' pegado al nombre."""
+    s = str(raw).strip().upper()
+    s = re.sub(r'\(.*', '', s)             # corta desde el primer paréntesis (envase/lote)
+    s = re.sub(r'\bLOTE\b.*$', '', s)       # 'LOTE: PE L3 25' suelto sin paréntesis
+    s = re.sub(r'\bBOTELLA\w*\b', '', s)    # 'BOTELLA1LT' pegado al nombre
+    s = re.sub(r'\s{2,}', ' ', s).strip()
+    return s
+
+
+def parse_concepto_pe(concepto):
+    """Extrae (qty_litros, nombre_producto_crudo) de un CONCEPTO de venta
+    Perú. Retorna None si el CONCEPTO mezcla 2+ productos (',' o '/') — esos
+    casos no se pueden atribuir a un solo SKU sin asumir datos y se reportan
+    aparte como 'multi-producto' (best-effort, no es un error)."""
+    s = str(concepto).strip()
+    if not s or s.upper() == 'NAN':
+        return None
+    if ',' in s or '/' in s:
+        return None
+    m = _QTY_UNIT_PE_RE.match(s)
+    if not m:
+        return None
+    qty = float(m.group(1).replace(',', '.'))
+    name_raw = _clean_pe_name(m.group(2))
+    for typo, fix in TYPO_FIX_PE.items():
+        name_raw = name_raw.replace(typo, fix)
+    return qty, name_raw
+
+
+def nearest_tier_pe(qty, tiers):
+    """Tramo de piso Perú (1/20/200/1000 L) más cercano a qty, en escala
+    logarítmica — los tramos son múltiplos de ~10-20x entre sí, por lo que
+    distancia log es más representativa que distancia lineal."""
+    if not tiers or qty is None or qty <= 0:
+        return None
+    return min(tiers, key=lambda t: abs(math.log10(qty) - math.log10(t)))
+
+
+def load_piso_peru(piso_path):
+    """Carga tabla de precios piso Perú: {'entries': {(prod_norm, tramo_L): {...}},
+    'tiers': {prod_norm: [tramos disponibles]}}. Misma nomenclatura "AV ..."
+    que Chile (validado 2026-06-24)."""
+    df = pd.read_excel(piso_path, sheet_name='Pricing Piso Peru', header=4)
+    df.columns = [str(c).strip() for c in df.columns]
+    pp_col    = [c for c in df.columns if 'PRECIO PISO' in c.upper() and 'CALCULADO' in c.upper()][0]
+    prop_col  = [c for c in df.columns if 'NUEVO PRECIO' in c.upper() or 'PROPUESTO' in c.upper()]
+    prop_col  = prop_col[0] if prop_col else None
+    costo_col = [c for c in df.columns if 'COSTO' in c.upper() and 'UNIDAD' in c.upper()][0]
+    marg_col  = [c for c in df.columns if 'MARGEN' in c.upper() and 'CALC' in c.upper()][0]
+    margp_col = [c for c in df.columns if 'MARGEN' in c.upper() and 'PROPUESTO' in c.upper()]
+    margp_col = margp_col[0] if margp_col else None
+    clasif_col = [c for c in df.columns if 'CLASIF' in c.upper()]
+    clasif_col = clasif_col[0] if clasif_col else None
+
+    entries, tiers_by_prod = {}, {}
+    for _, row in df.iterrows():
+        prod = str(row.get('PRODUCTO', '')).strip().upper()
+        fmt  = str(row.get('FORMATO', '')).strip().upper()
+        if not prod or prod == 'NAN':
+            continue
+        m = re.match(r'^(\d+)', fmt)
+        if not m:
+            continue
+        tier = int(m.group(1))
+        prod_n = _normalize_key(prod)
+
+        pp_val = pd.to_numeric(row.get(prop_col, np.nan) if prop_col else np.nan, errors='coerce')
+        if pd.isna(pp_val):
+            pp_val = pd.to_numeric(row[pp_col], errors='coerce')
+        costo_u = pd.to_numeric(row.get(costo_col, np.nan), errors='coerce')
+        marg_calc = pd.to_numeric(row.get(marg_col, np.nan), errors='coerce')
+        marg_prop = pd.to_numeric(row.get(margp_col, np.nan), errors='coerce') if margp_col else np.nan
+        clasif = str(row.get(clasif_col, '')).strip() if clasif_col else ''
+
+        entries[(prod_n, tier)] = {
+            'pp':               round(float(pp_val), 2) if pd.notna(pp_val) else None,
+            'costo_unidad':     round(float(costo_u), 4) if pd.notna(costo_u) else None,
+            'margen_calc':      round(float(marg_calc), 4) if pd.notna(marg_calc) else None,
+            'margen_propuesto': round(float(marg_prop), 4) if pd.notna(marg_prop) else None,
+            'clasif':           clasif,
+        }
+        tiers_by_prod.setdefault(prod_n, []).append(tier)
+    return {'entries': entries, 'tiers': tiers_by_prod}
+
+
+def extract_peru_ventas_sku(path):
+    """Extrae el detalle de ventas Perú por transacción (CONCEPTO) desde la
+    hoja 'VENTAS ACUMULADAS 2026' — usado solo por el módulo Productos
+    (extract_peru_ventas() sigue siendo la fuente de los KPIs agregados por
+    vendedor/mes que consume el resto del pipeline)."""
+    df = pd.read_excel(path, sheet_name='VENTAS ACUMULADAS 2026', header=5)
+    df.columns = [str(c).strip() for c in df.columns]
+    df = df[df['PERIODO'].notna()].copy()
+    df['DOLARES'] = pd.to_numeric(df['DOLARES'], errors='coerce').fillna(0)
+    return df
+
+
+def buscar_piso_peru(piso_pe, prod_raw, qty):
+    """Busca entrada de piso Perú por nombre normalizado + tramo más cercano
+    (escala log) al qty real de la transacción."""
+    prod_n = _normalize_key(prod_raw)
+    tiers = piso_pe['tiers'].get(prod_n)
+    if not tiers:
+        return None, prod_n
+    tier = nearest_tier_pe(qty, tiers)
+    return piso_pe['entries'].get((prod_n, tier)), prod_n
+
+
+def compute_productos_peru(df_sku, piso_pe):
+    """Agrega ventas Perú por (producto, tramo_asignado) y cruza contra
+    piso. Retorna (productos, multi_producto) — multi_producto resume el
+    monto en CONCEPTOs que mezclan 2+ productos y no se pudieron atribuir."""
+    productos_map = {}
+    multi_total, multi_n = 0.0, 0
+    for _, row in df_sku.iterrows():
+        monto = float(row['DOLARES'])
+        parsed = parse_concepto_pe(row.get('CONCEPTO', ''))
+        if parsed is None:
+            multi_total += monto
+            multi_n += 1
+            continue
+        qty, name_raw = parsed
+        entry, prod_n = buscar_piso_peru(piso_pe, name_raw, qty)
+        tier = nearest_tier_pe(qty, piso_pe['tiers'].get(prod_n)) if entry else None
+        fmt_label = f"{tier} L (tier)" if tier else '?'
+        key = (prod_n, fmt_label)
+        g = productos_map.setdefault(key, {'producto': normalize_prod_name(name_raw), 'formato': fmt_label,
+                                            'ventas': 0.0, 'cantidad': 0.0, 'entry': entry})
+        g['ventas'] += monto
+        g['cantidad'] += qty
+
+    productos = []
+    for (prod_n, fmt_label), g in productos_map.items():
+        entry = g['entry']
+        ventas = round(g['ventas'], 2)
+        cantidad = round(g['cantidad'], 2)
+        precio_prom = round(ventas / cantidad, 4) if cantidad else None
+        if entry and entry.get('costo_unidad') is not None:
+            estado, costo_unidad = 'OK', entry['costo_unidad']
+        else:
+            estado, costo_unidad = 'SIN_COSTO', None
+        costo_total  = round(costo_unidad * cantidad, 2) if costo_unidad is not None else None
+        margen_total = round(ventas - costo_total, 2) if costo_total is not None else None
+        margen_pct   = round(margen_total / ventas, 4) if (margen_total is not None and ventas) else None
+        productos.append({
+            'pais': 'PE', 'producto': g['producto'], 'formato': fmt_label,
+            'ventas': ventas, 'cantidad': cantidad, 'precio_uni_prom': precio_prom,
+            'costo_unidad': costo_unidad, 'costo_total': costo_total,
+            'margen_total': margen_total, 'margen_pct': margen_pct,
+            'piso': entry['pp'] if entry else None, 'clasif': entry['clasif'] if entry else None,
+            'estado': estado,
+        })
+    return productos, {'monto': round(multi_total, 2), 'n': multi_n}
+
+
+def compute_productos(cl_df, piso_cl, pe_df_sku, piso_pe):
+    """Construye el módulo PRODUCTOS: rentabilidad real por país×producto×
+    formato. Detecta productos que destruyen margen (alertas_nivel1, margen
+    negativo), subvaluados/en zona de riesgo (alertas_nivel2, margen 0-10%)
+    y sin costo cargado en piso (SIN_COSTO, oportunidad de completar datos).
+    Perú es best-effort (ver nearest_tier_pe) — validar con Javier antes de
+    tomar decisiones de pricing basadas solo en los números de Perú."""
+    prod_cl = compute_productos_chile(cl_df, piso_cl)
+    prod_pe, multi_pe = compute_productos_peru(pe_df_sku, piso_pe)
+    productos = prod_cl + prod_pe
+
+    con_costo = [p for p in productos if p['estado'] == 'OK' and p['margen_pct'] is not None]
+    nivel1 = sorted([p for p in con_costo if p['margen_pct'] < 0], key=lambda p: p['margen_total'])
+    nivel2 = sorted([p for p in con_costo if 0 <= p['margen_pct'] < 0.10], key=lambda p: p['margen_pct'])
+
+    def _sku_label(p):
+        return f"{p['producto']} {p['formato']}".strip()
+
+    alertas_nivel1 = [
+        {'pais': p['pais'], 'sku': _sku_label(p), 'margen': p['margen_pct'], 'margen_total': p['margen_total'],
+         'accion': 'REVISAR_O_DESCONTINUAR'}
+        for p in nivel1
+    ]
+    alertas_nivel2 = [
+        {'pais': p['pais'], 'sku': _sku_label(p), 'margen': p['margen_pct']}
+        for p in nivel2
+    ]
+
+    impacto_clp = int(round(sum(
+        (p['margen_total'] if p['pais'] == 'CL' else p['margen_total'] * TC_CLP_USD)
+        for p in nivel1
+    ))) if nivel1 else 0
+
+    def _bajo_piso(plist):
+        return sum(1 for p in plist if p['estado'] == 'OK' and p['piso'] and p['precio_uni_prom'] is not None
+                    and p['precio_uni_prom'] < p['piso'])
+
+    resumen = {
+        'alertas_nivel1':       alertas_nivel1,
+        'alertas_nivel2':       alertas_nivel2,
+        'impacto_clp':          impacto_clp,
+        'skus_bajo_piso_chile': _bajo_piso(prod_cl),
+        'skus_bajo_piso_peru':  _bajo_piso(prod_pe),
+        'skus_sin_costo_chile': sum(1 for p in prod_cl if p['estado'] == 'SIN_COSTO'),
+        'skus_sin_costo_peru':  sum(1 for p in prod_pe if p['estado'] == 'SIN_COSTO'),
+        'multi_producto_peru':  multi_pe,
+    }
+    return {'detalle': productos, 'resumen': resumen}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 #  4. GENERACIÓN avboard_data.js
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -662,7 +1140,7 @@ def _arr(lst, per_row=12, indent=6):
     return '[\n' + ',\n'.join(pad + str(c) for c in chunks) + '\n' + ' '*(indent-2) + ']'
 
 
-def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, peru_cxc_static):
+def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, peru_cxc_static, productos_data):
     """Genera el contenido completo de avboard_data.js."""
 
     version = datetime.now().strftime('%Y-%m-%d')
@@ -739,6 +1217,20 @@ def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, peru_cxc_static):
                 f"      }}"
             )
         return '{\n' + ',\n'.join(lines) + '\n    }'
+
+    def js_productos(lst):
+        items = []
+        for p in lst:
+            items.append(
+                "    { "
+                f"pais:{_jdumps(p['pais'])}, producto:{_jdumps(p['producto'])}, formato:{_jdumps(p['formato'])}, "
+                f"ventas:{_jdumps(p['ventas'])}, cantidad:{_jdumps(p['cantidad'])}, precio_uni_prom:{_jdumps(p['precio_uni_prom'])}, "
+                f"costo_unidad:{_jdumps(p['costo_unidad'])}, costo_total:{_jdumps(p['costo_total'])}, "
+                f"margen_total:{_jdumps(p['margen_total'])}, margen_pct:{_jdumps(p['margen_pct'])}, "
+                f"piso:{_jdumps(p['piso'])}, clasif:{_jdumps(p['clasif'])}, estado:{_jdumps(p['estado'])}"
+                " }"
+            )
+        return '[\n' + ',\n'.join(items) + '\n  ]'
 
     def js_rentabilidad(r):
         def alert_line(a):
@@ -830,6 +1322,7 @@ var AVBOARD = (function() {{
     ppto_4m:         {cl_v['ppto_4m']},
     ppto_5m:         {cl_v['ppto_5m']},
     cumplimiento_4m: {cl_v['cumplimiento_4m']},
+    cumplimiento_5m: {cl_v['cumplimiento_5m']},
     cumplimiento_t1: {round(sum(cl_v['mensual'][:3]) / sum(PPTO_MENSUAL_CL[:3]), 4)},
     mensual_real:  [{cl_mensual_str}],
     mensual_ppto:  [{ppto_cl_str}],
@@ -919,8 +1412,10 @@ var AVBOARD = (function() {{
 
   var peru_cxc = {_jdumps(peru_cxc_static, indent=2).replace(chr(10), chr(10)+'  ')};
 
+  var productos = {js_productos(productos_data['detalle'])};
+
   var rentabilidad = {{
-{js_rentabilidad(RENTABILIDAD)}
+{js_rentabilidad(productos_data['resumen'])}
   }};
 
   return {{
@@ -928,6 +1423,7 @@ var AVBOARD = (function() {{
     grupo:        grupo,
     chile:  {{ ventas: chile_ventas, cxc: chile_cxc }},
     peru:   {{ ventas: peru_ventas,  cxc: peru_cxc  }},
+    productos: productos,
     rentabilidad: rentabilidad,
     tc:       function() {{ return meta.tc_clp_usd; }},
     clpToUsd: function(clp) {{ return Math.round(clp / meta.tc_clp_usd); }},
@@ -1178,20 +1674,7 @@ const CXC_SIN_MATCH_CL = {cxc_sin_match};
 #  6. ACTUALIZACIÓN Panel_IEC (TX_CL)
 # ══════════════════════════════════════════════════════════════════════════════
 
-NAME_NORMALIZE = {
-    'VECA MOVE': 'AV MOVE', 'VECA ROOT MAX': 'AV ROOT MAX', 'VECASIL FORTE': 'AV SILFORTE',
-    'VECA HUMIC ROOT': 'AV HUMIC ROOT', 'CYTOPRIME': 'AV CYTO PRIME',
-    'VECA PLUS POTASIO': 'AV PLUS POTASIO', 'VECA PLUS MAGNESIO': 'AV PLUS MAGNESIO',
-    'VECA MICROMIX': 'AV MICROMIX', 'VECA PLUS CALCIO': 'AV PLUS CALCIO',
-    'VECA PLUS ZINC': 'AV PLUS ZINC', 'VECA PLUS FOSFORO': 'AV PLUS FOSFORO',
-}
-
-def normalize_prod_name(name):
-    upper = str(name).strip().upper()
-    return NAME_NORMALIZE.get(upper, upper.replace('VECA ', 'AV ').replace('VECASIL', 'AV SIL'))
-
-
-def build_tx_cl(df_ventas, piso_dict):
+def build_tx_cl(df_ventas, piso):
     """Construye el array TX_CL completo desde el DataFrame de ventas Chile."""
     df = df_ventas.copy()
     df['total_n'] = pd.to_numeric(df['Total'], errors='coerce').fillna(0)
@@ -1203,8 +1686,8 @@ def build_tx_cl(df_ventas, piso_dict):
     for _, row in df.iterrows():
         total = int(row['total_n'])
         pv    = float(row['pv_n']) if pd.notna(row['pv_n']) else None
-        pp_v  = piso_dict.get((row['prod_base'], row['fmt_parsed']), None)
-        pp    = float(pp_v) if pp_v is not None else None
+        entry = buscar_piso_chile(piso, row['prod_base'], row['fmt_parsed'])
+        pp    = float(entry['pp']) if entry and entry['pp'] is not None else None
         mes   = str(row.get('MES', '')).strip().upper()
 
         if pp is not None and total > 0:
@@ -1333,6 +1816,22 @@ VALIDACIÓN JS: {'✅ OK' if summary['js_ok'] else '❌ ERRORES'}
 **Alertas CxC:**
 {chr(10).join('- ' + c['cliente'] + f" CLP {c['monto']:,} ({c['dias']}d)" for c in summary['cuentas_criticas'] if c.get('estado') == 'CRÍTICO')}
 
+**Módulo Productos (rentabilidad real por SKU):**
+- {len(summary['productos']['alertas_nivel1'])} SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP {summary['productos']['impacto_clp']:,}
+- {len(summary['productos']['alertas_nivel2'])} SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: {summary['productos']['skus_sin_costo_chile']} SKU(s) Chile ·
+  {summary['productos']['skus_sin_costo_peru']} SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: {summary['productos']['skus_bajo_piso_chile']} SKU(s) Chile ·
+  {summary['productos']['skus_bajo_piso_peru']} SKU(s) Perú
+{chr(10).join('  - REVISAR: ' + a['sku'] + f" ({a['pais']}) margen {a['margen']:.1%}" for a in summary['productos']['alertas_nivel1'][:10])}
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
 ---
 """
     with open(LOGS / 'resumen_actualizacion.md', 'a', encoding='utf-8') as f:
@@ -1340,6 +1839,24 @@ VALIDACIÓN JS: {'✅ OK' if summary['js_ok'] else '❌ ERRORES'}
 
     # ── alertas.md ───────────────────────────────────────────────────────────
     crit_list = [c for c in summary['cuentas_criticas'] if c.get('estado') == 'CRÍTICO']
+    prod_alertas1 = summary.get('productos', {}).get('alertas_nivel1', [])
+    if prod_alertas1:
+        prod_alerta_md = (
+            f"\n## ⚠ Productos que destruyen margen — {NOW}\n\n"
+            "| SKU | País | Margen | Acción |\n"
+            "|-----|------|--------|--------|\n"
+        )
+        for a in prod_alertas1:
+            prod_alerta_md += f"| {a['sku']} | {a['pais']} | {a['margen']:.1%} | {a['accion']} |\n"
+        prod_alerta_md += (
+            f"\nImpacto estimado: CLP {summary['productos']['impacto_clp']:,}. "
+            f"SKUs sin costo cargado (no evaluables): "
+            f"{summary['productos']['skus_sin_costo_chile']} CL / "
+            f"{summary['productos']['skus_sin_costo_peru']} PE.\n---\n"
+        )
+        with open(LOGS / 'alertas.md', 'a', encoding='utf-8') as f:
+            f.write(prod_alerta_md)
+
     if crit_list:
         alertas = f"""
 ## ⚠ Alertas Activas — {NOW}
@@ -1467,10 +1984,24 @@ def main():
     iec_cl    = compute_iec_chile(cl_v['df'], piso_dict)
     print(f"   → IEC global: {iec_cl['total']:.1%} | BP: CLP {iec_cl['bp_total']:,}")
 
+    # 4.5 Calcular módulo Productos (rentabilidad real por país×producto×formato)
+    print("\n💰 Calculando módulo Productos...")
+    if 'piso_peru' in files:
+        piso_pe_dict = load_piso_peru(files['piso_peru'])
+        pe_sku_df    = extract_peru_ventas_sku(files['peru_ventas'])
+    else:
+        piso_pe_dict = {'entries': {}, 'tiers': {}}
+        pe_sku_df    = pd.DataFrame(columns=['CONCEPTO', 'DOLARES'])
+        print("   ⚠ precio piso peru*.xlsx no encontrado en inbox — módulo Productos Perú omitido (best-effort)")
+    productos = compute_productos(cl_v['df'], piso_dict, pe_sku_df, piso_pe_dict)
+    n_neg = len(productos['resumen']['alertas_nivel1'])
+    n_sin_costo = productos['resumen']['skus_sin_costo_chile'] + productos['resumen']['skus_sin_costo_peru']
+    print(f"   → {len(productos['detalle'])} SKUs · {n_neg} con margen negativo · {n_sin_costo} sin costo cargado")
+
     # 5. Generar avboard_data.js
     print("\n📝 Generando avboard_data.js...")
     peru_cxc_static = extract_peru_cxc_static()
-    js_data = render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, peru_cxc_static)
+    js_data = render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, peru_cxc_static, productos)
     with open(AVBOARD_DATA, 'w', encoding='utf-8') as f:
         f.write(js_data)
     ok, err = validate_js(AVBOARD_DATA)
@@ -1519,6 +2050,7 @@ def main():
         f"Panel_IEC TX_CL · {n_tx} transacciones",
         f"IEC Chile {iec_cl['total']:.1%} · BP CLP {iec_cl['bp_total']:,}",
         f"CxC Chile CLP {cl_cxc['total']:,} · +90d CLP {cl_cxc['tramos']['t90']:,}",
+        f"Módulo Productos: {len(productos['detalle'])} SKUs · {n_neg} margen negativo · {n_sin_costo} sin costo",
         f"Cache-busting ?v={CACHE_V} sincronizado en {len(panels_synced)} paneles HTML",
     ]
     summary = {
@@ -1534,6 +2066,7 @@ def main():
         'cxc_t90': cl_cxc['tramos']['t90'],
         'iec_total': iec_cl['total'],
         'cuentas_criticas': cl_cxc['cuentas_criticas'],
+        'productos': productos['resumen'],
     }
     write_logs(summary)
 

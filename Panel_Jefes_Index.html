@@ -200,7 +200,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
   .btn-logout:hover { background:rgba(231,76,60,0.10); }
 </style>
-  <script src="avboard_data.js?v=20260623"></script>
+  <script src="avboard_data.js?v=20260625"></script>
 </head>
 <body>
 
@@ -218,8 +218,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     <a href="Panel_Jefes_Peru_2026.html" class="np">🇵🇪 Perú</a>
   </div>
   <div class="hcorte">
-    <div>Chile <b>18/05</b> · Perú <b>15/05</b> · CxC <b>CL 17/05 PE 10/05/2026</b></div>
-    <div style="font-size:8px;margin-top:1px;">TC = 950 CLP/USD · Semana 20 · Grupo YTD USD 696.9K</div>
+    <div id="idx-hcorte-l1">Chile <b>18/05</b> · Perú <b>15/05</b> · CxC <b>CL 17/05 PE 10/05/2026</b></div>
+    <div id="idx-hcorte-l2" style="font-size:8px;margin-top:1px;">TC = 950 CLP/USD · Semana 20 · Grupo YTD USD 696.9K</div>
   </div>
   <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
 </header>
@@ -230,26 +230,26 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   <div class="intro">
     <div>
       <div class="intro-title">Resumen Semanal · Grupo AV Latam · Semana 20</div>
-      <div class="intro-sub">Corte Chile 18/05 · Perú 15/05 · CxC CL 17/05 PE 10/05/2026 · Datos actualizados para gestión de jefes de país</div>
+      <div class="intro-sub" id="idx-intro-sub">Corte Chile 18/05 · Perú 15/05 · CxC CL 17/05 PE 10/05/2026 · Datos actualizados para gestión de jefes de país</div>
     </div>
     <div class="intro-kpis">
       <div class="ik">
-        <div class="ik-val" style="color:var(--green);">USD 696.9K</div>
+        <div class="ik-val" id="idx-ik-grupo" style="color:var(--green);">USD 696.9K</div>
         <div class="ik-lbl">Grupo YTD</div>
       </div>
       <div style="width:1px;background:var(--bdim);"></div>
       <div class="ik">
-        <div class="ik-val" style="color:var(--green);">CLP 342.9M</div>
+        <div class="ik-val" id="idx-ik-chile" style="color:var(--green);">CLP 342.9M</div>
         <div class="ik-lbl">Chile YTD</div>
       </div>
       <div style="width:1px;background:var(--bdim);"></div>
       <div class="ik">
-        <div class="ik-val" style="color:var(--blue);">USD 335.9K</div>
+        <div class="ik-val" id="idx-ik-peru" style="color:var(--blue);">USD 335.9K</div>
         <div class="ik-lbl">Perú YTD</div>
       </div>
       <div style="width:1px;background:var(--bdim);"></div>
       <div class="ik">
-        <div class="ik-val" style="color:var(--red);">CLP 162.2M</div>
+        <div class="ik-val" id="idx-ik-cxc" style="color:var(--red);">CLP 162.2M</div>
         <div class="ik-lbl">CxC Chile ⚠️</div>
       </div>
     </div>
@@ -282,7 +282,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <div class="iec-icon">💳</div>
       <div class="iec-body">
         <div class="iec-val" style="color:var(--amber)">+90d</div>
-        <div class="iec-lbl">CxC Crítico activo<br>CLP 8.4M Chile · USD 28.8K Perú</div>
+        <div class="iec-lbl" id="idx-iec-cxc-lbl">CxC Crítico activo<br>CLP 8.4M Chile · USD 28.8K Perú</div>
       </div>
     </div>
   </div>
@@ -298,12 +298,12 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     <a href="Panel_Jefes_Chile_2026.html" class="sc">
       <div class="sc-icon">🇨🇱</div>
       <div class="sc-title">Chile</div>
-      <div class="sc-sub">YTD CLP 765.9M · Ppto 861.3M<br>Vendedores · Clientes · CxC · Pricing</div>
+      <div class="sc-sub" id="idx-sc-cl-sub">YTD CLP 765.9M · Ppto 861.3M<br>Vendedores · Clientes · CxC · Pricing</div>
     </a>
     <a href="Panel_Jefes_Peru_2026.html" class="sc">
       <div class="sc-icon">🇵🇪</div>
       <div class="sc-title">Perú</div>
-      <div class="sc-sub">YTD USD 229K · Ppto USD 1.137M<br>Vendedores · Clientes · CxC</div>
+      <div class="sc-sub" id="idx-sc-pe-sub">YTD USD 229K · Ppto USD 1.137M<br>Vendedores · Clientes · CxC</div>
     </a>
     <a href="Panel_IEC_Auditoria_2026.html" class="sc">
       <div class="sc-icon">⚡</div>
@@ -323,11 +323,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
           <span class="cc-flag">🇨🇱</span>
           <div>
             <div class="cc-title cl">Chile</div>
-            <div class="cc-sub">Corte 12/04/2026 · TC 950 · Ppto anual CLP 861.3M</div>
+            <div class="cc-sub" id="idx-cl-corte-sub">Corte 12/04/2026 · TC 950 · Ppto anual CLP 861.3M</div>
           </div>
         </div>
         <div style="text-align:right;">
-          <div class="cc-pct ok">105.4%</div>
+          <div class="cc-pct ok" id="idx-cl-pct">105.4%</div>
           <div style="font-size:9px;color:var(--muted);">Ppto T1 ✅</div>
         </div>
       </div>
@@ -335,19 +335,19 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <!-- Stats -->
       <div class="cc-stats cl" style="border-color:var(--bdim);">
         <div class="cc-stat" style="border-color:var(--bdim);">
-          <div class="cs-val ok">342.9M</div>
+          <div class="cs-val ok" id="idx-cl-stat-ytdclp">342.9M</div>
           <div class="cs-lbl">YTD CLP</div>
         </div>
         <div class="cc-stat" style="border-color:var(--bdim);">
-          <div class="cs-val ok">USD 200.9K</div>
+          <div class="cs-val ok" id="idx-cl-stat-ytdusd">USD 200.9K</div>
           <div class="cs-lbl">YTD USD</div>
         </div>
         <div class="cc-stat" style="border-color:var(--bdim);">
-          <div class="cs-val am">17.9%</div>
+          <div class="cs-val am" id="idx-cl-stat-mn">17.9%</div>
           <div class="cs-lbl">MN Real</div>
         </div>
         <div class="cc-stat" style="border-color:var(--bdim);">
-          <div class="cs-val rd">CLP 62M</div>
+          <div class="cs-val rd" id="idx-cl-stat-cxc">CLP 62M</div>
           <div class="cs-lbl">CxC Total</div>
         </div>
       </div>
@@ -355,12 +355,12 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <!-- Semáforo mini -->
       <div class="cc-sema">
         <span style="font-size:9px;color:var(--muted);margin-right:2px;">RTCs:</span>
-        <div class="sm-item"><div class="sm-dot sm-ok"></div><span class="sm-name" style="color:var(--green);">Caroca</span><span class="sm-pct" style="color:var(--green);">161%</span></div>
+        <div class="sm-item"><div class="sm-dot sm-ok"></div><span class="sm-name" style="color:var(--green);">Caroca</span><span class="sm-pct" style="color:var(--green);" id="idx-cl-sm-caroca">161%</span></div>
         <div class="sm-item"><div class="sm-dot sm-ok"></div><span class="sm-name" style="color:var(--green);">Muñoz</span><span class="sm-pct" style="color:var(--green);">118%</span></div>
-        <div class="sm-item"><div class="sm-dot sm-am"></div><span class="sm-name" style="color:var(--amber);">Laratro</span><span class="sm-pct" style="color:var(--amber);">98%</span></div>
-        <div class="sm-item"><div class="sm-dot sm-am"></div><span class="sm-name" style="color:var(--amber);">Encina</span><span class="sm-pct" style="color:var(--amber);">95%</span></div>
-        <div class="sm-item"><div class="sm-dot sm-rd"></div><span class="sm-name" style="color:var(--red);">Velásquez</span><span class="sm-pct" style="color:var(--red);">90%</span></div>
-        <div class="sm-item"><div class="sm-dot sm-rd2"></div><span class="sm-name" style="color:var(--red2);">Veverka</span><span class="sm-pct" style="color:var(--red2);">49%</span></div>
+        <div class="sm-item"><div class="sm-dot sm-am"></div><span class="sm-name" style="color:var(--amber);">Laratro</span><span class="sm-pct" style="color:var(--amber);" id="idx-cl-sm-laratro">98%</span></div>
+        <div class="sm-item"><div class="sm-dot sm-am"></div><span class="sm-name" style="color:var(--amber);">Encina</span><span class="sm-pct" style="color:var(--amber);" id="idx-cl-sm-encina">95%</span></div>
+        <div class="sm-item"><div class="sm-dot sm-rd"></div><span class="sm-name" style="color:var(--red);">Velásquez</span><span class="sm-pct" style="color:var(--red);" id="idx-cl-sm-velasquez">90%</span></div>
+        <div class="sm-item"><div class="sm-dot sm-rd2"></div><span class="sm-name" style="color:var(--red2);">Veverka</span><span class="sm-pct" style="color:var(--red2);" id="idx-cl-sm-veverka">49%</span></div>
       </div>
 
       <!-- Alertas -->
@@ -397,11 +397,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
           <span class="cc-flag">🇵🇪</span>
           <div>
             <div class="cc-title pe">Perú</div>
-            <div class="cc-sub">Corte 29/04/2026 · Ppto anual USD 1,137,034</div>
+            <div class="cc-sub" id="idx-pe-corte-sub">Corte 29/04/2026 · Ppto anual USD 1,137,034</div>
           </div>
         </div>
         <div style="text-align:right;">
-          <div class="cc-pct am">95.9%</div>
+          <div class="cc-pct am" id="idx-pe-pct">95.9%</div>
           <div style="font-size:9px;color:var(--muted);">Ppto T1</div>
         </div>
       </div>
@@ -409,19 +409,19 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <!-- Stats -->
       <div class="cc-stats pe" style="border-color:var(--bbdim);">
         <div class="cc-stat" style="border-color:var(--bbdim);">
-          <div class="cs-val" style="color:var(--blue);">USD 229K</div>
+          <div class="cs-val" id="idx-pe-stat-ytd" style="color:var(--blue);">USD 229K</div>
           <div class="cs-lbl">YTD</div>
         </div>
         <div class="cc-stat" style="border-color:var(--bbdim);">
-          <div class="cs-val am">80.5%</div>
+          <div class="cs-val am" id="idx-pe-stat-vsppto">80.5%</div>
           <div class="cs-lbl">vs Ppto Ene-Abr</div>
         </div>
         <div class="cc-stat" style="border-color:var(--bbdim);">
-          <div class="cs-val" style="color:var(--blue);">USD 104K</div>
+          <div class="cs-val" id="idx-pe-stat-cxcactiva" style="color:var(--blue);">USD 104K</div>
           <div class="cs-lbl">CxC Activa</div>
         </div>
         <div class="cc-stat" style="border-color:var(--bbdim);">
-          <div class="cs-val rd">USD 28.8K</div>
+          <div class="cs-val rd" id="idx-pe-stat-cxc90">USD 28.8K</div>
           <div class="cs-lbl">CxC +90d</div>
         </div>
       </div>
@@ -576,16 +576,16 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   </div>
 
   <!-- CXC RESUMEN -->
-  <div class="sec">Resumen Cobranza · Acción Requerida <span>corte 08–10/05/2026</span></div>
+  <div class="sec">Resumen Cobranza · Acción Requerida <span id="idx-cxc-sec-corte">corte 08–10/05/2026</span></div>
   <div class="cxc-grid">
 
     <div class="cxc-panel cl">
-      <div class="ptitle cl">🇨🇱 CxC CHILE · RESUMEN <span class="ptag">CLP · corte 08/05</span></div>
-      <div class="cxc-row"><span class="cxc-lbl">Total cartera</span><span class="cxc-val" style="color:var(--red);">CLP 134,698,594</span></div>
-      <div class="cxc-row"><span class="cxc-lbl">0–30d Al día</span><span class="cxc-val ok">CLP 98,489,215 · 73.1%</span></div>
-      <div class="cxc-row"><span class="cxc-lbl">31–60d Alerta</span><span class="cxc-val am">CLP 12,985,435 · 9.6%</span></div>
-      <div class="cxc-row"><span class="cxc-lbl">61–90d Riesgo</span><span class="cxc-val" style="color:#E67E22;">CLP 7,350,061 · 5.5%</span></div>
-      <div class="cxc-row"><span class="cxc-lbl" style="font-weight:700;">+90d CRÍTICO</span><span class="cxc-val rd">CLP 15,873,883 · 11.8% ⚠️</span></div>
+      <div class="ptitle cl">🇨🇱 CxC CHILE · RESUMEN <span class="ptag" id="idx-cxc-cl-ptag">CLP · corte 08/05</span></div>
+      <div class="cxc-row"><span class="cxc-lbl">Total cartera</span><span class="cxc-val" id="idx-cxc-cl-total" style="color:var(--red);">CLP 134,698,594</span></div>
+      <div class="cxc-row"><span class="cxc-lbl">0–30d Al día</span><span class="cxc-val ok" id="idx-cxc-cl-030">CLP 98,489,215 · 73.1%</span></div>
+      <div class="cxc-row"><span class="cxc-lbl">31–60d Alerta</span><span class="cxc-val am" id="idx-cxc-cl-3160">CLP 12,985,435 · 9.6%</span></div>
+      <div class="cxc-row"><span class="cxc-lbl">61–90d Riesgo</span><span class="cxc-val" id="idx-cxc-cl-6190" style="color:#E67E22;">CLP 7,350,061 · 5.5%</span></div>
+      <div class="cxc-row"><span class="cxc-lbl" style="font-weight:700;">+90d CRÍTICO</span><span class="cxc-val rd" id="idx-cxc-cl-90">CLP 15,873,883 · 11.8% ⚠️</span></div>
       <div style="margin-top:10px;padding:8px 10px;background:rgba(231,76,60,0.07);border-radius:6px;border-left:2px solid var(--red);font-size:10px;color:var(--dim);">
         <strong style="color:var(--red);">Loma Larga</strong> (Neira/Laratro · 92–114d · CLP 12.4M) · <strong style="color:var(--red);">Ribera</strong> (CLP 1.5M) · <strong style="color:var(--red);">Kullin</strong> (CLP 1.5M · 2 entidades)<br>
         Goyaservice ✅ PAGADO · Total +90d: CLP 15.9M<br>
@@ -594,11 +594,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     </div>
 
     <div class="cxc-panel pe">
-      <div class="ptitle pe">🇵🇪 CxC PERÚ · RESUMEN <span class="ptag">USD · corte 10/05</span></div>
-      <div class="cxc-row"><span class="cxc-lbl">No vencida</span><span class="cxc-val ok">USD 79,300 · en plazo</span></div>
-      <div class="cxc-row"><span class="cxc-lbl">0–30d en cobro</span><span class="cxc-val ok">USD 10,534 · gestión normal</span></div>
-      <div class="cxc-row"><span class="cxc-lbl">31–90d Alerta/Riesgo</span><span class="cxc-val am">USD 4,509 · seguimiento</span></div>
-      <div class="cxc-row"><span class="cxc-lbl" style="font-weight:700;">+90d CRÍTICO</span><span class="cxc-val rd">USD 23,621 · 20.0% ⚠️</span></div>
+      <div class="ptitle pe">🇵🇪 CxC PERÚ · RESUMEN <span class="ptag" id="idx-cxc-pe-ptag">USD · corte 10/05</span></div>
+      <div class="cxc-row"><span class="cxc-lbl">No vencida</span><span class="cxc-val ok" id="idx-cxc-pe-novenc">USD 79,300 · en plazo</span></div>
+      <div class="cxc-row"><span class="cxc-lbl">0–30d en cobro</span><span class="cxc-val ok" id="idx-cxc-pe-030">USD 10,534 · gestión normal</span></div>
+      <div class="cxc-row"><span class="cxc-lbl">31–90d Alerta/Riesgo</span><span class="cxc-val am" id="idx-cxc-pe-3190">USD 4,509 · seguimiento</span></div>
+      <div class="cxc-row"><span class="cxc-lbl" style="font-weight:700;">+90d CRÍTICO</span><span class="cxc-val rd" id="idx-cxc-pe-90">USD 23,621 · 20.0% ⚠️</span></div>
       <div style="margin-top:10px;padding:8px 10px;background:rgba(231,76,60,0.07);border-radius:6px;border-left:2px solid var(--red);font-size:10px;color:var(--dim);">
         <strong style="color:var(--red);">Geldres:</strong> PAODISA (USD 10.9K) · <strong style="color:var(--red);">Atalaya:</strong> Agrofer (USD 9.5K) + Luna Quintanilla (USD 2.3K)<br>
         Corp.Olmos + Amfresh → SUPRA (tratamiento separado)<br>
@@ -668,7 +668,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 </div>
 
 <div class="ftr">
-  <div>AV Latam BI Platform · Panel Jefes Comerciales · Semana 20 · Chile 18/05 · Perú 15/05 · CxC CL 17/05 PE 10/05/2026</div>
+  <div id="idx-footer-txt">AV Latam BI Platform · Panel Jefes Comerciales · Semana 20 · Chile 18/05 · Perú 15/05 · CxC CL 17/05 PE 10/05/2026</div>
   <div class="npills">
     <a href="index.html" class="np">🏠 Inicio</a>
     <a href="Panel_Jefes_Grupo_AV_2026.html" class="np">🌎 Grupo AV</a>
@@ -729,6 +729,99 @@ function cerrarSesion() {
   sessionStorage.removeItem('av_role');
   window.location.href = 'index.html';
 }
+</script>
+
+<script>
+// ── AVBOARD populate (Panel_Jefes_Index) ─────────────────────────────────────
+(function(){
+  if(typeof AVBOARD==='undefined') return;
+  try{
+    var D=AVBOARD, cv=D.chile.ventas, cc=D.chile.cxc, pv=D.peru.ventas, pc=D.peru.cxc;
+    function set(id,html){var el=document.getElementById(id); if(el) el.innerHTML=html;}
+    function fC(n){return (n/1e6).toFixed(1)+'M';}
+    function fK(n){return (n/1000).toFixed(1)+'K';}
+    function fN(n){return Math.round(n).toLocaleString('en-US');}
+    function pct1(n){return (n*100).toFixed(1)+'%';}
+
+    var corteCLv=D.meta.cortes.chile_ventas, corteCLc=D.meta.cortes.chile_cxc;
+    var cortePEv=D.meta.cortes.peru_ventas, cortePEc=D.meta.cortes.peru_cxc;
+    var sCLv=corteCLv.substring(0,5), sPEv=cortePEv.substring(0,5);
+    var sCLc=corteCLc.substring(0,5), sPEc=cortePEc.substring(0,5);
+
+    // ── Header + footer ──────────────────────────────────────────────────────
+    set('idx-hcorte-l1', 'Chile <b>'+sCLv+'</b> · Perú <b>'+sPEv+'</b> · CxC <b>CL '+sCLc+' PE '+corteCLc+'</b>');
+    set('idx-hcorte-l2', 'TC = '+D.tc()+' CLP/USD · Grupo YTD USD '+fK(D.grupo_ytd_usd()));
+    set('idx-footer-txt', 'AV Latam BI Platform · Panel Jefes Comerciales · Chile '+sCLv+' · Perú '+sPEv+' · CxC CL '+sCLc+' PE '+corteCLc);
+
+    // ── Intro KPIs ────────────────────────────────────────────────────────────
+    set('idx-intro-sub', 'Corte Chile '+sCLv+' · Perú '+sPEv+' · CxC CL '+sCLc+' PE '+corteCLc+' · Datos actualizados para gestión de jefes de país');
+    set('idx-ik-grupo', 'USD '+fK(D.grupo_ytd_usd()));
+    set('idx-ik-chile', 'CLP '+fC(D.chile_ytd()));
+    set('idx-ik-peru', 'USD '+fK(D.peru_ytd()));
+    set('idx-ik-cxc', 'CLP '+fC(cc.total));
+
+    // ── IEC strip · CxC crítico card (computable; IEC cards 1-2 quedan estáticas, dominio rentabilidad) ──
+    set('idx-iec-cxc-lbl', 'CxC Crítico activo<br>CLP '+fC(D.cxc_chile_t90())+' Chile · USD '+fK(D.cxc_peru_t90())+' Perú');
+
+    // ── Shortcuts ─────────────────────────────────────────────────────────────
+    set('idx-sc-cl-sub', 'YTD CLP '+fC(D.chile_ytd())+' · Ppto '+fC(cv.ppto_anual)+'<br>Vendedores · Clientes · CxC · Pricing');
+    set('idx-sc-pe-sub', 'YTD USD '+fK(D.peru_ytd())+' · Ppto USD '+fK(pv.ppto_anual)+'<br>Vendedores · Clientes · CxC');
+
+    // ── Country card Chile ────────────────────────────────────────────────────
+    set('idx-cl-corte-sub', 'Corte '+sCLv+'/2026 · TC '+D.tc()+' · Ppto anual CLP '+fC(cv.ppto_anual));
+    set('idx-cl-pct', pct1(cv.cumplimiento_t1));
+    set('idx-cl-stat-ytdclp', fC(D.chile_ytd()));
+    set('idx-cl-stat-ytdusd', 'USD '+fK(D.clpToUsd(D.chile_ytd())));
+    set('idx-cl-stat-mn', pct1(cv.mn_real));
+    set('idx-cl-stat-cxc', 'CLP '+fC(cc.total));
+
+    // Semáforo Chile (5 RTC con ppto T1; Muñoz no tiene rtc_ppto_t1 → se preserva estático)
+    var t1r=cv.rtc_real_t1, t1p=cv.rtc_ppto_t1;
+    ['caroca','laratro','encina','velasquez','veverka'].forEach(function(k){
+      if(t1p[k]){ set('idx-cl-sm-'+k, (t1r[k]/t1p[k]*100).toFixed(0)+'%'); }
+    });
+
+    // ── Country card Perú ─────────────────────────────────────────────────────
+    set('idx-pe-corte-sub', 'Corte '+sPEv+'/2026 · Ppto anual USD '+fN(pv.ppto_anual));
+    set('idx-pe-pct', pct1(pv.cumplimiento_5m));
+    set('idx-pe-stat-ytd', 'USD '+fK(D.peru_ytd()));
+    set('idx-pe-stat-vsppto', pct1(pv.cumplimiento_4m));
+    set('idx-pe-stat-cxcactiva', 'USD '+fN(pc.total - pc.tramos.t90));
+    set('idx-pe-stat-cxc90', 'USD '+fK(D.cxc_peru_t90()));
+    // Nota: semáforo por zona Perú queda estático — AVBOARD no tiene presupuesto T1 por vendedor/zona consolidada de forma confiable (ver alertas.md)
+
+    // ── CxC Resumen ───────────────────────────────────────────────────────────
+    set('idx-cxc-sec-corte', 'corte '+corteCLc+' CL · '+cortePEc+' PE');
+    set('idx-cxc-cl-ptag', 'CLP · corte '+sCLc);
+    set('idx-cxc-cl-total', 'CLP '+fN(cc.total));
+    set('idx-cxc-cl-030', 'CLP '+fN(cc.tramos.t030)+' · '+pct1(cc.tramos_pct.t030));
+    set('idx-cxc-cl-3160', 'CLP '+fN(cc.tramos.t3160)+' · '+pct1(cc.tramos_pct.t3160));
+    set('idx-cxc-cl-6190', 'CLP '+fN(cc.tramos.t6190)+' · '+pct1(cc.tramos_pct.t6190));
+    set('idx-cxc-cl-90', 'CLP '+fN(cc.tramos.t90)+' · '+pct1(cc.tramos_pct.t90)+' ⚠️');
+
+    set('idx-cxc-pe-ptag', 'USD · corte '+sPEc);
+    set('idx-cxc-pe-novenc', 'USD '+fN(pc.tramos.no_vencida)+' · en plazo');
+    set('idx-cxc-pe-030', 'USD '+fN(pc.tramos.t030)+' · gestión normal');
+    set('idx-cxc-pe-3190', 'USD '+fN(pc.tramos.t3160+pc.tramos.t6190)+' · seguimiento');
+    set('idx-cxc-pe-90', 'USD '+fN(pc.tramos.t90)+' · '+pct1(pc.tramos_pct.t90)+' ⚠️');
+
+    // ── Mini charts (Ene-Abr, mismas 4 barras / misma estructura) ────────────
+    var cChileMini = Chart.getChart(document.getElementById('cChileMini'));
+    if(cChileMini){
+      cChileMini.data.datasets[0].data = cv.mensual_ppto.slice(0,4).map(function(v){return Math.round(v/1000);});
+      cChileMini.data.datasets[1].data = cv.mensual_real.slice(0,4).map(function(v){return Math.round(v/1000);});
+      cChileMini.update();
+    }
+    var cPeruMini = Chart.getChart(document.getElementById('cPeruMini'));
+    if(cPeruMini){
+      cPeruMini.data.datasets[0].data = pv.mensual_ppto.slice(0,4).map(function(v){return Math.round(v);});
+      cPeruMini.data.datasets[1].data = pv.mensual_real.slice(0,4).map(function(v){return Math.round(v);});
+      cPeruMini.update();
+    }
+
+    console.log('[AVBOARD] ✅ Panel_Jefes_Index actualizado · Chile '+sCLv+' · Perú '+sPEv);
+  }catch(e){console.warn('[Jefes_Index] populate error:', e);}
+})();
 </script>
 </body>
 </html>

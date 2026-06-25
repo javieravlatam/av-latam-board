@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Panel Jefes · Grupo AV LATAM 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=20260623"></script>
+<script src="avboard_data.js?v=20260625"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -177,7 +177,7 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
   </div>
   <div class="kpi">
     <div class="kpi-lbl">🇨🇱 Chile Ppto 2026</div>
-    <div class="kpi-val kpi-a">CLP 861.3M</div>
+    <div class="kpi-val kpi-a" id="grp-kpi-cl-ppto">CLP 861.3M</div>
     <div class="kpi-sub">Meta anual · +12.4% vs 2025</div>
   </div>
   <div class="kpi">
@@ -187,7 +187,7 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
   </div>
   <div class="kpi">
     <div class="kpi-lbl">🇵🇪 Perú Ppto 2026</div>
-    <div class="kpi-val kpi-a">USD 1,137K</div>
+    <div class="kpi-val kpi-a" id="grp-kpi-pe-ppto">USD 1,137K</div>
     <div class="kpi-sub">Meta anual · +64.7% vs 2025</div>
   </div>
   <div class="kpi">
@@ -234,7 +234,7 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
       </div>
       <div class="cc-metric">
         <span class="cc-k">Presupuesto 2026</span>
-        <span class="cc-v" style="color:var(--amber)">CLP 861.3M</span>
+        <span class="cc-v" style="color:var(--amber)" id="grp-cl-ppto-val">CLP 861.3M</span>
       </div>
       <div class="cc-metric">
         <span class="cc-k">Gap vs Ppto 2026</span>
@@ -276,7 +276,7 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
       </div>
       <div class="cc-metric">
         <span class="cc-k">Presupuesto 2026</span>
-        <span class="cc-v" style="color:var(--amber)">USD 1,137K</span>
+        <span class="cc-v" style="color:var(--amber)" id="grp-pe-ppto-val">USD 1,137K</span>
       </div>
       <div class="cc-metric">
         <span class="cc-k">Gap vs Ppto 2026</span>
@@ -420,52 +420,52 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
   <div class="sec">Cartera Total Grupo · Mayo 2026</div>
 
   <!-- CHILE CxC -->
-  <div style="margin-bottom:8px;font-size:10px;color:var(--green);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;padding-left:4px">🇨🇱 Chile · Cartera CLP 162.2M · Corte 17/05/2026</div>
+  <div id="grp-cxc-cl-sub" style="margin-bottom:8px;font-size:10px;color:var(--green);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;padding-left:4px">🇨🇱 Chile · Cartera CLP 162.2M · Corte 17/05/2026</div>
   <div class="cxc-grid" style="margin-bottom:20px">
     <div class="cxc-card" style="background:rgba(122,182,72,0.07);border:1px solid rgba(122,182,72,0.25)">
       <div class="tramo" style="color:var(--green)">✅ 0–30d Normal</div>
-      <div class="monto" style="color:var(--green)">CLP 123.5M</div>
-      <div class="detail">76.2% de cartera · En cobro</div>
+      <div class="monto" style="color:var(--green)" id="grp-cxc-cl-030-monto">CLP 123.5M</div>
+      <div class="detail" id="grp-cxc-cl-030-detail">76.2% de cartera · En cobro</div>
     </div>
     <div class="cxc-card" style="background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.25)">
       <div class="tramo" style="color:var(--amber)">🟡 31–60d Alerta</div>
-      <div class="monto" style="color:var(--amber)">CLP 10.2M</div>
-      <div class="detail">6.3% de cartera · Gestión activa</div>
+      <div class="monto" style="color:var(--amber)" id="grp-cxc-cl-3160-monto">CLP 10.2M</div>
+      <div class="detail" id="grp-cxc-cl-3160-detail">6.3% de cartera · Gestión activa</div>
     </div>
     <div class="cxc-card" style="background:rgba(230,126,34,0.07);border:1px solid rgba(230,126,34,0.25)">
       <div class="tramo" style="color:var(--orange)">🟠 61–90d Riesgo</div>
-      <div class="monto" style="color:var(--orange)">CLP 10.2M</div>
-      <div class="detail">6.3% de cartera · Acuerdo urgente</div>
+      <div class="monto" style="color:var(--orange)" id="grp-cxc-cl-6190-monto">CLP 10.2M</div>
+      <div class="detail" id="grp-cxc-cl-6190-detail">6.3% de cartera · Acuerdo urgente</div>
     </div>
     <div class="cxc-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.3)">
       <div class="tramo" style="color:var(--red)">🔴 +90d Crítico</div>
-      <div class="monto" style="color:var(--red)">CLP 18.2M</div>
-      <div class="detail">11.2% de cartera · Acción inmediata</div>
+      <div class="monto" style="color:var(--red)" id="grp-cxc-cl-90-monto">CLP 18.2M</div>
+      <div class="detail" id="grp-cxc-cl-90-detail">11.2% de cartera · Acción inmediata</div>
     </div>
   </div>
 
   <!-- PERU CxC -->
-  <div style="margin-bottom:8px;font-size:10px;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;padding-left:4px">🇵🇪 Perú · Cartera USD 118.0K</div>
+  <div id="grp-cxc-pe-sub" style="margin-bottom:8px;font-size:10px;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;padding-left:4px">🇵🇪 Perú · Cartera USD 118.0K</div>
   <div class="cxc-grid" style="margin-bottom:24px">
     <div class="cxc-card" style="background:rgba(122,182,72,0.07);border:1px solid rgba(122,182,72,0.25)">
       <div class="tramo" style="color:var(--green)">✅ Al día / Futuro</div>
-      <div class="monto" style="color:var(--green)">USD 79.3K</div>
-      <div class="detail">67.2% de cartera total</div>
+      <div class="monto" style="color:var(--green)" id="grp-cxc-pe-nv-monto">USD 79.3K</div>
+      <div class="detail" id="grp-cxc-pe-nv-detail">67.2% de cartera total</div>
     </div>
     <div class="cxc-card" style="background:rgba(74,158,219,0.07);border:1px solid rgba(74,158,219,0.25)">
       <div class="tramo" style="color:var(--blue)">🔵 0–30d En cobro</div>
-      <div class="monto" style="color:var(--blue)">USD 10.5K</div>
-      <div class="detail">8.9% de cartera · Gestión normal</div>
+      <div class="monto" style="color:var(--blue)" id="grp-cxc-pe-030-monto">USD 10.5K</div>
+      <div class="detail" id="grp-cxc-pe-030-detail">8.9% de cartera · Gestión normal</div>
     </div>
     <div class="cxc-card" style="background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.25)">
       <div class="tramo" style="color:var(--amber)">🟡 31–90d Alerta/Riesgo</div>
-      <div class="monto" style="color:var(--amber)">USD 4.5K</div>
-      <div class="detail">3.9% · Acuerdo de pago urgente</div>
+      <div class="monto" style="color:var(--amber)" id="grp-cxc-pe-3190-monto">USD 4.5K</div>
+      <div class="detail" id="grp-cxc-pe-3190-detail">3.9% · Acuerdo de pago urgente</div>
     </div>
     <div class="cxc-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.3)">
       <div class="tramo" style="color:var(--red)">🔴 +90d Crítico</div>
-      <div class="monto" style="color:var(--red)">USD 23.6K</div>
-      <div class="detail">20.0% de cartera · Acción inmediata</div>
+      <div class="monto" style="color:var(--red)" id="grp-cxc-pe-90-monto">USD 23.6K</div>
+      <div class="detail" id="grp-cxc-pe-90-detail">20.0% de cartera · Acción inmediata</div>
     </div>
   </div>
 
@@ -490,7 +490,7 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
   <div class="tbl-wrap">
     <div class="tbl-head">
       <div class="tbl-head-title">CxC Vencida +90d consolidada</div>
-      <div style="font-size:10px;color:var(--dim)">Total crítico grupo: CLP 18.2M + USD 23.6K</div>
+      <div style="font-size:10px;color:var(--dim)" id="grp-cxc-tot-crit">Total crítico grupo: CLP 18.2M + USD 23.6K</div>
     </div>
     <table class="tbl">
       <thead>
@@ -503,7 +503,7 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
           <th class="c">Acción</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="grp-tbody-criticos">
         <!-- CHILE +90d -->
         <tr>
           <td><span class="badge b-cl">🇨🇱 CL</span></td>
@@ -803,11 +803,15 @@ const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov'
 
 // Chile CLP Millones
 const clReal25  = [61.5,57.9,38.9,44.2,131.5,36.8,33.9,75.0,101.1,134.5,43.6,7.0];
-const clPpto26  = [83.6,41.6,42.0,46.4,51.0,49.7,62.8,76.5,110.8,112.7,97.5,86.7];
+var clPpto26 = (typeof AVBOARD!=='undefined' && AVBOARD.chile && AVBOARD.chile.ventas && AVBOARD.chile.ventas.mensual_ppto)
+  ? AVBOARD.chile.ventas.mensual_ppto.map(function(v){return parseFloat((v/1e6).toFixed(1));})
+  : [83.6,41.6,42.0,46.4,51.0,49.7,62.8,76.5,110.8,112.7,97.5,86.7];
 
 // Peru USD Miles
 const peReal25  = [59.1,36.7,70.9,42.5,24.3,27.8,48.1,53.0,70.9,120.6,82.5,54.0];
-const pePpto26  = [51.7,58.5,103.2,71.3,61.9,78.7,100.7,178.2,125.6,165.8,98.5,43.0];
+var pePpto26 = (typeof AVBOARD!=='undefined' && AVBOARD.peru && AVBOARD.peru.ventas && AVBOARD.peru.ventas.mensual_ppto)
+  ? AVBOARD.peru.ventas.mensual_ppto.map(function(v){return parseFloat((v/1000).toFixed(1));})
+  : [51.7,58.5,103.2,71.3,61.9,78.7,100.7,178.2,125.6,165.8,98.5,43.0];
 
 // Real 2026 YTD — siempre desde AVBOARD (nunca fallback con data antigua)
 var clReal26 = (typeof AVBOARD!=='undefined')
@@ -1128,24 +1132,121 @@ function cerrarSesion() {
     var chPE=Chart.getChart(document.getElementById('chartPeru'));
     if(chPE){chPE.data.datasets[1].data=peReal26;chPE.update('none');}
 
-    // Actualizar CxC Chile donut desde AVBOARD
+    // Actualizar CxC Chile donut desde AVBOARD (bug corregido: claves reales son t030/t3160/t6190/t90)
     var chCxcCL=Chart.getChart(document.getElementById('chartCxcChile'));
     if(chCxcCL && cc.tramos){
       var t=cc.tramos;
       var tot=cc.total||1;
-      var d0=parseFloat((t.t0/1e6).toFixed(1)), d30=parseFloat((t.t30/1e6).toFixed(1));
-      var d60=parseFloat((t.t60/1e6).toFixed(1)), d90=parseFloat((t.t90/1e6).toFixed(1));
+      var d0=parseFloat((t.t030/1e6).toFixed(1)), d30=parseFloat((t.t3160/1e6).toFixed(1));
+      var d60=parseFloat((t.t6190/1e6).toFixed(1)), d90=parseFloat((t.t90/1e6).toFixed(1));
       chCxcCL.data.datasets[0].data=[d0,d30,d60,d90];
       chCxcCL.data.labels=[
-        '0–30d Normal ('+Math.round(t.t0/tot*100)+'%)',
-        '31–60d Alerta ('+Math.round(t.t30/tot*100)+'%)',
-        '61–90d Riesgo ('+Math.round(t.t60/tot*100)+'%)',
+        '0–30d Normal ('+Math.round(t.t030/tot*100)+'%)',
+        '31–60d Alerta ('+Math.round(t.t3160/tot*100)+'%)',
+        '61–90d Riesgo ('+Math.round(t.t6190/tot*100)+'%)',
         '+90d Crítico ('+Math.round(t.t90/tot*100)+'%)'
       ];
       chCxcCL.options.plugins.tooltip.callbacks.label=function(c){
         return c.label+': CLP '+c.raw+'M ('+Math.round(c.raw/parseFloat((tot/1e6).toFixed(1))*100)+'%)';
       };
       chCxcCL.update();
+    }
+
+    // Actualizar CxC Peru donut desde AVBOARD (antes quedaba 100% estático)
+    var pc=AVBOARD.peru.cxc;
+    var alerta3190=(pc.tramos.t3160||0)+(pc.tramos.t6190||0);
+    var chCxcPE=Chart.getChart(document.getElementById('chartCxcPeru'));
+    if(chCxcPE && pc.tramos){
+      var totp=pc.total||1;
+      var p0=parseFloat((pc.tramos.no_vencida/1000).toFixed(1)), p30=parseFloat((pc.tramos.t030/1000).toFixed(1));
+      var p60=parseFloat((alerta3190/1000).toFixed(1)), p90=parseFloat((pc.tramos.t90/1000).toFixed(1));
+      chCxcPE.data.datasets[0].data=[p0,p30,p60,p90];
+      chCxcPE.data.labels=[
+        'Al día / Futuro ('+Math.round(pc.tramos.no_vencida/totp*100)+'%)',
+        '0–30d En cobro ('+Math.round(pc.tramos.t030/totp*100)+'%)',
+        '31–90d Alerta/Riesgo ('+Math.round(alerta3190/totp*100)+'%)',
+        '+90d Crítico ('+Math.round(pc.tramos.t90/totp*100)+'%)'
+      ];
+      chCxcPE.options.plugins.tooltip.callbacks.label=function(c){
+        return c.label+': USD '+c.raw+'K ('+Math.round(c.raw/parseFloat((totp/1000).toFixed(1))*100)+'%)';
+      };
+      chCxcPE.update();
+    }
+
+    // KPI banner + tarjetas país: Presupuesto 2026 real desde AVBOARD (antes estático y desactualizado)
+    set('grp-kpi-cl-ppto','CLP '+(cv.ppto_anual/1e6).toFixed(1)+'M');
+    set('grp-kpi-pe-ppto','USD '+Math.round(pv.ppto_anual/1000).toLocaleString('en-US')+'K');
+    set('grp-cl-ppto-val','CLP '+(cv.ppto_anual/1e6).toFixed(1)+'M');
+    set('grp-pe-ppto-val','USD '+Math.round(pv.ppto_anual/1000).toLocaleString('en-US')+'K');
+
+    // CxC tab: subtítulos + tarjetas Chile/Perú desde AVBOARD
+    set('grp-cxc-cl-sub','🇨🇱 Chile · Cartera CLP '+(cc.total/1e6).toFixed(1)+'M · Corte '+mt.chile_cxc);
+    set('grp-cxc-pe-sub','🇵🇪 Perú · Cartera USD '+(pc.total/1000).toFixed(1)+'K · Corte '+mt.peru_cxc);
+    set('grp-cxc-tot-crit','Total crítico grupo: CLP '+(cc.tramos.t90/1e6).toFixed(1)+'M + USD '+(pc.tramos.t90/1000).toFixed(1)+'K');
+
+    set('grp-cxc-cl-030-monto','CLP '+(cc.tramos.t030/1e6).toFixed(1)+'M');
+    set('grp-cxc-cl-030-detail',(cc.tramos_pct.t030*100).toFixed(1)+'% de cartera · En cobro');
+    set('grp-cxc-cl-3160-monto','CLP '+(cc.tramos.t3160/1e6).toFixed(1)+'M');
+    set('grp-cxc-cl-3160-detail',(cc.tramos_pct.t3160*100).toFixed(1)+'% de cartera · Gestión activa');
+    set('grp-cxc-cl-6190-monto','CLP '+(cc.tramos.t6190/1e6).toFixed(1)+'M');
+    set('grp-cxc-cl-6190-detail',(cc.tramos_pct.t6190*100).toFixed(1)+'% de cartera · Acuerdo urgente');
+    set('grp-cxc-cl-90-monto','CLP '+(cc.tramos.t90/1e6).toFixed(1)+'M');
+    set('grp-cxc-cl-90-detail',(cc.tramos_pct.t90*100).toFixed(1)+'% de cartera · Acción inmediata');
+
+    set('grp-cxc-pe-nv-monto','USD '+(pc.tramos.no_vencida/1000).toFixed(1)+'K');
+    set('grp-cxc-pe-nv-detail',(pc.tramos_pct.no_vencida*100).toFixed(1)+'% de cartera total');
+    set('grp-cxc-pe-030-monto','USD '+(pc.tramos.t030/1000).toFixed(1)+'K');
+    set('grp-cxc-pe-030-detail',(pc.tramos_pct.t030*100).toFixed(1)+'% de cartera · Gestión normal');
+    set('grp-cxc-pe-3190-monto','USD '+(alerta3190/1000).toFixed(1)+'K');
+    set('grp-cxc-pe-3190-detail',((pc.tramos_pct.t3160+pc.tramos_pct.t6190)*100).toFixed(1)+'% · Acuerdo de pago urgente');
+    set('grp-cxc-pe-90-monto','USD '+(pc.tramos.t90/1000).toFixed(1)+'K');
+    set('grp-cxc-pe-90-detail',(pc.tramos_pct.t90*100).toFixed(1)+'% de cartera · Acción inmediata');
+
+    // Tabla "Clientes Críticos Grupo" — reconstruida desde AVBOARD (chile.cxc.cuentas_criticas + peru.cxc.cuentas_criticas)
+    var tbCrit=document.getElementById('grp-tbody-criticos');
+    if(tbCrit && cc.cuentas_criticas){
+      function diasTxt(d){ var s=String(d); return /d$/.test(s) ? s : s+'d'; }
+      var rowsHtml='';
+      var clCrit=cc.cuentas_criticas.filter(function(r){return r.estado==='CRÍTICO';}).sort(function(a,b){return b.monto-a.monto;});
+      var clResuelto=cc.cuentas_criticas.filter(function(r){return r.estado!=='CRÍTICO';});
+      clCrit.forEach(function(r){
+        var accion=r.alerta==='PRIORIDAD_MAXIMA'?'PRIORIDAD MÁXIMA':'URGENTE';
+        rowsHtml+='<tr>'+
+          '<td><span class="badge b-cl">🇨🇱 CL</span></td>'+
+          '<td><strong>'+r.cliente+'</strong></td>'+
+          '<td style="font-size:11px;color:var(--dim)">'+r.rtc+'</td>'+
+          '<td class="c"><span class="badge b-crit">'+diasTxt(r.dias)+'</span></td>'+
+          '<td class="r mono" style="color:var(--red)">CLP '+Math.round(r.monto).toLocaleString('en-US')+'</td>'+
+          '<td class="c"><span class="badge b-crit">'+accion+'</span></td>'+
+        '</tr>';
+      });
+      clResuelto.forEach(function(r){
+        rowsHtml+='<tr style="background:rgba(122,182,72,0.05)">'+
+          '<td><span class="badge b-cl">🇨🇱 CL</span></td>'+
+          '<td><strong style="color:var(--green)">'+r.cliente+'</strong></td>'+
+          '<td style="font-size:11px;color:var(--dim)">'+r.rtc+'</td>'+
+          '<td class="c">—</td>'+
+          '<td class="r mono" style="color:var(--green)">✅ PAGADO</td>'+
+          '<td class="c"><span class="badge b-ok">CERRADO</span></td>'+
+        '</tr>';
+      });
+      var peCrit=(pc.cuentas_criticas||[]).slice().sort(function(a,b){return b.monto-a.monto;});
+      peCrit.forEach(function(r){
+        var diasNum=parseInt(String(r.dias),10);
+        var esLegal=/legal/i.test(r.nota||'');
+        var accion=esLegal?'PROCESO FORMAL':(diasNum>=150?'URGENTE':'COBRAR');
+        var accionClass=(esLegal||diasNum>=150)?'b-crit':'b-warn';
+        rowsHtml+='<tr>'+
+          '<td><span class="badge b-pe">🇵🇪 PE</span></td>'+
+          '<td><strong>'+r.cliente+'</strong>'+(r.nota?'<br><span style="font-size:9px;color:var(--muted)">'+r.nota+'</span>':'')+'</td>'+
+          '<td style="font-size:11px;color:var(--dim)">'+r.vendedor+'</td>'+
+          '<td class="c"><span class="badge b-crit">'+diasTxt(r.dias)+'</span></td>'+
+          '<td class="r mono" style="color:var(--red)">USD '+Math.round(r.monto).toLocaleString('en-US')+'</td>'+
+          '<td class="c"><span class="badge '+accionClass+'">'+accion+'</span></td>'+
+        '</tr>';
+      });
+      rowsHtml+='<tr style="background:rgba(74,100,130,0.07);font-size:9px"><td colspan="5" style="color:var(--muted);padding:4px 8px;">🇵🇪 Corp.Olmos + Amfresh → SUPRA (tratamiento contable separado)</td><td></td></tr>';
+      tbCrit.innerHTML=rowsHtml;
     }
   }catch(e){console.warn('[AVBOARD][GRUPO]',e);}
 })();

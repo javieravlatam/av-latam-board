@@ -239,3 +239,153 @@ CxC +90d total: CLP 29,978,866
 
 CxC +90d total: CLP 29,978,866
 ---
+
+## ⚠ Alertas Activas — 2026-06-23 23:45
+
+| Cliente | Monto CLP | Días | RTC |
+|---------|-----------|------|-----|
+| NIVALDO ANTONIO FLORES EGAÑA | 5,318,824 | 597d | CAPEL |
+| TRANSACCIONES AGRICOLAS SPA | 3,856,957 | 193d | JOSÉ LORENZONI |
+| AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA | 3,754,844 | 102d | JUAN PABLO NEIRA |
+| AGRICOLA LOS QUILLAYES SPA | 2,813,517 | 367d | GUILLERMO PRADENAS |
+| AGRIC LOS SAUSALES LTDA | 2,523,276 | 395d | CAPEL |
+| AGROINSUMOS KULLIN SPA | 1,936,809 | 176d | PABLO LARATRO |
+| LOS PARRONALES DE CAMARICO S A | 1,877,820 | 387d | CAPEL |
+| AGRICOLA RIBERA LIMITADA | 1,473,696 | 122d | JORGE CAROCA |
+| COMERCIAL COPELEC S.A. | 1,307,077 | 135d | VALENTINA MUÑOZ |
+| SOC AGRICOLA VIENTO NORTE LTDA | 961,996 | 326d | IVÁN VEVERKA |
+| AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA | 948,192 | 408d | GUILLERMO PRADENAS |
+| AGROINSUMOS KULLIN | 921,215 | 115d | PABLO LARATRO |
+| VICENTE ADAN LAGOS SALDANA | 742,655 | 524d | GUILLERMO PRADENAS |
+| MAGALY DEL CARMEN ORELLANA PINO | 700,134 | 143d | JORGE CAROCA |
+| PEDRO JUAN BUGUENO TELLO | 304,640 | 668d | IVÁN VEVERKA |
+| ROMERO Y RIQUELME SPA | 240,975 | 493d | GUILLERMO PRADENAS |
+| NEWEN BOTANICUM SPA | 150,289 | 698d | JOSELIN MUÑOZ |
+| GERALDINE MORILLO | 145,950 | 698d | JOSELIN MUÑOZ |
+
+CxC +90d total: CLP 29,978,866
+
+---
+
+## ⚠ Alertas Activas — 2026-06-24 16:42 (Auditoría integral de wiring · 8 paneles)
+
+**1. [RESUELTO] Ranking "Top Vendedor 2026" incorrecto en Panel_Jefes_Chile_2026.html.**
+El panel mostraba estático "J. CAROCA · CLP 63.3M" como líder. El
+cálculo real desde AVBOARD (6 meses, Ene–Jun) da: P. LARATRO CLP
+170,298,179 (líder real) vs J. Caroca CLP 96,570,271. Cualquier
+decisión o incentivo basado en ese ranking previo a esta corrección
+estaba mal informado. Corregido — ahora se recalcula dinámicamente en
+cada carga, nunca más un nombre fijo en el HTML.
+
+**2. [RESUELTO] Cuenta crítica fantasma en Panel_Jefes_Peru_2026.html.**
+La tabla "Clientes Críticos Perú" listaba a INVERSIONES AJS S.A.C.
+(USD 304, 312d) como cuenta +90d activa. Esa cuenta ya no figura en
+`AVBOARD.peru.cxc.cuentas_criticas` del corte 10/05 — fue removida de
+la tabla en vivo. Vendedor de EPIC FARMS S.A.C. también estaba mal
+asignado (O. Infante en el HTML vs A. Gonzalez según AVBOARD).
+
+**3. [REVISIÓN MANUAL PENDIENTE] Columna "Compra en 2026" — Clientes
+Críticos Perú.** Al reconstruir la tabla desde AVBOARD no hay un campo
+que indique si la cuenta crítica sigue comprando en 2026 (antes era un
+Sí/No estático sin fuente verificable). Se deja como "Sin dato" en vez
+de inventar el valor. Si este dato importa para la gestión de cobranza,
+habría que agregarlo como campo nuevo en `avboard_data.js` /
+`peru.cxc.cuentas_criticas`.
+
+**4. [REVISIÓN MANUAL PENDIENTE] Roster de vendedores no coincide 1:1
+entre AVBOARD y las tablas estáticas "Vendedores" de cada panel.**
+- Chile: `AVBOARD.chile.ventas.rtc_mensual_real` tiene 7 claves
+  (almeida, caroca, encina, laratro, munoz, velasquez, veverka). La
+  tabla estática `vendedoresData` de Panel_Jefes_Chile tiene un roster
+  distinto (incluye Riffo, Pradenas, Camilla — ausentes en AVBOARD; no
+  incluye Almeida ni Muñoz).
+- Perú: roster de `AVBOARD.peru.ventas.por_vendedor` (7 claves) y el
+  `vendedoresData` estático de Panel_Jefes_Peru (8 entradas, incluye a
+  Geldres marcado inactivo) son consistentes en personas pero no en
+  presupuesto anual por vendedor — AVBOARD no tiene un campo
+  `ppto_anual` por vendedor, solo el ranking YTD real.
+No se tocaron estas tablas (son juicio/roster histórico, no cifras de
+AVBOARD) — quedan documentadas aquí para que el directorio decida si
+conviene unificar la fuente de verdad del roster comercial.
+
+**5. [PENDIENTE — fuera de alcance, migración mayor] 5 paneles sin
+conectar a `avboard_data.js`:** Panel_Productos_AV_2026.html,
+Panel_Rentabilidad_AV_2026.html, Panel_Ecuador_AV_2026.html,
+Panel_General_AV_2026.html, Panel_IEC_Auditoria_2026.html. Ninguno
+carga el script `avboard_data.js` — sus cifras son 100% estáticas y no
+se actualizan con el inbox. Esto ya se había señalado el 2026-06-23;
+se reitera porque el módulo prioritario PRODUCTOS del proyecto depende
+de que este panel se conecte.
+
+CxC Chile +90d total: CLP 29,978,866 · CxC Perú +90d total: USD 23,621
+---
+
+## ⚠ Alertas Activas — 2026-06-25 03:12
+
+| Cliente | Monto CLP | Días | RTC |
+|---------|-----------|------|-----|
+| NIVALDO ANTONIO FLORES EGAÑA | 5,318,824 | 597d | CAPEL |
+| TRANSACCIONES AGRICOLAS SPA | 3,856,957 | 193d | JOSÉ LORENZONI |
+| AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA | 3,754,844 | 102d | JUAN PABLO NEIRA |
+| AGRICOLA LOS QUILLAYES SPA | 2,813,517 | 367d | GUILLERMO PRADENAS |
+| AGRIC LOS SAUSALES LTDA | 2,523,276 | 395d | CAPEL |
+| AGROINSUMOS KULLIN SPA | 1,936,809 | 176d | PABLO LARATRO |
+| LOS PARRONALES DE CAMARICO S A | 1,877,820 | 387d | CAPEL |
+| AGRICOLA RIBERA LIMITADA | 1,473,696 | 122d | JORGE CAROCA |
+| COMERCIAL COPELEC S.A. | 1,307,077 | 135d | VALENTINA MUÑOZ |
+| SOC AGRICOLA VIENTO NORTE LTDA | 961,996 | 326d | IVÁN VEVERKA |
+| AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA | 948,192 | 408d | GUILLERMO PRADENAS |
+| AGROINSUMOS KULLIN | 921,215 | 115d | PABLO LARATRO |
+| VICENTE ADAN LAGOS SALDANA | 742,655 | 524d | GUILLERMO PRADENAS |
+| MAGALY DEL CARMEN ORELLANA PINO | 700,134 | 143d | JORGE CAROCA |
+| PEDRO JUAN BUGUENO TELLO | 304,640 | 668d | IVÁN VEVERKA |
+| ROMERO Y RIQUELME SPA | 240,975 | 493d | GUILLERMO PRADENAS |
+| NEWEN BOTANICUM SPA | 150,289 | 698d | JOSELIN MUÑOZ |
+| GERALDINE MORILLO | 145,950 | 698d | JOSELIN MUÑOZ |
+
+CxC +90d total: CLP 29,978,866
+---
+
+## ⚠ Productos que destruyen margen — 2026-06-25 03:14
+
+| SKU | País | Margen | Acción |
+|-----|------|--------|--------|
+| AV ALGAP 30 200 L | CL | -14.3% | REVISAR_O_DESCONTINUAR |
+| AV PLUS ZINC MANGANESO 20 L | CL | -6.7% | REVISAR_O_DESCONTINUAR |
+| AV ROOT MAX 1 L | CL | -36.6% | REVISAR_O_DESCONTINUAR |
+| AV PLUS CALCIO 20 L | CL | -6.8% | REVISAR_O_DESCONTINUAR |
+| AV BIOSOLARIS 1 L | CL | -50.0% | REVISAR_O_DESCONTINUAR |
+| AV PLUS HIERRO 5 L | CL | -101.5% | REVISAR_O_DESCONTINUAR |
+| AV AMIN SUGAR 1 L | CL | -199.8% | REVISAR_O_DESCONTINUAR |
+| AV ALGAP 30 5 L | CL | -10.0% | REVISAR_O_DESCONTINUAR |
+| AV PLUS MICRO MIX 1 L | CL | -23.1% | REVISAR_O_DESCONTINUAR |
+| AV HUMIC ROOT 5 L | CL | -11.1% | REVISAR_O_DESCONTINUAR |
+
+Impacto estimado: CLP -778,276. SKUs sin costo cargado (no evaluables): 35 CL / 5 PE.
+---
+
+## ⚠ Alertas Activas — 2026-06-25 03:14
+
+| Cliente | Monto CLP | Días | RTC |
+|---------|-----------|------|-----|
+| NIVALDO ANTONIO FLORES EGAÑA | 5,318,824 | 597d | CAPEL |
+| TRANSACCIONES AGRICOLAS SPA | 3,856,957 | 193d | JOSÉ LORENZONI |
+| AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA | 3,754,844 | 102d | JUAN PABLO NEIRA |
+| AGRICOLA LOS QUILLAYES SPA | 2,813,517 | 367d | GUILLERMO PRADENAS |
+| AGRIC LOS SAUSALES LTDA | 2,523,276 | 395d | CAPEL |
+| AGROINSUMOS KULLIN SPA | 1,936,809 | 176d | PABLO LARATRO |
+| LOS PARRONALES DE CAMARICO S A | 1,877,820 | 387d | CAPEL |
+| AGRICOLA RIBERA LIMITADA | 1,473,696 | 122d | JORGE CAROCA |
+| COMERCIAL COPELEC S.A. | 1,307,077 | 135d | VALENTINA MUÑOZ |
+| SOC AGRICOLA VIENTO NORTE LTDA | 961,996 | 326d | IVÁN VEVERKA |
+| AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA | 948,192 | 408d | GUILLERMO PRADENAS |
+| AGROINSUMOS KULLIN | 921,215 | 115d | PABLO LARATRO |
+| VICENTE ADAN LAGOS SALDANA | 742,655 | 524d | GUILLERMO PRADENAS |
+| MAGALY DEL CARMEN ORELLANA PINO | 700,134 | 143d | JORGE CAROCA |
+| PEDRO JUAN BUGUENO TELLO | 304,640 | 668d | IVÁN VEVERKA |
+| ROMERO Y RIQUELME SPA | 240,975 | 493d | GUILLERMO PRADENAS |
+| NEWEN BOTANICUM SPA | 150,289 | 698d | JOSELIN MUÑOZ |
+| GERALDINE MORILLO | 145,950 | 698d | JOSELIN MUÑOZ |
+
+CxC +90d total: CLP 29,978,866
+---

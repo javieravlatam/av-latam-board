@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Panel Jefes · Chile 2026 · AV Latam</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=20260623"></script>
+<script src="avboard_data.js?v=20260625"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -179,13 +179,13 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
   </div>
   <div class="kpi">
     <div class="kpi-lbl">Presupuesto 2026 · Anual</div>
-    <div class="kpi-val kpi-b">CLP 861.3M</div>
+    <div class="kpi-val kpi-b" id="jch-kpi-ppto-val">CLP 861.3M</div>
     <div class="kpi-sub">Meta anual · 6 RTCs activos</div>
   </div>
   <div class="kpi">
     <div class="kpi-lbl">Top Vendedor 2026</div>
-    <div class="kpi-val kpi-g" style="font-size:17px">J. CAROCA</div>
-    <div class="kpi-sub">CLP 63.3M · 4 meses</div>
+    <div class="kpi-val kpi-g" style="font-size:17px" id="jch-kpi-top-name">J. CAROCA</div>
+    <div class="kpi-sub" id="jch-kpi-top-sub">CLP 63.3M · 4 meses</div>
   </div>
   <div class="kpi">
     <div class="kpi-lbl">IEC 2026 YTD</div>
@@ -384,28 +384,28 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
 <!-- ══════════════════════════════════════════════ -->
 <div id="tab-cxc" class="tab-content">
 
-  <div class="sec">Cobranzas Chile · Corte 17/05/2026 <span>Cartera activa total: CLP 162.2M</span></div>
+  <div class="sec">Cobranzas Chile · Corte 17/05/2026 <span id="jch-cxc-sub">Cartera activa total: CLP 162.2M</span></div>
 
   <div class="cxc-grid" style="margin-bottom:20px">
     <div class="cxc-card" style="background:rgba(122,182,72,0.07);border:1px solid rgba(122,182,72,0.25)">
       <div class="tramo" style="color:var(--green)">✅ 0–30d Normal</div>
-      <div class="monto" style="color:var(--green)">98.5M</div>
-      <div class="detail">73.1% de cartera · En cobro</div>
+      <div class="monto" style="color:var(--green)" id="jch-cxc-030-monto">98.5M</div>
+      <div class="detail" id="jch-cxc-030-detail">73.1% de cartera · En cobro</div>
     </div>
     <div class="cxc-card" style="background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.25)">
       <div class="tramo" style="color:var(--amber)">🟡 31–60d Alerta</div>
-      <div class="monto" style="color:var(--amber)">13.0M</div>
-      <div class="detail">9.6% de cartera · Gestión activa</div>
+      <div class="monto" style="color:var(--amber)" id="jch-cxc-3160-monto">13.0M</div>
+      <div class="detail" id="jch-cxc-3160-detail">9.6% de cartera · Gestión activa</div>
     </div>
     <div class="cxc-card" style="background:rgba(230,126,34,0.07);border:1px solid rgba(230,126,34,0.25)">
       <div class="tramo" style="color:var(--orange)">🟠 61–90d Riesgo</div>
-      <div class="monto" style="color:var(--orange)">7.4M</div>
-      <div class="detail">5.5% de cartera · Acuerdo urgente</div>
+      <div class="monto" style="color:var(--orange)" id="jch-cxc-6190-monto">7.4M</div>
+      <div class="detail" id="jch-cxc-6190-detail">5.5% de cartera · Acuerdo urgente</div>
     </div>
     <div class="cxc-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.3)">
       <div class="tramo" style="color:var(--red)">🔴 +90d Crítico</div>
-      <div class="monto" style="color:var(--red)">15.9M</div>
-      <div class="detail">11.8% de cartera · Acción inmediata</div>
+      <div class="monto" style="color:var(--red)" id="jch-cxc-90-monto">15.9M</div>
+      <div class="detail" id="jch-cxc-90-detail">11.8% de cartera · Acción inmediata</div>
     </div>
   </div>
 
@@ -415,7 +415,7 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
       <thead>
         <tr><th>Cliente</th><th>RTC</th><th class="c">Días mora</th><th class="r">Monto CLP</th><th class="c">Acción</th></tr>
       </thead>
-      <tbody>
+      <tbody id="jch-tbody-criticos">
         <tr>
           <td><strong>LOMA LARGA LTDA</strong><br>
               <span style="font-size:9px;color:var(--muted)">Neira + Laratro · 2 entidades</span></td>
@@ -871,7 +871,9 @@ const LABELS=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV',
 // ── DATA ──
 const real2024=[77.4,46.1,37.4,72.1,18.2,33.8,42.7,24.8,41.5,109.0,67.3,53.4];
 const real2025=[61.5,57.9,38.9,44.2,131.5,36.8,33.9,75.0,101.1,134.5,43.6,7.0];
-const ppto2026=[83.6,41.6,42.0,46.4,51.0,49.7,62.8,76.5,110.8,112.7,97.5,86.7];
+var ppto2026=(typeof AVBOARD!=='undefined' && AVBOARD.chile && AVBOARD.chile.ventas && AVBOARD.chile.ventas.mensual_ppto)
+  ? AVBOARD.chile.ventas.mensual_ppto.map(function(v){return parseFloat((v/1e6).toFixed(1));})
+  : [83.6,41.6,42.0,46.4,51.0,49.7,62.8,76.5,110.8,112.7,97.5,86.7];
 var real2026=(typeof AVBOARD!=='undefined')
   ? AVBOARD.chile.ventas.mensual_real.map(function(v){return v>0?parseFloat((v/1e6).toFixed(1)):null;})
   : Array(12).fill(null);
@@ -961,6 +963,8 @@ new Chart(document.getElementById('chartVentas'),{
   const meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   let html='';
   let tot26=0,tot25=0,totPpto=0;
+  const lastDataIdxJC=real2026.reduce(function(l,v,i){return v!==null?i:l;},-1);
+  const curMesNmJC=meses[lastDataIdxJC>=0?lastDataIdxJC:0];
   ppto2026.forEach((pp,i)=>{
     const v26=real2026[i], v25=real2025[i];
     const hasData=v26!==null;
@@ -988,12 +992,12 @@ new Chart(document.getElementById('chartVentas'),{
   });
   const cumplTot=(tot26/totPpto*100).toFixed(1);
   html+=`<tr style="background:var(--s2);font-weight:700">
-    <td>YTD ENE–ABR</td>
+    <td>YTD ENE–${curMesNmJC.slice(0,3).toUpperCase()}</td>
     <td class="r mono" style="color:var(--blue)">${totPpto.toFixed(1)}</td>
     <td class="r mono">${tot26.toFixed(1)}</td>
     <td class="c" style="color:${cumplTot>=100?'var(--green)':'var(--amber)'};font-family:'DM Mono';font-size:11px">${cumplTot>=100?'▲':'▼'} ${Math.abs(cumplTot)}%</td>
-    <td class="r mono" style="color:var(--dim)">${(real2025.slice(0,4).reduce((a,b)=>a+b,0)).toFixed(1)}</td>
-    <td class="c"><span class="badge b-warn">Abr parcial</span></td>
+    <td class="r mono" style="color:var(--dim)">${(real2025.slice(0,lastDataIdxJC+1).reduce((a,b)=>a+b,0)).toFixed(1)}</td>
+    <td class="c"><span class="badge b-warn">${curMesNmJC} parcial</span></td>
   </tr>`;
   document.getElementById('tbody-ventas').innerHTML=html;
 })();
@@ -1185,7 +1189,7 @@ function cerrarSesion() {
 (function(){
   if(typeof AVBOARD==='undefined') return;
   try{
-    var cv=AVBOARD.chile.ventas, mt=AVBOARD.meta.cortes;
+    var cv=AVBOARD.chile.ventas, mt=AVBOARD.meta.cortes, cc=AVBOARD.chile.cxc;
     var corte=mt.chile_ventas||'';
     var ytdM=parseFloat((cv.ytd_5m/1e6).toFixed(1));
     var p5m=parseFloat((cv.ppto_5m/1e6).toFixed(1));
@@ -1251,6 +1255,67 @@ function cerrarSesion() {
         ?['Ppto '+nMeses+'m ('+p5m+'M)','Exceso vs Ppto ('+brechaM+'M)']
         :['Real 2026 YTD ('+ytdM+'M)','Brecha Ppto '+nMeses+'m ('+absBrecha+'M)'];
       chD.update();
+    }
+
+    // KPI: Presupuesto 2026 Anual (antes estático 861.3M)
+    set('jch-kpi-ppto-val','CLP '+(cv.ppto_anual/1e6).toFixed(1)+'M');
+
+    // KPI: Top Vendedor 2026 — calculado desde rtc_mensual_real YTD (antes estático J. CAROCA)
+    if(cv.rtc_mensual_real){
+      var nameMapCL={almeida:'ALMEIDA',caroca:'J. CAROCA',encina:'R. ENCINA',laratro:'P. LARATRO',munoz:'V. MUÑOZ',velasquez:'F. VELÁSQUEZ',veverka:'I. VEVERKA'};
+      var totalsCL={};
+      Object.keys(cv.rtc_mensual_real).forEach(function(k){
+        totalsCL[k]=cv.rtc_mensual_real[k].slice(0,nMeses).reduce(function(a,b){return a+b;},0);
+      });
+      var topKeyCL=Object.keys(totalsCL).reduce(function(a,b){return totalsCL[a]>totalsCL[b]?a:b;});
+      set('jch-kpi-top-name',nameMapCL[topKeyCL]||topKeyCL.toUpperCase());
+      set('jch-kpi-top-sub','CLP '+(totalsCL[topKeyCL]/1e6).toFixed(1)+'M · '+nMeses+' meses');
+    }
+
+    // CxC tab: subtítulo + 4 tarjetas desde AVBOARD (antes estático y desactualizado)
+    set('jch-cxc-sub','Cartera activa total: CLP '+(cc.total/1e6).toFixed(1)+'M');
+    set('jch-cxc-030-monto',(cc.tramos.t030/1e6).toFixed(1)+'M');
+    set('jch-cxc-030-detail',(cc.tramos_pct.t030*100).toFixed(1)+'% de cartera · En cobro');
+    set('jch-cxc-3160-monto',(cc.tramos.t3160/1e6).toFixed(1)+'M');
+    set('jch-cxc-3160-detail',(cc.tramos_pct.t3160*100).toFixed(1)+'% de cartera · Gestión activa');
+    set('jch-cxc-6190-monto',(cc.tramos.t6190/1e6).toFixed(1)+'M');
+    set('jch-cxc-6190-detail',(cc.tramos_pct.t6190*100).toFixed(1)+'% de cartera · Acuerdo urgente');
+    set('jch-cxc-90-monto',(cc.tramos.t90/1e6).toFixed(1)+'M');
+    set('jch-cxc-90-detail',(cc.tramos_pct.t90*100).toFixed(1)+'% de cartera · Acción inmediata');
+
+    // Tabla "Clientes Críticos Chile" — reconstruida desde AVBOARD.chile.cxc.cuentas_criticas
+    var tbCritCL=document.getElementById('jch-tbody-criticos');
+    if(tbCritCL && cc.cuentas_criticas){
+      var diasTxtCL=function(d){ var s=String(d); return /d$/.test(s) ? s : s+'d'; };
+      var rowsHtmlCL='';
+      var critCL=cc.cuentas_criticas.filter(function(r){return r.estado==='CRÍTICO';}).sort(function(a,b){return b.monto-a.monto;});
+      var resueltoCL=cc.cuentas_criticas.filter(function(r){return r.estado!=='CRÍTICO';});
+      critCL.forEach(function(r){
+        var accion=r.alerta==='PRIORIDAD_MAXIMA'?'PRIORIDAD MÁXIMA':'URGENTE';
+        rowsHtmlCL+='<tr>'+
+          '<td><strong>'+r.cliente+'</strong></td>'+
+          '<td style="font-size:11px;color:var(--dim)">'+r.rtc+'</td>'+
+          '<td class="c"><span class="badge b-crit">'+diasTxtCL(r.dias)+'</span></td>'+
+          '<td class="r mono" style="color:var(--red)">'+Math.round(r.monto).toLocaleString('en-US')+'</td>'+
+          '<td class="c"><span class="badge b-crit">'+accion+'</span></td>'+
+        '</tr>';
+      });
+      resueltoCL.forEach(function(r){
+        rowsHtmlCL+='<tr style="background:rgba(122,182,72,0.05)">'+
+          '<td><strong style="color:var(--green)">'+r.cliente+'</strong>'+(r.nota?'<br><span style="font-size:9px;color:var(--muted)">'+r.nota+'</span>':'')+'</td>'+
+          '<td style="font-size:11px;color:var(--dim)">'+r.rtc+'</td>'+
+          '<td class="c">—</td>'+
+          '<td class="r mono" style="color:var(--green)">✅ PAGADO</td>'+
+          '<td class="c"><span class="badge b-ok">CERRADO</span></td>'+
+        '</tr>';
+      });
+      var totalCritMonto=critCL.reduce(function(a,r){return a+r.monto;},0);
+      rowsHtmlCL+='<tr style="background:var(--s2)">'+
+        '<td colspan="3" style="font-weight:600">Total +90d cartera</td>'+
+        '<td class="r mono" style="color:var(--red);font-weight:700">'+Math.round(totalCritMonto).toLocaleString('en-US')+'</td>'+
+        '<td></td>'+
+      '</tr>';
+      tbCritCL.innerHTML=rowsHtmlCL;
     }
   }catch(e){console.warn('[AVBOARD][JCH]',e);}
 })();

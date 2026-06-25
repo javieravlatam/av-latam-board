@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel Presupuesto · AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=20260623"></script>
+<script src="avboard_data.js?v=20260625"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
 
 // =====================================================
@@ -134,8 +134,9 @@ function setPeruCurva(key, btn) {
   document.querySelectorAll('#selectorPeruCurva .sel-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   const d = PE_MES_DATA[key];
+  const nReal = PE_REAL.filter(function(v){return v>0;}).length || 4;
   const pptoAc = acumVal(d.ppto);
-  const realVals = d.real.map((v,i) => i < 4 ? v : null);
+  const realVals = d.real.map((v,i) => i < nReal ? v : null);
   const realAc = acumVal(realVals.map(v => v || 0)).map((v,i) => realVals[i] !== null || i === 0 ? v : null);
   peCurvaChart.data.datasets[0].data = pptoAc;
   peCurvaChart.data.datasets[1].data = realAc;
@@ -811,8 +812,10 @@ var PE_REAL = (typeof AVBOARD!=='undefined')
 
 // Acumulados
 const ac = arr => arr.reduce((a,v,i) => { a.push((a[i-1]||0)+(v||0)); return a; }, []);
-const CH_PA=ac(CH_PPTO), CH_RA=ac(CH_REAL.map((v,i)=>i<5?v:null));
-const PE_PA=ac(PE_PPTO), PE_RA=ac(PE_REAL.map((v,i)=>i<5?v:null));
+const CH_NREAL = CH_REAL.filter(function(v){return v>0;}).length || 5;
+const PE_NREAL = PE_REAL.filter(function(v){return v>0;}).length || 5;
+const CH_PA=ac(CH_PPTO), CH_RA=ac(CH_REAL.map((v,i)=>i<CH_NREAL?v:null));
+const PE_PA=ac(PE_PPTO), PE_RA=ac(PE_REAL.map((v,i)=>i<PE_NREAL?v:null));
 
 // CH RTC barras
 chRTCChart = new Chart(document.getElementById('cChileRTC'),{
@@ -1025,9 +1028,22 @@ new Chart(document.getElementById('cGrupo'),{
       if(rmb.velasquez&&CH_MES_DATA.velasquez) CH_MES_DATA.velasquez.real=rmb.velasquez.slice(0,12).map(toKr);
       if(rmb.veverka&&CH_MES_DATA.veverka) CH_MES_DATA.veverka.real=rmb.veverka.slice(0,12).map(toKr);
     }
-    // Re-render curva activa
+    // ── Actualizar PE_MES_DATA desde AVBOARD ──────────────────────────────────
+    PE_MES_DATA.equipo.real=PE_REAL.slice();
+    if(pv.rtc_mensual_real){
+      var rmp=pv.rtc_mensual_real;
+      var sumArr=function(a,b){return (a||[]).map(function(v,i){return (v||0)+((b&&b[i])||0);});};
+      if(rmp.infante&&PE_MES_DATA.infante) PE_MES_DATA.infante.real=rmp.infante.slice(0,12);
+      if((rmp.aguirre||rmp.navarro)&&PE_MES_DATA.aguirre) PE_MES_DATA.aguirre.real=sumArr(rmp.aguirre,rmp.navarro);
+      if(rmp.atalaya&&PE_MES_DATA.atalaya) PE_MES_DATA.atalaya.real=rmp.atalaya.slice(0,12);
+      if(rmp.gonzales&&PE_MES_DATA.gonzales) PE_MES_DATA.gonzales.real=rmp.gonzales.slice(0,12);
+      if(rmp.valladares&&PE_MES_DATA.valladares) PE_MES_DATA.valladares.real=rmp.valladares.slice(0,12);
+    }
+    // Re-render curvas activas
     var actBtn=document.querySelector('#selectorChileCurva .sel-btn.active');
     if(actBtn){var actKey=actBtn.getAttribute('onclick').match(/'([^']+)'/)[1];setChileCurva(actKey,actBtn);}
+    var actBtnPE=document.querySelector('#selectorPeruCurva .sel-btn.active');
+    if(actBtnPE){var actKeyPE=actBtnPE.getAttribute('onclick').match(/'([^']+)'/)[1];setPeruCurva(actKeyPE,actBtnPE);}
     // ── Actualizar charts con CH_REAL/PE_REAL ya inicializados ─────────────────
     var cChM=Chart.getChart(document.getElementById('cChileMes'));
     if(cChM){
@@ -1045,13 +1061,13 @@ new Chart(document.getElementById('cGrupo'),{
     }
     var cChC=Chart.getChart(document.getElementById('cChileCurva'));
     if(cChC){
-      var CH_RA2=ac(CH_REAL.map(function(v,i){return i<5?v:null;}));
+      var CH_RA2=ac(CH_REAL.map(function(v,i){return i<CH_NREAL?v:null;}));
       cChC.data.datasets[1].data=CH_RA2;
       cChC.update('none');
     }
     var cPeC=Chart.getChart(document.getElementById('cPeruCurva'));
     if(cPeC){
-      var PE_RA2=ac(PE_REAL.map(function(v,i){return i<5?v:null;}));
+      var PE_RA2=ac(PE_REAL.map(function(v,i){return i<PE_NREAL?v:null;}));
       cPeC.data.datasets[1].data=PE_RA2;
       cPeC.update('none');
     }

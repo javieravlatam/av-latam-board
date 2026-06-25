@@ -356,3 +356,206 @@ PENDIENTE DE JAVIER:
 VALIDACIÓN JS: ✅ OK (verificarIntegridad sin errores · pipeline completo
   ejecutado end-to-end exitosamente)
 ======================================================================
+
+======================================================================
+CORTE: 2026-06-23 23:45
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 21-06-2026.xlsx
+  - AGROVECA PERU -  VENTAS  AL 22.06.2026.xlsx
+  - Cuentas Cobrar  AGrocomercial 17-05.xlsx
+  - Cuentas Cobrar Agroveca 21-06.xlsx
+  - precios piso CHile .xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 21/06/2026
+  · avboard_clientes.js regenerado · 145 clientes CL
+  · Panel_IEC TX_CL · 1470 transacciones
+  · IEC Chile 30.3% · BP CLP 161,837,652
+  · CxC Chile CLP 138,511,571 · +90d CLP 29,978,866
+  · Cache-busting ?v=20260623 sincronizado en 0 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
+
+======================================================================
+CORTE: 2026-06-24 16:42
+TIPO: AUDITORÍA INTEGRAL — wiring AVBOARD en paneles "Jefes" + Comercial + CxC
+  (continuación directa del mandato: "la auditoria deberia ser integral
+  para que todas las cifras que se carguen en el inbox y se haga commit
+  push se actualicen en todo el board")
+ARCHIVOS PROCESADOS: ninguno nuevo en /inbox — esta corrida auditó el
+  HTML de 8 paneles contra avboard_data.js (corte 21/06 CL · 22/06 PE)
+  ya cargado, buscando KPIs/tablas/gráficos con cifras estáticas que
+  nunca se actualizan al cambiar el inbox.
+ARCHIVOS HTML CORREGIDOS (8):
+  1. Dashboard_Comercial_AV_Latam_2026.html — KPIs/tablas/gráficos
+     conectados a AVBOARD.
+  2. Executive_Board_View_AV_Latam_2026.html — tablas/gráficos RTC y
+     Vendedor conectados a AVBOARD.
+  3. Panel_CxC_AV_Latam_2026.html — auditado contra AVBOARD.
+  4. Panel_Jefes_Grupo_AV_2026.html — Ppto Anual CL/PE, tarjetas CxC
+     CL+PE, gráfico CxC Chile (NaN), gráfico CxC Perú, línea Ppto en
+     chartChile, tabla "Clientes Críticos" CL+PE reconstruida desde
+     AVBOARD.
+  5. Panel_Jefes_Index.html — KPIs hub, semáforos RTC, CxC, mini-charts
+     conectados a AVBOARD.
+  6. dashboard.html — KPIs/footer conectados a AVBOARD.
+  7. Panel_Jefes_Chile_2026.html — ver detalle abajo (bug real de
+     ranking detectado).
+  8. Panel_Jefes_Peru_2026.html — ver detalle abajo.
+BUG REAL DE DATOS DETECTADO (no solo caché/estilo) — Panel_Jefes_Chile:
+  · KPI "Top Vendedor 2026" mostraba estático "J. CAROCA · CLP 63.3M"
+    (4 meses). Cálculo real desde AVBOARD.chile.ventas.rtc_mensual_real
+    (6 meses, Ene–Jun) da el líder real: P. LARATRO · CLP 170.3M.
+    Caroca real YTD es solo CLP 96.6M — no estaba ni cerca del 1er
+    lugar. Corregido para calcular el líder dinámicamente cada vez
+    (nunca más un nombre hardcodeado).
+  · ppto2026 (array estático stale) y tabla "Clientes Críticos Chile"
+    (3 clientes/CLP 15.9M estáticos) reemplazados por wiring en vivo
+    desde AVBOARD (mensual_ppto · 19 cuentas críticas / CLP 30.0M).
+PANEL_JEFES_PERU — hallazgos corregidos:
+  · ppto2026 (array estático) y KPI "Ppto 2026 Anual" (USD 1,137K
+    estático vs USD 1,380K real) → wiring dinámico.
+  · Tabla "Clientes Críticos Perú": tenía una fila fantasma
+    (INVERSIONES AJS S.A.C., USD 304) que YA NO existe en
+    AVBOARD.peru.cxc.cuentas_criticas, vendedor de EPIC FARMS estaba
+    mal asignado (O. Infante en vez de A. Gonzalez), y días de mora de
+    AGROFER desactualizados (191d vs 211d reales) → tabla reconstruida
+    100% desde AVBOARD (4 cuentas críticas reales).
+  · KPI "CxC Vencido Activo" y las 4 tarjetas de tramos CxC (antes
+    estáticas) → wiring dinámico.
+  · Top Vendedor (O. Infante) ya se calculaba en vivo desde
+    AVBOARD.peru.ventas.por_vendedor — se corrigió un mapeo de
+    iniciales incorrecto (gonzales/valladares) y se agregó diaz, sin
+    cambiar el resultado actual.
+METODOLOGÍA: cada archivo se auditó completo (lectura íntegra del
+  HTML), se aplicaron ediciones quirúrgicas guardadas con verificación
+  de unicidad, se validó sintaxis JS (node --check) de cada bloque
+  <script>, y se construyó un test jsdom independiente por panel que
+  recalcula cada cifra desde AVBOARD y la compara contra el DOM
+  renderizado. Resultados: Chile 24/24 ✅ · Perú 33/33 ✅ · Grupo
+  35/35 ✅ · Index 27/27 ✅ · Executive Board View 46/46 ✅. Todas las
+  secciones narrativas/de juicio humano (alertas con nombre propio,
+  pestañas IEC sin fuente AVBOARD, rosters anuales estáticos de
+  vendedores) se dejaron intactas a propósito — quedan documentadas en
+  alertas.md como pendientes de revisión manual, no de wiring.
+FUERA DE ALCANCE (ya documentado antes, sigue pendiente — migración
+  mayor, no wiring puntual): Panel_Productos_AV_2026.html,
+  Panel_Rentabilidad_AV_2026.html, Panel_Ecuador_AV_2026.html,
+  Panel_General_AV_2026.html, Panel_IEC_Auditoria_2026.html — ninguno
+  carga avboard_data.js todavía.
+PENDIENTE DE JAVIER:
+  · Commit + push de los 8 archivos HTML corregidos + logs/ (este
+    entorno no tiene credenciales de GitHub).
+  · Hard refresh (Cmd+Shift+R) y confirmar visualmente Top Vendedor
+    Chile (ahora P. Laratro) y la tabla de Clientes Críticos Perú
+    (ahora 4 cuentas, sin INVERSIONES AJS).
+VALIDACIÓN JS: ✅ OK (node --check en todos los <script> + 165
+  aserciones jsdom pasadas, 0 fallidas, en los 5 paneles con test
+  dedicado)
+======================================================================
+
+======================================================================
+CORTE: 2026-06-25 03:12
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 21-06-2026.xlsx
+  - AGROVECA PERU -  VENTAS  AL 22.06.2026.xlsx
+  - Cuentas Cobrar  AGrocomercial 17-05.xlsx
+  - Cuentas Cobrar Agroveca 21-06.xlsx
+  - precios piso CHile .xlsx
+  - precio piso peru.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 21/06/2026
+  · avboard_clientes.js regenerado · 145 clientes CL
+  · Panel_IEC TX_CL · 1470 transacciones
+  · IEC Chile 32.6% · BP CLP 211,763,266
+  · CxC Chile CLP 138,511,571 · +90d CLP 29,978,866
+  · Módulo Productos: 176 SKUs · 10 margen negativo · 40 sin costo
+  · Cache-busting ?v=20260625 sincronizado en 13 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
+
+======================================================================
+CORTE: 2026-06-25 03:14
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 21-06-2026.xlsx
+  - AGROVECA PERU -  VENTAS  AL 22.06.2026.xlsx
+  - Cuentas Cobrar  AGrocomercial 17-05.xlsx
+  - Cuentas Cobrar Agroveca 21-06.xlsx
+  - precios piso CHile .xlsx
+  - precio piso peru.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 21/06/2026
+  · avboard_clientes.js regenerado · 145 clientes CL
+  · Panel_IEC TX_CL · 1470 transacciones
+  · IEC Chile 32.6% · BP CLP 211,763,266
+  · CxC Chile CLP 138,511,571 · +90d CLP 29,978,866
+  · Módulo Productos: 176 SKUs · 10 margen negativo · 40 sin costo
+  · Cache-busting ?v=20260625 sincronizado en 0 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
+
+======================================================================
+CORTE: 2026-06-25 04:25
+TIPO: WIRING — Panel_Productos_AV_2026.html conectado a AVBOARD.productos
+  (módulo prioritario PRODUCTOS, primer panel del módulo en quedar
+  100% en vivo)
+ARCHIVOS PROCESADOS: ninguno nuevo en /inbox — corrida de wiring sobre
+  avboard_data.js ya cargado (corte Chile 21/06/2026 · Perú 22/06/2026).
+ARCHIVO HTML CORREGIDO (1):
+  Panel_Productos_AV_2026.html — reemplazado el <script> final
+  (KPIs, 3 tablas, ranking de márgenes, 4 tarjetas de decisión y 3
+  gráficos Chart.js, antes 100% hardcodeados con datos de mockup) por
+  una capa de wiring en vivo desde AVBOARD.productos/rentabilidad,
+  siguiendo el patrón guard-IIFE + populate-IIFE ya usado en
+  Panel_CxC y Dashboard_Comercial. Chart.js se sigue cargando una
+  sola vez, sin DOMContentLoaded ni destroy(). showTab()/cerrarSesion()
+  se preservaron textualmente.
+DECISIONES DE CÁLCULO TOMADAS:
+  · "Oportunidad de precio" (tabla Top 10 + KPI) se calcula comparando
+    precio_uni_prom < piso fila por fila — NO se usa el campo
+    `clasif` (🟢/🟡/🔴), que viene copiado tal cual de la columna
+    CLASIF de la planilla de precios y resultó NO ser confiable (caso
+    detectado: AV MOVE 1L tiene precio>piso pero clasif="EN PISO").
+    Validado: el conteo resultante coincide exacto con
+    rentabilidad.skus_bajo_piso_chile (83) y …peru (6).
+  · Clasificación de salud de margen rediseñada con 6 tramos sin
+    overlap (EXCELENTE ≥50% · SANO 30-50% · EN ALERTA 20-30% ·
+    CRÍTICO 10-20% · INVIABLE 0-10% · margen negativo <0%) — el
+    mockup original tenía umbrales superpuestos (ej. "SANO 25-31%"
+    y "EN ALERTA 20-31%" se pisaban). Los 4 SKU con ventas=0 y
+    margen_total negativo se incorporan al conteo de "margen
+    negativo" aunque no aportan a la base de % (denominador =
+    ventas).
+  · Perú: se usa el total atribuible por SKU (USD 342,179) y NO
+    AVBOARD.peru.ventas.ytd_5m (USD 380,386) para los KPIs del tab
+    Perú, porque ese backend excluye transacciones que mezclan 2+
+    productos (USD 38,207 / 10.0% del total) — la diferencia queda
+    explicada en alertSinRiesgoBodyPE en vez de ocultarse.
+  · Formato de números: fN()/fUSD() usan toLocaleString('en-US') para
+    igualar la convención ya establecida en Panel_CxC (fN) y en los
+    números estáticos del propio mockup; los tooltips de Chart.js
+    mantienen 'es-CL' para CLP y 'en-US' para USD, igual que el
+    script hardcodeado original (no se tocó esa convención de
+    tooltip).
+METODOLOGÍA: se relevó el texto completo del HTML (todos los id= ya
+  insertados se reconfirmaron intactos), se re-derivó cada fórmula
+  contra avboard_data.js fresco con un prototipo en Python, se
+  redactó el script completo en un archivo de trabajo aparte, y se
+  verificó end-to-end con un harness Node (módulo vm) que carga el
+  avboard_data.js real + el script candidato en el mismo contexto
+  antes de tocar el HTML — 0 errores, KPIs/tablas/gráficos coinciden
+  con el prototipo Python. Tras la edición del HTML real se repitió
+  la misma verificación cargando los <script> tal cual quedaron en
+  el archivo (jsdom-style): AVBOARD íntegro, 3 gráficos construidos,
+  sin error banner.
+FUERA DE ALCANCE (sigue pendiente): Panel_Rentabilidad_AV_2026.html
+  (próximo del módulo Productos), Panel_Ecuador_AV_2026.html,
+  Panel_General_AV_2026.html, Panel_IEC_Auditoria_2026.html.
+PENDIENTE DE JAVIER:
+  · Commit + push de Panel_Productos_AV_2026.html + logs/ (este
+    entorno no tiene credenciales de GitHub).
+  · Hard refresh (Cmd+Shift+R) y revisar visualmente las 4 tarjetas
+    de decisión y el ranking de márgenes en el tab Alertas.
+VALIDACIÓN JS: ✅ OK (harness Node contra avboard_data.js real, 0
+  errores, sin error banner; verificación repetida sobre el HTML ya
+  editado)
+======================================================================

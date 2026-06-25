@@ -15,6 +15,7 @@
 <title>Panel Productos · AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="avboard_data.js?v=20260625"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -211,7 +212,7 @@
   </div>
   <div>
     <div class="corte-label">Corte de datos</div>
-    <div class="corte-date">Chile 15/04 · Perú 16/04 · 2026</div>
+    <div class="corte-date" id="prodCorteDate">Chile 15/04 · Perú 16/04 · 2026</div>
   </div>
   <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
 </header>
@@ -237,23 +238,23 @@
     <div class="kpi-strip">
       <div class="kpi-mini">
         <div class="kpi-mini-label">SKUs en portafolio</div>
-        <div class="kpi-mini-val" style="color:var(--green);">127</div>
-        <div class="kpi-mini-sub">112 costeados · 15 sin costo</div>
+        <div class="kpi-mini-val" id="kpProdSkus" style="color:var(--green);">127</div>
+        <div class="kpi-mini-sub" id="kpProdSkusSub">112 costeados · 15 sin costo</div>
       </div>
       <div class="kpi-mini">
         <div class="kpi-mini-label">Margen prom Chile</div>
-        <div class="kpi-mini-val" style="color:var(--green);">60.6%</div>
-        <div class="kpi-mini-sub">Objetivo 31% · +29.6pp sobre meta</div>
+        <div class="kpi-mini-val" id="kpProdMargenCL" style="color:var(--green);">60.6%</div>
+        <div class="kpi-mini-sub" id="kpProdMargenCLSub">Objetivo 31% · +29.6pp sobre meta</div>
       </div>
       <div class="kpi-mini">
         <div class="kpi-mini-label">Margen prom Perú</div>
-        <div class="kpi-mini-val" style="color:var(--green);">82.2%</div>
-        <div class="kpi-mini-sub">100% SKUs costeados en EXCELENTE</div>
+        <div class="kpi-mini-val" id="kpProdMargenPE" style="color:var(--green);">82.2%</div>
+        <div class="kpi-mini-sub" id="kpProdMargenPESub">100% SKUs costeados en EXCELENTE</div>
       </div>
       <div class="kpi-mini">
         <div class="kpi-mini-label">Oportunidad de precio</div>
-        <div class="kpi-mini-val" style="color:var(--amber);">19.8M</div>
-        <div class="kpi-mini-sub">CLP · Top 10 ajuste a piso oficial</div>
+        <div class="kpi-mini-val" id="kpProdOportunidad" style="color:var(--amber);">19.8M</div>
+        <div class="kpi-mini-sub" id="kpProdOportunidadSub">CLP · Top 10 ajuste a piso oficial</div>
       </div>
     </div>
 
@@ -274,19 +275,19 @@
         <div class="insight-card" style="margin-top:4px;">
           <div class="insight-num">01</div>
           <div class="insight-label">Estructura sana</div>
-          <div class="insight-desc">El portafolio es rentable. Margen Chile 60.6%, Perú 82.2%. Los 6 SKUs críticos/inviables representan menos del 0.2% de las ventas. No hay problema estructural de costos.</div>
+          <div class="insight-desc" id="insightEstructura">El portafolio es rentable. Margen Chile 60.6%, Perú 82.2%. Los 6 SKUs críticos/inviables representan menos del 0.2% de las ventas. No hay problema estructural de costos.</div>
         </div>
 
         <div class="insight-card amber">
           <div class="insight-num amber">02</div>
           <div class="insight-label">Oportunidad inmediata</div>
-          <div class="insight-desc">CLP +19.8M disponibles hoy sin tocar volumen ni clientes. Solo alinear precios al piso oficial. BIOVECA PRADERAS 250G vale +CLP 8.3M por sí solo.</div>
+          <div class="insight-desc" id="insightOportunidad">CLP +19.8M disponibles hoy sin tocar volumen ni clientes. Solo alinear precios al piso oficial. BIOVECA PRADERAS 250G vale +CLP 8.3M por sí solo.</div>
         </div>
 
         <div class="insight-card red">
           <div class="insight-num red">03</div>
           <div class="insight-label">Riesgo prioritario</div>
-          <div class="insight-desc">CLP 28.6M (15% del negocio Chile) opera sin costo mapeado. Sin ese dato no es posible gestionar la rentabilidad de ese segmento.</div>
+          <div class="insight-desc" id="insightRiesgo">CLP 28.6M (15% del negocio Chile) opera sin costo mapeado. Sin ese dato no es posible gestionar la rentabilidad de ese segmento.</div>
         </div>
       </div>
 
@@ -306,7 +307,8 @@
             <th>Estado</th>
           </tr>
         </thead>
-        <tbody>
+        <!-- Umbrales de clasificación (sin overlap, corregidos vs. mockup original) — ajustable por Javier -->
+        <tbody id="tbClasifCL">
           <tr>
             <td><span class="sema sg"></span></td>
             <td class="bold">EXCELENTE (≥31%)</td>
@@ -378,23 +380,23 @@
     <div class="kpi-strip">
       <div class="kpi-mini">
         <div class="kpi-mini-label">Ventas YTD Chile</div>
-        <div class="kpi-mini-val" style="color:var(--green);">190.8M</div>
-        <div class="kpi-mini-sub">CLP · 105.4% Ppto T1</div>
+        <div class="kpi-mini-val" id="kpClVentas" style="color:var(--green);">190.8M</div>
+        <div class="kpi-mini-sub" id="kpClVentasSub">CLP · 105.4% Ppto T1</div>
       </div>
       <div class="kpi-mini">
         <div class="kpi-mini-label">SKUs costeados</div>
-        <div class="kpi-mini-val">95</div>
-        <div class="kpi-mini-sub">de 106 · margen prom 60.6%</div>
+        <div class="kpi-mini-val" id="kpClSkusCosteados">95</div>
+        <div class="kpi-mini-sub" id="kpClSkusCosteadosSub">de 106 · margen prom 60.6%</div>
       </div>
       <div class="kpi-mini">
         <div class="kpi-mini-label">Zona ciega</div>
-        <div class="kpi-mini-val" style="color:var(--amber);">28.6M</div>
-        <div class="kpi-mini-sub">CLP · 11 SKUs sin costo (15%)</div>
+        <div class="kpi-mini-val" id="kpClZonaCiega" style="color:var(--amber);">28.6M</div>
+        <div class="kpi-mini-sub" id="kpClZonaCiegaSub">CLP · 11 SKUs sin costo (15%)</div>
       </div>
       <div class="kpi-mini">
         <div class="kpi-mini-label">Oportunidad precio</div>
-        <div class="kpi-mini-val" style="color:var(--amber);">+19.8M</div>
-        <div class="kpi-mini-sub">CLP YTD · Top 10 al piso</div>
+        <div class="kpi-mini-val" id="kpClOportunidad" style="color:var(--amber);">+19.8M</div>
+        <div class="kpi-mini-sub" id="kpClOportunidadSub">CLP YTD · Top 10 al piso</div>
       </div>
     </div>
 
@@ -420,7 +422,7 @@
               <th class="r">Impacto CLP</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="tbOportunidadesCL">
             <tr>
               <td class="muted mono">1</td>
               <td class="bold">BIOVECA PRADERAS <span class="muted">250G</span></td>
@@ -483,7 +485,7 @@
             </tr>
             <tr style="background:var(--surface2);">
               <td colspan="3" class="bold" style="text-align:right;padding-right:10px;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;">TOTAL TOP 10</td>
-              <td class="right mono green bold" style="font-size:13px;">+19,832,186</td>
+              <td class="right mono green bold" id="totalOportunidadCL" style="font-size:13px;">+19,832,186</td>
             </tr>
           </tbody>
         </table>
@@ -506,7 +508,7 @@
             <th></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="tbEstrategicosCL">
           <tr>
             <td class="muted mono">1</td>
             <td class="bold">MOVE <span class="muted">20L</span></td>
@@ -612,23 +614,23 @@
     <div class="kpi-strip">
       <div class="kpi-mini">
         <div class="kpi-mini-label">Ventas YTD Perú</div>
-        <div class="kpi-mini-val" style="color:var(--blue);">USD 232K</div>
-        <div class="kpi-mini-sub">167K costeados · 65K sin costo</div>
+        <div class="kpi-mini-val" id="kpPeVentas" style="color:var(--blue);">USD 232K</div>
+        <div class="kpi-mini-sub" id="kpPeVentasSub">167K costeados · 65K sin costo</div>
       </div>
       <div class="kpi-mini">
         <div class="kpi-mini-label">Margen promedio</div>
-        <div class="kpi-mini-val" style="color:var(--green);">82.2%</div>
-        <div class="kpi-mini-sub">100% SKUs costeados en EXCELENTE</div>
+        <div class="kpi-mini-val" id="kpPeMargen" style="color:var(--green);">82.2%</div>
+        <div class="kpi-mini-sub" id="kpPeMargenSub">100% SKUs costeados en EXCELENTE</div>
       </div>
       <div class="kpi-mini">
         <div class="kpi-mini-label">SKUs sin costo</div>
-        <div class="kpi-mini-val" style="color:var(--amber);">4</div>
-        <div class="kpi-mini-sub">USD 64.8K · 28% de ventas Perú</div>
+        <div class="kpi-mini-val" id="kpPeSinCosto" style="color:var(--amber);">4</div>
+        <div class="kpi-mini-sub" id="kpPeSinCostoSub">USD 64.8K · 28% de ventas Perú</div>
       </div>
       <div class="kpi-mini">
         <div class="kpi-mini-label">SKUs críticos</div>
-        <div class="kpi-mini-val" style="color:var(--green);">0</div>
-        <div class="kpi-mini-sub">Perú no tiene SKUs en zona de riesgo</div>
+        <div class="kpi-mini-val" id="kpPeCriticos" style="color:var(--green);">0</div>
+        <div class="kpi-mini-sub" id="kpPeCriticosSub">Perú no tiene SKUs en zona de riesgo</div>
       </div>
     </div>
 
@@ -641,8 +643,8 @@
           <canvas id="cPeruComposicion"></canvas>
         </div>
         <div class="alert-box amber" style="margin-top:14px;">
-          <div class="alert-title amber">⚠ Concentración SILFORTE</div>
-          <div class="alert-body">SILFORTE representa el <strong>54.9%</strong> de las ventas totales de Perú (USD 91,778). Riesgo de concentración alto — cualquier problema comercial, regulatorio o de supply en este producto afecta más de la mitad del negocio peruano.</div>
+          <div class="alert-title amber" id="alertConcentracionTitlePE">⚠ Concentración SILFORTE</div>
+          <div class="alert-body" id="alertConcentracionBodyPE">SILFORTE representa el <strong>54.9%</strong> de las ventas totales de Perú (USD 91,778). Riesgo de concentración alto — cualquier problema comercial, regulatorio o de supply en este producto afecta más de la mitad del negocio peruano.</div>
         </div>
       </div>
 
@@ -659,7 +661,7 @@
               <th class="r">Margen %</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="tbEstrategicosPE">
             <tr>
               <td class="muted mono">1</td>
               <td class="bold amber">SILFORTE</td>
@@ -734,8 +736,8 @@
         </table>
 
         <div class="alert-box green" style="margin-top:14px;">
-          <div class="alert-title green">✓ Perú: portafolio sin zona de riesgo</div>
-          <div class="alert-body">Los 17 SKUs con costo clasifican EXCELENTE. Margen mínimo 54%, máximo 91.9% (AMIN). El único trabajo pendiente es mapear los 4 SKUs sin costo (REGALIA MAX, REGALIA, RELAIA MAX) que representan USD 64.8K.</div>
+          <div class="alert-title green" id="alertSinRiesgoTitlePE">✓ Perú: portafolio sin zona de riesgo</div>
+          <div class="alert-body" id="alertSinRiesgoBodyPE">Los 17 SKUs con costo clasifican EXCELENTE. Margen mínimo 54%, máximo 91.9% (AMIN). El único trabajo pendiente es mapear los 4 SKUs sin costo (REGALIA MAX, REGALIA, RELAIA MAX) que representan USD 64.8K.</div>
         </div>
       </div>
 
@@ -766,7 +768,7 @@
             <th>Acción</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="tbRankingMargenCL">
           <tr style="background:rgba(192,57,43,0.08);">
             <td class="muted mono">1</td>
             <td><span class="sema srd"></span></td>
@@ -869,7 +871,7 @@
           </tr>
         </tbody>
       </table>
-      <div style="margin-top:10px;font-size:10px;color:var(--text-muted);font-family:'DM Mono',monospace;">
+      <div id="footnoteRankingCL" style="margin-top:10px;font-size:10px;color:var(--text-muted);font-family:'DM Mono',monospace;">
         Moneda: CLP.  Objetivo margen: 31.03%.  Todos los SKUs en zona de riesgo corresponden a Chile.  Perú: 0 SKUs críticos.
       </div>
     </div>
@@ -881,7 +883,7 @@
       <div class="decision-card red">
         <div class="decision-icon">🔴</div>
         <div class="decision-title red">Ajustar esta semana</div>
-        <div class="decision-body">
+        <div class="decision-body" id="decisionRedBody">
           <strong style="color:var(--text);">HUMIC ROOT (s/f) + PLUS MICRO MIX (1L):</strong> suspender venta a precios actuales. Cada transacción destruye caja.<br><br>
           Precio mínimo operativo: precio piso efectivo.<br>
           Precio objetivo: precio piso oficial.<br><br>
@@ -892,7 +894,7 @@
       <div class="decision-card amber">
         <div class="decision-icon">🟠</div>
         <div class="decision-title amber">Revisar comercialmente (2 semanas)</div>
-        <div class="decision-body">
+        <div class="decision-body" id="decisionAmberBody">
           <strong style="color:var(--text);">BIOVECA PRADERAS 250G:</strong> ¿existe acuerdo especial con algún cliente que justifique vender a 37% del piso oficial? Verificar antes de tocar el precio.<br><br>
           <strong style="color:var(--text);">Familia HUMIC ROOT:</strong> emitir instrucción formal de precios mínimos. El patrón es sistemático en 200L, 1000L y 20L.<br><br>
           <strong style="color:var(--text);">PLUS POTASIO + PLUS ZINC (s/f):</strong> verificar si ventas sin formato son errores de imputación en facturación.
@@ -902,7 +904,7 @@
       <div class="decision-card yellow">
         <div class="decision-icon">🟡</div>
         <div class="decision-title" style="color:var(--amber);">Pausar / investigar antes de vender</div>
-        <div class="decision-body">
+        <div class="decision-body" id="decisionYellowBody">
           <strong style="color:var(--text);">AMIN SUGAR 1L:</strong> margen 14.3% vs 61.3% en formato 20L. Brecha de 47pp no es normal. Revisar si el costo del 1L es correcto o si hay un error de registro antes de continuar vendiendo.<br><br>
           <strong style="color:var(--text);">PLUS ZINC MANGANESO 1L:</strong> margen 5.9%. Mismo patrón que AMIN SUGAR. Investigar costo unitario del formato.
         </div>
@@ -911,7 +913,7 @@
       <div class="decision-card dark">
         <div class="decision-icon">⬛</div>
         <div class="decision-title muted">Completar costeo (prerequisito)</div>
-        <div class="decision-body">
+        <div class="decision-body" id="decisionDarkBody">
           <strong style="color:var(--text);">Chile · 11 SKUs sin costo · CLP 28.6M:</strong> CRYOPHILE, SOLUFOS, BODENPRO POTASIO, BIOVECA NEMAOFF, PK-DEFEND MAX, XCARATOR y otros. Sin este dato el sistema no puede calcular rentabilidad del 15% del negocio.<br><br>
           <strong style="color:var(--text);">Perú · 4 SKUs sin costo · USD 64.8K:</strong> REGALIA MAX, REGALIA, RELAIA MAX, GENÉRICO. 28% del negocio peruano sin visibilidad.
         </div>
@@ -936,7 +938,7 @@
     <a href="Panel_Presupuesto_AV_2026.html" class="nav-pill">📈 Presupuesto</a>
     <a href="Panel_Productos_AV_2026.html" class="nav-pill active">📦 Productos</a>
   </div>
-  <div class="footer-copy">avboard · Panel Productos · corte 16.04.2026 · solo uso interno</div>
+  <div class="footer-copy" id="prodFooterCopy">avboard · Panel Productos · corte 16.04.2026 · solo uso interno</div>
 </footer>
 
 
@@ -947,174 +949,531 @@
      · Chart.js cargado una sola vez en <head>
 ══════════════════════════════════════ -->
 <script>
-  /* ── Constantes de color (mismo patrón que dashboards existentes) ── */
-  const G   = '#7AB648';
-  const GD  = '#5a8a35';
-  const A   = '#F5A623';
-  const R   = '#E74C3C';
-  const B   = '#4A9EDB';
-  const BDR = 'rgba(122,182,72,0.08)';
-  const TXT = '#8fa892';
-
-  /* ── Opciones comunes de ejes ── */
-  const axisOpts = {
-    grid:   { color: BDR },
-    border: { color: BDR },
-    ticks:  { color: TXT }
-  };
-
-  /* ── CHART 1 · Donut clasificación (Tab Resumen) ── */
-  new Chart(document.getElementById('cClasificacion'), {
-    type: 'doughnut',
-    data: {
-      labels: [
-        'EXCELENTE (87 SKUs)',
-        'EN ALERTA (1)',
-        'SANO (1)',
-        'CRÍTICO/INVIABLE (4)',
-        'NEGATIVO (2)',
-        'SIN COSTO (11)'
-      ],
-      datasets: [{
-        data: [160825207, 1013190, 77450, 137024, 149668, 28616900],
-        backgroundColor: [G, A, '#3a8a5a', '#E67E22', R, '#3a5a42'],
-        borderColor: '#080e09',
-        borderWidth: 3,
-        hoverOffset: 6
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      cutout: '60%',
-      plugins: {
-        legend: {
-          position: 'bottom',
-          labels: { boxWidth: 10, padding: 10, color: TXT, font: { size: 10 } }
-        },
-        tooltip: {
-          callbacks: {
-            label: ctx => {
-              const val = ctx.parsed;
-              return ' CLP ' + val.toLocaleString('es-CL') + '  (' + ctx.label + ')';
-            }
-          }
-        }
-      }
-    }
-  });
-
-  /* ── CHART 2 · Horizontal bar Top 10 Chile (Tab Chile) ── */
-  new Chart(document.getElementById('cChileTop10'), {
-    type: 'bar',
-    data: {
-      labels: [
-        'MAX FULVIC 45% 20L',
-        'HUMIC ROOT 200L',
-        'HUMIC ROOT 1000L',
-        'ROOT MAX 20L',
-        'AMIN SUGAR 20L',
-        'BIOVECA INVERNAL 250G',
-        'SILFORTE 20L',
-        'BIOVECA PRADERAS 250G',
-        'BIOVECA FOLIAR 250G',
-        'MOVE 20L'
-      ],
-      datasets: [{
-        label: 'Ventas YTD (CLP)',
-        data: [
-          4532457,
-          5050000,
-          7000000,
-          7006942,
-          8166599,
-          9446560,
-          9930120,
-          13806908,
-          6027000,
-          23747558
-        ],
-        backgroundColor: [GD, GD, GD, G, G, G, G, A, G, G],
-        borderRadius: 3
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: ctx => ' CLP ' + ctx.parsed.x.toLocaleString('es-CL')
-          }
-        }
-      },
-      scales: {
-        x: { ...axisOpts, ticks: { color: TXT, callback: v => (v/1000000).toFixed(1)+'M' } },
-        y: { grid: { display: false }, border: { color: BDR }, ticks: { color: TXT, font: { size: 10 } } }
-      }
-    }
-  });
-
-  /* ── CHART 3 · Donut composición Perú (Tab Perú) ── */
-  new Chart(document.getElementById('cPeruComposicion'), {
-    type: 'doughnut',
-    data: {
-      labels: [
-        'SILFORTE (54.9%)',
-        'ROOT MAX (15.1%)',
-        'ALGAP 30 (7.6%)',
-        'PLUS MAGNESIO (6.2%)',
-        'AMIN (3.6%)',
-        'MOVE (3.3%)',
-        'CYTO PRIME (3.2%)',
-        'Otros costeados (4.0%)',
-        'SIN COSTO (27.9%)'
-      ],
-      datasets: [{
-        data: [91778, 25191, 12642, 10421, 5974, 5478, 5434, 10289, 64851],
-        backgroundColor: [A, G, G, GD, G, GD, G, '#3a7060', '#3a5a42'],
-        borderColor: '#080e09',
-        borderWidth: 3,
-        hoverOffset: 6
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      cutout: '55%',
-      plugins: {
-        legend: {
-          position: 'bottom',
-          labels: { boxWidth: 10, padding: 8, color: TXT, font: { size: 10 } }
-        },
-        tooltip: {
-          callbacks: {
-            label: ctx => ' USD ' + ctx.parsed.toLocaleString('en-US', { minimumFractionDigits: 0 })
-          }
-        }
-      }
-    }
-  });
-
-  /* ── CHART 4 · Bar márgenes Top Chile (integrado en donut chart — Tab Chile) ── */
-  /* Nota: Chart 4 es el gráfico de barras del Tab Chile ya implementado como cChileTop10 */
-  /* Se añade aquí un cuarto chart separado en la tabla de alertas */
-
-  /* ── TAB SWITCHER (misma función que Dashboard Comercial) ── */
-  function showTab(name) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
-    event.target.classList.add('active');
+/* ── AVBOARD GUARD ─────────────────────────────────────────────────────── */
+(function initFromAVBOARD(){
+  function showError(msg){
+    if(document.getElementById('avboard-error-banner')) return;
+    var b=document.createElement('div');
+    b.id='avboard-error-banner';
+    b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#E74C3C;color:#fff;padding:14px 20px;font-family:"DM Mono",monospace;font-size:13px;text-align:center;letter-spacing:.5px;box-shadow:0 2px 8px rgba(0,0,0,.4);';
+    b.innerHTML='<b>⛔ ERROR AVBOARD:</b> '+msg;
+    document.body.insertBefore(b,document.body.firstChild);
+    console.error('[AVBOARD ERROR]',msg);
   }
+  if(typeof AVBOARD==='undefined'){
+    showError('avboard_data.js no cargó — datos no disponibles. Forzar recarga: Ctrl+Shift+R');
+    return;
+  }
+  var prod = AVBOARD.productos, rent = AVBOARD.rentabilidad;
+  var prodOK = Array.isArray(prod) && prod.length>0;
+  var rentOK = !!rent;
+  console.log('[AVBOARD] versión:', AVBOARD.meta&&AVBOARD.meta.version);
+  console.log('[AVBOARD] productos cargados:', prod?prod.length:0, prodOK?'✅':'❌ inválido');
+  console.log('[AVBOARD] rentabilidad:', rentOK?'✅':'❌ inválido');
+  console.log('[AVBOARD] cortes:', AVBOARD.meta&&AVBOARD.meta.cortes);
+  if(!prodOK||!rentOK){
+    showError('AVBOARD.productos/rentabilidad inválido o vacío');
+  }
+})();
+/* ── FIN GUARD ──────────────────────────────────────────────────────────── */
+
+Chart.defaults.color = '#8fa892';
+Chart.defaults.font.family = "'DM Mono', monospace";
+Chart.defaults.font.size = 10;
+
+/* ── Constantes de color (mismo patrón que dashboards existentes) ── */
+const G   = '#7AB648';
+const GD  = '#5a8a35';
+const A   = '#F5A623';
+const R   = '#E74C3C';
+const B   = '#4A9EDB';
+const BDR = 'rgba(122,182,72,0.08)';
+const TXT = '#8fa892';
+
+/* ── Opciones comunes de ejes ── */
+const axisOpts = {
+  grid:   { color: BDR },
+  border: { color: BDR },
+  ticks:  { color: TXT }
+};
+
+/* ── TAB SWITCHER (misma función que Dashboard Comercial) ── */
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
 
 function cerrarSesion() {
   sessionStorage.removeItem('av_auth');
   sessionStorage.removeItem('av_role');
   window.location.href = 'index.html';
 }
+
+/* ── AVBOARD populate (Panel Productos) ──────────────────────────────────── */
+(function(){
+  if(typeof AVBOARD==='undefined') return;
+  try{
+    var D = AVBOARD;
+    var productos = D.productos || [];
+    var rent = D.rentabilidad || {};
+
+    function set(id,html){ var el=document.getElementById(id); if(el) el.innerHTML=html; }
+    function setT(id,txt){ var el=document.getElementById(id); if(el) el.textContent=txt; }
+    function setW(id,w){ var el=document.getElementById(id); if(el) el.style.width=w; }
+    function fC(n){ return (n/1e6).toFixed(1)+'M'; }
+    function fK(n){ return (n/1000).toFixed(1)+'K'; }
+    function fN(n){ return Math.round(n).toLocaleString('en-US'); }
+    function fUSD(n){ return Math.round(n).toLocaleString('en-US'); }
+    function pct(n){ return (n*100).toFixed(1)+'%'; }
+    function sign(n){ return (n>=0?'+':'') + fN(n); }
+    function disp(s){ return String(s||'').replace(/^AV\s+/, ''); }
+    function dispFmt(f){
+      if(!f || f==='?') return 's/f';
+      var s = String(f).replace(/\s+/g,'');
+      s = s.replace(/GR$/,'G');
+      return s;
+    }
+    function sum(arr, f){ return arr.reduce(function(a,p){ return a + (f(p)||0); }, 0); }
+
+    var cl   = productos.filter(function(p){ return p.pais==='CL'; });
+    var pe   = productos.filter(function(p){ return p.pais==='PE'; });
+    var clOK = cl.filter(function(p){ return p.estado==='OK'; });
+    var clSC = cl.filter(function(p){ return p.estado==='SIN_COSTO'; });
+    var peOK = pe.filter(function(p){ return p.estado==='OK'; });
+    var peSC = pe.filter(function(p){ return p.estado==='SIN_COSTO'; });
+
+    var totalCLventas   = sum(cl, function(p){ return p.ventas; });           // universo completo Chile (== chile.ventas.ytd_5m)
+    var totalCLOKSC     = sum(clOK, function(p){ return p.ventas; }) + sum(clSC, function(p){ return p.ventas; });
+    var ventasSC_CL      = sum(clSC, function(p){ return p.ventas; });
+    var ventasOK_PE      = sum(peOK, function(p){ return p.ventas; });
+    var ventasSC_PE      = sum(peSC, function(p){ return p.ventas; });
+    var totalPEatrib     = ventasOK_PE + ventasSC_PE;
+
+    var wMargenCL = sum(clOK, function(p){ return p.margen_total; }) / sum(clOK, function(p){ return p.ventas; });
+    var wMargenPE = sum(peOK, function(p){ return p.margen_total; }) / sum(peOK, function(p){ return p.ventas; });
+
+    /* ═══ Clasificación por salud de margen (umbrales sin overlap) ═══ */
+    function bucket(m){
+      if(m==null)   return 'NULL';
+      if(m<0)       return 'NEG';
+      if(m<0.10)    return 'INVIABLE';
+      if(m<0.20)    return 'CRITICO';
+      if(m<0.30)    return 'ALERTA';
+      if(m<0.50)    return 'SANO';
+      return 'EXCELENTE';
+    }
+    var buckets = { EXCELENTE:{n:0,v:0}, SANO:{n:0,v:0}, ALERTA:{n:0,v:0}, CRITICO:{n:0,v:0}, INVIABLE:{n:0,v:0}, NEG:{n:0,v:0}, NULL:{n:0,v:0} };
+    clOK.forEach(function(p){ var b=bucket(p.margen_pct); buckets[b].n++; buckets[b].v+=p.ventas; });
+    buckets.NEG.n += buckets.NULL.n; // SKUs con margen negativo pero ventas=0 (no se puede calcular %) — igual destruyen valor
+    var nNullMargen = buckets.NULL.n;
+
+    var skusCosteados = clOK.length + peOK.length;
+    var skusSinCosto  = clSC.length + peSC.length;
+    var skusTotal     = skusCosteados + skusSinCosto;
+
+    /* ═══ Oportunidad de precio Chile: precio real < piso oficial ═══ */
+    var oppCL = clOK
+      .filter(function(p){ return p.piso!=null && p.precio_uni_prom!=null && p.precio_uni_prom < p.piso; })
+      .map(function(p){
+        var gap = Math.round(p.piso - p.precio_uni_prom);
+        var impacto = Math.round(gap * p.cantidad);
+        return { p:p, gap:gap, impacto:impacto };
+      })
+      .sort(function(a,b){ return b.impacto - a.impacto; });
+    var oppTop10 = oppCL.slice(0,10);
+    var oppTop10Total = sum(oppTop10, function(x){ return x.impacto; });
+    var oppAllTotal   = sum(oppCL, function(x){ return x.impacto; });
+
+    /* ═══ Top 10 estratégicos Chile (por ventas) ═══ */
+    var top10CL = clOK.slice().sort(function(a,b){ return b.ventas - a.ventas; }).slice(0,10);
+
+    /* ═══ Ranking peor margen real Chile (bottom 10, excluye margen_pct null) ═══ */
+    var ranking = clOK.filter(function(p){ return p.margen_pct!=null; })
+      .sort(function(a,b){ return a.margen_pct - b.margen_pct; }).slice(0,10);
+
+    /* ═══ Perú: agregación por producto (sin formato) ═══ */
+    var peAgg = {};
+    peOK.forEach(function(p){
+      var k = disp(p.producto);
+      if(!peAgg[k]) peAgg[k] = { nombre:k, ventas:0, margen_total:0 };
+      peAgg[k].ventas += p.ventas;
+      peAgg[k].margen_total += p.margen_total;
+    });
+    var peAggArr = Object.keys(peAgg).map(function(k){
+      var g = peAgg[k];
+      g.margen_pct = g.ventas ? g.margen_total/g.ventas : null;
+      return g;
+    });
+    peAggArr.sort(function(a,b){ return b.ventas - a.ventas; });
+    var peTop10 = peAggArr.slice(0,10);
+
+    /* ═══ Sin costo: nombres agregados por producto, para tarjetas/insights ═══ */
+    function aggSinCosto(arr){
+      var m = {};
+      arr.forEach(function(p){
+        var k = disp(p.producto);
+        m[k] = (m[k]||0) + p.ventas;
+      });
+      return Object.keys(m).map(function(k){ return {nombre:k, ventas:m[k]}; }).sort(function(a,b){ return b.ventas-a.ventas; });
+    }
+    var scCLNames = aggSinCosto(clSC);
+    var scPENames = aggSinCosto(peSC);
+
+    /* ════════════════════════════════════════════════════════════════
+       TAB RESUMEN
+    ════════════════════════════════════════════════════════════════ */
+    set('kpProdSkus', String(skusTotal));
+    set('kpProdSkusSub', skusCosteados+' costeados · '+skusSinCosto+' sin costo');
+
+    set('kpProdMargenCL', pct(wMargenCL));
+    var sanoOMejorCL = buckets.EXCELENTE.n + buckets.SANO.n;
+    set('kpProdMargenCLSub', sanoOMejorCL+' de '+clOK.length+' SKUs en SANO o mejor (≥30%)');
+
+    set('kpProdMargenPE', pct(wMargenPE));
+    var excelentePE = peOK.filter(function(p){ return p.margen_pct!=null && p.margen_pct>=0.50; }).length;
+    set('kpProdMargenPESub', excelentePE+' de '+peOK.length+' SKUs costeados en EXCELENTE');
+
+    set('kpProdOportunidad', fC(oppTop10Total));
+    set('kpProdOportunidadSub', 'CLP · Top 10 ajuste a piso oficial');
+
+    set('insightEstructura',
+      'El portafolio es rentable pero con dispersión real. Margen ponderado Chile '+pct(wMargenCL)+', Perú '+pct(wMargenPE)+
+      '. '+ranking.length+' SKUs con margen negativo (de '+ (buckets.NEG.n) +' en total, incl. '+nNullMargen+' con ventas registradas en 0) representan apenas '+
+      pct(buckets.NEG.v/totalCLOKSC)+' de las ventas clasificables de Chile — no hay problema estructural de costos, pero sí casos puntuales que destruyen valor en cada transacción.');
+
+    set('insightOportunidad',
+      'CLP '+sign(oppAllTotal)+' disponibles en Chile si los '+oppCL.length+' SKUs bajo precio piso suben a su piso oficial — sin tocar volumen ni clientes. Las Top 10 oportunidades concentran CLP '+fC(oppTop10Total)+
+      ', lideradas por '+disp(oppTop10[0].p.producto)+' '+dispFmt(oppTop10[0].p.formato)+' (+CLP '+fC(oppTop10[0].impacto)+').');
+
+    set('insightRiesgo',
+      'CLP '+fC(ventasSC_CL)+' ('+pct(ventasSC_CL/totalCLOKSC)+' de las ventas clasificables de Chile) y USD '+fK(ventasSC_PE)+' ('+pct(ventasSC_PE/totalPEatrib)+' de Perú) operan sin costo mapeado. Sin ese dato no es posible gestionar la rentabilidad de ese segmento.');
+
+    /* Tabla clasificación (7 filas, orden descendente de salud) */
+    var rowsClasif = [
+      { key:'EXCELENTE', label:'EXCELENTE (≥50%)',          sema:'sg',  badge:'badge-g', txt:'SIN ACCIÓN', labelCls:'bold',     nCls:'',         vCls:'green' },
+      { key:'SANO',      label:'SANO (30–50%)',             sema:'sg',  badge:'badge-g', txt:'MONITOREAR', labelCls:'',         nCls:'',         vCls:'' },
+      { key:'ALERTA',    label:'EN ALERTA (20–30%)',        sema:'sa',  badge:'badge-a', txt:'REVISAR',    labelCls:'',         nCls:'',         vCls:'amber' },
+      { key:'CRITICO',   label:'CRÍTICO (10–20%)',          sema:'sr',  badge:'badge-r', txt:'ACCIÓN',     labelCls:'',         nCls:'',         vCls:'red' },
+      { key:'INVIABLE',  label:'INVIABLE (&lt;10%)',        sema:'sr',  badge:'badge-r', txt:'ACCIÓN',     labelCls:'',         nCls:'',         vCls:'red' },
+      { key:'NEG',       label:'CRÍTICO (margen negativo)', sema:'srd', badge:'badge-d', txt:'URGENTE',    labelCls:'bold red', nCls:'red bold', vCls:'red bold' }
+    ];
+    var htmlClasif = '';
+    rowsClasif.forEach(function(r){
+      var b = buckets[r.key];
+      var pctTot = totalCLOKSC ? (b.v/totalCLOKSC*100).toFixed(2)+'%' : '0.00%';
+      htmlClasif += '<tr>'+
+        '<td><span class="sema '+r.sema+'"></span></td>'+
+        '<td class="'+r.labelCls+'">'+r.label+'</td>'+
+        '<td class="right mono'+(r.nCls?' '+r.nCls:'')+'">'+b.n+'</td>'+
+        '<td class="right mono'+(r.vCls?' '+r.vCls:'')+'">'+fN(b.v)+'</td>'+
+        '<td class="right mono">'+pctTot+'</td>'+
+        '<td><span class="badge '+r.badge+'">'+r.txt+'</span></td>'+
+      '</tr>';
+    });
+    var scPctTot = totalCLOKSC ? (ventasSC_CL/totalCLOKSC*100).toFixed(2)+'%' : '0.00%';
+    htmlClasif += '<tr style="background:rgba(90,112,96,0.06);">'+
+      '<td><span class="sema" style="background:var(--text-muted);"></span></td>'+
+      '<td class="muted">SIN COSTO / N/A</td>'+
+      '<td class="right mono muted">'+clSC.length+'</td>'+
+      '<td class="right mono muted">'+fN(ventasSC_CL)+'</td>'+
+      '<td class="right mono muted">'+scPctTot+'</td>'+
+      '<td><span class="badge" style="background:rgba(90,112,96,0.15);color:var(--text-muted);">PUNTO CIEGO</span></td>'+
+    '</tr>';
+    set('tbClasifCL', htmlClasif);
+
+    /* ════════════════════════════════════════════════════════════════
+       TAB CHILE
+    ════════════════════════════════════════════════════════════════ */
+    set('kpClVentas', fC(totalCLventas));
+    var cumplT1 = (D.chile && D.chile.ventas && D.chile.ventas.cumplimiento_t1) || null;
+    set('kpClVentasSub', 'CLP'+(cumplT1!=null? ' · '+pct(cumplT1)+' Ppto T1' : ''));
+
+    set('kpClSkusCosteados', String(clOK.length));
+    set('kpClSkusCosteadosSub', 'de '+(clOK.length+clSC.length)+' · margen prom '+pct(wMargenCL));
+
+    set('kpClZonaCiega', fC(ventasSC_CL));
+    set('kpClZonaCiegaSub', 'CLP · '+clSC.length+' SKUs sin costo ('+pct(ventasSC_CL/totalCLOKSC)+')');
+
+    set('kpClOportunidad', (oppTop10Total>=0?'+':'')+fC(oppTop10Total));
+    set('kpClOportunidadSub', 'CLP YTD · Top 10 de '+oppCL.length+' SKUs bajo piso');
+
+    /* Top 10 oportunidades de precio (tabla) */
+    var htmlOpp = '';
+    oppTop10.forEach(function(x,i){
+      var p = x.p;
+      htmlOpp += '<tr>'+
+        '<td class="muted mono">'+(i+1)+'</td>'+
+        '<td class="'+(i===0?'bold':'')+'">'+disp(p.producto)+' <span class="muted">'+dispFmt(p.formato)+'</span></td>'+
+        '<td class="right mono amber">+'+fN(x.gap)+'</td>'+
+        '<td class="right mono green'+(i===0?' bold':'')+'">+'+fN(x.impacto)+'</td>'+
+      '</tr>';
+    });
+    set('tbOportunidadesCL', htmlOpp);
+    set('totalOportunidadCL', '+'+fN(oppTop10Total));
+
+    /* Top 10 productos estratégicos Chile */
+    var maxVentasCL = top10CL.length ? top10CL[0].ventas : 1;
+    var htmlEstCL = '';
+    top10CL.forEach(function(p,i){
+      var pctPort = p.ventas/totalCLventas;
+      var width = Math.round(p.ventas/maxVentasCL*100);
+      var mColor = p.margen_pct==null ? '' : (p.margen_pct<0 ? 'red' : (p.margen_pct<0.30 ? 'amber' : 'green'));
+      htmlEstCL += '<tr>'+
+        '<td class="muted mono">'+(i+1)+'</td>'+
+        '<td class="'+(i===0?'bold':'')+'">'+disp(p.producto)+' <span class="muted">'+dispFmt(p.formato)+'</span></td>'+
+        '<td class="right mono green'+(i===0?' bold':'')+'">'+fN(p.ventas)+'</td>'+
+        '<td class="right mono">'+pct(pctPort)+'</td>'+
+        '<td class="right mono '+mColor+'">'+(p.margen_pct==null?'n/d':pct(p.margen_pct))+'</td>'+
+        '<td class="right mono">'+fN(p.margen_total)+'</td>'+
+        '<td><div class="prog-wrap"><div class="prog-fill" style="width:'+width+'%;background:var(--green);"></div></div></td>'+
+      '</tr>';
+    });
+    set('tbEstrategicosCL', htmlEstCL);
+
+    /* ════════════════════════════════════════════════════════════════
+       TAB PERÚ
+    ════════════════════════════════════════════════════════════════ */
+    set('kpPeVentas', 'USD '+fK(totalPEatrib));
+    set('kpPeVentasSub', fK(ventasOK_PE)+' costeados · '+fK(ventasSC_PE)+' sin costo');
+
+    set('kpPeMargen', pct(wMargenPE));
+    set('kpPeMargenSub', peOK.length+' de '+peOK.length+' SKUs costeados en EXCELENTE');
+
+    set('kpPeSinCosto', String(peSC.length));
+    set('kpPeSinCostoSub', 'USD '+fK(ventasSC_PE)+' · '+pct(ventasSC_PE/totalPEatrib)+' de ventas Perú');
+
+    var criticosPE = peOK.filter(function(p){ return p.margen_pct!=null && p.margen_pct<0.20; }).length;
+    set('kpPeCriticos', String(criticosPE));
+    set('kpPeCriticosSub', criticosPE===0 ? 'Perú no tiene SKUs en zona de riesgo' : criticosPE+' SKU(s) bajo 20% margen');
+
+    var liderPE = peTop10[0];
+    set('alertConcentracionTitlePE', '⚠ Concentración '+liderPE.nombre);
+    set('alertConcentracionBodyPE',
+      liderPE.nombre+' representa el <strong>'+pct(liderPE.ventas/ventasOK_PE)+'</strong> de las ventas atribuibles de Perú (USD '+fUSD(liderPE.ventas)+
+      '). Riesgo de concentración alto — cualquier problema comercial, regulatorio o de supply en este producto afecta más de la mitad del negocio peruano.');
+
+    var htmlEstPE = '';
+    peTop10.forEach(function(g,i){
+      var pctPais = g.ventas/ventasOK_PE;
+      htmlEstPE += '<tr>'+
+        '<td class="muted mono">'+(i+1)+'</td>'+
+        '<td class="'+(i===0?'bold amber':'')+'">'+g.nombre+'</td>'+
+        '<td class="right mono green'+(i===0?' bold':'')+'">'+fUSD(g.ventas)+'</td>'+
+        '<td class="right mono'+(i===0?' amber bold':'')+'">'+pct(pctPais)+'</td>'+
+        '<td class="right mono green">'+(g.margen_pct==null?'n/d':pct(g.margen_pct))+'</td>'+
+      '</tr>';
+    });
+    set('tbEstrategicosPE', htmlEstPE);
+
+    var margenes = peOK.filter(function(p){ return p.margen_pct!=null; }).map(function(p){ return p.margen_pct; });
+    var minM = Math.min.apply(null, margenes), maxM = Math.max.apply(null, margenes);
+    var maxRow = peOK.reduce(function(a,p){ return (a==null || p.margen_pct>a.margen_pct) ? p : a; }, null);
+    set('alertSinRiesgoTitlePE', '✓ Perú: portafolio sin zona de riesgo');
+    var gapUSD = (D.peru && D.peru.ventas && D.peru.ventas.ytd_5m) ? (D.peru.ventas.ytd_5m - totalPEatrib) : null;
+    set('alertSinRiesgoBodyPE',
+      'Los '+peAggArr.length+' productos con costo clasifican EXCELENTE. Margen mínimo '+pct(minM)+', máximo '+pct(maxM)+' ('+disp(maxRow.producto)+'). El trabajo pendiente es mapear los '+peSC.length+' SKUs sin costo ('+
+      scPENames.slice(0,5).map(function(x){return x.nombre;}).join(', ')+') que representan USD '+fK(ventasSC_PE)+'.'+
+      (gapUSD && gapUSD>1000 ? ' Nota: USD '+fK(gapUSD)+' adicionales en ventas Perú ('+pct(gapUSD/D.peru.ventas.ytd_5m)+' del total) corresponden a transacciones que mezclan 2+ productos y no son atribuibles a un SKU único — excluidas de este análisis.' : ''));
+
+    /* ════════════════════════════════════════════════════════════════
+       TAB ALERTAS & DECISIONES
+    ════════════════════════════════════════════════════════════════ */
+    function rowSeverity(m){
+      if(m<=-0.20) return { sema:'srd', badge:'badge-d', txt:'Precio < costo', bg:'rgba(192,57,43,0.08)' };
+      if(m<0)      return { sema:'sr',  badge:'badge-r', txt:'INVIABLE',        bg:'rgba(231,76,60,0.05)' };
+      if(m<0.10)   return { sema:'sr',  badge:'badge-r', txt:'CRÍTICO',         bg:'' };
+      if(m<0.20)   return { sema:'sa',  badge:'badge-a', txt:'EN ALERTA',       bg:'' };
+      if(m<0.30)   return { sema:'sa',  badge:'badge-a', txt:'SANO',            bg:'' };
+      return            { sema:'sg',  badge:'badge-g', txt:'EXCELENTE',       bg:'' };
+    }
+    function mejorHermano(producto, exclFormato){
+      var sibs = clOK.filter(function(p){ return p.producto===producto && p.formato!==exclFormato && p.margen_pct!=null; });
+      if(!sibs.length) return null;
+      return sibs.reduce(function(a,p){ return (a==null||p.margen_pct>a.margen_pct)?p:a; }, null);
+    }
+    var htmlRank = '';
+    ranking.forEach(function(p,i){
+      var sev = rowSeverity(p.margen_pct);
+      var sib = mejorHermano(p.producto, p.formato);
+      var accion = p.margen_pct<0
+        ? ('Subir a ≥'+fN(p.costo_unidad)+' (piso '+fN(p.piso)+')'+(sib?' o pasar a '+dispFmt(sib.formato)+' ('+pct(sib.margen_pct)+')':' o descontinuar'))
+        : 'Cerca del límite · monitorear';
+      htmlRank += '<tr style="background:'+sev.bg+';">'+
+        '<td class="muted mono">'+(i+1)+'</td>'+
+        '<td><span class="sema '+sev.sema+'"></span></td>'+
+        '<td class="'+(p.margen_pct<0?'red':'')+(i<2?' bold':'')+'">'+disp(p.producto)+' <span class="muted">'+dispFmt(p.formato)+'</span></td>'+
+        '<td class="right mono">'+fN(p.precio_uni_prom)+'</td>'+
+        '<td class="right mono">'+fN(p.costo_unidad)+'</td>'+
+        '<td class="right mono red'+(i<2?' bold':'')+'">'+pct(p.margen_pct)+'</td>'+
+        '<td><span class="badge '+sev.badge+'">'+sev.txt+'</span></td>'+
+        '<td class="muted" style="font-size:10px;">'+accion+'</td>'+
+      '</tr>';
+    });
+    set('tbRankingMargenCL', htmlRank);
+    set('footnoteRankingCL', 'Moneda: CLP.  '+ranking.length+' SKUs con margen negativo mostrados (peor primero).  Todos corresponden a Chile.  Perú: '+criticosPE+' SKUs críticos.'+(nNullMargen?'  Adicional: '+nNullMargen+' SKU(s) con ventas registradas en 0 y costo >0 (no graficables, igualmente destruyen margen).':''));
+
+    /* Decisiones recomendadas */
+    var peor2 = ranking.slice(0,2);
+    var redHtml = peor2.map(function(p){
+      var sib = mejorHermano(p.producto, p.formato);
+      return '<strong style="color:var(--text);">'+disp(p.producto)+' ('+dispFmt(p.formato)+'):</strong> vende a $'+fN(p.precio_uni_prom)+' con costo $'+fN(p.costo_unidad)+' (margen '+pct(p.margen_pct)+'). Precio piso oficial: $'+fN(p.piso)+'.'+
+        (sib ? ' Redirigir a formato '+dispFmt(sib.formato)+' (margen '+pct(sib.margen_pct)+') si el cliente no acepta el ajuste.' : '');
+    }).join('<br><br>');
+    set('decisionRedBody', redHtml+'<br><br>Suspender venta a precios actuales en ambos formatos — cada transacción destruye caja.');
+
+    var lvl2 = clOK.filter(function(p){ return p.margen_pct!=null && p.margen_pct>=0 && p.margen_pct<0.10; }).sort(function(a,b){ return b.ventas-a.ventas; });
+    var lvl2Exposure = sum(lvl2, function(p){ return p.ventas; });
+    var lvl2Top2 = lvl2.slice(0,2);
+    var lvl2Resto = lvl2.slice(2);
+    var amberHtml = '<strong style="color:var(--text);">'+lvl2.length+' SKUs en zona 0–10% margen · CLP '+fC(lvl2Exposure)+' de exposición:</strong> '+
+      lvl2Top2.map(function(p){ return disp(p.producto)+' '+dispFmt(p.formato)+' ('+pct(p.margen_pct)+', CLP '+fC(p.ventas)+')'; }).join(' y ')+
+      ' concentran '+pct((sum(lvl2Top2,function(p){return p.ventas;}))/lvl2Exposure)+' de esa exposición — prácticamente sin contribución real.';
+    if(lvl2Resto.length){
+      amberHtml += '<br><br>Resto en la misma franja: '+lvl2Resto.map(function(p){ return disp(p.producto)+' '+dispFmt(p.formato)+' ('+pct(p.margen_pct)+')'; }).join(', ')+'. Mismo patrón — revisar precios como línea, no como casos aislados.';
+    }
+    set('decisionAmberBody', amberHtml);
+
+    var ranKeys = {}; ranking.forEach(function(p){ ranKeys[p.producto+'|'+p.formato]=true; });
+    var byProd = {};
+    clOK.forEach(function(p){ if(p.margen_pct==null) return; (byProd[p.producto]=byProd[p.producto]||[]).push(p); });
+    var outliers = [];
+    Object.keys(byProd).forEach(function(prod){
+      var rows = byProd[prod];
+      if(rows.length<2) return;
+      var worst = rows.reduce(function(a,p){ return (a==null||p.margen_pct<a.margen_pct)?p:a; }, null);
+      var best  = rows.reduce(function(a,p){ return (a==null||p.margen_pct>a.margen_pct)?p:a; }, null);
+      var gap = best.margen_pct - worst.margen_pct;
+      if(gap>0.30 && !ranKeys[worst.producto+'|'+worst.formato]){
+        outliers.push({ prod:prod, gap:gap, worst:worst, best:best });
+      }
+    });
+    outliers.sort(function(a,b){ return b.gap-a.gap; });
+    var outTop2 = outliers.slice(0,2);
+    var yellowHtml = outTop2.map(function(o){
+      return '<strong style="color:var(--text);">'+disp(o.prod)+' '+dispFmt(o.worst.formato)+':</strong> margen '+pct(o.worst.margen_pct)+' vs '+pct(o.best.margen_pct)+' en formato '+dispFmt(o.best.formato)+
+        '. Brecha de '+(o.gap*100).toFixed(0)+'pp no es normal — revisar si el costo del '+dispFmt(o.worst.formato)+' está correctamente registrado antes de seguir vendiendo.';
+    }).join('<br><br>');
+    set('decisionYellowBody', yellowHtml || 'Sin outliers adicionales de variación de margen entre formatos del mismo producto por encima del umbral de 30pp.');
+
+    var darkHtml = '<strong style="color:var(--text);">Chile · '+clSC.length+' SKUs sin costo · CLP '+fC(ventasSC_CL)+' ('+pct(ventasSC_CL/totalCLOKSC)+' de ventas clasificables):</strong> '+
+      scCLNames.slice(0,5).map(function(x){ return x.nombre; }).join(', ')+(scCLNames.length>5?' y otros '+(scCLNames.length-5)+'.':'.')+
+      ' Sin este dato el sistema no puede calcular rentabilidad real de ese segmento.'+
+      '<br><br><strong style="color:var(--text);">Perú · '+peSC.length+' SKUs sin costo · USD '+fK(ventasSC_PE)+' ('+pct(ventasSC_PE/totalPEatrib)+' de ventas atribuibles):</strong> '+
+      scPENames.map(function(x){ return x.nombre; }).join(', ')+'.';
+    set('decisionDarkBody', darkHtml);
+
+    /* ════════════════════════════════════════════════════════════════
+       HEADER / FOOTER
+    ════════════════════════════════════════════════════════════════ */
+    var cHV = D.meta && D.meta.cortes ? D.meta.cortes.chile_ventas : '';
+    var pHV = D.meta && D.meta.cortes ? D.meta.cortes.peru_ventas : '';
+    setT('prodCorteDate', 'Chile '+cHV+' · Perú '+pHV);
+    setT('prodFooterCopy', 'avboard · Panel Productos · corte Chile '+cHV+' · Perú '+pHV+' · solo uso interno');
+
+    /* ════════════════════════════════════════════════════════════════
+       CHARTS
+    ════════════════════════════════════════════════════════════════ */
+    /* CHART 1 · Donut clasificación (Tab Resumen) — 6 cortes, CRÍTICO+INVIABLE fusionados */
+    var critInviableV = buckets.CRITICO.v + buckets.INVIABLE.v;
+    var critInviableN = buckets.CRITICO.n + buckets.INVIABLE.n;
+    new Chart(document.getElementById('cClasificacion'), {
+      type: 'doughnut',
+      data: {
+        labels: [
+          'EXCELENTE ('+buckets.EXCELENTE.n+' SKUs)',
+          'SANO ('+buckets.SANO.n+')',
+          'EN ALERTA ('+buckets.ALERTA.n+')',
+          'CRÍTICO/INVIABLE ('+critInviableN+')',
+          'NEGATIVO ('+buckets.NEG.n+')',
+          'SIN COSTO ('+clSC.length+')'
+        ],
+        datasets: [{
+          data: [buckets.EXCELENTE.v, buckets.SANO.v, buckets.ALERTA.v, critInviableV, buckets.NEG.v, ventasSC_CL],
+          backgroundColor: [G, '#3a8a5a', A, '#E67E22', R, '#3a5a42'],
+          borderColor: '#080e09',
+          borderWidth: 3,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '60%',
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10, color: TXT, font: { size: 10 } } },
+          tooltip: { callbacks: { label: ctx => ' CLP ' + ctx.parsed.toLocaleString('es-CL') + '  (' + ctx.label + ')' } }
+        }
+      }
+    });
+
+    /* CHART 2 · Horizontal bar Top 10 Chile (Tab Chile) */
+    var top10Asc = top10CL.slice().reverse(); // mayor arriba en barra horizontal
+    new Chart(document.getElementById('cChileTop10'), {
+      type: 'bar',
+      data: {
+        labels: top10Asc.map(function(p){ return disp(p.producto)+' '+dispFmt(p.formato); }),
+        datasets: [{
+          label: 'Ventas YTD (CLP)',
+          data: top10Asc.map(function(p){ return p.ventas; }),
+          backgroundColor: top10Asc.map(function(p){
+            if(p.margen_pct==null) return TXT;
+            return p.margen_pct<0.20 ? A : (p.margen_pct<0.30 ? GD : G);
+          }),
+          borderRadius: 3
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => ' CLP ' + ctx.parsed.x.toLocaleString('es-CL') } }
+        },
+        scales: {
+          x: { ...axisOpts, ticks: { color: TXT, callback: v => (v/1000000).toFixed(1)+'M' } },
+          y: { grid: { display: false }, border: { color: BDR }, ticks: { color: TXT, font: { size: 10 } } }
+        }
+      }
+    });
+
+    /* CHART 3 · Donut composición Perú (Tab Perú) */
+    var peTop7 = peAggArr.slice(0,7);
+    var peOtrosV = sum(peAggArr.slice(7), function(g){ return g.ventas; });
+    var peLabels = peTop7.map(function(g){ return g.nombre+' ('+pct(g.ventas/totalPEatrib)+')'; });
+    var peData   = peTop7.map(function(g){ return g.ventas; });
+    if(peOtrosV>0){ peLabels.push('Otros costeados ('+pct(peOtrosV/totalPEatrib)+')'); peData.push(peOtrosV); }
+    peLabels.push('SIN COSTO ('+pct(ventasSC_PE/totalPEatrib)+')'); peData.push(ventasSC_PE);
+    var peColors = [A, G, G, GD, G, GD, G, '#3a7060', '#3a5a42'].slice(0, peData.length-1);
+    while(peColors.length < peData.length-1) peColors.push(G);
+    peColors.push('#3a5a42');
+    new Chart(document.getElementById('cPeruComposicion'), {
+      type: 'doughnut',
+      data: {
+        labels: peLabels,
+        datasets: [{
+          data: peData,
+          backgroundColor: peColors,
+          borderColor: '#080e09',
+          borderWidth: 3,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '55%',
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 10, padding: 8, color: TXT, font: { size: 10 } } },
+          tooltip: { callbacks: { label: ctx => ' USD ' + ctx.parsed.toLocaleString('en-US', { minimumFractionDigits: 0 }) } }
+        }
+      }
+    });
+
+  }catch(e){ console.warn('[Productos] populate error:', e); }
+})();
 </script>
 
 </body>

@@ -500,7 +500,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   </div>
 </div>
 
-<script src="avboard_data.js?v=20260623"></script>
+<script src="avboard_data.js?v=20260625"></script>
 <script>
 /* ── AVBOARD GUARD ─────────────────────────────────────────────────────── */
 (function initFromAVBOARD(){
@@ -625,6 +625,11 @@ function cerrarSesion() {
   try {
     var D = AVBOARD, cv = D.chile.ventas, cc = D.chile.cxc;
 
+    var mesesFullCL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    var nRealCL = cv.mensual_real.filter(function(v){return v>0;}).length || 5;
+    var curMesNmCL = mesesFullCL[nRealCL-1];
+    var prevMesNmCL = mesesFullCL[Math.max(nRealCL-2,0)];
+
     function set(id, html) { var el = document.getElementById(id); if (el) el.innerHTML = html; }
     function M(n)   { return (n / 1e6).toFixed(1); }
     function K(n)   { return Math.round(n / 1000); }
@@ -638,16 +643,16 @@ function cerrarSesion() {
     var sHC = cHC.slice(0, 5);              // '08/05'
 
     // ── Header ───────────────────────────────────────────────────
-    set('av-cl-hsub', 'Jefe Comercial · Ene–May 2026 · al ' + cHV);
+    set('av-cl-hsub', 'Jefe Comercial · Ene–' + curMesNmCL + ' 2026 · al ' + cHV);
     set('av-cl-hdr-corte',
       '<div>Corte ventas <b>' + cHV + '</b> · CxC <b>' + cHC + '</b></div>' +
       '<div style="font-size:8px;margin-top:1px;">TC = ' + D.tc() + ' CLP/USD · Ppto anual CLP 861,321,350</div>');
 
     // ── KPI 1: YTD Chile 5m ──────────────────────────────────────
-    set('av-cl-kpi-ytd-lbl',   'YTD Chile 5m');
+    set('av-cl-kpi-ytd-lbl',   'YTD Chile ' + nRealCL + 'm');
     set('av-cl-kpi-ytd-val',   M(cv.ytd_5m) + 'M');
     set('av-cl-kpi-ytd-sub',   'CLP al ' + cHV);
-    set('av-cl-kpi-ytd-badge', pct(cv.cumplimiento_5m) + ' ppto Ene-May');
+    set('av-cl-kpi-ytd-badge', pct(cv.cumplimiento_5m) + ' ppto Ene-' + curMesNmCL);
 
     // ── KPI 2: YTD USD ───────────────────────────────────────────
     var chUsd = Math.round(cv.ytd_5m / D.tc());
@@ -655,13 +660,14 @@ function cerrarSesion() {
     set('av-cl-kpi-usd-sub',   'CLP ' + M(cv.ytd_5m) + 'M / TC ' + D.tc());
     set('av-cl-kpi-usd-badge', 'T1: ' + pct(cv.cumplimiento_t1) + ' ✅');
 
-    // ── KPI 3: Mayo Parcial ───────────────────────────────────────
-    var mayPpto = cv.mensual_ppto[4];
-    set('av-cl-kpi-abr-lbl',   'Mayo Parcial');
+    // ── KPI 3: Mes Parcial ───────────────────────────────────────
+    var mayPpto = cv.mensual_ppto[nRealCL-1];
+    set('av-cl-kpi-abr-lbl',   curMesNmCL + ' Parcial');
     set('av-cl-kpi-abr-val',   M(cv.mayo_parcial) + 'M');
     set('av-cl-kpi-abr-sub',   'CLP al ' + sHV + ' · ' + pct(cv.mayo_parcial / mayPpto) + ' ppto');
-    var aprC = cv.rtc_mensual_real.caroca[3], aprL = cv.rtc_mensual_real.laratro[3];
-    set('av-cl-kpi-abr-badge', 'Abr: Caroca ' + M(aprC) + 'M · Laratro ' + M(aprL) + 'M');
+    var prevIdxCL = Math.max(nRealCL-2,0);
+    var aprC = cv.rtc_mensual_real.caroca[prevIdxCL], aprL = cv.rtc_mensual_real.laratro[prevIdxCL];
+    set('av-cl-kpi-abr-badge', prevMesNmCL + ': Caroca ' + M(aprC) + 'M · Laratro ' + M(aprL) + 'M');
 
     // ── KPI 4: MN Chile ──────────────────────────────────────────
     set('av-cl-kpi-mn-val', pct(cv.mn_real));
@@ -674,16 +680,16 @@ function cerrarSesion() {
     // ── Semáforo tag ─────────────────────────────────────────────
     set('av-cl-sema-tag', 'CORTE ' + sHV + ' · MN REAL');
 
-    // ── Barras mensuales (5 meses + YTD 5m) ─────────────────────
-    var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'];
+    // ── Barras mensuales (N meses + YTD Nm) ─────────────────────
+    var meses = mesesFullCL.slice(0, nRealCL);
     var barsHTML = '';
-    cv.mensual_real.slice(0, 5).forEach(function(real, i) {
+    cv.mensual_real.slice(0, nRealCL).forEach(function(real, i) {
       var ppto = cv.mensual_ppto[i];
       var ratio = real / ppto;
       var width = Math.min(ratio * 100, 100).toFixed(1);
       var pDisplay = (ratio * 100).toFixed(1) + '%';
       var color = barColor(real, ppto);
-      var lbl = meses[i] + (i === 4 ? ' (parc.)' : '');
+      var lbl = meses[i] + (i === nRealCL-1 ? ' (parc.)' : '');
       barsHTML += '<div class="mes-row">' +
         '<div class="mes-lbl">' + lbl + '</div>' +
         '<div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:' + width + '%;background:' + color + ';"></div></div>' +
@@ -693,28 +699,28 @@ function cerrarSesion() {
     var ytd5Pct = (cv.ytd_5m / cv.ppto_5m * 100).toFixed(1);
     var ytdColor = cv.ytd_5m >= cv.ppto_5m ? 'var(--green)' : 'var(--amber)';
     barsHTML += '<div class="mes-row">' +
-      '<div class="mes-lbl" style="font-weight:700;">YTD 5m</div>' +
+      '<div class="mes-lbl" style="font-weight:700;">YTD ' + nRealCL + 'm</div>' +
       '<div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:100%;background:' + ytdColor + ';"></div></div>' +
       '<div class="mes-pct" style="color:' + ytdColor + ';font-weight:700;">' + ytd5Pct + '%</div>' +
       '</div>';
     set('av-cl-mes-container', barsHTML);
 
-    // ── Margen strip (5 meses) ────────────────────────────────────
+    // ── Margen strip (N meses) ────────────────────────────────────
     var stripEl = document.getElementById('av-cl-margen-strip');
-    if (stripEl) stripEl.style.gridTemplateColumns = 'repeat(5,1fr)';
+    if (stripEl) stripEl.style.gridTemplateColumns = 'repeat(' + nRealCL + ',1fr)';
     var stripHTML = '';
-    cv.mensual_real.slice(0, 4).forEach(function(v, i) {
+    cv.mensual_real.slice(0, nRealCL-1).forEach(function(v, i) {
       var c = barColor(v, cv.mensual_ppto[i]);
       stripHTML += '<div class="mg-item"><div class="mg-val" style="color:' + c + ';">' + M(v) + 'M</div><div class="mg-lbl">' + meses[i] + '</div></div>';
     });
     var mayC = barColor(cv.mayo_parcial, mayPpto);
-    stripHTML += '<div class="mg-item"><div class="mg-val" style="color:' + mayC + ';">' + M(cv.mayo_parcial) + 'M</div><div class="mg-lbl">Mayo *</div></div>';
+    stripHTML += '<div class="mg-item"><div class="mg-val" style="color:' + mayC + ';">' + M(cv.mayo_parcial) + 'M</div><div class="mg-lbl">' + curMesNmCL + ' *</div></div>';
     set('av-cl-margen-strip', stripHTML);
 
     // ── Acumulado text ────────────────────────────────────────────
     set('av-cl-mes-acum',
-      'Ene-May acum: CLP ' + M(cv.ytd_5m) + 'M · ' + pct(cv.cumplimiento_5m) + ' ppto ' +
-      '· May parcial: CLP ' + M(cv.mayo_parcial) + 'M · TC ' + D.tc() + ' CLP/USD');
+      'Ene-' + curMesNmCL + ' acum: CLP ' + M(cv.ytd_5m) + 'M · ' + pct(cv.cumplimiento_5m) + ' ppto ' +
+      '· ' + curMesNmCL + ' parcial: CLP ' + M(cv.mayo_parcial) + 'M · TC ' + D.tc() + ' CLP/USD');
 
     // ── CxC sección ───────────────────────────────────────────────
     set('av-cl-cxc-sec',  'corte ' + cHC + ' · 2 entidades · CLP ' + M(cc.total) + 'M total');
@@ -726,26 +732,27 @@ function cerrarSesion() {
       ' · CxC ' + sHC + '/' + cHC.slice(6) + ' · TC ' + D.tc() + ' CLP/USD · Ppto anual CLP 861,321,350');
 
     // ── Actualizar charts ─────────────────────────────────────────
-    // cStack: mensual apilado por RTC (4 meses con datos disponibles)
+    // cStack: mensual apilado por RTC (meses completos, excluye mes parcial)
     var cStack = Chart.getChart(document.getElementById('cStack'));
     if (cStack && cv.rtc_mensual_real) {
       var rm = cv.rtc_mensual_real;
       var toK = function(v) { return v ? Math.round(v / 1000) : 0; };
-      cStack.data.labels = ['Enero', 'Febrero', 'Marzo', 'Abril'];
-      cStack.data.datasets[0].data = rm.caroca.slice(0,4).map(toK);
-      cStack.data.datasets[1].data = rm.laratro.slice(0,4).map(toK);
-      cStack.data.datasets[2].data = rm.encina.slice(0,4).map(toK);
-      cStack.data.datasets[3].data = rm.velasquez.slice(0,4).map(toK);
-      cStack.data.datasets[4].data = rm.veverka.slice(0,4).map(toK);
+      var nStackCL = Math.max(nRealCL-1, 0);
+      cStack.data.labels = meses.slice(0, nStackCL);
+      cStack.data.datasets[0].data = rm.caroca.slice(0,nStackCL).map(toK);
+      cStack.data.datasets[1].data = rm.laratro.slice(0,nStackCL).map(toK);
+      cStack.data.datasets[2].data = rm.encina.slice(0,nStackCL).map(toK);
+      cStack.data.datasets[3].data = rm.velasquez.slice(0,nStackCL).map(toK);
+      cStack.data.datasets[4].data = rm.veverka.slice(0,nStackCL).map(toK);
       cStack.update();
     }
 
-    // cCurva: acumulada real 5 meses
+    // cCurva: acumulada real N meses
     var cCurva = Chart.getChart(document.getElementById('cCurva'));
     if (cCurva) {
       var realAcum = [null,null,null,null,null,null,null,null,null,null,null,null];
       var sum = 0;
-      cv.mensual_real.slice(0, 5).forEach(function(v, i) {
+      cv.mensual_real.slice(0, nRealCL).forEach(function(v, i) {
         sum += (v || 0);
         realAcum[i] = Math.round(sum / 1000);
       });

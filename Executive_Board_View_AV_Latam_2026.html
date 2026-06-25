@@ -397,54 +397,54 @@
   <div class="grid-2" style="margin-bottom:16px;">
     <!-- Tabla RTC Chile -->
     <div class="panel">
-      <div class="panel-title">RTC CHILE · YTD VENTA <span class="tag">CLP · corte 11/05</span></div>
+      <div class="panel-title">RTC CHILE · YTD VENTA <span class="tag" id="eb-cl-rtc-tag">CLP · corte 11/05</span></div>
       <table class="rtc-table">
         <thead>
           <tr>
             <th>RTC</th>
             <th class="right">YTD CLP</th>
-            <th class="right">vs Ppto</th>
+            <th class="right">vs Ppto T1</th>
             <th class="right">Margen</th>
             <th class="right">Estado</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr data-rtc="caroca">
             <td><span class="sema sema-green"></span><span class="rtc-name">J. Caroca</span></td>
             <td class="rtc-val">63.3M</td>
             <td><div class="rtc-pct" style="color:var(--green);">191.8%</div><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
             <td class="rtc-pct" style="color:var(--green);">39.2%</td>
             <td style="text-align:right;font-size:14px;">✅</td>
           </tr>
-          <tr>
+          <tr data-rtc="laratro">
             <td><span class="sema sema-amber"></span><span class="rtc-name">P. Laratro</span></td>
             <td class="rtc-val">54.6M</td>
             <td><div class="rtc-pct" style="color:var(--amber);">100.9%</div><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--amber);"></div></div></td>
             <td class="rtc-pct" style="color:var(--amber);">19.6%</td>
             <td style="text-align:right;font-size:14px;">⚠️</td>
           </tr>
-          <tr>
+          <tr data-rtc="encina">
             <td><span class="sema sema-amber"></span><span class="rtc-name">R. Encina</span></td>
             <td class="rtc-val">28.4M</td>
             <td><div class="rtc-pct" style="color:var(--amber);">97.2%</div><div class="prog-wrap"><div class="prog-fill" style="width:97.2%;background:var(--amber);"></div></div></td>
             <td class="rtc-pct" style="color:var(--amber);">21.9%</td>
             <td style="text-align:right;font-size:14px;">⚠️</td>
           </tr>
-          <tr>
+          <tr data-rtc="velasquez">
             <td><span class="sema sema-red"></span><span class="rtc-name">F. Velásquez</span></td>
             <td class="rtc-val">31.5M</td>
             <td><div class="rtc-pct" style="color:var(--amber);">95.8%</div><div class="prog-wrap"><div class="prog-fill" style="width:95.8%;background:var(--red);"></div></div></td>
             <td class="rtc-pct" style="color:var(--red);">2.8%</td>
             <td style="text-align:right;font-size:14px;">🔴</td>
           </tr>
-          <tr>
+          <tr data-rtc="veverka">
             <td><span class="sema sema-red"></span><span class="rtc-name">I. Veverka</span></td>
             <td class="rtc-val">8.8M</td>
             <td><div class="rtc-pct" style="color:var(--red);">48.9%</div><div class="prog-wrap"><div class="prog-fill" style="width:48.9%;background:var(--red-dark);"></div></div></td>
             <td class="rtc-pct" style="color:var(--red);">–28.7%</td>
             <td style="text-align:right;font-size:14px;">❌</td>
           </tr>
-          <tr>
+          <tr data-rtc="munoz">
             <td><span class="sema sema-green"></span><span class="rtc-name">V. Muñoz</span></td>
             <td class="rtc-val">4.2M</td>
             <td><div class="rtc-pct" style="color:var(--green);">117.7%</div><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
@@ -453,10 +453,10 @@
           </tr>
         </tbody>
       </table>
-      <!-- Abril parcial -->
-      <div style="margin-top:12px;padding:10px 12px;background:var(--surface3);border-radius:6px;font-size:11px;">
-        <span style="color:var(--text-muted);text-transform:uppercase;font-size:9px;letter-spacing:1px;">Corte 11/05 · Abril definitivo + Mayo parcial</span>
-        Abril completo <span style="color:var(--green);font-family:'DM Mono',monospace;">130.4M CLP</span> · Mayo al 11/05 <span style="color:var(--green);font-family:'DM Mono',monospace;">25.3M</span> · YTD 5m <span style="color:var(--green);font-family:'DM Mono',monospace;">331.9M CLP</span>
+      <!-- Mes parcial -->
+      <div style="margin-top:12px;padding:10px 12px;background:var(--surface3);border-radius:6px;font-size:11px;" id="eb-cl-mesbox">
+        <span style="color:var(--text-muted);text-transform:uppercase;font-size:9px;letter-spacing:1px;" id="eb-cl-mesbox-tag">Corte 11/05 · Abril definitivo + Mayo parcial</span>
+        <span id="eb-cl-mesbox-body">Abril completo <span style="color:var(--green);font-family:'DM Mono',monospace;">130.4M CLP</span> · Mayo al 11/05 <span style="color:var(--green);font-family:'DM Mono',monospace;">25.3M</span> · YTD 5m <span style="color:var(--green);font-family:'DM Mono',monospace;">331.9M CLP</span></span>
       </div>
     </div>
 
@@ -555,47 +555,47 @@
 
   <div class="grid-2" style="margin-bottom:16px;">
     <div class="panel">
-      <div class="panel-title">VENDEDORES PERÚ · YTD 5m <span class="tag">USD · incl. Mayo parcial al 11/05</span></div>
+      <div class="panel-title">VENDEDORES PERÚ · YTD 5m <span class="tag" id="eb-pe-rtc-tag">USD · incl. Mayo parcial al 11/05</span></div>
       <table class="rtc-table">
         <thead>
           <tr>
             <th>Vendedor</th>
             <th class="right">YTD USD</th>
             <th class="right">vs Ppto</th>
-            <th class="right">Mayo</th>
+            <th class="right" id="eb-pe-th-mes">Mayo</th>
             <th class="right">Estado</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr data-vendor="infante">
             <td><span class="sema sema-green"></span><span class="rtc-name">O. Infante</span></td>
             <td class="rtc-val">121,072</td>
             <td><div class="rtc-pct" style="color:var(--green);">96.1%</div><div class="prog-wrap"><div class="prog-fill" style="width:96.1%;background:var(--green);"></div></div></td>
             <td class="rtc-val" style="color:var(--green);">13,296</td>
             <td style="text-align:right;">✅</td>
           </tr>
-          <tr>
+          <tr data-vendor="aguirre">
             <td><span class="sema sema-green"></span><span class="rtc-name">L. Aguirre</span></td>
             <td class="rtc-val">97,107</td>
             <td><div class="rtc-pct" style="color:var(--green);">–</div><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
             <td class="rtc-val" style="color:var(--green);">48,495</td>
             <td style="text-align:right;">✅</td>
           </tr>
-          <tr>
+          <tr data-vendor="atalaya">
             <td><span class="sema sema-green"></span><span class="rtc-name">O. Atalaya</span></td>
             <td class="rtc-val">64,589</td>
             <td><div class="rtc-pct" style="color:var(--green);">120.7%</div><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
             <td class="rtc-val" style="color:var(--text-muted);">–</td>
             <td style="text-align:right;">✅</td>
           </tr>
-          <tr>
+          <tr data-vendor="navarro">
             <td><span class="sema sema-amber"></span><span class="rtc-name">N. Navarro</span></td>
             <td class="rtc-val">30,940</td>
             <td><div class="rtc-pct" style="color:var(--amber);">–</div><div class="prog-wrap"><div class="prog-fill" style="width:60%;background:var(--amber);"></div></div></td>
             <td class="rtc-val" style="color:var(--text-muted);">–</td>
             <td style="text-align:right;">⚠️</td>
           </tr>
-          <tr>
+          <tr data-vendor="gonzales">
             <td><span class="sema sema-red"></span><span class="rtc-name">A. Gonzales</span></td>
             <td class="rtc-val">696</td>
             <td><div class="rtc-pct" style="color:var(--red);">17.4%</div><div class="prog-wrap"><div class="prog-fill" style="width:17.4%;background:var(--red);"></div></div></td>
@@ -604,7 +604,7 @@
           </tr>
         </tbody>
       </table>
-      <div style="margin-top:12px;padding:10px 12px;background:var(--surface3);border-radius:6px;font-size:11px;color:var(--text-dim);">
+      <div style="margin-top:12px;padding:10px 12px;background:var(--surface3);border-radius:6px;font-size:11px;color:var(--text-dim);" id="eb-pe-mesbox">
         🚀 <strong style="color:var(--green);">L. Aguirre</strong> lidera Mayo con USD 48.5K · Mayo total al 11/05: USD 65.0K · YTD Perú 5m: USD 360,500
       </div>
     </div>
@@ -696,7 +696,7 @@
   <div class="grid-2" style="margin-bottom:24px;">
     <!-- CxC Chile -->
     <div class="panel">
-      <div class="panel-title">CxC CHILE <span class="tag">CLP 162.2M total · 17/05/2026 · 2 entidades</span></div>
+      <div class="panel-title">CxC CHILE <span class="tag" id="eb-cxc-cl-tag">CLP 162.2M total · 17/05/2026 · 2 entidades</span></div>
       <div class="grid-2" style="gap:12px;margin-bottom:16px;">
         <div style="background:var(--surface2);border-radius:8px;padding:14px;text-align:center;">
           <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Total Cartera</div>
@@ -717,23 +717,23 @@
         <div style="display:flex;flex-direction:column;gap:5px;">
           <div style="display:flex;align-items:center;gap:8px;">
             <div style="width:60px;font-size:11px;color:var(--green);">0–30d</div>
-            <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:73.1%;background:var(--green);"></div></div></div>
-            <div style="font-family:'DM Mono',monospace;font-size:10px;width:60px;text-align:right;">98.5M · 73.1%</div>
+            <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" id="eb-cxc-cl-bar-030" style="width:73.1%;background:var(--green);"></div></div></div>
+            <div style="font-family:'DM Mono',monospace;font-size:10px;width:60px;text-align:right;" id="eb-cxc-cl-t030">98.5M · 73.1%</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
             <div style="width:60px;font-size:11px;color:var(--amber);">31–60d</div>
-            <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:9.6%;background:var(--amber);"></div></div></div>
-            <div style="font-family:'DM Mono',monospace;font-size:10px;width:60px;text-align:right;">13.0M · 9.6%</div>
+            <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" id="eb-cxc-cl-bar-3160" style="width:9.6%;background:var(--amber);"></div></div></div>
+            <div style="font-family:'DM Mono',monospace;font-size:10px;width:60px;text-align:right;" id="eb-cxc-cl-t3160">13.0M · 9.6%</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
             <div style="width:60px;font-size:11px;color:#E67E22;">61–90d</div>
-            <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:5.5%;background:#E67E22;"></div></div></div>
-            <div style="font-family:'DM Mono',monospace;font-size:10px;width:60px;text-align:right;">7.4M · 5.5%</div>
+            <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" id="eb-cxc-cl-bar-6190" style="width:5.5%;background:#E67E22;"></div></div></div>
+            <div style="font-family:'DM Mono',monospace;font-size:10px;width:60px;text-align:right;" id="eb-cxc-cl-t6190">7.4M · 5.5%</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
             <div style="width:60px;font-size:11px;color:var(--red);">+90d</div>
-            <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:11.8%;background:var(--red);"></div></div></div>
-            <div style="font-family:'DM Mono',monospace;font-size:10px;width:60px;text-align:right;">15.9M · 11.8%</div>
+            <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" id="eb-cxc-cl-bar-90" style="width:11.8%;background:var(--red);"></div></div></div>
+            <div style="font-family:'DM Mono',monospace;font-size:10px;width:60px;text-align:right;" id="eb-cxc-cl-t90">15.9M · 11.8%</div>
           </div>
         </div>
       </div>
@@ -745,7 +745,7 @@
 
     <!-- CxC Perú -->
     <div class="panel">
-      <div class="panel-title">CxC PERÚ (ACTIVA) <span class="tag">USD 118K sin SUPRA · 10/05/2026</span></div>
+      <div class="panel-title">CxC PERÚ (ACTIVA) <span class="tag" id="eb-cxc-pe-tag">USD 118K sin SUPRA · 10/05/2026</span></div>
       <div class="grid-2" style="gap:12px;margin-bottom:16px;">
         <div style="background:var(--surface2);border-radius:8px;padding:14px;text-align:center;">
           <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Cartera Activa</div>
@@ -763,23 +763,23 @@
       <div style="display:flex;flex-direction:column;gap:6px;">
         <div style="display:flex;align-items:center;gap:8px;">
           <div style="width:90px;font-size:11px;color:var(--green);">No vencida</div>
-          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:67.2%;background:var(--green);"></div></div></div>
-          <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 79,300</div>
+          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" id="eb-cxc-pe-bar-novenc" style="width:67.2%;background:var(--green);"></div></div></div>
+          <div id="eb-cxc-pe-t-novenc" style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 79,300</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <div style="width:90px;font-size:11px;color:var(--amber);">0–30d</div>
-          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:8.9%;background:var(--amber);"></div></div></div>
-          <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 10,534</div>
+          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" id="eb-cxc-pe-bar-030" style="width:8.9%;background:var(--amber);"></div></div></div>
+          <div id="eb-cxc-pe-t030" style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 10,534</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <div style="width:90px;font-size:11px;color:#E67E22;">31–90d</div>
-          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:3.8%;background:#E67E22;"></div></div></div>
-          <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 4,509</div>
+          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" id="eb-cxc-pe-bar-3190" style="width:3.8%;background:#E67E22;"></div></div></div>
+          <div id="eb-cxc-pe-t3190" style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 4,509</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <div style="width:90px;font-size:11px;color:var(--red);">+90d</div>
-          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" style="width:20.0%;background:var(--red);"></div></div></div>
-          <div style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 23,620</div>
+          <div style="flex:1;"><div class="prog-wrap"><div class="prog-fill" id="eb-cxc-pe-bar-90" style="width:20.0%;background:var(--red);"></div></div></div>
+          <div id="eb-cxc-pe-t90" style="font-family:'DM Mono',monospace;font-size:10px;width:70px;text-align:right;">USD 23,620</div>
         </div>
       </div>
       <div style="margin-top:12px;padding:8px 10px;background:rgba(243,156,18,0.08);border-radius:6px;border-left:2px solid var(--amber);font-size:11px;color:var(--text-dim);">
@@ -1169,7 +1169,7 @@
   </div>
 </div>
 
-<script src="avboard_data.js?v=20260623"></script>
+<script src="avboard_data.js?v=20260625"></script>
 <script>
 Chart.defaults.color = '#8fa892';
 Chart.defaults.font.family = "'DM Mono', monospace";
@@ -1372,6 +1372,12 @@ function cerrarSesion() {
     var cv = D.chile.ventas, cc = D.chile.cxc;
     var pv = D.peru.ventas, pc = D.peru.cxc;
 
+    var mesesFullEB = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    var mesesFullEBLong = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    var nRealCL_EB = cv.mensual_real.filter(function(v){return v>0;}).length || 5;
+    var nRealPE_EB = pv.mensual_real.filter(function(v){return v>0;}).length || 5;
+    var nRealGrupo = Math.max(nRealCL_EB, nRealPE_EB);
+
     function set(id, html) { var el = document.getElementById(id); if (el) el.innerHTML = html; }
     function K(n)   { return Math.round(n / 1000); }
     function K1(n)  { return (n / 1000).toFixed(1); }
@@ -1403,7 +1409,7 @@ function cerrarSesion() {
 
     // KPI Perú
     set('av-eb-peru-ytd',    K(D.peru_ytd())+'K');
-    set('av-eb-peru-sub',    'Ppto 5m ref.: USD '+K(pv.ppto_5m)+'K');
+    set('av-eb-peru-sub',    'Ppto '+nRealPE_EB+'m ref.: USD '+K(pv.ppto_5m)+'K');
     set('av-eb-peru-badge',  'Aguirre '+K(pv.por_vendedor.aguirre.ytd)+'K · Infante '+K(pv.por_vendedor.infante.ytd)+'K');
 
     // KPI MN Chile
@@ -1416,14 +1422,14 @@ function cerrarSesion() {
     set('av-eb-tc-label', 'TC = '+D.tc()+' CLP/USD');
 
     // Consolidado Chile
-    set('av-eb-cons-chile-clp',  'CLP '+M(D.chile_ytd())+'M (5m)');
+    set('av-eb-cons-chile-clp',  'CLP '+M(D.chile_ytd())+'M ('+nRealCL_EB+'m)');
     set('av-eb-cons-chile-ppto', 'Ppto 4m: '+M(cv.ppto_4m)+'M');
     set('av-eb-cons-chile-usd',  'USD '+K1(D.chile_ytd()/D.tc())+'K');
     set('av-eb-cons-chile-pct',  pct(cv.cumplimiento_4m));
 
     // Consolidado Perú
-    set('av-eb-cons-peru-usd-bar', 'USD '+K1(D.peru_ytd())+'K (5m)');
-    set('av-eb-cons-peru-ppto',   'Ppto 5m: '+K(pv.ppto_5m)+'K');
+    set('av-eb-cons-peru-usd-bar', 'USD '+K1(D.peru_ytd())+'K ('+nRealPE_EB+'m)');
+    set('av-eb-cons-peru-ppto',   'Ppto '+nRealPE_EB+'m: '+K(pv.ppto_5m)+'K');
     set('av-eb-cons-peru-usd',    'USD '+K1(D.peru_ytd())+'K');
     set('av-eb-cons-peru-pct',    pct(pv.cumplimiento_5m));
 
@@ -1445,12 +1451,14 @@ function cerrarSesion() {
     set('av-eb-footer-corte', 'Corte: Chile '+sHV+' · Perú '+sPV+' · CxC '+sHC+'/'+cHC.slice(6)+' · TC CLP/USD '+D.tc());
 
     // ── Actualizar charts con datos AVBOARD ────────────────────────
-    // Chart 1: Grupo mensual (5 meses)
+    // Chart 1: Grupo mensual (N meses)
     var cGrupo = Chart.getChart(document.getElementById('chartGrupo'));
     if (cGrupo) {
-      cGrupo.data.labels = ['Ene','Feb','Mar','Abr','May (parc.)'];
-      cGrupo.data.datasets[0].data = cv.mensual_real.slice(0,5).map(function(v){ return v ? Math.round(v/D.tc()) : 0; });
-      cGrupo.data.datasets[1].data = pv.mensual_real.slice(0,5).map(function(v){ return v || 0; });
+      var lblGrupo = mesesFullEB.slice(0, nRealGrupo);
+      lblGrupo[nRealGrupo-1] = lblGrupo[nRealGrupo-1] + ' (parc.)';
+      cGrupo.data.labels = lblGrupo;
+      cGrupo.data.datasets[0].data = cv.mensual_real.slice(0,nRealGrupo).map(function(v){ return v ? Math.round(v/D.tc()) : 0; });
+      cGrupo.data.datasets[1].data = pv.mensual_real.slice(0,nRealGrupo).map(function(v){ return v || 0; });
       cGrupo.update();
     }
 
@@ -1481,13 +1489,113 @@ function cerrarSesion() {
       cCxC.update();
     }
 
-    // Chart 6: Perú mensual (5 meses)
+    // Chart 6: Perú mensual (N meses)
     var cPeruMes = Chart.getChart(document.getElementById('chartPeruMes'));
     if (cPeruMes) {
-      cPeruMes.data.labels = ['Enero','Febrero','Marzo','Abril','Mayo (parc.)'];
-      cPeruMes.data.datasets[0].data = pv.mensual_real.slice(0,5).map(function(v){ return v || 0; });
+      var lblPeruMes = mesesFullEBLong.slice(0, nRealPE_EB);
+      lblPeruMes[nRealPE_EB-1] = lblPeruMes[nRealPE_EB-1] + ' (parc.)';
+      cPeruMes.data.labels = lblPeruMes;
+      cPeruMes.data.datasets[0].data = pv.mensual_real.slice(0,nRealPE_EB).map(function(v){ return v || 0; });
       cPeruMes.update();
     }
+
+    // ── RTC Chile YTD table + Ppto T1 + caja de mes (tag eb-cl-rtc-tag) ──
+    set('eb-cl-rtc-tag', 'CLP · corte '+sHV);
+    var curIdxCL_EB = nRealCL_EB - 1, prevIdxCL_EB = Math.max(nRealCL_EB - 2, 0);
+    ['caroca','laratro','encina','velasquez','veverka','munoz'].forEach(function(k){
+      var row = document.querySelector('tr[data-rtc="'+k+'"]');
+      if (!row) return;
+      var arr = cv.rtc_mensual_real && cv.rtc_mensual_real[k];
+      if (arr) {
+        var ytd = arr.slice(0, nRealCL_EB).reduce(function(a,b){return a+b;},0);
+        row.children[1].textContent = M(ytd) + 'M';
+      }
+      var t1r = (cv.rtc_real_t1 && cv.rtc_real_t1[k]) || 0;
+      var t1p = (cv.rtc_ppto_t1 && cv.rtc_ppto_t1[k]) || 0;
+      if (t1p) {
+        // sólo se actualiza si AVBOARD tiene ppto T1 para este RTC; si no, se deja el último valor reportado
+        var pctT1 = t1r / t1p * 100;
+        var pctEl = row.children[2].querySelector('.rtc-pct');
+        if (pctEl) pctEl.textContent = pctT1.toFixed(1) + '%';
+        var bar2 = row.children[2].querySelector('.prog-fill');
+        if (bar2) bar2.style.width = Math.min(pctT1, 100) + '%';
+      }
+    });
+    var prevMesCL_EB = mesesFullEBLong[prevIdxCL_EB], curMesCL_EB = mesesFullEBLong[curIdxCL_EB];
+    set('eb-cl-mesbox-tag', 'Corte '+sHV+' · '+prevMesCL_EB+' definitivo + '+curMesCL_EB+' parcial');
+    set('eb-cl-mesbox-body', prevMesCL_EB+' completo <span style="color:var(--green);font-family:\'DM Mono\',monospace;">'+M(cv.mensual_real[prevIdxCL_EB]||0)+'M CLP</span> · '+curMesCL_EB+' al '+sHV+' <span style="color:var(--green);font-family:\'DM Mono\',monospace;">'+M(cv.mensual_real[curIdxCL_EB]||0)+'M</span> · YTD '+nRealCL_EB+'m <span style="color:var(--green);font-family:\'DM Mono\',monospace;">'+M(D.chile_ytd())+'M CLP</span>');
+
+    // ── Vendedores Perú YTD table + caja de mes ──
+    var curIdxPE_EB = nRealPE_EB - 1;
+    var curMesPE_EB = mesesFullEBLong[curIdxPE_EB];
+    set('eb-pe-rtc-tag', 'USD · incl. '+curMesPE_EB+' parcial al '+sPV);
+    set('eb-pe-th-mes', mesesFullEB[curIdxPE_EB]);
+    var ebVendNames = {infante:'O. Infante',aguirre:'L. Aguirre',atalaya:'O. Atalaya',navarro:'N. Navarro',gonzales:'A. Gonzales'};
+    var ebTopVend = null, ebTopVal = -1;
+    Object.keys(ebVendNames).forEach(function(k){
+      var row = document.querySelector('tr[data-vendor="'+k+'"]');
+      var v = pv.por_vendedor && pv.por_vendedor[k];
+      if (!v) return;
+      if (row) {
+        row.children[1].textContent = fUsd(v.ytd);
+        row.children[3].textContent = v.mayo ? fUsd(v.mayo) : '–';
+      }
+      if (v.mayo > ebTopVal) { ebTopVal = v.mayo; ebTopVend = k; }
+    });
+    if (ebTopVend && ebTopVal > 0) {
+      set('eb-pe-mesbox', '🚀 <strong style="color:var(--green);">'+ebVendNames[ebTopVend]+'</strong> lidera '+curMesPE_EB+' con USD '+K1(ebTopVal)+'K · '+curMesPE_EB+' total al '+sPV+': USD '+K1(pv.mensual_real[curIdxPE_EB]||0)+'K · YTD Perú '+nRealPE_EB+'m: USD '+fUsd(D.peru_ytd()));
+    } else {
+      set('eb-pe-mesbox', 'Sin ventas registradas en '+curMesPE_EB+' al '+sPV+' · YTD Perú '+nRealPE_EB+'m: USD '+fUsd(D.peru_ytd()));
+    }
+
+    // ── CxC Chile: tag + tramos (mapeo directo 1:1 con cc.tramos) ──
+    set('eb-cxc-cl-tag', 'CLP '+M(cc.total)+'M total · '+cHC+' · '+cc.entidades+' entidades');
+    function ebBar(idBar, idTxt, monto, pctVal) {
+      var bar = document.getElementById(idBar); if (bar) bar.style.width = (pctVal*100).toFixed(1)+'%';
+      var txt = document.getElementById(idTxt); if (txt) txt.textContent = M(monto)+'M · '+(pctVal*100).toFixed(1)+'%';
+    }
+    if (cc.tramos && cc.tramos_pct) {
+      ebBar('eb-cxc-cl-bar-030','eb-cxc-cl-t030', cc.tramos.t030, cc.tramos_pct.t030);
+      ebBar('eb-cxc-cl-bar-3160','eb-cxc-cl-t3160', cc.tramos.t3160, cc.tramos_pct.t3160);
+      ebBar('eb-cxc-cl-bar-6190','eb-cxc-cl-t6190', cc.tramos.t6190, cc.tramos_pct.t6190);
+      ebBar('eb-cxc-cl-bar-90','eb-cxc-cl-t90', cc.tramos.t90, cc.tramos_pct.t90);
+    }
+    // CxC Perú: corte de la etiqueta (el total/90d ya estaban vivos vía av-eb-cxc-peru-*)
+    set('eb-cxc-pe-tag', 'USD '+K(pc.total)+'K sin SUPRA · '+cPC);
+    // CxC Perú: tramos. "31–90d" de la UI agrupa t3160+t6190 de AVBOARD (sin bucket propio para esa franja)
+    function ebBarUsd(idBar, idTxt, monto, pctVal) {
+      var bar = document.getElementById(idBar); if (bar) bar.style.width = (pctVal*100).toFixed(1)+'%';
+      var txt = document.getElementById(idTxt); if (txt) txt.textContent = 'USD '+fUsd(monto);
+    }
+    if (pc.tramos && pc.tramos_pct) {
+      var pe3190 = (pc.tramos.t3160||0) + (pc.tramos.t6190||0);
+      var pe3190pct = (pc.tramos_pct.t3160||0) + (pc.tramos_pct.t6190||0);
+      ebBarUsd('eb-cxc-pe-bar-novenc','eb-cxc-pe-t-novenc', pc.tramos.no_vencida, pc.tramos_pct.no_vencida);
+      ebBarUsd('eb-cxc-pe-bar-030','eb-cxc-pe-t030', pc.tramos.t030, pc.tramos_pct.t030);
+      ebBarUsd('eb-cxc-pe-bar-3190','eb-cxc-pe-t3190', pe3190, pe3190pct);
+      ebBarUsd('eb-cxc-pe-bar-90','eb-cxc-pe-t90', pc.tramos.t90, pc.tramos_pct.t90);
+    }
+
+    // ── Chart 2: Chile RTC venta YTD vs Ppto T1 (mismo dato que la tabla, ya no hardcode separado) ──
+    var cChileRTC = Chart.getChart(document.getElementById('chartChileRTC'));
+    if (cChileRTC) {
+      var rtcKeysEB = ['caroca','laratro','encina','velasquez','veverka','munoz'];
+      cChileRTC.data.datasets[0].data = rtcKeysEB.map(function(k){
+        var arr = cv.rtc_mensual_real && cv.rtc_mensual_real[k];
+        var ytd = arr ? arr.slice(0,nRealCL_EB).reduce(function(a,b){return a+b;},0) : 0;
+        return parseFloat(M(ytd));
+      });
+      cChileRTC.data.datasets[1].data = rtcKeysEB.map(function(k, idx){
+        var t1p = cv.rtc_ppto_t1 && cv.rtc_ppto_t1[k];
+        // sin dato de ppto T1 para este RTC (caso Muñoz): se deja el valor estático ya cargado, no se sobreescribe con 0
+        if (!t1p) return cChileRTC.data.datasets[1].data[idx];
+        return parseFloat(M(t1p));
+      });
+      cChileRTC.update();
+    }
+    // Nota: chartMNChile (Margen Neto Real % por RTC) se deja estático — AVBOARD no
+    // tiene margen por RTC individual (sólo cv.mn_real agregado de Chile). Igual que
+    // la columna "Margen" de esta misma tabla. Ver alertas.md.
 
     console.log('[AVBOARD] ✅ Executive_Board actualizado · '+D.meta.version);
   } catch(e) {

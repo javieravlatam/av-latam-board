@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Panel Jefes · Perú 2026 · AV Latam</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=20260623"></script>
+<script src="avboard_data.js?v=20260625"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -180,13 +180,13 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
   </div>
   <div class="kpi">
     <div class="kpi-lbl">Ppto 2026 · Anual</div>
-    <div class="kpi-val kpi-a">USD 1,137K</div>
-    <div class="kpi-sub">Pendiente: 803K · 7 vendedores activos</div>
+    <div class="kpi-val kpi-a" id="jpe-kpi-ppto-val">USD 1,137K</div>
+    <div class="kpi-sub" id="jpe-kpi-ppto-sub">Pendiente: 803K · 7 vendedores activos</div>
   </div>
   <div class="kpi">
     <div class="kpi-lbl">CxC Vencido Activo</div>
-    <div class="kpi-val kpi-a">USD 39.3K</div>
-    <div class="kpi-sub">Total cartera: 117.9K · +90d: 23.6K</div>
+    <div class="kpi-val kpi-a" id="jpe-kpi-cxcvenc-val">USD 39.3K</div>
+    <div class="kpi-sub" id="jpe-kpi-cxcvenc-sub">Total cartera: 117.9K · +90d: 23.6K</div>
   </div>
   <div class="kpi">
     <div class="kpi-lbl">Top Vendedor 2026</div>
@@ -402,28 +402,28 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
 <!-- ══════════════════════════════════════════════ -->
 <div id="tab-cxc" class="tab-content">
 
-  <div class="sec">Cobranzas Perú · Corte 10/05/2026 <span>Cartera activa total: USD 117.9K</span></div>
+  <div class="sec"><span id="jpe-cxc-corte-hdr">Cobranzas Perú · Corte 10/05/2026</span> <span id="jpe-cxc-sub">Cartera activa total: USD 117.9K</span></div>
 
   <div class="cxc-grid" style="margin-bottom:20px">
     <div class="cxc-card" style="background:rgba(122,182,72,0.07);border:1px solid rgba(122,182,72,0.25)">
       <div class="tramo" style="color:var(--green)">✅ Al día / Futuro</div>
-      <div class="monto" style="color:var(--green)">79.3K</div>
-      <div class="detail">67.2% de cartera total</div>
+      <div class="monto" style="color:var(--green)" id="jpe-cxc-nv-monto">79.3K</div>
+      <div class="detail" id="jpe-cxc-nv-detail">67.2% de cartera total</div>
     </div>
     <div class="cxc-card" style="background:rgba(122,182,72,0.05);border:1px solid rgba(122,182,72,0.15)">
       <div class="tramo" style="color:var(--blue)">🔵 0–30d En cobro</div>
-      <div class="monto" style="color:var(--blue)">10.5K</div>
-      <div class="detail">8.9% de cartera · Gestión normal</div>
+      <div class="monto" style="color:var(--blue)" id="jpe-cxc-030-monto">10.5K</div>
+      <div class="detail" id="jpe-cxc-030-detail">8.9% de cartera · Gestión normal</div>
     </div>
     <div class="cxc-card" style="background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.25)">
       <div class="tramo" style="color:var(--amber)">🟡 31–90d Alerta/Riesgo</div>
-      <div class="monto" style="color:var(--amber)">4.5K</div>
-      <div class="detail">3.9% · Acuerdo de pago urgente</div>
+      <div class="monto" style="color:var(--amber)" id="jpe-cxc-3190-monto">4.5K</div>
+      <div class="detail" id="jpe-cxc-3190-detail">3.9% · Acuerdo de pago urgente</div>
     </div>
     <div class="cxc-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.3)">
       <div class="tramo" style="color:var(--red)">🔴 +90d Crítico</div>
-      <div class="monto" style="color:var(--red)">23.6K</div>
-      <div class="detail">20.0% de cartera · Acción inmediata</div>
+      <div class="monto" style="color:var(--red)" id="jpe-cxc-90-monto">23.6K</div>
+      <div class="detail" id="jpe-cxc-90-detail">20.0% de cartera · Acción inmediata</div>
     </div>
   </div>
 
@@ -433,7 +433,7 @@ table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
       <thead>
         <tr><th>Cliente</th><th>Vendedor</th><th class="c">Días mora</th><th class="r">Monto USD</th><th class="c">Compra en 2026</th><th class="c">Acción</th></tr>
       </thead>
-      <tbody>
+      <tbody id="jpe-tbody-criticos">
         <tr>
           <td><strong>PAODISA S.A.</strong><br><span style="font-size:9px;color:var(--muted)">4 facturas · 2024 · 468–628 días</span></td>
           <td style="font-size:11px;color:var(--dim)">J. Geldres (inactivo)</td>
@@ -866,7 +866,13 @@ var real2026usd=(typeof AVBOARD!=='undefined')
 const real2025=[59.1,36.7,70.9,42.5,24.3,27.8,48.1,53.0,70.9,120.6,82.5,54.0];
 
 // Presupuesto 2026 completo
-const ppto2026=[51.7,58.5,103.2,71.3,61.9,78.7,100.7,178.2,125.6,165.8,98.5,43.0];
+var ppto2026=(typeof AVBOARD!=='undefined' && AVBOARD.peru && AVBOARD.peru.ventas && AVBOARD.peru.ventas.mensual_ppto)
+  ? AVBOARD.peru.ventas.mensual_ppto.map(function(v){return parseFloat((v/1000).toFixed(1));})
+  : [51.7,58.5,103.2,71.3,61.9,78.7,100.7,178.2,125.6,165.8,98.5,43.0];
+// Presupuesto 2026 anual (USD K) — usado en KPI banner y proyección restante
+var pptoAnualK=(typeof AVBOARD!=='undefined' && AVBOARD.peru && AVBOARD.peru.ventas && Number.isFinite(AVBOARD.peru.ventas.ppto_anual))
+  ? AVBOARD.peru.ventas.ppto_anual/1000
+  : 1137.1;
 
 // TAB SWITCH
 function switchTab(t,el){
@@ -957,22 +963,24 @@ new Chart(document.getElementById('chartVentas'),{
   });
 
   const cumplAcum=(tot26/tot25); // wrong - should be vs ppto partial
-  const acumPpto4m=ppto2026.slice(0,4).reduce((a,b)=>a+b,0);
+  const curMesNmJPE=MESES_FULL[mesesConData-1]||MESES_FULL[0];
+  const nextMesNmJPE=MESES_FULL[mesesConData]||MESES_FULL[11];
+  const acumPpto4m=ppto2026.slice(0,mesesConData).reduce((a,b)=>a+b,0);
   const cumplTotal=(tot26/acumPpto4m*100);
   html+=`<tr style="background:var(--s2);font-weight:700">
-    <td>ACUM ENE–ABR</td>
+    <td>ACUM ENE–${curMesNmJPE.slice(0,3).toUpperCase()}</td>
     <td class="r mono" style="color:var(--amber)">${acumPpto4m.toFixed(1)}K</td>
     <td class="r mono" style="color:var(--blue)">${tot26.toFixed(1)}K</td>
     <td class="c"><span class="badge ${cumplTotal>=100?'b-ok':cumplTotal>=80?'b-warn':'b-crit'}">${cumplTotal.toFixed(1)}%</span></td>
     <td class="r mono" style="color:var(--muted)">${tot25.toFixed(1)}K</td>
     <td class="c"><span class="badge b-ok">▲ ${((tot26-tot25)/tot25*100).toFixed(1)}%</span></td>
-    <td class="c"><span class="badge b-warn">* Abr parcial</span></td>
+    <td class="c"><span class="badge b-warn">* ${curMesNmJPE} parcial</span></td>
   </tr>
   <tr style="opacity:0.5">
-    <td>MAY–DIC (ppto)</td>
-    <td class="r mono" style="color:var(--amber)">${(1137.1-acumPpto4m).toFixed(1)}K</td>
+    <td>${nextMesNmJPE.slice(0,3).toUpperCase()}–DIC (ppto)</td>
+    <td class="r mono" style="color:var(--amber)">${(pptoAnualK-acumPpto4m).toFixed(1)}K</td>
     <td class="r mono" style="color:var(--muted)">—</td>
-    <td colspan="4" class="c" style="font-size:10px;color:var(--muted)">Pendiente de ejecución · mayo a diciembre 2026</td>
+    <td colspan="4" class="c" style="font-size:10px;color:var(--muted)">Pendiente de ejecución · ${nextMesNmJPE.toLowerCase()} a diciembre 2026</td>
   </tr>`;
 
   document.getElementById('tbody-ventas').innerHTML=html;
@@ -1279,7 +1287,7 @@ function cerrarSesion() {
 (function(){
   if(typeof AVBOARD==='undefined') return;
   try{
-    var pv=AVBOARD.peru.ventas, mt=AVBOARD.meta.cortes;
+    var pv=AVBOARD.peru.ventas, mt=AVBOARD.meta.cortes, cc=AVBOARD.peru.cxc;
     var corte=mt.peru_ventas||'';
     var ytdK=parseFloat((pv.ytd_5m/1000).toFixed(1));
     var p5mK=parseFloat((pv.ppto_5m/1000).toFixed(1));
@@ -1312,7 +1320,7 @@ function cerrarSesion() {
     var pve=pv.por_vendedor||{};
     var topK='',topNom='',topV=0;
     var nomMap={aguirre:'L. AGUIRRE',infante:'O. INFANTE',atalaya:'O. ATALAYA',
-                gonzales:'P. GONZALES',valladares:'R. VALLADARES'};
+                gonzales:'A. GONZALES',valladares:'P. VALLADARES',navarro:'N. NAVARRO',diaz:'S. DIAZ'};
     Object.keys(pve).forEach(function(k){
       if(pve[k].ytd>topV){topV=pve[k].ytd;topK=k;}
     });
@@ -1322,6 +1330,63 @@ function cerrarSesion() {
       var topPct=Math.round(topV/pv.ytd_5m*100*10)/10;
       set('jpe-kpi-top-val',topNom);
       set('jpe-kpi-top-sub','USD '+topKtxt+'K · '+topPct+'% del real YTD');
+    }
+
+    // KPI Ppto 2026 Anual + CxC Vencido Activo
+    var pptoAnualKpi=Math.round(pv.ppto_anual/1000);
+    set('jpe-kpi-ppto-val','USD '+pptoAnualKpi.toLocaleString('en-US')+'K');
+    var pendienteK=Math.round(pv.ppto_anual/1000-pv.ytd_5m/1000);
+    var nVendActivos=Object.keys(pve).length;
+    set('jpe-kpi-ppto-sub','Pendiente: '+pendienteK.toLocaleString('en-US')+'K · '+nVendActivos+' vendedores activos');
+
+    var vencidoActivoK=parseFloat(((cc.total-cc.tramos.no_vencida)/1000).toFixed(1));
+    set('jpe-kpi-cxcvenc-val','USD '+vencidoActivoK+'K');
+    set('jpe-kpi-cxcvenc-sub','Total cartera: '+(cc.total/1000).toFixed(1)+'K · +90d: '+(cc.tramos.t90/1000).toFixed(1)+'K');
+
+    // CxC tab: corte + subtítulo + 4 tarjetas
+    var corteCxc=mt.peru_cxc||'';
+    set('jpe-cxc-corte-hdr','Cobranzas Perú · Corte '+corteCxc);
+    set('jpe-cxc-sub','Cartera activa total: USD '+(cc.total/1000).toFixed(1)+'K');
+    set('jpe-cxc-nv-monto',(cc.tramos.no_vencida/1000).toFixed(1)+'K');
+    set('jpe-cxc-nv-detail',(cc.tramos_pct.no_vencida*100).toFixed(1)+'% de cartera total');
+    set('jpe-cxc-030-monto',(cc.tramos.t030/1000).toFixed(1)+'K');
+    set('jpe-cxc-030-detail',(cc.tramos_pct.t030*100).toFixed(1)+'% de cartera · Gestión normal');
+    var t3190K=(cc.tramos.t3160+cc.tramos.t6190)/1000;
+    var t3190Pct=(cc.tramos_pct.t3160+cc.tramos_pct.t6190)*100;
+    set('jpe-cxc-3190-monto',t3190K.toFixed(1)+'K');
+    set('jpe-cxc-3190-detail',t3190Pct.toFixed(1)+'% · Acuerdo de pago urgente');
+    set('jpe-cxc-90-monto',(cc.tramos.t90/1000).toFixed(1)+'K');
+    set('jpe-cxc-90-detail',(cc.tramos_pct.t90*100).toFixed(1)+'% de cartera · Acción inmediata');
+
+    // Tabla "Clientes Críticos Perú" — reconstruida desde AVBOARD.peru.cxc.cuentas_criticas
+    var tbCrit=document.getElementById('jpe-tbody-criticos');
+    if(tbCrit && cc.cuentas_criticas){
+      var critRows=cc.cuentas_criticas.slice().sort(function(a,b){return b.monto-a.monto;});
+      var htmlCrit='';
+      critRows.forEach(function(r){
+        var diasTxt=(typeof r.dias==='string')?r.dias:(r.dias+'d');
+        var vendTxt=(r.vendedor==='J. Geldres')?'J. Geldres (inactivo)':r.vendedor;
+        var accion=/legal/i.test(r.nota||'')?'PROCESO FORMAL':(/urgente/i.test(r.nota||'')?'URGENTE':'COBRAR');
+        var accionCls=(accion==='COBRAR')?'b-warn':'b-crit';
+        htmlCrit+='<tr>'+
+          '<td><strong>'+r.cliente+'</strong>'+(r.nota?'<br><span style="font-size:9px;color:var(--muted)">'+r.nota+'</span>':'')+'</td>'+
+          '<td style="font-size:11px;color:var(--dim)">'+vendTxt+'</td>'+
+          '<td class="c"><span class="badge b-crit">'+diasTxt+'</span></td>'+
+          '<td class="r mono" style="color:var(--red)">'+Math.round(r.monto).toLocaleString('en-US')+'</td>'+
+          '<td class="c"><span class="badge b-nd">Sin dato</span></td>'+
+          '<td class="c"><span class="badge '+accionCls+'">'+accion+'</span></td>'+
+        '</tr>';
+      });
+      htmlCrit+='<tr style="background:rgba(231,76,60,0.05);font-size:9px;">'+
+        '<td colspan="5" style="color:var(--muted);padding:4px 8px;">Corp.Olmos (USD 5,850) + Amfresh (USD 3,289) → SUPRA · tratamiento contable separado</td>'+
+        '<td></td>'+
+      '</tr>';
+      htmlCrit+='<tr style="background:var(--s2)">'+
+        '<td colspan="3" style="font-weight:600">Total +90d</td>'+
+        '<td class="r mono" style="color:var(--red);font-weight:700">'+Math.round(cc.tramos.t90).toLocaleString('en-US')+'</td>'+
+        '<td colspan="2"></td>'+
+      '</tr>';
+      tbCrit.innerHTML=htmlCrit;
     }
 
     // Notas y footer dinámicos
