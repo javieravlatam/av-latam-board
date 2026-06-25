@@ -559,3 +559,72 @@ VALIDACIÓN JS: ✅ OK (harness Node contra avboard_data.js real, 0
   errores, sin error banner; verificación repetida sobre el HTML ya
   editado)
 ======================================================================
+
+======================================================================
+CORTE: 2026-06-25 05:19
+TIPO: FIX — Panel_Presupuesto: tabla "SEGUIMIENTO MES A MES" (Chile +
+  Perú) generalizada a 12 meses dinámicos + Ppto anual Chile corregido
+  a Libro Base oficial.
+ARCHIVOS PROCESADOS: ninguno nuevo en /inbox — fix de código sobre
+  avboard_data.js ya cargado (corte Chile 21/06/2026 · Perú
+  22/06/2026).
+MOTIVO: Javier reportó que tras corregirse la curva acumulada, la
+  tabla "real vs presupuesto" (SEGUIMIENTO MES A MES) del mismo panel
+  seguía sin actualizarse, y pidió generalizar: "debería también
+  registrar los avances al igual que todos los cuadros en todos los
+  módulos."
+ARCHIVO HTML CORREGIDO (1): Panel_Presupuesto_AV_2026.html
+  · Se detectó que `CH_PPTO`/`CH_USD` (Chile) seguían hardcodeados a
+    la cifra LEGACY (CLP 861,321,350 / USD 906,654) en vez del Ppto
+    Libro Base vigente (CLP 792,640,368 / USD 834,358 a TC 950) — se
+    reemplazaron por lectura en vivo de
+    `AVBOARD.chile.ventas.mensual_ppto` (fallback al array legacy
+    solo si AVBOARD no carga). Perú ya leía el Ppto correcto en el
+    gráfico, pero la fila "Ppto USD" de su propia tabla mes a mes
+    seguía hardcodeada — corregida también.
+  · Se construyó un helper genérico `pintarMesAMes(cfg)` (parametrizado
+    por país: prefijo de id, divisor, locale, moneda) que repinta
+    los 12 meses de Ppto/Real/%Cumpl/Gap de cada tabla en cada carga,
+    detecta el "mes actual" desde `AVBOARD.meta.cortes.*` (en vez de
+    un mes fijo), aplica el mismo esquema de clases 3-tramos ya
+    existente (hit/miss/crit · pbok/pbw/pbd · gp/gn) y fusiona los
+    meses futuros pendientes en una sola celda (colSpan) con el monto
+    de Ppto restante — ya no hace falta tocar el HTML cada vez que
+    avanza el mes.
+  · 6 repeticiones estáticas del Ppto Anual Chile dispersas en el
+    panel (tarjeta KPI, subtítulo de header, sidebar "RESUMEN ANUAL
+    GRUPO" CLP y USD, total Grupo Consolidado) recibieron id y ahora
+    se recalculan desde el mismo valor AVBOARD — antes mostraban la
+    cifra legacy de forma permanente sin importar el corte.
+DECISIÓN DE ALCANCE: las tablas de presupuesto POR RTC/vendedor
+  (Chile "PRESUPUESTO POR RTC", "REAL vs PPTO T1 POR RTC"; Perú
+  equivalente) NO se tocaron — requieren una redistribución mensual
+  por RTC que AVBOARD no expone hoy (solo total anual por RTC +
+  mensual a nivel país). Ver hallazgo nuevo en alertas.md.
+METODOLOGÍA: helper verificado primero en borrador con harness Node
+  jsdom contra avboard_data.js real (12 aserciones, 0 fallidas), luego
+  aplicado al HTML real, y verificado una SEGUNDA vez extrayendo los
+  <script> tal cual quedaron en el archivo editado y ejecutándolos en
+  el mismo harness (respetando el orden real de carga de scripts) —
+  0 errores nuevos, totales de tabla calzan exacto con `ytd_5m`.
+HALLAZGO NUEVO (no introducido por este fix, preexistente — ver
+  detalle completo en alertas.md): la segunda pasada de verificación
+  reveló que el `<script src="...chart.umd.min.js">` del head (línea
+  18) nunca se cierra hasta la línea 146 — por spec HTML, eso vuelve
+  INERTE (nunca se ejecuta en ningún navegador) ~130 líneas de datos
+  legacy (CH_RTC_DATA/CH_MES_DATA/PE_RTC_DATA) que estaban escritas
+  ahí. Consecuencia confirmada: los botones selectores de curva por
+  RTC (Caroca/Laratro/Encina/Velásquez/Veverka en Chile; Infante/
+  Aguirre-Navarro/Atalaya/Gonzales/Valladares en Perú) lanzan
+  TypeError al hacer clic y no hacen nada — bug 100% preexistente,
+  no causado por este fix. NO se corrigió en esta pasada (fuera del
+  alcance solicitado) — queda documentado para decisión de Javier.
+VALIDACIÓN JS: ✅ OK (ver metodología arriba)
+PENDIENTE DE JAVIER:
+  · Commit + push de Panel_Presupuesto_AV_2026.html + logs/.
+  · Hard refresh (Cmd+Shift+R) y confirmar visualmente que ambas
+    tablas "SEGUIMIENTO MES A MES" muestran Jun* como mes actual.
+  · Decidir si corrijo el bug del <script src> (ver alertas.md) — es
+    de bajo riesgo (solo separa el tag en dos) pero toca código fuera
+    de lo solicitado hoy.
+======================================================================

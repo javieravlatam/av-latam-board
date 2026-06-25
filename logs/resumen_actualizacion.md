@@ -437,3 +437,43 @@ validar con Javier antes de tomar decisiones de pricing basadas solo en esos
 números (ver nota en update_avboard.py / compute_productos).
 
 ---
+
+## Actualización 2026-06-25 05:19 — Fix Panel Presupuesto (Chile + Perú)
+
+**Qué se corrigió:** la tabla "SEGUIMIENTO MES A MES" (real vs presupuesto)
+de Chile y Perú no se actualizaba mes a mes — quedaba fija con los meses
+que existían cuando se construyó el panel. Ahora se repinta sola en cada
+carga, detecta el mes en curso desde el corte de AVBOARD, y funde los
+meses futuros pendientes en un solo mensaje con el presupuesto restante.
+De paso se corrigió que el Ppto Anual de Chile (tarjeta KPI, subtítulo,
+sidebar de grupo) seguía mostrando la cifra vieja **CLP 861.3M / USD
+906.7K** en 6 lugares distintos del panel, en vez de la cifra Libro Base
+vigente **CLP 792.6M / USD 834.4K** (diferencia: CLP 68.7M / USD 72.3K).
+
+**Hallazgo crítico nuevo (no relacionado al pedido de hoy, preexistente):**
+un `<script>` del head con atributo `src` (el que carga Chart.js) nunca se
+cierra y se "traga" ~130 líneas de datos legacy que llevaban tiempo sin
+ejecutarse en ningún navegador. Consecuencia confirmada: los botones para
+ver la curva acumulada de un vendedor/RTC individual (en vez del equipo
+completo) en Chile y Perú no responden al hacer clic — llevan rotos desde
+que se armó el panel, sin que se notara porque el resto del panel se ve
+bien. No se tocó hoy (fuera de alcance) — queda en alertas.md con la
+corrección propuesta (separar el tag en dos) a la espera de luz verde.
+
+**Recordatorio activo (ya señalado, sigue pendiente):** las tablas de
+presupuesto por RTC/vendedor (Chile y Perú) tienen celdas mensuales que
+siguen sumando al total presupuestario viejo aunque el total anual ya
+muestre la cifra correcta — requiere definir con finanzas cómo repartir
+el nuevo presupuesto mes a mes por vendedor antes de poder corregirlas
+bien (no se quiere inventar el reparto).
+
+**Validación:** helper de tabla verificado primero en aislado contra
+avboard_data.js real (jsdom), luego contra el HTML ya editado extrayendo
+sus `<script>` reales y ejecutándolos en el mismo orden que un navegador
+— totales de ambas tablas calzan exacto con el YTD ya validado.
+
+**Pendiente de Javier:** commit + push de Panel_Presupuesto_AV_2026.html
++ logs/; decidir si corrijo el bug del `<script src>` ahora o lo deja
+para otra sesión.
+
+---

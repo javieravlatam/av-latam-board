@@ -282,7 +282,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 <!-- ══ CHILE ══ -->
 <div class="c-hdr">
   <span class="c-flag">🇨🇱</span>
-  <div><div class="c-name cl">Chile</div><div style="font-size:9px;color:var(--muted);">CLP · Ppto anual CLP 861,321,350 · USD 906,654</div></div>
+  <div><div class="c-name cl">Chile</div><div style="font-size:9px;color:var(--muted);" id="cl-ppto-anual-header">CLP · Ppto anual CLP 792,640,368 · USD 834,358</div></div>
   <div class="c-line"></div>
   <div class="c-kpi">
     <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Real YTD 5m</div>
@@ -292,7 +292,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 </div>
 
 <div class="krow" style="margin-bottom:16px;">
-  <div class="kpi cl"><div class="klbl">Ppto Anual</div><div class="kval">861.3M</div><div class="ksub">CLP · USD 906.7K</div></div>
+  <div class="kpi cl"><div class="klbl">Ppto Anual</div><div class="kval" id="cl-ppto-anual-kpi">861.3M</div><div class="ksub" id="cl-ppto-anual-kpi-usd">CLP · USD 906.7K</div></div>
   <div class="kpi ok"><div class="klbl">Real YTD 5m</div><div class="kval ok" id="av-ppto-cl-ytd-val">342.9M</div><div class="ksub" id="av-ppto-cl-ytd-sub">CLP · al 18/05/2026</div></div>
   <div class="kpi cl"><div class="klbl">Ppto YTD 5m</div><div class="kval" id="av-ppto-cl-ppto5m">264.6M</div><div class="ksub">CLP Ene–May acumulado</div></div>
   <div class="kpi ok"><div class="klbl">Cumplimiento YTD</div><div class="kval ok" id="av-ppto-cl-cumpl-val">125.5%</div><div class="ksub" id="av-ppto-cl-cumpl-sub">T1 103.2% · May parcial</div></div>
@@ -438,43 +438,50 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
   <table class="bt">
     <thead><tr>
       <th style="text-align:left;">Concepto</th>
-      <th>Ene</th><th>Feb</th><th>Mar</th><th style="color:var(--amber);">Abr*</th>
-      <th style="color:var(--muted);">May</th><th style="color:var(--muted);">Jun</th><th style="color:var(--muted);">Jul</th><th style="color:var(--muted);">Ago</th>
-      <th style="color:var(--muted);">Sep</th><th style="color:var(--muted);">Oct</th><th style="color:var(--muted);">Nov</th><th style="color:var(--muted);">Dic</th>
+      <th id="cl-th-0">Ene</th><th id="cl-th-1">Feb</th><th id="cl-th-2">Mar</th><th id="cl-th-3">Abr</th>
+      <th id="cl-th-4">May</th><th id="cl-th-5">Jun</th><th id="cl-th-6">Jul</th><th id="cl-th-7">Ago</th>
+      <th id="cl-th-8">Sep</th><th id="cl-th-9">Oct</th><th id="cl-th-10">Nov</th><th id="cl-th-11">Dic</th>
       <th style="color:var(--green);">ANUAL</th>
     </tr></thead>
     <tbody>
-      <tr><td style="color:var(--dim);">Ppto CLP (K)</td>
-        <td class="cp">83.558</td><td class="cp">41.602</td><td class="cp">42.000</td><td class="cp">46.431</td>
-        <td class="cp">51.000</td><td class="cp">49.730</td><td class="cp">62.800</td><td class="cp">76.500</td>
-        <td class="cp">110.800</td><td class="cp">112.700</td><td class="cp">97.500</td><td class="cp">86.700</td>
-        <td class="cp" style="font-weight:700;color:var(--text);">861.321</td>
+      <tr id="cl-ppto-row"><td style="color:var(--dim);">Ppto CLP (K)</td>
+        <td class="cp" id="cl-ppto-0">83.558</td><td class="cp" id="cl-ppto-1">41.602</td><td class="cp" id="cl-ppto-2">42.000</td><td class="cp" id="cl-ppto-3">46.431</td>
+        <td class="cp" id="cl-ppto-4">51.000</td><td class="cp" id="cl-ppto-5">49.730</td><td class="cp" id="cl-ppto-6">62.800</td><td class="cp" id="cl-ppto-7">76.500</td>
+        <td class="cp" id="cl-ppto-8">110.800</td><td class="cp" id="cl-ppto-9">112.700</td><td class="cp" id="cl-ppto-10">97.500</td><td class="cp" id="cl-ppto-11">86.700</td>
+        <td class="cp" style="font-weight:700;color:var(--text);" id="cl-ppto-tot">861.321</td>
       </tr>
-      <tr class="cur"><td style="font-weight:700;">Real CLP (K)</td>
-        <td class="cr hit">88.231</td><td class="cr miss">35.652</td><td class="cr hit">52.371</td><td class="cr hit" id="cl-real-abr">—</td>
-        <td class="cr miss" id="cl-real-may">—</td><td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td>
-        <td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td>
+      <tr class="cur" id="cl-real-row"><td style="font-weight:700;">Real CLP (K)</td>
+        <td class="cr hit" id="cl-real-0">88.231</td><td class="cr miss" id="cl-real-1">35.652</td><td class="cr hit" id="cl-real-2">52.371</td><td class="cr na" id="cl-real-3">–</td>
+        <td class="cr na" id="cl-real-4">–</td><td class="cr na" id="cl-real-5">–</td><td class="cr na" id="cl-real-6">–</td><td class="cr na" id="cl-real-7">–</td>
+        <td class="cr na" id="cl-real-8">–</td><td class="cr na" id="cl-real-9">–</td><td class="cr na" id="cl-real-10">–</td><td class="cr na" id="cl-real-11">–</td>
         <td class="cr hit" id="cl-real-tot">—</td>
       </tr>
-      <tr><td style="color:var(--dim);">% Cumpl.</td>
-        <td style="text-align:right;"><span class="pb pbok">105.6%</span></td>
-        <td style="text-align:right;"><span class="pb pbw">85.7%</span></td>
-        <td style="text-align:right;"><span class="pb pbok">124.7%</span></td>
-        <td style="text-align:right;" id="cl-cumpl-abr"><span class="pb pbok">—</span></td>
-        <td style="text-align:right;" id="cl-cumpl-may"><span class="pb pbd">—</span></td>
-        <td colspan="7" style="text-align:center;color:var(--muted);font-size:8px;" id="cl-pend-txt">Pendiente Jun–Dic · Ppto restante: CLP —</td>
+      <tr id="cl-cumpl-row"><td style="color:var(--dim);">% Cumpl.</td>
+        <td style="text-align:right;" id="cl-cumpl-0"><span class="pb pbok">105.6%</span></td>
+        <td style="text-align:right;" id="cl-cumpl-1"><span class="pb pbw">85.7%</span></td>
+        <td style="text-align:right;" id="cl-cumpl-2"><span class="pb pbok">124.7%</span></td>
+        <td style="text-align:right;" id="cl-cumpl-3">—</td>
+        <td style="text-align:right;" id="cl-cumpl-4">—</td>
+        <td style="text-align:right;" id="cl-cumpl-5">—</td>
+        <td style="text-align:right;" id="cl-cumpl-6">—</td>
+        <td style="text-align:right;" id="cl-cumpl-7">—</td>
+        <td style="text-align:right;" id="cl-cumpl-8">—</td>
+        <td style="text-align:right;" id="cl-cumpl-9">—</td>
+        <td style="text-align:right;" id="cl-cumpl-10">—</td>
+        <td style="text-align:right;" id="cl-cumpl-11">—</td>
         <td style="text-align:right;" id="cl-cumpl-tot"><span class="pb pbok">—</span></td>
       </tr>
-      <tr><td style="color:var(--dim);">Gap CLP (K)</td>
-        <td class="gp">+4.673</td><td class="gn">–5.950</td><td class="gp">+10.371</td><td id="cl-gap-abr">—</td>
-        <td id="cl-gap-may">—</td>
-        <td colspan="8" style="text-align:right;color:var(--muted);font-size:8px;font-family:'DM Mono';padding-right:8px;">Ppto restante Jun–Dic: CLP 597M</td>
+      <tr id="cl-gap-row"><td style="color:var(--dim);">Gap CLP (K)</td>
+        <td class="gp" id="cl-gap-0">+4.673</td><td class="gn" id="cl-gap-1">–5.950</td><td class="gp" id="cl-gap-2">+10.371</td><td id="cl-gap-3">—</td>
+        <td id="cl-gap-4">—</td><td id="cl-gap-5">—</td><td id="cl-gap-6">—</td><td id="cl-gap-7">—</td>
+        <td id="cl-gap-8">—</td><td id="cl-gap-9">—</td><td id="cl-gap-10">—</td><td id="cl-gap-11">—</td>
+        <td id="cl-gap-tot">—</td>
       </tr>
       <tr><td style="color:var(--dim);">Ppto USD</td>
-        <td class="cp">87.956</td><td class="cp">43.792</td><td class="cp">44.211</td><td class="cp">48.875</td>
-        <td class="cp">53.684</td><td class="cp">52.347</td><td class="cp">66.105</td><td class="cp">80.526</td>
-        <td class="cp">116.632</td><td class="cp">118.632</td><td class="cp">102.632</td><td class="cp">91.263</td>
-        <td class="cp" style="font-weight:700;color:var(--text);">906.654</td>
+        <td class="cp" id="cl-pptousd-0">87.956</td><td class="cp" id="cl-pptousd-1">43.792</td><td class="cp" id="cl-pptousd-2">44.211</td><td class="cp" id="cl-pptousd-3">48.875</td>
+        <td class="cp" id="cl-pptousd-4">53.684</td><td class="cp" id="cl-pptousd-5">52.347</td><td class="cp" id="cl-pptousd-6">66.105</td><td class="cp" id="cl-pptousd-7">80.526</td>
+        <td class="cp" id="cl-pptousd-8">116.632</td><td class="cp" id="cl-pptousd-9">118.632</td><td class="cp" id="cl-pptousd-10">102.632</td><td class="cp" id="cl-pptousd-11">91.263</td>
+        <td class="cp" style="font-weight:700;color:var(--text);" id="cl-pptousd-tot">906.654</td>
       </tr>
     </tbody>
   </table>
@@ -640,37 +647,44 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
   <table class="bt">
     <thead><tr>
       <th style="text-align:left;">Concepto</th>
-      <th>Ene</th><th>Feb</th><th>Mar</th><th>Abr</th>
-      <th style="color:var(--amber);" id="pe-th-ult">May*</th><th style="color:var(--muted);">Jun</th><th style="color:var(--muted);">Jul</th><th style="color:var(--muted);">Ago</th>
-      <th style="color:var(--muted);">Sep</th><th style="color:var(--muted);">Oct</th><th style="color:var(--muted);">Nov</th><th style="color:var(--muted);">Dic</th>
+      <th id="pe-th-0">Ene</th><th id="pe-th-1">Feb</th><th id="pe-th-2">Mar</th><th id="pe-th-3">Abr</th>
+      <th id="pe-th-4">May</th><th id="pe-th-5">Jun</th><th id="pe-th-6">Jul</th><th id="pe-th-7">Ago</th>
+      <th id="pe-th-8">Sep</th><th id="pe-th-9">Oct</th><th id="pe-th-10">Nov</th><th id="pe-th-11">Dic</th>
       <th style="color:var(--blue);">ANUAL</th>
     </tr></thead>
     <tbody>
-      <tr><td style="color:var(--dim);">Ppto USD</td>
-        <td class="cp">51.674</td><td class="cp">58.489</td><td class="cp">103.222</td><td class="cp">71.299</td>
-        <td class="cp">61.946</td><td class="cp">78.710</td><td class="cp">100.675</td><td class="cp">178.180</td>
-        <td class="cp">125.564</td><td class="cp">165.842</td><td class="cp">98.481</td><td class="cp">42.952</td>
-        <td class="cp" style="font-weight:700;color:var(--text);">1.380.015</td>
+      <tr id="pe-ppto-row"><td style="color:var(--dim);">Ppto USD</td>
+        <td class="cp" id="pe-ppto-0">54.018</td><td class="cp" id="pe-ppto-1">60.699</td><td class="cp" id="pe-ppto-2">103.228</td><td class="cp" id="pe-ppto-3">74.732</td>
+        <td class="cp" id="pe-ppto-4">65.722</td><td class="cp" id="pe-ppto-5">104.999</td><td class="cp" id="pe-ppto-6">127.929</td><td class="cp" id="pe-ppto-7">208.900</td>
+        <td class="cp" id="pe-ppto-8">211.628</td><td class="cp" id="pe-ppto-9">182.802</td><td class="cp" id="pe-ppto-10">108.220</td><td class="cp" id="pe-ppto-11">77.138</td>
+        <td class="cp" style="font-weight:700;color:var(--text);" id="pe-ppto-tot">1.380.015</td>
       </tr>
-      <tr class="cur-pe"><td style="font-weight:700;">Real USD</td>
-        <td class="cr hit">70.232</td><td class="cr miss">38.180</td><td class="cr miss">87.966</td><td class="cr miss">63.734</td>
-        <td class="cr hit" id="pe-real-may">—</td><td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td>
-        <td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td><td class="cr na">–</td>
+      <tr class="cur-pe" id="pe-real-row"><td style="font-weight:700;">Real USD</td>
+        <td class="cr hit" id="pe-real-0">70.232</td><td class="cr miss" id="pe-real-1">38.180</td><td class="cr miss" id="pe-real-2">87.967</td><td class="cr miss" id="pe-real-3">63.434</td>
+        <td class="cr na" id="pe-real-4">–</td><td class="cr na" id="pe-real-5">–</td><td class="cr na" id="pe-real-6">–</td><td class="cr na" id="pe-real-7">–</td>
+        <td class="cr na" id="pe-real-8">–</td><td class="cr na" id="pe-real-9">–</td><td class="cr na" id="pe-real-10">–</td><td class="cr na" id="pe-real-11">–</td>
         <td style="font-family:'DM Mono';font-size:9px;text-align:right;color:var(--blue);" id="pe-real-tot">—</td>
       </tr>
-      <tr><td style="color:var(--dim);">% Cumpl.</td>
-        <td style="text-align:right;"><span class="pb pbok">135.9%</span></td>
-        <td style="text-align:right;"><span class="pb pbd">65.3%</span></td>
-        <td style="text-align:right;"><span class="pb pbw">85.2%</span></td>
-        <td style="text-align:right;"><span class="pb pbw">89.4%</span></td>
-        <td style="text-align:right;" id="pe-cumpl-may"><span class="pb pbok">—</span></td>
-        <td colspan="7" style="text-align:center;color:var(--muted);font-size:8px;" id="pe-pend-txt">Pendiente Jun–Dic · Ppto restante: USD —</td>
+      <tr id="pe-cumpl-row"><td style="color:var(--dim);">% Cumpl.</td>
+        <td style="text-align:right;" id="pe-cumpl-0"><span class="pb pbok">135.9%</span></td>
+        <td style="text-align:right;" id="pe-cumpl-1"><span class="pb pbd">65.3%</span></td>
+        <td style="text-align:right;" id="pe-cumpl-2"><span class="pb pbw">85.2%</span></td>
+        <td style="text-align:right;" id="pe-cumpl-3"><span class="pb pbw">89.4%</span></td>
+        <td style="text-align:right;" id="pe-cumpl-4">—</td>
+        <td style="text-align:right;" id="pe-cumpl-5">—</td>
+        <td style="text-align:right;" id="pe-cumpl-6">—</td>
+        <td style="text-align:right;" id="pe-cumpl-7">—</td>
+        <td style="text-align:right;" id="pe-cumpl-8">—</td>
+        <td style="text-align:right;" id="pe-cumpl-9">—</td>
+        <td style="text-align:right;" id="pe-cumpl-10">—</td>
+        <td style="text-align:right;" id="pe-cumpl-11">—</td>
         <td style="text-align:right;" id="pe-cumpl-tot"><span class="pb pbw">—</span></td>
       </tr>
-      <tr><td style="color:var(--dim);">Gap USD</td>
-        <td class="gp">+18.558</td><td class="gn">–20.309</td><td class="gn">–15.256</td><td class="gn">–7.565</td>
-        <td id="pe-gap-may">—</td>
-        <td colspan="8" style="text-align:right;color:var(--muted);font-size:8px;font-family:'DM Mono';padding-right:8px;">Ago: USD 178K · Oct: USD 165K · meses clave</td>
+      <tr id="pe-gap-row"><td style="color:var(--dim);">Gap USD</td>
+        <td class="gp" id="pe-gap-0">+18.558</td><td class="gn" id="pe-gap-1">–20.309</td><td class="gn" id="pe-gap-2">–15.256</td><td class="gn" id="pe-gap-3">–7.565</td>
+        <td id="pe-gap-4">—</td><td id="pe-gap-5">—</td><td id="pe-gap-6">—</td><td id="pe-gap-7">—</td>
+        <td id="pe-gap-8">—</td><td id="pe-gap-9">—</td><td id="pe-gap-10">—</td><td id="pe-gap-11">—</td>
+        <td id="pe-gap-tot">—</td>
       </tr>
     </tbody>
   </table>
@@ -701,8 +715,8 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
           <span class="pb pbok">103.2% T1</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:9px;">
-          <div><div style="color:var(--muted);">Ppto Anual</div><div style="font-family:'DM Mono';color:var(--dim);">CLP 861.3M</div></div>
-          <div><div style="color:var(--muted);">en USD (TC 950)</div><div style="font-family:'DM Mono';color:var(--dim);">USD 906.7K</div></div>
+          <div><div style="color:var(--muted);">Ppto Anual</div><div style="font-family:'DM Mono';color:var(--dim);" id="cl-resumen-ppto-clp">CLP 861.3M</div></div>
+          <div><div style="color:var(--muted);">en USD (TC 950)</div><div style="font-family:'DM Mono';color:var(--dim);" id="cl-resumen-ppto-usd">USD 906.7K</div></div>
           <div><div style="color:var(--muted);">Real YTD 5m USD</div><div id="ppto-grp-cl-ytd" style="font-family:'DM Mono';color:var(--green);">USD —</div></div>
         </div>
       </div>
@@ -723,7 +737,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
           <span class="pb pbw">98.3% T1</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:9px;">
-          <div><div style="color:var(--muted);">Ppto Anual Grupo</div><div style="font-family:'DM Mono';font-size:11px;color:var(--text);">USD 2.044M</div></div>
+          <div><div style="color:var(--muted);">Ppto Anual Grupo</div><div style="font-family:'DM Mono';font-size:11px;color:var(--text);" id="grp-resumen-ppto-anual">USD 2.044M</div></div>
           <div><div style="color:var(--muted);">Real T1 Grupo</div><div style="font-family:'DM Mono';font-size:11px;color:var(--green);">USD 381.9K</div></div>
           <div><div style="color:var(--muted);" id="ppto-grp-ytd-corte">YTD 5m</div><div id="ppto-grp-ytd-val" style="font-family:'DM Mono';font-size:11px;color:var(--green);">USD —</div></div>
         </div>
@@ -800,8 +814,16 @@ const GD='rgba(122,182,72,0.1)',BD='rgba(74,158,219,0.1)';
 const MESES=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 
 // DATA OFICIAL — siempre desde avboard_data.js (fuente única)
-const CH_PPTO=[83558,41602,42000,46431,51000,49730,62800,76500,110800,112700,97500,86700];
-const PE_PPTO=[54018.4,60698.8,103228,74732,65722,104999,127929,208900,211628,182802,108220,77137.6];
+// Fallback legacy (solo si AVBOARD no cargó): ver scripts/ppto_libro_base.py PPTO_MENSUAL_*_LEGACY
+const CH_PPTO_LEGACY=[83558,41602,42000,46431,51000,49730,62800,76500,110800,112700,97500,86700];
+const PE_PPTO_LEGACY=[54018.4,60698.8,103228,74732,65722,104999,127929,208900,211628,182802,108220,77137.6];
+const TC=(typeof AVBOARD!=='undefined'&&AVBOARD.meta&&AVBOARD.meta.tc_clp_usd)?AVBOARD.meta.tc_clp_usd:950;
+const CH_PPTO=(typeof AVBOARD!=='undefined'&&AVBOARD.chile&&AVBOARD.chile.ventas&&AVBOARD.chile.ventas.mensual_ppto)
+  ? AVBOARD.chile.ventas.mensual_ppto.map(function(v){return v/1000;})
+  : CH_PPTO_LEGACY.slice();
+const PE_PPTO=(typeof AVBOARD!=='undefined'&&AVBOARD.peru&&AVBOARD.peru.ventas&&AVBOARD.peru.ventas.mensual_ppto)
+  ? AVBOARD.peru.ventas.mensual_ppto.slice()
+  : PE_PPTO_LEGACY.slice();
 // CH_REAL/PE_REAL se sobreescriben desde AVBOARD si disponible (ver hook al final)
 var CH_REAL = (typeof AVBOARD!=='undefined')
   ? AVBOARD.chile.ventas.mensual_real.map(function(v){return Math.round(v/1000);})
@@ -816,6 +838,94 @@ const CH_NREAL = CH_REAL.filter(function(v){return v>0;}).length || 5;
 const PE_NREAL = PE_REAL.filter(function(v){return v>0;}).length || 5;
 const CH_PA=ac(CH_PPTO), CH_RA=ac(CH_REAL.map((v,i)=>i<CH_NREAL?v:null));
 const PE_PA=ac(PE_PPTO), PE_RA=ac(PE_REAL.map((v,i)=>i<PE_NREAL?v:null));
+
+/* ── Helpers genéricos "mes a mes" (Chile+Perú, todos los meses, fuente AVBOARD) ── */
+const MESES_LARGO=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+function mesActualDeCorte(corteStr){
+  if(!corteStr) return 4;
+  var mm=parseInt((corteStr.split('/')[1]||''),10);
+  return isNaN(mm)?4:Math.max(0,Math.min(11,mm-1));
+}
+function mergePendiente(rowId, fromIdx, mensaje){
+  var row=document.getElementById(rowId);
+  if(!row) return;
+  var tds=row.querySelectorAll('td');
+  var first=tds[1+fromIdx];
+  if(!first) return;
+  var span=12-fromIdx;
+  first.colSpan=span;
+  first.style.textAlign='center';
+  first.style.color='var(--muted)';
+  first.style.fontSize='8px';
+  if(mensaje) first.innerHTML=mensaje;
+  for(var k=1;k<span;k++){
+    var cell=tds[1+fromIdx+k];
+    if(cell) cell.style.display='none';
+  }
+}
+function pintarMesAMes(cfg){
+  var p=cfg.prefix, div=cfg.divisor||1, loc=cfg.locale||'es-CL';
+  var real=cfg.mensualReal||[], ppto=cfg.mensualPpto||[];
+  var mAct=cfg.mesActualIdx;
+  var fmt=function(n){ return Math.round(n/div).toLocaleString(loc); };
+  var pctTxt=function(r){ return (r*100).toFixed(1)+'%'; };
+  var cumplCls=function(r){ return r>=1?'pbok':(r>=0.8?'pbw':'pbd'); };
+  var realCls=function(r){ return r>=1?'hit':(r>=0.8?'miss':'crit'); };
+  var sumN=function(arr,n){ var s=0; for(var i=0;i<n;i++) s+=(arr[i]||0); return s; };
+  var pptoAnualTot=sumN(ppto,12);
+  var pptoHastaAhora=sumN(ppto,mAct+1);
+
+  for(var i=0;i<12;i++){
+    var th=document.getElementById(p+'-th-'+i);
+    if(th){
+      if(i===mAct){ th.textContent=MESES[i]+'*'; th.style.color='var(--amber)'; }
+      else if(i>mAct){ th.textContent=MESES[i]; th.style.color='var(--muted)'; }
+      else { th.textContent=MESES[i]; th.style.color=''; }
+    }
+    var tdP=document.getElementById(p+'-ppto-'+i);
+    if(tdP) tdP.textContent=fmt(ppto[i]||0);
+
+    if(i<=mAct){
+      var r=real[i]||0, pp=ppto[i]||0;
+      var ratio = pp>0 ? r/pp : 0;
+      var ast = (i===mAct) ? '*' : '';
+      var tdR=document.getElementById(p+'-real-'+i);
+      if(tdR){ tdR.textContent=fmt(r); tdR.className='cr '+realCls(ratio); }
+      var tdC=document.getElementById(p+'-cumpl-'+i);
+      if(tdC){ tdC.innerHTML='<span class="pb '+cumplCls(ratio)+'">'+pctTxt(ratio)+ast+'</span>'; }
+      var tdG=document.getElementById(p+'-gap-'+i);
+      if(tdG){
+        var gap=Math.round((r-pp)/div);
+        tdG.className=gap>=0?'gp':'gn';
+        tdG.textContent=(gap>=0?'+':'–')+Math.abs(gap).toLocaleString(loc)+ast;
+      }
+    }
+  }
+
+  var pendIni=mAct+1;
+  if(pendIni<=11){
+    var restante=cfg.pendienteAnual!=null?cfg.pendienteAnual:(pptoAnualTot-(cfg.totalReal||0));
+    var msg='Pendiente '+MESES[pendIni]+'–Dic · Ppto restante: '+cfg.currency+' '+cfg.fmtPend(restante);
+    mergePendiente(p+'-cumpl-row', pendIni, msg);
+    mergePendiente(p+'-gap-row', pendIni, msg);
+  }
+
+  var totReal = cfg.totalReal!=null ? cfg.totalReal : sumN(real, mAct+1);
+  var totRatio = pptoHastaAhora>0 ? totReal/pptoHastaAhora : 0;
+  var elR=document.getElementById(p+'-real-tot');
+  if(elR){ elR.textContent=fmt(totReal); elR.className='cr '+realCls(totRatio); }
+  var elC=document.getElementById(p+'-cumpl-tot');
+  if(elC){ elC.innerHTML='<span class="pb '+cumplCls(totRatio)+'">'+pctTxt(totRatio)+'</span>'; }
+  var elG=document.getElementById(p+'-gap-tot');
+  if(elG){
+    var totGap=Math.round((totReal-pptoHastaAhora)/div);
+    elG.className=totGap>=0?'gp':'gn';
+    elG.style.fontWeight='700';
+    elG.textContent=(totGap>=0?'+':'–')+Math.abs(totGap).toLocaleString(loc);
+  }
+  var elPT=document.getElementById(p+'-ppto-tot');
+  if(elPT) elPT.textContent=fmt(pptoAnualTot);
+}
 
 // CH RTC barras
 chRTCChart = new Chart(document.getElementById('cChileRTC'),{
@@ -902,7 +1012,7 @@ new Chart(document.getElementById('cPeruMes'),{
 });
 
 // Grupo consolidado
-const CH_USD=[87956,43792,44211,48875,53684,52347,66105,80526,116632,118632,102632,91263];
+const CH_USD=CH_PPTO.map(function(v){return Math.round(v*1000/TC);});
 new Chart(document.getElementById('cGrupo'),{
   type:'bar', data:{
     labels:MESES,
@@ -953,26 +1063,27 @@ new Chart(document.getElementById('cGrupo'),{
     set('av-ppto-cl-cumpl-val',clCumpl5m!=null?Pc(clCumpl5m):'N/D');
     set('av-ppto-cl-cumpl-sub','4m '+(clCumpl4m!=null?Pc(clCumpl4m):'N/D')+' · May '+Mm(may5CL));
     set('av-ppto-cl-pend',Mm(clPptoA-clYTD));
-    // ── Chile tabla mes a mes ──────────────────────────────────────────────────
-    var clAbrR=Math.round(cv.mensual_real[3]/1000), clMayR=Math.round(cv.mensual_real[4]/1000);
-    var clAbrP=Math.round(CH_PPTO[3]), clMayP=Math.round(CH_PPTO[4]);
-    var clTot5=Math.round(clYTD/1000);  // total YTD en miles
-    set('cl-real-abr',clAbrR.toLocaleString('es-CL').replace(/\./g,'.')||'—');
-    set('cl-real-may',clMayR.toLocaleString('es-CL').replace(/\./g,'.')||'—');
-    set('cl-real-tot',clTot5.toLocaleString('es-CL').replace(/\./g,'.')||'—');
-    var clAbrCumpl=clAbrP>0?clAbrR/clAbrP:0, clMayCumpl=clMayP>0?clMayR/clMayP:0;
-    var clTotCumpl=clPpto5m>0?clYTD/clPpto5m:0;
-    var clAbrCls=clAbrCumpl>=1?'pbok':'pbd', clMayCls=clMayCumpl>=1?'pbok':'pbd', clTotCls=clTotCumpl>=1?'pbok':'pbw';
-    set('cl-cumpl-abr','<span class="pb '+clAbrCls+'">'+Pc(clAbrCumpl)+'</span>');
-    set('cl-cumpl-may','<span class="pb '+clMayCls+'">'+Pc(clMayCumpl)+'*</span>');
-    set('cl-cumpl-tot','<span class="pb '+clTotCls+'">'+Pc(clTotCumpl)+'</span>');
-    set('cl-pend-txt','Pendiente Jun–Dic · Ppto restante: CLP '+Mm(clPptoA-clYTD)+' · al '+cortesCL);
-    set('cl-footnote-txt','* Mayo parcial al '+cortesCL+' · H2 Chile muy fuerte: Sep CLP 110.8M · Oct CLP 112.7M');
-    var clGapAbr=clAbrR-clAbrP, clGapMay=clMayR-clMayP;
-    var gaE=document.getElementById('cl-gap-abr');
-    if(gaE){gaE.className=clGapAbr>=0?'gp':'gn';gaE.textContent=(clGapAbr>=0?'+':'')+clGapAbr.toLocaleString('es-CL');}
-    var gmE=document.getElementById('cl-gap-may');
-    if(gmE){gmE.className=clGapMay>=0?'gp':'gn';gmE.textContent=(clGapMay>=0?'+':'')+clGapMay.toLocaleString('es-CL')+'*';}
+    // ── Chile tabla mes a mes (todos los meses, dinámico) ───────────────────────
+    var clMesActual = mesActualDeCorte(cortesCL);
+    pintarMesAMes({
+      prefix:'cl', mensualReal:cv.mensual_real, mensualPpto:cv.mensual_ppto,
+      mesActualIdx:clMesActual, divisor:1000, locale:'es-CL', currency:'CLP',
+      totalReal:clYTD, pendienteAnual:(clPptoA-clYTD), fmtPend:Mm
+    });
+    set('cl-footnote-txt','* '+MESES_LARGO[clMesActual]+' parcial al '+cortesCL+' · H2 Chile muy fuerte: Sep CLP 110.8M · Oct CLP 112.7M');
+    // Ppto USD (fila secundaria, CLP oficial / TC — ya no hardcodeada)
+    for(var _i=0;_i<12;_i++){
+      var _eu=document.getElementById('cl-pptousd-'+_i);
+      if(_eu) _eu.textContent=Math.round(((cv.mensual_ppto[_i]||0)*1000/TC)/1000).toLocaleString('es-CL');
+    }
+    var _euT=document.getElementById('cl-pptousd-tot');
+    if(_euT) _euT.textContent=Math.round((clPptoA/TC)/1000).toLocaleString('es-CL');
+    // KPIs/sidebar que repetían el mismo Ppto Anual Chile (antes hardcodeados a la cifra legacy)
+    set('cl-ppto-anual-kpi',Mm(clPptoA));
+    set('cl-ppto-anual-kpi-usd','CLP · USD '+Kk(clPptoA/TC));
+    set('cl-resumen-ppto-clp','CLP '+Mm(clPptoA));
+    set('cl-resumen-ppto-usd','USD '+Kk(clPptoA/TC));
+    set('cl-ppto-anual-header','CLP · Ppto anual CLP '+Math.round(clPptoA).toLocaleString('en-US')+' · USD '+Math.round(clPptoA/TC).toLocaleString('en-US'));
     // ── Perú KPIs ──────────────────────────────────────────────────────────────
     var peYTD=pv.ytd_5m, pePpto5m=pv.ppto_5m, pePptoA=pv.ppto_anual;
     // Fallback NaN-safe para cumplimiento Perú
@@ -990,21 +1101,14 @@ new Chart(document.getElementById('cGrupo'),{
     set('av-ppto-pe-cumpl-val',peCumpl5m!=null?Pc(peCumpl5m):'N/D');
     set('av-ppto-pe-cumpl-sub','T1 '+Pc(t1PE/t1PEppto)+' · May '+Pc(may5PE/mayPEppto));
     set('av-ppto-pe-pend',Kk(pePptoA-peYTD));
-    // ── Perú tabla mes a mes ───────────────────────────────────────────────────
-    var peMayR=Math.round(may5PE), peMayP=Math.round(mayPEppto);
-    var peTot5=Math.round(peYTD);
-    set('pe-real-may',peMayR.toLocaleString('en-US')+'*');
-    set('pe-real-tot',peTot5.toLocaleString('en-US'));
-    var peMayCumpl=peMayP>0?peMayR/peMayP:0, peTotCumpl=pePpto5m>0?peYTD/pePpto5m:0;
-    var peMayCls=peMayCumpl>=1?'pbok':'pbd', peTotCls=peTotCumpl>=1?'pbok':'pbw';
-    set('pe-cumpl-may','<span class="pb '+peMayCls+'">'+Pc(peMayCumpl)+'*</span>');
-    set('pe-cumpl-tot','<span class="pb '+peTotCls+'">'+Pc(peTotCumpl)+'</span>');
-    var peRestante=Math.round(pePptoA-peYTD);
-    set('pe-pend-txt','Pendiente Jun–Dic · Ppto restante: USD '+peRestante.toLocaleString('en-US')+' · H2 muy fuerte');
-    var peGapMay=peMayR-peMayP;
-    var pgmE=document.getElementById('pe-gap-may');
-    if(pgmE){pgmE.className=peGapMay>=0?'gp':'gn';pgmE.textContent=(peGapMay>=0?'+':'')+peGapMay.toLocaleString('en-US')+'*';}
-    set('pe-footnote-txt','* Mayo parcial al '+cortesPE+' · Abr definitivo');
+    // ── Perú tabla mes a mes (todos los meses, dinámico) ────────────────────────
+    var peMesActual = mesActualDeCorte(cortesPE);
+    pintarMesAMes({
+      prefix:'pe', mensualReal:pv.mensual_real, mensualPpto:pv.mensual_ppto,
+      mesActualIdx:peMesActual, divisor:1, locale:'es-CL', currency:'USD',
+      totalReal:peYTD, pendienteAnual:(pePptoA-peYTD), fmtPend:Kk
+    });
+    set('pe-footnote-txt','* '+MESES_LARGO[peMesActual]+' parcial al '+cortesPE+' · '+MESES_LARGO[Math.max(0,peMesActual-1)]+' definitivo');
     // ── Hcorte ─────────────────────────────────────────────────────────────────
     var hc=document.getElementById('av-ppto-hcorte');
     if(hc)hc.innerHTML='<b>Chile</b> '+cortesCL+' · <b>Perú</b> '+cortesPE;
@@ -1016,6 +1120,7 @@ new Chart(document.getElementById('cGrupo'),{
     set('ppto-grp-pe-ytd','USD '+Kk(peYTD));
     set('ppto-grp-ytd-val','USD '+Kk(grpYTD));
     set('ppto-grp-ytd-corte','YTD 5m al '+cortesCL);
+    set('grp-resumen-ppto-anual','USD '+Mm((clPptoA/tc)+pePptoA));
     set('ppto-footer-txt','AV Latam BI Platform · Panel Presupuesto · Ppto oficial 2026 · Real: Chile '+cortesCL+' · Perú '+cortesPE+' · TC='+tc);
     // ── Actualizar CH_MES_DATA desde AVBOARD ──────────────────────────────────
     CH_MES_DATA.equipo.real=CH_REAL.slice();
