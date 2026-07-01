@@ -10,7 +10,7 @@
  *
  * Cortes:
  *   Chile ventas → 30/06/2026
- *   Chile CxC    → 17/05/2026 (2 entidades)
+ *   Chile CxC    → 21/06/2026 (2 entidades)
  *   Perú ventas  → 30/06/2026
  *   Perú CxC     → 10/05/2026
  *
@@ -25,7 +25,7 @@ var AVBOARD = (function() {
     meta_mn:      0.25,
     cortes: {
       chile_ventas: '30/06/2026',
-      chile_cxc:    '17/05/2026',
+      chile_cxc:    '21/06/2026',
       peru_ventas:  '30/06/2026',
       peru_cxc:     '10/05/2026'
     },
@@ -100,20 +100,20 @@ var AVBOARD = (function() {
   };
 
   var chile_cxc = {
-    corte:    '17/05/2026',
+    corte:    '21/06/2026',
     entidades: 2,
-    total:    138511571,
-    vencida:  57858879,
-    al_dia:   80652692,
+    total:    66426892,
+    vencida:  39752112,
+    al_dia:   26674780,
     por_entidad: {
       agrocomercial: {
         nombre: 'Agrocomercial',
-        total:  104854765,
+        total:  32770086,
         tramos: {
-          t90:   6331802,
-          t6190: 7661141,
-          t3160: 10209130,
-          t030:  80652692
+          t90:   2426626,
+          t6190: 820000,
+          t3160: 2848680,
+          t030:  26674780
         }
       },
       agroveca_chile: {
@@ -128,79 +128,72 @@ var AVBOARD = (function() {
       }
     },
     tramos: {
-      t90:   29978866,
-      t6190: 16908155,
-      t3160: 10971858,
-      t030:  80652692
+      t90:   26073690,
+      t6190: 10067014,
+      t3160: 3611408,
+      t030:  26674780
     },
     tramos_pct: {
-      t90:   0.2164,
-      t6190: 0.1221,
-      t3160: 0.0792,
-      t030:  0.5823
+      t90:   0.3925,
+      t6190: 0.1516,
+      t3160: 0.0544,
+      t030:  0.4016
     },
     por_rtc: {
-      velasquez: {
-        total:   41948928,
-        pct:     0.3029,
-        vencida: 19111995,
-        t90:     0,
-        riesgo: 'RIESGO'
-      },
-      encina: {
-        total:   22486724,
-        pct:     0.1623,
-        vencida: 6940354,
-        t90:     0,
-        riesgo: 'RIESGO'
-      },
       laratro: {
-        total:   20577619,
-        pct:     0.1486,
-        vencida: 6815864,
+        total:   22445717,
+        pct:     0.3379,
+        vencida: 12653802,
         t90:     2858024,
         riesgo: 'CRÍTICO'
       },
       otros: {
-        total:   19904603,
-        pct:     0.1437,
-        vencida: 19471190,
-        t90:     18618455,
-        riesgo: 'CRÍTICO'
-      },
-      neira: {
-        total:   9965856,
-        pct:     0.0719,
-        vencida: 9965856,
-        t90:     3754844,
+        total:   19077796,
+        pct:     0.2872,
+        vencida: 19077796,
+        t90:     18788714,
         riesgo: 'CRÍTICO'
       },
       franco_riffo: {
         total:   9247014,
-        pct:     0.0668,
+        pct:     0.1392,
         vencida: 9247014,
         t90:     0,
         riesgo: 'RIESGO'
       },
-      caroca: {
-        total:   7101558,
-        pct:     0.0513,
-        vencida: 7101558,
-        t90:     2173830,
-        riesgo: 'CRÍTICO'
+      velasquez: {
+        total:   7615098,
+        pct:     0.1146,
+        vencida: 7615098,
+        t90:     0,
+        riesgo: 'RIESGO'
       },
       veverka: {
-        total:   5886216,
-        pct:     0.0425,
-        vencida: 1266636,
-        t90:     1266636,
+        total:   3722796,
+        pct:     0.056,
+        vencida: 3722796,
+        t90:     2086636,
+        riesgo: 'CRÍTICO'
+      },
+      encina: {
+        total:   2173282,
+        pct:     0.0327,
+        vencida: 333105,
+        t90:     333105,
         riesgo: 'CRÍTICO'
       },
       munoz: {
-        total:   1393053,
-        pct:     0.0101,
-        vencida: 1393053,
+        total:   1307077,
+        pct:     0.0197,
+        vencida: 1307077,
         t90:     1307077,
+        riesgo: 'CRÍTICO'
+      },
+      caroca: {
+        total:   838112,
+        pct:     0.0126,
+        vencida: 838112,
+        t90:     700134,
         riesgo: 'CRÍTICO'
       }
     },
@@ -218,14 +211,6 @@ var AVBOARD = (function() {
         rtc: "JOSÉ LORENZONI",
         dias: 193,
         monto: 3856957,
-        estado: "CRÍTICO",
-        alerta: "URGENTE"
-      },
-      {
-        cliente: "AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA",
-        rtc: "JUAN PABLO NEIRA",
-        dias: 102,
-        monto: 3754844,
         estado: "CRÍTICO",
         alerta: "URGENTE"
       },
@@ -262,14 +247,6 @@ var AVBOARD = (function() {
         alerta: "URGENTE"
       },
       {
-        cliente: "AGRICOLA RIBERA LIMITADA",
-        rtc: "JORGE CAROCA",
-        dias: 122,
-        monto: 1473696,
-        estado: "CRÍTICO",
-        alerta: "URGENTE"
-      },
-      {
         cliente: "COMERCIAL COPELEC S.A.",
         rtc: "VALENTINA MUÑOZ",
         dias: 135,
@@ -296,8 +273,16 @@ var AVBOARD = (function() {
       {
         cliente: "AGROINSUMOS KULLIN",
         rtc: "PABLO LARATRO",
-        dias: 115,
+        dias: 150,
         monto: 921215,
+        estado: "CRÍTICO",
+        alerta: "URGENTE"
+      },
+      {
+        cliente: "AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA",
+        rtc: "IVAN VEVERKA",
+        dias: 107,
+        monto: 820000,
         estado: "CRÍTICO",
         alerta: "URGENTE"
       },
@@ -330,6 +315,30 @@ var AVBOARD = (function() {
         rtc: "GUILLERMO PRADENAS",
         dias: 493,
         monto: 240975,
+        estado: "CRÍTICO",
+        alerta: "URGENTE"
+      },
+      {
+        cliente: "JOSE CRISTOBAL GONZALEZ CORREA",
+        rtc: "RODRIGO ENCINA",
+        dias: 101,
+        monto: 170789,
+        estado: "CRÍTICO",
+        alerta: "URGENTE"
+      },
+      {
+        cliente: "JUAN FRANCISCO VARGAS MANCILLA",
+        rtc: "OFICINA",
+        dias: 92,
+        monto: 170259,
+        estado: "CRÍTICO",
+        alerta: "URGENTE"
+      },
+      {
+        cliente: "AGRICOLA TUNICHE LIMITADA",
+        rtc: "RODRIGO ENCINA",
+        dias: 93,
+        monto: 162316,
         estado: "CRÍTICO",
         alerta: "URGENTE"
       },
