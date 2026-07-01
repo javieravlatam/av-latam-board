@@ -477,3 +477,57 @@ sus `<script>` reales y ejecutándolos en el mismo orden que un navegador
 para otra sesión.
 
 ---
+
+## Actualización 2026-07-01 14:30 — Corte 30/06/2026
+
+**Chile ventas:** CLP 404,690,082 YTD · Cumpl 4m: 157.3%
+**Perú ventas:** USD 390,056 YTD · Cumpl 5m: 84.2%
+**CxC Chile:** CLP 138,511,571 total · +90d: CLP 29,978,866
+**IEC Chile:** 34.0% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGROCOMERCIAL Y GANADERA LOMA LARGA LIMITADA CLP 3,754,844 (102d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- AGRICOLA RIBERA LIMITADA CLP 1,473,696 (122d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- AGROINSUMOS KULLIN CLP 921,215 (115d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 700,134 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 11 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP -880,257
+- 7 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 35 SKU(s) Chile ·
+  5 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 83 SKU(s) Chile ·
+  6 SKU(s) Perú
+  - REVISAR: AV ALGAP 30 200 L (CL) margen -14.3%
+  - REVISAR: AV PLUS ZINC MANGANESO 20 L (CL) margen -6.7%
+  - REVISAR: AV ROOT MAX 1 L (CL) margen -36.6%
+  - REVISAR: AV SILFORTE 200 L (CL) margen -7.6%
+  - REVISAR: AV MAX FULVIC 45% 20 L (CL) margen -2.0%
+  - REVISAR: AV BIOSOLARIS 1 L (CL) margen -50.0%
+  - REVISAR: AV PLUS HIERRO 5 L (CL) margen -101.5%
+  - REVISAR: AV AMIN SUGAR 1 L (CL) margen -199.8%
+  - REVISAR: AV ALGAP 30 5 L (CL) margen -10.0%
+  - REVISAR: AV PLUS MICRO MIX 1 L (CL) margen -23.1%
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
