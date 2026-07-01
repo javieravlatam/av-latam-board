@@ -170,9 +170,11 @@ def detect_inbox_files():
     if pe_ventas:
         files['peru_ventas'] = pe_ventas[0]
 
-    # CxC Agrocomercial
+    # CxC Agrocomercial (acepta ambas grafías: "AGrocomercial" y "Agrocomercial")
     cxc_agro = sorted(list(INBOX.glob('Cuentas Cobrar  AGrocomercial*.xlsx')) +
-                      list(INBOX.glob('Cuentas Cobrar AGrocomercial*.xlsx')),
+                      list(INBOX.glob('Cuentas Cobrar AGrocomercial*.xlsx')) +
+                      list(INBOX.glob('Cuentas Cobrar  Agrocomercial*.xlsx')) +
+                      list(INBOX.glob('Cuentas Cobrar Agrocomercial*.xlsx')),
                       key=_parse_date_from_name, reverse=True)
     if cxc_agro:
         files['cxc_agro'] = cxc_agro[0]

@@ -648,3 +648,20 @@ ACCIONES:
   · Cache-busting ?v=20260701 sincronizado en 14 paneles HTML
 VALIDACIÓN JS: ✅ OK
 ======================================================================
+
+======================================================================
+CORTE: 2026-07-01 (fix CxC Agrocomercial)
+ARCHIVOS AFECTADOS:
+  - scripts/update_avboard.py
+ACCIONES:
+  · Bug fix en detect_inbox_files(): glob de CxC Agrocomercial solo
+    reconocía "AGrocomercial" (G mayúscula). Archivos nuevos llegaron
+    como "Agrocomercial" (g minúscula) → script quedaba atrapado en
+    archivo de mayo 17 aunque junio 21 existía en inbox.
+  · Fix: se agregaron dos patrones adicionales al sorted() que
+    cubren la grafía con g minúscula (con y sin doble espacio).
+  · Verificado con Python: ANTES seleccionaba 2026-05-17, DESPUÉS
+    selecciona 2026-06-21 correctamente.
+PENDIENTE: Javier debe re-ejecutar ACTUALIZAR_AVBOARD.command y
+luego commit + push de avboard_data.js + scripts/update_avboard.py.
+======================================================================
