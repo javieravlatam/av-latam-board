@@ -1,0 +1,129 @@
+{
+  "_comentario": "Modelo de datos CANÓNICO para la entidad Clientes del Centro Comercial AV LATAM. NO es el catálogo operativo (ese sigue siendo ../clientes_chile.json / ../clientes_peru.json, consumido hoy por cotizador_chile.html / cotizador_peru.html). Este archivo es solo el contrato de campos que usarán las próximas fases (CRM Clientes). No está conectado a ninguna pantalla todavía.",
+  "entidad": "CLIENTES",
+  "version": "1.0.0",
+  "fecha_diseno": "2026-07-01",
+  "clave_primaria": "id",
+  "campos": {
+    "id": {
+      "tipo": "string", "obligatorio": true,
+      "descripcion": "Identificador único del cliente.",
+      "ejemplo": "cl_779415449",
+      "origen_actual": "clientes_chile.json / clientes_peru.json → id (ya existe, mismo formato)"
+    },
+    "pais": {
+      "tipo": "string", "enum": ["CL", "PE"], "obligatorio": true,
+      "descripcion": "País del cliente. (En el listado original de Javier 'País' aparecía dos veces — se consolidó en un solo campo.)",
+      "ejemplo": "CL",
+      "origen_actual": "clientes_chile.json / clientes_peru.json → pais (ya existe)"
+    },
+    "razon_social": {
+      "tipo": "string", "obligatorio": true,
+      "descripcion": "Nombre legal / razón social del cliente.",
+      "ejemplo": "BODEN SPA",
+      "origen_actual": "clientes_chile.json / clientes_peru.json → nombre (mismo dato, nombre de campo distinto)"
+    },
+    "rut_ruc": {
+      "tipo": "string", "obligatorio": true,
+      "descripcion": "RUT (Chile) o RUC (Perú).",
+      "ejemplo": "77.941.544-9",
+      "origen_actual": "clientes_chile.json / clientes_peru.json → rut (ya existe)"
+    },
+    "direccion": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Dirección física del cliente.",
+      "ejemplo": "",
+      "origen_actual": "clientes_chile.json / clientes_peru.json → direccion (ya existe, hoy vacío — sin fuente real todavía)"
+    },
+    "ciudad": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Ciudad del cliente.",
+      "ejemplo": "",
+      "origen_actual": "clientes_chile.json / clientes_peru.json → ciudad (ya existe, hoy vacío)"
+    },
+    "region": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Región (Chile) o equivalente administrativo.",
+      "ejemplo": "DECIMA",
+      "origen_actual": "clientes_chile.json → region (ya existe para CL; Perú no trae región hoy)"
+    },
+    "contacto_principal": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Nombre de la persona de contacto principal.",
+      "ejemplo": "",
+      "origen_actual": "clientes_*.json → contacto (ya existe, hoy vacío — se completa a mano en cada cotización)"
+    },
+    "cargo": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Cargo del contacto principal (ej. Jefe de Compras, Gerente Agrícola). NUEVO — no existe en el catálogo operativo actual.",
+      "ejemplo": "",
+      "origen_actual": "no existe todavía — campo nuevo de esta fase de modelado"
+    },
+    "telefono": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Teléfono de contacto.",
+      "ejemplo": "",
+      "origen_actual": "clientes_*.json → telefono (ya existe, hoy vacío)"
+    },
+    "correo": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Correo electrónico de contacto.",
+      "ejemplo": "",
+      "origen_actual": "clientes_*.json → correo (ya existe, hoy vacío)"
+    },
+    "rtc_asignado": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Vendedor / ruta comercial asignada al cliente.",
+      "ejemplo": "JORGE CAROCA",
+      "origen_actual": "clientes_*.json → vendedor_rtc (mismo dato, nombre de campo distinto)"
+    },
+    "condicion_pago": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Condición de pago habitual del cliente. Debe ser uno de los valores de configuracion.condiciones.",
+      "ejemplo": "30 días",
+      "origen_actual": "clientes_*.json → condicion_pago_habitual (ya existe, hoy vacío)"
+    },
+    "lista_precios": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Lista de precios asignada al cliente (ej. Estándar, Distribuidor, Exportación). NUEVO — hoy todos los clientes cotizan contra el mismo catálogo de precio piso/lista, sin segmentación por cliente.",
+      "ejemplo": "Estándar",
+      "origen_actual": "no existe todavía — depende del futuro módulo Pricing"
+    },
+    "cultivo_principal": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Cultivo principal del cliente (ej. Cerezo, Palta, Uva de mesa). NUEVO — dato agronómico relevante para el futuro CRM.",
+      "ejemplo": "",
+      "origen_actual": "no existe todavía — campo nuevo de esta fase de modelado"
+    },
+    "superficie": {
+      "tipo": "number", "obligatorio": false,
+      "descripcion": "Superficie cultivada del cliente, en hectáreas. NUEVO.",
+      "ejemplo": null,
+      "unidad": "ha",
+      "origen_actual": "no existe todavía — campo nuevo de esta fase de modelado"
+    },
+    "estado_cliente": {
+      "tipo": "string", "enum": ["ACTIVO", "INACTIVO", "PROSPECTO", "BLOQUEADO"], "obligatorio": true,
+      "descripcion": "Estado comercial del cliente.",
+      "ejemplo": "ACTIVO",
+      "origen_actual": "clientes_*.json → estado (ya existe, hoy siempre 'ACTIVO' — no distingue prospecto/bloqueado todavía)"
+    },
+    "observaciones": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Notas libres sobre el cliente (uso interno CRM). NUEVO.",
+      "ejemplo": "",
+      "origen_actual": "no existe todavía — campo nuevo de esta fase de modelado"
+    },
+    "moneda": {
+      "tipo": "string", "enum": ["CLP", "USD"], "obligatorio": false,
+      "descripcion": "Moneda operativa del cliente (heredada de país). Campo adicional no pedido explícitamente por Javier, pero ya existe en el catálogo operativo y es útil mantenerlo.",
+      "ejemplo": "CLP",
+      "origen_actual": "clientes_*.json → moneda (ya existe)"
+    }
+  },
+  "notas": [
+    "Este schema documenta el campo 'lista_precios' y 'cultivo_principal'/'superficie' como NUEVOS: hoy no hay ninguna fuente de datos real para ellos (ni en avboard_clientes.js ni en ningún Excel del inbox). Quedan preparados para cuando exista un CRM o un levantamiento manual.",
+    "El catálogo operativo actual (clientes_chile.json/clientes_peru.json) YA tiene 13 de estos 18 campos con los mismos nombres o equivalentes directos — ver columna 'origen_actual' de cada campo. Los 5 restantes (cargo, lista_precios, cultivo_principal, superficie, observaciones) son 100% nuevos.",
+    "Cuando se aborde el módulo CRM Clientes, la migración recomendada es: agregar los 5 campos nuevos al catálogo operativo (mismo archivo, mismo formato) en vez de crear una fuente de datos paralela — evita duplicar la lógica de carga que ya usa cotizador_core.js."
+  ]
+}

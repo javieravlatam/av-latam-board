@@ -1,0 +1,111 @@
+{
+  "_comentario": "Configuración comercial del Cotizador AV LATAM. Editable sin tocar cotizador_core.js. Generado 2026-07-01. Extendido 2026-07-01 (Fase 2 — solo adiciones), 2026-07-01 (Fase 3 — motor logístico, solo adiciones) y 2026-07-01 (Corrección Final — vuelta al modelo simple de precio unitario por litro/kilo + presentaciones_por_unidad).",
+  "version": "1.3.0",
+  "paises": {
+    "CL": {
+      "nombre": "Chile",
+      "bandera": "🇨🇱",
+      "moneda": "CLP",
+      "moneda_simbolo": "$",
+      "prefijo_numero": "AV-CL",
+      "productos_file": "data/productos_chile.json",
+      "clientes_file": "data/clientes_chile.json"
+    },
+    "PE": {
+      "nombre": "Perú",
+      "bandera": "🇵🇪",
+      "moneda": "USD",
+      "moneda_simbolo": "US$",
+      "prefijo_numero": "AV-PE",
+      "productos_file": "data/productos_peru.json",
+      "clientes_file": "data/clientes_peru.json"
+    }
+  },
+  "iec": {
+    "descripcion": "IEC = Valor Cotizado / Precio Piso, ponderado por línea elegible (con piso definido). 1.00 = exactamente en piso.",
+    "semaforo": {
+      "verde_min": 1.03,
+      "amarillo_min": 0.98,
+      "naranja_min": 0.90,
+      "_regla": "IEC >= verde_min -> Verde. amarillo_min <= IEC < verde_min -> Amarillo. naranja_min <= IEC < amarillo_min -> Naranja. IEC < naranja_min -> Rojo.",
+      "labels": {
+        "verde":   { "nombre": "Verde",   "descripcion": "Cotización sobre política" },
+        "amarillo":{ "nombre": "Amarillo","descripcion": "Muy cercana al Precio Piso" },
+        "naranja": { "nombre": "Naranja", "descripcion": "Bajo política" },
+        "rojo":    { "nombre": "Rojo",    "descripcion": "Crítica" }
+      }
+    }
+  },
+  "condiciones_pago": [
+    "Contado",
+    "15 días",
+    "30 días",
+    "45 días",
+    "60 días",
+    "Anticipado 50% / saldo contra entrega"
+  ],
+  "validez_dias_default": 15,
+  "estados": [
+    "BORRADOR",
+    "EMITIDA",
+    "ENVIADA",
+    "APROBADA",
+    "RECHAZADA",
+    "CONVERTIDA_A_PEDIDO"
+  ],
+  "estados_transiciones": {
+    "BORRADOR": ["EMITIDA"],
+    "EMITIDA": ["ENVIADA", "BORRADOR"],
+    "ENVIADA": ["APROBADA", "RECHAZADA"],
+    "APROBADA": ["CONVERTIDA_A_PEDIDO"],
+    "RECHAZADA": [],
+    "CONVERTIDA_A_PEDIDO": []
+  },
+  "numeracion_inicio": {
+    "CL": 1,
+    "PE": 1
+  },
+  "objetivo": {
+    "_comentario": "Precio Objetivo (Fase 2; vuelto a nivel de precio unitario por litro/kilo en la Corrección Final de 2026-07-01) — referencia entre Precio Lista y Precio Piso, ambos por litro/kilo. Todavía NO se usa en el cálculo de IEC ni en el semáforo (esos siguen 100% atados al Precio Piso). Es un campo editable por línea, con este valor solo como sugerencia inicial.",
+    "factor_default": 0.5,
+    "formula_default": "piso_unitario + (precio_lista_unitario - piso_unitario) * factor_default, si precio_lista_unitario > piso_unitario; si no, = piso_unitario"
+  },
+  "_comentario_presentaciones_por_unidad": "Corrección Final (2026-07-01). presentaciones_por_unidad = presentaciones pequeñas que se cotizan DIRECTO por envase, no multiplicadas por su contenido en litros/kilos (ej. 250 GR, 500 GR no se multiplican × 0,25 o × 0,5). Calc.factorPresentacion() compara cada línea contra esta lista (normalizando GR/G, KG/K, etc. — no requiere texto idéntico) y usa factor=1 si hay match; si no, usa el contenido numérico de la presentación. 100% configurable — NO hardcodeado en cotizador_core.js. Agregar aquí cualquier presentación nueva que deba cotizarse por unidad.",
+  "presentaciones_por_unidad": [
+    "250 GR",
+    "500 GR"
+  ],
+  "pipeline_visual": {
+    "_comentario": "Barra de pipeline puramente decorativa (Fase 2). NO reemplaza estados_transiciones ni tiene funcionalidad de click.",
+    "etapas": ["BORRADOR", "ENVIADA", "NEGOCIACIÓN", "ACEPTADA", "PEDIDO"],
+    "mapa_estado_real": {
+      "BORRADOR": "BORRADOR",
+      "EMITIDA": "ENVIADA",
+      "ENVIADA": "ENVIADA",
+      "APROBADA": "ACEPTADA",
+      "CONVERTIDA_A_PEDIDO": "PEDIDO",
+      "RECHAZADA": null
+    }
+  },
+  "navegacion": {
+    "_comentario": "Barra superior del futuro Centro Comercial AV LATAM (spec Fase 2, sección BARRA SUPERIOR). disponible:false = visible pero inerte (Próximamente), no se desarrolla todavía. La visión completa de módulos futuros (CRM, Pricing, Pipeline, Reportes, Inteligencia Comercial) queda documentada en README.md — no se agregan aquí hasta que se aborden explícitamente.",
+    "items": [
+      { "id": "portal",        "label": "Portal",              "disponible": true },
+      { "id": "nueva",         "label": "Nueva Cotización",     "disponible": true },
+      { "id": "historial",     "label": "Historial",            "disponible": true },
+      { "id": "clientes",      "label": "Clientes",             "disponible": false },
+      { "id": "productos",     "label": "Productos",            "disponible": false },
+      { "id": "configuracion", "label": "Configuración",         "disponible": false }
+    ]
+  },
+  "logistica": {
+    "_comentario": "Motor Logístico (Fase 3) — distancia y costo de despacho. La api_key NUNCA se hardcodea en cotizador_core.js: siempre se lee desde aquí. Si queda vacía, o si origen_chile/origen_peru siguen con el texto placeholder, el sistema usa ingreso manual de distancia automáticamente (ver README.md sección 12). No conecta con ningún backend — llamada directa desde el navegador a OpenRouteService.",
+    "proveedor_api": "openrouteservice",
+    "api_key": "",
+    "origen_chile": "PENDIENTE — completar dirección oficial de origen (bodega/planta) Chile",
+    "origen_peru": "PENDIENTE — completar dirección oficial de origen (bodega/planta) Perú",
+    "costo_km_chile_clp": 1000,
+    "costo_km_peru_usd": 0,
+    "fallback_manual": true
+  }
+}

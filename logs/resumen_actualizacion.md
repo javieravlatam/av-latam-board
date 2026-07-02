@@ -587,3 +587,196 @@ validar con Javier antes de tomar decisiones de pricing basadas solo en esos
 números (ver nota en update_avboard.py / compute_productos).
 
 ---
+
+---
+
+## Actualización 2026-07-01 — Nuevo módulo: Cotizador AV LATAM (Fase 1)
+
+**Qué se construyó:** módulo independiente `apps/cotizador/` — portal Chile/Perú,
+pantallas de cotización con Índice de Eficiencia Comercial (IEC) por línea y
+global, semáforo de política de precios, margen estimado, numeración
+automática (AV-CL/AV-PE-AAAA-0001), historial filtrable, PDF cliente sin
+datos internos, panel interno con alertas.
+
+**Alcance de esta fase:** portal + pantallas base + motor de cálculo +
+catálogos semilla (89 SKU Chile / 29 SKU Perú, 148 clientes Chile / 42
+Perú, extraídos de avboard_data.js/avboard_clientes.js sin modificarlos).
+Arquitectura preparada — no implementada — para integrar con Executive
+Board, CRM, Pipeline, Pedidos, Facturación y Reportes Comerciales.
+
+**Decisión pendiente para Javier:** el catálogo trae `precio_lista_ref`
+como referencia (promedio histórico de venta, NO una lista oficial) —
+definir si se reemplaza por una lista de precios real. Los umbrales del
+semáforo IEC (1.03 / 0.98 / 0.90) son un punto de partida configurable en
+`data/config.json`, pendientes de validación como política oficial.
+
+**Impacto en dashboards existentes:** ninguno — cero archivos modificados
+fuera de `apps/cotizador/` (confirmado con `git status`).
+
+---
+
+## Actualización 2026-07-01 — Fase 2: Cotizador evoluciona a "Centro Comercial AV LATAM"
+
+**Qué cambió:** experiencia de usuario del módulo Cotizador (Fase 1,
+arquitectura congelada) rediseñada a nivel Enterprise — identidad visual
+idéntica al Executive Board, hero de cotización (número/estado/país/
+moneda), tarjeta de cliente autocargada, grilla tipo ERP con el nuevo
+concepto Precio Objetivo, panel de Recomendación Comercial en lenguaje
+de negociación (🟢/🟡/🔴), pipeline visual decorativo, navegación
+preparada para CRM/Productos/Pricing/Pipeline/Reportes/Inteligencia
+Comercial (todavía "Próximamente"), y PDF cliente con imagen corporativa
+y firma manual.
+
+**Qué NO cambió:** numeración automática, fórmula de IEC (100% atada a
+Precio Piso), semáforo, máquina de estados, patrón de storage (adapter),
+ni ningún dashboard/panel/script del resto del repo.
+
+**Decisión pendiente para Javier:** los nuevos campos de cliente
+(dirección, ciudad, correo, teléfono, condición de pago habitual) están
+vacíos porque no existen en avboard_clientes.js — la UI ya los autocarga
+en cuanto el dato exista en `data/clientes_*.json`. El factor de Precio
+Objetivo (0.5 = punto medio entre Piso y Lista referencial) es un
+default editable en `config.json`, no una política validada.
+
+---
+
+## Actualización 2026-07-01 — Modelo de datos del Centro Comercial (preparación, sin desarrollo)
+
+**Qué se dejó listo:** el contrato de datos que usarán CRM Clientes,
+Productos, Pricing y Pipeline Comercial en las próximas fases —
+5 schemas + 1 manifest en `apps/cotizador/data/modelo/`, puramente
+documental (no conectado a ninguna pantalla ni a `cotizador_core.js`).
+
+**Qué NO cambió:** ninguna pantalla, `cotizador.css`, `cotizador_core.js`,
+ni los archivos operativos de Fase 1/2 (`config.json`, catálogos de
+productos/clientes). Cero riesgo para lo que ya funciona. Sin commit.
+
+**Decisión pendiente para Javier:** el modelo deja marcadas 4 brechas
+reales sin fuente de datos hoy — ficha extendida de cliente (cargo,
+lista de precios, cultivo, superficie, observaciones), categoría técnica
+de producto, referencia formal cliente↔cotización, e IVA. Ninguna se
+inventó ni se completó con datos falsos.
+
+---
+
+## Actualización 2026-07-01 — Fase 3: Motor Logístico Inteligente (despacho)
+
+**Qué se agregó:** cálculo automático (opcional) de distancia y costo de
+despacho por dirección de entrega, vía OpenRouteService. Panel nuevo
+"DESPACHO / ENTREGA" en Cotizador Chile y Perú. El usuario decide si el
+despacho se suma o no al total — nunca se agrega solo.
+
+**Qué NO cambió:** IEC, margen, precio piso, arquitectura de Fase 1/2,
+Executive Board, dashboards, update_avboard.py, acceso principal. El
+despacho es un objeto separado (`quote.despacho`) que jamás entra al
+motor de cálculo comercial — verificado con pruebas.
+
+**Decisión pendiente para Javier:** la API key de OpenRouteService y las
+direcciones oficiales de origen (Chile/Perú) están vacías/placeholder en
+`config.json` — sin eso, el sistema funciona igual pero en modo 100%
+manual (nunca bloquea la cotización). El costo/km de Chile arranca en
+1000 CLP/km (tal como se pidió); el de Perú arranca en 0, pendiente de
+definir.
+
+**Sin commit** — cambios quedan en el árbol de trabajo para revisión.
+
+---
+
+## Actualización 2026-07-01 — Fase 4: Corrección crítica de precio por presentación
+
+**Qué se corrigió:** el Cotizador asumía que todos los productos se
+cotizan por litro/kilo. No es así — algunos se negocian directo por
+envase/unidad. Ahora cada línea tiene un `tipo_precio` (LITRO/KILO/
+PRESENTACION/UNIDAD) y los precios de referencia (Lista/Objetivo/Piso)
+se guardan por presentación completa, no por contenido. Una sola
+fórmula (precio unitario × contenido, con contenido=1 por convención en
+PRESENTACION/UNIDAD) calcula correctamente los 4 casos.
+
+**Qué NO cambió:** la fórmula de IEC sigue 100% atada a Precio Piso; el
+despacho sigue sin afectar el cálculo comercial; el PDF cliente sigue
+sin mostrar piso/objetivo/IEC/margen; Executive Board, dashboards,
+update_avboard.py y acceso principal sin tocar.
+
+**Validado:** los 2 casos exactos pedidos por Javier — AV MOVE 20L (3
+envases × $8.000/L) → $480.000, y un caso ilustrativo tipo BIOVECA por
+unidad (3 × $25.000/envase) → $75.000. Ambos en PASS.
+
+**Decisión pendiente para Javier:** el catálogo real (118 SKU, CL+PE) se
+reclasificó 100% automático — no hay hoy ningún producto tipo
+PRESENTACION/UNIDAD en los datos reales (todos son LITRO o KILO). El
+caso BIOVECA es ilustrativo de cómo se comportaría el sistema el día
+que exista un SKU así.
+
+**Sin commit** — cambios quedan en el árbol de trabajo para revisión.
+
+---
+
+## Actualización 2026-07-01 — Corrección Final: lógica simple de precio unitario
+
+**Qué se corrigió:** el modelo de precio por presentación de la Fase 4
+(precios oficiales guardados por envase completo) no correspondía a cómo
+está construida la tabla de precios piso real de Agroveca, que siempre
+trabaja por litro/kilo. Se simplificó el motor: ahora `precio_lista/
+objetivo/piso/venta` son SIEMPRE precio unitario por litro o kilo, y un
+`factor_presentacion` (1 para presentaciones chicas configuradas en
+`presentaciones_por_unidad`, o el contenido de la presentación en el
+resto) traduce eso al total real. Fórmula: `total_linea =
+precio_venta_unitario × factor_presentacion × cantidad_envases`.
+
+**Qué NO cambió:** el IEC sigue 100% atado al Precio Piso; el despacho
+sigue sin afectar el cálculo comercial (verificado: mismo IEC con/sin
+despacho incluido); el PDF cliente sigue sin mostrar piso/objetivo/IEC/
+margen/costo; Executive Board, dashboards, `update_avboard.py` y acceso
+principal sin tocar.
+
+**Validado:** los 4 casos exactos de Javier — AV MOVE 20L (3×8.000/L) →
+480.000; formato 25 KG (2×4.500/KG) → 225.000; formato 500 g, excepción
+por unidad (4×10.000/envase) → 40.000; formato 250 g, excepción por
+unidad (6×8.000/envase) → 48.000. Los 4 en PASS.
+
+**Decisión pendiente para Javier:** `presentaciones_por_unidad` en
+`data/config.json` hoy solo tiene `["250 GR", "500 GR"]` — las únicas
+presentaciones pequeñas que existen hoy en el catálogo real (5 SKU entre
+Chile y Perú). Cualquier presentación nueva que deba cotizarse directo
+por envase (en vez de multiplicarse por su contenido) se agrega ahí, sin
+tocar código.
+
+**Sin commit** — cambios quedan en el árbol de trabajo para revisión.
+
+---
+
+## Actualización 2026-07-02 — Fase 5: Ajustes finales de UX
+
+**Qué se corrigió:** dos problemas de usabilidad que impedían empezar
+pruebas operativas reales. (1) El logo del header era un placeholder de
+texto "AV" — ahora es el logo oficial de AV LATAM (misma imagen del
+portal principal de acceso) en las 3 pantallas del Cotizador y en el PDF
+cliente. (2) El campo "Precio Venta Unitario" perdía el foco en cada
+tecla porque el sistema recalculaba y repintaba toda la tabla en cada
+carácter escrito — ahora el campo funciona como en un ERP profesional
+(SAP/Dynamics/Odoo): mientras se edita se ve el número crudo ("8000") y
+el cálculo solo ocurre al salir del campo, presionar Enter o cambiar de
+línea, mostrando entonces el valor formateado ("8.000" en Chile, "8.50"
+en Perú).
+
+**Qué NO cambió:** IEC, despacho, numeración, máquina de estados,
+arquitectura de carpetas, Executive Board, dashboards,
+`update_avboard.py`, `avboard_data.js`, acceso principal.
+
+**Validado:** con simulación de teclado (jsdom) se confirmó que el
+`<input>` no se destruye mientras se escribe (nunca pierde el foco), que
+el valor se formatea correctamente recién al salir del campo, que el
+spinner incrementa +500 CLP en Chile / +0.10 USD en Perú, y que el logo
+carga con el mismo tamaño exacto (33.366 caracteres) que el archivo
+original. Los 4 casos de la Corrección Final y la independencia
+IEC/despacho se re-confirmaron sin cambios.
+
+**Decisión pendiente para Javier:** el Executive Board hoy NO tiene un
+logo de imagen real — usa el mismo tipo de mark de texto "AV" que tenía
+el Cotizador antes de esta fase. Se usó como fuente el portal principal
+de acceso (único archivo del repo con la imagen real) en vez del
+Executive Board, ya que ese no la tiene. Si en algún momento se quiere
+que el Executive Board también use la imagen, es un cambio aparte (fuera
+de alcance de esta fase, que solo tocó `apps/cotizador/`).
+
+**Sin commit** — cambios quedan en el árbol de trabajo para revisión.

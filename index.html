@@ -192,6 +192,33 @@
       </button>
     </div>
 
+    <!-- SEPARADOR ENTRE BLOQUES -->
+    <div style="display:flex;align-items:center;gap:10px;margin:18px 0">
+      <div style="flex:1;height:1px;background:rgba(122,182,72,0.12)"></div>
+      <div style="font-size:9px;color:#4a6050;letter-spacing:2px;text-transform:uppercase">o</div>
+      <div style="flex:1;height:1px;background:rgba(122,182,72,0.12)"></div>
+    </div>
+
+    <!-- BLOQUE COTIZADOR -->
+    <div style="margin-bottom:6px">
+      <div style="font-size:9px;color:#8fa892;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;display:flex;align-items:center;gap:7px">
+        <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#F5A623"></span>
+        COTIZADOR COMERCIAL · CHILE / PERÚ
+      </div>
+      <div class="input-wrap">
+        <span class="input-icon">🔒</span>
+        <input type="password" id="pwdCot" class="pwd-input"
+          placeholder="Clave cotizador" maxlength="20" autocomplete="off" />
+        <button class="eye-btn" id="eyeCot" type="button" tabindex="-1">👁</button>
+      </div>
+      <div class="error-msg" id="errCot">Clave incorrecta. Intenta nuevamente.</div>
+      <button class="btn" id="btnCot" onclick="checkCot()"
+        style="background:#F5A623;box-shadow:0 4px 20px rgba(245,166,35,.28)">
+        <div class="btn-spinner" id="spCot"></div>
+        <span id="txCot">ACCESO COTIZADOR</span>
+      </button>
+    </div>
+
     <div class="card-footer">
       <span class="dot-green"></span>Agroveca Grupo Latam · 2026<br>
       Chile · Perú · Ecuador
@@ -203,6 +230,10 @@
 <script>
   const DIR_HASH  = "7cd4374e16e78510de24a08115c3b44f6d0d72762d41054e6ef8fa0cb5e0c45b";
   const JEFE_HASH = "7d575fec604a7d6f7bc4345dce24adfabf6ccee7bd800b718f79afebbeab4320";
+  // Clave cotizador: "2026" — para cambiarla, generar el nuevo hash con la misma
+  // función sha256() de este archivo (ej. en consola: await sha256("nuevaClave"))
+  // y reemplazar el valor de abajo. Es la única constante que hay que tocar.
+  const COT_HASH  = "158a323a7ba44870f23d96f1516dd70aa48e9a72db4ebb026b0a89e212a208ab";
 
   // Auto-redirect si ya hay sesión activa
   if (sessionStorage.getItem('av_auth') === DIR_HASH) {
@@ -210,7 +241,7 @@
     window.location.replace(role === 'jefe' ? 'Panel_Jefes_Index.html' : 'dashboard.html');
   }
 
-  let intDir = 0, intJefe = 0;
+  let intDir = 0, intJefe = 0, intCot = 0;
 
   async function sha256(msg) {
     const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
@@ -225,10 +256,12 @@
   }
   document.getElementById('eyeDir').addEventListener('click',  () => toggleEye('pwdDir','eyeDir'));
   document.getElementById('eyeJefe').addEventListener('click', () => toggleEye('pwdJefe','eyeJefe'));
+  document.getElementById('eyeCot').addEventListener('click',  () => toggleEye('pwdCot','eyeCot'));
 
   // Enter en cada campo
   document.getElementById('pwdDir').addEventListener('keydown',  e => { if(e.key==='Enter') checkDir();  clearErr('pwdDir','errDir'); });
   document.getElementById('pwdJefe').addEventListener('keydown', e => { if(e.key==='Enter') checkJefe(); clearErr('pwdJefe','errJefe'); });
+  document.getElementById('pwdCot').addEventListener('keydown',  e => { if(e.key==='Enter') checkCot();  clearErr('pwdCot','errCot'); });
 
   function clearErr(inputId, errId) {
     document.getElementById(errId).classList.remove('show');
@@ -288,6 +321,25 @@
       const msg = intJefe>=5 ? 'Acceso bloqueado. Recarga la página.'
         : `Clave incorrecta · ${5-intJefe} intento${5-intJefe!==1?'s':''} restante${5-intJefe!==1?'s':''}`;
       showErr('pwdJefe','errJefe','btnJefe','spJefe','txJefe', msg, 'ACCESO JEFES PAÍS');
+    }
+  }
+
+  async function checkCot() {
+    const val = document.getElementById('pwdCot').value.trim();
+    if (!val || intCot >= 5) return;
+    const btn=document.getElementById('btnCot'), sp=document.getElementById('spCot'), tx=document.getElementById('txCot');
+    btn.disabled=true; sp.style.display='block'; tx.textContent='Verificando...';
+    await new Promise(r => setTimeout(r, 700));
+    const h = await sha256(val);
+    if (h === COT_HASH) {
+      document.getElementById('successOverlay').classList.add('show');
+      document.querySelector('.success-sub').textContent = 'Cargando cotizador comercial...';
+      setTimeout(() => window.location.href = 'apps/cotizador/index.html', 1500);
+    } else {
+      intCot++;
+      const msg = intCot>=5 ? 'Acceso bloqueado. Recarga la página.'
+        : `Clave incorrecta · ${5-intCot} intento${5-intCot!==1?'s':''} restante${5-intCot!==1?'s':''}`;
+      showErr('pwdCot','errCot','btnCot','spCot','txCot', msg, 'ACCESO COTIZADOR');
     }
   }
 </script>

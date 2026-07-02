@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotizador Perú · Centro Comercial AV LATAM</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="cotizador.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <div class="logo-mark-img"><img id="logo-img" alt="AV LATAM"></div>
+    <div>
+      <div class="header-title">CENTRO COMERCIAL AV LATAM</div>
+      <div class="header-sub">🇵🇪 Cotizador Perú</div>
+    </div>
+  </div>
+  <nav class="header-nav" id="nav-principal"></nav>
+  <div class="header-corte">
+    <div class="corte-label">Fecha</div>
+    <div class="corte-date" id="fecha-hoy">—</div>
+  </div>
+</header>
+
+<div class="cz-shell">
+
+  <!-- ══════════════ HERO: número / estado / país / moneda ══════════════ -->
+  <div class="quote-hero">
+    <div class="quote-hero-id">
+      <div class="eyebrow">Cotización Comercial</div>
+      <div class="numero" id="numero-actual">AV-PE-...</div>
+    </div>
+    <div class="quote-hero-meta">
+      <span class="badge BORRADOR" id="badge-estado">BORRADOR</span>
+      <span class="chip"><span class="chip-label">País</span> Perú 🇵🇪</span>
+      <span class="chip"><span class="chip-label">Moneda</span> USD</span>
+    </div>
+    <div class="quote-hero-actions">
+      <select id="sel-nuevo-estado" style="width:auto"></select>
+      <button class="btn secundario" id="btn-cambiar-estado">Cambiar estado</button>
+      <button class="btn secundario" id="btn-guardar">Guardar</button>
+      <button class="btn" id="btn-imprimir">PDF Cliente</button>
+      <div class="tools-wrap">
+        <button class="tools-btn" id="btn-tools">⋯ Herramientas</button>
+        <div class="tools-menu" id="tools-menu">
+          <button id="btn-exportar-json">Exportar JSON</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ PIPELINE VISUAL (decorativo) ══════════════ -->
+  <div class="panel">
+    <h3>PIPELINE COMERCIAL <span class="tag">VISTA PREVIA · SIN FUNCIONALIDAD TODAVÍA</span></h3>
+    <div class="pipeline" id="pipeline-box"></div>
+  </div>
+
+  <div class="cz-grid">
+    <!-- ══════════════ COLUMNA IZQUIERDA: encabezado + detalle ══════════════ -->
+    <div>
+      <div class="panel">
+        <h3>DATOS DEL CLIENTE <span class="tag">AUTOCARGA AL SELECCIONAR</span></h3>
+        <div class="form-grid">
+          <div class="field"><label>Cliente / Razón Social</label>
+            <input list="lista-clientes" id="f-cliente-nombre" placeholder="Buscar cliente...">
+            <datalist id="lista-clientes"></datalist>
+          </div>
+          <div class="field"><label>RUC / Documento</label><input id="f-cliente-rut" placeholder="20xxxxxxxxx"></div>
+          <div class="field"><label>RTC (vendedor / ruta)</label><input id="f-rtc" placeholder="Ej. J. Caroca"></div>
+        </div>
+        <div class="form-grid" style="margin-top:12px">
+          <div class="field"><label>Dirección</label><input id="f-cliente-direccion" placeholder="Dirección"></div>
+          <div class="field"><label>Ciudad</label><input id="f-cliente-ciudad" placeholder="Ciudad"></div>
+          <div class="field"><label>Contacto principal</label><input id="f-cliente-contacto" placeholder="Nombre contacto"></div>
+        </div>
+        <div class="form-grid" style="margin-top:12px">
+          <div class="field"><label>Correo electrónico</label><input id="f-cliente-correo" type="email" placeholder="correo@cliente.pe"></div>
+          <div class="field"><label>Teléfono</label><input id="f-cliente-telefono" placeholder="+51 9 ...."></div>
+          <div class="field"><label>Elaborado por</label><input id="f-elaborado-por" placeholder="Tu nombre"></div>
+        </div>
+
+        <div class="cliente-card" id="cliente-card" style="display:none"></div>
+
+        <div class="form-grid" style="margin-top:16px">
+          <div class="field"><label>Fecha</label><input id="f-fecha" type="date"></div>
+          <div class="field"><label>Condición de pago</label><select id="f-condicion-pago"></select></div>
+          <div class="field"><label>Validez (días)</label><input id="f-validez" type="number" value="15" min="1"></div>
+        </div>
+        <div class="form-grid" style="margin-top:12px">
+          <div class="field"><label>Lugar de entrega</label><input id="f-lugar-entrega" placeholder="Bodega / campo / ciudad"></div>
+        </div>
+        <div class="field" style="margin-top:12px"><label>Observaciones (visibles para el cliente)</label>
+          <textarea id="f-observaciones" rows="2" placeholder="Condiciones comerciales adicionales..."></textarea>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>DETALLE DE PRODUCTOS <span class="tag" id="tag-lineas">0 LÍNEAS</span></h3>
+        <div style="overflow-x:auto">
+        <table class="lineas">
+          <thead><tr>
+            <th style="width:18%">Producto</th><th style="width:10%">Presentación</th>
+            <th class="num">Cant. envases</th>
+            <th class="num">P. Lista unit.</th>
+            <th class="num">P. Objetivo unit.</th>
+            <th class="num">P. Piso unit.</th>
+            <th class="num">P. Venta unit.</th>
+            <th class="num">Total línea</th>
+            <th class="num">IEC</th>
+            <th></th>
+          </tr></thead>
+          <tbody id="tbody-lineas"></tbody>
+        </table>
+        </div>
+        <div class="btn-row"><button class="btn secundario" id="btn-agregar-linea">+ Agregar línea</button></div>
+        <div class="subtotal-strip">
+          <span>Precio piso total: <b id="s-piso-total">—</b></span>
+          <span>Valor cotizado: <b id="s-cotizado-total">—</b></span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>DESPACHO / ENTREGA <span class="tag">MOTOR LOGÍSTICO · NO AFECTA IEC NI MARGEN</span></h3>
+        <div class="form-grid cols-2">
+          <div class="field"><label>Dirección de entrega</label><input id="f-desp-direccion" placeholder="Calle, número, comuna..."></div>
+          <div class="field"><label>Ciudad / zona</label><input id="f-desp-ciudad" placeholder="Ciudad o zona"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn secundario" id="btn-calcular-distancia">Calcular distancia</button>
+          <span class="logi-estado sin_calcular" id="logi-estado-badge">Sin calcular</span>
+        </div>
+        <div class="logi-msg" id="logi-mensaje">Ingresa la dirección y presiona "Calcular distancia", o escribe la distancia manualmente si prefieres.</div>
+        <div class="form-grid" style="margin-top:12px">
+          <div class="field"><label>Distancia (km)</label><input id="f-desp-distancia" type="number" min="0" step="0.1" placeholder="0"></div>
+          <div class="field"><label>Tiempo estimado</label><input id="f-desp-tiempo" placeholder="—" readonly></div>
+          <div class="field"><label>Costo por km</label><input id="f-desp-costokm" type="number" min="0" step="0.01"></div>
+        </div>
+        <div class="form-grid cols-2" style="margin-top:12px;align-items:end">
+          <div class="field"><label>Costo despacho</label><input id="f-desp-costo" type="number" min="0" step="0.01" readonly></div>
+          <div class="field"><label>Incluir despacho en la cotización</label>
+            <select id="f-desp-incluir"><option value="no">No</option><option value="si">Sí</option></select>
+          </div>
+        </div>
+        <div class="subtotal-strip" style="flex-wrap:wrap; justify-content:flex-start; gap:20px">
+          <span>Subtotal productos: <b id="desp-subtotal-productos">—</b></span>
+          <span>Costo despacho: <b id="desp-costo-resumen">—</b></span>
+          <span>Total cotización: <b id="desp-total-cotizacion">—</b></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ COLUMNA DERECHA: inteligencia comercial ══════════════ -->
+    <div>
+      <div class="panel">
+        <h3>RECOMENDACIÓN COMERCIAL <span class="tag">ASISTENTE DE NEGOCIACIÓN</span></h3>
+        <div class="reco-card sin_datos" id="reco-card">
+          <div class="reco-icono" id="reco-icono">⚪</div>
+          <div><div class="reco-titulo" id="reco-titulo">Sin datos</div><div class="reco-cuerpo" id="reco-cuerpo">Agrega líneas para recibir una recomendación.</div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>DETALLE TÉCNICO <span class="tag">USO INTERNO</span></h3>
+        <div class="semaforo" id="semaforo-box">
+          <div class="dot" style="background:#5a7060"></div>
+          <div><div class="nombre" id="semaforo-nombre">Sin datos</div><div class="desc" id="semaforo-desc">Agrega líneas para calcular el IEC</div></div>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi"><div class="kval" id="k-iec">—</div><div class="klabel">IEC GLOBAL (vs PISO)</div></div>
+          <div class="kpi"><div class="kval" id="k-margen">—</div><div class="klabel">MARGEN ESTIMADO</div></div>
+          <div class="kpi"><div class="kval" id="k-ganado">—</div><div class="klabel">VALOR GANADO vs PISO</div></div>
+          <div class="kpi"><div class="kval" id="k-cedido">—</div><div class="klabel">VALOR CEDIDO vs PISO</div></div>
+          <div class="kpi"><div class="kval" id="k-bajo-piso">—</div><div class="klabel">LÍNEAS BAJO PISO</div></div>
+          <div class="kpi"><div class="kval" id="k-bajo-objetivo">—</div><div class="klabel">LÍNEAS BAJO OBJETIVO</div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>ALERTAS <span class="tag">USO INTERNO</span></h3>
+        <div id="alertas-box"><div class="hint">Sin alertas por ahora.</div></div>
+      </div>
+
+      <div class="panel">
+        <h3>COMENTARIOS INTERNOS <span class="tag">NO VA AL PDF CLIENTE</span></h3>
+        <textarea id="f-comentarios-internos" rows="4" placeholder="Notas para el equipo comercial / jefatura..."></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL HISTORIAL ══════════════ -->
+<div class="modal-backdrop" id="modal-historial">
+  <div class="modal">
+    <h3 style="display:flex;justify-content:space-between">HISTORIAL DE COTIZACIONES — PERÚ <button class="btn-mini" id="btn-cerrar-historial">✕</button></h3>
+    <div class="hist-filtros">
+      <input id="hf-cliente" placeholder="Cliente">
+      <input id="hf-rtc" placeholder="RTC / vendedor">
+      <input id="hf-numero" placeholder="Número">
+      <select id="hf-estado"><option value="">Todos los estados</option></select>
+      <button class="btn secundario" id="btn-filtrar-historial">Buscar</button>
+    </div>
+    <table class="historial">
+      <thead><tr><th>Número</th><th>Fecha</th><th>Cliente</th><th>RTC</th><th>Estado</th><th class="num">Total</th></tr></thead>
+      <tbody id="tbody-historial"></tbody>
+    </table>
+  </div>
+</div>
+
+<script src="assets_logo.js"></script>
+<script src="cotizador_core.js"></script>
+<script>
+(function(){
+  var PAIS = 'PE';
+  var PAIS_NOMBRE = 'Perú';
+  var STEP_PRECIO = (PAIS === 'PE') ? 0.1 : 500; // Fase 5: spinner — Chile +500 CLP, Perú +0.10 USD
+  var ctx = null;      // { config, paisConfig, productos, clientes }
+  var quote = null;
+
+  function $(id){ return document.getElementById(id); }
+
+  $('logo-img').src = AV_LOGO_DATA_URL;
+
+  COTIZADOR.init(PAIS).then(function(res){
+    ctx = res;
+    poblarNav();
+    poblarSelects();
+    poblarClientes();
+    $('fecha-hoy').textContent = COTIZADOR.util.todayDisplay();
+    quote = COTIZADOR.Quote.nueva(PAIS, ctx.paisConfig, '');
+    quote.despacho.costo_km = COTIZADOR.Logistica.costoKmPais(ctx.config, PAIS);
+    hidratarDespacho();
+    render();
+  }).catch(function(err){
+    document.querySelector('.cz-shell').innerHTML = '<div class="panel"><h3>ERROR DE CARGA</h3><p>' + err.message + '</p></div>';
+  });
+
+  function poblarNav(){
+    var items = (ctx.config.navegacion && ctx.config.navegacion.items) || [];
+    var nav = $('nav-principal');
+    nav.innerHTML = items.map(function(it){
+      if (!it.disponible) return '<span class="nav-pill proximamente" title="Próximamente">' + it.label + '</span>';
+      if (it.id === 'portal') return '<a class="nav-pill" href="index.html">' + it.label + '</a>';
+      if (it.id === 'nueva') return '<a class="nav-pill activo" href="#" id="nav-nueva">' + it.label + '</a>';
+      if (it.id === 'historial') return '<a class="nav-pill" href="#" id="nav-historial">' + it.label + '</a>';
+      return '<a class="nav-pill" href="index.html">' + it.label + '</a>';
+    }).join('');
+    $('nav-nueva').addEventListener('click', function(e){ e.preventDefault(); nuevaCotizacion(); });
+    $('nav-historial').addEventListener('click', function(e){ e.preventDefault(); abrirHistorial(); });
+  }
+
+  function poblarSelects(){
+    var cp = $('f-condicion-pago');
+    cp.innerHTML = ctx.config.condiciones_pago.map(function(c){ return '<option>' + c + '</option>'; }).join('');
+    $('f-validez').value = ctx.config.validez_dias_default;
+
+    var estados = ctx.config.estados;
+    $('sel-nuevo-estado').innerHTML = estados.map(function(e){ return '<option value="'+e+'">'+e+'</option>'; }).join('');
+    $('hf-estado').innerHTML += estados.map(function(e){ return '<option value="'+e+'">'+e+'</option>'; }).join('');
+  }
+
+  function poblarClientes(){
+    $('lista-clientes').innerHTML = ctx.clientes.map(function(c){
+      return '<option value="' + COTIZADOR.util.escapeHTML(c.nombre) + '">';
+    }).join('');
+  }
+
+  // ── Cliente: autocarga desde catálogo ────────────────────────────
+  function campoOVacio(v){
+    return v ? COTIZADOR.util.escapeHTML(v) : '<span class="vacio">— sin datos, completar manualmente —</span>';
+  }
+  function pintarClienteCard(c){
+    var card = $('cliente-card');
+    if (!c){ card.style.display = 'none'; return; }
+    card.style.display = 'grid';
+    card.innerHTML =
+      '<div class="ci"><b>Razón Social</b><span>' + COTIZADOR.util.escapeHTML(c.nombre) + '</span></div>' +
+      '<div class="ci"><b>RUT</b><span>' + campoOVacio(c.rut) + '</span></div>' +
+      '<div class="ci"><b>Dirección</b><span>' + campoOVacio(c.direccion) + '</span></div>' +
+      '<div class="ci"><b>Ciudad</b><span>' + campoOVacio(c.ciudad || c.region) + '</span></div>' +
+      '<div class="ci"><b>Correo</b><span>' + campoOVacio(c.correo) + '</span></div>' +
+      '<div class="ci"><b>Teléfono</b><span>' + campoOVacio(c.telefono) + '</span></div>' +
+      '<div class="ci"><b>RTC asignado</b><span>' + campoOVacio(c.vendedor_rtc) + '</span></div>' +
+      '<div class="ci"><b>Cond. pago habitual</b><span>' + campoOVacio(c.condicion_pago_habitual) + '</span></div>' +
+      '<div class="ci"><b>Estado cliente</b><span>' + campoOVacio(c.estado) + '</span></div>';
+  }
+
+  $('f-cliente-nombre').addEventListener('change', function(){
+    var val = this.value;
+    var c = ctx.clientes.find(function(cl){ return cl.nombre === val; });
+    if (c){
+      $('f-cliente-rut').value = c.rut || '';
+      $('f-rtc').value = c.vendedor_rtc || '';
+      $('f-cliente-direccion').value = c.direccion || '';
+      $('f-cliente-ciudad').value = c.ciudad || c.region || '';
+      $('f-cliente-correo').value = c.correo || '';
+      $('f-cliente-telefono').value = c.telefono || '';
+      if (c.condicion_pago_habitual && ctx.config.condiciones_pago.indexOf(c.condicion_pago_habitual) !== -1){
+        $('f-condicion-pago').value = c.condicion_pago_habitual;
+      }
+      pintarClienteCard(c);
+      sincronizarClienteEnQuote();
+    } else {
+      pintarClienteCard(null);
+    }
+  });
+
+  function sincronizarClienteEnQuote(){
+    quote.cliente.nombre = $('f-cliente-nombre').value;
+    quote.cliente.rut = $('f-cliente-rut').value;
+    quote.cliente.contacto = $('f-cliente-contacto').value;
+    quote.cliente.rtc = $('f-rtc').value;
+    quote.cliente.direccion = $('f-cliente-direccion').value;
+    quote.cliente.ciudad = $('f-cliente-ciudad').value;
+    quote.cliente.correo = $('f-cliente-correo').value;
+    quote.cliente.telefono = $('f-cliente-telefono').value;
+    quote.condicion_pago = $('f-condicion-pago').value;
+  }
+
+  // ── Líneas ──────────────────────────────────────────────────────
+  function agregarLinea(){
+    quote.lineas.push(COTIZADOR.Quote.lineaVacia());
+    render();
+  }
+  $('btn-agregar-linea').addEventListener('click', agregarLinea);
+
+  function opcionesProductos(seleccionSku){
+    return '<option value="">— seleccionar —</option>' + ctx.productos.map(function(p){
+      var sel = p.sku === seleccionSku ? ' selected' : '';
+      return '<option value="' + p.sku + '"' + sel + '>' + COTIZADOR.util.escapeHTML(p.producto + ' — ' + p.presentacion) + '</option>';
+    }).join('');
+  }
+
+  // Corrección Final: sufijo junto al input de precio venta unitario, para
+  // que el vendedor sepa si está escribiendo un precio por L/KG o directo
+  // por envase (presentaciones_por_unidad en config.json). factor=1 → envase.
+  function sufijoPrecioUnitario(l){
+    var factor = COTIZADOR.Calc.factorPresentacion(l.presentacion, l.contenido_presentacion, ctx.config);
+    if (factor === 1) return '/envase';
+    return (l.unidad || '').toUpperCase().indexOf('KG') !== -1 ? '/KG' : '/L';
+  }
+
+  // Fase 5 (2026-07-02): edición estilo ERP para campos de precio. Mientras
+  // el campo tiene foco es type="number" (spinner nativo, step=STEP_PRECIO,
+  // valor crudo sin formato — así el usuario escribe "8000" de corrido sin
+  // perder el cursor). Al perder foco / Enter / cambiar de línea se formatea
+  // (type="text", "8.000" o "8.50") y RECIÉN AHÍ se recalcula la cotización
+  // completa. Nunca se recalcula mientras se escribe (evita el re-render que
+  // destruía el input y le hacía perder el foco).
+  function activarCampoNum(inp, campo){
+    inp.addEventListener('focus', function(){
+      var i = parseInt(this.dataset.i, 10);
+      var raw = quote.lineas[i][campo];
+      this.type = 'number';
+      this.step = String(STEP_PRECIO);
+      this.min = '0';
+      this.value = (raw === null || raw === undefined) ? '' : raw;
+      this.select();
+    });
+    function commit(inp){
+      var i = parseInt(inp.dataset.i, 10);
+      var val = parseFloat(inp.value);
+      quote.lineas[i][campo] = isNaN(val) ? 0 : val;
+      render(); // recalcula + repinta toda la tabla — recién aquí, no durante la escritura
+    }
+    inp.addEventListener('blur', function(){ commit(this); });
+    inp.addEventListener('keydown', function(e){
+      if (e.key === 'Enter'){ e.preventDefault(); this.blur(); } // blur dispara commit()
+    });
+  }
+
+  // Cantidad de envases: no lleva formato de miles (es un conteo), pero
+  // tampoco debe recalcular en cada tecla — mismo criterio de Fase 5.
+  function activarCampoCantidad(inp){
+    inp.addEventListener('blur', function(){
+      var i = parseInt(this.dataset.i, 10);
+      var val = parseFloat(this.value);
+      quote.lineas[i].cantidad_envases = isNaN(val) ? 0 : val;
+      render();
+    });
+    inp.addEventListener('keydown', function(e){
+      if (e.key === 'Enter'){ e.preventDefault(); this.blur(); }
+    });
+  }
+
+  function pintarLineas(){
+    var tbody = $('tbody-lineas');
+    tbody.innerHTML = '';
+    quote.lineas.forEach(function(l, i){
+      var tr = document.createElement('tr');
+      if (l.elegible_iec && l.bajo_piso) tr.className = 'row-bajo-piso';
+      else if (l.bajo_objetivo) tr.className = 'row-bajo-objetivo';
+      var iecDisplay = (l.iec_linea === null || l.iec_linea === undefined) ? '—' : COTIZADOR.util.formatPct(l.iec_linea);
+      var listaTitle = l.precio_lista_nota ? ' title="' + COTIZADOR.util.escapeHTML(l.precio_lista_nota) + '"' : '';
+      tr.innerHTML =
+        '<td><select data-i="'+i+'" class="sel-producto">' + opcionesProductos(l.sku) + '</select></td>' +
+        '<td>' + COTIZADOR.util.escapeHTML(l.presentacion || '') + '</td>' +
+        '<td class="num"><input data-i="'+i+'" class="in-cantidad" type="number" min="0" step="1" value="'+ (l.cantidad_envases || 0) +'" style="width:56px"></td>' +
+        '<td class="num ref"'+listaTitle+'>' + (l.precio_lista_unitario !== null && l.precio_lista_unitario !== undefined ? COTIZADOR.util.formatMoney(l.precio_lista_unitario, quote.moneda) : '—') + '</td>' +
+        '<td class="num"><input data-i="'+i+'" class="in-objetivo" type="text" inputmode="decimal" value="'+ COTIZADOR.util.formatNumeroEdit(l.precio_objetivo_unitario, quote.moneda) +'" style="width:84px"></td>' +
+        '<td class="num mono">' + (l.precio_piso_unitario !== null && l.precio_piso_unitario !== undefined ? COTIZADOR.util.formatMoney(l.precio_piso_unitario, quote.moneda) : '—') + '</td>' +
+        '<td class="num"><input data-i="'+i+'" class="in-precio" type="text" inputmode="decimal" value="'+ COTIZADOR.util.formatNumeroEdit(l.precio_venta_unitario, quote.moneda) +'" style="width:76px" title="Precio '+sufijoPrecioUnitario(l)+'"><span class="hint" style="display:block">'+sufijoPrecioUnitario(l)+'</span></td>' +
+        '<td class="num mono">' + COTIZADOR.util.formatMoney(l.total_linea || 0, quote.moneda) + '</td>' +
+        '<td class="num mono">' + iecDisplay + '</td>' +
+        '<td><button class="btn-mini" data-i="'+i+'" data-accion="borrar">✕</button></td>';
+      tbody.appendChild(tr);
+    });
+
+    tbody.querySelectorAll('.sel-producto').forEach(function(sel){
+      sel.addEventListener('change', function(){
+        var i = parseInt(this.dataset.i, 10);
+        var p = ctx.productos.find(function(pp){ return pp.sku === this.value; }.bind(this));
+        if (p){
+          var l = quote.lineas[i];
+          l.sku = p.sku; l.producto = p.producto; l.presentacion = p.presentacion; l.unidad = p.unidad;
+          l.contenido_presentacion = p.contenido_presentacion;
+          l.precio_piso_unitario = p.precio_piso_unitario;
+          l.precio_lista_unitario = p.precio_lista_unitario;
+          l.costo_referencial_unitario = p.costo_referencial_unitario;
+          l.precio_lista_nota = p.precio_lista_nota;
+          if (!l.precio_venta_unitario) l.precio_venta_unitario = 0;
+          if (!l.precio_objetivo_unitario) l.precio_objetivo_unitario = COTIZADOR.Quote.sugerirObjetivoUnitario(p.precio_piso_unitario, p.precio_lista_unitario, ctx.config);
+        }
+        render();
+      });
+    });
+    tbody.querySelectorAll('.in-cantidad').forEach(activarCampoCantidad);
+    tbody.querySelectorAll('.in-precio').forEach(function(inp){ activarCampoNum(inp, 'precio_venta_unitario'); });
+    tbody.querySelectorAll('.in-objetivo').forEach(function(inp){ activarCampoNum(inp, 'precio_objetivo_unitario'); });
+    tbody.querySelectorAll('[data-accion="borrar"]').forEach(function(btn){
+      btn.addEventListener('click', function(){ quote.lineas.splice(parseInt(this.dataset.i,10), 1); render(); });
+    });
+
+    $('tag-lineas').textContent = quote.lineas.length + (quote.lineas.length === 1 ? ' LÍNEA' : ' LÍNEAS');
+  }
+
+  // ── Pipeline visual ──────────────────────────────────────────────
+  function pintarPipeline(){
+    var etapas = COTIZADOR.Pipeline.etapas(ctx.config);
+    var actual = COTIZADOR.Pipeline.etapaActual(quote.estado, ctx.config);
+    var idxActual = etapas.indexOf(actual);
+    var box = $('pipeline-box');
+    box.innerHTML = etapas.map(function(et, i){
+      var cls = 'pipeline-step';
+      if (idxActual !== -1 && i < idxActual) cls += ' completado';
+      else if (idxActual !== -1 && i === idxActual) cls += ' actual';
+      return '<div class="'+cls+'"><div class="line"></div><div class="dot">'+(i+1)+'</div><div class="label">'+et+'</div></div>';
+    }).join('');
+    if (quote.estado === 'RECHAZADA'){
+      box.innerHTML += '<span class="badge RECHAZADA" style="margin-left:12px">RECHAZADA</span>';
+    }
+  }
+
+  // ── Motor logístico (despacho / entrega) ─────────────────────────
+  // Nota: quote.despacho es completamente independiente de quote.totales
+  // (IEC/margen/piso) — nunca se pasa a Calc.calcularLinea/calcularTotales.
+  var ESTADO_LOGI_LABEL = {
+    sin_calcular: 'Sin calcular', calculando: 'Consultando ruta...',
+    automatico: 'Calculado automáticamente', manual: 'Ingreso manual',
+    error_fallback_manual: 'Falló el cálculo automático — manual'
+  };
+
+  function hidratarDespacho(){
+    if (!quote.despacho) quote.despacho = COTIZADOR.Logistica.nuevoDespacho(); // defensivo: cotizaciones guardadas antes de Fase 3
+    var d = quote.despacho;
+    $('f-desp-direccion').value = d.direccion || '';
+    $('f-desp-ciudad').value = d.ciudad || '';
+    $('f-desp-distancia').value = d.distancia_km !== null ? d.distancia_km : '';
+    $('f-desp-tiempo').value = d.tiempo_min !== null ? Math.round(d.tiempo_min) + ' min' : '—';
+    $('f-desp-costokm').value = d.costo_km || 0;
+    $('f-desp-costo').value = d.costo_despacho || 0;
+    $('f-desp-incluir').value = d.incluido ? 'si' : 'no';
+    pintarEstadoLogistico();
+  }
+
+  function pintarEstadoLogistico(){
+    var d = quote.despacho;
+    var badge = $('logi-estado-badge');
+    badge.className = 'logi-estado ' + d.estado;
+    badge.textContent = ESTADO_LOGI_LABEL[d.estado] || d.estado;
+    $('logi-mensaje').textContent = d.mensaje || 'Ingresa la dirección y presiona "Calcular distancia", o escribe la distancia manualmente si prefieres.';
+  }
+
+  function sincronizarDespachoEnQuote(){
+    var d = quote.despacho;
+    d.direccion = $('f-desp-direccion').value;
+    d.ciudad = $('f-desp-ciudad').value;
+    d.distancia_km = $('f-desp-distancia').value === '' ? null : parseFloat($('f-desp-distancia').value);
+    d.costo_km = parseFloat($('f-desp-costokm').value) || 0;
+    d.costo_despacho = COTIZADOR.Logistica.calcularCostoDespacho(d.distancia_km, d.costo_km);
+    d.incluido = $('f-desp-incluir').value === 'si';
+    $('f-desp-costo').value = d.costo_despacho;
+    pintarResumenDespacho();
+  }
+
+  function pintarResumenDespacho(){
+    var r = COTIZADOR.Quote.totalConDespacho(quote);
+    $('desp-subtotal-productos').textContent = COTIZADOR.util.formatMoney(r.subtotal_productos, quote.moneda);
+    $('desp-costo-resumen').textContent = COTIZADOR.util.formatMoney(quote.despacho.incluido ? r.costo_despacho : 0, quote.moneda);
+    $('desp-total-cotizacion').textContent = COTIZADOR.util.formatMoney(r.total, quote.moneda);
+  }
+
+  ['f-desp-direccion','f-desp-ciudad','f-desp-distancia','f-desp-costokm'].forEach(function(id){
+    $(id).addEventListener('input', sincronizarDespachoEnQuote);
+  });
+  $('f-desp-incluir').addEventListener('change', sincronizarDespachoEnQuote);
+
+  $('btn-calcular-distancia').addEventListener('click', function(){
+    var d = quote.despacho;
+    d.direccion = $('f-desp-direccion').value.trim();
+    d.ciudad = $('f-desp-ciudad').value.trim();
+    if (!d.direccion){
+      d.estado = 'manual';
+      d.mensaje = 'Ingresa una dirección de entrega antes de calcular.';
+      pintarEstadoLogistico();
+      return;
+    }
+    var destino = d.direccion + (d.ciudad ? ', ' + d.ciudad : '') + ', ' + PAIS_NOMBRE;
+    var origen = COTIZADOR.Logistica.origenPais(ctx.config, PAIS);
+
+    if (!COTIZADOR.Logistica.apiDisponible(ctx.config, PAIS)){
+      d.estado = 'manual';
+      d.mensaje = 'Sin API key u origen logístico configurado en data/config.json → logistica. Ingresa la distancia manualmente — la cotización no queda bloqueada.';
+      pintarEstadoLogistico();
+      return;
+    }
+
+    d.estado = 'calculando';
+    d.mensaje = 'Consultando OpenRouteService...';
+    pintarEstadoLogistico();
+
+    COTIZADOR.Logistica.calcularDistanciaAutomatica(origen, destino, ctx.config.logistica.api_key)
+      .then(function(res){
+        d.distancia_km = Math.round(res.distancia_km * 10) / 10;
+        d.tiempo_min = res.tiempo_min;
+        d.estado = 'automatico';
+        d.mensaje = 'Distancia calculada automáticamente vía OpenRouteService.';
+        d.costo_despacho = COTIZADOR.Logistica.calcularCostoDespacho(d.distancia_km, d.costo_km);
+        hidratarDespacho();
+        pintarResumenDespacho();
+      })
+      .catch(function(err){
+        // No bloquear la cotización: se cae a ingreso manual con mensaje claro.
+        d.estado = 'error_fallback_manual';
+        d.mensaje = 'No se pudo calcular automáticamente (' + err.message + '). Ingresa la distancia manualmente.';
+        pintarEstadoLogistico();
+      });
+  });
+
+  // ── Render general ──────────────────────────────────────────────
+  function render(){
+    COTIZADOR.Quote.recalcular(quote, ctx.config);
+    pintarLineas();
+    pintarPipeline();
+
+    $('numero-actual').textContent = quote.numero;
+    $('badge-estado').textContent = quote.estado;
+    $('badge-estado').className = 'badge ' + quote.estado;
+
+    var t = quote.totales;
+    $('s-piso-total').textContent = COTIZADOR.util.formatMoney(t.precio_piso_total, quote.moneda);
+    $('s-cotizado-total').textContent = COTIZADOR.util.formatMoney(t.valor_cotizado_total, quote.moneda);
+
+    $('k-iec').textContent = t.iec_global === null ? '—' : COTIZADOR.util.formatPct(t.iec_global);
+    $('k-margen').textContent = t.margen_estimado === null ? '—' : COTIZADOR.util.formatMoney(t.margen_estimado, quote.moneda);
+    $('k-ganado').textContent = COTIZADOR.util.formatMoney(t.valor_ganado, quote.moneda);
+    $('k-cedido').textContent = COTIZADOR.util.formatMoney(t.valor_cedido, quote.moneda);
+    $('k-bajo-piso').textContent = t.n_lineas_bajo_piso;
+    $('k-bajo-objetivo').textContent = t.n_lineas_bajo_objetivo;
+
+    var s = t.semaforo;
+    $('semaforo-box').querySelector('.dot').style.background = s.color;
+    $('semaforo-box').querySelector('.dot').style.color = s.color;
+    $('semaforo-nombre').textContent = s.nombre || s.clave;
+    $('semaforo-desc').textContent = s.descripcion || '';
+
+    // Recomendación comercial
+    var rec = COTIZADOR.Recomendacion.generar(t, quote.moneda);
+    var recCard = $('reco-card');
+    recCard.className = 'reco-card ' + rec.nivel;
+    $('reco-icono').textContent = rec.icono;
+    $('reco-titulo').textContent = rec.titulo;
+    $('reco-cuerpo').textContent = rec.cuerpo;
+
+    // Alertas internas
+    var alertas = [];
+    if (t.n_lineas_bajo_piso > 0) alertas.push({tipo:'red', msg: t.n_lineas_bajo_piso + ' línea(s) cotizadas bajo precio piso.'});
+    if (t.n_lineas_bajo_objetivo > 0) alertas.push({tipo:'amber', msg: t.n_lineas_bajo_objetivo + ' línea(s) bajo Precio Objetivo.'});
+    if (t.n_lineas_sin_piso > 0) alertas.push({tipo:'amber', msg: t.n_lineas_sin_piso + ' línea(s) sin precio piso definido — no entran al cálculo de IEC.'});
+    if (s.clave === 'rojo') alertas.push({tipo:'red', msg: 'IEC global crítico. Requiere autorización antes de emitir.'});
+    var box = $('alertas-box');
+    box.innerHTML = alertas.length ? alertas.map(function(a){ return '<div class="alerta ' + (a.tipo==='amber'?'amber':'') + '">' + a.msg + '</div>'; }).join('') : '<div class="hint">Sin alertas por ahora.</div>';
+
+    // Fase 3 — resumen de despacho (subtotal/costo despacho/total). No toca t/IEC.
+    pintarResumenDespacho();
+  }
+
+  // ── Encabezado: eventos ──────────────────────────────────────────
+  ['f-cliente-nombre','f-cliente-rut','f-cliente-contacto','f-rtc','f-cliente-direccion','f-cliente-ciudad','f-cliente-correo','f-cliente-telefono'].forEach(function(id){
+    $(id).addEventListener('input', sincronizarClienteEnQuote);
+  });
+  $('f-elaborado-por').addEventListener('input', function(){ quote.elaborado_por = this.value; });
+  $('f-fecha').addEventListener('change', function(){ quote.fecha = this.value; });
+  $('f-condicion-pago').addEventListener('change', function(){ quote.condicion_pago = this.value; });
+  $('f-validez').addEventListener('input', function(){ quote.validez_dias = parseInt(this.value,10) || 0; });
+  $('f-lugar-entrega').addEventListener('input', function(){ quote.lugar_entrega = this.value; });
+  $('f-observaciones').addEventListener('input', function(){ quote.observaciones = this.value; });
+  $('f-comentarios-internos').addEventListener('input', function(){ quote.comentarios_internos = this.value; });
+  $('f-fecha').value = COTIZADOR.util.todayISO();
+
+  // ── Herramientas (menú) ──────────────────────────────────────────
+  $('btn-tools').addEventListener('click', function(e){
+    e.stopPropagation();
+    $('tools-menu').classList.toggle('abierto');
+  });
+  document.addEventListener('click', function(){ $('tools-menu').classList.remove('abierto'); });
+
+  // ── Acciones ──────────────────────────────────────────────────────
+  $('btn-guardar').addEventListener('click', function(){
+    COTIZADOR.Storage.save(quote).then(function(){ alert('Cotización ' + quote.numero + ' guardada.'); });
+  });
+  $('btn-cambiar-estado').addEventListener('click', function(){
+    var nuevo = $('sel-nuevo-estado').value;
+    try{
+      COTIZADOR.Quote.cambiarEstado(quote, nuevo, quote.elaborado_por, ctx.config);
+      COTIZADOR.Storage.save(quote).then(render);
+    }catch(e){ alert(e.message); }
+  });
+  $('btn-exportar-json').addEventListener('click', function(){ COTIZADOR.Export.descargarJSON(quote); $('tools-menu').classList.remove('abierto'); });
+  $('btn-imprimir').addEventListener('click', function(){ COTIZADOR.PDF.imprimir(quote, PAIS_NOMBRE); });
+
+  function nuevaCotizacion(){
+    quote = COTIZADOR.Quote.nueva(PAIS, ctx.paisConfig, quote ? quote.elaborado_por : '');
+    quote.despacho.costo_km = COTIZADOR.Logistica.costoKmPais(ctx.config, PAIS);
+    ['f-cliente-nombre','f-cliente-rut','f-cliente-contacto','f-rtc','f-cliente-direccion','f-cliente-ciudad','f-cliente-correo','f-cliente-telefono','f-lugar-entrega','f-observaciones','f-comentarios-internos'].forEach(function(id){ $(id).value=''; });
+    pintarClienteCard(null);
+    $('f-fecha').value = COTIZADOR.util.todayISO();
+    $('f-condicion-pago').selectedIndex = 0;
+    $('f-validez').value = ctx.config.validez_dias_default;
+    hidratarDespacho();
+    render();
+  }
+
+  // ── Historial ──────────────────────────────────────────────────────
+  $('btn-cerrar-historial').addEventListener('click', function(){ $('modal-historial').classList.remove('abierto'); });
+  $('btn-filtrar-historial').addEventListener('click', function(){ cargarHistorial(); });
+
+  function abrirHistorial(){ $('modal-historial').classList.add('abierto'); cargarHistorial(); }
+
+  function cargarHistorial(){
+    var filtros = { cliente: $('hf-cliente').value, rtc: $('hf-rtc').value, numero: $('hf-numero').value, estado: $('hf-estado').value };
+    COTIZADOR.Storage.list(PAIS, filtros).then(function(list){
+      var tbody = $('tbody-historial');
+      tbody.innerHTML = list.map(function(q){
+        return '<tr data-id="'+q.id+'"><td class="mono">'+q.numero+'</td><td>'+q.fecha+'</td><td>'+COTIZADOR.util.escapeHTML(q.cliente.nombre||'')+'</td>' +
+          '<td>'+COTIZADOR.util.escapeHTML(q.cliente.rtc||'')+'</td><td><span class="badge '+q.estado+'">'+q.estado+'</span></td>' +
+          '<td class="num mono">'+(q.totales ? COTIZADOR.util.formatMoney(q.totales.valor_cotizado_total, q.moneda) : '—')+'</td></tr>';
+      }).join('') || '<tr><td colspan="6" class="hint">Sin cotizaciones guardadas todavía.</td></tr>';
+      tbody.querySelectorAll('tr[data-id]').forEach(function(tr){
+        tr.addEventListener('click', function(){
+          var found = list.find(function(q){ return q.id === this.dataset.id; }.bind(this));
+          if (found){ quote = found; hidratarFormulario(); render(); $('modal-historial').classList.remove('abierto'); }
+        });
+      });
+    });
+  }
+
+  function hidratarFormulario(){
+    $('f-cliente-nombre').value = quote.cliente.nombre || '';
+    $('f-cliente-rut').value = quote.cliente.rut || '';
+    $('f-cliente-contacto').value = quote.cliente.contacto || '';
+    $('f-rtc').value = quote.cliente.rtc || '';
+    $('f-cliente-direccion').value = quote.cliente.direccion || '';
+    $('f-cliente-ciudad').value = quote.cliente.ciudad || '';
+    $('f-cliente-correo').value = quote.cliente.correo || '';
+    $('f-cliente-telefono').value = quote.cliente.telefono || '';
+    $('f-elaborado-por').value = quote.elaborado_por || '';
+    $('f-fecha').value = quote.fecha || COTIZADOR.util.todayISO();
+    $('f-condicion-pago').value = quote.condicion_pago || '';
+    $('f-validez').value = quote.validez_dias || 15;
+    $('f-lugar-entrega').value = quote.lugar_entrega || '';
+    $('f-observaciones').value = quote.observaciones || '';
+    $('f-comentarios-internos').value = quote.comentarios_internos || '';
+    pintarClienteCard(null);
+    hidratarDespacho();
+  }
+
+})();
+</script>
+</body>
+</html>

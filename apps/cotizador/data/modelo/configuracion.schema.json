@@ -1,0 +1,55 @@
+{
+  "_comentario": "Modelo de datos CANÓNICO para la entidad Configuración del Centro Comercial AV LATAM. A diferencia de las otras entidades, Configuración es un objeto único (singleton), no una lista de registros. Documenta hacia dónde crece ../config.json — que sigue siendo el archivo operativo real, sin cambios.",
+  "entidad": "CONFIGURACION",
+  "version": "1.0.0",
+  "fecha_diseno": "2026-07-01",
+  "tipo": "singleton (un solo objeto de configuración por sistema, no una colección)",
+  "secciones": {
+    "monedas": {
+      "descripcion": "Monedas soportadas y su símbolo/país asociado.",
+      "obligatorio": true,
+      "origen_actual": "config.json → paises.CL.moneda / paises.PE.moneda + moneda_simbolo (ya existe, con esta forma: por país en vez de lista independiente — funcionalmente equivalente)",
+      "ejemplo": { "CLP": { "simbolo": "$", "pais": "CL" }, "USD": { "simbolo": "US$", "pais": "PE" } }
+    },
+    "iva": {
+      "descripcion": "Tasa de IVA por país, para cuando las cotizaciones necesiten desglosar neto/IVA/total. NUEVO — hoy todas las cotizaciones son montos netos, sin IVA calculado ni mostrado en ninguna pantalla ni en el PDF.",
+      "obligatorio": false,
+      "origen_actual": "no existe todavía",
+      "ejemplo": { "CL": { "tasa": 0.19, "aplica": false }, "PE": { "tasa": 0.18, "aplica": false } }
+    },
+    "vigencia": {
+      "descripcion": "Días de validez por defecto de una cotización (y, a futuro, posibles vigencias distintas por línea de producto o por lista de precios).",
+      "obligatorio": true,
+      "origen_actual": "config.json → validez_dias_default (ya existe; el detalle por producto/lista es nuevo, no implementado)",
+      "ejemplo": { "dias_default": 15 }
+    },
+    "condiciones": {
+      "descripcion": "Condiciones de pago disponibles para seleccionar en el encabezado de la cotización.",
+      "obligatorio": true,
+      "origen_actual": "config.json → condiciones_pago (ya existe, mismo dato, nombre de sección distinto)",
+      "ejemplo": ["Contado", "30 días", "60 días"]
+    },
+    "semaforos_iec": {
+      "descripcion": "Umbrales y etiquetas del semáforo de política comercial, calculado sobre IEC Global (100% atado a Precio Piso, sin cambios desde Fase 1).",
+      "obligatorio": true,
+      "origen_actual": "config.json → iec.semaforo (ya existe, sin cambios)",
+      "ejemplo": { "verde_min": 1.03, "amarillo_min": 0.98, "naranja_min": 0.90 }
+    },
+    "numeracion": {
+      "descripcion": "Prefijos y contadores de numeración automática por país.",
+      "obligatorio": true,
+      "origen_actual": "config.json → paises.CL.prefijo_numero / paises.PE.prefijo_numero + numeracion_inicio (ya existe, sin cambios — sigue siendo por navegador vía localStorage, ver README sección 6)",
+      "ejemplo": { "CL": { "prefijo": "AV-CL", "inicio": 1 }, "PE": { "prefijo": "AV-PE", "inicio": 1 } }
+    },
+    "parametros": {
+      "descripcion": "Bolsa extensible de parámetros generales del sistema — agrupa lo que hoy ya vive suelto en config.json (objetivo, pipeline_visual, navegacion) más espacio para parámetros futuros (redondeo, decimales, idioma, etc.) sin tener que crear una sección nueva cada vez.",
+      "obligatorio": false,
+      "origen_actual": "config.json → objetivo / pipeline_visual / navegacion (ya existen como secciones propias — este modelo los agrupa conceptualmente bajo 'parametros' para las próximas fases, sin moverlos ni renombrarlos en el archivo real)",
+      "ejemplo": { "objetivo_factor_default": 0.5, "redondeo_decimales": 2 }
+    }
+  },
+  "notas": [
+    "La única sección genuinamente nueva es 'iva': hoy el sistema no calcula ni muestra IVA en ninguna parte (ni pantallas ni PDF) — todas las cotizaciones son montos netos. Se deja modelada para cuando se defina la política tributaria a mostrar.",
+    "Todas las demás secciones ya existen en ../config.json con nombres de sección ligeramente distintos — este archivo es un mapa de equivalencias, no una fuente de datos paralela. ../config.json sigue siendo la única fuente real que consume la aplicación."
+  ]
+}

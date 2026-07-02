@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centro Comercial AV LATAM · Cotizador</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="cotizador.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <div class="logo-mark-img"><img id="logo-img" alt="AV LATAM"></div>
+    <div>
+      <div class="header-title">CENTRO COMERCIAL AV LATAM</div>
+      <div class="header-sub">Portal · Selección de país</div>
+    </div>
+  </div>
+  <nav class="header-nav" id="nav-principal"></nav>
+  <div class="header-corte">
+    <div class="corte-label">Fecha</div>
+    <div class="corte-date" id="fecha-hoy">—</div>
+  </div>
+</header>
+
+<div class="portal-wrap">
+  <div class="portal-title">COTIZADOR COMERCIAL</div>
+  <div class="portal-sub">MÓDULO 1 DE 6 · CENTRO COMERCIAL AV LATAM · SELECCIONE EL PAÍS</div>
+
+  <div class="portal-cards">
+    <div class="portal-card" onclick="location.href='cotizador_chile.html'">
+      <span class="flag">🇨🇱</span>
+      <h2>Cotizador Chile</h2>
+      <span class="moneda-tag">CLP · AV-CL-AAAA-0001</span>
+      <p>Catálogo, precios piso y clientes de Chile. IEC, margen real y recomendación comercial automática por cotización.</p>
+      <div class="cta">ENTRAR →</div>
+    </div>
+
+    <div class="portal-card" onclick="location.href='cotizador_peru.html'">
+      <span class="flag">🇵🇪</span>
+      <h2>Cotizador Perú</h2>
+      <span class="moneda-tag">USD · AV-PE-AAAA-0001</span>
+      <p>Catálogo, precios piso y clientes de Perú. IEC, margen real y recomendación comercial automática por cotización.</p>
+      <div class="cta">ENTRAR →</div>
+    </div>
+  </div>
+
+  <p class="hint" style="margin-top:40px">
+    Al seleccionar un país se cargan automáticamente moneda, productos, presentaciones, precios piso y clientes correspondientes.
+    Clientes · Productos · Configuración son módulos futuros del Centro Comercial AV LATAM — la navegación ya está preparada, aún no desarrollados.
+  </p>
+</div>
+
+<script src="assets_logo.js"></script>
+<script src="cotizador_core.js"></script>
+<script>
+  document.getElementById('logo-img').src = AV_LOGO_DATA_URL;
+  document.getElementById('fecha-hoy').textContent = COTIZADOR.util.todayDisplay();
+
+  COTIZADOR.loadConfig().then(function(config){
+    var items = (config.navegacion && config.navegacion.items) || [];
+    var nav = document.getElementById('nav-principal');
+    nav.innerHTML = items.map(function(it){
+      if (!it.disponible) return '<span class="nav-pill proximamente" title="Próximamente">' + it.label + '</span>';
+      var activo = it.id === 'portal' ? ' activo' : '';
+      if (it.id === 'nueva' || it.id === 'historial') {
+        return '<span class="nav-pill inerte" title="Elige un país primero">' + it.label + '</span>';
+      }
+      return '<a class="nav-pill' + activo + '" href="index.html">' + it.label + '</a>';
+    }).join('');
+  });
+</script>
+</body>
+</html>

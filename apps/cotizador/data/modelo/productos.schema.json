@@ -1,0 +1,100 @@
+{
+  "_comentario": "Modelo de datos CANÓNICO para la entidad Productos del Centro Comercial AV LATAM. NO es el catálogo operativo (ese sigue siendo ../productos_chile.json / ../productos_peru.json, consumido hoy por cotizador_chile.html / cotizador_peru.html). Este archivo es el contrato de campos para el futuro módulo Productos + Pricing. No está conectado a ninguna pantalla todavía. Actualizado 2026-07-01 (Corrección Final): el modelo de precio por presentación de Fase 4 fue REVERTIDO en cotizador_core.js — el catálogo operativo real vuelve a trabajar con precio unitario por litro/kilo (precio_*_unitario). Los campos precio_*_presentacion/tipo_precio se conservan en el catálogo como compatibilidad histórica pero YA NO gobiernan el cálculo. Ver 'apps/cotizador/README.md' secciones 13 (superada) y 14 (vigente).",
+  "entidad": "PRODUCTOS",
+  "version": "1.2.0",
+  "fecha_diseno": "2026-07-01",
+  "clave_primaria": "sku",
+  "campos": {
+    "sku": {
+      "tipo": "string", "obligatorio": true,
+      "descripcion": "Código único de producto + presentación.",
+      "ejemplo": "CL-AV-MOVE-20-L",
+      "origen_actual": "productos_chile.json / productos_peru.json → sku (ya existe)"
+    },
+    "producto": {
+      "tipo": "string", "obligatorio": true,
+      "descripcion": "Nombre comercial del producto.",
+      "ejemplo": "AV MOVE",
+      "origen_actual": "productos_*.json → producto (ya existe)"
+    },
+    "linea": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Línea comercial del producto (agrupación amplia).",
+      "ejemplo": "AV Línea Base",
+      "origen_actual": "productos_*.json → linea_comercial (mismo dato, nombre de campo distinto)"
+    },
+    "categoria": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Categoría técnica/agronómica del producto (ej. Bioestimulante, Fertilizante Foliar, Fungicida, Corrector). NUEVO — hoy el catálogo solo clasifica por línea comercial, no por categoría técnica.",
+      "ejemplo": "",
+      "origen_actual": "no existe todavía — requiere clasificación manual o ficha técnica por SKU"
+    },
+    "presentacion": {
+      "tipo": "string", "obligatorio": true,
+      "descripcion": "Formato/envase del producto.",
+      "ejemplo": "20 L",
+      "origen_actual": "productos_*.json → presentacion (ya existe)"
+    },
+    "unidad": {
+      "tipo": "string", "obligatorio": true,
+      "descripcion": "Unidad de medida.",
+      "ejemplo": "L",
+      "origen_actual": "productos_*.json → unidad (ya existe)"
+    },
+    "contenido_presentacion": {
+      "tipo": "number", "obligatorio": true,
+      "descripcion": "Litros/kilos por envase (ej. 20 para '20 L'). Usado por Calc.factorPresentacion() para decidir si el precio unitario se multiplica por el contenido o se toma directo (ver presentaciones_por_unidad en config.json).",
+      "ejemplo": 20,
+      "origen_actual": "productos_*.json → contenido_presentacion (ya existe)"
+    },
+    "precio_lista": {
+      "tipo": "number", "obligatorio": false,
+      "descripcion": "Precio de lista oficial POR LITRO/KILO (Corrección Final, 2026-07-01). IMPORTANTE: el catálogo operativo actual NO tiene un precio de lista oficial — precio_lista_unitario es un promedio histórico de venta por litro/kilo (referencial, puede quedar bajo el piso). Cuando exista una lista oficial (módulo Pricing), este campo la reemplaza.",
+      "ejemplo": null,
+      "origen_actual": "productos_*.json → precio_lista_unitario (referencial, NO oficial — alias directo de precio_lista_ref, ya existe desde Fase 1; ver notas)"
+    },
+    "precio_objetivo": {
+      "tipo": "number", "obligatorio": false,
+      "descripcion": "Precio objetivo sugerido a nivel de catálogo maestro, por litro/kilo (distinto del precio_objetivo_unitario editable por línea en cada cotización). Sirve como default sugerido cuando el módulo Pricing defina políticas por SKU.",
+      "ejemplo": null,
+      "origen_actual": "productos_*.json → precio_objetivo_unitario (ya existe desde la Corrección Final, calculado con Quote.sugerirObjetivoUnitario() al momento de generar el catálogo — mismo factor configurable que el editable por línea)"
+    },
+    "precio_piso": {
+      "tipo": "number", "obligatorio": true,
+      "descripcion": "Precio piso POR LITRO/KILO — mínimo de política comercial, usado en el cálculo de IEC junto con el factor de presentación de la línea (Corrección Final, 2026-07-01).",
+      "ejemplo": 7500,
+      "origen_actual": "productos_*.json → precio_piso_unitario (ya existe = alias directo del precio_piso original, sin cambios desde Fase 1)"
+    },
+    "costo_referencial": {
+      "tipo": "number", "obligatorio": false,
+      "descripcion": "Costo de fábrica/referencial POR LITRO/KILO, usado para estimar margen.",
+      "ejemplo": 2797.75,
+      "origen_actual": "productos_*.json → costo_referencial_unitario (ya existe = alias directo del costo_referencial original)"
+    },
+    "estado": {
+      "tipo": "string", "enum": ["ACTIVO", "INACTIVO", "DESCONTINUADO"], "obligatorio": true,
+      "descripcion": "Estado comercial del SKU.",
+      "ejemplo": "ACTIVO",
+      "origen_actual": "productos_*.json → estado (ya existe, hoy siempre 'ACTIVO' — el catálogo ya viene pre-filtrado a estado:'OK' desde avboard_data.js)"
+    },
+    "pais": {
+      "tipo": "string", "enum": ["CL", "PE"], "obligatorio": false,
+      "descripcion": "País del catálogo al que pertenece el SKU. Campo adicional heredado, no pedido explícitamente pero ya presente.",
+      "ejemplo": "CL",
+      "origen_actual": "productos_*.json → (implícito por archivo, no como campo explícito hoy — se agregaría al migrar)"
+    },
+    "moneda": {
+      "tipo": "string", "enum": ["CLP", "USD"], "obligatorio": false,
+      "descripcion": "Moneda de los precios del SKU.",
+      "ejemplo": "CLP",
+      "origen_actual": "productos_*.json → moneda (ya existe)"
+    }
+  },
+  "notas": [
+    "El campo 'categoria' es 100% nuevo — no existe ninguna fuente de datos real todavía (ni en avboard_data.js ni en los Excel del inbox). Requiere una ficha técnica o clasificación manual por SKU antes de poblarse.",
+    "El campo 'precio_lista' de este modelo NO debe confundirse con 'precio_lista_ref' del catálogo operativo: precio_lista_unitario es ese mismo promedio histórico por litro/kilo (referencial, puede quedar bajo el piso) — ver 'apps/cotizador/README.md' secciones 2 y 14.",
+    "'precio_objetivo' a nivel de catálogo maestro es distinto del precio_objetivo_unitario editable por línea que ya funciona en cada cotización (Fase 2, vuelto a nivel unitario en la Corrección Final) — ese sigue funcionando exactamente igual.",
+    "Corrección Final (2026-07-01): el modelo de precio por presentación de la Fase 4 (tipo_precio/contenido_presentacion/unidad_contenido/precio_*_presentacion) fue revertido por ser más complejo de lo que la tabla de precios piso real requiere. Esos campos SIGUEN en productos_chile.json/productos_peru.json (no se borró nada) pero ya no gobiernan el cálculo — cotizador_core.js usa exclusivamente los campos precio_*_unitario. 'contenido_presentacion' se conserva y SÍ se sigue usando, ahora solo para calcular factor_presentacion.",
+    "'presentaciones_por_unidad' (lista configurable en data/config.json, NO en este catálogo) determina qué presentaciones se cotizan directo por envase en vez de multiplicarse por su contenido — ver README sección 14 y Calc.factorPresentacion() en cotizador_core.js."
+  ]
+}

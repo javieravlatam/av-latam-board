@@ -1,0 +1,99 @@
+{
+  "_comentario": "Modelo de datos CANÓNICO para el DETALLE (líneas) de Cotizaciones del Centro Comercial AV LATAM. Vista 'plana' de referencia para integración futura — el objeto real (quote.lineas[], calculado por Calc.calcularLinea) sigue siendo la fuente de verdad operativa. Actualizado 2026-07-01 (Corrección Final): el modelo de precio por presentación de Fase 4 fue REVERTIDO — vuelve a precio unitario por litro/kilo (precio_*_unitario) + factor_presentacion. Ver README secciones 13 (superada) y 14 (vigente).",
+  "entidad": "DETALLE_COTIZACION",
+  "version": "3.0.0",
+  "fecha_diseno": "2026-07-01",
+  "clave_primaria": "compuesta: cotizacion_numero + numero_linea",
+  "relacion": "cotizacion_numero → COTIZACIONES.numero · producto_sku → PRODUCTOS.sku",
+  "campos": {
+    "cotizacion_numero": {
+      "tipo": "string", "obligatorio": true,
+      "descripcion": "Referencia (FK) a la cotización a la que pertenece la línea.",
+      "ejemplo": "AV-CL-2026-0001",
+      "origen_actual": "no existe como campo explícito por línea — hoy la línea vive anidada dentro de quote.lineas[], el vínculo es implícito por estar en el mismo objeto"
+    },
+    "numero_linea": {
+      "tipo": "number", "obligatorio": true,
+      "descripcion": "Posición de la línea dentro de la cotización (para ordenar).",
+      "ejemplo": 1,
+      "origen_actual": "no existe explícito — hoy es el índice del arreglo quote.lineas[]"
+    },
+    "producto_sku": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Referencia (FK) al SKU del catálogo de productos.",
+      "ejemplo": "CL-AV-MOVE-20-L",
+      "origen_actual": "linea.sku (ya existe)"
+    },
+    "producto": {
+      "tipo": "string", "obligatorio": true,
+      "descripcion": "Nombre del producto (denormalizado, para no depender de un join al mostrar la cotización).",
+      "ejemplo": "AV MOVE",
+      "origen_actual": "linea.producto (ya existe)"
+    },
+    "presentacion": {
+      "tipo": "string", "obligatorio": true,
+      "descripcion": "Formato/envase cotizado.",
+      "ejemplo": "20 L",
+      "origen_actual": "linea.presentacion (ya existe)"
+    },
+    "contenido_presentacion": {
+      "tipo": "number", "obligatorio": true,
+      "descripcion": "Litros/kilos por envase (ej. 20 para '20 L'). Se usa junto con presentaciones_por_unidad (config.json) para calcular factor_presentacion.",
+      "ejemplo": 20,
+      "origen_actual": "linea.contenido_presentacion (ya existe)"
+    },
+    "cantidad_envases": {
+      "tipo": "number", "obligatorio": true,
+      "descripcion": "Cantidad de envases/presentaciones cotizados. Antes 'cantidad'.",
+      "ejemplo": 3,
+      "origen_actual": "linea.cantidad_envases (ya existe; antes 'cantidad')"
+    },
+    "precio_lista_unitario": {
+      "tipo": "number", "obligatorio": false,
+      "descripcion": "Precio de lista de referencia al momento de cotizar, por litro/kilo (Corrección Final, 2026-07-01).",
+      "ejemplo": 5353,
+      "origen_actual": "linea.precio_lista_unitario (ya existe, referencial — ver productos.schema.json)"
+    },
+    "precio_objetivo_unitario": {
+      "tipo": "number", "obligatorio": false,
+      "descripcion": "Precio objetivo de la línea, por litro/kilo. NO participa del cálculo de IEC — solo alimenta la Recomendación Comercial.",
+      "ejemplo": 7500,
+      "origen_actual": "linea.precio_objetivo_unitario (ya existe desde Fase 2, vuelto a nivel unitario en la Corrección Final)"
+    },
+    "precio_piso_unitario": {
+      "tipo": "number", "obligatorio": true,
+      "descripcion": "Precio piso vigente al momento de cotizar, por litro/kilo (queda fijo en la línea aunque el catálogo cambie después).",
+      "ejemplo": 7000,
+      "origen_actual": "linea.precio_piso_unitario (ya existe)"
+    },
+    "precio_venta_unitario": {
+      "tipo": "number", "obligatorio": true,
+      "descripcion": "Lo único que ingresa manualmente el vendedor: precio por litro/kilo, salvo en presentaciones configuradas en presentaciones_por_unidad (config.json), donde es el precio directo por envase.",
+      "ejemplo": 8000,
+      "origen_actual": "linea.precio_venta_unitario (ya existe)"
+    },
+    "factor_presentacion": {
+      "tipo": "number", "obligatorio": true,
+      "descripcion": "Calculado, no editable: 1 si la presentación está en presentaciones_por_unidad, o contenido_presentacion en caso contrario. Nunca se muestra al cliente.",
+      "ejemplo": 20,
+      "origen_actual": "linea.factor_presentacion (ya existe, calculado por Calc.factorPresentacion)"
+    },
+    "iec_linea": {
+      "tipo": "number", "obligatorio": false,
+      "descripcion": "IEC de la línea = (precio_venta_unitario × factor_presentacion × cantidad_envases) / (precio_piso_unitario × factor_presentacion × cantidad_envases). Calculado, no editable.",
+      "ejemplo": 1.142857,
+      "origen_actual": "linea.iec_linea (ya existe, calculado por Calc.calcularLinea)"
+    },
+    "total_linea": {
+      "tipo": "number", "obligatorio": true,
+      "descripcion": "Total de la línea = precio_venta_unitario × factor_presentacion × cantidad_envases. Calculado.",
+      "ejemplo": 480000,
+      "origen_actual": "linea.total_linea (ya existe, calculado)"
+    }
+  },
+  "notas": [
+    "Los campos 'cotizacion_numero' y 'numero_linea' son los únicos sin equivalente explícito hoy: la relación cotización↔línea existe (las líneas viven dentro de quote.lineas[]), pero no como claves planas independientes. Necesarias solo si el detalle se expone algún día como tabla/API separada de la cotización completa.",
+    "Corrección Final (2026-07-01): revierte el modelo de precio por presentación de la Fase 4. precio_lista/objetivo/piso vuelven a ser SIEMPRE por litro/kilo (sufijo _unitario, no _presentacion); 'cantidad' pasó a 'cantidad_envases'; se agregó 'factor_presentacion' (reemplaza a tipo_precio/precio_venta_presentacion_calculado, que ya no se usan en el cálculo). Ver 'apps/cotizador/README.md' sección 14 para la fórmula completa y los 4 casos de validación.",
+    "Calc.calcularLinea/calcularTotales en cotizador_core.js siguen siendo la única fuente de verdad del cálculo — este archivo documenta el contrato, no lo reemplaza."
+  ]
+}

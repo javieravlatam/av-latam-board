@@ -1,0 +1,77 @@
+{
+  "_comentario": "Modelo de datos CANÓNICO para el ENCABEZADO de Cotizaciones del Centro Comercial AV LATAM. Es una vista 'plana' pensada para integración futura (API/tabla), distinta del objeto Quote anidado y más rico que ya usa cotizador_core.js (con cliente{}, lineas[], totales{}, historial_estados[], meta{}). No reemplaza ni modifica ese objeto — es el contrato de referencia para cuando Cotizaciones se exponga a otros módulos (Pipeline Comercial, Reportes, Pedidos).",
+  "entidad": "COTIZACIONES",
+  "version": "1.0.0",
+  "fecha_diseno": "2026-07-01",
+  "clave_primaria": "numero",
+  "campos": {
+    "numero": {
+      "tipo": "string", "obligatorio": true,
+      "descripcion": "Número correlativo de la cotización.",
+      "ejemplo": "AV-CL-2026-0001",
+      "origen_actual": "cotizador_core.js → Quote.numero, generado por Numbering.next() (ya existe, sin cambios)"
+    },
+    "pais": {
+      "tipo": "string", "enum": ["CL", "PE"], "obligatorio": true,
+      "descripcion": "País de la cotización.",
+      "ejemplo": "CL",
+      "origen_actual": "Quote.pais (ya existe)"
+    },
+    "cliente_id": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Referencia (FK) al id del cliente en la entidad CLIENTES. NUEVO/BRECHA: hoy la cotización guarda el nombre y RUT del cliente como texto suelto (Quote.cliente.nombre/rut), escrito o autocompletado desde el catálogo, pero sin un id de referencia formal — no hay integridad referencial todavía.",
+      "ejemplo": "cl_779415449",
+      "origen_actual": "no existe como FK — hoy es Quote.cliente.nombre/rut (texto), no un id vinculado"
+    },
+    "rtc": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Vendedor / ruta comercial de la cotización.",
+      "ejemplo": "JORGE CAROCA",
+      "origen_actual": "Quote.cliente.rtc (ya existe)"
+    },
+    "fecha": {
+      "tipo": "string", "formato": "YYYY-MM-DD", "obligatorio": true,
+      "descripcion": "Fecha de emisión/creación de la cotización.",
+      "ejemplo": "2026-07-01",
+      "origen_actual": "Quote.fecha (ya existe)"
+    },
+    "estado": {
+      "tipo": "string",
+      "enum": ["BORRADOR", "EMITIDA", "ENVIADA", "APROBADA", "RECHAZADA", "CONVERTIDA_A_PEDIDO"],
+      "obligatorio": true,
+      "descripcion": "Estado del pipeline de la cotización — mismos valores y transiciones definidos en ../config.json → estados_transiciones (sin cambios).",
+      "ejemplo": "BORRADOR",
+      "origen_actual": "Quote.estado (ya existe, máquina de estados sin cambios)"
+    },
+    "observaciones": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Observaciones visibles para el cliente (van también en el PDF).",
+      "ejemplo": "",
+      "origen_actual": "Quote.observaciones (ya existe)"
+    },
+    "elaborado_por": {
+      "tipo": "string", "obligatorio": false,
+      "descripcion": "Nombre escrito manualmente por quien preparó la cotización (nunca un usuario de sistema automático).",
+      "ejemplo": "",
+      "origen_actual": "Quote.elaborado_por (ya existe, política de Fase 2 sin cambios)"
+    },
+    "fecha_modificacion": {
+      "tipo": "string", "formato": "ISO-8601", "obligatorio": true,
+      "descripcion": "Fecha/hora de la última modificación.",
+      "ejemplo": "2026-07-01T18:42:00.000Z",
+      "origen_actual": "Quote.meta.actualizado (ya existe, mismo dato con otro nombre de campo)"
+    },
+    "moneda": {
+      "tipo": "string", "enum": ["CLP", "USD"], "obligatorio": false,
+      "descripcion": "Moneda de la cotización. Campo adicional heredado, no pedido explícitamente pero ya presente y necesario para totales.",
+      "origen_actual": "Quote.moneda (ya existe)"
+    },
+    "condicion_pago": { "tipo": "string", "obligatorio": false, "descripcion": "Condición de pago pactada.", "origen_actual": "Quote.condicion_pago (ya existe)" },
+    "validez_dias": { "tipo": "number", "obligatorio": false, "descripcion": "Días de validez de la oferta.", "origen_actual": "Quote.validez_dias (ya existe)" },
+    "lugar_entrega": { "tipo": "string", "obligatorio": false, "descripcion": "Lugar de entrega pactado.", "origen_actual": "Quote.lugar_entrega (ya existe)" }
+  },
+  "notas": [
+    "El único campo del listado de Javier sin equivalente actual es 'cliente_id' como referencia formal (FK). Hoy funciona por texto libre (nombre/RUT), que es suficiente para el PDF y el historial, pero NO permite todavía cruces confiables tipo 'todas las cotizaciones del cliente X' si el nombre se escribió distinto dos veces. Cuando se aborde CRM Clientes, agregar cliente_id a Quote.cliente sería el cambio mínimo necesario — no implementado en esta sesión (solo modelado).",
+    "Este schema es una proyección 'plana' del objeto Quote real. El objeto Quote de cotizador_core.js sigue siendo la fuente de verdad operativa y no se modificó — ver ../../README.md sección 3."
+  ]
+}

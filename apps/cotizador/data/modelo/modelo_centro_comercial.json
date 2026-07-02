@@ -1,0 +1,57 @@
+{
+  "_comentario": "Manifest del modelo de datos del Centro Comercial AV LATAM. Punto de entrada único para leer los 5 schemas de esta carpeta y entender cómo se relacionan. Puramente documental — no lo carga ninguna pantalla todavía. Preparado para las fases de CRM Clientes, Productos, Pricing y Pipeline Comercial.",
+  "version": "1.0.0",
+  "fecha_diseno": "2026-07-01",
+  "fase_origen": "Fase 3 — preparación de arquitectura de datos (arquitectura de Fase 2 congelada, sin cambios de pantalla)",
+  "entidades": {
+    "CLIENTES": {
+      "archivo_schema": "clientes.schema.json",
+      "clave_primaria": "id",
+      "fuente_operativa_hoy": "../clientes_chile.json, ../clientes_peru.json",
+      "modulo_futuro": "CRM Clientes"
+    },
+    "PRODUCTOS": {
+      "archivo_schema": "productos.schema.json",
+      "clave_primaria": "sku",
+      "fuente_operativa_hoy": "../productos_chile.json, ../productos_peru.json",
+      "modulo_futuro": "Productos + Pricing"
+    },
+    "COTIZACIONES": {
+      "archivo_schema": "cotizaciones.schema.json",
+      "clave_primaria": "numero",
+      "fuente_operativa_hoy": "localStorage del navegador (COTIZADOR.Storage.LocalStorageAdapter), objeto Quote de cotizador_core.js",
+      "modulo_futuro": "Pipeline Comercial, Reportes Comerciales, Pedidos"
+    },
+    "DETALLE_COTIZACION": {
+      "archivo_schema": "detalle_cotizacion.schema.json",
+      "clave_primaria": "cotizacion_numero + numero_linea",
+      "fuente_operativa_hoy": "quote.lineas[] (anidado dentro de cada Quote, mismo storage que COTIZACIONES)",
+      "modulo_futuro": "Reportes Comerciales, Inteligencia Comercial"
+    },
+    "CONFIGURACION": {
+      "archivo_schema": "configuracion.schema.json",
+      "tipo": "singleton",
+      "fuente_operativa_hoy": "../config.json",
+      "modulo_futuro": "Configuración (panel de administración)"
+    }
+  },
+  "relaciones": [
+    { "de": "COTIZACIONES.cliente_id", "hacia": "CLIENTES.id", "tipo": "muchos-a-uno", "estado": "modelada, NO implementada — hoy Quote.cliente guarda nombre/rut como texto libre, sin FK" },
+    { "de": "DETALLE_COTIZACION.cotizacion_numero", "hacia": "COTIZACIONES.numero", "tipo": "muchos-a-uno", "estado": "implícita hoy (líneas anidadas en el mismo objeto Quote), explícita en este modelo" },
+    { "de": "DETALLE_COTIZACION.producto_sku", "hacia": "PRODUCTOS.sku", "tipo": "muchos-a-uno", "estado": "implementada — linea.sku ya referencia el catálogo de productos" },
+    { "de": "CLIENTES.rtc_asignado", "hacia": "(futuro) VENDEDORES.id", "tipo": "muchos-a-uno", "estado": "no modelada todavía — hoy es texto libre (nombre del vendedor), igual que en avboard_clientes.js" }
+  ],
+  "roadmap_integracion": {
+    "CRM_Clientes": "Consumirá CLIENTES como fuente de verdad de ficha de cliente (hoy repartida entre clientes_*.json y lo que el vendedor escribe a mano en cada cotización). Requiere completar cargo/lista_precios/cultivo_principal/superficie/observaciones, hoy vacíos.",
+    "Productos_Pricing": "Consumirá PRODUCTOS para gestionar precio_lista oficial (hoy solo hay un promedio referencial) y precio_objetivo por SKU (hoy se sugiere al vuelo por línea). El precio_piso sigue siendo la fuente de la política de IEC, sin cambios.",
+    "Pipeline_Comercial": "Consumirá COTIZACIONES filtradas por estado — la máquina de estados (BORRADOR→EMITIDA→ENVIADA→APROBADA/RECHAZADA→CONVERTIDA_A_PEDIDO) y el pipeline visual decorativo de Fase 2 ya usan este mismo vocabulario, listos para conectarse.",
+    "Reportes_Comerciales": "Consumirá COTIZACIONES + DETALLE_COTIZACION vía Storage.list(pais, filtros), que ya soporta filtrar por cliente/RTC/fecha/estado/número.",
+    "backend_futuro": "Cuando exista una API real, el adapter pattern de COTIZADOR.Storage (ver ../../README.md sección 6) es el punto de enchufe — ningún HTML necesita cambiar."
+  },
+  "reglas_de_esta_fase": [
+    "No se conectó ningún archivo de esta carpeta a cotizador_core.js ni a ninguna pantalla — son solo contratos de datos.",
+    "No se modificó ../config.json, ../productos_*.json, ../clientes_*.json ni ningún archivo operativo de Fase 1/2.",
+    "No se modificó ninguna pantalla (index.html, cotizador_chile.html, cotizador_peru.html) ni cotizador.css.",
+    "No se realizó commit — cambios quedan en el árbol de trabajo para revisión de Javier."
+  ]
+}

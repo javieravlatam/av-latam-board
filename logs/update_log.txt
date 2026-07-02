@@ -685,3 +685,331 @@ ACCIONES:
   · Cache-busting ?v=20260701 sincronizado en 0 paneles HTML
 VALIDACIÓN JS: ✅ OK
 ======================================================================
+
+======================================================================
+CORTE: 2026-07-01 (desarrollo de módulo — no es procesamiento de inbox)
+ARCHIVOS PROCESADOS: ninguno del /inbox — build de módulo nuevo a pedido de Javier
+ACCIONES:
+  · Nuevo módulo independiente creado: apps/cotizador/ (Arquitecto Senior / Fase 1)
+  · Archivos creados: index.html, cotizador.css, cotizador_core.js,
+    cotizador_chile.html, cotizador_peru.html, data/config.json,
+    data/productos_chile.json (89 SKU), data/productos_peru.json (29 SKU),
+    data/clientes_chile.json (148), data/clientes_peru.json (42),
+    templates/README.md, exports/README.md, README.md
+  · Catálogos semilla extraídos (solo lectura) de avboard_data.js
+    (AVBOARD.productos, estado OK + piso definido) y avboard_clientes.js
+    (CLIENTES_CL/CLIENTES_PE) — NINGÚN archivo fuente fue modificado.
+  · Motor de IEC/margen/semáforo verificado con caso de prueba manual
+    (3 líneas: sobre piso / bajo piso / sin piso) — resultado correcto.
+  · Numeración automática AV-CL-AAAA-0001 / AV-PE-AAAA-0001, storage
+    con patrón adapter (localStorage hoy, API mañana sin romper UI).
+  · git status confirmado: único cambio es "?? apps/" (carpeta nueva sin
+    trackear) — cero modificaciones a dashboards, avboard_data.js,
+    avboard_clientes.js ni update_avboard.py.
+VALIDACIÓN JS: ✅ OK (5 JSON parseados sin error, tags balanceados en los 3 HTML)
+======================================================================
+
+======================================================================
+CORTE: 2026-07-01 (cambio estructural autorizado explícitamente por Javier)
+ARCHIVOS PROCESADOS: ninguno del /inbox
+ACCIONES:
+  · index.html (login gate): agregado tercer bloque de acceso "COTIZADOR
+    COMERCIAL · CHILE / PERÚ" debajo de Directores y Jefes País, mismo
+    estilo visual (separador "o", input con ojo, botón, mensaje de error).
+  · Clave inicial: "2026" → guardada como hash SHA-256 en la constante
+    COT_HASH (mismo patrón que DIR_HASH/JEFE_HASH). Cambiar la clave =
+    reemplazar esa constante por el nuevo hash.
+  · checkCot() redirige a apps/cotizador/index.html (ruta ya existente,
+    módulo creado en la sesión anterior). No usa sessionStorage av_auth/
+    av_role compartido — el cotizador no depende del gate de dashboards.
+  · checkDir(), checkJefe() y el bloque de auto-redirect por sesión NO
+    fueron tocados (confirmado por diff — único cambio compartido es
+    `intDir=0,intJefe=0` → se agregó `,intCot=0` en la misma línea).
+  · Único archivo modificado: index.html. Ningún dashboard ni panel tocado.
+VALIDACIÓN: tags balanceados (div 38/38, button 6/6, script 1/1) · git diff
+revisado línea por línea · git status confirma que apps/cotizador/ y
+logs/ son los únicos cambios fuera de index.html.
+======================================================================
+
+======================================================================
+CORTE: 2026-07-01 (FASE 2 — Centro Comercial AV LATAM, evolución UX)
+ARCHIVOS PROCESADOS: ninguno del /inbox
+ACCIONES:
+  · Arquitectura de Fase 1 confirmada CONGELADA — cambios 100% aditivos.
+  · Archivos modificados (todos dentro de apps/cotizador/):
+    - cotizador_core.js: + precio_objetivo/precio_lista_ref en línea,
+      + n_lineas_bajo_objetivo/valor_brecha_objetivo en totales (aditivo),
+      + módulo Recomendacion (narrativa 🟢/🟡/🔴), + módulo Pipeline
+      (barra visual decorativa), PDF rediseñado (marca AV + wordmark
+      Agroveca + firma manual "Elaborado por"), whitelist PDF ampliada.
+    - cotizador.css: header estilo Executive Board (.header/.logo-mark/
+      .header-title), nav con items "Próximamente", .quote-hero,
+      .pipeline, .reco-card, .cliente-card, .tools-menu.
+    - data/config.json: + objetivo.factor_default, + pipeline_visual
+      (mapa decorativo), + navegacion.items — semáforo/estados/
+      estados_transiciones intactos.
+    - data/clientes_chile.json, data/clientes_peru.json: + campos
+      direccion/ciudad/correo/telefono/condicion_pago_habitual (vacíos,
+      editables — no existen en avboard_clientes.js todavía).
+    - index.html (portal), cotizador_chile.html, cotizador_peru.html:
+      reescritos — header corporativo, hero de cotización, grilla ERP
+      con Precio Lista/Objetivo/Piso/Venta, panel de recomendación
+      comercial, pipeline visual, menú "Herramientas" (Exportar JSON).
+    - README.md: sección 10 documentando Fase 2 completa.
+  · NO tocado (verificado con git diff --stat, salida vacía): index.html
+    raíz, dashboard.html, Executive_Board_View_AV_Latam_2026.html,
+    Panel_Productos_AV_2026.html, Panel_Rentabilidad_AV_2026.html,
+    avboard_data.js, avboard_clientes.js, scripts/update_avboard.py.
+  · IEC/semáforo siguen 100% atados a Precio Piso — Precio Objetivo es
+    un concepto nuevo sin política activa (solo alimenta Recomendacion).
+VALIDACIÓN: 5 JSON parseados sin error · tags balanceados en los 3 HTML
+· scripts inline verificados con `new Function()` (sintaxis OK, ambos
+países) · todos los id referenciados por $() existen en el DOM (0
+missing) · sanity test de Calc+Recomendacion con 3 escenarios (verde/
+amarillo/rojo) — resultado correcto en los tres.
+======================================================================
+
+======================================================================
+CORTE: 2026-07-01 (arquitectura de datos — preparación, sin desarrollo)
+ARCHIVOS PROCESADOS: ninguno del /inbox
+ACCIONES:
+  · Diseñado el modelo de datos canónico del Centro Comercial AV LATAM
+    para las próximas fases (CRM Clientes, Productos, Pricing, Pipeline
+    Comercial). Archivos nuevos, todos dentro de
+    apps/cotizador/data/modelo/ (carpeta nueva, puramente documental):
+    - modelo_centro_comercial.json (manifest: entidades, relaciones FK, roadmap)
+    - clientes.schema.json (18 campos)
+    - productos.schema.json (11 campos)
+    - cotizaciones.schema.json (12 campos, encabezado)
+    - detalle_cotizacion.schema.json (11 campos)
+    - configuracion.schema.json (6 secciones, singleton)
+  · Cada campo documenta tipo/obligatoriedad/descripción/ejemplo y
+    'origen_actual' (si ya existe en Fase 1/2 y con qué nombre, o si es
+    100% nuevo sin fuente de datos real todavía).
+  · Brechas reales identificadas (sin fuente de datos hoy): CLIENTES.
+    cargo/lista_precios/cultivo_principal/superficie/observaciones ·
+    PRODUCTOS.categoria y precio_lista oficial · COTIZACIONES.cliente_id
+    (FK formal) · CONFIGURACION.iva (no existe cálculo de IVA en el sistema).
+  · README.md: + sección 11 documentando el modelo y su roadmap de integración.
+  · NO conectado a ninguna pantalla ni a cotizador_core.js — cero riesgo
+    de romper Fase 1/2. NO se tocó ningún archivo operativo (config.json,
+    productos_*.json, clientes_*.json, cotizador_chile/peru.html,
+    cotizador.css, cotizador_core.js) ni ningún dashboard/script del resto
+    del repo (verificado con git diff --stat, salida vacía en todos).
+  · NO se realizó commit (working tree queda igual que antes, solo con
+    archivos nuevos sin trackear + los 3 logs actualizados).
+VALIDACIÓN: 6 JSON nuevos parseados sin error.
+======================================================================
+
+======================================================================
+CORTE: 2026-07-01 (FASE 3 — Motor Logístico Inteligente)
+ARCHIVOS PROCESADOS: ninguno del /inbox
+ACCIONES:
+  · Incorporado cálculo automático de distancia y costo de despacho al
+    módulo apps/cotizador/, 100% aditivo sobre Fase 1/2 (congeladas).
+  · cotizador_core.js: + módulo Logistica (geocode + directions vía
+    OpenRouteService, timeout 12s, fallback manual), quote.despacho{}
+    (completamente separado de quote.totales{} — nunca pasa por
+    Calc.calcularLinea/calcularTotales), Quote.totalConDespacho()
+    (subtotal productos + despacho solo si incluido:true), whitelist
+    PDF ampliada (distancia_km/costo_km/proveedor_api/api_key/estado/
+    mensaje prohibidos), PDF con línea "Despacho / Entrega" condicional.
+  · data/config.json: + sección logistica (proveedor_api, api_key vacío
+    — NUNCA hardcodeada en JS —, origen_chile/origen_peru con placeholder
+    explícito "PENDIENTE...", costo_km_chile_clp:1000, costo_km_peru_usd:0,
+    fallback_manual:true). Resto del archivo sin cambios.
+  · cotizador.css: + estilos .logi-estado (badges sin_calcular/
+    calculando/automatico/manual/error_fallback_manual).
+  · cotizador_chile.html, cotizador_peru.html: + panel "DESPACHO /
+    ENTREGA" (dirección, ciudad, calcular distancia, distancia km,
+    tiempo estimado, costo por km, costo despacho, incluir sí/no) +
+    resumen (subtotal productos/costo despacho/total cotización/estado
+    del cálculo logístico).
+  · README.md: + sección 12 (cómo configurar ORS, dónde va la key,
+    fallback manual, por qué no afecta IEC, costo/km inicial 1000 CLP).
+  · Validado con script de Node: IEC global idéntico con despacho
+    incluido/excluido · total SÍ cambia (850.000 → 895.000 con 45km ×
+    1000 CLP/km) · PDF.vistaCliente() nunca expone distancia_km/
+    costo_km/api_key y solo muestra la línea de despacho si está incluido.
+  · NO tocado (git diff --stat vacío): Executive Board, dashboards,
+    update_avboard.py, avboard_data.js, avboard_clientes.js, index.html
+    raíz (Acceso Cotizador, sin cambios esta sesión).
+  · NO se realizó commit.
+VALIDACIÓN: 11 JSON del módulo parseados sin error · scripts inline de
+ambos países verificados con `new Function()` · 0 ids huérfanos.
+======================================================================
+
+======================================================================
+CORTE: 2026-07-01 (FASE 4 — Corrección crítica: precio por presentación)
+ARCHIVOS PROCESADOS: ninguno del /inbox
+ACCIONES:
+  · Corregido el modelo de precio del Cotizador: no todos los SKU se
+    cotizan por litro/kilo — algunos (ej. tipo BIOVECA) se negocian
+    directo por envase/unidad. Se agregó tipo_precio (LITRO/KILO/
+    PRESENTACION/UNIDAD) y contenido_presentacion por línea, y los
+    precios de referencia (Lista/Objetivo/Piso) pasan a guardarse
+    SIEMPRE por presentación completa, no por litro/kilo.
+  · cotizador_core.js: Calc.calcularLinea reescrito con fórmula unificada
+    precio_venta_presentacion_calculado = precio_venta_unitario ×
+    contenido_presentacion (contenido=1 por convención en PRESENTACION/
+    UNIDAD, así una sola fórmula sirve para los 4 tipos) · total_linea =
+    precio_venta_presentacion × cantidad_envases · IEC recalculado sobre
+    el valor por presentación. Fallback defensivo a nombres de campo
+    antiguos (cantidad/precio_unitario/precio_piso) para no romper
+    borradores guardados antes de esta fase. Quote.lineaVacia() y
+    Quote.sugerirObjetivo() actualizados/renombrados (→
+    sugerirObjetivoPresentacion). Whitelist PDF ampliada con los nuevos
+    campos internos (tipo_precio, contenido_presentacion, precios
+    *_presentacion, precio_venta_unitario) — el PDF cliente solo muestra
+    Producto/Presentación/Cantidad/Precio Unitario Comercial/Subtotal.
+  · data/productos_chile.json, data/productos_peru.json: regenerados —
+    118 SKU (89 CL + 29 PE) reclasificados 100% automáticamente por
+    patrón de texto en 'presentacion' (L→LITRO, GR/KG→KILO), 0 requirieron
+    revisión manual. Se agregaron tipo_precio/contenido_presentacion/
+    unidad_contenido/precio_piso_presentacion/precio_lista_presentacion/
+    precio_objetivo_presentacion/costo_referencial_presentacion sin
+    borrar ningún campo existente (los valores por litro/kilo se
+    conservan para trazabilidad).
+  · data/config.json: actualizado texto de objetivo._comentario/
+    formula_default para reflejar el cálculo a nivel de presentación.
+    Sin cambios estructurales.
+  · cotizador_chile.html, cotizador_peru.html: grilla de líneas
+    rediseñada con columnas Producto/Presentación/Tipo precio/Cant.
+    envases/P. Lista pres./P. Objetivo pres./P. Piso pres./P. Venta
+    unit./P. Venta pres./Total línea/IEC. "Cantidad" renombrada a
+    "Cantidad envases" en toda la UI.
+  · data/modelo/productos.schema.json (v1.1.0) y
+    data/modelo/detalle_cotizacion.schema.json (v2.0.0): actualizados
+    para documentar los campos ya implementados (antes marcados
+    "futuro"/"no existe todavía").
+  · README.md: + sección 13 con el problema, la tabla de campos
+    corregidos, la fórmula unificada, y los 2 casos de validación.
+  · Validado con script de Node (cotizador_core.js cargado vía
+    new Function): Caso 1 — AV MOVE 20L, LITRO, cant. 3, precio venta
+    unitario 8.000 → total_linea 480.000 (PASS). Caso 2 — BIOVECA
+    unidad, PRESENTACION, cant. 3, precio venta presentación 25.000 →
+    total_linea 75.000 (PASS, caso ilustrativo — SKU no existe hoy en
+    el catálogo real).
+  · NO tocado (git diff --stat vacío): Executive Board, dashboards,
+    update_avboard.py, avboard_data.js, avboard_clientes.js, index.html
+    raíz (Acceso Cotizador, sin cambios esta sesión).
+  · NO se realizó commit (apps/ sigue sin trackear en git status).
+VALIDACIÓN: 10 JSON del módulo parseados sin error · cotizador_core.js
+carga sin errores de sintaxis · cotizador_chile.html y
+cotizador_peru.html con 115/115 <div> balanceados · 2/2 casos de
+validación exactos del usuario en PASS.
+======================================================================
+
+======================================================================
+CORTE: 2026-07-01 (CORRECCIÓN FINAL — lógica simple de precio unitario)
+ARCHIVOS PROCESADOS: ninguno del /inbox
+ACCIONES:
+  · Revertido el modelo de precio por presentación de la Fase 4: la tabla
+    de precios piso real de Agroveca trabaja SIEMPRE con precio unitario
+    por litro/kilo, no por presentación completa. Se simplificó el motor
+    de cálculo del Cotizador para reflejar eso.
+  · cotizador_core.js: Calc reescrito con Calc.factorPresentacion()
+    (factor=1 para presentaciones configuradas en presentaciones_por_unidad,
+    o el contenido numérico de la presentación en el resto — NO
+    hardcodeado) + Calc.calcularLinea/calcularTotales sobre precio_*_unitario.
+    Fórmula: total_linea = precio_venta_unitario × factor_presentacion ×
+    cantidad_envases. IEC_linea/IEC_global usan el mismo factor en venta y
+    piso. Quote.lineaVacia y Quote.sugerirObjetivoPresentacion (renombrado
+    a sugerirObjetivoUnitario) actualizados. Whitelist PDF ampliada;
+    PDF.vistaCliente sigue mostrando solo Producto/Presentación/Cantidad/
+    Precio Unitario/Subtotal (ahora el precio ya multiplicado por el
+    factor, nunca el desglose interno).
+  · data/config.json (v1.3.0): + presentaciones_por_unidad (lista
+    configurable, hoy ["250 GR", "500 GR"] — coincide con las 5
+    presentaciones pequeñas reales del catálogo). Comentario de
+    objetivo actualizado a nivel unitario.
+  · data/productos_chile.json, data/productos_peru.json: + 4 campos
+    aditivos por SKU (precio_piso_unitario, precio_lista_unitario,
+    precio_objetivo_unitario, costo_referencial_unitario) — alias
+    directos de los campos por litro/kilo ya existentes desde Fase 1.
+    NO se borró ningún campo (los *_presentacion de Fase 4 quedan como
+    compatibilidad interna, sin uso operativo).
+  · cotizador_chile.html, cotizador_peru.html: grilla de líneas
+    simplificada a 9 columnas (Producto/Presentación/Cant. envases/
+    P.Lista unit./P.Objetivo unit./P.Piso unit./P.Venta unit./Total
+    línea/IEC) — se eliminó la columna "Tipo precio" y "P. Venta pres.".
+    sel-producto y listeners actualizados a los campos _unitario.
+  · data/modelo/productos.schema.json (v1.2.0) y
+    data/modelo/detalle_cotizacion.schema.json (v3.0.0): actualizados
+    para reflejar el modelo vigente (precio_*_unitario + factor_presentacion,
+    tipo_precio/precio_*_presentacion documentados como histórico).
+  · README.md: sección 13 marcada como SUPERADA + nueva sección 14 con
+    la fórmula, la tabla de excepción configurable y los 4 casos de
+    validación.
+  · Validado con Node (cotizador_core.js + flujo completo Quote.nueva →
+    recalcular → totalConDespacho → PDF.vistaCliente): Caso 1 AV MOVE 20L
+    cant.3 × 8.000/L → 480.000 (PASS, IEC 1,142857 con piso 7.000/L).
+    Caso 2 formato 25 KG cant.2 × 4.500/KG → 225.000 (PASS). Caso 3
+    formato 500 g cant.4 × 10.000/envase → 40.000 (PASS). Caso 4 formato
+    250 g cant.6 × 8.000/envase → 48.000 (PASS). IEC global idéntico
+    antes/después de incluir despacho (1,140351 con Caso1+Caso3) · total
+    SÍ cambia (520.000 → 565.000 con 45km × 1.000 CLP/km) · PDF cliente
+    sin fugas de precio_piso_unitario/precio_lista_unitario/
+    precio_objetivo_unitario/factor_presentacion/contenido_presentacion/
+    precio_venta_unitario/datos de logística.
+  · NO tocado (git diff --stat vacío): Executive Board, dashboards,
+    update_avboard.py, avboard_data.js, avboard_clientes.js, index.html
+    raíz (Acceso Cotizador, sin cambios esta sesión).
+  · NO se realizó commit.
+VALIDACIÓN: 11 JSON del módulo parseados sin error · cotizador_core.js
+carga sin errores de sintaxis · cotizador_chile.html y cotizador_peru.html
+con 115/115 <div> balanceados y diff limpio (solo líneas país-específicas)
+· 4/4 casos de validación exactos del usuario en PASS · despacho
+confirmado sin efecto en IEC.
+======================================================================
+
+======================================================================
+CORTE: 2026-07-02 (FASE 5 — Ajustes finales de UX)
+ARCHIVOS PROCESADOS: ninguno del /inbox
+ACCIONES:
+  · Logo corporativo: reemplazado el mark de texto "AV" por el logo
+    oficial de AV LATAM en las 3 pantallas del Cotizador (portal,
+    Chile, Perú) y en el PDF cliente / vista previa. Fuente única: la
+    imagen real ya usada en el portal principal de acceso (index.html
+    raíz, solo lectura, sin modificar) — el Executive Board hoy usa el
+    mismo tipo de mark de texto que tenía el Cotizador, no una imagen,
+    así que se documentó esta decisión en README sección 15. + archivo
+    nuevo apps/cotizador/assets_logo.js (constante AV_LOGO_DATA_URL,
+    ~33 KB base64, verificado byte a byte idéntico al original).
+  · cotizador.css: + clase .logo-mark-img (caja blanca redondeada,
+    40px alto, imagen a 28px — proporciones discretas). .logo-mark
+    (texto) se deja sin borrar por compatibilidad.
+  · cotizador_core.js: + util.formatNumeroEdit(value, moneda) (formato
+    sin símbolo de moneda para campos editables: "8.000" CLP, "8.50"
+    USD). PDF.imprimir: .brand-mark ahora usa <img src="AV_LOGO_DATA_URL">
+    en vez de texto "AV".
+  · cotizador_chile.html, cotizador_peru.html: campos "Precio Venta
+    Unitario" y "Precio Objetivo Unitario" rediseñados con patrón
+    ERP — type="number" con spinner (step=500 CLP / 0.10 USD según
+    STEP_PRECIO derivado de PAIS) y valor crudo mientras están
+    enfocados; type="text" con valor formateado ("8.000"/"8.50")
+    cuando pierden el foco. El recálculo completo (Quote.recalcular +
+    repintado de la tabla) se dispara únicamente en blur/Enter/cambio
+    de línea — nunca en el evento 'input', que es lo que antes
+    destruía y recreaba el input en cada tecla y le hacía perder el
+    foco. "Cantidad envases" recibió el mismo criterio de recalcular
+    solo al salir (sin formato de miles, es un conteo).
+  · Validado con jsdom (teclado simulado carácter por carácter): el
+    nodo <input> NO se destruye mientras se escribe "8000" (mismo
+    objeto DOM antes/después), el valor se ve sin formatear mientras
+    se edita, se formatea a "8.000" recién al disparar blur, el step
+    es 500 al reenfocar en Chile, y el logo carga con el mismo tamaño
+    (33.366 caracteres base64) que el original. Los 4 casos de
+    validación de la Corrección Final y la independencia IEC/despacho
+    se re-verificaron intactos (IEC 1,142857 antes y después de
+    incluir despacho).
+  · NO tocado (git diff --stat vacío): Executive Board, dashboards,
+    update_avboard.py, avboard_data.js, avboard_clientes.js, index.html
+    raíz (Acceso Cotizador, sin cambios esta sesión — solo se leyó su
+    logo, no se editó el archivo).
+  · NO se realizó commit.
+VALIDACIÓN: JSON del módulo parseados sin error · cotizador_core.js y
+las 3 pantallas cargan sin errores de sintaxis · 115/115 <div>
+balanceados en Chile/Perú, diff limpio (solo líneas país-específicas) ·
+prueba de foco/formato/step en jsdom en PASS · IEC/despacho sin cambios.
+======================================================================
