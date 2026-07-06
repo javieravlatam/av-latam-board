@@ -475,6 +475,13 @@ var COTIZADOR = (function () {
       return Number(pais === 'PE' ? log.costo_km_peru_usd : log.costo_km_chile_clp) || 0;
     },
 
+    /** Fase 6: timeout configurable (data/config.json → logistica.timeout_ms). Default 10000ms si no está definido. */
+    timeoutMs: function (config) {
+      var log = config && config.logistica;
+      var ms = log && Number(log.timeout_ms);
+      return (ms && ms > 0) ? ms : 10000;
+    },
+
     /** true si el sistema tiene lo mínimo (key + origen real) para intentar el cálculo automático. */
     apiDisponible: function (config, pais) {
       var log = config && config.logistica;
@@ -536,15 +543,19 @@ var COTIZADOR = (function () {
      * Devuelve Promise<{distancia_km, tiempo_min}>. Quien llama SIEMPRE
      * debe capturar el error y caer a ingreso manual — nunca debe
      * bloquear la cotización (ver cotizador_chile.html/cotizador_peru.html).
+     * Fase 6: el timeout ya NO está hardcodeado — se recibe como parámetro
+     * (léase con Logistica.timeoutMs(config) desde data/config.json →
+     * logistica.timeout_ms, default 10000ms si no está definido).
      */
-    calcularDistanciaAutomatica: function (origenTexto, destinoTexto, apiKey) {
+    calcularDistanciaAutomatica: function (origenTexto, destinoTexto, apiKey, timeoutMs) {
       var self = this;
       var trabajo = self._geocode(apiKey, origenTexto).then(function (coordOrigen) {
         return self._geocode(apiKey, destinoTexto).then(function (coordDestino) {
           return self._directions(apiKey, coordOrigen, coordDestino);
         });
       });
-      return self._conTimeout(trabajo, 12000, 'La consulta a OpenRouteService demoró demasiado.');
+      var ms = (timeoutMs && timeoutMs > 0) ? timeoutMs : 10000;
+      return self._conTimeout(trabajo, ms, 'La consulta a OpenRouteService demoró demasiado.');
     }
   };
 

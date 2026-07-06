@@ -1013,3 +1013,62 @@ las 3 pantallas cargan sin errores de sintaxis · 115/115 <div>
 balanceados en Chile/Perú, diff limpio (solo líneas país-específicas) ·
 prueba de foco/formato/step en jsdom en PASS · IEC/despacho sin cambios.
 ======================================================================
+
+======================================================================
+CORTE: 2026-07-02 (FASE 6 — Motor de Distancias y Rutas / OpenRouteService)
+ARCHIVOS PROCESADOS: ninguno del /inbox
+ACCIONES:
+  · Auditoría completa del motor logístico (Fase 3) contra un spec más
+    detallado de Fase 6: dirección de entrega → origen por país desde
+    config.json → consulta a OpenRouteService → distancia/tiempo →
+    costo = distancia × costo/km → toggle incluir → suma al total →
+    IEC intacto. Resultado: TODO el flujo ya estaba implementado
+    correctamente desde Fase 3, incluyendo aviso claro sin API key,
+    fallback manual sin bloquear la cotización, whitelist del PDF sin
+    fuga de datos técnicos, y los 5 estados visuales del badge
+    (sin_calcular/calculando/automatico/manual/error_fallback_manual).
+  · Único gap real encontrado: el timeout de la llamada a
+    OpenRouteService estaba fijo en 12000ms dentro del código
+    (Calc.calcularDistanciaAutomatica), no configurable.
+  · data/config.json: + logistica.timeout_ms: 10000 (nuevo campo,
+    aditivo). Resto de la sección logistica sin cambios.
+  · cotizador_core.js: + Logistica.timeoutMs(config) (lee
+    logistica.timeout_ms, default 10000ms) ·
+    Logistica.calcularDistanciaAutomatica ahora recibe timeoutMs como
+    4to parámetro en vez de usar 12000 fijo.
+  · cotizador_chile.html, cotizador_peru.html: el llamado a
+    calcularDistanciaAutomatica ahora pasa
+    COTIZADOR.Logistica.timeoutMs(ctx.config) como 4to argumento. Sin
+    otros cambios en la UI del panel DESPACHO / ENTREGA (ya cumplía
+    el spec completo).
+  · README.md: sección 12 actualizada (ejemplo JSON con timeout_ms,
+    texto de "timeout de 12 segundos" → "timeout configurable") + nueva
+    subsección "Fase 6 (2026-07-02): timeout configurable" documentando
+    la auditoría y qué cambió realmente.
+  · Validado con Node + jsdom (simulación de flujo real en el DOM,
+    incluyendo clic en "Calcular distancia"): sin api_key cae a modo
+    manual con aviso ("Sin API key u origen logístico configurado...")
+    sin bloquear · distancia manual 45km × 1.000 CLP/km = 45.000 CLP
+    (PASS) · IEC global idéntico antes/después de incluir despacho
+    (1,142857...) · total SÍ cambia (480.000 → 525.000 con despacho de
+    45.000) · PDF.vistaCliente() muestra "Despacho / Entrega" solo si
+    incluido:true y jamás expone distancia_km/costo_km/api_key/estado/
+    mensaje (0 fugas detectadas) · fallo de red simulado hacia ORS cae
+    a error_fallback_manual sin bloquear · 0 console.error y 0
+    unhandled promise rejections en toda la prueba (incluyendo el
+    camino de error).
+  · NO tocado (git diff --stat vacío): Executive Board, dashboards,
+    update_avboard.py, avboard_data.js, avboard_clientes.js, index.html
+    raíz, lógica de IEC, lógica de precio piso, lógica de cálculo por
+    presentación, PDF cliente (salvo la línea de despacho ya existente,
+    sin cambios).
+  · NO se realizó commit de esta sesión (se detectó un commit "act"
+    preexistente en el historial, ajeno a este trabajo — ver nota en
+    resumen_actualizacion.md).
+VALIDACIÓN: config.json y catálogos parsean sin error · cotizador_core.js
+y las 2 pantallas de país cargan sin errores de sintaxis · diff
+chile/peru limpio (mismas líneas país-específicas de siempre) · 5/5
+validaciones del spec (sin key, cálculo manual 45km, toggle cambia
+total, toggle no cambia IEC, PDF condicional) en PASS · 0 errores de
+consola.
+======================================================================

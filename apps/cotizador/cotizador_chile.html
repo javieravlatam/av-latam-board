@@ -530,7 +530,7 @@
     d.mensaje = 'Consultando OpenRouteService...';
     pintarEstadoLogistico();
 
-    COTIZADOR.Logistica.calcularDistanciaAutomatica(origen, destino, ctx.config.logistica.api_key)
+    COTIZADOR.Logistica.calcularDistanciaAutomatica(origen, destino, ctx.config.logistica.api_key, COTIZADOR.Logistica.timeoutMs(ctx.config))
       .then(function(res){
         d.distancia_km = Math.round(res.distancia_km * 10) / 10;
         d.tiempo_min = res.tiempo_min;

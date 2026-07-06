@@ -343,7 +343,8 @@ incluido o excluido; solo el total comercial cambia.
   "origen_peru": "PENDIENTE — completar dirección oficial de origen (bodega/planta) Perú",
   "costo_km_chile_clp": 1000,
   "costo_km_peru_usd": 0,
-  "fallback_manual": true
+  "fallback_manual": true,
+  "timeout_ms": 10000
 }
 ```
 
@@ -367,7 +368,8 @@ cada pantalla de país):
    editable para que el vendedor la escriba a mano.
 2. Si hay key y origen configurados, geocodifica origen y destino y
    calcula la ruta contra OpenRouteService (`driving-car`), con un
-   timeout de 12 segundos.
+   timeout **configurable** (`logistica.timeout_ms`, en milisegundos —
+   10000 = 10s por defecto si no está definido en `config.json`).
 3. Si la API responde bien → estado `automatico`, distancia y tiempo se
    completan solos.
 4. Si la API falla por cualquier motivo (sin resultados de geocodificación,
@@ -408,6 +410,27 @@ ni ningún dato de la lógica interna (whitelist ampliada en
   activarlo/desactivarlo.
 - `PDF.vistaCliente()`: `despacho_incluido` refleja el estado del toggle,
   y nunca expone `distancia_km`/`costo_km`/`api_key`.
+
+### Fase 6 (2026-07-02): timeout configurable
+
+Auditoría del motor logístico contra un spec más detallado de Fase 6 —
+el flujo completo (dirección → origen por país → OpenRouteService →
+distancia/tiempo → costo → toggle incluir → suma al total → IEC
+intacto) ya estaba implementado desde Fase 3 y se confirmó sin cambios.
+El único ajuste real: el timeout de la llamada a OpenRouteService estaba
+fijo en 12000ms dentro de `Calc.calcularDistanciaAutomatica` — ahora se
+lee desde `data/config.json → logistica.timeout_ms` (nueva función
+`Logistica.timeoutMs(config)`, default 10000ms si no está definido).
+Sin cambios en `_geocode`/`_directions`/estados visuales/whitelist del
+PDF — todo lo demás de esta sección sigue vigente tal cual.
+
+**Validado de nuevo tras el ajuste:** sin `api_key` cae a modo manual
+con aviso claro (sin bloquear) · distancia manual 45km × 1.000 CLP/km =
+45.000 CLP · activar/desactivar despacho cambia el total pero el IEC
+global da exactamente el mismo número · fallo de red simulado cae a
+`error_fallback_manual` sin bloquear la cotización · 0 errores de
+consola y 0 promesas sin capturar en toda la prueba (jsdom, incluyendo
+el camino de error).
 
 ## 13. Corrección crítica: precio por presentación (Fase 4, 2026-07-01) — SUPERADA
 

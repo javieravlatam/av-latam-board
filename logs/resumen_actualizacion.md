@@ -745,6 +745,38 @@ tocar código.
 
 ---
 
+## Actualización 2026-07-02 — Fase 6: Motor de Distancias y Rutas (OpenRouteService)
+
+**Qué se pidió:** integrar cálculo automático de distancia/ruta con
+OpenRouteService en el Cotizador. Al auditar el motor logístico existente
+(construido en Fase 3), se confirmó que **todo el flujo pedido ya estaba
+implementado**: dirección → origen por país → consulta a ORS → distancia/
+tiempo → costo = distancia × costo/km → toggle incluir → suma al total →
+IEC intacto, con aviso claro si falta la API key y fallback manual sin
+bloquear la cotización.
+
+**Qué se corrigió realmente:** el único gap encontrado fue el timeout de
+la llamada a OpenRouteService, que estaba fijo en el código (12 segundos)
+en vez de ser configurable. Se agregó `logistica.timeout_ms` a
+`data/config.json` (default 10.000 ms) y se conectó al motor.
+
+**Qué NO cambió:** IEC, precio piso, cálculo por presentación, PDF cliente
+(salvo la línea de despacho, que ya existía), Executive Board, dashboards,
+`update_avboard.py`, acceso principal.
+
+**Validado:** sin API key cae a modo manual con aviso (sin bloquear) ·
+45 km × 1.000 CLP/km = 45.000 CLP · activar/desactivar despacho cambia el
+total pero no el IEC global · fallo de red simulado cae a modo manual con
+error claro · 0 errores de consola en toda la prueba (jsdom).
+
+**Nota:** se detectó un commit `"act"` en el historial de git ajeno a este
+trabajo (no ejecutado por esta sesión) — mencionado solo para que quede
+registrado, no afecta nada de lo aquí reportado.
+
+**Sin commit** — cambios quedan en el árbol de trabajo para revisión.
+
+---
+
 ## Actualización 2026-07-02 — Fase 5: Ajustes finales de UX
 
 **Qué se corrigió:** dos problemas de usabilidad que impedían empezar

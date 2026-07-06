@@ -99,13 +99,14 @@
     ]
   },
   "logistica": {
-    "_comentario": "Motor Logístico (Fase 3) — distancia y costo de despacho. La api_key NUNCA se hardcodea en cotizador_core.js: siempre se lee desde aquí. Si queda vacía, o si origen_chile/origen_peru siguen con el texto placeholder, el sistema usa ingreso manual de distancia automáticamente (ver README.md sección 12). No conecta con ningún backend — llamada directa desde el navegador a OpenRouteService.",
+    "_comentario": "Motor Logístico (Fase 3, timeout configurable agregado en Fase 6) — distancia y costo de despacho. La api_key NUNCA se hardcodea en cotizador_core.js: siempre se lee desde aquí. Si queda vacía, o si origen_chile/origen_peru siguen con el texto placeholder, el sistema usa ingreso manual de distancia automáticamente (ver README.md sección 12). No conecta con ningún backend — llamada directa desde el navegador a OpenRouteService.",
     "proveedor_api": "openrouteservice",
     "api_key": "",
     "origen_chile": "PENDIENTE — completar dirección oficial de origen (bodega/planta) Chile",
     "origen_peru": "PENDIENTE — completar dirección oficial de origen (bodega/planta) Perú",
     "costo_km_chile_clp": 1000,
     "costo_km_peru_usd": 0,
-    "fallback_manual": true
+    "fallback_manual": true,
+    "timeout_ms": 10000
   }
 }
