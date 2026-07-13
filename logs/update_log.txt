@@ -1072,3 +1072,33 @@ validaciones del spec (sin key, cálculo manual 45km, toggle cambia
 total, toggle no cambia IEC, PDF condicional) en PASS · 0 errores de
 consola.
 ======================================================================
+
+======================================================================
+CORTE: 2026-07-13 19:37
+ARCHIVOS PROCESADOS:
+  - Panel_Jefes_Chile_2026.html (modificación de panel — no es un corte de datos)
+ACCIONES:
+  · CORRECCIÓN gráfico "Detalle Mensual por Vendedor":
+    - Añadido: dataset "Real 2026" (barras verdes sólidas, fuente: AVBOARD.chile.ventas.rtc_mensual_real)
+    - Mantenido: dataset "Real 2025" (barras verdes tenues, fuente: vendedoresData[].meses)
+    - Mantenido: dataset "Ppto 2026" (línea azul, fuente: AVBOARD.chile.ventas.rtc_mensual_ppto)
+    - Meses futuros (>corteIdxCL) nulleados en Real 2026 para no mostrar barras vacías
+    - Vendedores sin RTC en AVBOARD (Riffo, Pradenas, Camilla): título indica "pendiente de carga"
+  · NUEVO módulo "Cuadro Ejecutivo Mensual" en tab-vendedores:
+    - Tabla 3 filas × 12 meses + columna acumulada al corte (sticky)
+    - Fila Ppto 2026: fuente rtc_mensual_ppto → fallback pptoMes (en M CLP)
+    - Fila Real 2026: fuente rtc_mensual_real; celdas futuras = "—"; sin avbKey = "Pend."
+    - Fila Cumpl. Mensual: Real/Ppto×100 por mes; colores (verde/ámbar/rojo)
+    - Columna "Acum. al corte": sum(Real[0..corteIdx])/sum(Ppto[0..corteIdx])×100 (NO promedio mensual)
+    - Mes corriente (corteIdxCL) marcado visualmente con clase ce-cursor
+    - Scroll horizontal con primera columna sticky
+  · NUEVO bloque resumen:
+    - Panel A — Acumulado al Corte: Ppto acum | Real acum | Cumplimiento acum + barra
+    - Panel B — Presupuesto Anual: total Ene–Dic + % ejecutado al corte + meses restantes
+  · Añadido campo avbKey a vendedoresData (5 con clave, 3 null)
+  · Añadidos avbReal2026, avbPpto2026, corteIdxCL como vars module-level
+  · CSS: .exec-wrap, .tbl-exec, .ce-*, .res-bloque, .res-card, .res-kpis añadidos
+VALIDACIÓN JSDOM: ✅ 64/64 aserciones OK (acumulados, fórmulas, pendientes, futuros)
+VENDEDORES CON DATOS REALES (5): F. Velásquez, P. Laratro, J. Caroca, I. Veverka, R. Encina
+VENDEDORES PENDIENTES DE CARGA (3): F. Riffo, G. Pradenas, D. Camilla
+======================================================================

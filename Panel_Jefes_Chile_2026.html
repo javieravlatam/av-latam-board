@@ -138,6 +138,30 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
 
   .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
   .btn-logout:hover { background:rgba(231,76,60,0.10); }
+
+/* ── CUADRO EJECUTIVO POR VENDEDOR ── */
+.exec-wrap{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;overflow:hidden;margin-top:4px}
+.exec-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.tbl-exec{width:max-content;min-width:100%;border-collapse:collapse;font-size:11px}
+table.tbl-exec th{padding:8px 10px;text-align:right;font-size:8px;text-transform:uppercase;
+  letter-spacing:1px;color:var(--muted);background:var(--s2);font-weight:600;
+  border-bottom:1px solid var(--bdr);white-space:nowrap}
+table.tbl-exec td{padding:7px 10px;border-bottom:1px solid rgba(122,182,72,0.06);white-space:nowrap}
+table.tbl-exec tr:last-child td{border-bottom:none}
+table.tbl-exec th:first-child{text-align:left;min-width:130px;position:sticky;left:0;z-index:3;background:var(--s2)}
+table.tbl-exec td:first-child{text-align:left;position:sticky;left:0;z-index:2;background:var(--s1)}
+table.tbl-exec th.th-acum{border-left:2px solid rgba(122,182,72,0.35);background:rgba(122,182,72,0.04)}
+table.tbl-exec td.td-acum{border-left:2px solid rgba(122,182,72,0.35);background:rgba(122,182,72,0.04);font-weight:700}
+.ce-bajo{color:var(--red)}.ce-parcial{color:var(--amber)}.ce-ok{color:var(--green)}
+.ce-cursor{background:rgba(122,182,72,0.07) !important;border-left:1px solid rgba(122,182,72,0.22) !important;border-right:1px solid rgba(122,182,72,0.22) !important}
+.ce-nd{color:var(--muted);font-size:9px;font-style:italic;font-family:'DM Sans',sans-serif}
+/* BLOQUE RESUMEN */
+.res-bloque{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.res-card{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;padding:16px}
+.res-card-title{font-family:'Bebas Neue';font-size:11px;letter-spacing:2px;margin-bottom:12px;color:var(--dim)}
+.res-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.res-kpi-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.res-kpi-val{font-family:'Bebas Neue';font-size:22px;line-height:1}
 </style>
 </head>
 <body>
@@ -333,6 +357,44 @@ table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
     <div class="chart-title" id="vend-chart-title">Ventas mensuales 2025 vs Presupuesto 2026</div>
     <div class="chart-canvas">
       <canvas id="chartVendedor"></canvas>
+    </div>
+  </div>
+
+  <div class="sec" style="margin-top:22px">Cuadro Ejecutivo Mensual <span>Presupuesto vs Real 2026 · mes a mes · CLP Millones</span></div>
+  <div class="exec-wrap">
+    <div class="exec-scroll">
+      <div id="tbl-exec-container"></div>
+    </div>
+  </div>
+
+  <div class="res-bloque">
+    <div class="res-card">
+      <div class="res-card-title">A · Acumulado al Corte</div>
+      <div class="res-kpis">
+        <div>
+          <div class="res-kpi-lbl">Ppto Acum.</div>
+          <div class="res-kpi-val kpi-b" id="res-ppto-corte">—</div>
+        </div>
+        <div>
+          <div class="res-kpi-lbl">Real Acum.</div>
+          <div class="res-kpi-val kpi-g" id="res-real-acum">—</div>
+        </div>
+        <div>
+          <div class="res-kpi-lbl">Cumplimiento</div>
+          <div id="res-cumpl-corte" style="font-family:'Bebas Neue';font-size:22px;line-height:1">—</div>
+        </div>
+      </div>
+      <div class="cumpl-bar" style="margin-top:10px" id="res-cumpl-bar">
+        <div class="cumpl-fill" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-title">B · Presupuesto Anual</div>
+      <div>
+        <div class="res-kpi-lbl">Total Anual 2026</div>
+        <div class="res-kpi-val kpi-b" id="res-ppto-anual">—</div>
+      </div>
+      <div style="font-size:10px;color:var(--dim);margin-top:8px" id="res-ppto-anual-sub">Ene–Dic 2026</div>
     </div>
   </div>
 
@@ -877,30 +939,37 @@ var ppto2026=(typeof AVBOARD!=='undefined' && AVBOARD.chile && AVBOARD.chile.ven
 var real2026=(typeof AVBOARD!=='undefined')
   ? AVBOARD.chile.ventas.mensual_real.map(function(v){return v>0?parseFloat((v/1e6).toFixed(1)):null;})
   : Array(12).fill(null);
+var avbReal2026=(typeof AVBOARD!=='undefined'&&AVBOARD.chile&&AVBOARD.chile.ventas&&AVBOARD.chile.ventas.rtc_mensual_real)
+  ?AVBOARD.chile.ventas.rtc_mensual_real:{};
+var avbPpto2026=(typeof AVBOARD!=='undefined'&&AVBOARD.chile&&AVBOARD.chile.ventas&&AVBOARD.chile.ventas.rtc_mensual_ppto)
+  ?AVBOARD.chile.ventas.rtc_mensual_ppto:{};
+var corteIdxCL=(function(){
+  try{var s=AVBOARD.meta.cortes.chile_ventas||'';var p=s.split('/');
+    return p.length>=2?parseInt(p[1],10)-1:5;}catch(e){return 5;}})();
 
 const vendedoresData=[
-  {nombre:'FRANCISCO VELÁSQUEZ', corto:'F. Velásquez', real:240.1, ppto:253.9,
+  {nombre:'FRANCISCO VELÁSQUEZ', corto:'F. Velásquez', avbKey:'velasquez', real:240.1, ppto:253.9,
    meses:[8.3,10.9,4.1,17.9,46.6,13.3,4.4,16.1,50.5,52.6,10.9,4.6],
    pptoMes:[14.9,11.5,6.5,10.0,5.0,20.0,38.0,12.0,48.0,50.0,18.0,20.0]},
-  {nombre:'PABLO LARATRO',       corto:'P. Laratro',   real:232.6, ppto:234.0,
+  {nombre:'PABLO LARATRO',       corto:'P. Laratro',   avbKey:'laratro',   real:232.6, ppto:234.0,
    meses:[27.0,21.2,11.9,10.4,50.6,8.3,12.2,24.1,26.6,16.8,22.2,1.2],
    pptoMes:[36.0,10.6,7.5,16.6,22.5,10.0,7.8,21.0,25.0,20.0,37.5,19.5]},
-  {nombre:'JORGE CAROCA',        corto:'J. Caroca',    real:97.0,  ppto:131.6,
+  {nombre:'JORGE CAROCA',        corto:'J. Caroca',    avbKey:'caroca',    real:97.0,  ppto:131.6,
    meses:[8.4,9.9,10.3,5.9,13.0,7.2,6.5,19.6,8.5,7.7,0.0,0.0],
    pptoMes:[12.5,6.0,14.5,8.8,12.5,8.7,6.0,25.5,10.8,8.7,5.0,12.5]},
-  {nombre:'FRANCO RIFFO',        corto:'F. Riffo',     real:58.7,  ppto:null,
+  {nombre:'FRANCO RIFFO',        corto:'F. Riffo',     avbKey:null,        real:58.7,  ppto:null,
    meses:[0.0,0.0,0.0,0.0,0.0,3.4,5.2,9.0,8.2,32.9,0.0,0.0],
    pptoMes:null},
-  {nombre:'IVÁN VEVERKA',        corto:'I. Veverka',   real:36.4,  ppto:72.0,
+  {nombre:'IVÁN VEVERKA',        corto:'I. Veverka',   avbKey:'veverka',   real:36.4,  ppto:72.0,
    meses:[1.1,1.9,1.1,1.7,10.2,0.0,0.6,0.0,0.0,15.4,4.4,0.0],
    pptoMes:[6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0]},
-  {nombre:'GUILLERMO PRADENAS',  corto:'G. Pradenas',  real:33.5,  ppto:null,
+  {nombre:'GUILLERMO PRADENAS',  corto:'G. Pradenas',  avbKey:null,        real:33.5,  ppto:null,
    meses:[5.2,8.2,4.9,4.3,7.1,2.6,1.2,0.0,0.0,0.0,0.0,0.0],
    pptoMes:null},
-  {nombre:'DAVID CAMILLA',       corto:'D. Camilla',   real:21.0,  ppto:null,
+  {nombre:'DAVID CAMILLA',       corto:'D. Camilla',   avbKey:null,        real:21.0,  ppto:null,
    meses:[8.5,5.1,2.7,2.0,2.7,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
    pptoMes:null},
-  {nombre:'RODRIGO ENCINA',      corto:'R. Encina',    real:19.5,  ppto:169.9,
+  {nombre:'RODRIGO ENCINA',      corto:'R. Encina',    avbKey:'encina',    real:19.5,  ppto:169.9,
    meses:[0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,6.3,5.3,5.8,0.0],
    pptoMes:[14.2,7.5,7.5,5.0,5.0,5.0,5.0,12.0,21.0,28.0,31.0,28.7]},
 ];
@@ -1048,17 +1117,39 @@ let chartVend=null;
 })();
 
 function updateVendChart(idx){
-  const v=vendedoresData[idx];
-  document.getElementById('vend-chart-title').textContent=`${v.nombre} · Ventas 2025 por mes vs Presupuesto 2026`;
-  const datasets=[{
-    label:'Real 2025',data:v.meses,
-    backgroundColor:'rgba(122,182,72,0.6)',borderColor:G,borderWidth:1.5,borderRadius:3
-  }];
-  if(v.pptoMes){
+  var v=vendedoresData[idx];
+  var hasPending=v.avbKey===null;
+  var titleNote=hasPending?' · (Real 2026: pendiente de carga)':'';
+  document.getElementById('vend-chart-title').textContent=
+    v.nombre+' · Real 2026 vs Real 2025 vs Ppto 2026'+titleNote;
+
+  // Real 2026 por RTC desde AVBOARD (en M CLP), null para meses futuros
+  var rtcReal2026=(v.avbKey&&avbReal2026[v.avbKey])
+    ? avbReal2026[v.avbKey].map(function(val,i){
+        return i<=corteIdxCL ? parseFloat((val/1e6).toFixed(1)) : null;
+      })
+    : Array(12).fill(null);
+
+  // Ppto 2026 por RTC: prefer AVBOARD, fallback pptoMes (ya en M)
+  var rtcPpto2026=null;
+  if(v.avbKey&&avbPpto2026[v.avbKey]){
+    rtcPpto2026=avbPpto2026[v.avbKey].map(function(x){return parseFloat((x/1e6).toFixed(1));});
+  } else if(v.pptoMes){
+    rtcPpto2026=v.pptoMes;
+  }
+
+  var datasets=[
+    {label:'Real 2026',data:rtcReal2026,
+     backgroundColor:'rgba(122,182,72,0.80)',borderColor:G,borderWidth:1.5,borderRadius:3,order:2},
+    {label:'Real 2025',data:v.meses,
+     backgroundColor:'rgba(122,182,72,0.22)',borderColor:'rgba(122,182,72,0.45)',
+     borderWidth:1,borderRadius:2,order:3}
+  ];
+  if(rtcPpto2026){
     datasets.push({
-      label:'Ppto 2026',data:v.pptoMes,type:'line',
+      label:'Ppto 2026',data:rtcPpto2026,type:'line',
       borderColor:B,borderWidth:2,pointRadius:4,pointBackgroundColor:B,
-      fill:false,tension:0.3,borderDash:[5,3]
+      fill:false,tension:0.3,borderDash:[5,3],order:1
     });
   }
   if(chartVend){
@@ -1067,17 +1158,152 @@ function updateVendChart(idx){
   } else {
     chartVend=new Chart(document.getElementById('chartVendedor'),{
       type:'bar',
-      data:{labels:LABELS,datasets},
+      data:{labels:LABELS,datasets:datasets},
       options:{
         responsive:true,maintainAspectRatio:false,
         plugins:{legend:{position:'top',labels:{boxWidth:12,padding:14,usePointStyle:true}},
-          tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: CLP ${ctx.parsed.y}M`}}},
+          tooltip:{callbacks:{label:function(ctx){return ctx.dataset.label+': CLP '+ctx.parsed.y+'M';}}}},
         scales:{
           x:{grid:{color:'rgba(122,182,72,0.06)'}},
-          y:{grid:{color:'rgba(122,182,72,0.06)'},ticks:{callback:v=>v+'M'}}
+          y:{grid:{color:'rgba(122,182,72,0.06)'},ticks:{callback:function(v){return v+'M';}}}
         }
       }
     });
+  }
+  updateCuadroEjecutivo(idx);
+}
+
+// ── CUADRO EJECUTIVO ──
+function updateCuadroEjecutivo(idx){
+  var v=vendedoresData[idx];
+
+  // Ppto: prefer AVBOARD rtc_mensual_ppto (pesos→M), fallback v.pptoMes (ya en M)
+  var pptoArr=null;
+  if(v.avbKey&&avbPpto2026[v.avbKey]){
+    pptoArr=avbPpto2026[v.avbKey].map(function(x){return parseFloat((x/1e6).toFixed(1));});
+  } else if(v.pptoMes){
+    pptoArr=v.pptoMes.slice();
+  }
+
+  // Real 2026: solo si tiene avbKey (pesos→M)
+  var realArr=null;
+  if(v.avbKey&&avbReal2026[v.avbKey]){
+    realArr=avbReal2026[v.avbKey].map(function(x){return parseFloat((x/1e6).toFixed(1));});
+  }
+
+  // Precomputar acumulados (meses 0..corteIdxCL)
+  var pptoAcum=0,realAcum=0;
+  for(var m=0;m<=corteIdxCL;m++){
+    if(pptoArr&&pptoArr[m]&&pptoArr[m]>0) pptoAcum+=pptoArr[m];
+    if(realArr) realAcum+=realArr[m];
+  }
+  pptoAcum=parseFloat(pptoAcum.toFixed(1));
+  realAcum=parseFloat(realAcum.toFixed(1));
+  var cumplAcum=(pptoAcum>0&&realArr)?Math.round(realAcum/pptoAcum*1000)/10:null;
+
+  // Construir tabla completa (thead + tbody)
+  var tbl='<table class="tbl-exec"><thead><tr>';
+  tbl+='<th>Indicador</th>';
+  for(var i=0;i<12;i++){
+    var isCurr=(i===corteIdxCL);
+    tbl+='<th class="r'+(isCurr?' ce-cursor':'')+'">'+(isCurr?'▸ ':'')+LABELS[i]+'</th>';
+  }
+  tbl+='<th class="r th-acum">Acum. al corte</th>';
+  tbl+='</tr></thead><tbody>';
+
+  // Fila 1: Ppto 2026
+  tbl+='<tr><td style="font-weight:600;color:var(--dim)">Ppto 2026</td>';
+  for(var j=0;j<12;j++){
+    var isCurr=(j===corteIdxCL);
+    var val=pptoArr?pptoArr[j]:null;
+    var disp;
+    if(!val||val<=0) disp='<span class="ce-nd">N/A</span>';
+    else disp=val.toFixed(1)+'M';
+    tbl+='<td class="r'+(isCurr?' ce-cursor':'')+'">'+disp+'</td>';
+  }
+  tbl+='<td class="r td-acum">'+(pptoAcum>0?pptoAcum.toFixed(1)+'M':'<span class="ce-nd">N/A</span>')+'</td></tr>';
+
+  // Fila 2: Real 2026
+  tbl+='<tr><td style="font-weight:600;color:var(--green)">Real 2026</td>';
+  for(var k=0;k<12;k++){
+    var isFut=(k>corteIdxCL);
+    var isCurr=(k===corteIdxCL);
+    if(isFut){
+      tbl+='<td class="r" style="color:var(--muted)">—</td>';
+    } else if(!realArr){
+      tbl+='<td class="r'+(isCurr?' ce-cursor':'')+'"><span class="ce-nd">Pend.</span></td>';
+    } else {
+      tbl+='<td class="r'+(isCurr?' ce-cursor':'')+'" style="color:var(--green)">'+realArr[k].toFixed(1)+'M</td>';
+    }
+  }
+  var realAcumDisp=realArr?'<span style="color:var(--green)">'+realAcum.toFixed(1)+'M</span>':'<span class="ce-nd">Pend.</span>';
+  tbl+='<td class="r td-acum">'+realAcumDisp+'</td></tr>';
+
+  // Fila 3: Cumpl. Mensual
+  tbl+='<tr><td style="font-weight:600;font-size:10px;color:var(--dim)">Cumpl. Mensual</td>';
+  for(var n=0;n<12;n++){
+    var isFut=(n>corteIdxCL);
+    var isCurr=(n===corteIdxCL);
+    if(isFut){
+      tbl+='<td class="r" style="color:var(--muted)">—</td>';
+    } else if(!realArr){
+      tbl+='<td class="r'+(isCurr?' ce-cursor':'')+'"><span class="ce-nd">N/A</span></td>';
+    } else {
+      var pp=pptoArr?pptoArr[n]:null;
+      if(!pp||pp<=0){
+        tbl+='<td class="r'+(isCurr?' ce-cursor':'')+'"><span class="ce-nd">N/A</span></td>';
+      } else {
+        var pct=Math.round(realArr[n]/pp*1000)/10;
+        var cc=pct>=100?'ce-ok':(pct>=85?'ce-parcial':'ce-bajo');
+        tbl+='<td class="r '+(isCurr?'ce-cursor ':'')+cc+'">'+pct+'%</td>';
+      }
+    }
+  }
+  var cumplAcumDisp;
+  if(cumplAcum===null) cumplAcumDisp='<span class="ce-nd">N/A</span>';
+  else{
+    var cc2=cumplAcum>=100?'ce-ok':(cumplAcum>=85?'ce-parcial':'ce-bajo');
+    cumplAcumDisp='<span class="'+cc2+'">'+cumplAcum+'%</span>';
+  }
+  tbl+='<td class="r td-acum">'+cumplAcumDisp+'</td></tr>';
+
+  tbl+='</tbody></table>';
+  document.getElementById('tbl-exec-container').innerHTML=tbl;
+
+  // Actualizar bloque resumen
+  var set=function(id,val){var el=document.getElementById(id);if(el)el.textContent=val;};
+  var setH=function(id,val){var el=document.getElementById(id);if(el)el.innerHTML=val;};
+  var mesesNom=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+  // Panel A — acumulado al corte
+  set('res-ppto-corte',pptoAcum>0?'CLP '+pptoAcum.toFixed(1)+'M':'N/A');
+  set('res-real-acum',realArr?'CLP '+realAcum.toFixed(1)+'M':'Pendiente');
+  if(cumplAcum!==null){
+    var cc3=cumplAcum>=100?'kpi-g':(cumplAcum>=85?'kpi-a':'kpi-r');
+    setH('res-cumpl-corte','<span class="'+cc3+'" style="font-family:\'Bebas Neue\';font-size:22px">'+cumplAcum+'%</span>');
+    var barEl=document.getElementById('res-cumpl-bar');
+    if(barEl){
+      var fp=Math.min(cumplAcum,100);
+      var bc=cumplAcum>=100?'var(--green)':(cumplAcum>=85?'var(--amber)':'var(--red)');
+      barEl.innerHTML='<div class="cumpl-fill" style="width:'+fp+'%;background:'+bc+'"></div>';
+    }
+  } else {
+    set('res-cumpl-corte','N/A');
+    var barEl2=document.getElementById('res-cumpl-bar');
+    if(barEl2) barEl2.innerHTML='<div class="cumpl-fill" style="width:0%"></div>';
+  }
+
+  // Panel B — presupuesto anual
+  var pptoAnual=pptoArr?parseFloat(pptoArr.reduce(function(a,b){return a+(b&&b>0?b:0);},0).toFixed(1)):null;
+  if(pptoAnual&&pptoAnual>0){
+    set('res-ppto-anual','CLP '+pptoAnual.toFixed(1)+'M');
+    var mRest=11-corteIdxCL;
+    var corteLabel=mesesNom[corteIdxCL+1]||'';
+    var pctEjec=realArr?parseFloat(realAcum/pptoAnual*100).toFixed(1)+'% ejecutado Ene–'+corteLabel:'pendiente';
+    set('res-ppto-anual-sub','Ene–Dic 2026 · '+pctEjec+' · '+mRest+' meses restantes');
+  } else {
+    set('res-ppto-anual','N/A');
+    set('res-ppto-anual-sub','Sin presupuesto asignado 2026');
   }
 }
 
