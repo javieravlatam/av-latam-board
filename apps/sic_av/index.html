@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIC-AV — Acceso al Prototipo</title>
+<link rel="stylesheet" href="sic_styles.css">
+</head>
+<body>
+<div class="sic-demo-banner">PROTOTIPO SIC-AV — MODELO DEMOSTRATIVO, PENDIENTE DE APROBACION GERENCIAL. Datos sinteticos, sin conexion a AV LATAM Board.</div>
+
+<div class="sic-login-wrap">
+  <div class="sic-login-card">
+    <div class="sic-login-title">
+      <h1>Sistema Integral de Incentivos Comerciales</h1>
+      <p>Grupo AV LATAM — Prototipo funcional aislado, Fase 4. Seleccione su pais para ingresar.</p>
+    </div>
+
+    <div class="sic-login-options">
+      <div class="sic-login-option">
+        <h2>Chile</h2>
+        <p class="desc">Acceso al modulo SIC-AV Chile</p>
+        <input type="password" id="clave-cl" placeholder="Clave de acceso" autocomplete="off">
+        <button onclick="intentarAcceso('CL')">Ingresar</button>
+        <div class="sic-login-error" id="error-cl"></div>
+      </div>
+
+      <div class="sic-login-option">
+        <h2>Peru</h2>
+        <p class="desc">Acceso al modulo SIC-AV Peru</p>
+        <input type="password" id="clave-pe" placeholder="Clave de acceso" autocomplete="off">
+        <button onclick="intentarAcceso('PE')">Ingresar</button>
+        <div class="sic-login-error" id="error-pe"></div>
+      </div>
+    </div>
+
+    <div class="sic-login-footer">
+      Este es un prototipo de demostracion. Las claves de acceso son unicas por pais y no representan<br>
+      autenticacion individual por vendedor. Ver README.md — "Advertencia de autenticacion productiva".
+    </div>
+  </div>
+</div>
+
+<script src="sic_auth.js"></script>
+<script>
+  function intentarAcceso(paisEsperado) {
+    var inputId = paisEsperado === "CL" ? "clave-cl" : "clave-pe";
+    var errorId = paisEsperado === "CL" ? "error-cl" : "error-pe";
+    var clave = document.getElementById(inputId).value;
+    var paisAutenticado = SICAuth.autenticar(clave);
+
+    if (paisAutenticado === paisEsperado) {
+      window.location.href = paisEsperado === "CL" ? "sic_chile.html" : "sic_peru.html";
+    } else if (paisAutenticado && paisAutenticado !== paisEsperado) {
+      // La clave es valida pero corresponde al OTRO pais -- no se permite cruzar.
+      document.getElementById(errorId).textContent = "Esa clave no corresponde a este pais.";
+      sessionStorage.removeItem("sic_av_session");
+    } else {
+      document.getElementById(errorId).textContent = "Clave incorrecta.";
+    }
+  }
+
+  // Si ya existe una sesion activa, ofrecer continuar directo al modulo correspondiente.
+  (function () {
+    var sesion = SICAuth.sesionActiva();
+    if (sesion) {
+      window.location.href = sesion.pais === "CL" ? "sic_chile.html" : "sic_peru.html";
+    }
+  })();
+
+  // Permitir Enter para enviar
+  document.getElementById("clave-cl").addEventListener("keydown", function (e) { if (e.key === "Enter") intentarAcceso("CL"); });
+  document.getElementById("clave-pe").addEventListener("keydown", function (e) { if (e.key === "Enter") intentarAcceso("PE"); });
+</script>
+</body>
+</html>

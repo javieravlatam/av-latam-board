@@ -1,0 +1,241 @@
+{
+  "cobranzas": [
+    {
+      "factura": "CL-2026-07-001",
+      "fecha_pago": "2026-07-01",
+      "monto": 1440000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-002",
+      "fecha_pago": "2026-07-15",
+      "monto": 784000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-003",
+      "fecha_pago": "2026-07-12",
+      "monto": 608000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-004",
+      "fecha_pago": "2026-07-20",
+      "monto": 710000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-005",
+      "fecha_pago": "2026-07-20",
+      "monto": 356400,
+      "tipo": "parcial"
+    },
+    {
+      "factura": "CL-2026-07-007",
+      "fecha_pago": "2026-07-10",
+      "monto": 2150000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-008",
+      "fecha_pago": "2026-07-18",
+      "monto": 558000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-009",
+      "fecha_pago": "2026-07-14",
+      "monto": 602000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-010",
+      "fecha_pago": "2026-05-25",
+      "monto": 232500,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-011",
+      "fecha_pago": "2026-07-09",
+      "monto": 3960000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-012",
+      "fecha_pago": "2026-07-11",
+      "monto": 2190000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-013",
+      "fecha_pago": "2026-07-19",
+      "monto": 1455000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-014",
+      "fecha_pago": "2026-07-08",
+      "monto": 453000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-015",
+      "fecha_pago": "2026-07-10",
+      "monto": 870000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-016",
+      "fecha_pago": "2026-07-12",
+      "monto": 492500,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-017",
+      "fecha_pago": "2026-07-05",
+      "monto": 382500,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-018",
+      "fecha_pago": "2026-07-09",
+      "monto": 3045000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-07-019",
+      "fecha_pago": "2026-07-13",
+      "monto": 786500,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-02-101",
+      "fecha_pago": "2026-02-15",
+      "monto": 1020000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-02-102",
+      "fecha_pago": "2026-02-20",
+      "monto": 855000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-02-103",
+      "fecha_pago": "2026-02-24",
+      "monto": 298000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-02-104",
+      "fecha_pago": "2026-02-28",
+      "monto": 1680000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-03-105",
+      "fecha_pago": "2026-03-14",
+      "monto": 1104000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-03-106",
+      "fecha_pago": "2026-03-19",
+      "monto": 912000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-03-107",
+      "fecha_pago": "2026-03-25",
+      "monto": 330000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-03-108",
+      "fecha_pago": "2026-03-30",
+      "monto": 1785000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-04-109",
+      "fecha_pago": "2026-04-13",
+      "monto": 1190000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-04-110",
+      "fecha_pago": "2026-04-18",
+      "monto": 970000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-04-111",
+      "fecha_pago": "2026-04-24",
+      "monto": 362400,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-04-112",
+      "fecha_pago": "2026-04-29",
+      "monto": 1883200,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-05-113",
+      "fecha_pago": "2026-05-12",
+      "monto": 1269000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-05-114",
+      "fecha_pago": "2026-05-17",
+      "monto": 1023750,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-05-115",
+      "fecha_pago": "2026-05-23",
+      "monto": 393900,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-05-116",
+      "fecha_pago": "2026-05-28",
+      "monto": 1978000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-06-117",
+      "fecha_pago": "2026-06-11",
+      "monto": 1349000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-06-118",
+      "fecha_pago": "2026-06-16",
+      "monto": 1078000,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-06-119",
+      "fecha_pago": "2026-06-22",
+      "monto": 425600,
+      "tipo": "total"
+    },
+    {
+      "factura": "CL-2026-06-120",
+      "fecha_pago": "2026-06-27",
+      "monto": 2073600,
+      "tipo": "total"
+    }
+  ],
+  "notas_credito": [
+    {
+      "factura": "CL-2026-07-010",
+      "fecha_nc": "2026-07-08",
+      "monto_nc": 46500,
+      "motivo": "Ajuste comercial por devolucion parcial de producto",
+      "ciclo_aplicacion": "2026-07"
+    }
+  ]
+}

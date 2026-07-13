@@ -1,0 +1,205 @@
+{
+  "version_politica": "SIC-AV V1.4 (demostrativo -- Factor de Presupuesto, Tabla de Cartera Chile y Factor IEC definidos y aprobados por Gerencia General el 2026-07-13; el mismo dia se elimino el Factor de Precio Piso del calculo de comision -- toda venta facturada es una operacion valida, el precio piso solo impacta la comision de forma indirecta a traves del IEC; el mecanismo de bono de consistencia trimestral sigue ilustrativo)",
+  "pais": "PE",
+  "moneda": "USD",
+  "tasa_cartera": {
+    "Distribuidor": [
+      {
+        "max_dias": 0,
+        "tasa": 8
+      },
+      {
+        "max_dias": 30,
+        "tasa": 7.5
+      },
+      {
+        "max_dias": 60,
+        "tasa": 6
+      },
+      {
+        "max_dias": 120,
+        "tasa": 5
+      },
+      {
+        "max_dias": 180,
+        "tasa": 2.5
+      },
+      {
+        "max_dias": null,
+        "tasa": 0.5
+      }
+    ],
+    "ClienteFinal": [
+      {
+        "max_dias": 0,
+        "tasa": 8
+      },
+      {
+        "max_dias": 30,
+        "tasa": 7.5
+      },
+      {
+        "max_dias": 60,
+        "tasa": 6
+      },
+      {
+        "max_dias": 120,
+        "tasa": 5
+      },
+      {
+        "max_dias": 180,
+        "tasa": 2.5
+      },
+      {
+        "max_dias": null,
+        "tasa": 0.5
+      }
+    ]
+  },
+  "factor_presupuesto_tramos": [
+    {
+      "min_cumpl": 0,
+      "max_cumpl": 89.99,
+      "factor": 0
+    },
+    {
+      "min_cumpl": 90,
+      "max_cumpl": 99.99,
+      "factor": 80
+    },
+    {
+      "min_cumpl": 100,
+      "max_cumpl": null,
+      "factor": 100
+    }
+  ],
+  "_factor_presupuesto_nota": "Politica V1.1 (2026-07-12, aprobada por Gerencia General): tramos fijos, reemplaza el Modelo C continuo/interpolado. El factor NUNCA supera 100%. Ver CHANGE REQUEST SIC-AV v1.1, seccion 1.",
+  "_precio_piso_nota": "CHANGE REQUEST SIC-AV v1.4 (2026-07-13, aprobada por Gerencia General): se elimino el Factor de Precio Piso del calculo de comision -- ya no existe una tabla de factores de reduccion/veto por precio piso. Toda venta facturada se considera una operacion valida y previamente aprobada por la compañia. El precio piso se mantiene solo como dato informativo por factura y como insumo del Factor IEC (unico mecanismo por el que el precio piso puede impactar la comision).",
+  "bono_excedente_pct": 2,
+  "diferido_trimestral": {
+    "liberacion": [
+      {
+        "min_cumpl": 100,
+        "max_cumpl": 104.99,
+        "pct_liberacion": 50
+      },
+      {
+        "min_cumpl": 105,
+        "max_cumpl": 109.99,
+        "pct_liberacion": 75
+      },
+      {
+        "min_cumpl": 110,
+        "max_cumpl": null,
+        "pct_liberacion": 100
+      }
+    ],
+    "iec_minimo": 95,
+    "condiciones": [
+      "cartera_estandar",
+      "sin_observaciones_financieras_graves"
+    ]
+  },
+  "advertencia": "MODELO DEMOSTRATIVO -- PENDIENTE DE APROBACION GERENCIAL. Ver docs/sic_av/SIC_AV_DECISIONES_GERENCIA.md",
+  "ciclos": [
+    {
+      "ciclo": "2026-02",
+      "inicio": "2026-01-26",
+      "cierre": "2026-02-25",
+      "estado": "cerrado",
+      "policy_version": "SIC v1.2",
+      "fecha_datos": "2026-02-25"
+    },
+    {
+      "ciclo": "2026-03",
+      "inicio": "2026-02-26",
+      "cierre": "2026-03-25",
+      "estado": "cerrado",
+      "policy_version": "SIC v1.2",
+      "fecha_datos": "2026-03-25"
+    },
+    {
+      "ciclo": "2026-04",
+      "inicio": "2026-03-26",
+      "cierre": "2026-04-25",
+      "estado": "cerrado",
+      "policy_version": "SIC v1.2",
+      "fecha_datos": "2026-04-25"
+    },
+    {
+      "ciclo": "2026-05",
+      "inicio": "2026-04-26",
+      "cierre": "2026-05-25",
+      "estado": "cerrado",
+      "policy_version": "SIC v1.2",
+      "fecha_datos": "2026-05-25"
+    },
+    {
+      "ciclo": "2026-06",
+      "inicio": "2026-05-26",
+      "cierre": "2026-06-25",
+      "estado": "cerrado",
+      "policy_version": "SIC v1.2",
+      "fecha_datos": "2026-06-25"
+    },
+    {
+      "ciclo": "2026-07",
+      "inicio": "2026-06-26",
+      "cierre": "2026-07-25",
+      "estado": "vigente",
+      "policy_version": "SIC v1.2",
+      "fecha_datos": "2026-07-25"
+    }
+  ],
+  "trimestres": [
+    {
+      "trimestre": "2026-Q1",
+      "ciclos": [
+        "2026-02",
+        "2026-03",
+        "2026-04"
+      ],
+      "estado": "cerrado"
+    },
+    {
+      "trimestre": "2026-Q2",
+      "ciclos": [
+        "2026-05",
+        "2026-06",
+        "2026-07"
+      ],
+      "estado": "en_curso"
+    }
+  ],
+  "ciclo_vigente": "2026-07",
+  "factor_iec_tramos": [
+    {
+      "min_iec": 0,
+      "max_iec": 69.99,
+      "factor": 20
+    },
+    {
+      "min_iec": 70,
+      "max_iec": 84.99,
+      "factor": 70
+    },
+    {
+      "min_iec": 85,
+      "max_iec": 91.99,
+      "factor": 80
+    },
+    {
+      "min_iec": 92,
+      "max_iec": 94.99,
+      "factor": 90
+    },
+    {
+      "min_iec": 95,
+      "max_iec": null,
+      "factor": 105
+    }
+  ],
+  "_factor_iec_nota": "Politica V1.2 (2026-07-13, aprobada por Gerencia General): tramos fijos, reemplaza por completo la curva continua/interpolada anterior. Ver CHANGE REQUEST SIC-AV v1.3.",
+  "politica_vigente_desde": "2026-07-13",
+  "politica_estado": "Vigente"
+}

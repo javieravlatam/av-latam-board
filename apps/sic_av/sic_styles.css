@@ -1,0 +1,436 @@
+/* =====================================================================
+   SIC-AV — Estilos del prototipo (Fase 4)
+   Minimalista, ejecutivo, inspirado en la identidad de Grupo AV LATAM:
+   fondo blanco, azul corporativo, grises suaves, tipografia limpia,
+   mucho espacio en blanco. Responsive: computador y tablet.
+   ===================================================================== */
+
+:root {
+  --av-blue: #0d3b66;
+  --av-blue-dark: #082742;
+  --av-blue-soft: #4a7fb5;
+  --av-blue-tint: #eef3f8;
+  --av-grey-line: #e4e7eb;
+  --av-grey-text: #5b6470;
+  --av-grey-bg: #f7f8fa;
+  --av-ok: #1e7d4a;
+  --av-warn: #a83232;
+  --av-amber: #b8791a;
+  --av-white: #ffffff;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(13, 59, 102, 0.06), 0 1px 2px rgba(13, 59, 102, 0.04);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--av-white);
+  color: #1b2027;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+a { color: var(--av-blue); }
+
+/* ---------------------------------------------------------------------
+   Banner / advertencia demostrativa
+   --------------------------------------------------------------------- */
+.sic-demo-banner {
+  background: #fff8ec;
+  border-bottom: 1px solid #f0d9a8;
+  color: var(--av-amber);
+  font-size: 12.5px;
+  text-align: center;
+  padding: 7px 16px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* ---------------------------------------------------------------------
+   Encabezado principal
+   --------------------------------------------------------------------- */
+.sic-header {
+  background: var(--av-blue);
+  color: #fff;
+  padding: 22px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.sic-header .brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.sic-logo-slot {
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid rgba(255,255,255,0.5);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+  flex-shrink: 0;
+}
+.sic-header h1 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.sic-header .subtitle {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: #cfe0f0;
+}
+.sic-header .meta {
+  text-align: right;
+  font-size: 12.5px;
+  color: #dce9f5;
+  line-height: 1.6;
+}
+.sic-header .meta strong { color: #fff; }
+
+.sic-user-bar {
+  background: var(--av-blue-dark);
+  color: #cfe0f0;
+  font-size: 12.5px;
+  padding: 8px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.sic-user-bar .pais-activo {
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.03em;
+}
+.sic-btn-logout {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.35);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.sic-btn-logout:hover { background: rgba(255,255,255,0.08); }
+
+/* ---------------------------------------------------------------------
+   Layout general
+   --------------------------------------------------------------------- */
+.sic-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 32px 28px 90px;
+}
+.sic-section {
+  margin-top: 44px;
+}
+.sic-section h2 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--av-blue-soft);
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+.sic-section p.hint {
+  color: var(--av-grey-text);
+  font-size: 13px;
+  margin: -8px 0 18px;
+}
+
+/* ---------------------------------------------------------------------
+   Selector de vendedor (perfil comercial demo)
+   --------------------------------------------------------------------- */
+.sic-selector-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.sic-selector-row label { font-size: 13px; color: var(--av-grey-text); }
+.sic-selector-row select, .sic-selector-row input[type=text] {
+  padding: 9px 12px;
+  border: 1px solid var(--av-grey-line);
+  border-radius: 7px;
+  font-size: 13.5px;
+  font-family: inherit;
+  background: #fff;
+  min-width: 200px;
+}
+
+/* ---------------------------------------------------------------------
+   Tarjetas ejecutivas
+   --------------------------------------------------------------------- */
+.sic-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+@media (max-width: 900px) {
+  .sic-cards { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .sic-cards { grid-template-columns: 1fr; }
+}
+.sic-card {
+  background: #fff;
+  border: 1px solid var(--av-grey-line);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  box-shadow: var(--shadow);
+}
+.sic-card .k { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--av-grey-text); font-weight: 600; }
+.sic-card .v { font-size: 25px; font-weight: 700; color: var(--av-blue); margin-top: 8px; letter-spacing: -0.01em; }
+.sic-card .sub { font-size: 12px; color: var(--av-grey-text); margin-top: 6px; }
+.sic-card.warn .v { color: var(--av-warn); }
+.sic-card.muted { background: var(--av-grey-bg); }
+
+/* ---------------------------------------------------------------------
+   Indicadores (fila compacta)
+   --------------------------------------------------------------------- */
+.sic-indicadores {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+}
+@media (max-width: 900px) { .sic-indicadores { grid-template-columns: repeat(2, 1fr); } }
+.sic-ind {
+  border: 1px solid var(--av-grey-line);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.sic-ind .k { font-size: 11px; color: var(--av-grey-text); text-transform: uppercase; letter-spacing: 0.04em; }
+.sic-ind .v { font-size: 17px; font-weight: 700; color: #1b2027; margin-top: 4px; }
+.sic-ind .bar {
+  height: 5px;
+  background: var(--av-grey-line);
+  border-radius: 3px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+.sic-ind .bar > span { display: block; height: 100%; background: var(--av-blue-soft); }
+
+/* ---------------------------------------------------------------------
+   Paso a paso ("Como se construyo mi comision")
+   --------------------------------------------------------------------- */
+.sic-steps { list-style: none; margin: 0; padding: 0; }
+.sic-steps li {
+  display: grid;
+  grid-template-columns: 34px 200px 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--av-grey-line);
+}
+.sic-steps li:last-child { border-bottom: none; }
+.sic-steps .num {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--av-blue-tint);
+  color: var(--av-blue);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.sic-steps .label { font-size: 13px; font-weight: 600; color: #1b2027; }
+.sic-steps .valor { font-size: 13px; color: var(--av-grey-text); }
+.sic-steps .valor b { color: var(--av-blue); font-weight: 700; }
+@media (max-width: 700px) {
+  .sic-steps li { grid-template-columns: 26px 1fr; }
+  .sic-steps .label { grid-column: 2; }
+  .sic-steps .valor { grid-column: 2; }
+}
+
+/* ---------------------------------------------------------------------
+   Tabla de facturas
+   --------------------------------------------------------------------- */
+.sic-tabla-controles {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.sic-tabla-controles input, .sic-tabla-controles select {
+  padding: 8px 12px;
+  border: 1px solid var(--av-grey-line);
+  border-radius: 7px;
+  font-size: 13px;
+  font-family: inherit;
+}
+.sic-tabla-controles button {
+  padding: 8px 16px;
+  border: 1px solid var(--av-blue);
+  background: #fff;
+  color: var(--av-blue);
+  border-radius: 7px;
+  font-size: 12.5px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.sic-tabla-controles button:hover { background: var(--av-blue-tint); }
+
+.sic-tabla-wrap { overflow-x: auto; border: 1px solid var(--av-grey-line); border-radius: var(--radius); }
+table.sic-tabla { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 1100px; }
+table.sic-tabla th, table.sic-tabla td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--av-grey-line); white-space: nowrap; }
+table.sic-tabla th { background: var(--av-grey-bg); font-size: 11px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--av-grey-text); font-weight: 700; cursor: pointer; }
+table.sic-tabla tbody tr:hover { background: var(--av-blue-tint); cursor: pointer; }
+table.sic-tabla td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.sic-estado {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.sic-estado.potencial { background: #eef3f8; color: var(--av-blue-soft); }
+.sic-estado.liberada { background: #e7f6ee; color: var(--av-ok); }
+.sic-estado.pendiente { background: #fff4e0; color: var(--av-amber); }
+.sic-estado.retenida { background: #fbe9e9; color: var(--av-warn); }
+.sic-estado.anulada { background: #eee; color: #777; }
+
+.sic-fila-detalle { background: var(--av-grey-bg); }
+.sic-fila-detalle td { white-space: normal; }
+
+/* ---------------------------------------------------------------------
+   Acciones para ganar mas
+   --------------------------------------------------------------------- */
+.sic-acciones { display: flex; flex-direction: column; gap: 12px; }
+.sic-accion {
+  border: 1px solid var(--av-grey-line);
+  border-left: 3px solid var(--av-blue-soft);
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 13.5px;
+  background: #fff;
+}
+.sic-accion b { color: var(--av-blue); }
+
+/* ---------------------------------------------------------------------
+   Comision diferida trimestral
+   --------------------------------------------------------------------- */
+.sic-diferido-box {
+  border: 1px solid var(--av-grey-line);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+}
+.sic-diferido-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 14px; }
+@media (max-width: 700px) { .sic-diferido-grid { grid-template-columns: 1fr; } }
+.sic-condiciones { margin-top: 16px; font-size: 12.5px; }
+.sic-condicion-ok { color: var(--av-ok); }
+.sic-condicion-fail { color: var(--av-warn); }
+
+/* ---------------------------------------------------------------------
+   Historico
+   --------------------------------------------------------------------- */
+table.sic-historico { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.sic-historico th, table.sic-historico td { padding: 10px 12px; border-bottom: 1px solid var(--av-grey-line); text-align: right; }
+table.sic-historico th:first-child, table.sic-historico td:first-child { text-align: left; }
+table.sic-historico th { color: var(--av-grey-text); font-size: 11px; text-transform: uppercase; letter-spacing: 0.03em; }
+tr.ciclo-vigente { background: var(--av-blue-tint); font-weight: 600; }
+
+/* ---------------------------------------------------------------------
+   Botones generales
+   --------------------------------------------------------------------- */
+.sic-btn-primary {
+  background: var(--av-blue);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.sic-btn-primary:hover { background: var(--av-blue-dark); }
+
+/* ---------------------------------------------------------------------
+   Pantalla de acceso (index.html)
+   --------------------------------------------------------------------- */
+.sic-login-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--av-grey-bg);
+  padding: 24px;
+}
+.sic-login-card {
+  max-width: 880px;
+  width: 100%;
+}
+.sic-login-title { text-align: center; margin-bottom: 40px; }
+.sic-login-title h1 { font-size: 22px; color: var(--av-blue); margin: 0 0 8px; font-weight: 700; }
+.sic-login-title p { color: var(--av-grey-text); font-size: 13.5px; margin: 0; }
+.sic-login-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 640px) { .sic-login-options { grid-template-columns: 1fr; } }
+.sic-login-option {
+  background: #fff;
+  border: 1px solid var(--av-grey-line);
+  border-radius: 14px;
+  padding: 32px 28px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.sic-login-option h2 { font-size: 16px; color: var(--av-blue); margin: 0 0 6px; }
+.sic-login-option p.desc { font-size: 12.5px; color: var(--av-grey-text); margin: 0 0 20px; }
+.sic-login-option input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--av-grey-line);
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+  font-family: inherit;
+}
+.sic-login-option button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: var(--av-blue);
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.sic-login-option button:hover { background: var(--av-blue-dark); }
+.sic-login-error { color: var(--av-warn); font-size: 12px; margin-top: 10px; min-height: 16px; }
+.sic-login-footer {
+  margin-top: 34px;
+  font-size: 11.5px;
+  color: #97a0ab;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ---------------------------------------------------------------------
+   Impresion / PDF (ver sic_pdf.js) — A4
+   --------------------------------------------------------------------- */
+@media print {
+  body { background: #fff; }
+  .no-print { display: none !important; }
+}
+@page { size: A4; margin: 16mm 14mm; }

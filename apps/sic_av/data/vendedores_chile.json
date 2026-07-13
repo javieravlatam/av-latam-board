@@ -1,0 +1,28 @@
+{
+  "vendedores": [
+    {
+      "id": "CL-V01",
+      "nombre": "Comercial Demo CL-1",
+      "cargo": "RTC",
+      "pais": "CL"
+    },
+    {
+      "id": "CL-V02",
+      "nombre": "Comercial Demo CL-2",
+      "cargo": "RTC",
+      "pais": "CL"
+    },
+    {
+      "id": "CL-V03",
+      "nombre": "Comercial Demo CL-3",
+      "cargo": "KAM",
+      "pais": "CL"
+    },
+    {
+      "id": "CL-V04",
+      "nombre": "Comercial Demo CL-4",
+      "cargo": "Jefe de Ventas",
+      "pais": "CL"
+    }
+  ]
+}

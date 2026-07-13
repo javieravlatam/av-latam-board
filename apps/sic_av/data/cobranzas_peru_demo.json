@@ -1,0 +1,247 @@
+{
+  "cobranzas": [
+    {
+      "factura": "PE-2026-07-001",
+      "fecha_pago": "2026-07-01",
+      "monto": 21600,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-002",
+      "fecha_pago": "2026-07-15",
+      "monto": 11250,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-003",
+      "fecha_pago": "2026-07-10",
+      "monto": 6960,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-004",
+      "fecha_pago": "2026-07-14",
+      "monto": 10600,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-005",
+      "fecha_pago": "2026-07-20",
+      "monto": 9250,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-006",
+      "fecha_pago": "2026-07-22",
+      "monto": 3420,
+      "tipo": "parcial"
+    },
+    {
+      "factura": "PE-2026-07-008",
+      "fecha_pago": "2026-07-09",
+      "monto": 59840,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-009",
+      "fecha_pago": "2026-07-16",
+      "monto": 7800,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-010",
+      "fecha_pago": "2026-07-13",
+      "monto": 7200,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-011",
+      "fecha_pago": "2026-05-25",
+      "monto": 5004,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-012",
+      "fecha_pago": "2026-07-09",
+      "monto": 50400,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-013",
+      "fecha_pago": "2026-07-11",
+      "monto": 24750,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-014",
+      "fecha_pago": "2026-07-19",
+      "monto": 15120,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-015",
+      "fecha_pago": "2026-07-08",
+      "monto": 7605,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-016",
+      "fecha_pago": "2026-07-10",
+      "monto": 13800,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-017",
+      "fecha_pago": "2026-07-12",
+      "monto": 8360,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-018",
+      "fecha_pago": "2026-07-05",
+      "monto": 5310,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-019",
+      "fecha_pago": "2026-07-09",
+      "monto": 42500,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-07-020",
+      "fecha_pago": "2026-07-13",
+      "monto": 13152,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-02-101",
+      "fecha_pago": "2026-02-15",
+      "monto": 15300.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-02-102",
+      "fecha_pago": "2026-02-20",
+      "monto": 12600.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-02-103",
+      "fecha_pago": "2026-02-24",
+      "monto": 4440.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-02-104",
+      "fecha_pago": "2026-02-28",
+      "monto": 28440.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-03-105",
+      "fecha_pago": "2026-03-14",
+      "monto": 16770.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-03-106",
+      "fecha_pago": "2026-03-19",
+      "monto": 13104.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-03-107",
+      "fecha_pago": "2026-03-25",
+      "monto": 4760.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-03-108",
+      "fecha_pago": "2026-03-30",
+      "monto": 30210.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-04-109",
+      "fecha_pago": "2026-04-13",
+      "monto": 18200.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-04-110",
+      "fecha_pago": "2026-04-18",
+      "monto": 13616.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-04-111",
+      "fecha_pago": "2026-04-24",
+      "monto": 5085.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-04-112",
+      "fecha_pago": "2026-04-29",
+      "monto": 32000.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-05-113",
+      "fecha_pago": "2026-05-12",
+      "monto": 19725.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-05-114",
+      "fecha_pago": "2026-05-17",
+      "monto": 14060.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-05-115",
+      "fecha_pago": "2026-05-23",
+      "monto": 5415.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-05-116",
+      "fecha_pago": "2026-05-28",
+      "monto": 34020.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-06-117",
+      "fecha_pago": "2026-06-11",
+      "monto": 20748.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-06-118",
+      "fecha_pago": "2026-06-16",
+      "monto": 14508.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-06-119",
+      "fecha_pago": "2026-06-22",
+      "monto": 5750.0,
+      "tipo": "total"
+    },
+    {
+      "factura": "PE-2026-06-120",
+      "fecha_pago": "2026-06-27",
+      "monto": 36080.0,
+      "tipo": "total"
+    }
+  ],
+  "notas_credito": [
+    {
+      "factura": "PE-2026-07-011",
+      "fecha_nc": "2026-07-09",
+      "monto_nc": 500.4,
+      "motivo": "Ajuste comercial por devolucion parcial de producto",
+      "ciclo_aplicacion": "2026-07"
+    }
+  ]
+}

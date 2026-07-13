@@ -1,0 +1,196 @@
+{
+  "iec": [
+    {
+      "vendedor_id": "CL-V01",
+      "ciclo": "2026-07",
+      "iec_pct": 82.0,
+      "ventas_sobre_piso_clp": 5200000,
+      "ventas_bajo_piso_clp": 1140000,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V02",
+      "ciclo": "2026-07",
+      "iec_pct": 91.0,
+      "ventas_sobre_piso_clp": 8058000,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V03",
+      "ciclo": "2026-07",
+      "iec_pct": 96.5,
+      "ventas_sobre_piso_clp": 1745000,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V04",
+      "ciclo": "2026-07",
+      "iec_pct": 88.0,
+      "ventas_sobre_piso_clp": 3831500,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V01",
+      "ciclo": "2026-02",
+      "iec_pct": 96.0,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V01",
+      "ciclo": "2026-03",
+      "iec_pct": 96.0,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V01",
+      "ciclo": "2026-04",
+      "iec_pct": 96.0,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V01",
+      "ciclo": "2026-05",
+      "iec_pct": 78.5,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V01",
+      "ciclo": "2026-06",
+      "iec_pct": 80.0,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V02",
+      "ciclo": "2026-02",
+      "iec_pct": 97.0,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V02",
+      "ciclo": "2026-03",
+      "iec_pct": 97.0,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V02",
+      "ciclo": "2026-04",
+      "iec_pct": 97.0,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V02",
+      "ciclo": "2026-05",
+      "iec_pct": 89.5,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V02",
+      "ciclo": "2026-06",
+      "iec_pct": 91.0,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V03",
+      "ciclo": "2026-02",
+      "iec_pct": 98.0,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V03",
+      "ciclo": "2026-03",
+      "iec_pct": 98.0,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V03",
+      "ciclo": "2026-04",
+      "iec_pct": 98.0,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V03",
+      "ciclo": "2026-05",
+      "iec_pct": 97.5,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V03",
+      "ciclo": "2026-06",
+      "iec_pct": 99.0,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V04",
+      "ciclo": "2026-02",
+      "iec_pct": 80.0,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V04",
+      "ciclo": "2026-03",
+      "iec_pct": 81.5,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V04",
+      "ciclo": "2026-04",
+      "iec_pct": 83.0,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V04",
+      "ciclo": "2026-05",
+      "iec_pct": 84.5,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    },
+    {
+      "vendedor_id": "CL-V04",
+      "ciclo": "2026-06",
+      "iec_pct": 86.0,
+      "ventas_sobre_piso_clp": 0,
+      "ventas_bajo_piso_clp": 0,
+      "ventas_no_evaluables_clp": 0
+    }
+  ]
+}

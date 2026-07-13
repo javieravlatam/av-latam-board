@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIC-AV — Politica y Factores</title>
+<link rel="stylesheet" href="sic_styles.css">
+</head>
+<body>
+<div class="sic-demo-banner">MODELO DEMOSTRATIVO — PENDIENTE DE APROBACION GERENCIAL (precio piso y bono de consistencia trimestral). Datos sinteticos. No conectado a AV LATAM Board.</div>
+
+<div class="sic-header">
+  <div class="brand">
+    <div class="sic-logo-slot">AV<br>LATAM</div>
+    <div>
+      <h1>Politica y Factores</h1>
+      <p class="subtitle" id="hdr-subtitle">SIC-AV</p>
+    </div>
+  </div>
+  <div class="meta">
+    <div>Pais activo: <strong id="hdr-pais">—</strong></div>
+    <div>Ciclo consultado: <span id="hdr-ciclo">—</span></div>
+    <div>Version de politica: <span id="hdr-version">—</span> · Estado: <span id="hdr-estado-politica">—</span></div>
+    <div>Vigente desde: <span id="hdr-vigente-desde">—</span></div>
+  </div>
+</div>
+
+<div class="sic-user-bar">
+  <div>Pais activo: <span class="pais-activo" id="hdr-pais-activo-bar">—</span></div>
+  <div>
+    <button class="sic-btn-logout" onclick="volverAlDashboard()">Volver al dashboard</button>
+    <button class="sic-btn-logout" onclick="SICAuth.cerrarSesion()">Cerrar sesion</button>
+  </div>
+</div>
+
+<div class="sic-wrap">
+
+  <!-- ============================= FACTOR DE PRESUPUESTO ============================= -->
+  <div class="sic-section">
+    <h2>Factor de cumplimiento de presupuesto</h2>
+    <p class="hint">Tramos fijos, definitivos (Politica V1.1, aprobada por Gerencia General). El factor no interpola entre tramos.</p>
+    <div class="sic-tabla-wrap">
+      <table class="sic-historico">
+        <thead><tr><th>Cumplimiento del ciclo</th><th>Factor de presupuesto</th></tr></thead>
+        <tbody id="tbody-presupuesto"></tbody>
+      </table>
+    </div>
+    <p class="hint" style="margin-top:14px;">El factor de presupuesto nunca supera el 100%. El sobrecumplimiento se reconoce mediante el Bono por Excedente.</p>
+  </div>
+
+  <!-- ============================= BONO POR EXCEDENTE ============================= -->
+  <div class="sic-section">
+    <h2>Bono por excedente</h2>
+    <p class="hint">2% sobre la venta neta cobrada que exceda el presupuesto del ciclo. Es independiente del Factor de Presupuesto y se aplica solo sobre el excedente, nunca sobre la venta total.</p>
+    <div class="sic-diferido-box">
+      <div class="sic-diferido-grid">
+        <div class="sic-ind"><div class="k">Presupuesto (ejemplo)</div><div class="v" id="bono-ej-ppto">—</div></div>
+        <div class="sic-ind"><div class="k">Venta cobrada (ejemplo)</div><div class="v" id="bono-ej-venta">—</div></div>
+        <div class="sic-ind"><div class="k">Excedente (ejemplo)</div><div class="v" id="bono-ej-excedente">—</div></div>
+        <div class="sic-ind"><div class="k">Bono por excedente (2%)</div><div class="v" id="bono-ej-bono">—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================= EDAD DE CARTERA (PAIS ACTIVO) ============================= -->
+  <div class="sic-section">
+    <h2>Edad de cartera — <span id="cartera-pais-titulo">—</span></h2>
+    <p class="hint">Tabla oficial del pais activo unicamente. No se muestra la tabla del otro pais.</p>
+    <div class="sic-tabla-wrap">
+      <table class="sic-historico">
+        <thead><tr><th>Tramo de dias</th><th>Tasa</th></tr></thead>
+        <tbody id="tbody-cartera"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============================= FACTOR IEC ============================= -->
+  <div class="sic-section">
+    <h2>Factor IEC</h2>
+    <p class="hint">Tramos fijos, definitivos (Politica V1.2, aprobada por Gerencia General). El IEC mide la disciplina de gestion comercial del vendedor — principalmente el respeto del precio piso — no la rentabilidad del producto ni el margen.</p>
+    <div class="sic-tabla-wrap">
+      <table class="sic-historico">
+        <thead><tr><th>IEC del ciclo</th><th>Factor IEC</th></tr></thead>
+        <tbody id="tbody-iec"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============================= PRECIO PISO ============================= -->
+  <div class="sic-section">
+    <h2>Tratamiento de precio piso</h2>
+    <p class="hint">CHANGE REQUEST SIC-AV v1.4 (aprobado por Gerencia General): toda venta facturada se considera una operacion valida y previamente aprobada por la compañia. El SIC ya no aplica controles adicionales de autorizacion por precio piso.</p>
+    <div class="sic-acciones">
+      <div class="sic-accion"><b>Venta sobre o igual al piso:</b> comision normal.</div>
+      <div class="sic-accion"><b>Venta bajo piso:</b> comision normal — el precio piso, por si solo, no reduce ni bloquea la comision (informativo).</div>
+    </div>
+    <p class="hint" style="margin-top:14px;">El precio piso se mantiene como dato informativo por factura, como comparacion entre precio de venta y precio piso, y como insumo del Factor IEC — clasificando cada venta como sobre piso, bajo piso o no evaluable. <b>El Factor IEC es el unico mecanismo por el cual el precio piso puede impactar la comision.</b></p>
+  </div>
+
+  <!-- ============================= BONO DE CONSISTENCIA TRIMESTRAL ============================= -->
+  <div class="sic-section">
+    <h2>Bono de consistencia trimestral (comision diferida)</h2>
+    <p class="hint">Aisla exclusivamente la porcion de comision retenida por no alcanzar el Factor de Presupuesto. <b>Nunca</b> recupera reducciones causadas por IEC, edad de cartera, notas de credito o devoluciones — esas reducciones no se difieren ni se reliquidan.</p>
+    <div class="sic-tabla-wrap">
+      <table class="sic-historico">
+        <thead><tr><th>Cumplimiento trimestral</th><th>% de liberacion</th></tr></thead>
+        <tbody id="tbody-diferido"></tbody>
+      </table>
+    </div>
+    <p class="hint" id="diferido-condiciones" style="margin-top:14px;"></p>
+  </div>
+
+  <!-- ============================= PDF ============================= -->
+  <div class="sic-section" style="text-align:center;">
+    <button class="sic-btn-primary" onclick="descargarPoliticaPDF()">Descargar politica en PDF</button>
+  </div>
+
+</div>
+
+<script src="sic_auth.js"></script>
+<script src="sic_core.js"></script>
+<script src="sic_pdf.js"></script>
+<script>
+  var CTX = null, PAIS = null, CICLO_CONSULTADO = null;
+
+  var sesion = SICAuth.sesionActiva();
+  if (!sesion) {
+    window.location.href = "index.html";
+  } else {
+    PAIS = sesion.pais;
+    inicializar();
+  }
+
+  function volverAlDashboard() {
+    window.location.href = PAIS === "CL" ? "sic_chile.html" : "sic_peru.html";
+  }
+
+  var MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+  function nombreCiclo(codigoCiclo) {
+    var partes = codigoCiclo.split("-");
+    var mes = MESES[parseInt(partes[1], 10) - 1] || codigoCiclo;
+    return mes + " " + partes[0];
+  }
+  function fechaDDMMYYYY(iso) {
+    if (!iso) return "—";
+    var p = iso.split("-");
+    return p[2] + "/" + p[1] + "/" + p[0];
+  }
+  function estadoLegible(estado) {
+    return estado === "vigente" ? "Vigente" : (estado === "cerrado" ? "Cerrado" : estado);
+  }
+  function fmtMoneda(pais, n) {
+    if (pais === "CL") return "CLP " + Math.round(n || 0).toLocaleString("es-CL");
+    var v = Math.round((n || 0) * 100) / 100;
+    return "USD " + v.toLocaleString("es-CL", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  // Tabla de cartera del PAIS ACTIVO unicamente -- misma logica de resolucion
+  // que SIC.tasaCartera (arreglo plano para Chile, o sub-tabla "Distribuidor"
+  // para Peru), para que la pagina nunca pueda mostrar una tabla distinta a
+  // la que realmente usa el motor de calculo.
+  function tablaCarteraPaisActivo(params) {
+    return Array.isArray(params.tasa_cartera) ? params.tasa_cartera : params.tasa_cartera["Distribuidor"];
+  }
+  function textoTramoDias(tramo, idx, tabla) {
+    var desde = idx === 0 ? 0 : tabla[idx - 1].max_dias + 1;
+    if (tramo.max_dias === null) return "Mas de " + tabla[idx - 1].max_dias + " dias";
+    if (desde === 0 && tramo.max_dias === 0) return "Contado";
+    return desde + "-" + tramo.max_dias + " dias";
+  }
+
+  function inicializar() {
+    document.getElementById("hdr-subtitle").textContent = "SIC-AV · " + (PAIS === "CL" ? "Chile" : "Peru");
+    document.getElementById("hdr-pais").textContent = PAIS === "CL" ? "Chile" : "Peru";
+    document.getElementById("hdr-pais-activo-bar").textContent = PAIS === "CL" ? "CHILE" : "PERU";
+
+    SIC.cargarPais(PAIS).then(function (ctx) {
+      CTX = ctx;
+
+      var params = new URLSearchParams(window.location.search);
+      var cicloSolicitado = params.get("ciclo");
+      var cicloInfo = ctx.params.ciclos.filter(function (c) { return c.ciclo === cicloSolicitado; })[0] ||
+        ctx.params.ciclos.filter(function (c) { return c.ciclo === ctx.params.ciclo_vigente; })[0];
+      CICLO_CONSULTADO = cicloInfo.ciclo;
+
+      // 2. Encabezado: version de politica, fecha de vigencia, pais activo, ciclo consultado, estado
+      document.getElementById("hdr-ciclo").textContent = nombreCiclo(cicloInfo.ciclo) + " (" + fechaDDMMYYYY(cicloInfo.inicio) + "–" + fechaDDMMYYYY(cicloInfo.cierre) + ") · " + estadoLegible(cicloInfo.estado);
+      document.getElementById("hdr-version").textContent = cicloInfo.policy_version || ctx.params.version_politica;
+      document.getElementById("hdr-estado-politica").textContent = ctx.params.politica_estado || "—";
+      document.getElementById("hdr-vigente-desde").textContent = fechaDDMMYYYY(ctx.params.politica_vigente_desde);
+
+      // 3. Factor de presupuesto -- tabla definitiva
+      document.getElementById("tbody-presupuesto").innerHTML = ctx.params.factor_presupuesto_tramos.map(function (t) {
+        var rango = t.max_cumpl === null ? (t.min_cumpl + "% o mas") : (t.min_cumpl === 0 ? "Menos de " + (t.max_cumpl + 0.01).toFixed(0) + "%" : t.min_cumpl + "%-" + t.max_cumpl + "%");
+        return "<tr><td>" + rango + "</td><td>" + t.factor + "%</td></tr>";
+      }).join("");
+
+      // 4. Bono por excedente -- ejemplo fijo (100.000 / 120.000 / 20.000 / 400), en la moneda del pais
+      var ejPpto = 100000, ejVenta = 120000, ejExcedente = ejVenta - ejPpto;
+      var ejBono = ejExcedente * (ctx.params.bono_excedente_pct / 100);
+      document.getElementById("bono-ej-ppto").textContent = fmtMoneda(PAIS, ejPpto);
+      document.getElementById("bono-ej-venta").textContent = fmtMoneda(PAIS, ejVenta);
+      document.getElementById("bono-ej-excedente").textContent = fmtMoneda(PAIS, ejExcedente);
+      document.getElementById("bono-ej-bono").textContent = fmtMoneda(PAIS, ejBono);
+
+      // 5. Edad de cartera -- SOLO la tabla del pais activo
+      document.getElementById("cartera-pais-titulo").textContent = PAIS === "CL" ? "Chile" : "Peru";
+      var tablaCartera = tablaCarteraPaisActivo(ctx.params);
+      document.getElementById("tbody-cartera").innerHTML = tablaCartera.map(function (t, idx) {
+        return "<tr><td>" + textoTramoDias(t, idx, tablaCartera) + "</td><td>" + t.tasa + "%</td></tr>";
+      }).join("");
+
+      // 6. Factor IEC -- tabla definitiva
+      document.getElementById("tbody-iec").innerHTML = ctx.params.factor_iec_tramos.map(function (t) {
+        var rango = t.max_iec === null ? (t.min_iec + "% o mas") : (t.min_iec === 0 ? "Menos de 70%" : t.min_iec + "%-" + t.max_iec + "%");
+        return "<tr><td>" + rango + "</td><td>" + t.factor + "%</td></tr>";
+      }).join("");
+
+      // 7. Precio piso -- CHANGE REQUEST SIC-AV v1.4: ya no existe un factor
+      // de precio piso que mostrar (el texto explicativo de la seccion HTML
+      // ya documenta el tratamiento vigente; no hay valores dinamicos que
+      // poblar aqui).
+
+      // 8. Bono de consistencia trimestral -- tramos de liberacion vigentes
+      document.getElementById("tbody-diferido").innerHTML = ctx.params.diferido_trimestral.liberacion.map(function (t) {
+        var rango = t.max_cumpl === null ? (t.min_cumpl + "% o mas") : (t.min_cumpl + "%-" + t.max_cumpl + "%");
+        return "<tr><td>" + rango + "</td><td>" + t.pct_liberacion + "%</td></tr>";
+      }).join("");
+      document.getElementById("diferido-condiciones").textContent = "Condiciones para liberar: IEC trimestral minimo " + ctx.params.diferido_trimestral.iec_minimo + "%, cartera dentro de estandar y sin observaciones financieras graves.";
+
+    }).catch(function (err) {
+      document.querySelector(".sic-wrap").innerHTML = "<p style='color:#a83232'>No se pudieron cargar los datos del prototipo (" + err.message + "). Si abrio este archivo con doble clic, ejecute un servidor local -- ver README.md, seccion 'Como abrir el prototipo'.</p>";
+    });
+  }
+
+  function descargarPoliticaPDF() {
+    if (!CTX) return;
+    SICPDF.generarInformePolitica({
+      pais: PAIS,
+      ciclo: CICLO_CONSULTADO,
+      params: CTX.params
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "precios_piso": [
+    {
+      "producto": "AV Producto Demo A",
+      "formato": "20 L",
+      "precio_piso": 24.5,
+      "vigente_desde": "2026-01-01"
+    },
+    {
+      "producto": "AV Producto Demo B",
+      "formato": "5 L",
+      "precio_piso": 34.0,
+      "vigente_desde": "2026-01-01"
+    },
+    {
+      "producto": "AV Producto Demo C",
+      "formato": "1 L",
+      "precio_piso": 55.0,
+      "vigente_desde": "2026-01-01"
+    },
+    {
+      "producto": "AV Producto Demo D",
+      "formato": "200 L",
+      "precio_piso": 15.5,
+      "vigente_desde": "2026-01-01"
+    }
+  ]
+}

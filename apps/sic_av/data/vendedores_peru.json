@@ -1,0 +1,28 @@
+{
+  "vendedores": [
+    {
+      "id": "PE-V01",
+      "nombre": "Comercial Demo PE-1",
+      "cargo": "RTC",
+      "pais": "PE"
+    },
+    {
+      "id": "PE-V02",
+      "nombre": "Comercial Demo PE-2",
+      "cargo": "RTC",
+      "pais": "PE"
+    },
+    {
+      "id": "PE-V03",
+      "nombre": "Comercial Demo PE-3",
+      "cargo": "KAM",
+      "pais": "PE"
+    },
+    {
+      "id": "PE-V04",
+      "nombre": "Comercial Demo PE-4",
+      "cargo": "Jefe de Ventas",
+      "pais": "PE"
+    }
+  ]
+}

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIC-AV — Integración con datos reales (solo lectura)</title>
+<link rel="stylesheet" href="sic_styles.css">
+<style>
+  /* Estilos propios de esta pagina unicamente -- no se toca sic_styles.css
+     para no arriesgar el estilo visual de sic_chile.html / sic_peru.html /
+     sic_politica.html (regla del proyecto: no romper dashboards existentes). */
+  .real-banner {
+    background: #1b2a4a; color: #fff; padding: 10px 20px; font-size: 12.5px;
+    text-align: center; letter-spacing: 0.02em;
+  }
+  .real-banner b { color: #ffd166; }
+  .real-section-title { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+  .real-badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:700; }
+  .real-badge.ok { background:#e7f6ee; color:#1c7a4d; }
+  .real-badge.warn { background:#fff4e0; color:#9a6b00; }
+  .real-badge.gap { background:#fbe9e9; color:#a83232; }
+  .real-advertencias-tabla { width:100%; border-collapse:collapse; font-size:12.5px; margin-top:10px; }
+  .real-advertencias-tabla th, .real-advertencias-tabla td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--av-grey-line); }
+  .real-advertencias-tabla th { background: var(--av-grey-bg); font-size:11px; text-transform:uppercase; letter-spacing:0.03em; color:var(--av-grey-text); }
+  .real-detalle-ejemplos { font-size:11.5px; color:var(--av-grey-text); margin:4px 0 0 0; padding-left:18px; }
+  .real-pendientes li { margin-bottom:8px; }
+  .real-recon-row { display:flex; gap:24px; flex-wrap:wrap; margin-top:10px; }
+  .real-recon-item { flex:1; min-width:220px; }
+  .real-recon-item .k { font-size:11px; text-transform:uppercase; color:var(--av-grey-text); letter-spacing:0.04em; }
+  .real-recon-item .v { font-size:18px; font-weight:700; color:var(--av-blue); margin-top:4px; }
+  .bloque-titulo { display:flex; align-items:center; gap:10px; margin-bottom:4px; }
+  .bloque-numero { display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:var(--av-blue); color:#fff; font-weight:700; font-size:13px; flex:none; }
+  .bloque-numero.pendiente { background:#9a6b00; }
+  .bloque-subtitulo { font-size:12.5px; color:var(--av-grey-text); margin:0 0 14px 36px; }
+  .estado-comision-panel {
+    background:#fff8ec; border:1px solid #f0d999; border-radius:var(--radius, 10px);
+    padding:20px 22px; margin-top:6px;
+  }
+  .estado-comision-titulo { font-size:17px; font-weight:700; color:#9a6b00; margin-bottom:8px; }
+  .estado-comision-texto { font-size:13.5px; color:#4a4a4a; line-height:1.6; }
+  .estado-comision-texto + .estado-comision-texto { margin-top:10px; }
+  .estado-comision-tecnico { margin-top:14px; padding-top:12px; border-top:1px dashed #e3cd8f; font-size:11.5px; color:#9a8a5a; }
+</style>
+</head>
+<body>
+<div class="real-banner">
+  INTEGRACIÓN CON DATOS REALES (SOLO LECTURA) — CHANGE REQUEST SIC-AV v1.5 · Lee directamente
+  <b>Panel_IEC_Auditoria_2026.html</b> (TX_CL/TX_PE) y <b>avboard_data.js</b> (presupuesto real) del AV LATAM Board.
+  No escribe, no modifica archivos fuente, no altera sic_chile.html / sic_peru.html / sic_politica.html ni el motor sic_core.js.
+</div>
+
+<div class="sic-header">
+  <div class="brand">
+    <div class="sic-logo-slot">AV<br>LATAM</div>
+    <div>
+      <h1>SIC-AV — Datos reales del ciclo</h1>
+      <p class="subtitle" id="hdr-subtitle">Cargando…</p>
+    </div>
+  </div>
+  <div class="meta">
+    <div>Fuente: <span id="hdr-fuente">—</span></div>
+    <div>Ciclo real <span id="hdr-ciclo">—</span> · Estado: <span id="hdr-estado-ciclo">—</span></div>
+    <div>Reconstruido el: <span id="hdr-fecha-datos">—</span></div>
+  </div>
+</div>
+
+<div class="sic-user-bar">
+  <div>País de la sesión activa: <span class="pais-activo" id="pais-activo-txt">—</span></div>
+  <div>
+    <button class="sic-btn-logout" onclick="window.location.href='sic_chile.html'; if(PAIS==='PE'){window.location.href='sic_peru.html';}">Volver al dashboard</button>
+    <button class="sic-btn-logout" onclick="SICAuth.cerrarSesion()">Cerrar sesión</button>
+  </div>
+</div>
+
+<div class="sic-wrap" id="wrap-contenido">
+
+  <div class="sic-selector-row">
+    <label for="sel-ciclo-real">Ciclo comercial real (26→25):</label>
+    <select id="sel-ciclo-real" onchange="renderCicloReal()"></select>
+  </div>
+
+  <!-- ============================= BLOQUE 1 — DATOS REALES VALIDADOS ============================= -->
+  <div class="sic-section">
+    <div class="bloque-titulo"><span class="bloque-numero">1</span><h2 style="margin:0;">Datos reales validados</h2></div>
+    <p class="bloque-subtitulo">Venta facturada, presupuesto, IEC y precio piso reconstruidos directamente desde el AV LATAM Board, conciliados contra la fuente. Esto es lo que hoy se puede mostrar como dato de gestión.</p>
+    <div class="sic-cards">
+      <div class="sic-card"><div class="k">Venta facturada real (ciclo)</div><div class="v" id="c-facturada">—</div><div class="sub">Suma de TX real del ciclo, vendedores comerciales</div></div>
+      <div class="sic-card"><div class="k">Presupuesto prorrateado</div><div class="v" id="c-presupuesto">—</div><div class="sub">Presupuesto real prorrateado al ciclo 26-25</div></div>
+      <div class="sic-card"><div class="k">Cumplimiento sobre venta facturada</div><div class="v" id="c-cumpl">—</div><div class="sub">Venta facturada / presupuesto — informativo, no es el cumplimiento oficial del SIC (que exige venta cobrada)</div></div>
+      <div class="sic-card"><div class="k">IEC real del ciclo</div><div class="v" id="c-iec">—</div><div class="sub">Recalculado directo de TX (SP / Elegible)</div></div>
+      <div class="sic-card"><div class="k">Precio piso</div><div class="v" id="c-piso">—</div><div class="sub" id="c-piso-sub">Clasificación informativa de las ventas del ciclo</div></div>
+      <div class="sic-card"><div class="k"># Facturas / # Vendedores</div><div class="v" id="c-n-facturas">—</div><div class="sub" id="c-n-vendedores-sub">—</div></div>
+    </div>
+  </div>
+
+  <!-- ============================= CONCILIACION FUENTE VS SIC ============================= -->
+  <div class="sic-section">
+    <div class="real-section-title">
+      <h2>Conciliación: fuente real vs. adaptador SIC</h2>
+      <span class="real-badge" id="recon-badge">—</span>
+    </div>
+    <p class="hint">Suma independiente calculada directamente sobre TX_CL/TX_PE filtrando por ciclo y vendedor comercial, comparada contra la suma que construyó el adaptador para el motor SIC. Deben coincidir exactamente.</p>
+    <div class="real-recon-row">
+      <div class="real-recon-item"><div class="k">Suma independiente (fuente TX)</div><div class="v" id="recon-fuente">—</div></div>
+      <div class="real-recon-item"><div class="k">Suma reconstruida (adaptador SIC)</div><div class="v" id="recon-adaptador">—</div></div>
+      <div class="real-recon-item"><div class="k">Facturas consideradas</div><div class="v" id="recon-n">—</div></div>
+    </div>
+  </div>
+
+  <!-- ============================= BLOQUE 2 — ESTADO DEL CALCULO DE COMISIONES ============================= -->
+  <div class="sic-section">
+    <div class="bloque-titulo"><span class="bloque-numero pendiente">2</span><h2 style="margin:0;">Estado del cálculo de comisiones</h2></div>
+    <p class="bloque-subtitulo">No es un resultado comercial — es el estado de avance del cálculo definitivo.</p>
+    <div class="estado-comision-panel">
+      <div class="estado-comision-titulo">⏳ Cálculo definitivo pendiente de integración de cobranza real por factura.</div>
+      <div class="estado-comision-texto">El motor SIC (<code>sic_core.js</code>) se encuentra <b>operativo</b> y corre sin modificaciones sobre los datos reales de este ciclo — venta facturada, presupuesto e IEC ya están conciliados (Bloque 1). La <b>liberación definitiva de comisión</b> requiere fecha y monto real de cobranza por factura, que hoy no existe en ninguna fuente conectada del AV LATAM Board (detalle completo en <code>COLLECTION_SOURCE_AUDIT.md</code>).</div>
+      <div class="estado-comision-texto">No se muestra una cifra de comisión "$0" como resultado — mostrarla induciría a pensar que ya se calculó y que el resultado es cero, cuando en realidad el cálculo todavía no puede ejecutarse de forma completa. Ningún cobro fue estimado, inventado, ni sustituido por la venta facturada.</div>
+      <div class="estado-comision-tecnico">Nota técnica (para auditoría, no para lectura ejecutiva): el motor sin modificar, al recibir venta cobrada = 0 para todo el ciclo, retorna internamente comisión potencial = <span id="c-potencial-tecnico">—</span> y comisión liberada = <span id="c-liberada-tecnico">—</span>. Es el comportamiento correcto y esperado del motor dado el dato disponible — ver <code>DATA_SOURCE_AUDIT.md</code> y <code>COLLECTION_SOURCE_AUDIT.md</code>, sección "Escenario identificado".</div>
+    </div>
+  </div>
+
+  <!-- ============================= VENDEDORES DEL CICLO ============================= -->
+  <div class="sic-section">
+    <h2>Vendedores del ciclo</h2>
+    <p class="hint">Un vendedor aparece si tuvo al menos una venta real en este ciclo. El motor SIC (sic_core.js) no se modificó.</p>
+    <div class="sic-tabla-wrap">
+      <table class="sic-tabla" id="tabla-vendedores">
+        <thead>
+          <tr>
+            <th>Vendedor</th>
+            <th>Venta facturada</th>
+            <th>Presupuesto</th>
+            <th>Cumplimiento</th>
+            <th>IEC</th>
+            <th>Factor Ppto</th>
+            <th>Factor IEC</th>
+            <th>Comisión</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-vendedores"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============================= DETALLE POR FACTURA (REAL) ============================= -->
+  <div class="sic-section">
+    <h2>Detalle por factura (datos reales)</h2>
+    <div class="sic-tabla-controles">
+      <input type="text" id="buscar-factura-real" placeholder="Buscar factura, cliente o vendedor..." oninput="renderTablaFacturasReal()">
+    </div>
+    <div class="sic-tabla-wrap">
+      <table class="sic-tabla" id="tabla-facturas-real">
+        <thead>
+          <tr>
+            <th>Factura</th>
+            <th>Fecha</th>
+            <th>Vendedor</th>
+            <th>Cliente</th>
+            <th>Producto</th>
+            <th>Venta neta</th>
+            <th>Piso</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-facturas-real"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============================= VALIDACIONES / ADVERTENCIAS ============================= -->
+  <div class="sic-section">
+    <div class="real-section-title">
+      <h2>Validaciones de integridad (no se excluye nada en silencio)</h2>
+      <span class="real-badge warn" id="advertencias-total-badge">—</span>
+    </div>
+    <p class="hint">Cada fila real que el adaptador no pudo incorporar sin observaciones queda registrada aquí, agrupada por tipo. Ver detalle completo en apps/sic_av/DATA_SOURCE_AUDIT.md.</p>
+    <table class="real-advertencias-tabla" id="tabla-advertencias">
+      <thead><tr><th>Tipo de advertencia</th><th>Ocurrencias en este ciclo</th><th>Ejemplos</th></tr></thead>
+      <tbody id="tbody-advertencias"></tbody>
+    </table>
+  </div>
+
+  <!-- ============================= CAMPOS PENDIENTES ============================= -->
+  <div class="sic-section">
+    <div class="real-section-title">
+      <h2>Campos aún pendientes de fuente real</h2>
+      <span class="real-badge gap">Ver DATA_SOURCE_AUDIT.md</span>
+    </div>
+    <ul class="real-pendientes">
+      <li><b>Fecha de cobro real por factura.</b> Ninguna fuente conectada del Board registra cuándo se pagó una factura — los archivos de Cuentas por Cobrar son fotos de saldo pendiente a una fecha de corte, no un libro de cobros. Esto no solo deja en 0 la comisión <b>liberada</b>: el motor SIC calcula el <b>Factor de Presupuesto</b> sobre venta COBRADA (no facturada), así que con cobranza siempre en 0 el cumplimiento del motor también es 0% y el Factor de Presupuesto queda en 0% — por lo tanto la comisión <b>potencial</b> que hoy calcula el motor sobre datos reales también es 0. Los datos genuinamente representativos hoy son: venta facturada, presupuesto prorrateado, cumplimiento aproximado (facturada/presupuesto, informativo) e IEC real. La comisión (potencial y liberada) solo será representativa cuando exista una fuente real de cobranza.</li>
+      <li><b>Tipo de cliente en Perú (Distribuidor / Cliente Final).</b> TX_PE no distingue este campo a nivel de transacción — se asume "Distribuidor" por defecto y se advierte en cada factura de Perú.</li>
+      <li><b>Presupuesto mensual real en Perú.</b> Solo existe presupuesto ANUAL real por vendedor — el prorrateo al ciclo 26-25 es una aproximación más gruesa que la de Chile (anual / 12), y se marca como tal.</li>
+      <li><b>Mapeo unificado de nombre de vendedor.</b> Algunos nombres reales de TX_CL/TX_PE aún no tienen una clave normalizada confirmada por Comercial — se muestran con una clave derivada del nombre y una advertencia visible, nunca se descartan.</li>
+    </ul>
+  </div>
+
+</div>
+
+<script src="sic_auth.js"></script>
+<script src="sic_core.js"></script>
+<script src="js/sic_data_adapter.js"></script>
+<script>
+  var sesion = SICAuth.sesionActiva();
+  if (!sesion) {
+    window.location.href = "index.html";
+  }
+  var PAIS = sesion ? sesion.pais : null;
+
+  var CTX_PARAMS = null;
+  var FUENTES = null;
+  var CICLOS_DISPONIBLES = [];
+  var CICLO_REAL_ACTUAL = null;
+  var RESULTADOS_VENDEDORES = [];
+  var TODAS_LAS_VENTAS = [];
+
+  function fmtMoneda(n) {
+    var prefijo = PAIS === "PE" ? "USD " : "CLP ";
+    return prefijo + Math.round(n || 0).toLocaleString(PAIS === "PE" ? "en-US" : "es-CL");
+  }
+  function pct(n) { return (Math.round((n || 0) * 10) / 10) + "%"; }
+  function fechaDDMMYYYY(iso) {
+    if (!iso) return "—";
+    var p = String(iso).split("-");
+    if (p.length !== 3) return iso;
+    return p[2] + "/" + p[1] + "/" + p[0];
+  }
+
+  if (sesion) {
+    document.getElementById("pais-activo-txt").textContent = PAIS === "PE" ? "PERÚ" : "CHILE";
+    inicializar();
+  }
+
+  function inicializar() {
+    Promise.all([
+      SIC.cargarPais(PAIS).then(function (ctx) { return ctx.params; }),
+      SICAdapter.cargarFuentesReales()
+    ]).then(function (r) {
+      CTX_PARAMS = r[0];
+      FUENTES = r[1];
+      document.getElementById("hdr-subtitle").textContent = "Chile" === (PAIS === "CL" ? "Chile" : "Perú") ? "" : "";
+      document.getElementById("hdr-subtitle").textContent = (PAIS === "PE" ? "Perú" : "Chile") + " · reconstruido desde Panel_IEC_Auditoria_2026.html y avboard_data.js";
+      document.getElementById("hdr-fuente").textContent = "Panel_IEC_Auditoria_2026.html + avboard_data.js";
+
+      // Ciclos reales presentes en la fuente para este pais.
+      var txArray = PAIS === "CL" ? FUENTES.tx.TX_CL : FUENTES.tx.TX_PE;
+      var ciclosVistos = {};
+      (txArray || []).forEach(function (t) {
+        if (t.fecha === null || t.fecha === undefined || typeof t.fecha === "number" || !/^\d{4}-\d{2}-\d{2}$/.test(String(t.fecha))) return;
+        var c = SICAdapter.asignarCiclo(t.fecha).ciclo;
+        ciclosVistos[c] = true;
+      });
+      var ciclosConDatos = Object.keys(ciclosVistos).sort();
+
+      // Solo se muestran ciclos que ademas tienen una definicion de politica
+      // (inicio/cierre/estado) en parametros_*.json -- el prototipo demo
+      // define politica para 2026-02 a 2026-07. Un ciclo real fuera de ese
+      // rango (ej. 2026-01, si existieran ventas de fin de diciembre) no se
+      // descarta en silencio: se muestra la advertencia igual, solo no se
+      // ofrece como opcion seleccionable porque el motor SIC no tiene una
+      // definicion de ciclo para calcular contra el (evita un error, no oculta el dato).
+      var ciclosDefinidos = {};
+      CTX_PARAMS.ciclos.forEach(function (c) { ciclosDefinidos[c.ciclo] = true; });
+      CICLOS_DISPONIBLES = ciclosConDatos.filter(function (c) { return ciclosDefinidos[c]; });
+      var ciclosFueraDeRango = ciclosConDatos.filter(function (c) { return !ciclosDefinidos[c]; });
+
+      var selCiclo = document.getElementById("sel-ciclo-real");
+      selCiclo.innerHTML = "";
+      if (!CICLOS_DISPONIBLES.length) {
+        document.getElementById("wrap-contenido").innerHTML = "<p style='color:#a83232'>No se encontraron ciclos reales con datos para " + PAIS + " dentro del rango de politica definido (2026-02 a 2026-07).</p>";
+        return;
+      }
+      CICLOS_DISPONIBLES.forEach(function (c) {
+        var opt = document.createElement("option");
+        opt.value = c;
+        opt.textContent = c;
+        selCiclo.appendChild(opt);
+      });
+      // Por defecto: el ciclo real mas reciente con datos.
+      CICLO_REAL_ACTUAL = CICLOS_DISPONIBLES[CICLOS_DISPONIBLES.length - 1];
+      selCiclo.value = CICLO_REAL_ACTUAL;
+
+      if (ciclosFueraDeRango.length) {
+        console.warn("Ciclos reales con transacciones pero sin definicion de politica (no seleccionables aqui):", ciclosFueraDeRango);
+      }
+
+      renderCicloReal();
+    }).catch(function (err) {
+      document.getElementById("wrap-contenido").innerHTML = "<p style='color:#a83232'>No se pudieron cargar las fuentes reales del Board (" + err.message + "). Verifique que Panel_IEC_Auditoria_2026.html y avboard_data.js existan en la raiz del repositorio.</p>";
+    });
+  }
+
+  function renderCicloReal() {
+    CICLO_REAL_ACTUAL = document.getElementById("sel-ciclo-real").value || CICLO_REAL_ACTUAL;
+    var cicloReal = SICAdapter.construirCicloReal(PAIS, CICLO_REAL_ACTUAL, FUENTES, CTX_PARAMS);
+
+    document.getElementById("hdr-ciclo").textContent = CICLO_REAL_ACTUAL + " (" + fechaDDMMYYYY(cicloReal.ciclo_info.inicio) + "–" + fechaDDMMYYYY(cicloReal.ciclo_info.cierre) + ")";
+    document.getElementById("hdr-estado-ciclo").textContent = "Cerrado (histórico reconstruido)";
+    document.getElementById("hdr-fecha-datos").textContent = new Date().toLocaleString("es-CL");
+
+    // Resultados por vendedor, usando el motor SIC.calcularVendedorCiclo SIN MODIFICAR.
+    RESULTADOS_VENDEDORES = cicloReal.vendedores.map(function (v) {
+      var r = SIC.calcularVendedorCiclo(cicloReal, v.id, CICLO_REAL_ACTUAL);
+      var iecInfo = cicloReal.iec.filter(function (i) { return i.vendedor_id === v.id; })[0];
+      return { vendedor: v, resultado: r, iec: iecInfo };
+    });
+
+    var totalFacturada = RESULTADOS_VENDEDORES.reduce(function (s, x) { return s + x.resultado.venta_facturada; }, 0);
+    var totalPresupuesto = RESULTADOS_VENDEDORES.reduce(function (s, x) { return s + x.resultado.presupuesto; }, 0);
+    var totalPotencial = RESULTADOS_VENDEDORES.reduce(function (s, x) { return s + x.resultado.comision_potencial; }, 0);
+    var totalLiberada = RESULTADOS_VENDEDORES.reduce(function (s, x) { return s + x.resultado.comision_liberada; }, 0);
+    var totalSP = cicloReal.iec.reduce(function (s, i) { return s + (i.ventas_sobre_piso_clp || i.ventas_sobre_piso_usd || 0); }, 0);
+    var totalElegible = totalSP + cicloReal.iec.reduce(function (s, i) { return s + (i.ventas_bajo_piso_clp || i.ventas_bajo_piso_usd || 0); }, 0);
+    var iecCiclo = totalElegible > 0 ? (totalSP / totalElegible * 100) : 0;
+
+    document.getElementById("c-facturada").textContent = fmtMoneda(totalFacturada);
+    document.getElementById("c-presupuesto").textContent = fmtMoneda(totalPresupuesto);
+    document.getElementById("c-cumpl").textContent = totalPresupuesto > 0 ? pct(totalFacturada / totalPresupuesto * 100) : "—";
+    document.getElementById("c-iec").textContent = pct(iecCiclo);
+    // Nota tecnica de auditoria (Bloque 2, no es un KPI de Bloque 1).
+    document.getElementById("c-potencial-tecnico").textContent = fmtMoneda(totalPotencial);
+    document.getElementById("c-liberada-tecnico").textContent = fmtMoneda(totalLiberada);
+
+    // Precio piso (Bloque 1): clasificacion informativa agregada del ciclo.
+    var sp = 0, bp = 0, ne = 0;
+    cicloReal.ventas.forEach(function (v) {
+      var c = SIC.clasificacionPiso(v.piso_situacion);
+      if (c === "sobre_piso") sp++; else if (c === "bajo_piso") bp++; else ne++;
+    });
+    var totalVentasPiso = sp + bp + ne;
+    document.getElementById("c-piso").textContent = totalVentasPiso > 0 ? pct(sp / totalVentasPiso * 100) + " sobre piso" : "—";
+    document.getElementById("c-piso-sub").textContent = sp + " sobre piso · " + bp + " bajo piso (informativo) · " + ne + " no evaluable";
+
+    document.getElementById("c-n-facturas").textContent = cicloReal.ventas.length;
+    document.getElementById("c-n-vendedores-sub").textContent = RESULTADOS_VENDEDORES.length + " vendedor(es) con venta real en el ciclo";
+
+    // Conciliacion independiente: recalcular directamente sobre TX_CL/TX_PE,
+    // filtrando por ciclo y vendedor comercial, sin reusar el codigo interno
+    // del adaptador -- debe coincidir exactamente con lo que uso el motor.
+    var txArray = PAIS === "CL" ? FUENTES.tx.TX_CL : FUENTES.tx.TX_PE;
+    var sumaIndependiente = 0, nIndependiente = 0;
+    (txArray || []).forEach(function (t) {
+      if (t.fecha === null || t.fecha === undefined || typeof t.fecha === "number" || !/^\d{4}-\d{2}-\d{2}$/.test(String(t.fecha))) return;
+      if (SICAdapter.asignarCiclo(t.fecha).ciclo !== CICLO_REAL_ACTUAL) return;
+      var vend = SICAdapter.normalizarVendedor(PAIS, t.vendedor);
+      if (!vend.esComercial) return;
+      if (!t.vendedor || String(t.vendedor).trim() === "") return;
+      sumaIndependiente += Number(t.total) || 0;
+      nIndependiente++;
+    });
+    var sumaAdaptador = cicloReal.ventas.reduce(function (s, v) { return s + v.venta_neta; }, 0);
+    var coincide = Math.abs(sumaIndependiente - sumaAdaptador) < 0.01 && nIndependiente === cicloReal.ventas.length;
+    document.getElementById("recon-fuente").textContent = fmtMoneda(sumaIndependiente);
+    document.getElementById("recon-adaptador").textContent = fmtMoneda(sumaAdaptador);
+    document.getElementById("recon-n").textContent = nIndependiente + " / " + cicloReal.ventas.length;
+    var badge = document.getElementById("recon-badge");
+    badge.textContent = coincide ? "Coincide exactamente" : "NO coincide — revisar";
+    badge.className = "real-badge " + (coincide ? "ok" : "gap");
+
+    // Tabla de vendedores
+    document.getElementById("tbody-vendedores").innerHTML = RESULTADOS_VENDEDORES.map(function (x) {
+      var r = x.resultado;
+      return "<tr>" +
+        "<td>" + x.vendedor.nombre + "</td>" +
+        "<td class='num'>" + fmtMoneda(r.venta_facturada) + "</td>" +
+        "<td class='num'>" + fmtMoneda(r.presupuesto) + "</td>" +
+        "<td class='num'>" + pct(r.cumplimiento_pct) + "</td>" +
+        "<td class='num'>" + pct(r.iec_pct) + "</td>" +
+        "<td class='num'>" + pct(r.factor_presupuesto) + "</td>" +
+        "<td class='num'>" + pct(r.factor_iec) + "</td>" +
+        "<td><span class='sic-estado pendiente' title='Pendiente de integración de cobranza real — ver Bloque 2'>Pendiente de cobranza</span></td>" +
+        "</tr>";
+    }).join("") || "<tr><td colspan='8'>Sin vendedores con ventas reales en este ciclo.</td></tr>";
+
+    // Detalle por factura (todas las ventas reales del ciclo, con su clasificacion de piso)
+    TODAS_LAS_VENTAS = cicloReal.ventas.map(function (v) {
+      var vendedorObj = cicloReal.vendedores.filter(function (vv) { return vv.id === v.vendedor_id; })[0];
+      return {
+        factura: v.factura,
+        fecha_factura: v.fecha_factura,
+        vendedor_nombre: vendedorObj ? vendedorObj.nombre : v.vendedor_id,
+        cliente_nombre: v.cliente_nombre,
+        producto: v.producto,
+        venta_neta: v.venta_neta,
+        clasificacion_piso: SIC.clasificacionPiso(v.piso_situacion)
+      };
+    });
+    renderTablaFacturasReal();
+
+    // Advertencias agrupadas, con ejemplos (maximo 3 por tipo, para no saturar la pantalla).
+    var resumen = SICAdapter.resumirAdvertencias(cicloReal.advertencias);
+    var tipos = Object.keys(resumen);
+    document.getElementById("advertencias-total-badge").textContent = cicloReal.advertencias.length + " advertencia(s) en este ciclo";
+    document.getElementById("tbody-advertencias").innerHTML = tipos.length ? tipos.map(function (tipo) {
+      var ejemplos = cicloReal.advertencias.filter(function (a) { return a.tipo === tipo; }).slice(0, 3);
+      var listaEjemplos = "<ul class='real-detalle-ejemplos'>" + ejemplos.map(function (e) { return "<li>" + e.detalle + "</li>"; }).join("") + "</ul>";
+      return "<tr><td>" + tipo + "</td><td class='num'>" + resumen[tipo] + "</td><td>" + listaEjemplos + "</td></tr>";
+    }).join("") : "<tr><td colspan='3'>Sin advertencias en este ciclo.</td></tr>";
+  }
+
+  function renderTablaFacturasReal() {
+    var busqueda = (document.getElementById("buscar-factura-real").value || "").toLowerCase();
+    var datos = TODAS_LAS_VENTAS.slice();
+    if (busqueda) {
+      datos = datos.filter(function (f) {
+        return f.factura.toLowerCase().indexOf(busqueda) !== -1 ||
+          (f.cliente_nombre || "").toLowerCase().indexOf(busqueda) !== -1 ||
+          (f.vendedor_nombre || "").toLowerCase().indexOf(busqueda) !== -1;
+      });
+    }
+    document.getElementById("tbody-facturas-real").innerHTML = datos.slice(0, 300).map(function (f) {
+      var etiquetaPiso = f.clasificacion_piso === "sobre_piso" ? "Sobre piso" : (f.clasificacion_piso === "bajo_piso" ? "Bajo piso (informativo)" : "No evaluable");
+      return "<tr>" +
+        "<td>" + f.factura + "</td><td>" + f.fecha_factura + "</td><td>" + f.vendedor_nombre + "</td><td>" + (f.cliente_nombre || "—") + "</td>" +
+        "<td>" + (f.producto || "—") + "</td><td class='num'>" + fmtMoneda(f.venta_neta) + "</td><td>" + etiquetaPiso + "</td>" +
+        "<td><span class='sic-estado potencial'>potencial</span></td></tr>";
+    }).join("") + (datos.length > 300 ? "<tr><td colspan='8'>Mostrando 300 de " + datos.length + " facturas. Use el buscador para acotar.</td></tr>" : "");
+  }
+</script>
+</body>
+</html>
