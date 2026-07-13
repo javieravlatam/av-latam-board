@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIC-AV · Simulador de Comisiones V1 (ambiente de prueba)</title>
+<style>
+  :root{
+    --blue: #0d3b66;
+    --blue-light: #eef3f8;
+    --blue-soft: #4a7fb5;
+    --grey-line: #e2e6ea;
+    --grey-text: #4a4f55;
+    --ok: #1e7d4a;
+    --warn: #a83232;
+    --bg: #ffffff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:#1c1f22;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height:1.5;
+  }
+  .banner{
+    background:var(--blue);
+    color:#fff;
+    padding:22px 40px;
+  }
+  .banner h1{margin:0; font-size:20px; font-weight:600; letter-spacing:0.2px;}
+  .banner p{margin:6px 0 0; font-size:13px; color:#cfe0f0;}
+  .wrap{
+    max-width:980px;
+    margin:0 auto;
+    padding:40px 24px 80px;
+  }
+  .notice{
+    border:1px solid var(--grey-line);
+    background:var(--blue-light);
+    color:var(--blue);
+    font-size:13px;
+    padding:14px 18px;
+    border-radius:6px;
+    margin-bottom:36px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px 48px;
+  }
+  @media (max-width:760px){ .grid{grid-template-columns:1fr;} }
+  fieldset{
+    border:none;
+    padding:0;
+    margin:0 0 28px;
+  }
+  legend{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--blue-soft);
+    font-weight:600;
+    margin-bottom:12px;
+    padding:0;
+  }
+  label{
+    display:block;
+    font-size:13px;
+    color:var(--grey-text);
+    margin:14px 0 6px;
+  }
+  input[type=number], select{
+    width:100%;
+    padding:10px 12px;
+    font-size:14px;
+    border:1px solid var(--grey-line);
+    border-radius:5px;
+    background:#fff;
+    color:#1c1f22;
+    font-family:inherit;
+  }
+  input[type=number]:focus, select:focus{
+    outline:none;
+    border-color:var(--blue-soft);
+  }
+  .radio-row{display:flex; gap:18px; margin-top:4px;}
+  .radio-row label{display:flex; align-items:center; gap:6px; font-size:13px; margin:0;}
+  .radio-row input{width:auto;}
+  button{
+    background:var(--blue);
+    color:#fff;
+    border:none;
+    padding:13px 28px;
+    font-size:14px;
+    font-weight:600;
+    border-radius:5px;
+    cursor:pointer;
+    margin-top:8px;
+  }
+  button:hover{background:#0a2e4f;}
+  .result{
+    margin-top:44px;
+    padding-top:36px;
+    border-top:1px solid var(--grey-line);
+  }
+  .headline{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    margin-bottom:32px;
+  }
+  .card{
+    border:1px solid var(--grey-line);
+    border-radius:8px;
+    padding:22px 24px;
+  }
+  .card .label{font-size:12px; text-transform:uppercase; letter-spacing:0.05em; color:var(--grey-text);}
+  .card .value{font-size:28px; font-weight:700; color:var(--blue); margin-top:6px;}
+  .card.zero .value{color:var(--warn);}
+  table.steps{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+  }
+  table.steps th, table.steps td{
+    text-align:left;
+    padding:10px 8px;
+    border-bottom:1px solid var(--grey-line);
+  }
+  table.steps th{
+    color:var(--grey-text);
+    font-weight:600;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+  .explain{
+    margin-top:28px;
+    font-size:14px;
+    color:#2a2d30;
+    background:var(--blue-light);
+    border-radius:8px;
+    padding:20px 22px;
+  }
+  .explain h3{margin:0 0 8px; font-size:13px; color:var(--blue); text-transform:uppercase; letter-spacing:0.05em;}
+  .footer-note{
+    margin-top:48px;
+    font-size:12px;
+    color:#8a9099;
+    border-top:1px solid var(--grey-line);
+    padding-top:16px;
+  }
+  .pill{
+    display:inline-block;
+    font-size:11px;
+    padding:2px 8px;
+    border-radius:20px;
+    background:var(--blue-light);
+    color:var(--blue);
+    margin-left:8px;
+    font-weight:600;
+  }
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <h1>SIC-AV · Simulador de Comisiones V1</h1>
+  <p>Ambiente de prueba, aislado del Board — no carga avboard_data.js, no escribe ningun archivo, no requiere conexion a internet. Fase 3, borrador de politica no aprobado.</p>
+</div>
+
+<div class="wrap">
+
+  <div class="notice">
+    Este simulador valida el modelo matematico del SIC-AV con datos que usted mismo ingresa. No representa comisiones reales de ningun vendedor. Ningun valor mostrado aqui esta aprobado por Gerencia General — ver <em>SIC_AV_DECISIONES_GERENCIA.md</em>.
+  </div>
+
+  <form id="form-sim" onsubmit="return false;">
+    <div class="grid">
+      <div>
+        <fieldset>
+          <legend>Contexto</legend>
+          <label for="pais">Pais</label>
+          <select id="pais">
+            <option value="CL">Chile</option>
+            <option value="PE">Peru</option>
+          </select>
+
+          <label for="tipoCliente">Tipo de cliente</label>
+          <select id="tipoCliente">
+            <option value="Distribuidor">Distribuidor</option>
+            <option value="ClienteFinal">Cliente Final / Agroindustria</option>
+          </select>
+
+          <label for="cargo">Cargo comercial</label>
+          <select id="cargo">
+            <option value="RTC">RTC</option>
+            <option value="KAM">KAM</option>
+            <option value="Jefe">Jefe de Ventas</option>
+          </select>
+
+          <label for="modelo">Modelo de calculo</label>
+          <select id="modelo">
+            <option value="actual">Politica Actual</option>
+            <option value="recomendado" selected>Modelo Progresivo Recomendado</option>
+            <option value="alternativo">Modelo Alternativo (escala progresiva)</option>
+          </select>
+        </fieldset>
+      </div>
+
+      <div>
+        <fieldset>
+          <legend>Datos del ciclo</legend>
+          <label for="presupuesto">Presupuesto del ciclo</label>
+          <input type="number" id="presupuesto" value="20000000" min="0">
+
+          <label for="ventaFacturada">Venta facturada</label>
+          <input type="number" id="ventaFacturada" value="24000000" min="0">
+
+          <label for="ventaCobrada">Venta neta cobrada</label>
+          <input type="number" id="ventaCobrada" value="24000000" min="0">
+
+          <label for="dias">Dias transcurridos entre factura y cobro</label>
+          <input type="number" id="dias" value="60" min="0">
+
+          <label for="iec">IEC del ciclo (%)</label>
+          <input type="number" id="iec" value="75" min="0" max="100" step="0.1">
+
+          <label for="piso">Situacion de precio piso</label>
+          <select id="piso">
+            <option value="cumple">Cumple precio piso</option>
+            <option value="autorizada">Bajo piso, autorizada formalmente</option>
+            <option value="no_autorizada">Bajo piso, sin autorizacion</option>
+          </select>
+        </fieldset>
+      </div>
+    </div>
+
+    <button onclick="calcular()">Calcular comision</button>
+  </form>
+
+  <div class="result" id="resultado" style="display:none;">
+
+    <div class="headline">
+      <div class="card">
+        <div class="label">Comision Potencial (sobre venta facturada)</div>
+        <div class="value" id="out-potencial">—</div>
+      </div>
+      <div class="card" id="card-liberada">
+        <div class="label">Comision Liberada (sobre venta cobrada)</div>
+        <div class="value" id="out-liberada">—</div>
+      </div>
+    </div>
+
+    <table class="steps">
+      <tr><th>Paso</th><th>Valor</th></tr>
+      <tr><td>Tasa por edad de cartera aplicada</td><td id="s-tasa">—</td></tr>
+      <tr><td>Comision base (venta cobrada &times; tasa)</td><td id="s-base">—</td></tr>
+      <tr><td>Cumplimiento de presupuesto</td><td id="s-cumpl">—</td></tr>
+      <tr><td>Factor de Cumplimiento de Presupuesto</td><td id="s-fppto">—</td></tr>
+      <tr><td>Factor IEC</td><td id="s-fiec">—</td></tr>
+      <tr><td>Factor de Precio Piso</td><td id="s-fpiso">—</td></tr>
+      <tr><td>Excedente sobre presupuesto (cobrado)</td><td id="s-exced">—</td></tr>
+      <tr><td>Bono por excedente</td><td id="s-bono">—</td></tr>
+      <tr><td><strong>Comision Final Liberada</strong></td><td id="s-final">—</td></tr>
+    </table>
+
+    <div class="explain">
+      <h3>Explicacion en lenguaje simple</h3>
+      <p id="explicacion-texto">—</p>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    SIC-AV V1 · Grupo AV LATAM · Simulador independiente, sin conexion a AV LATAM Board · Fase 3 — no implementado, no aprobado.
+  </div>
+
+</div>
+
+<script>
+function tasaCartera(pais, tipoCliente, dias){
+  if(pais==='CL'){
+    if(tipoCliente==='Distribuidor'){
+      if(dias<=0) return 8;
+      if(dias<=30) return 7.5;
+      if(dias<=180) return 6;
+      if(dias<=210) return 2.5;
+      return 0.5;
+    } else {
+      if(dias<=0) return 8;
+      if(dias<=30) return 7.5;
+      if(dias<=180) return 6;
+      if(dias<=210) return 3;
+      if(dias<=360) return 2.5;
+      return 0.5;
+    }
+  } else {
+    if(dias<=0) return 8;
+    if(dias<=30) return 7.5;
+    if(dias<=60) return 6;
+    if(dias<=120) return 5;
+    if(dias<=180) return 2.5;
+    return 0.5;
+  }
+}
+
+function interpolar(anchors, x, cap){
+  if(x<=anchors[0][0]) return anchors[0][1];
+  for(let i=0;i<anchors.length-1;i++){
+    const x0=anchors[i][0], y0=anchors[i][1];
+    const x1=anchors[i+1][0], y1=anchors[i+1][1];
+    if(x<=x1){
+      return y0 + (y1-y0)*(x-x0)/(x1-x0);
+    }
+  }
+  return cap;
+}
+
+function factorPresupuesto(modelo, cumplPct){
+  if(modelo==='actual'){
+    if(cumplPct<=50) return 0;
+    if(cumplPct<=79) return 70;
+    return 100;
+  }
+  if(modelo==='alternativo'){
+    if(cumplPct<50) return 0;
+    if(cumplPct<60) return 50;
+    if(cumplPct<70) return 65;
+    if(cumplPct<80) return 80;
+    if(cumplPct<90) return 90;
+    if(cumplPct<100) return 100;
+    if(cumplPct<110) return 105;
+    return 110;
+  }
+  const anchors=[[0,0],[50,50],[60,65],[70,80],[80,90],[90,100],[100,105],[110,110]];
+  return interpolar(anchors, cumplPct, 110);
+}
+
+function factorIEC(modelo, iecPct){
+  if(modelo==='actual'){
+    if(iecPct<70) return 20;
+    if(iecPct<85) return 70;
+    if(iecPct<92) return 80;
+    if(iecPct<95) return 90;
+    return 105;
+  }
+  if(modelo==='alternativo'){
+    if(iecPct<50) return 40;
+    if(iecPct<70) return 60;
+    if(iecPct<85) return 80;
+    if(iecPct<92) return 90;
+    if(iecPct<95) return 100;
+    return 110;
+  }
+  const anchors=[[0,40],[50,60],[70,80],[85,90],[92,100],[95,110]];
+  return interpolar(anchors, iecPct, 110);
+}
+
+function factorPiso(situacion){
+  if(situacion==='cumple') return 1.0;
+  if(situacion==='autorizada') return 0.5; // V1 ilustrativo, no aprobado
+  return 0; // no_autorizada -> veto total
+}
+
+function fmt(pais, n){
+  const symbol = pais==='CL' ? 'CLP ' : 'USD ';
+  return symbol + Math.round(n*100)/100 + '';
+}
+function fmtMoney(pais, n){
+  const rounded = Math.round(n);
+  return (pais==='CL'?'CLP ':'USD ') + rounded.toLocaleString('es-CL');
+}
+function fmtPct(n){
+  return (Math.round(n*10)/10) + '%';
+}
+
+function calcular(){
+  const pais = document.getElementById('pais').value;
+  const tipoClienteRaw = document.getElementById('tipoCliente').value;
+  const tipoCliente = tipoClienteRaw==='Distribuidor' ? 'Distribuidor' : 'ClienteFinal';
+  const cargo = document.getElementById('cargo').value;
+  const modelo = document.getElementById('modelo').value;
+
+  const presupuesto = parseFloat(document.getElementById('presupuesto').value)||0;
+  const ventaFacturada = parseFloat(document.getElementById('ventaFacturada').value)||0;
+  const ventaCobrada = parseFloat(document.getElementById('ventaCobrada').value)||0;
+  const dias = parseFloat(document.getElementById('dias').value)||0;
+  const iec = parseFloat(document.getElementById('iec').value)||0;
+  const pisoSituacion = document.getElementById('piso').value;
+
+  const tasa = tasaCartera(pais, tipoCliente, dias);
+  const fPiso = factorPiso(pisoSituacion);
+  const fIec = factorIEC(modelo, iec);
+
+  // --- Comision Liberada (sobre venta cobrada) ---
+  const cumplCobrado = presupuesto>0 ? (ventaCobrada/presupuesto*100) : 0;
+  const fPptoCobrado = factorPresupuesto(modelo, cumplCobrado);
+  const comisionBaseCobrada = ventaCobrada * (tasa/100);
+  const excedenteCobrado = Math.max(0, ventaCobrada - presupuesto);
+  const bonoGate = modelo==='actual' ? 1 : (fIec/100) * fPiso;
+  const bono = excedenteCobrado * 0.02 * bonoGate;
+  const comisionLiberada = comisionBaseCobrada * (fPptoCobrado/100) * (fIec/100) * fPiso + bono;
+
+  // --- Comision Potencial (sobre venta facturada, informativa) ---
+  const cumplFacturado = presupuesto>0 ? (ventaFacturada/presupuesto*100) : 0;
+  const fPptoFacturado = factorPresupuesto(modelo, cumplFacturado);
+  const comisionBaseFacturada = ventaFacturada * (tasa/100);
+  const excedenteFacturado = Math.max(0, ventaFacturada - presupuesto);
+  const bonoPotencial = excedenteFacturado * 0.02 * bonoGate;
+  const comisionPotencial = comisionBaseFacturada * (fPptoFacturado/100) * (fIec/100) * fPiso + bonoPotencial;
+
+  document.getElementById('resultado').style.display = 'block';
+
+  document.getElementById('out-potencial').textContent = fmtMoney(pais, comisionPotencial);
+  document.getElementById('out-liberada').textContent = fmtMoney(pais, comisionLiberada);
+  document.getElementById('card-liberada').className = comisionLiberada===0 ? 'card zero' : 'card';
+
+  document.getElementById('s-tasa').textContent = tasa + '% (' + dias + ' dias, ' + (pais==='CL'?'Chile':'Peru') + ', ' + (tipoCliente==='Distribuidor'?'Distribuidor':'Cliente Final/Agroindustria') + ')';
+  document.getElementById('s-base').textContent = fmtMoney(pais, comisionBaseCobrada);
+  document.getElementById('s-cumpl').textContent = fmtPct(cumplCobrado) + ' (' + fmtMoney(pais,ventaCobrada) + ' sobre ' + fmtMoney(pais,presupuesto) + ' de presupuesto)';
+  document.getElementById('s-fppto').textContent = fmtPct(fPptoCobrado) + ' — modelo: ' + (modelo==='actual'?'Politica Actual':modelo==='recomendado'?'Progresivo Recomendado':'Alternativo');
+  document.getElementById('s-fiec').textContent = fmtPct(fIec) + ' (IEC ingresado: ' + iec + '%)';
+  document.getElementById('s-fpiso').textContent = fPiso + (pisoSituacion==='cumple' ? ' (venta a precio piso o superior)' : pisoSituacion==='autorizada' ? ' (bajo piso, autorizada — reduccion, no veto)' : ' (bajo piso SIN autorizacion — veto total)');
+  document.getElementById('s-exced').textContent = fmtMoney(pais, excedenteCobrado);
+  document.getElementById('s-bono').textContent = fmtMoney(pais, bono) + (modelo==='actual' ? ' (2% sin condicionar por IEC/piso, segun politica actual)' : ' (2% condicionado por IEC y precio piso)');
+  document.getElementById('s-final').textContent = fmtMoney(pais, comisionLiberada);
+
+  let explicacion = '';
+  if(pisoSituacion==='no_autorizada'){
+    explicacion = 'Esta venta se realizo bajo el precio piso vigente y no cuenta con autorizacion formal registrada. Por politica, esto anula por completo la comision de esta venta (factor de precio piso = 0), sin importar el cumplimiento de presupuesto ni el IEC. El IEC del ciclo debe seguir contabilizando esta venta como "bajo piso" para efectos de medicion, aunque no genere comision.';
+  } else if(ventaCobrada===0){
+    explicacion = 'No existe venta cobrada en este escenario. Una venta termina cuando se cobra (principio filosofico 3 del SIC-AV) — sin cobro, no hay comision liberada, aunque exista venta facturada que genere comision potencial de referencia.';
+  } else {
+    explicacion = 'Sobre ' + fmtMoney(pais, ventaCobrada) + ' cobrados en ' + dias + ' dias, la tasa por edad de cartera aplicable es ' + tasa + '%, dando una comision base de ' + fmtMoney(pais, comisionBaseCobrada) + '. El cumplimiento de presupuesto (' + fmtPct(cumplCobrado) + ') aporta un factor de ' + fmtPct(fPptoCobrado) + ', y el IEC de ' + iec + '% aporta un factor de ' + fmtPct(fIec) + '.';
+    if(pisoSituacion==='autorizada'){
+      explicacion += ' Como la venta fue bajo precio piso pero con autorizacion formal, se aplica una reduccion (factor 0.5), no una anulacion.';
+    }
+    if(excedenteCobrado>0){
+      explicacion += ' Ademas, ' + fmtMoney(pais, excedenteCobrado) + ' de venta cobrada exceden el presupuesto del ciclo, generando un bono adicional de ' + fmtMoney(pais, bono) + '.';
+    }
+    explicacion += ' El resultado final de comision liberada es ' + fmtMoney(pais, comisionLiberada) + '.';
+  }
+  document.getElementById('explicacion-texto').textContent = explicacion;
+}
+</script>
+
+</body>
+</html>
