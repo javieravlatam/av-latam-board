@@ -219,6 +219,31 @@
       </button>
     </div>
 
+    <!-- SEPARADOR ENTRE BLOQUES -->
+    <div style="display:flex;align-items:center;gap:10px;margin:18px 0">
+      <div style="flex:1;height:1px;background:rgba(122,182,72,0.12)"></div>
+      <div style="font-size:9px;color:#4a6050;letter-spacing:2px;text-transform:uppercase">o</div>
+      <div style="flex:1;height:1px;background:rgba(122,182,72,0.12)"></div>
+    </div>
+
+    <!-- BLOQUE SIC AV (acceso propio -- este bloque NO valida clave aqui; el
+         boton solo navega a apps/sic_av/index.html, donde el SIC-AV exige su
+         propia autenticacion por pais [sic_auth.js] antes de mostrar cualquier
+         dato -- no se duplica ni se reemplaza esa autenticacion desde aqui) -->
+    <div style="margin-bottom:6px">
+      <div style="font-size:9px;color:#8fa892;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;display:flex;align-items:center;gap:7px">
+        <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0d3b66"></span>
+        SIC AV · INCENTIVOS COMERCIALES
+      </div>
+      <div style="font-size:11px;color:var(--dim);line-height:1.6;margin-bottom:12px">
+        Acceso al Sistema Integral de Incentivos Comerciales
+      </div>
+      <button class="btn" id="btnSic" type="button" onclick="irASicAv()"
+        style="background:#0d3b66;box-shadow:0 4px 20px rgba(13,59,102,.35)">
+        <span id="txSic">ACCESO SIC AV</span>
+      </button>
+    </div>
+
     <div class="card-footer">
       <span class="dot-green"></span>Agroveca Grupo Latam · 2026<br>
       Chile · Perú · Ecuador
@@ -341,6 +366,18 @@
         : `Clave incorrecta · ${5-intCot} intento${5-intCot!==1?'s':''} restante${5-intCot!==1?'s':''}`;
       showErr('pwdCot','errCot','btnCot','spCot','txCot', msg, 'ACCESO COTIZADOR');
     }
+  }
+
+  // SIC AV no valida clave en este portal -- el SIC-AV tiene su propia
+  // autenticacion por pais (sic_auth.js) dentro de apps/sic_av/index.html.
+  // Este boton unicamente navega hasta ahi; no se expone ningun dato sin
+  // pasar primero por esa autenticacion propia.
+  function irASicAv() {
+    const btn = document.getElementById('btnSic');
+    btn.disabled = true;
+    document.getElementById('successOverlay').classList.add('show');
+    document.querySelector('.success-sub').textContent = 'Cargando SIC AV · Incentivos Comerciales...';
+    setTimeout(() => window.location.href = 'apps/sic_av/index.html', 1500);
   }
 </script>
 </body>
