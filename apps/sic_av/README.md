@@ -1,6 +1,8 @@
-# SIC-AV — Prototipo Funcional del Módulo de Comisiones (Fase 4 · v1.5)
+# SIC-AV — Prototipo Funcional del Módulo de Comisiones (v1.6 — flujo principal con datos reales)
 
-**Estado de cobranza real (actualizado 2026-07-13, ver `COLLECTION_SOURCE_AUDIT.md`):** no existe hoy, en ninguna fuente del AV LATAM Board, fecha ni monto real de cobro por factura. La comisión (potencial y liberada) sobre datos reales queda marcada como **pendiente de integración de cobranza real**, nunca como "$0" definitivo — ver `sic_datos_reales.html`, Bloque 2, y `PRESENTATION_READINESS.md` antes de cualquier presentación ejecutiva.
+**CORRECCIÓN v1.6 (2026-07-13):** `sic_chile.html` y `sic_peru.html` — el flujo principal al que se llega desde el Portal → SIC AV → País — dejaron de mostrar datos demostrativos. Ahora cargan datos reales del AV LATAM Board a través de `js/sic_data_adapter.js` (mismo adaptador de solo lectura ya usado por `sic_datos_reales.html`), sin duplicar lógica y sin modificar `sic_core.js`. Antes de esta corrección, el acceso principal mostraba datos sintéticos y solo `sic_datos_reales.html` (una vista secundaria) tenía datos reales — ver detalle en `CHANGELOG.md`.
+
+**Estado de cobranza real (actualizado 2026-07-13, ver `COLLECTION_SOURCE_AUDIT.md`):** no existe hoy, en ninguna fuente del AV LATAM Board, fecha ni monto real de cobro por factura. La comisión (potencial y liberada) sobre datos reales queda marcada como **pendiente de integración de cobranza real**, nunca como "$0" definitivo — ver `sic_chile.html`/`sic_peru.html` (Bloque 2), `sic_datos_reales.html`, y `PRESENTATION_READINESS.md` antes de cualquier presentación ejecutiva.
 
 Sistema Integral de Incentivos Comerciales de Grupo AV LATAM. Este es un **prototipo aislado**, construido para validar visualmente el modelo de cálculo definido en la Fase 3 (`docs/sic_av/SIC_AV_POLICY_V1.md`) antes de integrarlo a AV LATAM Board. No está conectado a datos productivos ni al Board.
 
@@ -28,10 +30,10 @@ El vendedor (demo) puede, en menos de dos minutos:
 ```
 apps/sic_av/
 ├── index.html              Pantalla de acceso (selección de país + clave)
-├── sic_chile.html           Dashboard del vendedor — Chile (datos demostrativos)
-├── sic_peru.html            Dashboard del vendedor — Perú (datos demostrativos)
+├── sic_chile.html           Dashboard del vendedor — Chile (v1.6: datos REALES vía SICAdapter, ya no demo)
+├── sic_peru.html            Dashboard del vendedor — Perú (v1.6: datos REALES vía SICAdapter, ya no demo)
 ├── sic_politica.html         Página "Política y Factores" (accesible desde ambos dashboards)
-├── sic_datos_reales.html      NUEVO (v1.5) — Ciclo real 26-25 leído en vivo desde AV LATAM Board, solo lectura (ver sección 3b)
+├── sic_datos_reales.html      Vista de auditoría técnica — mismo ciclo real 26-25, con conciliación y advertencias en detalle (ver sección 3b)
 ├── sic_core.js               Motor de cálculo (SIC.*), sin dependencias externas — SIN modificar en v1.5
 ├── sic_auth.js                Autenticación de prototipo, centralizada (SICAuth.*) — SIN modificar en v1.5
 ├── sic_pdf.js                  Generador del Informe Ejecutivo en PDF (SICPDF.*)
@@ -41,9 +43,10 @@ apps/sic_av/
 ├── data/                          14 archivos JSON de datos demostrativos (ver sección 5)
 ├── tests/
 │   ├── run_engine_tests.js        Pruebas del motor de cálculo y del PDF (Node, sin navegador) — 49/49
-│   ├── run_ui_tests.js             Pruebas de autenticación y dashboard demo (jsdom + servidor HTTP local) — 20/20
-│   ├── run_adapter_tests.js         NUEVO (v1.5) — Pruebas del adaptador de datos reales (Node, fs.readFileSync) — 26/26
-│   └── run_datos_reales_ui_test.js   NUEVO (v1.5) — Prueba de humo de sic_datos_reales.html (jsdom + servidor HTTP) — 13/13
+│   ├── run_ui_tests.js             Pruebas de autenticación, aislamiento por país y "Política y Factores" (jsdom + servidor HTTP) — 9/9
+│   ├── run_adapter_tests.js         Pruebas del adaptador de datos reales (Node, fs.readFileSync) — 26/26
+│   ├── run_datos_reales_ui_test.js   Prueba de humo de sic_datos_reales.html, vista de auditoría técnica (jsdom + servidor HTTP) — 13/13
+│   └── run_dashboard_real_test.js     NUEVO (v1.6) — Prueba de humo del flujo principal con datos reales: sic_chile.html/sic_peru.html (jsdom + servidor HTTP) — 24/24
 ├── reports/                        Carpeta sugerida para informes PDF generados durante pruebas
 ├── DATA_SOURCE_AUDIT.md             NUEVO (v1.5) — Auditoría de dónde vive cada dato del SIC en las fuentes reales del Board
 ├── COLLECTION_SOURCE_AUDIT.md        NUEVO (v1.5 Fase 4) — Auditoría profunda de cobranzas en TODO el repositorio (no solo apps/sic_av/)
@@ -57,33 +60,26 @@ Ningún archivo fuera de `apps/sic_av/` fue creado, leído para modificar, ni to
 
 ## 3. Cómo abrir el prototipo localmente
 
-El prototipo usa `fetch()` para cargar los JSON de `data/`. Los navegadores bloquean `fetch()` sobre archivos abiertos con doble clic (protocolo `file://`) por política de CORS — **es necesario un servidor HTTP local**, no basta con abrir `index.html` directamente.
+El prototipo usa `fetch()` para cargar los JSON de `data/` y (desde v1.6, en `sic_chile.html`/`sic_peru.html`/`sic_datos_reales.html`) las fuentes reales del Board. Los navegadores bloquean `fetch()` sobre archivos abiertos con doble clic (protocolo `file://`) por política de CORS — **es necesario un servidor HTTP local**, no basta con abrir `index.html` directamente.
 
-Con Python 3 (viene preinstalado en Mac/Linux):
-
-```bash
-cd apps/sic_av
-python3 -m http.server 8123
-```
-
-Luego abrir en el navegador: `http://localhost:8123/index.html`
-
-(Alternativa con Node, si se prefiere: `npx serve -l 8123 .` desde la misma carpeta.)
+**Desde v1.6, el servidor debe levantarse siempre desde la raíz del repositorio** (ver sección 3b) — ya no solo para `sic_datos_reales.html`, sino también para el flujo principal (`sic_chile.html`/`sic_peru.html`), porque ambos ahora leen `Panel_IEC_Auditoria_2026.html` y `avboard_data.js` en vivo.
 
 Para detener el servidor: `Ctrl+C` en la terminal donde quedó corriendo.
 
-## 3b. Cómo abrir la página de datos reales (v1.5)
+## 3b. Cómo abrir el prototipo con datos reales (v1.6)
 
-`sic_datos_reales.html` lee en vivo `Panel_IEC_Auditoria_2026.html` y `avboard_data.js`, que viven en la **raíz del repositorio** (dos niveles arriba de `apps/sic_av/`). Los servidores HTTP estáticos (incluido `python3 -m http.server`) no sirven archivos fuera de la carpeta desde la que se levantan, así que para esta página específica el servidor debe levantarse desde la **raíz del repo**, no desde `apps/sic_av/`:
+`sic_chile.html`, `sic_peru.html` y `sic_datos_reales.html` leen en vivo `Panel_IEC_Auditoria_2026.html` y `avboard_data.js`, que viven en la **raíz del repositorio** (dos niveles arriba de `apps/sic_av/`). Los servidores HTTP estáticos (incluido `python3 -m http.server`) no sirven archivos fuera de la carpeta desde la que se levantan, así que el servidor debe levantarse desde la **raíz del repo**, no desde `apps/sic_av/`:
 
 ```bash
 cd <raíz-del-repositorio>          # donde vive Panel_IEC_Auditoria_2026.html
 python3 -m http.server 8123
 ```
 
-Luego abrir: `http://localhost:8123/apps/sic_av/index.html` (o directamente `.../apps/sic_av/sic_datos_reales.html` si ya hay una sesión activa en `sessionStorage`). Con el servidor levantado así, todas las demás páginas del prototipo (`sic_chile.html`, `sic_peru.html`, `sic_politica.html`) siguen funcionando igual, solo cambia la URL base.
+Luego abrir: `http://localhost:8123/apps/sic_av/index.html`. Con el servidor levantado así, todas las páginas del prototipo (`sic_chile.html`, `sic_peru.html`, `sic_politica.html`, `sic_datos_reales.html`) funcionan igual, solo cambia la URL base.
 
-`sic_datos_reales.html` es de **solo lectura**: no escribe en `Panel_IEC_Auditoria_2026.html` ni en `avboard_data.js`, no modifica `sic_core.js`, y no toca `sic_chile.html` / `sic_peru.html` / `sic_politica.html`. Requiere la misma sesión de `sic_auth.js` que el resto del prototipo (clave por país) — no se agregó ni se modificó ningún mecanismo de autenticación.
+`js/sic_data_adapter.js` es de **solo lectura**: no escribe en `Panel_IEC_Auditoria_2026.html` ni en `avboard_data.js`, no modifica `sic_core.js`. Requiere la misma sesión de `sic_auth.js` que el resto del prototipo (clave por país) — no se agregó ni se modificó ningún mecanismo de autenticación.
+
+`sic_datos_reales.html` sigue disponible como **vista de auditoría técnica** (conciliación detallada, tabla completa de advertencias) — accesible desde el botón "Datos Reales (auditoría técnica)" en `sic_chile.html`/`sic_peru.html`; ya no es la única forma de ver datos reales, porque el dashboard principal los muestra directamente.
 
 ## 4. Claves de acceso (prototipo)
 
@@ -109,6 +105,8 @@ Cada clave da acceso **únicamente** a su país — una clave válida de un paí
 - `precios_piso_<pais>_demo.json` — precio piso por producto y presentación.
 
 Moneda: CLP para Chile, USD para Perú.
+
+**Nota v1.6:** `sic_chile.html`/`sic_peru.html` siguen llamando a `SIC.cargarPais()` (que internamente sigue haciendo fetch de los 7 JSON de esta sección, sin modificar `sic_core.js`), pero **solo usan el campo `ctx.params`** (la política: tramos, cartera, ciclos) de esa llamada. Los campos `ventas`/`cobranzas`/`presupuestos`/`iec`/`precios_piso` que trae esa misma llamada son descartados por el dashboard principal — los datos de venta/presupuesto/IEC que sí se muestran vienen de `js/sic_data_adapter.js` (fuentes reales del Board). `sic_politica.html` sigue usando estos JSON de forma normal, sin cambios.
 
 ## 6. Modelo de cálculo aplicado
 
@@ -143,9 +141,9 @@ Detalle completo de la política base y los 18 casos especiales: `docs/sic_av/SI
 
 ## 7. Limitaciones del prototipo
 
-- Datos 100% sintéticos — ninguna cifra representa vendedores, clientes o ventas reales.
-- No está conectado a AV LATAM Board, a `update_avboard.py`, a `ppto_libro_base.py` ni a ningún archivo del Inbox.
-- No calcula sobre datos en tiempo real; los 14 JSON son estáticos.
+- **Desde v1.6, venta facturada, presupuesto e IEC son datos REALES** (leídos en vivo de `Panel_IEC_Auditoria_2026.html` y `avboard_data.js` vía `js/sic_data_adapter.js`) — ya no son sintéticos en `sic_chile.html`/`sic_peru.html`. La **comisión (potencial y liberada) sigue sin ser representativa**, porque no existe fuente real de cobranza por factura (ver `COLLECTION_SOURCE_AUDIT.md`) — se muestra como "Pendiente de cálculo", nunca como cifra definitiva ni como "$0".
+- Conectado de solo lectura a `Panel_IEC_Auditoria_2026.html` y `avboard_data.js` del AV LATAM Board (no a `update_avboard.py`, `ppto_libro_base.py` ni al Inbox directamente — esos son fuentes upstream de esos dos archivos).
+- El presupuesto/política de tramos (cartera, IEC, diferido) sigue viniendo de los 14 JSON de `data/` (`SIC.cargarPais` → `ctx.params`), que son estáticos.
 - El PDF se genera con `window.print()` (patrón ya usado en `apps/cotizador/cotizador_core.js`) — depende de que el usuario elija "Guardar como PDF" en el diálogo de impresión del navegador; no genera un archivo `.pdf` directamente.
 - No implementa roles ni permisos distintos entre RTC, KAM y Jefe de Ventas más allá de mostrarlos como etiqueta — la arquitectura de roles queda pendiente de decisión de Gerencia (ver `docs/sic_av/SIC_AV_DECISIONES_GERENCIA.md`).
 - No incluye margen, costo de fábrica ni rentabilidad real — deliberadamente, para no exponer información confidencial al vendedor.

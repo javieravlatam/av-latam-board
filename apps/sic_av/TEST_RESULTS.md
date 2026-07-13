@@ -1,7 +1,9 @@
-# SIC-AV — Resultados de Pruebas (Fase 4, Prototipo Funcional · v1.5)
+# SIC-AV — Resultados de Pruebas (Prototipo Funcional · v1.6)
 
-Fecha de ejecución: 2026-07-13 (actualizado tras el CHANGE REQUEST SIC-AV v1.5 — integración con datos reales existentes del AV LATAM Board)
+Fecha de ejecución: 2026-07-13 (actualizado tras la CORRECCIÓN PRIORITARIA v1.6 — datos reales en el flujo principal)
 Entorno: Node.js v22 + jsdom 29 (servidor HTTP local en `localhost:8123`, requerido por CORS al usar `fetch()` sobre archivos `file://`).
+
+**v1.6 (2026-07-13) — Datos reales en el flujo principal (`sic_chile.html`/`sic_peru.html`):** el acceso publicado (Portal → SIC AV → País) mostraba datos demostrativos incluso después de v1.5, porque `sic_chile.html`/`sic_peru.html` seguían llamando solo a `SIC.cargarPais()` (datos demo) — únicamente la vista secundaria `sic_datos_reales.html` usaba `js/sic_data_adapter.js`. Se corrigió: ambos dashboards ahora combinan `SIC.cargarPais().then(ctx => ctx.params)` (política real) con `SICAdapter.cargarFuentesReales()` + `SICAdapter.construirCicloReal()` (mismo patrón ya probado en `sic_datos_reales.html`), sin duplicar lógica ni modificar `sic_core.js`. Se reorganizaron en Bloque 1 (datos reales validados: venta facturada, presupuesto, cumplimiento aproximado, IEC, precio piso, # facturas, conciliación con la fuente, fecha de actualización) y Bloque 2 (estado del cálculo de comisiones, con los textos exigidos: presupuesto/IEC faltante → "Pendiente de carga", cobranza real → "Pendiente de integración", comisión definitiva → "Pendiente de cálculo" — nunca "$0" como resultado). Las secciones que dependían de cobranza (Comisión diferida trimestral, Qué puedo hacer para aumentar mi comisión) se reemplazaron por avisos de estado pendiente; el botón de PDF ya no genera un informe con comisión fabricada. `tests/run_ui_tests.js` se redujo de 20 a 9 pruebas (se retiraron las aserciones sobre contenido demo que dejó de existir a propósito — tarjetas de comisión, filtro de estado, histórico de 6 ciclos fijos, PDF vía `SICPDF._construirHtml` con datos sintéticos — y se conservaron las de autenticación/aislamiento/página de política, que no cambiaron). Se agregó `tests/run_dashboard_real_test.js` (24 pruebas nuevas) para cubrir el contenido real del flujo principal. Total del módulo: 108→**121** pruebas.
 
 **v1.5 Fase 4 (2026-07-13):** auditoría profunda y definitiva de cobranzas en todo el repositorio (no solo `apps/sic_av/`) — ver `COLLECTION_SOURCE_AUDIT.md`. Hallazgo nuevo: el CxC de Perú en `avboard_data.js` está **congelado/hardcodeado** en `scripts/update_avboard.py` (`extract_peru_cxc_static()`, corte fijo `10/05/2026`), no se refresca desde `inbox/`. Un experimento de diffing entre cortes sucesivos de CxC Chile (ya presentes en `inbox/`) muestra que se puede aproximar una ventana de resolución de 5-14 días para un subconjunto de facturas, pero no es automático, no cubre Perú, y no equivale a una fecha de cobro exacta — Escenario **C** (saldo CxC sin movimientos de cobro confiables). `sic_datos_reales.html` se reorganizó en dos bloques explícitos: Bloque 1 (datos reales validados: venta facturada, presupuesto, cumplimiento aproximado, IEC, precio piso, # facturas/vendedores) y Bloque 2 (estado del cálculo de comisiones — mensaje honesto de "pendiente de integración de cobranza real", sin mostrar comisión "$0" como resultado comercial). La tabla de vendedores ya no muestra montos de comisión, solo el estado "Pendiente de cobranza". `tests/run_datos_reales_ui_test.js` pasó de 9 a 13 pruebas (se removió la prueba que esperaba tarjetas `c-potencial`/`c-liberada` con "$0" y se agregaron 5 pruebas que verifican los dos bloques, el mensaje de estado, y que la tabla de vendedores no exhibe montos). El total pasó de 104 a **108** pruebas automatizadas.
 
@@ -15,14 +17,15 @@ Entorno: Node.js v22 + jsdom 29 (servidor HTTP local en `localhost:8123`, requer
 
 **v1.1 (2026-07-12):** el Factor de Cumplimiento de Presupuesto pasó del Modelo C continuo/interpolado a tramos fijos (cumplimiento &lt;90%→0%, 90-99,99%→80%, ≥100%→100%, nunca supera 100%), y la tabla de edad de cartera de Chile se unificó en una sola tabla (sin distinción Distribuidor/Cliente Final).
 
-Cuatro suites automatizadas, ejecutables en cualquier momento:
+Cinco suites automatizadas, ejecutables en cualquier momento:
 
 - `tests/run_engine_tests.js` — motor de cálculo (`sic_core.js`) y generador de PDF (`sic_pdf.js`, incluyendo el PDF de política). No requiere servidor HTTP: usa un *shim* de `fetch()` que lee los JSON locales con `fs.readFileSync`.
-- `tests/run_ui_tests.js` — autenticación, aislamiento por país, renderizado del dashboard demo y de la página "Política y Factores" en un DOM real (jsdom). Requiere un servidor HTTP local sirviendo `apps/sic_av/` en el puerto 8123 (ver README, sección "Cómo abrir el prototipo").
-- `tests/run_adapter_tests.js` — **(v1.5)** lectura y transformación de las fuentes reales del Board (`Panel_IEC_Auditoria_2026.html`, `avboard_data.js`), construcción de un ciclo real 26-25, y conciliación independiente contra el motor SIC sin modificar. No requiere servidor HTTP: usa `fs.readFileSync` directo sobre los archivos reales del repo.
-- `tests/run_datos_reales_ui_test.js` — **(v1.5)** renderiza `sic_datos_reales.html` en un DOM real (jsdom), sirviendo los archivos reales por HTTP. Requiere que el servidor HTTP se levante desde la **raíz del repositorio** (no desde `apps/sic_av/`) — ver README, sección "3b".
+- `tests/run_ui_tests.js` — autenticación, aislamiento por país y página "Política y Factores" en un DOM real (jsdom). **Desde v1.6 requiere el servidor HTTP levantado desde la raíz del repositorio** (mismo requisito que las dos suites siguientes), no desde `apps/sic_av/`, porque `sic_chile.html`/`sic_peru.html` ahora también hacen fetch de archivos del Board.
+- `tests/run_adapter_tests.js` — lectura y transformación de las fuentes reales del Board (`Panel_IEC_Auditoria_2026.html`, `avboard_data.js`), construcción de un ciclo real 26-25, y conciliación independiente contra el motor SIC sin modificar. No requiere servidor HTTP: usa `fs.readFileSync` directo sobre los archivos reales del repo.
+- `tests/run_datos_reales_ui_test.js` — renderiza `sic_datos_reales.html` (vista de auditoría técnica) en un DOM real (jsdom), sirviendo los archivos reales por HTTP.
+- `tests/run_dashboard_real_test.js` — **(v1.6)** renderiza `sic_chile.html`/`sic_peru.html` (flujo principal) en un DOM real, confirmando datos reales, aislamiento por país, ausencia de datos demo, textos de estado pendiente exigidos y cero errores de consola.
 
-Cómo ejecutar las cuatro suites:
+Cómo ejecutar las cinco suites:
 
 ```
 cd apps/sic_av
@@ -31,14 +34,13 @@ node tests/run_adapter_tests.js         # sin dependencias, corre de inmediato (
 
 npm install --no-save jsdom             # solo necesario para las suites de UI (dependencia de desarrollo,
                                          # no la usa el prototipo en si -- el prototipo no depende de nada)
-python3 -m http.server 8123 &           # desde apps/sic_av/, para run_ui_tests.js
-node tests/run_ui_tests.js
-kill %1
 
-cd ../..                                # a la raiz del repo, para run_datos_reales_ui_test.js
-python3 -m http.server 8123 &
+cd ../..                                # a la raiz del repo -- desde v1.6, TODAS las suites de UI
+python3 -m http.server 8123 &           # requieren el servidor levantado aqui, no en apps/sic_av/
 cd apps/sic_av
+node tests/run_ui_tests.js
 node tests/run_datos_reales_ui_test.js
+node tests/run_dashboard_real_test.js
 kill %1
 ```
 
@@ -46,7 +48,7 @@ kill %1
 
 ## Resultado global
 
-**108 / 108 pruebas automatizadas en OK.** 0 fallos. (49 de motor/PDF + 20 de UI demo + 26 de adaptador de datos reales + 13 de UI de datos reales.)
+**121 / 121 pruebas automatizadas en OK.** 0 fallos. (49 de motor/PDF + 9 de UI auth/política + 26 de adaptador de datos reales + 13 de UI de datos reales (auditoría técnica) + 24 de UI de dashboard real (flujo principal).)
 
 ## Detalle — Suite de motor y PDF, pruebas nuevas de v1.4 (5 pruebas + 2 reescritas)
 
@@ -169,4 +171,4 @@ La prueba `sin_doble_penalizacion_precio_piso` (motor) y `sin_control_precio_pis
 
 ## Validación manual recomendada antes de compartir con Gerencia
 
-Aunque las 69 pruebas automatizadas cubren la lógica de negocio y el flujo de datos, se recomienda una revisión visual manual breve (abrir `index.html` en un navegador con el servidor local activo, ingresar ambas claves, revisar el dashboard, la página "Política y Factores" y ambos PDF generados con `window.print() → Guardar como PDF`) antes de cualquier presentación, ya que las pruebas automatizadas no verifican maquetación visual ni el diálogo nativo de impresión del navegador.
+Aunque las 121 pruebas automatizadas cubren la lógica de negocio y el flujo de datos, se recomienda una revisión visual manual breve (abrir `index.html` en un navegador con el servidor local activo, ingresar ambas claves, revisar el dashboard, la página "Política y Factores" y ambos PDF generados con `window.print() → Guardar como PDF`) antes de cualquier presentación, ya que las pruebas automatizadas no verifican maquetación visual ni el diálogo nativo de impresión del navegador.

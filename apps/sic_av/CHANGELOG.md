@@ -2,6 +2,14 @@
 
 Historial de cambios del módulo SIC-AV (`apps/sic_av/`), versión por versión. Todo el trabajo vive dentro de esta carpeta salvo cuando se indica explícitamente lo contrario; ningún cambio de este historial modificó `sic_core.js` de forma retroactiva a menos que se declare, ni tocó autenticación, ni se hizo commit/push.
 
+## v1.6 (2026-07-13) — Corrección: datos reales en el flujo principal
+
+- **Causa:** aunque v1.5 conectó `js/sic_data_adapter.js` a datos reales del Board, ese adaptador solo se usaba en `sic_datos_reales.html` (vista secundaria). `sic_chile.html`/`sic_peru.html` — el flujo al que se llega desde el Portal → SIC AV → País, ya publicado — seguían llamando únicamente a `SIC.cargarPais()`, que retorna datos 100% demostrativos. Resultado: el acceso publicado mostraba datos sintéticos aunque los datos reales ya existían en el sistema.
+- **Corrección:** `sic_chile.html`/`sic_peru.html` ahora combinan `SIC.cargarPais().then(ctx => ctx.params)` (política real, sin tocar `sic_core.js`) con `SICAdapter.cargarFuentesReales()` + `SICAdapter.construirCicloReal()` (mismo patrón ya probado en `sic_datos_reales.html`) — sin duplicar lógica, sin crear una base paralela, sin modificar `sic_core.js` ni `sic_auth.js`.
+- **UI:** reorganizados en Bloque 1 (datos reales validados: venta facturada, presupuesto, cumplimiento aproximado, IEC, precio piso, # facturas, conciliación con la fuente, fecha de actualización) y Bloque 2 (estado del cálculo de comisiones — mensaje fijo de pendiente, nunca "$0"). Estados de dato faltante: presupuesto/IEC → "Pendiente de carga"; cobranza real → "Pendiente de integración"; comisión definitiva → "Pendiente de cálculo". Secciones dependientes de cobranza (Comisión diferida trimestral, Qué puedo hacer para aumentar mi comisión) reemplazadas por avisos de estado; el botón de PDF ya no genera un informe con comisión fabricada. Se agregó acceso directo a `sic_datos_reales.html` ("Datos Reales · auditoría técnica") desde ambos dashboards.
+- **Pruebas:** `tests/run_ui_tests.js` se redujo de 20 a 9 pruebas (se retiraron las aserciones sobre contenido demo que dejó de existir a propósito, se mantuvieron autenticación/aislamiento/política). Se agregó `tests/run_dashboard_real_test.js` (24 pruebas). Total del módulo: 108→**121** pruebas, todas OK.
+- **No se modificó:** `sic_core.js`, `sic_auth.js`, reglas SIC, ni ningún archivo fuente del Board.
+
 ## v1.5 — Fase 4 (2026-07-13) — Auditoría profunda de cobranzas y cierre para presentación
 
 - **Nuevo:** `COLLECTION_SOURCE_AUDIT.md` — auditoría exhaustiva de cobranzas en todo el repositorio (scripts, `inbox/`, `versions/`, reportes ya construidos), no solo `apps/sic_av/`.
