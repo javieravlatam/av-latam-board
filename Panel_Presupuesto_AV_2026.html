@@ -1153,6 +1153,7 @@ new Chart(document.getElementById('cGrupo'),{
       if(rmb.veverka&&CH_MES_DATA.veverka) CH_MES_DATA.veverka.real=rmb.veverka.slice(0,12).map(toKr);
     }
     // ── Actualizar PE_MES_DATA desde AVBOARD ──────────────────────────────────
+    PE_MES_DATA.equipo.ppto=PE_PPTO.slice();   // sync ppto a libro base actual
     PE_MES_DATA.equipo.real=PE_REAL.slice();
     if(pv.rtc_mensual_real){
       var rmp=pv.rtc_mensual_real;
