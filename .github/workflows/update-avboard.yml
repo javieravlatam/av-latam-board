@@ -1,12 +1,12 @@
 name: Actualizar AVBOARD
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'inbox/**'
-      - 'scripts/update_avboard.py'
-      - 'scripts/ppto_libro_base.py'
+  workflow_dispatch:
+    inputs:
+      motivo:
+        description: 'Motivo de ejecución manual'
+        required: false
+        default: 'Actualización manual de datos AVBOARD'
 
 jobs:
   update-avboard:
