@@ -11,7 +11,7 @@
  * Cortes:
  *   Chile ventas → 30/06/2026
  *   Chile CxC    → 21/06/2026 (2 entidades)
- *   Perú ventas  → 16/07/2026
+ *   Perú ventas  → 20/07/2026
  *   Perú CxC     → 10/05/2026
  *
  * Actualizado: 2026-07-21
@@ -26,17 +26,17 @@ var AVBOARD = (function() {
     cortes: {
       chile_ventas: '30/06/2026',
       chile_cxc:    '21/06/2026',
-      peru_ventas:  '16/07/2026',
+      peru_ventas:  '20/07/2026',
       peru_cxc:     '10/05/2026'
     },
     meses: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
   };
 
   var grupo = {
-    ytd_usd:      843226,
-    ytd_clp:      801064282,
+    ytd_usd:      845491,
+    ytd_clp:      803216032,
     chile_ytd_usd: 425990,
-    peru_ytd_usd:  417236,
+    peru_ytd_usd:  419501,
     rtc_activos:  12,
     mn_chile:     0.179,
     mn_peru:      null
@@ -371,21 +371,21 @@ var AVBOARD = (function() {
   };
 
   var peru_ventas = {
-    ytd_5m:       417236,
+    ytd_5m:       419501,
     ytd_4m:       259813,
-    mayo_parcial: 27179,
+    mayo_parcial: 29444,
     ppto_anual:   1210600.0,
     ppto_4m:      287777.3,
     ppto_5m:      350134.3,
     cumplimiento_4m: 0.9028,
-    cumplimiento_5m: 0.7908,
-    mensual_real: [70232, 38180, 87967, 63434, 84159, 46084, 27179, 0, 0, 0, 0, 0],
+    cumplimiento_5m: 0.7951,
+    mensual_real: [70232, 38180, 87967, 63434, 84159, 46084, 29444, 0, 0, 0, 0, 0],
     mensual_ppto: [51668.700000000004, 60148.09999999999, 101803.8, 74156.7, 62357.0, 99465.7, 78000.0, 159000.0, 143000.0, 173000.0, 118000.0, 90000.0],
     por_vendedor: {
       aguirre: {
         nombre: "Lizbeth Aguirre",
-        ytd:    119321,
-        mayo:   2473
+        ytd:    121346,
+        mayo:   4498
       },
       atalaya: {
         nombre: "Omar Atalaya",
@@ -394,8 +394,8 @@ var AVBOARD = (function() {
       },
       diaz: {
         nombre: "Susan Diaz",
-        ytd:    17220,
-        mayo:   0
+        ytd:    17460,
+        mayo:   240
       },
       gonzales: {
         nombre: "Antonio Gonzales",
@@ -421,9 +421,9 @@ var AVBOARD = (function() {
       valladares: 142372
     },
     rtc_mensual_real: {
-      aguirre: [0, 13884, 28681, 13447, 49431, 11404, 2473, 0, 0, 0, 0, 0],
+      aguirre: [0, 13884, 28681, 13447, 49431, 11404, 4498, 0, 0, 0, 0, 0],
       atalaya: [29881, 8108, 20000, 6600, 8400, 12600, 0, 0, 0, 0, 0, 0],
-      diaz: [0, 0, 0, 6300, 2600, 8320, 0, 0, 0, 0, 0, 0],
+      diaz: [0, 0, 0, 6300, 2600, 8320, 240, 0, 0, 0, 0, 0],
       gonzales: [600, 0, 96, 0, 0, 6720, 8146, 0, 0, 0, 0, 0],
       infante: [39751, 16188, 38190, 36887, 22328, 0, 5840, 0, 0, 0, 0, 0],
       valladares: [0, 0, 1000, 200, 1400, 7040, 10720, 0, 0, 0, 0, 0]
@@ -680,7 +680,7 @@ var AVBOARD = (function() {
     { pais:"CL", producto:"RAIZ CONC.", formato:"200 ML", ventas:0, cantidad:8.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"AV PLUS CALCIO", formato:"200 L", ventas:720000, cantidad:200.0, precio_uni_prom:3600.0, costo_unidad:995.62, costo_total:199124, margen_total:520876, margen_pct:0.7234, piso:2500, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV PLUS CALCIO", formato:"1000 L", ventas:3250000, cantidad:1000.0, precio_uni_prom:3250.0, costo_unidad:932.49, costo_total:932490, margen_total:2317510, margen_pct:0.7131, piso:2000, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"PE", producto:"AV SILFORTE", formato:"200 L (tier)", ventas:45590.0, cantidad:3778.0, precio_uni_prom:12.0672, costo_unidad:2.15, costo_total:8122.7, margen_total:37467.3, margen_pct:0.8218, piso:12.0, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"PE", producto:"AV SILFORTE", formato:"200 L (tier)", ventas:47615.0, cantidad:3928.0, precio_uni_prom:12.1219, costo_unidad:2.15, costo_total:8445.2, margen_total:39169.8, margen_pct:0.8226, piso:12.0, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"PE", producto:"AV ALGAP 30", formato:"20 L (tier)", ventas:960.0, cantidad:100.0, precio_uni_prom:9.6, costo_unidad:2.0, costo_total:200.0, margen_total:760.0, margen_pct:0.7917, piso:10.0, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"PE", producto:"AV PLUS MICRO MIX", formato:"1000 L (tier)", ventas:3149.0, cantidad:470.0, precio_uni_prom:6.7, costo_unidad:2.2, costo_total:1034.0, margen_total:2115.0, margen_pct:0.6716, piso:4.5, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"PE", producto:"REGALIA MAX", formato:"?", ventas:51734.0, cantidad:1554.0, precio_uni_prom:33.2909, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
@@ -699,7 +699,7 @@ var AVBOARD = (function() {
     { pais:"PE", producto:"AV PLUS CALCIO", formato:"200 L (tier)", ventas:1126.4, cantidad:256.0, precio_uni_prom:4.4, costo_unidad:1.05, costo_total:268.8, margen_total:857.6, margen_pct:0.7614, piso:3.8, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"PE", producto:"AV ALGAP 30", formato:"200 L (tier)", ventas:6632.0, cantidad:628.0, precio_uni_prom:10.5605, costo_unidad:1.7, costo_total:1067.6, margen_total:5564.4, margen_pct:0.839, piso:8.0, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"PE", producto:"REGALIA MAXX", formato:"?", ventas:73731.64, cantidad:2135.0, precio_uni_prom:34.5347, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
-    { pais:"PE", producto:"AV SILFORTE", formato:"20 L (tier)", ventas:1936.0, cantidad:186.0, precio_uni_prom:10.4086, costo_unidad:2.4, costo_total:446.4, margen_total:1489.6, margen_pct:0.7694, piso:13.0, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"PE", producto:"AV SILFORTE", formato:"20 L (tier)", ventas:2176.0, cantidad:206.0, precio_uni_prom:10.5631, costo_unidad:2.4, costo_total:494.4, margen_total:1681.6, margen_pct:0.7728, piso:13.0, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"PE", producto:"AV HUMIC ROOT", formato:"200 L (tier)", ventas:280.0, cantidad:80.0, precio_uni_prom:3.5, costo_unidad:1.25, costo_total:100.0, margen_total:180.0, margen_pct:0.6429, piso:3.0, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"PE", producto:"AV PLUS ZINC", formato:"200 L (tier)", ventas:3150.0, cantidad:420.0, precio_uni_prom:7.5, costo_unidad:1.85, costo_total:777.0, margen_total:2373.0, margen_pct:0.7533, piso:6.8, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"PE", producto:"AV MOVE", formato:"1000 L (tier)", ventas:5477.5, cantidad:626.0, precio_uni_prom:8.75, costo_unidad:2.5, costo_total:1565.0, margen_total:3912.5, margen_pct:0.7143, piso:6.0, clasif:"🟢 SOBRE PISO", estado:"OK" },
