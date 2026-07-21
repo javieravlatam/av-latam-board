@@ -71,8 +71,8 @@ PPTO_ANUAL_PE_LEGACY: float = sum(PPTO_MENSUAL_PE_LEGACY)   # 1,137,034
 
 EXPECTED_CL_ANUAL:  float = 792_640_368.0
 EXPECTED_CL_PPTO5M: float = 246_979_768.0
-EXPECTED_PE_ANUAL:  float = 1_380_014.8
-EXPECTED_PE_PPTO5M: float = 358_399.2
+EXPECTED_PE_ANUAL:  float = 1_210_600.0
+EXPECTED_PE_PPTO5M: float = 350_134.3
 
 # ─────────────────────────────────────────────────────────────
 # CONFIGURACIÓN
