@@ -17,6 +17,9 @@
 <script src="avboard_data.js?v=20260721"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
+// ── CONSTANTES DE COLOR (definidas aquí para que CH_RTC_DATA / PE_RTC_DATA las encuentren) ──
+const G='#7AB648',G2='#5a8a35',A='#F5A623',R='#E74C3C',RD='#C0392B',B='#4A9EDB';
+const GD='rgba(122,182,72,0.1)',BD='rgba(74,158,219,0.1)';
 
 // =====================================================
 // DATOS POR VENDEDOR — CHILE & PERÚ
@@ -94,6 +97,7 @@ function colorBar(realArr, pptoArr) {
 
 // ── ACTUALIZAR Chile RTC ──
 function setChileRTC(key, btn) {
+  if (!chRTCChart) return;
   document.querySelectorAll('#selectorChileRTC .sel-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   const d = CH_RTC_DATA[key];
@@ -106,6 +110,7 @@ function setChileRTC(key, btn) {
 
 // ── ACTUALIZAR Chile Curva ──
 function setChileCurva(key, btn) {
+  if (!chCurvaChart) return;
   document.querySelectorAll('#selectorChileCurva .sel-btn').forEach(b => b.classList.remove('active'));
   if(btn) btn.classList.add('active');
   const d = CH_MES_DATA[key];
@@ -120,6 +125,7 @@ function setChileCurva(key, btn) {
 
 // ── ACTUALIZAR Perú RTC ──
 function setPeruRTC(key, btn) {
+  if (!peRTCChart) return;
   document.querySelectorAll('#selectorPeruRTC .sel-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   const d = PE_RTC_DATA[key];
@@ -132,6 +138,7 @@ function setPeruRTC(key, btn) {
 
 // ── ACTUALIZAR Perú Curva ──
 function setPeruCurva(key, btn) {
+  if (!peCurvaChart) return;
   document.querySelectorAll('#selectorPeruCurva .sel-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   const d = PE_MES_DATA[key];
@@ -810,8 +817,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 Chart.defaults.color = '#8fa892';
 Chart.defaults.font.family = "'DM Mono', monospace";
 Chart.defaults.font.size = 10;
-const G='#7AB648',G2='#5a8a35',A='#F5A623',R='#E74C3C',RD='#C0392B',B='#4A9EDB';
-const GD='rgba(122,182,72,0.1)',BD='rgba(74,158,219,0.1)';
+// G, G2, A, R, RD, B, GD, BD — definidos en Block D (antes de CH_RTC_DATA)
 const MESES=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 
 // DATA OFICIAL — siempre desde avboard_data.js (fuente única)
@@ -976,7 +982,7 @@ peRTCChart = new Chart(document.getElementById('cPeruRTC'),{
     labels:['O. Infante','L. Aguirre','O. Atalaya','A. Gonzales','P. Valladares'],
     datasets:[
       {label:'Ppto Anual',data:[485058,223930,248424,37250,142372],backgroundColor:'rgba(74,158,219,0.08)',borderColor:'rgba(74,158,219,0.18)',borderWidth:1,borderRadius:3},
-      {label:'Real YTD 5m',data:(typeof AVBOARD!=='undefined'?[AVBOARD.peru.ventas.por_vendedor.infante.ytd,(AVBOARD.peru.ventas.por_vendedor.aguirre.ytd||0)+(AVBOARD.peru.ventas.por_vendedor.navarro.ytd||0),AVBOARD.peru.ventas.por_vendedor.atalaya.ytd,AVBOARD.peru.ventas.por_vendedor.gonzales.ytd,AVBOARD.peru.ventas.por_vendedor.valladares.ytd]:[130104,128047,64589,696,1800]),backgroundColor:[A,G,G,R,R],borderRadius:3}
+      {label:'Real YTD 5m',data:(typeof AVBOARD!=='undefined'?[AVBOARD.peru.ventas.por_vendedor.infante.ytd,(AVBOARD.peru.ventas.por_vendedor.aguirre.ytd||0)+((AVBOARD.peru.ventas.por_vendedor.navarro&&AVBOARD.peru.ventas.por_vendedor.navarro.ytd)||0),AVBOARD.peru.ventas.por_vendedor.atalaya.ytd,AVBOARD.peru.ventas.por_vendedor.gonzales.ytd,AVBOARD.peru.ventas.por_vendedor.valladares.ytd]:[130104,128047,64589,696,1800]),backgroundColor:[A,G,G,R,R],borderRadius:3}
     ]
   },
   options:{responsive:true,maintainAspectRatio:false,
