@@ -418,7 +418,8 @@ var AVBOARD = (function() {
       aguirre: 223930,
       atalaya: 248424,
       gonzales: 37250,
-      valladares: 142372
+      valladares: 142372,
+      martha: 65000
     },
     rtc_mensual_real: {
       aguirre: [0, 13884, 28681, 13447, 49431, 11404, 4498, 0, 0, 0, 0, 0],

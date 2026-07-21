@@ -118,6 +118,7 @@ PPTO_RTC_ANUAL_PE = {
     'atalaya':    248424,
     'gonzales':    37250,
     'valladares': 142372,
+    'martha':      65000,   # Martha Hidalgo - KAM (incorporada ago 2026)
 }
 
 # NOTA: la antigua tabla estática RENTABILIDAD (alertas hardcodeadas) fue
@@ -317,15 +318,17 @@ def extract_peru_ventas(path):
 
     # Find rows with vendor data (before "Total general")
     vend_map_pe = {
-        'OSCAR INFANTE':      'infante',
-        'NICOLL NAVARRO':     'navarro',    # → se fusiona con aguirre en _apply_peru_vendor_gg_decisions()
-        'OMAR ATALAYA':       'atalaya',
-        'ANTONIO GONZALES':   'gonzales',
-        'LISBETH AGUIRRE':    'aguirre',
-        'LIZBETH AGUIRRE':    'aguirre',    # variante ortográfica — GG decision 2026-07-21
-        'PATRICIA VALLADARES':'valladares',
-        'SUSAN DIAZ':         'diaz',
-        'SUSAN DÍAZ':         'diaz',
+        'OSCAR INFANTE':         'infante',
+        'NICOLL NAVARRO':        'navarro',    # → se fusiona con aguirre en _apply_peru_vendor_gg_decisions()
+        'OMAR ATALAYA':          'atalaya',
+        'ANTONIO GONZALES':      'gonzales',
+        'LISBETH AGUIRRE':       'aguirre',
+        'LIZBETH AGUIRRE':       'aguirre',    # variante ortográfica — GG decision 2026-07-21
+        'PATRICIA VALLADARES':   'valladares',
+        'SUSAN DIAZ':            'diaz',
+        'SUSAN DÍAZ':            'diaz',
+        'MARTHA HIDALGO':        'martha',     # Martha Hidalgo - KAM (incorporada ago 2026)
+        'MARTHA HIDALGO - KAM':  'martha',     # variante con cargo
     }
 
     # Detectar dinámicamente TODAS las columnas de mes presentes en el archivo
