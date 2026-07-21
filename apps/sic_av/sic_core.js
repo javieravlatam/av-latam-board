@@ -26,13 +26,41 @@
  *     (sobre piso / bajo piso / no evaluable, ver SIC.clasificacionPiso). El
  *     IEC es el UNICO mecanismo por el cual el precio piso impacta la
  *     comision.
+ *   - CHANGE REQUEST SIC-AV v1.6 (2026-07-13): ARQUITECTURA TEMPORAL
+ *     DEFINITIVA -- se elimina el concepto "Presupuesto del ciclo 26-25".
+ *     El SIC opera con DOS periodos distintos, coordinados pero no
+ *     mezclados (ver TEMPORAL_MODEL_AUDIT_v1.6.md y TEMPORAL_MODEL_v1.6.md):
+ *       (A) PERIODO DE COBRANZA (26 del mes anterior -> 25 del mes actual,
+ *           definicion sin cambios en `ctx.params.ciclos`): determina cobros
+ *           efectivamente recibidos, facturas cobradas, edad de cartera,
+ *           tasa base de comision y la liquidacion del periodo.
+ *       (B) MES DE DESEMPEÑO (el ultimo mes calendario completamente
+ *           cerrado -- por definicion, el mes calendario anterior al mes de
+ *           cierre del periodo de cobranza): determina presupuesto, venta
+ *           neta del mes, cumplimiento de presupuesto, Factor de
+ *           Presupuesto, IEC, Factor IEC y Bono por Excedente.
+ *     Formula oficial revisada:
+ *       Cobros efectivos del periodo 26-25 x Tasa segun edad de cartera
+ *         x Factor de Cumplimiento del mes calendario cerrado
+ *         x Factor IEC del mismo mes calendario cerrado
+ *       + Bono por Excedente del mes calendario cerrado
+ *       - Notas de Credito - Devoluciones - Ajustes aplicables
+ *       = Remuneracion Variable del periodo
+ *     El Bono por Excedente YA NO se pondera por Factor IEC (formula v1.6:
+ *     Bono = Excedente del mes x 2%, donde Excedente = venta neta del mes -
+ *     presupuesto del mismo mes; si el resultado es <= 0, Bono = 0). No se
+ *     prorratea presupuesto entre dos meses para formar un "presupuesto de
+ *     ciclo" -- el presupuesto y el IEC se leen o calculan directamente
+ *     sobre el mes calendario correspondiente.
+ *
  * Parametrizado desde data/parametros_<pais>.json -- ningun valor de la
  * formula esta hardcodeado aqui, todo se lee desde esa tabla configurable.
  *
- * Formula definitiva (CHANGE REQUEST SIC-AV v1.4):
- *   Comision Base por Factura = Venta Neta Cobrada x Tasa por Edad de Cartera
- *   Comision Ajustada = Comision Base x Factor Presupuesto x Factor IEC
- *   Comision Final del Ciclo = Suma(Comision Ajustada) + Bono Excedente + Bono Consistencia Trimestral
+ * Formula definitiva (CHANGE REQUEST SIC-AV v1.6):
+ *   Comision Base por Pago = Monto Cobrado (periodo 26-25) x Tasa por Edad de Cartera
+ *   Comision Ajustada = Comision Base x Factor Presupuesto (mes desempeño) x Factor IEC (mes desempeño)
+ *   Bono por Excedente = max(0, Venta Neta Mes - Presupuesto Mes) x 2%  [SIN Factor IEC, ver v1.6]
+ *   Comision Final del Periodo = Suma(Comision Ajustada) + Bono Excedente + Bono Consistencia Trimestral
  *                                - Notas de Credito - Devoluciones - Ajustes autorizados
  *
  * La edad de cartera NUNCA se cuenta dos veces: vive unicamente en la tasa
@@ -58,6 +86,49 @@
     // pagos de ejemplo de este ciclo ya hayan ocurrido. En una integracion
     // real esto seria new Date().
     return "2026-07-24";
+  };
+
+  // ---------------------------------------------------------------------
+  // A2. Aritmetica de meses (CHANGE REQUEST SIC-AV v1.6) -- todas las
+  // funciones trabajan sobre codigos "YYYY-MM", sin depender de Date() para
+  // evitar problemas de huso horario.
+  // ---------------------------------------------------------------------
+  SIC._shiftMes = function (mesCode, delta) {
+    var partes = mesCode.split("-");
+    var y = parseInt(partes[0], 10), m = parseInt(partes[1], 10);
+    var total = (y * 12 + (m - 1)) + delta;
+    var yy = Math.floor(total / 12);
+    var mm = (total % 12) + 1;
+    return yy + "-" + (mm < 10 ? "0" + mm : String(mm));
+  };
+
+  // Mes de desempeño de un periodo de cobranza 26-25: el mes calendario
+  // inmediatamente anterior al mes de cierre del periodo (CHANGE REQUEST
+  // v1.6, seccion 1.B -- ej. periodo con cierre 25 de junio -> mes de
+  // desempeño = mayo).
+  SIC.mesDesempenoDe = function (cicloCode) {
+    return SIC._shiftMes(cicloCode, -1);
+  };
+
+  // Inversa: dado un mes de desempeño, el periodo de cobranza que lo liquida
+  // (el que cierra el mes calendario siguiente).
+  SIC.periodoQueLiquidaMes = function (mesCode) {
+    return SIC._shiftMes(mesCode, 1);
+  };
+
+  SIC._diasEnMes = function (anio, mes1a12) {
+    return new Date(anio, mes1a12, 0).getDate();
+  };
+
+  // Rango completo (dia 1 al ultimo dia) del mes calendario correspondiente
+  // a un codigo "YYYY-MM" -- usado para presupuesto/venta neta/IEC del mes
+  // de desempeño, NUNCA para el periodo de cobranza (que sigue siendo 26-25).
+  SIC.rangoMesCalendario = function (mesCode) {
+    var partes = mesCode.split("-");
+    var y = parseInt(partes[0], 10), m = parseInt(partes[1], 10);
+    var ultimoDia = SIC._diasEnMes(y, m);
+    var mm = m < 10 ? "0" + m : String(m);
+    return { inicio: mesCode + "-01", cierre: mesCode + "-" + (ultimoDia < 10 ? "0" + ultimoDia : String(ultimoDia)) };
   };
 
   // ---------------------------------------------------------------------
@@ -205,15 +276,38 @@
       return facturadaEnCiclo || pagoEnCiclo || esCarteraViejaPendiente;
     });
   }
-  function presupuestoDe(ctx, vendedorId, ciclo) {
-    var p = ctx.presupuestos.filter(function (x) { return x.vendedor_id === vendedorId && x.ciclo === ciclo; })[0];
-    return p ? p.presupuesto : 0;
+  // CHANGE REQUEST SIC-AV v1.6: presupuesto e IEC ya NO se buscan por
+  // "ciclo" (periodo de cobranza 26-25) -- se buscan por "mes" (mes de
+  // desempeño, el ultimo mes calendario completamente cerrado). Los
+  // arreglos ctx.presupuestos/ctx.iec migraron su campo de "ciclo" a "mes"
+  // (ver data/presupuestos_*_demo.json, data/iec_*_demo.json y
+  // js/sic_data_adapter.js). Si no hay dato para ese mes, retorna null (no
+  // 0) para que el llamador pueda distinguir "sin presupuesto/IEC cargado"
+  // de "presupuesto/IEC es cero" -- regla v1.6 seccion 13: "Pendiente de
+  // carga", nunca inventar ni tratar como cero silenciosamente.
+  function presupuestoDelMes(ctx, vendedorId, mesCode) {
+    var p = ctx.presupuestos.filter(function (x) { return x.vendedor_id === vendedorId && x.mes === mesCode; })[0];
+    return p ? p.presupuesto : null;
   }
-  function iecDe(ctx, vendedorId, ciclo) {
-    var i = ctx.iec.filter(function (x) { return x.vendedor_id === vendedorId && x.ciclo === ciclo; })[0];
-    return i || { iec_pct: 0, ventas_sobre_piso_clp: 0, ventas_bajo_piso_clp: 0, ventas_no_evaluables_clp: 0 };
+  function iecDelMes(ctx, vendedorId, mesCode) {
+    var i = ctx.iec.filter(function (x) { return x.vendedor_id === vendedorId && x.mes === mesCode; })[0];
+    return i || null;
   }
-  SIC._helpers = { cobrosDeFactura: cobrosDeFactura, ventasDeVendedorCiclo: ventasDeVendedorCiclo, facturasRelevantesCiclo: facturasRelevantesCiclo, presupuestoDe: presupuestoDe, iecDe: iecDe };
+  // Venta neta del mes de desempeño: suma de venta_neta de TODAS las ventas
+  // del vendedor cuya fecha_factura cae dentro del mes calendario completo
+  // (dia 1 al ultimo dia), SIN IMPORTAR a que periodo de cobranza 26-25
+  // pertenezcan -- es un concepto de mes calendario puro, independiente del
+  // periodo de cobranza (CHANGE REQUEST v1.6, seccion 1.B y 2).
+  function ventaNetaDelMes(ctx, vendedorId, mesCode) {
+    var rango = SIC.rangoMesCalendario(mesCode);
+    return ctx.ventas.filter(function (v) {
+      return v.vendedor_id === vendedorId && v.fecha_factura >= rango.inicio && v.fecha_factura <= rango.cierre;
+    }).reduce(function (s, v) { return s + v.venta_neta; }, 0);
+  }
+  SIC._helpers = {
+    cobrosDeFactura: cobrosDeFactura, ventasDeVendedorCiclo: ventasDeVendedorCiclo, facturasRelevantesCiclo: facturasRelevantesCiclo,
+    presupuestoDelMes: presupuestoDelMes, iecDelMes: iecDelMes, ventaNetaDelMes: ventaNetaDelMes
+  };
 
   // ---------------------------------------------------------------------
   // Calculo por factura: retorna el detalle completo de una linea, ya
@@ -246,14 +340,26 @@
       return { fecha_pago: p.fecha_pago, monto: p.monto, dias_al_cobro: dias, tasa_cartera: tasa, comision_base: base, comision_ajustada: ajustada };
     });
 
-    // Proyeccion sobre el saldo no cobrado (comision potencial adicional),
-    // usando la tasa correspondiente a los dias transcurridos HASTA HOY --
-    // es una ESTIMACION, nunca un monto pagable.
-    var diasProyeccion = SIC.diasEntre(venta.fecha_factura, hoy);
-    if (diasProyeccion < 0) diasProyeccion = 0;
-    var tasaProyeccion = SIC.tasaCartera(ctx.params, venta.tipo_cliente, diasProyeccion);
-    var comisionBaseProyectada = saldoPendiente * (tasaProyeccion / 100);
-    var comisionAjustadaProyectada = comisionBaseProyectada * (factorPpto / 100) * (factorIec / 100);
+    // REVISION GG (2026-07-13), punto 2: la proyeccion sobre saldo no cobrado
+    // (comision potencial adicional, estimada con la tasa de los dias
+    // transcurridos hasta hoy) SOLO tiene sentido si existe una fuente real
+    // de cobranza conectada (ctx.cobranzas con al menos un registro real).
+    // Cuando no existe ninguna fuente de cobranza conectada (brecha
+    // documentada en DATA_SOURCE_AUDIT.md seccion 3.1 -- caso de los
+    // dashboards reales sic_chile.html/sic_peru.html, donde ctx.cobranzas
+    // siempre es []), esta proyeccion NO se calcula: no se inventa un monto
+    // de comision sobre una cobranza que nunca fue observada. La UI debe
+    // mostrar "Pendiente de calculo" (nunca "$0" ni una cifra estimada) en
+    // este caso -- ver SIC.calcularVendedorCiclo -> cobranza_fuente_disponible.
+    var cobranzaFuenteDisponible = ctx.cobranzas.length > 0;
+    var comisionBaseProyectada = 0, comisionAjustadaProyectada = 0;
+    if (cobranzaFuenteDisponible) {
+      var diasProyeccion = SIC.diasEntre(venta.fecha_factura, hoy);
+      if (diasProyeccion < 0) diasProyeccion = 0;
+      var tasaProyeccion = SIC.tasaCartera(ctx.params, venta.tipo_cliente, diasProyeccion);
+      comisionBaseProyectada = saldoPendiente * (tasaProyeccion / 100);
+      comisionAjustadaProyectada = comisionBaseProyectada * (factorPpto / 100) * (factorIec / 100);
+    }
 
     var comisionPotencialTotal = comisionAjustadaLiberada + comisionAjustadaProyectada;
 
@@ -306,26 +412,43 @@
   SIC.calcularVendedorCiclo = function (ctx, vendedorId, ciclo) {
     var hoy = SIC.hoyDemo();
     var cicloInfo = ctx.params.ciclos.filter(function (c) { return c.ciclo === ciclo; })[0];
-    var presupuesto = presupuestoDe(ctx, vendedorId, ciclo);
-    var iecInfo = iecDe(ctx, vendedorId, ciclo);
+
+    // CHANGE REQUEST SIC-AV v1.6: mes de desempeño derivado del periodo de
+    // cobranza (el mes calendario inmediatamente anterior al cierre del
+    // periodo). Presupuesto, venta neta, cumplimiento, Factor Presupuesto,
+    // IEC, Factor IEC y Bono por Excedente se calculan TODOS sobre este mes
+    // -- nunca sobre el periodo 26-25 ni prorrateados entre dos meses.
+    var mesDesempeno = SIC.mesDesempenoDe(ciclo);
+    var mesDesempenoInfo = SIC.rangoMesCalendario(mesDesempeno);
+
+    var presupuestoMes = presupuestoDelMes(ctx, vendedorId, mesDesempeno); // null si no hay dato cargado
+    var iecInfo = iecDelMes(ctx, vendedorId, mesDesempeno); // null si no hay dato cargado
+    var iecPct = iecInfo ? iecInfo.iec_pct : 0;
+    var ventaNetaMes = ventaNetaDelMes(ctx, vendedorId, mesDesempeno);
 
     var ventasCiclo = facturasRelevantesCiclo(ctx, vendedorId, ciclo);
 
-    // Primero: total venta cobrada del ciclo (para cumplimiento), sumando
-    // TODOS los pagos cuya fecha cae dentro de la ventana del ciclo,
-    // sin importar en que ciclo se facturo la venta original.
-    var ventaCobradaCiclo = 0;
+    // Monto efectivamente cobrado DENTRO DEL PERIODO DE COBRANZA (26-25),
+    // sumando TODOS los pagos cuya fecha cae dentro de esa ventana, sin
+    // importar en que periodo se facturo la venta original. Este es un
+    // indicador del PERIODO DE COBRANZA, no del mes de desempeño -- ya NO
+    // se usa para calcular cumplimiento (regla v1.6, seccion 3: "No
+    // utilizar cobranzas para calcular cumplimiento").
+    var montoCobradoPeriodo = 0;
     ctx.ventas.filter(function (v) { return v.vendedor_id === vendedorId; }).forEach(function (v) {
       cobrosDeFactura(ctx, v.factura).forEach(function (p) {
         if (p.fecha_pago >= cicloInfo.inicio && p.fecha_pago <= cicloInfo.cierre) {
-          ventaCobradaCiclo += p.monto;
+          montoCobradoPeriodo += p.monto;
         }
       });
     });
 
-    var cumplimientoPct = presupuesto > 0 ? (ventaCobradaCiclo / presupuesto * 100) : 0;
+    // Cumplimiento del MES DE DESEMPEÑO: venta neta del mes / presupuesto
+    // del mismo mes -- si falta presupuesto cargado, no se calcula (0%,
+    // Factor Presupuesto 0%) para no inventar un cumplimiento sin base.
+    var cumplimientoPct = (presupuestoMes !== null && presupuestoMes > 0) ? (ventaNetaMes / presupuestoMes * 100) : 0;
     var factorPpto = SIC.factorPresupuesto(ctx.params, cumplimientoPct);
-    var factorIec = SIC.factorIEC(ctx.params, iecInfo.iec_pct);
+    var factorIec = SIC.factorIEC(ctx.params, iecPct);
 
     var detalleFacturas = ventasCiclo.map(function (v) {
       return SIC.calcularFactura(ctx, v, factorPpto, factorIec, hoy);
@@ -335,23 +458,27 @@
     var comisionPotencial = detalleFacturas.reduce(function (s, f) { return s + f.comision_potencial; }, 0);
     var comisionPendiente = comisionPotencial - comisionLiberada;
 
-    // F. Bono por excedente -- solo sobre lo cobrado que excede presupuesto,
-    // condicionado por Factor IEC. CHANGE REQUEST SIC-AV v1.4: ya no se
-    // pondera por precio piso -- el IEC es el unico mecanismo por el que el
-    // precio piso puede llegar a impactar este bono (de forma indirecta,
-    // vía el propio Factor IEC).
-    var excedenteCobrado = Math.max(0, ventaCobradaCiclo - presupuesto);
-    var bonoExcedente = excedenteCobrado * (ctx.params.bono_excedente_pct / 100) * (factorIec / 100);
+    // F. Bono por Excedente del MES DE DESEMPEÑO (formula revisada CHANGE
+    // REQUEST v1.6, seccion 5): Excedente = venta neta del mes - presupuesto
+    // del mismo mes (nunca negativo); Bono = Excedente x 2%. YA NO se
+    // pondera por Factor IEC (a diferencia de la formula v1.1-v1.5) ni se
+    // calcula sobre cobranza ni sobre presupuesto prorrateado del periodo
+    // 26-25.
+    var excedenteMes = (presupuestoMes !== null) ? Math.max(0, ventaNetaMes - presupuestoMes) : 0;
+    var bonoExcedente = excedenteMes * (ctx.params.bono_excedente_pct / 100);
 
-    // Ajustes por notas de credito aplicadas EN ESTE ciclo (sobre ventas de
-    // ciclos anteriores) -- nunca se reescribe el ciclo original.
+    // Ajustes por notas de credito aplicadas EN ESTE periodo de cobranza
+    // (sobre ventas de periodos anteriores) -- nunca se reescribe el
+    // periodo original. Este ajuste sigue viviendo en el periodo de
+    // cobranza (es sobre facturas y su cobro/reconocimiento), no en el mes
+    // de desempeño.
     var ajustesNC = 0;
     ctx.notas_credito.forEach(function (n) {
       if (n.ciclo_aplicacion !== ciclo) return;
       var venta = ctx.ventas.filter(function (v) { return v.factura === n.factura; })[0];
       if (!venta) return;
-      var perteneceAlCiclo = venta.fecha_factura >= cicloInfo.inicio && venta.fecha_factura <= cicloInfo.cierre;
-      if (perteneceAlCiclo) return; // si la venta es del propio ciclo vigente, ya se reconocio neta de NC arriba
+      var perteneceAlPeriodo = venta.fecha_factura >= cicloInfo.inicio && venta.fecha_factura <= cicloInfo.cierre;
+      if (perteneceAlPeriodo) return; // si la venta es del propio periodo vigente, ya se reconocio neta de NC arriba
       var tasaOriginal = SIC.tasaCartera(ctx.params, venta.tipo_cliente, 30); // aproximacion: tasa de referencia rapida
       ajustesNC += n.monto_nc * (tasaOriginal / 100);
     });
@@ -366,18 +493,24 @@
       vendedor_id: vendedorId,
       ciclo: ciclo,
       ciclo_info: cicloInfo,
-      presupuesto: presupuesto,
-      venta_facturada: ventasDeVendedorCiclo(ctx, vendedorId, ciclo).reduce(function (s, v) { return s + v.venta_neta; }, 0),
-      venta_cobrada: ventaCobradaCiclo,
+      // --- MES DE DESEMPEÑO (presupuesto / venta neta / cumplimiento / IEC / excedente / bono) ---
+      mes_desempeno: mesDesempeno,
+      mes_desempeno_info: mesDesempenoInfo,
+      presupuesto_mes: presupuestoMes, // null = "Pendiente de carga" (sin dato)
+      venta_neta_mes: ventaNetaMes,
       cumplimiento_pct: cumplimientoPct,
       factor_presupuesto: factorPpto,
-      iec_pct: iecInfo.iec_pct,
+      iec_pct: iecPct,
+      iec_disponible: iecInfo !== null, // false = "Pendiente de carga" (sin dato)
       factor_iec: factorIec,
-      ventas_sobre_piso: iecInfo.ventas_sobre_piso_clp !== undefined ? iecInfo.ventas_sobre_piso_clp : iecInfo.ventas_sobre_piso_usd,
-      ventas_bajo_piso: iecInfo.ventas_bajo_piso_clp !== undefined ? iecInfo.ventas_bajo_piso_clp : iecInfo.ventas_bajo_piso_usd,
-      ventas_no_evaluables: iecInfo.ventas_no_evaluables_clp !== undefined ? iecInfo.ventas_no_evaluables_clp : iecInfo.ventas_no_evaluables_usd,
-      excedente_cobrado: excedenteCobrado,
+      ventas_sobre_piso: iecInfo ? (iecInfo.ventas_sobre_piso_clp !== undefined ? iecInfo.ventas_sobre_piso_clp : iecInfo.ventas_sobre_piso_usd) : 0,
+      ventas_bajo_piso: iecInfo ? (iecInfo.ventas_bajo_piso_clp !== undefined ? iecInfo.ventas_bajo_piso_clp : iecInfo.ventas_bajo_piso_usd) : 0,
+      ventas_no_evaluables: iecInfo ? (iecInfo.ventas_no_evaluables_clp !== undefined ? iecInfo.ventas_no_evaluables_clp : iecInfo.ventas_no_evaluables_usd) : 0,
+      excedente_mes: excedenteMes,
       bono_excedente: bonoExcedente,
+      // --- PERIODO DE COBRANZA (26-25): monto cobrado / facturas cobradas / edad de cartera / comision base / ajustes / comision liquidada ---
+      venta_facturada_periodo: ventasDeVendedorCiclo(ctx, vendedorId, ciclo).reduce(function (s, v) { return s + v.venta_neta; }, 0),
+      venta_cobrada: montoCobradoPeriodo,
       ajustes_nc: ajustesNC,
       comision_base_total: detalleFacturas.reduce(function (s, f) { return s + f.comision_base; }, 0),
       comision_potencial: comisionPotencial,
@@ -389,7 +522,7 @@
       detalle_facturas: detalleFacturas,
       // Clasificacion informativa (CHANGE REQUEST v1.4): ya no distingue
       // autorizada/no_autorizada -- esa distincion de aprobacion excepcional
-      // se elimino del SIC. Solo cuenta cuantas facturas del ciclo quedaron
+      // se elimino del SIC. Solo cuenta cuantas facturas del periodo quedaron
       // clasificadas como "bajo piso", sin que eso afecte la comision.
       ventas_bajo_piso_count: detalleFacturas.filter(function (f) { return f.clasificacion_piso === "bajo_piso"; }).length
     };
@@ -402,13 +535,21 @@
     var trimInfo = ctx.params.trimestres.filter(function (t) { return t.trimestre === trimestreCode; })[0];
     var diferidoAcumulado = 0;
     var presupuestoTrimestral = 0;
-    var ventaCobradaTrimestral = 0;
+    var ventaNetaTrimestral = 0;
     var iecs = [];
 
-    trimInfo.ciclos.forEach(function (ciclo) {
-      var r = SIC.calcularVendedorCiclo(ctx, vendedorId, ciclo);
-      presupuestoTrimestral += r.presupuesto;
-      ventaCobradaTrimestral += r.venta_cobrada;
+    // CHANGE REQUEST SIC-AV v1.6, seccion 6: la consistencia trimestral se
+    // evalua sobre MESES CALENDARIO (trimInfo.meses, ej. abril/mayo/junio),
+    // no sobre periodos de cobranza 26-25. Para cada mes de desempeño del
+    // trimestre se deriva el periodo de cobranza que lo liquida (el que
+    // cierra al mes siguiente) para obtener la comision base/liberada real
+    // de ese periodo -- pero el presupuesto/venta neta/IEC usados para el
+    // cumplimiento trimestral son siempre los del mes calendario.
+    trimInfo.meses.forEach(function (mesCode) {
+      var cicloDelMes = SIC.periodoQueLiquidaMes(mesCode);
+      var r = SIC.calcularVendedorCiclo(ctx, vendedorId, cicloDelMes);
+      presupuestoTrimestral += (r.presupuesto_mes || 0);
+      ventaNetaTrimestral += r.venta_neta_mes;
       iecs.push(r.iec_pct);
       // La porcion diferida es exactamente lo que el Factor de Presupuesto
       // redujo, aislado de IEC/NC (que nunca se restituyen). CHANGE REQUEST
@@ -421,7 +562,7 @@
       }
     });
 
-    var cumplimientoTrimestral = presupuestoTrimestral > 0 ? (ventaCobradaTrimestral / presupuestoTrimestral * 100) : 0;
+    var cumplimientoTrimestral = presupuestoTrimestral > 0 ? (ventaNetaTrimestral / presupuestoTrimestral * 100) : 0;
     var iecTrimestral = iecs.length ? (iecs.reduce(function (s, v) { return s + v; }, 0) / iecs.length) : 0;
 
     var pctLiberacion = 0;
@@ -472,17 +613,32 @@
   // ---------------------------------------------------------------------
   // Historico (todos los ciclos definidos en parametros)
   // ---------------------------------------------------------------------
+  // CHANGE REQUEST SIC-AV v1.6, seccion 12: cada liquidacion (periodo de
+  // cobranza) del historico conserva su identificador, fechas del periodo,
+  // el mes de desempeño asociado y todos los indicadores de ambos periodos
+  // -- sin perder compatibilidad con el historico existente (mismos campos
+  // ciclo/estado/comision_* de siempre, mas los campos nuevos de v1.6).
   SIC.calcularHistorico = function (ctx, vendedorId) {
     return ctx.params.ciclos.map(function (c) {
       var r = SIC.calcularVendedorCiclo(ctx, vendedorId, c.ciclo);
       return {
+        identificador_liquidacion: c.ciclo,
         ciclo: c.ciclo,
         estado: c.estado,
+        fecha_cierre: c.cierre,
+        periodo_cobranza_inicio: c.inicio,
+        periodo_cobranza_cierre: c.cierre,
+        mes_desempeno: r.mes_desempeno,
+        presupuesto_mes: r.presupuesto_mes,
+        venta_neta_mes: r.venta_neta_mes,
+        venta_cobrada: r.venta_cobrada,
         comision_potencial: r.comision_potencial,
         comision_liberada: r.comision_liberada,
         comision_pagada: r.comision_pagada,
         cumplimiento_pct: r.cumplimiento_pct,
-        iec_pct: r.iec_pct
+        iec_pct: r.iec_pct,
+        excedente_mes: r.excedente_mes,
+        bono_excedente: r.bono_excedente
       };
     });
   };
@@ -511,9 +667,11 @@
       });
     }
 
-    // 2. Alcanzar 100% de presupuesto
-    if (base.cumplimiento_pct < 100 && base.presupuesto > 0) {
-      var faltante = base.presupuesto - base.venta_cobrada;
+    // 2. Alcanzar 100% de presupuesto del mes de desempeño (CHANGE REQUEST
+    // v1.6: el cumplimiento se mide sobre venta neta del mes, no sobre
+    // venta cobrada del periodo).
+    if (base.cumplimiento_pct < 100 && base.presupuesto_mes > 0) {
+      var faltante = base.presupuesto_mes - base.venta_neta_mes;
       var factor100 = SIC.factorPresupuesto(ctx.params, 100);
       var comisionActual = base.comision_liberada;
       var comisionSi100 = base.comision_base_total * (factor100 / 100) * (base.factor_iec / 100);
@@ -537,7 +695,11 @@
 
     // 4. Diferido trimestral -- CHANGE REQUEST v1.4: ya no se pasa condicion
     // de ventas bajo piso (eliminada del motor de diferido trimestral).
-    var trimestreActual = ctx.params.trimestres.filter(function (t) { return t.ciclos.indexOf(ciclo) !== -1; })[0];
+    // CHANGE REQUEST v1.6: trimestres[].ciclos fue renombrado a
+    // trimestres[].meses (meses calendario de desempeño, no periodos 26-25).
+    // Se deriva el mes de desempeño de este ciclo y se busca ahi.
+    var mesDesempenoDeEsteCiclo = SIC.mesDesempenoDe(ciclo);
+    var trimestreActual = ctx.params.trimestres.filter(function (t) { return t.meses.indexOf(mesDesempenoDeEsteCiclo) !== -1; })[0];
     if (trimestreActual) {
       var diferido = SIC.calcularDiferidoTrimestral(ctx, vendedorId, trimestreActual.trimestre, {
         cartera_fuera_estandar: false,

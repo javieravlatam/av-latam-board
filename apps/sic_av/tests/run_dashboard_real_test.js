@@ -95,10 +95,18 @@ function check(nombre, condicion, detalle) {
   check('vendedor_real_chile', vendedorCL !== '—' && vendedorCL.length > 1, 'hdr-vendedor=' + vendedorCL);
   check('vendedor_real_peru', vendedorPE !== '—' && vendedorPE.length > 1, 'hdr-vendedor=' + vendedorPE);
 
+  // CHANGE REQUEST v1.6: el encabezado ahora muestra "Cierre DD/MM/YYYY
+  // (período ..., mes de desempeño ...)" -- ya no es solo "<Mes> <Año>".
   const cicloCL = docCL.getElementById('hdr-ciclo').textContent;
   const cicloPE = docPE.getElementById('hdr-ciclo').textContent;
-  check('ciclo_real_chile', /^\w+ \d{4}/.test(cicloCL), 'hdr-ciclo=' + cicloCL);
-  check('ciclo_real_peru', /^\w+ \d{4}/.test(cicloPE), 'hdr-ciclo=' + cicloPE);
+  check('ciclo_real_chile', /^Cierre \d{2}\/\d{2}\/\d{4}/.test(cicloCL) && cicloCL.indexOf('mes de desempeño') !== -1, 'hdr-ciclo=' + cicloCL);
+  check('ciclo_real_peru', /^Cierre \d{2}\/\d{2}\/\d{4}/.test(cicloPE) && cicloPE.indexOf('mes de desempeño') !== -1, 'hdr-ciclo=' + cicloPE);
+
+  // -- Banner "dos periodos" (v1.6): periodo de cobranza y mes de desempeño
+  // siempre visibles juntos, nunca mezclados. --
+  const dpPeriodoCL = docCL.getElementById('dp-periodo-cobranza').textContent;
+  const dpMesCL = docCL.getElementById('dp-mes-desempeno').textContent;
+  check('banner_dos_periodos_chile', dpPeriodoCL !== '—' && dpMesCL !== '—', 'periodo=' + dpPeriodoCL + ' mes=' + dpMesCL);
 
   // -- Aislamiento por pais: el vendedor de un pais no debe ser un vendedor del otro pais --
   const opcionesVendCL = Array.from(docCL.getElementById('sel-vendedor').options).map(o => o.textContent);

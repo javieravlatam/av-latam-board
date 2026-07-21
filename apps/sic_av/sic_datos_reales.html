@@ -84,10 +84,10 @@
     <div class="bloque-titulo"><span class="bloque-numero">1</span><h2 style="margin:0;">Datos reales validados</h2></div>
     <p class="bloque-subtitulo">Venta facturada, presupuesto, IEC y precio piso reconstruidos directamente desde el AV LATAM Board, conciliados contra la fuente. Esto es lo que hoy se puede mostrar como dato de gestión.</p>
     <div class="sic-cards">
-      <div class="sic-card"><div class="k">Venta facturada real (ciclo)</div><div class="v" id="c-facturada">—</div><div class="sub">Suma de TX real del ciclo, vendedores comerciales</div></div>
-      <div class="sic-card"><div class="k">Presupuesto prorrateado</div><div class="v" id="c-presupuesto">—</div><div class="sub">Presupuesto real prorrateado al ciclo 26-25</div></div>
-      <div class="sic-card"><div class="k">Cumplimiento sobre venta facturada</div><div class="v" id="c-cumpl">—</div><div class="sub">Venta facturada / presupuesto — informativo, no es el cumplimiento oficial del SIC (que exige venta cobrada)</div></div>
-      <div class="sic-card"><div class="k">IEC real del ciclo</div><div class="v" id="c-iec">—</div><div class="sub">Recalculado directo de TX (SP / Elegible)</div></div>
+      <div class="sic-card"><div class="k">Venta facturada real (período)</div><div class="v" id="c-facturada">—</div><div class="sub">Suma de TX real del período 26-25, vendedores comerciales</div></div>
+      <div class="sic-card"><div class="k">Presupuesto del mes de desempeño</div><div class="v" id="c-presupuesto">—</div><div class="sub">CHANGE REQUEST v1.6: lectura directa del mes calendario de desempeño, sin prorratear</div></div>
+      <div class="sic-card"><div class="k">Cumplimiento del mes de desempeño</div><div class="v" id="c-cumpl">—</div><div class="sub">Venta neta del mes / presupuesto del mismo mes — cumplimiento oficial del SIC (v1.6)</div></div>
+      <div class="sic-card"><div class="k">IEC del mes de desempeño</div><div class="v" id="c-iec">—</div><div class="sub">Recalculado directo de TX del mes calendario (SP / Elegible)</div></div>
       <div class="sic-card"><div class="k">Precio piso</div><div class="v" id="c-piso">—</div><div class="sub" id="c-piso-sub">Clasificación informativa de las ventas del ciclo</div></div>
       <div class="sic-card"><div class="k"># Facturas / # Vendedores</div><div class="v" id="c-n-facturas">—</div><div class="sub" id="c-n-vendedores-sub">—</div></div>
     </div>
@@ -293,7 +293,7 @@
     CICLO_REAL_ACTUAL = document.getElementById("sel-ciclo-real").value || CICLO_REAL_ACTUAL;
     var cicloReal = SICAdapter.construirCicloReal(PAIS, CICLO_REAL_ACTUAL, FUENTES, CTX_PARAMS);
 
-    document.getElementById("hdr-ciclo").textContent = CICLO_REAL_ACTUAL + " (" + fechaDDMMYYYY(cicloReal.ciclo_info.inicio) + "–" + fechaDDMMYYYY(cicloReal.ciclo_info.cierre) + ")";
+    document.getElementById("hdr-ciclo").textContent = CICLO_REAL_ACTUAL + " (período " + fechaDDMMYYYY(cicloReal.ciclo_info.inicio) + "–" + fechaDDMMYYYY(cicloReal.ciclo_info.cierre) + ", mes de desempeño " + cicloReal.mes_desempeno + ")";
     document.getElementById("hdr-estado-ciclo").textContent = "Cerrado (histórico reconstruido)";
     document.getElementById("hdr-fecha-datos").textContent = new Date().toLocaleString("es-CL");
 
@@ -304,8 +304,15 @@
       return { vendedor: v, resultado: r, iec: iecInfo };
     });
 
-    var totalFacturada = RESULTADOS_VENDEDORES.reduce(function (s, x) { return s + x.resultado.venta_facturada; }, 0);
-    var totalPresupuesto = RESULTADOS_VENDEDORES.reduce(function (s, x) { return s + x.resultado.presupuesto; }, 0);
+    // CHANGE REQUEST v1.6: cicloReal.ventas ahora es la UNION de transacciones
+    // del periodo de cobranza y del mes calendario de desempeño (necesario
+    // para que el motor calcule venta_neta_mes/presupuesto_mes/IEC del mes).
+    // Esta pagina muestra "el ciclo" como periodo de cobranza -- se filtra
+    // explicitamente por _pertenece_periodo para no inflar los totales.
+    var ventasDelPeriodo = cicloReal.ventas.filter(function (v) { return v._pertenece_periodo; });
+
+    var totalFacturada = RESULTADOS_VENDEDORES.reduce(function (s, x) { return s + x.resultado.venta_facturada_periodo; }, 0);
+    var totalPresupuesto = RESULTADOS_VENDEDORES.reduce(function (s, x) { return s + (x.resultado.presupuesto_mes || 0); }, 0);
     var totalPotencial = RESULTADOS_VENDEDORES.reduce(function (s, x) { return s + x.resultado.comision_potencial; }, 0);
     var totalLiberada = RESULTADOS_VENDEDORES.reduce(function (s, x) { return s + x.resultado.comision_liberada; }, 0);
     var totalSP = cicloReal.iec.reduce(function (s, i) { return s + (i.ventas_sobre_piso_clp || i.ventas_sobre_piso_usd || 0); }, 0);
@@ -320,9 +327,9 @@
     document.getElementById("c-potencial-tecnico").textContent = fmtMoneda(totalPotencial);
     document.getElementById("c-liberada-tecnico").textContent = fmtMoneda(totalLiberada);
 
-    // Precio piso (Bloque 1): clasificacion informativa agregada del ciclo.
+    // Precio piso (Bloque 1): clasificacion informativa agregada del período de cobranza.
     var sp = 0, bp = 0, ne = 0;
-    cicloReal.ventas.forEach(function (v) {
+    ventasDelPeriodo.forEach(function (v) {
       var c = SIC.clasificacionPiso(v.piso_situacion);
       if (c === "sobre_piso") sp++; else if (c === "bajo_piso") bp++; else ne++;
     });
@@ -330,12 +337,13 @@
     document.getElementById("c-piso").textContent = totalVentasPiso > 0 ? pct(sp / totalVentasPiso * 100) + " sobre piso" : "—";
     document.getElementById("c-piso-sub").textContent = sp + " sobre piso · " + bp + " bajo piso (informativo) · " + ne + " no evaluable";
 
-    document.getElementById("c-n-facturas").textContent = cicloReal.ventas.length;
-    document.getElementById("c-n-vendedores-sub").textContent = RESULTADOS_VENDEDORES.length + " vendedor(es) con venta real en el ciclo";
+    document.getElementById("c-n-facturas").textContent = ventasDelPeriodo.length;
+    document.getElementById("c-n-vendedores-sub").textContent = RESULTADOS_VENDEDORES.length + " vendedor(es) con venta real en el período/mes de desempeño";
 
     // Conciliacion independiente: recalcular directamente sobre TX_CL/TX_PE,
-    // filtrando por ciclo y vendedor comercial, sin reusar el codigo interno
-    // del adaptador -- debe coincidir exactamente con lo que uso el motor.
+    // filtrando por periodo de cobranza y vendedor comercial, sin reusar el
+    // codigo interno del adaptador -- debe coincidir exactamente con lo que
+    // uso el motor para el bloque de periodo de cobranza.
     var txArray = PAIS === "CL" ? FUENTES.tx.TX_CL : FUENTES.tx.TX_PE;
     var sumaIndependiente = 0, nIndependiente = 0;
     (txArray || []).forEach(function (t) {
@@ -347,11 +355,11 @@
       sumaIndependiente += Number(t.total) || 0;
       nIndependiente++;
     });
-    var sumaAdaptador = cicloReal.ventas.reduce(function (s, v) { return s + v.venta_neta; }, 0);
-    var coincide = Math.abs(sumaIndependiente - sumaAdaptador) < 0.01 && nIndependiente === cicloReal.ventas.length;
+    var sumaAdaptador = ventasDelPeriodo.reduce(function (s, v) { return s + v.venta_neta; }, 0);
+    var coincide = Math.abs(sumaIndependiente - sumaAdaptador) < 0.01 && nIndependiente === ventasDelPeriodo.length;
     document.getElementById("recon-fuente").textContent = fmtMoneda(sumaIndependiente);
     document.getElementById("recon-adaptador").textContent = fmtMoneda(sumaAdaptador);
-    document.getElementById("recon-n").textContent = nIndependiente + " / " + cicloReal.ventas.length;
+    document.getElementById("recon-n").textContent = nIndependiente + " / " + ventasDelPeriodo.length;
     var badge = document.getElementById("recon-badge");
     badge.textContent = coincide ? "Coincide exactamente" : "NO coincide — revisar";
     badge.className = "real-badge " + (coincide ? "ok" : "gap");
@@ -361,18 +369,18 @@
       var r = x.resultado;
       return "<tr>" +
         "<td>" + x.vendedor.nombre + "</td>" +
-        "<td class='num'>" + fmtMoneda(r.venta_facturada) + "</td>" +
-        "<td class='num'>" + fmtMoneda(r.presupuesto) + "</td>" +
+        "<td class='num'>" + fmtMoneda(r.venta_facturada_periodo) + "</td>" +
+        "<td class='num'>" + (r.presupuesto_mes === null ? "Pendiente de carga" : fmtMoneda(r.presupuesto_mes)) + "</td>" +
         "<td class='num'>" + pct(r.cumplimiento_pct) + "</td>" +
         "<td class='num'>" + pct(r.iec_pct) + "</td>" +
         "<td class='num'>" + pct(r.factor_presupuesto) + "</td>" +
         "<td class='num'>" + pct(r.factor_iec) + "</td>" +
         "<td><span class='sic-estado pendiente' title='Pendiente de integración de cobranza real — ver Bloque 2'>Pendiente de cobranza</span></td>" +
         "</tr>";
-    }).join("") || "<tr><td colspan='8'>Sin vendedores con ventas reales en este ciclo.</td></tr>";
+    }).join("") || "<tr><td colspan='8'>Sin vendedores con ventas reales en este período/mes.</td></tr>";
 
-    // Detalle por factura (todas las ventas reales del ciclo, con su clasificacion de piso)
-    TODAS_LAS_VENTAS = cicloReal.ventas.map(function (v) {
+    // Detalle por factura (ventas reales del período de cobranza, con su clasificacion de piso)
+    TODAS_LAS_VENTAS = ventasDelPeriodo.map(function (v) {
       var vendedorObj = cicloReal.vendedores.filter(function (vv) { return vv.id === v.vendedor_id; })[0];
       return {
         factura: v.factura,

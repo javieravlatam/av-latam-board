@@ -3,6 +3,8 @@
 Fecha: 2026-07-13
 Alcance: identificar dónde vive HOY cada dato que el SIC necesita, dentro del repositorio real `av-latam-board` (rama actual, sin tocar ningún archivo fuente). No se creó ninguna base paralela ni plantilla de carga manual — este documento es puramente de lectura y diagnóstico.
 
+> **Nota v1.6 (2026-07-13):** el CHANGE REQUEST v1.6 (ver `TEMPORAL_MODEL_v1.6.md`) eliminó el prorrateo de presupuesto mensual real de Chile al ciclo 26-25 mencionado más abajo — el presupuesto ahora se lee directamente del mes calendario de desempeño, sin interpolar entre dos meses. La granularidad real de los datos que este documento describe (mensual en Chile, anual en Perú) no cambió; solo cambió cómo el adaptador (`js/sic_data_adapter.js`) la usa.
+
 Método: lectura directa de los scripts de procesamiento (`scripts/update_avboard.py`, `scripts/ppto_libro_base.py`), de las capas de datos ya generadas (`avboard_data.js`, `avboard_clientes.js`, `Panel_IEC_Auditoria_2026.html` → `TX_CL`/`TX_PE`), y de los archivos fuente crudos en `inbox/` (Excel), abiertos con `openpyxl`/`pandas` para verificar columnas reales, no solo lo documentado.
 
 ---

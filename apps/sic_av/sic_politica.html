@@ -19,7 +19,8 @@
   </div>
   <div class="meta">
     <div>Pais activo: <strong id="hdr-pais">—</strong></div>
-    <div>Ciclo consultado: <span id="hdr-ciclo">—</span></div>
+    <div>Período de cobranza consultado: <span id="hdr-ciclo">—</span></div>
+    <div>Mes de desempeño aplicado: <span id="hdr-mes-desempeno">—</span></div>
     <div>Version de politica: <span id="hdr-version">—</span> · Estado: <span id="hdr-estado-politica">—</span></div>
     <div>Vigente desde: <span id="hdr-vigente-desde">—</span></div>
   </div>
@@ -35,13 +36,33 @@
 
 <div class="sic-wrap">
 
+  <!-- ============================= DOS PERIODOS, UNA SOLA LIQUIDACION (v1.6) ============================= -->
+  <div class="sic-section">
+    <h2>Dos períodos, una sola liquidación</h2>
+    <p class="hint">CHANGE REQUEST SIC-AV v1.6 (aprobado por Gerencia General): se elimina por completo el concepto "Presupuesto del ciclo 26-25". Cada liquidación del SIC-AV combina, de forma coordinada pero <b>nunca mezclada</b>, dos períodos de tiempo distintos.</p>
+    <div class="sic-diferido-box">
+      <div class="sic-diferido-grid">
+        <div class="sic-ind"><div class="k">Mes de desempeño</div><div class="v">1 al último día del mes</div></div>
+        <div class="sic-ind"><div class="k">Determina</div><div class="v" style="font-size:13.5px;">Presupuesto, venta neta, cumplimiento, Factor de Presupuesto, IEC, Factor IEC, excedente y Bono por Excedente, consistencia trimestral</div></div>
+      </div>
+    </div>
+    <div class="sic-diferido-box" style="margin-top:12px;">
+      <div class="sic-diferido-grid">
+        <div class="sic-ind"><div class="k">Período de cobranza</div><div class="v">26 al 25 (sin cambios)</div></div>
+        <div class="sic-ind"><div class="k">Determina</div><div class="v" style="font-size:13.5px;">Cobros efectivamente recibidos, facturas cobradas, edad de cartera, tasa base de comisión y la liquidación del período</div></div>
+      </div>
+    </div>
+    <p class="hint" style="margin-top:14px;"><b>Ejemplo completo:</b> una liquidación con cierre el 25 de junio de 2026 usa como período de cobranza el 26 de mayo al 25 de junio de 2026 (cobros, facturas cobradas, edad de cartera, tasa base). Su mes de desempeño es mayo de 2026: es el mes calendario contra el que se mide presupuesto, venta neta, cumplimiento, Factor de Presupuesto, IEC, Factor IEC y Bono por Excedente. <b>No se prorratea presupuesto entre dos meses para formar un "presupuesto de ciclo", y no se usa cobranza para calcular cumplimiento ni IEC.</b></p>
+    <p class="hint" style="margin-top:10px;">Fórmula oficial: Cobros efectivos del período 26–25 × Tasa según edad de cartera × Factor de Cumplimiento del mes de desempeño × Factor IEC del mismo mes de desempeño + Bono por Excedente del mes de desempeño − Notas de Crédito − Devoluciones − Ajustes aplicables = Remuneración Variable del período.</p>
+  </div>
+
   <!-- ============================= FACTOR DE PRESUPUESTO ============================= -->
   <div class="sic-section">
-    <h2>Factor de cumplimiento de presupuesto</h2>
-    <p class="hint">Tramos fijos, definitivos (Politica V1.1, aprobada por Gerencia General). El factor no interpola entre tramos.</p>
+    <h2>Factor de cumplimiento de presupuesto (mes de desempeño)</h2>
+    <p class="hint">Tramos fijos, definitivos (Politica V1.1, aprobada por Gerencia General). El factor no interpola entre tramos. CHANGE REQUEST v1.6: el cumplimiento se calcula sobre venta neta del mes de desempeño / presupuesto del mismo mes calendario — nunca sobre cobranza ni sobre un presupuesto de ciclo 26-25 prorrateado.</p>
     <div class="sic-tabla-wrap">
       <table class="sic-historico">
-        <thead><tr><th>Cumplimiento del ciclo</th><th>Factor de presupuesto</th></tr></thead>
+        <thead><tr><th>Cumplimiento del mes de desempeño</th><th>Factor de presupuesto</th></tr></thead>
         <tbody id="tbody-presupuesto"></tbody>
       </table>
     </div>
@@ -50,8 +71,8 @@
 
   <!-- ============================= BONO POR EXCEDENTE ============================= -->
   <div class="sic-section">
-    <h2>Bono por excedente</h2>
-    <p class="hint">2% sobre la venta neta cobrada que exceda el presupuesto del ciclo. Es independiente del Factor de Presupuesto y se aplica solo sobre el excedente, nunca sobre la venta total.</p>
+    <h2>Bono por excedente del mes de desempeño</h2>
+    <p class="hint">2% sobre la venta neta del mes de desempeño que exceda el presupuesto del mismo mes calendario. Es independiente del Factor de Presupuesto y ya NO se pondera por Factor IEC (CHANGE REQUEST v1.6). Nunca se calcula sobre cobranza ni sobre el período 26-25, ni usa presupuesto prorrateado — se incorpora en la liquidación siguiente (ej. el excedente de mayo se incorpora en la liquidación que cierra el 25 de junio).</p>
     <div class="sic-diferido-box">
       <div class="sic-diferido-grid">
         <div class="sic-ind"><div class="k">Presupuesto (ejemplo)</div><div class="v" id="bono-ej-ppto">—</div></div>
@@ -65,7 +86,7 @@
   <!-- ============================= EDAD DE CARTERA (PAIS ACTIVO) ============================= -->
   <div class="sic-section">
     <h2>Edad de cartera — <span id="cartera-pais-titulo">—</span></h2>
-    <p class="hint">Tabla oficial del pais activo unicamente. No se muestra la tabla del otro pais.</p>
+    <p class="hint">Tabla oficial del pais activo unicamente. No se muestra la tabla del otro pais. Se aplica sobre cobros del período de cobranza (26-25) — definición sin cambios en CHANGE REQUEST v1.6.</p>
     <div class="sic-tabla-wrap">
       <table class="sic-historico">
         <thead><tr><th>Tramo de dias</th><th>Tasa</th></tr></thead>
@@ -76,11 +97,11 @@
 
   <!-- ============================= FACTOR IEC ============================= -->
   <div class="sic-section">
-    <h2>Factor IEC</h2>
-    <p class="hint">Tramos fijos, definitivos (Politica V1.2, aprobada por Gerencia General). El IEC mide la disciplina de gestion comercial del vendedor — principalmente el respeto del precio piso — no la rentabilidad del producto ni el margen.</p>
+    <h2>Factor IEC (mes de desempeño)</h2>
+    <p class="hint">Tramos fijos, definitivos (Politica V1.2, aprobada por Gerencia General). El IEC mide la disciplina de gestion comercial del vendedor — principalmente el respeto del precio piso — no la rentabilidad del producto ni el margen. CHANGE REQUEST v1.6: el IEC se calcula sobre el mismo mes calendario de desempeño que el Factor de Presupuesto — nunca IEC parcial del mes en curso, ni mezclado con presupuesto de otro mes.</p>
     <div class="sic-tabla-wrap">
       <table class="sic-historico">
-        <thead><tr><th>IEC del ciclo</th><th>Factor IEC</th></tr></thead>
+        <thead><tr><th>IEC del mes de desempeño</th><th>Factor IEC</th></tr></thead>
         <tbody id="tbody-iec"></tbody>
       </table>
     </div>
@@ -100,7 +121,7 @@
   <!-- ============================= BONO DE CONSISTENCIA TRIMESTRAL ============================= -->
   <div class="sic-section">
     <h2>Bono de consistencia trimestral (comision diferida)</h2>
-    <p class="hint">Aisla exclusivamente la porcion de comision retenida por no alcanzar el Factor de Presupuesto. <b>Nunca</b> recupera reducciones causadas por IEC, edad de cartera, notas de credito o devoluciones — esas reducciones no se difieren ni se reliquidan.</p>
+    <p class="hint">Aisla exclusivamente la porcion de comision retenida por no alcanzar el Factor de Presupuesto. <b>Nunca</b> recupera reducciones causadas por IEC, edad de cartera, notas de credito o devoluciones — esas reducciones no se difieren ni se reliquidan. CHANGE REQUEST v1.6: el trimestre se evalúa sobre <b>meses calendario de desempeño</b> (ej. abril/mayo/junio), no sobre períodos de cobranza 26-25.</p>
     <div class="sic-tabla-wrap">
       <table class="sic-historico">
         <thead><tr><th>Cumplimiento trimestral</th><th>% de liberacion</th></tr></thead>
@@ -183,8 +204,11 @@
         ctx.params.ciclos.filter(function (c) { return c.ciclo === ctx.params.ciclo_vigente; })[0];
       CICLO_CONSULTADO = cicloInfo.ciclo;
 
-      // 2. Encabezado: version de politica, fecha de vigencia, pais activo, ciclo consultado, estado
-      document.getElementById("hdr-ciclo").textContent = nombreCiclo(cicloInfo.ciclo) + " (" + fechaDDMMYYYY(cicloInfo.inicio) + "–" + fechaDDMMYYYY(cicloInfo.cierre) + ") · " + estadoLegible(cicloInfo.estado);
+      // 2. Encabezado: version de politica, fecha de vigencia, pais activo,
+      // periodo de cobranza consultado + su mes de desempeño (v1.6, siempre
+      // mostrados juntos, nunca mezclados), estado
+      document.getElementById("hdr-ciclo").textContent = fechaDDMMYYYY(cicloInfo.inicio) + "–" + fechaDDMMYYYY(cicloInfo.cierre) + " · " + estadoLegible(cicloInfo.estado);
+      document.getElementById("hdr-mes-desempeno").textContent = nombreCiclo(SIC.mesDesempenoDe(cicloInfo.ciclo));
       document.getElementById("hdr-version").textContent = cicloInfo.policy_version || ctx.params.version_politica;
       document.getElementById("hdr-estado-politica").textContent = ctx.params.politica_estado || "—";
       document.getElementById("hdr-vigente-desde").textContent = fechaDDMMYYYY(ctx.params.politica_vigente_desde);

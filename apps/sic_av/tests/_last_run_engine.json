@@ -1,0 +1,247 @@
+[
+  {
+    "nombre": "carga_datos_chile",
+    "ok": true,
+    "detalle": "ventas=39 vendedores=4"
+  },
+  {
+    "nombre": "carga_datos_peru",
+    "ok": true,
+    "detalle": "ventas=40 vendedores=4"
+  },
+  {
+    "nombre": "venta_no_cobrada",
+    "ok": true,
+    "detalle": "factura=CL-2026-07-006 estado=potencial liberada=0"
+  },
+  {
+    "nombre": "pago_parcial",
+    "ok": true,
+    "detalle": "estado=pendiente saldo=237600"
+  },
+  {
+    "nombre": "pronto_pago",
+    "ok": true,
+    "detalle": "factura=CL-2026-07-002 dias=12 tasa=7.5"
+  },
+  {
+    "nombre": "cobro_tardio",
+    "ok": true,
+    "detalle": "dias=231 tasa=2.5%"
+  },
+  {
+    "nombre": "cartera_chile_tabla_unica",
+    "ok": true,
+    "detalle": "tasa(45d)=6% igual para ambos tipos de cliente; tramos 0/30/180/210/360 verificados"
+  },
+  {
+    "nombre": "cartera_peru_tabla_mantenida",
+    "ok": true,
+    "detalle": "tramos Peru verificados sin cambios"
+  },
+  {
+    "nombre": "iec_bajo",
+    "ok": true,
+    "detalle": "iec=82% factor_iec=70"
+  },
+  {
+    "nombre": "iec_alto",
+    "ok": true,
+    "detalle": "iec=96.5% factor_iec=105"
+  },
+  {
+    "nombre": "factor_iec_tramos_exactos",
+    "ok": true,
+    "detalle": "f(69.99)=20 f(70)=70 f(85)=80 f(92)=90 f(95)=105 (sin interpolacion)"
+  },
+  {
+    "nombre": "cumplimiento_bajo",
+    "ok": true,
+    "detalle": "cumplimiento=16.8% factor_ppto=0"
+  },
+  {
+    "nombre": "cumplimiento_superior_100",
+    "ok": true,
+    "detalle": "cumplimiento=163.2% factor_ppto=100"
+  },
+  {
+    "nombre": "cumplimiento_intermedio_80pct",
+    "ok": true,
+    "detalle": "ningun vendedor demo cae en el tramo 90-99.99% en este ciclo (tramo validado analiticamente via SIC.factorPresupuesto)"
+  },
+  {
+    "nombre": "factor_presupuesto_tramos_exactos",
+    "ok": true,
+    "detalle": "f(89.99)=0 f(90)=80 f(99.99)=80 f(100)=100 f(150)=100 (nunca debe superar 100)"
+  },
+  {
+    "nombre": "venta_bajo_piso_autorizada_sin_reduccion",
+    "ok": true,
+    "detalle": "clasificacion=bajo_piso estado=liberada comision_ajustada=0.00 esperada(sin reduccion de piso)=0 (factor_presupuesto=0% este ciclo -- ver v1.6, mes de desempeño 2026-06)"
+  },
+  {
+    "nombre": "venta_bajo_piso_no_autorizada_ya_no_es_cero",
+    "ok": true,
+    "detalle": "estado=liberada comision_ajustada=0.00 (antes era 0/retenida por piso, ahora entra al calculo normal -- monto real 0 hoy por Factor Presupuesto del mes, no por el piso)"
+  },
+  {
+    "nombre": "estado_retenida_eliminado",
+    "ok": true,
+    "detalle": "ningun estado === \"retenida\" y el campo factor_piso ya no existe en el detalle de factura"
+  },
+  {
+    "nombre": "sin_doble_penalizacion_precio_piso",
+    "ok": true,
+    "detalle": "comision_ajustada=0.00 esperada(base x Fppto x Fiec)=0.00"
+  },
+  {
+    "nombre": "bono_por_excedente",
+    "ok": true,
+    "detalle": "excedente_mes=353121 bono=7062 (mes de desempeño 2026-03)"
+  },
+  {
+    "nombre": "bono_excedente_formula_v16_sin_factor_iec",
+    "ok": true,
+    "detalle": "bono_excedente=7062.42 esperado(excedente_mes x 2%, sin Factor IEC)=7062.42 (factor_iec de este vendedor=105%, distinto de 100 -- confirma que ya no se pondera)"
+  },
+  {
+    "nombre": "comision_diferida_trimestral",
+    "ok": true,
+    "detalle": "diferido_acumulado=593276 trimestre=2026-Q2"
+  },
+  {
+    "nombre": "liberacion_trimestral_50pct",
+    "ok": true,
+    "detalle": "cumpl_trim=102.0% (sintetico, IEC trimestral=100.0%)"
+  },
+  {
+    "nombre": "liberacion_trimestral_75pct",
+    "ok": true,
+    "detalle": "cumpl_trim=107.0% (sintetico, IEC trimestral=100.0%)"
+  },
+  {
+    "nombre": "liberacion_trimestral_100pct",
+    "ok": true,
+    "detalle": "cumpl_trim=115.0% (sintetico, IEC trimestral=100.0%)"
+  },
+  {
+    "nombre": "liberacion_trimestral_0pct_no_cumple",
+    "ok": true,
+    "detalle": "cumpl_trim=53.4% liberado=0 de 800115"
+  },
+  {
+    "nombre": "nota_de_credito",
+    "ok": true,
+    "detalle": "ajustes_nc=3488 (factura con NC: CL-2026-07-010)"
+  },
+  {
+    "nombre": "generacion_pdf",
+    "ok": true,
+    "detalle": "longitud_html=13039"
+  },
+  {
+    "nombre": "consistencia_pantalla_pdf",
+    "ok": true,
+    "detalle": "comision_liberada=CLP 0 presente_en_pdf=true | potencial presente=true"
+  },
+  {
+    "nombre": "peru_venta_no_cobrada",
+    "ok": true,
+    "detalle": "PE-2026-07-007"
+  },
+  {
+    "nombre": "peru_bajo_piso_no_autorizada_sin_reduccion",
+    "ok": true,
+    "detalle": "PE-2026-07-009 comision_ajustada=0.00 (factor_presupuesto=0% este ciclo)"
+  },
+  {
+    "nombre": "selector_al_menos_6_ciclos",
+    "ok": true,
+    "detalle": "CL=6 ciclos, PE=6 ciclos, todos con inicio/cierre/estado"
+  },
+  {
+    "nombre": "cambio_de_ciclo_chile",
+    "ok": true,
+    "detalle": "vigente(2026-07): presupuesto_mes=6000000 | cerrado(2026-04): presupuesto_mes=649020 estado=cerrado"
+  },
+  {
+    "nombre": "cambio_de_ciclo_peru",
+    "ok": true,
+    "detalle": "vigente(2026-07): presupuesto_mes=110000 | cerrado(2026-04): presupuesto_mes=102524"
+  },
+  {
+    "nombre": "actualizacion_de_tarjetas",
+    "ok": true,
+    "detalle": "liberada vigente=0 vs liberada cerrado(2026-04)=112350"
+  },
+  {
+    "nombre": "actualizacion_de_detalle",
+    "ok": true,
+    "detalle": "facturas ciclo 2026-04=2, facturas ciclo 2026-07=9 (listas distintas)"
+  },
+  {
+    "nombre": "pdf_del_ciclo_seleccionado",
+    "ok": true,
+    "detalle": "PDF del ciclo 2026-04 contiene su mes de desempeño (\"Marzo 2026\") y sus fechas de período (26/03/2026 a 25/04/2026), y NO contiene \"Junio 2026\" (mes de desempeño del ciclo vigente 2026-07)"
+  },
+  {
+    "nombre": "preservacion_ciclo_vigente",
+    "ok": true,
+    "detalle": "ciclo_vigente CL=2026-07 PE=2026-07 (no cambia tras consultar ciclos cerrados)"
+  },
+  {
+    "nombre": "aislamiento_por_pais_ciclos",
+    "ok": true,
+    "detalle": "CL y PE cargan arreglos de ciclos independientes (6 cada uno), sin compartir referencia"
+  },
+  {
+    "nombre": "ciclo_cerrado_no_cambia",
+    "ok": true,
+    "detalle": "comision_final ciclo 2026-04 antes=121450 despues=121450 (identico, sin efectos de estado compartido)"
+  },
+  {
+    "nombre": "politica_tabla_presupuesto_correcta",
+    "ok": true,
+    "detalle": "tramos=[0,80,100]"
+  },
+  {
+    "nombre": "politica_tabla_chile_correcta",
+    "ok": true,
+    "detalle": "tasas CL=[8,7.5,6,3,2.5,0.5]"
+  },
+  {
+    "nombre": "politica_tabla_peru_correcta",
+    "ok": true,
+    "detalle": "tasas PE=[8,7.5,6,5,2.5,0.5] dias=[0,30,60,120,180,null]"
+  },
+  {
+    "nombre": "politica_tabla_iec_correcta",
+    "ok": true,
+    "detalle": "factores IEC=[20,70,80,90,105]"
+  },
+  {
+    "nombre": "politica_bono_excedente_ejemplo",
+    "ok": true,
+    "detalle": "presupuesto=100000 venta=120000 excedente=20000 bono=400"
+  },
+  {
+    "nombre": "politica_precio_piso_eliminado",
+    "ok": true,
+    "detalle": "factor_piso ausente en parametros de ambos paises; SIC.factorPiso ya no existe; SIC.clasificacionPiso disponible como clasificacion informativa"
+  },
+  {
+    "nombre": "politica_consistencia_trimestral_tramos",
+    "ok": true,
+    "detalle": "tramos=[50,75,100]"
+  },
+  {
+    "nombre": "pdf_politica_generado",
+    "ok": true,
+    "detalle": "longitud_html=8329 (todas las secciones y metadatos presentes)"
+  },
+  {
+    "nombre": "politica_aislamiento_por_pais",
+    "ok": true,
+    "detalle": "PDF Chile solo muestra tramos de Chile, PDF Peru solo muestra tramos de Peru"
+  }
+]

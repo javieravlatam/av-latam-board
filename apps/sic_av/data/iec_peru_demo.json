@@ -1,8 +1,9 @@
 {
+  "_migracion_v1.6": "CHANGE REQUEST SIC-AV v1.6 (2026-07-13): el campo 'ciclo' se renombro a 'mes' (mes calendario de desempeno) y los valores se recorrieron -1 mes respecto a su etiqueta anterior, para preservar la cifra que ya se mostraba en cada periodo de cobranza vigente/cerrado. Ver TEMPORAL_MODEL_AUDIT_v1.6.md.",
   "iec": [
     {
       "vendedor_id": "PE-V01",
-      "ciclo": "2026-07",
+      "mes": "2026-06",
       "iec_pct": 79.0,
       "ventas_sobre_piso_usd": 19500,
       "ventas_bajo_piso_usd": 5100,
@@ -10,7 +11,7 @@
     },
     {
       "vendedor_id": "PE-V02",
-      "ciclo": "2026-07",
+      "mes": "2026-06",
       "iec_pct": 93.0,
       "ventas_sobre_piso_usd": 30800,
       "ventas_bajo_piso_usd": 0,
@@ -18,7 +19,7 @@
     },
     {
       "vendedor_id": "PE-V03",
-      "ciclo": "2026-07",
+      "mes": "2026-06",
       "iec_pct": 97.0,
       "ventas_sobre_piso_usd": 14000,
       "ventas_bajo_piso_usd": 0,
@@ -26,7 +27,7 @@
     },
     {
       "vendedor_id": "PE-V04",
-      "ciclo": "2026-07",
+      "mes": "2026-06",
       "iec_pct": 85.5,
       "ventas_sobre_piso_usd": 22450,
       "ventas_bajo_piso_usd": 0,
@@ -34,7 +35,7 @@
     },
     {
       "vendedor_id": "PE-V01",
-      "ciclo": "2026-02",
+      "mes": "2026-01",
       "iec_pct": 71.0,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -42,7 +43,7 @@
     },
     {
       "vendedor_id": "PE-V01",
-      "ciclo": "2026-03",
+      "mes": "2026-02",
       "iec_pct": 72.6,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -50,7 +51,7 @@
     },
     {
       "vendedor_id": "PE-V01",
-      "ciclo": "2026-04",
+      "mes": "2026-03",
       "iec_pct": 74.2,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -58,7 +59,7 @@
     },
     {
       "vendedor_id": "PE-V01",
-      "ciclo": "2026-05",
+      "mes": "2026-04",
       "iec_pct": 75.8,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -66,7 +67,7 @@
     },
     {
       "vendedor_id": "PE-V01",
-      "ciclo": "2026-06",
+      "mes": "2026-05",
       "iec_pct": 77.4,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -74,7 +75,7 @@
     },
     {
       "vendedor_id": "PE-V02",
-      "ciclo": "2026-02",
+      "mes": "2026-01",
       "iec_pct": 87.0,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -82,7 +83,7 @@
     },
     {
       "vendedor_id": "PE-V02",
-      "ciclo": "2026-03",
+      "mes": "2026-02",
       "iec_pct": 88.6,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -90,7 +91,7 @@
     },
     {
       "vendedor_id": "PE-V02",
-      "ciclo": "2026-04",
+      "mes": "2026-03",
       "iec_pct": 90.2,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -98,7 +99,7 @@
     },
     {
       "vendedor_id": "PE-V02",
-      "ciclo": "2026-05",
+      "mes": "2026-04",
       "iec_pct": 91.8,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -106,7 +107,7 @@
     },
     {
       "vendedor_id": "PE-V02",
-      "ciclo": "2026-06",
+      "mes": "2026-05",
       "iec_pct": 93.4,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -114,7 +115,7 @@
     },
     {
       "vendedor_id": "PE-V03",
-      "ciclo": "2026-02",
+      "mes": "2026-01",
       "iec_pct": 94.0,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -122,7 +123,7 @@
     },
     {
       "vendedor_id": "PE-V03",
-      "ciclo": "2026-03",
+      "mes": "2026-02",
       "iec_pct": 95.6,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -130,7 +131,7 @@
     },
     {
       "vendedor_id": "PE-V03",
-      "ciclo": "2026-04",
+      "mes": "2026-03",
       "iec_pct": 97.2,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -138,7 +139,7 @@
     },
     {
       "vendedor_id": "PE-V03",
-      "ciclo": "2026-05",
+      "mes": "2026-04",
       "iec_pct": 98.8,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -146,7 +147,7 @@
     },
     {
       "vendedor_id": "PE-V03",
-      "ciclo": "2026-06",
+      "mes": "2026-05",
       "iec_pct": 100.4,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -154,7 +155,7 @@
     },
     {
       "vendedor_id": "PE-V04",
-      "ciclo": "2026-02",
+      "mes": "2026-01",
       "iec_pct": 79.0,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -162,7 +163,7 @@
     },
     {
       "vendedor_id": "PE-V04",
-      "ciclo": "2026-03",
+      "mes": "2026-02",
       "iec_pct": 80.6,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -170,7 +171,7 @@
     },
     {
       "vendedor_id": "PE-V04",
-      "ciclo": "2026-04",
+      "mes": "2026-03",
       "iec_pct": 82.2,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -178,7 +179,7 @@
     },
     {
       "vendedor_id": "PE-V04",
-      "ciclo": "2026-05",
+      "mes": "2026-04",
       "iec_pct": 83.8,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
@@ -186,7 +187,7 @@
     },
     {
       "vendedor_id": "PE-V04",
-      "ciclo": "2026-06",
+      "mes": "2026-05",
       "iec_pct": 85.4,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,

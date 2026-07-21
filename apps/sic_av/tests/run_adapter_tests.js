@@ -95,7 +95,11 @@ function check(nombre, condicion, detalle) {
 
   // -- Reconciliacion independiente: sumar directamente TX_CL filtrando por
   // el mismo ciclo (sin reusar el codigo interno del adaptador) y comparar
-  // contra la suma de ventas que construyo SICAdapter.construirCicloReal. --
+  // contra la suma de ventas que construyo SICAdapter.construirCicloReal,
+  // filtrando por la bandera _pertenece_periodo (CHANGE REQUEST v1.6: el
+  // adaptador ahora devuelve tambien transacciones del mes calendario de
+  // desempeño, que puede no coincidir con la ventana 26-25 -- la bandera
+  // permite reconciliar solo el bloque de periodo, igual que antes). --
   let sumaIndependiente = 0, countIndependiente = 0;
   fuentes.tx.TX_CL.forEach(function (t) {
     const c = SICAdapter.asignarCiclo(t.fecha);
@@ -105,28 +109,29 @@ function check(nombre, condicion, detalle) {
     sumaIndependiente += Number(t.total) || 0;
     countIndependiente++;
   });
-  const sumaAdaptador = cicloRealCL.ventas.reduce((s, v) => s + v.venta_neta, 0);
+  const ventasDelPeriodo = cicloRealCL.ventas.filter(v => v._pertenece_periodo);
+  const sumaAdaptador = ventasDelPeriodo.reduce((s, v) => s + v.venta_neta, 0);
   check('conciliacion_venta_facturada_chile_2026_03',
-    Math.abs(sumaIndependiente - sumaAdaptador) < 0.01 && countIndependiente === cicloRealCL.ventas.length,
-    'suma independiente=' + Math.round(sumaIndependiente) + ' (n=' + countIndependiente + ') vs suma adaptador=' + Math.round(sumaAdaptador) + ' (n=' + cicloRealCL.ventas.length + ')');
+    Math.abs(sumaIndependiente - sumaAdaptador) < 0.01 && countIndependiente === ventasDelPeriodo.length,
+    'suma independiente=' + Math.round(sumaIndependiente) + ' (n=' + countIndependiente + ') vs suma adaptador (solo periodo)=' + Math.round(sumaAdaptador) + ' (n=' + ventasDelPeriodo.length + ')');
 
   // -- Motor SIC sin modificar, corriendo sobre datos reales --
   if (cicloRealCL.vendedores.length > 0) {
     const vendedorPrueba = cicloRealCL.vendedores[0].id;
     const r = SIC.calcularVendedorCiclo(cicloRealCL, vendedorPrueba, '2026-03');
     check('motor_sic_corre_sobre_datos_reales',
-      r.venta_facturada > 0 && r.comision_liberada === 0 && r.comision_potencial >= 0,
-      'vendedor=' + vendedorPrueba + ' venta_facturada=' + Math.round(r.venta_facturada) + ' comision_liberada=' + r.comision_liberada + ' (0 esperado, ver brecha de cobranza) comision_potencial=' + Math.round(r.comision_potencial));
+      r.venta_facturada_periodo >= 0 && r.comision_liberada === 0 && r.comision_potencial >= 0,
+      'vendedor=' + vendedorPrueba + ' venta_facturada_periodo=' + Math.round(r.venta_facturada_periodo) + ' comision_liberada=' + r.comision_liberada + ' (0 esperado, ver brecha de cobranza) comision_potencial=' + Math.round(r.comision_potencial));
 
     const iecReal = cicloRealCL.iec.find(i => i.vendedor_id === vendedorPrueba);
-    check('iec_real_recalculado_por_ciclo',
+    check('iec_real_recalculado_por_mes_desempeno',
       !!iecReal && iecReal.iec_pct >= 0 && iecReal.iec_pct <= 100,
-      'IEC real del vendedor ' + vendedorPrueba + ' en el ciclo 2026-03: ' + (iecReal ? iecReal.iec_pct : 'N/A') + '%');
+      'IEC real del vendedor ' + vendedorPrueba + ' en el mes de desempeño ' + cicloRealCL.mes_desempeno + ': ' + (iecReal ? iecReal.iec_pct : 'N/A') + '%');
 
     const pptoReal = cicloRealCL.presupuestos.find(p => p.vendedor_id === vendedorPrueba);
-    check('presupuesto_real_prorrateado',
-      !!pptoReal && pptoReal.presupuesto >= 0,
-      'presupuesto prorrateado del ciclo 2026-03 para ' + vendedorPrueba + ': ' + (pptoReal ? Math.round(pptoReal.presupuesto) : 'N/A'));
+    check('presupuesto_real_mes_desempeno_sin_prorrateo',
+      !!pptoReal && (pptoReal.presupuesto === null || pptoReal.presupuesto >= 0),
+      'presupuesto del mes de desempeño ' + cicloRealCL.mes_desempeno + ' (lectura directa, sin prorratear) para ' + vendedorPrueba + ': ' + (pptoReal && pptoReal.presupuesto !== null ? Math.round(pptoReal.presupuesto) : 'Pendiente de carga'));
   } else {
     check('motor_sic_corre_sobre_datos_reales', false, 'no hay vendedores en el ciclo real para probar');
   }

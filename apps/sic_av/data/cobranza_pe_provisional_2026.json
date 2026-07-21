@@ -1,0 +1,260 @@
+{
+  "meta": {
+    "fuente": "AGROVECA PERU -  COMISIONES TRABAJADORES 2026.xlsx (hoja \"VENTAS ACUMULADAS 2026\")",
+    "tipo": "provisional",
+    "fecha_extraccion": "2026-07-13",
+    "advertencia": "Fuente provisional de cobranza: archivo historico de comisiones Peru 2026. Pendiente de conciliacion con reporte oficial de Finanzas.",
+    "metodo": "Solo se importan factura/vendedor/fecha_pago/monto -- NUNCA la formula de comision del Excel (PORCENTAJE/COMISION POR PAGAR), que no se usa como regla SIC.",
+    "n_registros": 31
+  },
+  "registros": [
+    {
+      "folio": "901",
+      "fecha_pago": "2026-04-06",
+      "monto": 2484.0,
+      "vendedor_excel": "OSCAR INFANTE",
+      "cliente_excel": "AGRICOLA GUILI S.A.C",
+      "fila_origen": 8
+    },
+    {
+      "folio": "902",
+      "fecha_pago": "2026-04-06",
+      "monto": 2208.0,
+      "vendedor_excel": "OSCAR INFANTE",
+      "cliente_excel": "AGRICOLA GUILI S.A.C",
+      "fila_origen": 9
+    },
+    {
+      "folio": "903",
+      "fecha_pago": "2026-04-06",
+      "monto": 4416.0,
+      "vendedor_excel": "OSCAR INFANTE",
+      "cliente_excel": "AGRICOLA GUILI S.A.C",
+      "fila_origen": 10
+    },
+    {
+      "folio": "910",
+      "fecha_pago": "2026-04-13",
+      "monto": 3780.0,
+      "vendedor_excel": "OMAR ATALAYA",
+      "cliente_excel": "AGRICOLA HUARMEY S.A.C.",
+      "fila_origen": 14
+    },
+    {
+      "folio": "914",
+      "fecha_pago": "2026-02-09",
+      "monto": 24500.0,
+      "vendedor_excel": "OMAR ATALAYA",
+      "cliente_excel": "BOMAREA S.R.L.",
+      "fila_origen": 18
+    },
+    {
+      "folio": "930",
+      "fecha_pago": "2026-06-20",
+      "monto": 1404.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "UVICA S.A.C.",
+      "fila_origen": 29
+    },
+    {
+      "folio": "934",
+      "fecha_pago": "2026-05-06",
+      "monto": 3150.0,
+      "vendedor_excel": "OMAR ATALAYA",
+      "cliente_excel": "AGRICOLA HUARMEY S.A.C.",
+      "fila_origen": 30
+    },
+    {
+      "folio": "936",
+      "fecha_pago": "2026-06-05",
+      "monto": 400.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "CORPORACION AGROLATINA S.A.C",
+      "fila_origen": 31
+    },
+    {
+      "folio": "937",
+      "fecha_pago": "2026-05-14",
+      "monto": 1872.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "UVICA S.A.C.",
+      "fila_origen": 32
+    },
+    {
+      "folio": "941",
+      "fecha_pago": "2026-06-19",
+      "monto": 304.0,
+      "vendedor_excel": "OSCAR INFANTE",
+      "cliente_excel": "INVERSIONES AJS S.A.C.",
+      "fila_origen": 36
+    },
+    {
+      "folio": "945",
+      "fecha_pago": "2026-02-13",
+      "monto": 17.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "LIFONCIO MEZA ANTONIO",
+      "fila_origen": 37
+    },
+    {
+      "folio": "948",
+      "fecha_pago": "2026-04-19",
+      "monto": 1365.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "AGRICOLA CARMEN LUISA S.A.C.",
+      "fila_origen": 38
+    },
+    {
+      "folio": "952",
+      "fecha_pago": "2026-06-30",
+      "monto": 222.0,
+      "vendedor_excel": "OSCAR INFANTE",
+      "cliente_excel": "INVERSIONES AJS S.A.C.",
+      "fila_origen": 39
+    },
+    {
+      "folio": "960",
+      "fecha_pago": "2026-06-04",
+      "monto": 4958.0,
+      "vendedor_excel": "OMAR ATALAYA",
+      "cliente_excel": "CORPORACION AGRICOLA OLMOS S.A",
+      "fila_origen": 45
+    },
+    {
+      "folio": "965",
+      "fecha_pago": "2026-05-29",
+      "monto": 5180.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "CORPORACION ESAN E & F SOCIEDAD ANONIMA CERRADA",
+      "fila_origen": 46
+    },
+    {
+      "folio": "966",
+      "fecha_pago": "2026-04-20",
+      "monto": 10000.0,
+      "vendedor_excel": "OMAR ATALAYA",
+      "cliente_excel": "BOMAREA S.R.L.",
+      "fila_origen": 47
+    },
+    {
+      "folio": "969",
+      "fecha_pago": "2026-06-20",
+      "monto": 2340.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "UVICA S.A.C.",
+      "fila_origen": 50
+    },
+    {
+      "folio": "970",
+      "fecha_pago": "2026-05-29",
+      "monto": 8917.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "CORPORACION ESAN E & F SOCIEDAD ANONIMA CERRADA",
+      "fila_origen": 51
+    },
+    {
+      "folio": "972",
+      "fecha_pago": "2026-04-17",
+      "monto": 200.0,
+      "vendedor_excel": "PATRICIA VALLADARES",
+      "cliente_excel": "SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA",
+      "fila_origen": 53
+    },
+    {
+      "folio": "977",
+      "fecha_pago": "2026-05-13",
+      "monto": 2646.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "AGRICOLA CARMEN LUISA S.A.C.",
+      "fila_origen": 56
+    },
+    {
+      "folio": "979",
+      "fecha_pago": "2026-06-15",
+      "monto": 6132.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "FAMILY FARMS PERÚ S.R.L",
+      "fila_origen": 58
+    },
+    {
+      "folio": "982",
+      "fecha_pago": "2026-05-20",
+      "monto": 280.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "AGRICOLA CARMEN LUISA S.A.C.",
+      "fila_origen": 60
+    },
+    {
+      "folio": "984",
+      "fecha_pago": "2026-06-10",
+      "monto": 400.0,
+      "vendedor_excel": "PATRICIA VALLADARES",
+      "cliente_excel": "SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA",
+      "fila_origen": 62
+    },
+    {
+      "folio": "989",
+      "fecha_pago": "2026-05-27",
+      "monto": 250.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "AGRICOLA CARMEN LUISA S.A.C.",
+      "fila_origen": 65
+    },
+    {
+      "folio": "998",
+      "fecha_pago": "2026-06-10",
+      "monto": 400.0,
+      "vendedor_excel": "PATRICIA VALLADARES",
+      "cliente_excel": "SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA",
+      "fila_origen": 70
+    },
+    {
+      "folio": "1006",
+      "fecha_pago": "2026-06-04",
+      "monto": 300.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "AGRICOLA CARMEN LUISA S.A.C.",
+      "fila_origen": 75
+    },
+    {
+      "folio": "1011",
+      "fecha_pago": "2026-06-18",
+      "monto": 300.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "AGRICOLA CARMEN LUISA S.A.C.",
+      "fila_origen": 78
+    },
+    {
+      "folio": "1013",
+      "fecha_pago": "2026-05-22",
+      "monto": 200.0,
+      "vendedor_excel": "PATRICIA VALLADARES",
+      "cliente_excel": "AGROEXPORTACIONES SANTA MARIA MAGDALENA E.I.R.L",
+      "fila_origen": 79
+    },
+    {
+      "folio": "1015",
+      "fecha_pago": "2026-06-18",
+      "monto": 300.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "AGRICOLA CARMEN LUISA S.A.C.",
+      "fila_origen": 80
+    },
+    {
+      "folio": "1019",
+      "fecha_pago": "2026-04-23",
+      "monto": 33.0,
+      "vendedor_excel": "LISBETH AGUIRRE",
+      "cliente_excel": "AGROINDUSTRIAL P & L S.A.C.",
+      "fila_origen": 81
+    },
+    {
+      "folio": "1038",
+      "fecha_pago": "2026-06-12",
+      "monto": 600.0,
+      "vendedor_excel": "PATRICIA VALLADARES",
+      "cliente_excel": "VIVEROS EL TAMBO S.A.C.",
+      "fila_origen": 91
+    }
+  ]
+}

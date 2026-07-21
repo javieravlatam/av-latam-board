@@ -25,10 +25,16 @@
   .estado-comision-texto + .estado-comision-texto { margin-top:10px; }
   .estado-comision-tecnico { margin-top:14px; padding-top:12px; border-top:1px dashed #e3cd8f; font-size:11.5px; color:#9a8a5a; }
   .real-advertencias-vendedor { font-size:11.5px; color:var(--av-grey-text); margin:10px 0 0 0; padding-left:18px; }
+  /* CHANGE REQUEST SIC-AV v1.6: banner de dos periodos, siempre juntos, nunca mezclados. */
+  .dos-periodos-banner { display:flex; flex-wrap:wrap; gap:18px; background:#eef4fb; border:1px solid #cfe0f2; border-radius:var(--radius, 10px); padding:14px 18px; margin-bottom:16px; }
+  .dos-periodos-bloque { flex:1 1 260px; }
+  .dos-periodos-etiqueta { font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:#4a6a8a; font-weight:700; margin-bottom:3px; }
+  .dos-periodos-valor { font-size:15.5px; font-weight:700; color:#1c3a5e; }
+  .dos-periodos-nota { font-size:11.5px; color:var(--av-grey-text); margin-top:2px; }
 </style>
 </head>
 <body>
-<div class="sic-demo-banner">DATOS REALES DEL AV LATAM BOARD — Venta facturada, presupuesto e IEC verificados y conciliados contra la fuente. Comisión definitiva pendiente de integración de cobranza real por factura (ver bloque "Estado del cálculo de comisiones").</div>
+<div class="sic-demo-banner">DATOS REALES DEL AV LATAM BOARD — Venta neta, presupuesto e IEC verificados y conciliados contra la fuente, calculados sobre el mes de desempeño (CHANGE REQUEST v1.6). Comisión definitiva pendiente de integración de cobranza real por factura (ver bloque "Estado del cálculo de comisiones").</div>
 
 <div class="sic-header">
   <div class="brand">
@@ -40,7 +46,7 @@
   </div>
   <div class="meta">
     <div><strong id="hdr-vendedor">—</strong> · <span id="hdr-cargo">—</span></div>
-    <div>Ciclo <span id="hdr-ciclo">—</span> · Estado: <span id="hdr-estado-ciclo">—</span></div>
+    <div>Liquidación <span id="hdr-ciclo">—</span> · Estado: <span id="hdr-estado-ciclo">—</span></div>
     <div>Politica aplicada: <span id="hdr-politica">—</span> · Datos al: <span id="hdr-fecha-datos">—</span></div>
   </div>
 </div>
@@ -59,34 +65,62 @@
   <div class="sic-selector-row">
     <label for="sel-vendedor">Vendedor:</label>
     <select id="sel-vendedor" onchange="cambiarVendedor()"></select>
-    <label for="sel-ciclo">Ciclo comercial (real, 26→25):</label>
+    <label for="sel-ciclo">Período de cobranza (real, 26→25):</label>
     <select id="sel-ciclo" onchange="cambiarCiclo()"></select>
   </div>
 
-  <!-- ============================= BLOQUE 1 — DATOS REALES VALIDADOS ============================= -->
+  <!-- ============================= DOS PERIODOS, UNA SOLA LIQUIDACION (v1.6) ============================= -->
+  <div class="dos-periodos-banner">
+    <div class="dos-periodos-bloque">
+      <div class="dos-periodos-etiqueta">A. Período de cobranza</div>
+      <div class="dos-periodos-valor" id="dp-periodo-cobranza">—</div>
+      <div class="dos-periodos-nota">Determina cobros, facturas cobradas, edad de cartera, tasa base y liquidación.</div>
+    </div>
+    <div class="dos-periodos-bloque">
+      <div class="dos-periodos-etiqueta">B. Mes de desempeño aplicado</div>
+      <div class="dos-periodos-valor" id="dp-mes-desempeno">—</div>
+      <div class="dos-periodos-nota">Determina presupuesto, venta neta, cumplimiento, Factor de Presupuesto, IEC y Bono por Excedente.</div>
+    </div>
+  </div>
+
+  <!-- ============================= BLOQUE 1 — INDICADORES DEL MES DE DESEMPEÑO ============================= -->
   <div class="sic-section">
-    <div class="bloque-titulo"><span class="bloque-numero">1</span><h2 style="margin:0;">Datos reales validados</h2></div>
-    <p class="bloque-subtitulo">Reconstruido directamente desde Panel_IEC_Auditoria_2026.html y avboard_data.js del AV LATAM Board, conciliado contra la fuente. El motor SIC (sic_core.js) no fue modificado.</p>
+    <div class="bloque-titulo"><span class="bloque-numero">1</span><h2 style="margin:0;">C. Indicadores del mes de desempeño</h2></div>
+    <p class="bloque-subtitulo">Presupuesto, venta neta, cumplimiento, IEC y excedente — todos calculados sobre el mes calendario cerrado (mes de desempeño), nunca prorrateados ni mezclados con el período de cobranza.</p>
     <div class="sic-cards">
-      <div class="sic-card"><div class="k">Venta facturada (ciclo)</div><div class="v" id="c-facturada">—</div><div class="sub">Suma de transacciones reales del ciclo para este vendedor</div></div>
-      <div class="sic-card"><div class="k">Presupuesto del ciclo</div><div class="v" id="c-presupuesto">—</div><div class="sub">Presupuesto real prorrateado al ciclo 26-25</div></div>
-      <div class="sic-card"><div class="k">Cumplimiento (aproximado)</div><div class="v" id="c-cumpl">—</div><div class="sub">Venta facturada / presupuesto — informativo; el cumplimiento oficial del SIC exige venta cobrada</div></div>
-      <div class="sic-card"><div class="k">IEC del ciclo</div><div class="v" id="c-iec">—</div><div class="sub">Recalculado directo de transacciones (SP / Elegible)</div></div>
-      <div class="sic-card"><div class="k">Precio piso</div><div class="v" id="c-piso">—</div><div class="sub" id="c-piso-sub">Clasificación informativa, no afecta la comisión</div></div>
-      <div class="sic-card"><div class="k"># Facturas del ciclo</div><div class="v" id="c-n-facturas">—</div><div class="sub">Facturas reales atribuidas a este vendedor en este ciclo</div></div>
-      <div class="sic-card"><div class="k">Conciliación con la fuente</div><div class="v" id="c-conciliacion">—</div><div class="sub">Suma independiente de la fuente vs. lo reconstruido para el motor SIC</div></div>
-      <div class="sic-card"><div class="k">Fecha de actualización</div><div class="v" id="c-fecha-actualizacion" style="font-size:15px;">—</div><div class="sub">Momento en que se leyeron las fuentes reales del Board</div></div>
+      <div class="sic-card"><div class="k">Presupuesto del mes de desempeño</div><div class="v" id="c-presupuesto-mes">—</div><div class="sub">Lectura directa del mes calendario, sin prorratear</div></div>
+      <div class="sic-card"><div class="k">Venta neta del mes de desempeño</div><div class="v" id="c-venta-neta-mes">—</div><div class="sub">Todas las facturas del vendedor con fecha en ese mes calendario</div></div>
+      <div class="sic-card"><div class="k">Cumplimiento del mes de desempeño</div><div class="v" id="c-cumpl-mes">—</div><div class="sub">Venta neta / presupuesto del mismo mes calendario</div></div>
+      <div class="sic-card"><div class="k">Factor de Presupuesto</div><div class="v" id="c-factor-ppto">—</div><div class="sub">Tramos vigentes: &lt;90%=0% · 90-99,99%=80% · ≥100%=100%</div></div>
+      <div class="sic-card"><div class="k">IEC del mes de desempeño</div><div class="v" id="c-iec-mes">—</div><div class="sub">Recalculado directo de transacciones del mes (SP / Elegible)</div></div>
+      <div class="sic-card"><div class="k">Factor IEC</div><div class="v" id="c-factor-iec">—</div><div class="sub">Tramos vigentes: &lt;70%=20% · 70-84,99%=70% · 85-91,99%=80% · 92-94,99%=90% · ≥95%=105%</div></div>
+      <div class="sic-card"><div class="k">Excedente del mes de desempeño</div><div class="v" id="c-excedente-mes">—</div><div class="sub">max(0, venta neta del mes − presupuesto del mismo mes)</div></div>
+      <div class="sic-card"><div class="k">Bono por Excedente del mes de desempeño</div><div class="v" id="c-bono-excedente">—</div><div class="sub">Excedente × 2% (sin ponderar por Factor IEC, se incorpora en la liquidación siguiente)</div></div>
     </div>
     <div class="real-advertencias-vendedor" id="advertencias-vendedor"></div>
   </div>
 
-  <!-- ============================= BLOQUE 2 — ESTADO DEL CALCULO DE COMISIONES ============================= -->
+  <!-- ============================= BLOQUE 2 — INDICADORES DEL PERIODO DE COBRANZA ============================= -->
   <div class="sic-section">
-    <div class="bloque-titulo"><span class="bloque-numero pendiente">2</span><h2 style="margin:0;">Estado del cálculo de comisiones</h2></div>
+    <div class="bloque-titulo"><span class="bloque-numero">2</span><h2 style="margin:0;">D. Indicadores del período de cobranza</h2></div>
+    <p class="bloque-subtitulo">Reconstruido directamente desde Panel_IEC_Auditoria_2026.html y avboard_data.js del AV LATAM Board, conciliado contra la fuente. El motor SIC (sic_core.js) no fue modificado.</p>
+    <div class="sic-cards">
+      <div class="sic-card"><div class="k">Venta facturada (período)</div><div class="v" id="c-facturada">—</div><div class="sub">Suma de transacciones reales del período 26-25 para este vendedor</div></div>
+      <div class="sic-card"><div class="k"># Facturas del período</div><div class="v" id="c-n-facturas">—</div><div class="sub">Facturas reales atribuidas a este vendedor en este período</div></div>
+      <div class="sic-card"><div class="k">Monto cobrado del período</div><div class="v" id="c-cobrado">—</div><div class="sub">Pendiente de integración — ninguna fuente conectada trae fecha de cobro real</div></div>
+      <div class="sic-card"><div class="k">Precio piso</div><div class="v" id="c-piso">—</div><div class="sub" id="c-piso-sub">Clasificación informativa, no afecta la comisión</div></div>
+      <div class="sic-card"><div class="k">Conciliación con la fuente</div><div class="v" id="c-conciliacion">—</div><div class="sub">Suma independiente de la fuente vs. lo reconstruido para el motor SIC</div></div>
+      <div class="sic-card"><div class="k">Fecha de actualización</div><div class="v" id="c-fecha-actualizacion" style="font-size:15px;">—</div><div class="sub">Momento en que se leyeron las fuentes reales del Board</div></div>
+    </div>
+  </div>
+
+  <!-- ============================= BLOQUE 3 — ESTADO DEL CALCULO DE COMISIONES ============================= -->
+  <div class="sic-section">
+    <div class="bloque-titulo"><span class="bloque-numero pendiente">3</span><h2 style="margin:0;">Estado del cálculo de comisiones</h2></div>
     <p class="bloque-subtitulo">No es un resultado comercial — es el estado de avance del cálculo definitivo.</p>
     <div class="estado-comision-panel">
       <div class="estado-comision-titulo">⏳ Cálculo definitivo pendiente de integración de cobranza real por factura.</div>
-      <div class="estado-comision-texto">El motor SIC (<code>sic_core.js</code>) corre sin modificaciones sobre los datos reales de este ciclo — venta facturada, presupuesto e IEC ya están conciliados (Bloque 1). La <b>liberación definitiva de comisión</b> requiere fecha y monto real de cobranza por factura, que hoy no existe en ninguna fuente conectada del AV LATAM Board.</div>
+      <div class="estado-comision-texto">El motor SIC (<code>sic_core.js</code>) corre sin modificaciones sobre los datos reales de este período — presupuesto, venta neta, cumplimiento e IEC del mes de desempeño ya están conciliados (Bloque 1). La <b>liberación definitiva de comisión</b> requiere fecha y monto real de cobranza por factura dentro del período 26-25, que hoy no existe en ninguna fuente conectada del AV LATAM Board.</div>
       <div class="estado-comision-texto">Estados pendientes: Cobranza real → <b>Pendiente de integración</b>. Comisión definitiva → <b>Pendiente de cálculo</b>. No se muestra una cifra "$0" como resultado de negocio.</div>
       <div class="estado-comision-tecnico">Nota técnica (auditoría, no lectura ejecutiva): el motor sin modificar, al recibir venta cobrada = 0, retorna internamente comisión potencial = <span id="c-potencial-tecnico">—</span> y comisión liberada = <span id="c-liberada-tecnico">—</span>. Es el comportamiento esperado del motor dado el dato disponible hoy.</div>
     </div>
@@ -94,14 +128,14 @@
 
   <!-- ============================= COMO SE COMPONE LA INFORMACION ============================= -->
   <div class="sic-section">
-    <h2>Cómo se compone la información real de este ciclo</h2>
-    <p class="hint">Explicación paso a paso de lo que hoy se puede validar con datos reales.</p>
+    <h2>Cómo se compone la información real de esta liquidación</h2>
+    <p class="hint">Explicación paso a paso de lo que hoy se puede validar con datos reales, respetando la separación entre período de cobranza y mes de desempeño (CHANGE REQUEST v1.6).</p>
     <ol class="sic-steps" id="pasos-calculo"></ol>
   </div>
 
   <!-- ============================= DETALLE POR FACTURA ============================= -->
   <div class="sic-section">
-    <h2>Detalle por factura (datos reales)</h2>
+    <h2>Detalle por factura (período de cobranza, datos reales)</h2>
     <div class="sic-tabla-controles">
       <input type="text" id="buscar-factura" placeholder="Buscar factura o cliente..." oninput="renderTablaFacturas()">
       <button onclick="exportarCSV()">Exportar CSV</button>
@@ -134,18 +168,18 @@
   <!-- ============================= COMISION DIFERIDA TRIMESTRAL ============================= -->
   <div class="sic-section">
     <h2>Comision diferida trimestral</h2>
-    <p class="hint">Pendiente de integración de cobranza real.</p>
+    <p class="hint">Pendiente de integración de cobranza real. Se evalúa sobre meses calendario (CHANGE REQUEST v1.6), no sobre períodos 26-25.</p>
     <div class="sic-diferido-box">
-      <div class="estado-comision-texto">El cálculo de comisión diferida trimestral depende de la liberación de comisión por cobranza real, que hoy no está disponible en ninguna fuente conectada del AV LATAM Board (ver Bloque 2 arriba). Este bloque quedará operativo cuando exista esa fuente — no se muestra un monto diferido estimado ni en cero.</div>
+      <div class="estado-comision-texto">El cálculo de comisión diferida trimestral depende de la liberación de comisión por cobranza real, que hoy no está disponible en ninguna fuente conectada del AV LATAM Board (ver Bloque 3 arriba). Este bloque quedará operativo cuando exista esa fuente — no se muestra un monto diferido estimado ni en cero.</div>
     </div>
   </div>
 
   <!-- ============================= HISTORICO ============================= -->
   <div class="sic-section">
     <h2>Historico</h2>
-    <p class="hint">Ciclos reales disponibles para este vendedor. Sin rankings entre vendedores.</p>
+    <p class="hint">Liquidaciones reales disponibles para este vendedor, con su mes de desempeño asociado. Sin rankings entre vendedores.</p>
     <table class="sic-historico">
-      <thead><tr><th>Ciclo</th><th>Venta facturada</th><th>Presupuesto</th><th>Cumplimiento</th><th>IEC</th></tr></thead>
+      <thead><tr><th>Período de cobranza</th><th>Mes de desempeño</th><th>Venta neta del mes</th><th>Presupuesto del mes</th><th>Cumplimiento</th><th>IEC</th></tr></thead>
       <tbody id="tbody-historico"></tbody>
     </table>
   </div>
@@ -171,8 +205,9 @@
   var sesion = SICAuth.exigirSesion(PAIS);
   if (sesion) { inicializar(); }
 
-  // Nombres de ciclo legibles y fechas en formato DD/MM/YYYY -- solo para
-  // presentacion; el codigo interno del ciclo (ej. "2026-07") no cambia.
+  // Nombres de ciclo/mes legibles y fechas en formato DD/MM/YYYY -- solo para
+  // presentacion; el codigo interno ("2026-07") no cambia. Sirve tanto para
+  // periodos de cobranza como para meses de desempeño (mismo formato "YYYY-MM").
   var MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
   function nombreCiclo(codigoCiclo) {
     var partes = codigoCiclo.split("-");
@@ -210,7 +245,7 @@
       CICLOS_DISPONIBLES = ciclosConDatos.filter(function (c) { return ciclosDefinidos[c]; });
 
       if (!CICLOS_DISPONIBLES.length) {
-        document.querySelector(".sic-wrap").innerHTML = "<p style='color:#a83232'>No se encontraron ciclos reales con datos para Chile dentro del rango de politica definido.</p>";
+        document.querySelector(".sic-wrap").innerHTML = "<p style='color:#a83232'>No se encontraron períodos reales con datos para Chile dentro del rango de politica definido.</p>";
         return;
       }
 
@@ -278,16 +313,22 @@
     window._CICLO_REAL_ACTUAL = cicloReal;
     var vendedor = cicloReal.vendedores.filter(function (v) { return v.id === VENDEDOR_ACTUAL; })[0];
 
+    // Banner "dos periodos" -- siempre visible, aunque no haya vendedor seleccionado.
+    document.getElementById("dp-periodo-cobranza").textContent =
+      fechaDDMMYYYY(cicloReal.ciclo_info.inicio) + " – " + fechaDDMMYYYY(cicloReal.ciclo_info.cierre);
+    document.getElementById("dp-mes-desempeno").textContent = nombreCiclo(cicloReal.mes_desempeno);
+
     if (!vendedor) {
-      document.getElementById("hdr-vendedor").textContent = "Sin ventas en este ciclo";
+      document.getElementById("hdr-vendedor").textContent = "Sin ventas en este período";
       document.getElementById("hdr-cargo").textContent = "—";
-      ["c-facturada", "c-presupuesto", "c-cumpl", "c-iec", "c-piso", "c-n-facturas", "c-conciliacion", "c-fecha-actualizacion"].forEach(function (id) {
+      ["c-presupuesto-mes", "c-venta-neta-mes", "c-cumpl-mes", "c-factor-ppto", "c-iec-mes", "c-factor-iec", "c-excedente-mes", "c-bono-excedente",
+       "c-facturada", "c-n-facturas", "c-cobrado", "c-piso", "c-conciliacion", "c-fecha-actualizacion"].forEach(function (id) {
         document.getElementById(id).textContent = "—";
       });
       document.getElementById("pasos-calculo").innerHTML = "";
       window._DETALLE_ACTUAL = [];
       renderTablaFacturas();
-      document.getElementById("lista-acciones").innerHTML = "<div class='sic-accion'>Sin ventas de este vendedor en este ciclo.</div>";
+      document.getElementById("lista-acciones").innerHTML = "<div class='sic-accion'>Sin ventas de este vendedor en este período.</div>";
       document.getElementById("tbody-historico").innerHTML = "";
       return;
     }
@@ -302,18 +343,27 @@
     // Encabezado
     document.getElementById("hdr-vendedor").textContent = vendedor.nombre;
     document.getElementById("hdr-cargo").textContent = (vendedor.cargo || "").indexOf("No disponible") !== -1 ? "—" : vendedor.cargo;
-    document.getElementById("hdr-ciclo").textContent = nombreCiclo(CICLO_ACTUAL) + " (" + fechaDDMMYYYY(r.ciclo_info.inicio) + "–" + fechaDDMMYYYY(r.ciclo_info.cierre) + ")";
+    document.getElementById("hdr-ciclo").textContent = "Cierre " + fechaDDMMYYYY(r.ciclo_info.cierre) + " (período " + fechaDDMMYYYY(r.ciclo_info.inicio) + "–" + fechaDDMMYYYY(r.ciclo_info.cierre) + ", mes de desempeño " + nombreCiclo(r.mes_desempeno) + ")";
     document.getElementById("hdr-estado-ciclo").textContent = "Cerrado (histórico real)";
     document.getElementById("hdr-politica").textContent = r.ciclo_info.policy_version || CTX_PARAMS.version_politica;
     document.getElementById("hdr-fecha-datos").textContent = new Date().toLocaleString("es-CL");
 
-    // Bloque 1
-    document.getElementById("c-facturada").textContent = fmt(r.venta_facturada);
-    document.getElementById("c-presupuesto").textContent = sinPresupuesto ? "Pendiente de carga" : fmt(r.presupuesto);
-    document.getElementById("c-cumpl").textContent = sinPresupuesto ? "Pendiente de carga" : (r.presupuesto > 0 ? pct(r.venta_facturada / r.presupuesto * 100) : "—");
-    document.getElementById("c-iec").textContent = sinIec ? "Pendiente de carga" : pct(r.iec_pct);
+    // Bloque 1 -- Indicadores del MES DE DESEMPEÑO
+    document.getElementById("c-presupuesto-mes").textContent = sinPresupuesto ? "Pendiente de carga" : fmt(r.presupuesto_mes);
+    document.getElementById("c-venta-neta-mes").textContent = fmt(r.venta_neta_mes);
+    document.getElementById("c-cumpl-mes").textContent = sinPresupuesto ? "Pendiente de carga" : pct(r.cumplimiento_pct);
+    document.getElementById("c-factor-ppto").textContent = sinPresupuesto ? "Pendiente de carga" : pct(r.factor_presupuesto);
+    document.getElementById("c-iec-mes").textContent = sinIec ? "Pendiente de carga" : pct(r.iec_pct);
+    document.getElementById("c-factor-iec").textContent = sinIec ? "Pendiente de carga" : pct(r.factor_iec);
+    document.getElementById("c-excedente-mes").textContent = sinPresupuesto ? "Pendiente de carga" : fmt(r.excedente_mes);
+    document.getElementById("c-bono-excedente").textContent = sinPresupuesto ? "Pendiente de carga" : fmt(r.bono_excedente);
 
-    var ventasVendedor = cicloReal.ventas.filter(function (v) { return v.vendedor_id === VENDEDOR_ACTUAL; });
+    // Bloque 2 -- Indicadores del PERIODO DE COBRANZA
+    var ventasVendedor = cicloReal.ventas.filter(function (v) { return v.vendedor_id === VENDEDOR_ACTUAL && v._pertenece_periodo; });
+    document.getElementById("c-facturada").textContent = fmt(r.venta_facturada_periodo);
+    document.getElementById("c-n-facturas").textContent = ventasVendedor.length;
+    document.getElementById("c-cobrado").textContent = "Pendiente de integración";
+
     var sp = 0, bp = 0, ne = 0;
     ventasVendedor.forEach(function (v) {
       var c = SIC.clasificacionPiso(v.piso_situacion);
@@ -322,10 +372,9 @@
     var totalPiso = sp + bp + ne;
     document.getElementById("c-piso").textContent = totalPiso > 0 ? pct(sp / totalPiso * 100) + " sobre piso" : "—";
     document.getElementById("c-piso-sub").textContent = sp + " sobre piso · " + bp + " bajo piso (informativo) · " + ne + " no evaluable";
-    document.getElementById("c-n-facturas").textContent = ventasVendedor.length;
     document.getElementById("c-fecha-actualizacion").textContent = new Date().toLocaleString("es-CL");
 
-    // Conciliacion con la fuente (solo para este vendedor y este ciclo)
+    // Conciliacion con la fuente (solo para este vendedor y este periodo de cobranza)
     var txArray = FUENTES.tx.TX_CL;
     var sumaIndep = 0, nIndep = 0;
     (txArray || []).forEach(function (t) {
@@ -343,7 +392,7 @@
     elConciliacion.textContent = coincide ? "Coincide exactamente" : "Revisar";
     elConciliacion.className = "v real-badge " + (coincide ? "ok" : "gap");
 
-    // Nota tecnica Bloque 2
+    // Nota tecnica Bloque 3
     document.getElementById("c-potencial-tecnico").textContent = fmt(r.comision_potencial);
     document.getElementById("c-liberada-tecnico").textContent = fmt(r.comision_liberada);
 
@@ -356,7 +405,7 @@
     // Pasos
     renderPasos(r, sinPresupuesto, sinIec, sp, bp, ne);
 
-    // Tabla de facturas
+    // Tabla de facturas (solo las del periodo de cobranza)
     window._DETALLE_ACTUAL = ventasVendedor.map(function (v) {
       return {
         factura: v.factura,
@@ -372,7 +421,7 @@
     // Acciones -- pendiente de cobranza real
     document.getElementById("lista-acciones").innerHTML = "<div class='sic-accion'>Pendiente de cálculo — requiere integración de cobranza real por factura para proyectar acciones de cobro.</div>";
 
-    // Historico real (mismo vendedor, todos los ciclos reales disponibles)
+    // Historico real (mismo vendedor, todos los periodos reales disponibles)
     renderHistoricoReal();
 
     window._RESULTADO_ACTUAL = r;
@@ -381,12 +430,15 @@
 
   function renderPasos(r, sinPresupuesto, sinIec, sp, bp, ne) {
     var pasos = [
-      { label: "Venta facturada real", valor: fmt(r.venta_facturada), nota: "Suma de las transacciones reales de este vendedor en el ciclo, conciliada contra la fuente (ver tarjeta 'Conciliación con la fuente')." },
-      { label: "Presupuesto del ciclo", valor: sinPresupuesto ? "Pendiente de carga" : fmt(r.presupuesto), nota: sinPresupuesto ? "No se encontró presupuesto real asociado a este vendedor para este ciclo." : "Presupuesto real prorrateado al ciclo 26-25." },
-      { label: "Cumplimiento (aproximado)", valor: sinPresupuesto ? "Pendiente de carga" : pct(r.presupuesto > 0 ? r.venta_facturada / r.presupuesto * 100 : 0), nota: "Venta facturada sobre presupuesto — informativo. El cumplimiento oficial del SIC (Política V1.1) se calcula sobre venta COBRADA, que hoy no está disponible." },
-      { label: "IEC del ciclo", valor: sinIec ? "Pendiente de carga" : pct(r.iec_pct), nota: "Recalculado directo desde las transacciones (ventas sobre piso / ventas elegibles), misma fórmula que usa AVBOARD." },
+      { label: "A. Período de cobranza", valor: fechaDDMMYYYY(r.ciclo_info.inicio) + " – " + fechaDDMMYYYY(r.ciclo_info.cierre), nota: "Ventana 26→25 sin cambios (CHANGE REQUEST v1.6, sección 1.A) — determina cobros, facturas cobradas y edad de cartera." },
+      { label: "B. Mes de desempeño", valor: nombreCiclo(r.mes_desempeno), nota: "Último mes calendario completamente cerrado antes del cierre del período — determina presupuesto, venta neta, cumplimiento, IEC y excedente." },
+      { label: "Presupuesto del mes de desempeño", valor: sinPresupuesto ? "Pendiente de carga" : fmt(r.presupuesto_mes), nota: sinPresupuesto ? "No se encontró presupuesto real asociado a este vendedor para el mes " + r.mes_desempeno + "." : "Lectura directa del mes calendario real — sin prorratear entre dos meses." },
+      { label: "Venta neta del mes de desempeño", valor: fmt(r.venta_neta_mes), nota: "Suma de todas las facturas reales de este vendedor con fecha dentro del mes calendario completo (día 1 al último día), sin importar el período de cobranza al que pertenezcan." },
+      { label: "Cumplimiento y Factor de Presupuesto", valor: sinPresupuesto ? "Pendiente de carga" : (pct(r.cumplimiento_pct) + " → Factor " + pct(r.factor_presupuesto)), nota: "Venta neta del mes / presupuesto del mismo mes, mapeado a los tramos vigentes de la Política V1.1." },
+      { label: "IEC del mes de desempeño y Factor IEC", valor: sinIec ? "Pendiente de carga" : (pct(r.iec_pct) + " → Factor " + pct(r.factor_iec)), nota: "Recalculado directo desde las transacciones del mismo mes calendario (ventas sobre piso / ventas elegibles)." },
+      { label: "Excedente y Bono por Excedente", valor: sinPresupuesto ? "Pendiente de carga" : (fmt(r.excedente_mes) + " → Bono " + fmt(r.bono_excedente)), nota: "Excedente = max(0, venta neta del mes − presupuesto del mismo mes). Bono = Excedente × 2%, sin ponderar por Factor IEC (CHANGE REQUEST v1.6)." },
       { label: "Precio piso (informativo)", valor: sp + " sobre piso · " + bp + " bajo piso · " + ne + " no evaluable", nota: "Política V1.4: el precio piso ya no reduce ni anula la comisión por sí solo — es informativo y solo impacta a través del Factor IEC." },
-      { label: "Comisión definitiva", valor: "Pendiente de cálculo", nota: "Requiere fecha y monto real de cobranza por factura, que hoy no existe en ninguna fuente conectada del AV LATAM Board (ver bloque 'Estado del cálculo de comisiones')." }
+      { label: "Comisión definitiva del período", valor: "Pendiente de cálculo", nota: "Requiere fecha y monto real de cobranza por factura dentro del período de cobranza, que hoy no existe en ninguna fuente conectada del AV LATAM Board (ver bloque 'Estado del cálculo de comisiones')." }
     ];
     document.getElementById("pasos-calculo").innerHTML = pasos.map(function (p, i) {
       return "<li><div class='num'>" + (i + 1) + "</div><div class='label'>" + p.label + "</div><div class='valor'><b>" + p.valor + "</b><br>" + p.nota + "</div></li>";
@@ -422,18 +474,18 @@
       var ciclo = cCode === CICLO_ACTUAL ? window._CICLO_REAL_ACTUAL : SICAdapter.construirCicloReal(PAIS, cCode, FUENTES, CTX_PARAMS);
       var tieneVendedor = ciclo.vendedores.some(function (v) { return v.id === VENDEDOR_ACTUAL; });
       if (!tieneVendedor) {
-        return "<tr><td>" + cCode + "</td><td colspan='4'>Sin ventas de este vendedor en este ciclo</td></tr>";
+        return "<tr><td>" + cCode + "</td><td>" + nombreCiclo(ciclo.mes_desempeno) + "</td><td colspan='4'>Sin ventas de este vendedor en este período/mes</td></tr>";
       }
       var rr = SIC.calcularVendedorCiclo(ciclo, VENDEDOR_ACTUAL, cCode);
       var advs = ciclo.advertencias.filter(function (a) { return a.detalle.indexOf("Vendedor '" + VENDEDOR_ACTUAL + "'") === 0; });
       var sinP = advs.some(function (a) { return a.tipo === "vendedor_sin_presupuesto"; });
       var sinI = advs.some(function (a) { return a.tipo === "vendedor_sin_iec"; });
-      var cumplTxt = sinP ? "Pendiente de carga" : (rr.presupuesto > 0 ? pct(rr.venta_facturada / rr.presupuesto * 100) : "—");
       return "<tr" + (cCode === CICLO_ACTUAL ? " class='ciclo-vigente'" : "") + ">" +
         "<td>" + cCode + (cCode === CICLO_ACTUAL ? " (actual)" : "") + "</td>" +
-        "<td class='num'>" + fmt(rr.venta_facturada) + "</td>" +
-        "<td class='num'>" + (sinP ? "Pendiente de carga" : fmt(rr.presupuesto)) + "</td>" +
-        "<td class='num'>" + cumplTxt + "</td>" +
+        "<td>" + nombreCiclo(rr.mes_desempeno) + "</td>" +
+        "<td class='num'>" + fmt(rr.venta_neta_mes) + "</td>" +
+        "<td class='num'>" + (sinP ? "Pendiente de carga" : fmt(rr.presupuesto_mes)) + "</td>" +
+        "<td class='num'>" + (sinP ? "Pendiente de carga" : pct(rr.cumplimiento_pct)) + "</td>" +
         "<td class='num'>" + (sinI ? "Pendiente de carga" : pct(rr.iec_pct)) + "</td>" +
         "</tr>";
     });
@@ -456,7 +508,7 @@
   }
 
   function descargarPDF() {
-    alert("El informe PDF con comisión definitiva estará disponible cuando se integre la cobranza real por factura. Mientras tanto, use 'Datos Reales (auditoría técnica)' para el detalle validado de venta, presupuesto e IEC.");
+    alert("El informe PDF con comisión definitiva estará disponible cuando se integre la cobranza real por factura. Mientras tanto, use 'Datos Reales (auditoría técnica)' para el detalle validado de presupuesto, venta neta e IEC del mes de desempeño.");
   }
 </script>
 </body>

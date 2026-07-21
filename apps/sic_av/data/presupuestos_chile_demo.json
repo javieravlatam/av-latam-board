@@ -1,123 +1,124 @@
 {
+  "_migracion_v1.6": "CHANGE REQUEST SIC-AV v1.6 (2026-07-13): el campo 'ciclo' se renombro a 'mes' (mes calendario de desempeno) y los valores se recorrieron -1 mes respecto a su etiqueta anterior, para preservar la cifra que ya se mostraba en cada periodo de cobranza vigente/cerrado (ej. lo que antes era 'ciclo':'2026-07' -> 6000000 ahora es 'mes':'2026-06' -> 6000000, porque el mes de desempeno del periodo que cierra el 25/07 es junio). Ver TEMPORAL_MODEL_AUDIT_v1.6.md.",
   "presupuestos": [
     {
       "vendedor_id": "CL-V01",
-      "ciclo": "2026-02",
+      "mes": "2026-01",
       "presupuesto": 1300000
     },
     {
       "vendedor_id": "CL-V01",
-      "ciclo": "2026-03",
+      "mes": "2026-02",
       "presupuesto": 1300000
     },
     {
       "vendedor_id": "CL-V01",
-      "ciclo": "2026-04",
+      "mes": "2026-03",
       "presupuesto": 649020
     },
     {
       "vendedor_id": "CL-V01",
-      "ciclo": "2026-05",
+      "mes": "2026-04",
       "presupuesto": 5708738
     },
     {
       "vendedor_id": "CL-V01",
-      "ciclo": "2026-06",
+      "mes": "2026-05",
       "presupuesto": 5825243
     },
     {
       "vendedor_id": "CL-V01",
-      "ciclo": "2026-07",
+      "mes": "2026-06",
       "presupuesto": 6000000
     },
     {
       "vendedor_id": "CL-V02",
-      "ciclo": "2026-02",
+      "mes": "2026-01",
       "presupuesto": 1000000
     },
     {
       "vendedor_id": "CL-V02",
-      "ciclo": "2026-03",
+      "mes": "2026-02",
       "presupuesto": 1000000
     },
     {
       "vendedor_id": "CL-V02",
-      "ciclo": "2026-04",
+      "mes": "2026-03",
       "presupuesto": 558879
     },
     {
       "vendedor_id": "CL-V02",
-      "ciclo": "2026-05",
+      "mes": "2026-04",
       "presupuesto": 6184466
     },
     {
       "vendedor_id": "CL-V02",
-      "ciclo": "2026-06",
+      "mes": "2026-05",
       "presupuesto": 6310680
     },
     {
       "vendedor_id": "CL-V02",
-      "ciclo": "2026-07",
+      "mes": "2026-06",
       "presupuesto": 6500000
     },
     {
       "vendedor_id": "CL-V03",
-      "ciclo": "2026-02",
+      "mes": "2026-01",
       "presupuesto": 350000
     },
     {
       "vendedor_id": "CL-V03",
-      "ciclo": "2026-03",
+      "mes": "2026-02",
       "presupuesto": 350000
     },
     {
       "vendedor_id": "CL-V03",
-      "ciclo": "2026-04",
+      "mes": "2026-03",
       "presupuesto": 161217
     },
     {
       "vendedor_id": "CL-V03",
-      "ciclo": "2026-05",
+      "mes": "2026-04",
       "presupuesto": 4566990
     },
     {
       "vendedor_id": "CL-V03",
-      "ciclo": "2026-06",
+      "mes": "2026-05",
       "presupuesto": 4660194
     },
     {
       "vendedor_id": "CL-V03",
-      "ciclo": "2026-07",
+      "mes": "2026-06",
       "presupuesto": 4800000
     },
     {
       "vendedor_id": "CL-V04",
-      "ciclo": "2026-02",
+      "mes": "2026-01",
       "presupuesto": 2097000
     },
     {
       "vendedor_id": "CL-V04",
-      "ciclo": "2026-03",
+      "mes": "2026-02",
       "presupuesto": 2097000
     },
     {
       "vendedor_id": "CL-V04",
-      "ciclo": "2026-04",
+      "mes": "2026-03",
       "presupuesto": 2098000
     },
     {
       "vendedor_id": "CL-V04",
-      "ciclo": "2026-05",
+      "mes": "2026-04",
       "presupuesto": 3615534
     },
     {
       "vendedor_id": "CL-V04",
-      "ciclo": "2026-06",
+      "mes": "2026-05",
       "presupuesto": 3689320
     },
     {
       "vendedor_id": "CL-V04",
-      "ciclo": "2026-07",
+      "mes": "2026-06",
       "presupuesto": 3800000
     }
   ]

@@ -1,8 +1,25 @@
 /**
- * SIC-AV — Adaptador de datos reales (CHANGE REQUEST SIC-AV v1.5, Fase 2)
+ * SIC-AV — Adaptador de datos reales (CHANGE REQUEST SIC-AV v1.5, Fase 2;
+ * actualizado por CHANGE REQUEST SIC-AV v1.6, seccion 8)
  * =========================================================================================
  * Capa de adaptacion de SOLO LECTURA entre las fuentes reales YA EXISTENTES de AV LATAM
  * Board y el motor de calculo SIC (sic_core.js), que NO se modifica.
+ *
+ * CHANGE REQUEST v1.6: este adaptador ya NO prorratea presupuesto entre dos
+ * meses calendario para formar un "presupuesto de ciclo" (function eliminada:
+ * _proporcionMeses / _presupuestoDelCiclo). El presupuesto de Chile se lee
+ * directamente del mes calendario de desempeño (rtc_mensual_ppto[vendedor][mesIdx]),
+ * sin interpolar entre meses. El IEC real tambien se recalcula sobre el MES DE
+ * DESEMPEÑO (mes calendario completo), no sobre el periodo de cobranza 26-25 --
+ * por eso construirCicloReal ahora reune, ademas de las transacciones propias
+ * del periodo solicitado, las transacciones de TODO el mes calendario de
+ * desempeño correspondiente (que puede no coincidir con la ventana 26-25).
+ * Cada venta que construye este adaptador queda marcada con dos banderas
+ * independientes: _pertenece_periodo (dentro de la ventana 26-25 del ciclo
+ * solicitado) y _pertenece_mes_desempeno (dentro del mes calendario completo
+ * de desempeño) -- sic_core.js ya filtra por su cuenta usando fechas, estas
+ * banderas son solo para que las pruebas y el propio adaptador puedan
+ * reconciliar cada bloque por separado sin recalcular fechas.
  *
  * Fuentes reales que este archivo lee (nunca escribe, nunca modifica):
  *   - Panel_IEC_Auditoria_2026.html  -> TX_CL / TX_PE (detalle transaccional real,
@@ -114,26 +131,6 @@
 
   SICAdapter._diasEnMes = function (anio, mes1a12) {
     return new Date(anio, mes1a12, 0).getDate();
-  };
-
-  // Proporcion de dias que un ciclo 26->25 toma de cada uno de los dos meses
-  // calendario que cruza -- usado para prorratear presupuesto mensual real.
-  SICAdapter._proporcionMeses = function (cicloCode) {
-    var partes = cicloCode.split("-");
-    var y = parseInt(partes[0], 10), m = parseInt(partes[1], 10);
-    var mesAnteriorIdx = m - 2; // 0-based, mes anterior al del ciclo
-    var mesActualIdx = m - 1;   // 0-based
-    var anioAnterior = y;
-    if (mesAnteriorIdx < 0) { mesAnteriorIdx = 11; anioAnterior = y - 1; }
-    var diasMesAnterior = SICAdapter._diasEnMes(anioAnterior, mesAnteriorIdx + 1);
-    var diasMesActual = SICAdapter._diasEnMes(y, mesActualIdx + 1);
-    var diasDelAnterior = diasMesAnterior - 25; // del 26 al fin de mes
-    var diasDelActual = 25; // del 1 al 25
-    return {
-      mesAnteriorIdx: mesAnteriorIdx, mesActualIdx: mesActualIdx,
-      pctAnterior: diasDelAnterior / diasMesAnterior,
-      pctActual: diasDelActual / diasMesActual
-    };
   };
 
   // ---------------------------------------------------------------------
@@ -255,6 +252,15 @@
       advertencias.push({ tipo: "sin_datos", detalle: "No se encontraron transacciones reales para " + pais + " en " + SICAdapter.RUTAS.panelIec });
     }
 
+    // CHANGE REQUEST v1.6: se necesita, ademas de la ventana 26-25 del ciclo
+    // solicitado, la ventana del mes calendario completo de desempeño (que
+    // NO coincide con la ventana del periodo -- puede empezar hasta 25 dias
+    // antes). SIC ya esta cargado (sic_core.js se declara antes que este
+    // archivo en sic_chile.html/sic_peru.html), se reusa su aritmetica de
+    // meses sin duplicarla aqui.
+    var mesDesempeno = global.SIC.mesDesempenoDe(cicloCode);
+    var rangoMesDesempeno = global.SIC.rangoMesCalendario(mesDesempeno);
+
     var cicloInfo = null;
     var ventas = [];
     var vendedoresVistos = {};
@@ -271,8 +277,15 @@
         return;
       }
       var cInfo = SICAdapter.asignarCiclo(t.fecha);
-      if (cInfo.ciclo !== cicloCode) return; // fuera del ciclo solicitado
-      if (!cicloInfo) cicloInfo = cInfo;
+      var perteneceAlPeriodo = cInfo.ciclo === cicloCode;
+      var perteneceAlMesDesempeno = String(t.fecha) >= rangoMesDesempeno.inicio && String(t.fecha) <= rangoMesDesempeno.cierre;
+      // CHANGE REQUEST v1.6: ya no se descarta todo lo que este fuera del
+      // periodo 26-25 -- tambien se conserva lo que caiga dentro del mes
+      // calendario de desempeño (aunque quede fuera de la ventana 26-25),
+      // porque venta_neta_mes/presupuesto/IEC del mes de desempeño lo
+      // necesitan. Fuera de ambas ventanas, se descarta igual que antes.
+      if (!perteneceAlPeriodo && !perteneceAlMesDesempeno) return;
+      if (perteneceAlPeriodo && !cicloInfo) cicloInfo = cInfo;
 
       // Validacion: factura sin vendedor (campo vacio/ausente en la fuente).
       // No se descarta en silencio: se reporta y la fila se excluye del ciclo
@@ -346,7 +359,12 @@
         venta_neta: monto,
         _real: true,
         _folio_original: t.folio,
-        _documento: t.doc || null
+        _documento: t.doc || null,
+        // CHANGE REQUEST v1.6: banderas independientes -- una venta puede
+        // pertenecer al periodo de cobranza, al mes de desempeño, a ambos o
+        // (en el limite de la ventana 26-25) solo a uno de los dos.
+        _pertenece_periodo: perteneceAlPeriodo,
+        _pertenece_mes_desempeno: perteneceAlMesDesempeno
       });
     });
 
@@ -378,39 +396,46 @@
     // son un no-op porque `cobranzas` siempre esta vacio (brecha 3.1).
     SICAdapter._validarCobranzas(cobranzas, ventas, advertencias);
 
-    // -- Presupuesto: prorrateo del presupuesto mensual/anual real al ciclo 26-25 --
+    // -- Presupuesto: CHANGE REQUEST v1.6 -- lectura DIRECTA del mes
+    // calendario de desempeño, sin prorratear entre dos meses. Se guarda
+    // con clave "mes" (no "ciclo"), igual que data/presupuestos_*_demo.json
+    // migrado, para que SIC.presupuestoDelMes lo encuentre igual sea real o
+    // demo.
     var presupuestos = [];
     var vendedoresSinPresupuesto = [];
     Object.keys(vendedoresVistos).forEach(function (clave) {
-      var monto = SICAdapter._presupuestoDelCiclo(pais, clave, cicloCode, fuentes.presupuesto);
+      var monto = SICAdapter._presupuestoDelMes(pais, clave, mesDesempeno, fuentes.presupuesto);
       if (monto === null) {
         vendedoresSinPresupuesto.push(clave);
-        advertencias.push({ tipo: "vendedor_sin_presupuesto", detalle: "Vendedor '" + clave + "' (" + vendedoresVistos[clave] + ") tiene ventas reales en este ciclo pero no se encontro presupuesto real asociado" });
-        monto = 0;
+        advertencias.push({ tipo: "vendedor_sin_presupuesto", detalle: "Vendedor '" + clave + "' (" + vendedoresVistos[clave] + ") tiene ventas reales en este periodo/mes de desempeño pero no se encontro presupuesto real asociado al mes " + mesDesempeno });
+        monto = null; // v1.6 seccion 13: nunca inventar 0 -- queda "Pendiente de carga"
       }
-      presupuestos.push({ vendedor_id: clave, ciclo: cicloCode, presupuesto: monto });
+      presupuestos.push({ vendedor_id: clave, mes: mesDesempeno, presupuesto: monto });
     });
 
-    // -- IEC real del ciclo: recalculado directamente desde TX (SP/Elegible),
-    // exactamente la misma formula que docs/AVBOARD_BUSINESS_RULES.md y que
-    // ya usa SIC.factorIEC (misma tabla de tramos 20/70/80/90/105%). --
+    // -- IEC real: CHANGE REQUEST v1.6 -- se recalcula sobre el MES DE
+    // DESEMPEÑO (mes calendario completo, bandera _pertenece_mes_desempeno),
+    // NUNCA sobre el periodo de cobranza 26-25 (ver TEMPORAL_MODEL_AUDIT_v1.6.md
+    // seccion 3). Misma formula SP/Elegible que docs/AVBOARD_BUSINESS_RULES.md
+    // y que ya usa SIC.factorIEC (misma tabla de tramos 20/70/80/90/105%).
     var iec = [];
     Object.keys(vendedoresVistos).forEach(function (clave) {
       var sp = 0, elegible = 0, bajoPiso = 0, noEvaluable = 0;
       ventas.forEach(function (v) {
         if (v.vendedor_id !== clave) return;
+        if (!v._pertenece_mes_desempeno) return;
         if (v.piso_situacion === "no_evaluable") { noEvaluable += v.venta_neta; return; }
         elegible += v.venta_neta;
         if (v.piso_situacion === "cumple") sp += v.venta_neta; else bajoPiso += v.venta_neta;
       });
       var iecPct = elegible > 0 ? (sp / elegible * 100) : 0;
       if (elegible === 0) {
-        advertencias.push({ tipo: "vendedor_sin_iec", detalle: "Vendedor '" + clave + "' no tiene ventas elegibles (con precio piso) en este ciclo -- IEC no calculable, se usa 0%" });
+        advertencias.push({ tipo: "vendedor_sin_iec", detalle: "Vendedor '" + clave + "' no tiene ventas elegibles (con precio piso) en el mes de desempeño " + mesDesempeno + " -- IEC no calculable, se usa 0%" });
       }
       var campoSobre = pais === "CL" ? "ventas_sobre_piso_clp" : "ventas_sobre_piso_usd";
       var campoBajo = pais === "CL" ? "ventas_bajo_piso_clp" : "ventas_bajo_piso_usd";
       var campoNoEval = pais === "CL" ? "ventas_no_evaluables_clp" : "ventas_no_evaluables_usd";
-      var registro = { vendedor_id: clave, ciclo: cicloCode, iec_pct: Math.round(iecPct * 100) / 100 };
+      var registro = { vendedor_id: clave, mes: mesDesempeno, iec_pct: Math.round(iecPct * 100) / 100 };
       registro[campoSobre] = sp;
       registro[campoBajo] = bajoPiso;
       registro[campoNoEval] = noEvaluable;
@@ -432,6 +457,12 @@
       presupuestos: presupuestos,
       iec: iec,
       ciclo_info: cicloInfo,
+      // CHANGE REQUEST v1.6: se expone explicitamente el mes de desempeño y
+      // su rango calendario, para que sic_chile.html/sic_peru.html/sic_pdf.js
+      // puedan mostrar "Periodo de cobranza" y "Mes de desempeño" como dos
+      // bloques separados sin tener que recalcularlo.
+      mes_desempeno: mesDesempeno,
+      mes_desempeno_info: rangoMesDesempeno,
       advertencias: advertencias
     };
   };
@@ -457,17 +488,22 @@
     });
   };
 
-  SICAdapter._presupuestoDelCiclo = function (pais, vendedorClave, cicloCode, presupuestoReal) {
-    var prop = SICAdapter._proporcionMeses(cicloCode);
+  // CHANGE REQUEST v1.6, seccion 8: lectura DIRECTA del presupuesto del mes
+  // calendario de desempeño -- SIN prorratear entre dos meses (la funcion
+  // anterior, _presupuestoDelCiclo, interpolaba entre el mes anterior y el
+  // mes del ciclo para formar un "presupuesto de ciclo 26-25"; eso queda
+  // explicitamente prohibido por el CHANGE REQUEST v1.6, seccion 2).
+  SICAdapter._presupuestoDelMes = function (pais, vendedorClave, mesCode, presupuestoReal) {
+    var mesIdx = parseInt(mesCode.split("-")[1], 10) - 1; // 0-based
     if (pais === "CL") {
       var serie = presupuestoReal.CL.rtc_mensual_ppto[vendedorClave];
       if (!serie) return null;
-      var pptoAnterior = serie[prop.mesAnteriorIdx] || 0;
-      var pptoActual = serie[prop.mesActualIdx] || 0;
-      return Math.round(pptoAnterior * prop.pctAnterior + pptoActual * prop.pctActual);
+      var val = serie[mesIdx];
+      return (val === undefined || val === null) ? null : val;
     }
-    // Peru: solo hay presupuesto ANUAL real -- prorrateo grueso (anual / 12),
-    // marcado como aproximacion mayor que la de Chile.
+    // Peru: solo hay presupuesto ANUAL real -- aproximacion anual/12,
+    // mantenida (no es un prorrateo de ciclo, es la unica granularidad real
+    // disponible para Peru; ver DATA_SOURCE_AUDIT.md).
     var anual = presupuestoReal.PE.rtc_ppto_anual[vendedorClave];
     if (anual === undefined) return null;
     return Math.round((anual / 12) * 100) / 100;

@@ -78,8 +78,9 @@
       "<tr><td>Pais</td><td>" + (pais === "CL" ? "Chile" : "Peru") + "</td></tr>" +
       "<tr><td>Comercial</td><td>" + esc(vendedor.nombre) + "</td></tr>" +
       "<tr><td>Cargo</td><td>" + esc(vendedor.cargo) + "</td></tr>" +
-      "<tr><td>Ciclo comercial</td><td>" + esc(nombreCicloPdf(r.ciclo)) + " (" + fechaDDMMYYYYPdf(r.ciclo_info.inicio) + " a " + fechaDDMMYYYYPdf(r.ciclo_info.cierre) + ")</td></tr>" +
-      "<tr><td>Estado del ciclo</td><td>" + esc(r.ciclo_info.estado === "vigente" ? "Vigente" : (r.ciclo_info.estado === "cerrado" ? "Cerrado" : r.ciclo_info.estado)) + "</td></tr>" +
+      "<tr><td>Período de cobranza</td><td>" + fechaDDMMYYYYPdf(r.ciclo_info.inicio) + " a " + fechaDDMMYYYYPdf(r.ciclo_info.cierre) + "</td></tr>" +
+      "<tr><td>Mes de desempeño aplicado</td><td>" + esc(nombreCicloPdf(r.mes_desempeno)) + "</td></tr>" +
+      "<tr><td>Estado del período</td><td>" + esc(r.ciclo_info.estado === "vigente" ? "Vigente" : (r.ciclo_info.estado === "cerrado" ? "Cerrado" : r.ciclo_info.estado)) + "</td></tr>" +
       "<tr><td>Version de politica aplicada a este ciclo</td><td>" + esc(r.ciclo_info.policy_version || params.version_politica) + "</td></tr>" +
       "<tr><td>Fecha de datos del ciclo</td><td>" + fechaDDMMYYYYPdf(r.ciclo_info.fecha_datos) + "</td></tr>" +
       "<tr><td>Fecha de generacion del informe</td><td>" + fechaGeneracion + "</td></tr>" +
@@ -88,9 +89,25 @@
       "<div class='banner-demo'>MODELO DEMOSTRATIVO — PENDIENTE DE APROBACION GERENCIAL. Datos sinteticos, sin valor contractual.</div>" +
       "</section>" +
 
-      // RESUMEN EJECUTIVO
+      // RESUMEN EJECUTIVO -- CHANGE REQUEST v1.6: indicadores del MES DE
+      // DESEMPEÑO (presupuesto, venta neta, cumplimiento, IEC, excedente,
+      // bono) y del PERIODO DE COBRANZA (venta facturada, venta cobrada,
+      // comisiones) se muestran por separado, nunca mezclados.
       "<section class='bloque'>" +
-      "<h2>Resumen Ejecutivo</h2>" +
+      "<h2>Resumen Ejecutivo — Indicadores del Mes de Desempeño (" + esc(nombreCicloPdf(r.mes_desempeno)) + ")</h2>" +
+      "<table class='tabla-resumen'>" +
+      "<tr><td>Presupuesto del mes de desempeño</td><td class='num'>" + (r.presupuesto_mes === null ? "Pendiente de carga" : fmt(pais, r.presupuesto_mes)) + "</td>" +
+      "<td>Venta neta del mes de desempeño</td><td class='num'>" + fmt(pais, r.venta_neta_mes) + "</td></tr>" +
+      "<tr><td>Cumplimiento del mes de desempeño</td><td class='num'>" + pct(r.cumplimiento_pct) + "</td>" +
+      "<td>Factor de Presupuesto</td><td class='num'>" + pct(r.factor_presupuesto) + "</td></tr>" +
+      "<tr><td>IEC del mes de desempeño</td><td class='num'>" + pct(r.iec_pct) + "</td>" +
+      "<td>Factor IEC</td><td class='num'>" + pct(r.factor_iec) + "</td></tr>" +
+      "<tr><td>Excedente del mes de desempeño</td><td class='num'>" + fmt(pais, r.excedente_mes) + "</td>" +
+      "<td>Bono por excedente</td><td class='num'>" + fmt(pais, r.bono_excedente) + "</td></tr>" +
+      "</table></section>" +
+
+      "<section class='bloque'>" +
+      "<h2>Resumen Ejecutivo — Indicadores del Período de Cobranza</h2>" +
       "<table class='tabla-resumen'>" +
       "<tr><td>Comision potencial</td><td class='num'>" + fmt(pais, r.comision_potencial) + "</td>" +
       "<td>Comision liberada</td><td class='num'>" + fmt(pais, r.comision_liberada) + "</td></tr>" +
@@ -98,12 +115,8 @@
       "<td>Comision validada</td><td class='num'>" + fmt(pais, r.comision_validada) + "</td></tr>" +
       "<tr><td>Comision pagada</td><td class='num'>" + fmt(pais, r.comision_pagada) + "</td>" +
       "<td>Comision diferida (trimestre)</td><td class='num'>" + fmt(pais, diferido.diferido_acumulado) + "</td></tr>" +
-      "<tr><td>Presupuesto del ciclo</td><td class='num'>" + fmt(pais, r.presupuesto) + "</td>" +
-      "<td>Cumplimiento</td><td class='num'>" + pct(r.cumplimiento_pct) + "</td></tr>" +
-      "<tr><td>IEC del ciclo</td><td class='num'>" + pct(r.iec_pct) + "</td>" +
-      "<td>Venta facturada</td><td class='num'>" + fmt(pais, r.venta_facturada) + "</td></tr>" +
-      "<tr><td>Venta cobrada</td><td class='num'>" + fmt(pais, r.venta_cobrada) + "</td>" +
-      "<td>Bono por excedente</td><td class='num'>" + fmt(pais, r.bono_excedente) + "</td></tr>" +
+      "<tr><td>Venta facturada (período)</td><td class='num'>" + fmt(pais, r.venta_facturada_periodo) + "</td>" +
+      "<td>Venta cobrada (período)</td><td class='num'>" + fmt(pais, r.venta_cobrada) + "</td></tr>" +
       "</table></section>" +
 
       // COMO SE CONSTRUYO
@@ -117,9 +130,8 @@
       "<tr><td>Ajustes (notas de credito de ciclos anteriores)</td><td class='num'>-" + fmt(pais, r.ajustes_nc) + "</td></tr>" +
       "<tr class='total'><td>Resultado final del ciclo</td><td class='num'>" + fmt(pais, r.comision_final) + "</td></tr>" +
       "</table>" +
-      "<p class='nota-formula'>Formula (Politica V1.4): Comision Ajustada = Comision Base &times; Factor Presupuesto &times; Factor IEC. " +
-      "Comision Final = Suma(Comision Ajustada) + Bono Excedente + Bono Consistencia Trimestral - Notas de Credito - Devoluciones - Ajustes. " +
-      "La edad de cartera no se cuenta dos veces: vive unicamente en la tasa por tramo de dias. El precio piso ya no es un factor de la formula -- toda venta facturada entra al calculo normal; el precio piso solo impacta la comision de forma indirecta, a traves del Factor IEC.</p>" +
+      "<p class='nota-formula'>Formula (CHANGE REQUEST SIC-AV v1.6): Cobros efectivos del período 26-25 &times; Tasa segun edad de cartera &times; Factor de Cumplimiento del mes de desempeño &times; Factor IEC del mismo mes de desempeño + Bono por Excedente del mes de desempeño - Notas de Credito - Devoluciones - Ajustes = Remuneracion Variable del período. " +
+      "La edad de cartera no se cuenta dos veces: vive unicamente en la tasa por tramo de dias. El precio piso ya no es un factor de la formula -- toda venta facturada entra al calculo normal; el precio piso solo impacta la comision de forma indirecta, a traves del Factor IEC. El presupuesto y el IEC se leen o calculan directamente sobre el mes calendario de desempeño -- nunca se prorratea presupuesto entre dos meses.</p>" +
       "</section>" +
 
       // DETALLE POR FACTURA
@@ -259,7 +271,8 @@
       "<p class='sistema'>Sistema Integral de Incentivos Comerciales — SIC-AV</p>" +
       "<table class='tabla-portada'>" +
       "<tr><td>Pais</td><td>" + (pais === "CL" ? "Chile" : "Peru") + "</td></tr>" +
-      "<tr><td>Ciclo consultado</td><td>" + esc(nombreCicloPdf(cicloInfo.ciclo)) + " (" + fechaDDMMYYYYPdf(cicloInfo.inicio) + " a " + fechaDDMMYYYYPdf(cicloInfo.cierre) + ") · " + esc(cicloInfo.estado === "vigente" ? "Vigente" : "Cerrado") + "</td></tr>" +
+      "<tr><td>Período de cobranza consultado</td><td>" + fechaDDMMYYYYPdf(cicloInfo.inicio) + " a " + fechaDDMMYYYYPdf(cicloInfo.cierre) + " · " + esc(cicloInfo.estado === "vigente" ? "Vigente" : "Cerrado") + "</td></tr>" +
+      "<tr><td>Mes de desempeño aplicado</td><td>" + esc(nombreCicloPdf(global.SIC ? global.SIC.mesDesempenoDe(cicloInfo.ciclo) : cicloInfo.ciclo)) + "</td></tr>" +
       "<tr><td>Version de politica</td><td>" + esc(cicloInfo.policy_version || params.version_politica) + "</td></tr>" +
       "<tr><td>Vigente desde</td><td>" + fechaDDMMYYYYPdf(params.politica_vigente_desde) + "</td></tr>" +
       "<tr><td>Estado de la politica</td><td>" + esc(params.politica_estado || "—") + "</td></tr>" +
@@ -269,14 +282,14 @@
       "</section>" +
 
       "<section class='bloque'>" +
-      "<h2>Factor de Cumplimiento de Presupuesto</h2>" +
-      "<table class='tabla-resumen'><thead><tr><th>Cumplimiento del ciclo</th><th class='num'>Factor</th></tr></thead><tbody>" + filasPresupuesto + "</tbody></table>" +
-      "<p class='nota-formula'>El factor de presupuesto nunca supera el 100%. El sobrecumplimiento se reconoce mediante el Bono por Excedente.</p>" +
+      "<h2>Factor de Cumplimiento de Presupuesto (mes de desempeño)</h2>" +
+      "<table class='tabla-resumen'><thead><tr><th>Cumplimiento del mes de desempeño</th><th class='num'>Factor</th></tr></thead><tbody>" + filasPresupuesto + "</tbody></table>" +
+      "<p class='nota-formula'>El factor de presupuesto nunca supera el 100%. El sobrecumplimiento se reconoce mediante el Bono por Excedente. CHANGE REQUEST v1.6: se calcula sobre venta neta del mes de desempeño / presupuesto del mismo mes calendario -- nunca sobre cobranza ni presupuesto de ciclo prorrateado.</p>" +
       "</section>" +
 
       "<section class='bloque'>" +
-      "<h2>Bono por Excedente</h2>" +
-      "<p class='nota-formula'>2% sobre la venta neta cobrada que exceda el presupuesto del ciclo.</p>" +
+      "<h2>Bono por Excedente del Mes de Desempeño</h2>" +
+      "<p class='nota-formula'>2% sobre la venta neta del mes de desempeño que exceda el presupuesto del mismo mes calendario. Ya no se pondera por Factor IEC (CHANGE REQUEST v1.6) y se incorpora en la liquidación siguiente.</p>" +
       "<table class='tabla-resumen'>" +
       "<tr><td>Presupuesto (ejemplo)</td><td class='num'>" + monedaEj + " " + ejPpto.toLocaleString("es-CL") + "</td></tr>" +
       "<tr><td>Venta cobrada (ejemplo)</td><td class='num'>" + monedaEj + " " + ejVenta.toLocaleString("es-CL") + "</td></tr>" +
@@ -290,9 +303,9 @@
       "</section>" +
 
       "<section class='bloque'>" +
-      "<h2>Factor IEC</h2>" +
-      "<table class='tabla-resumen'><thead><tr><th>IEC del ciclo</th><th class='num'>Factor</th></tr></thead><tbody>" + filasIec + "</tbody></table>" +
-      "<p class='nota-formula'>El IEC mide la disciplina de gestion comercial del vendedor (principalmente el respeto del precio piso) — no la rentabilidad ni el margen del producto.</p>" +
+      "<h2>Factor IEC (mes de desempeño)</h2>" +
+      "<table class='tabla-resumen'><thead><tr><th>IEC del mes de desempeño</th><th class='num'>Factor</th></tr></thead><tbody>" + filasIec + "</tbody></table>" +
+      "<p class='nota-formula'>El IEC mide la disciplina de gestion comercial del vendedor (principalmente el respeto del precio piso) — no la rentabilidad ni el margen del producto. CHANGE REQUEST v1.6: se calcula sobre el mismo mes calendario de desempeño que el Factor de Presupuesto.</p>" +
       "</section>" +
 
       "<section class='bloque'>" +
@@ -307,7 +320,7 @@
 
       "<section class='bloque'>" +
       "<h2>Bono de Consistencia Trimestral</h2>" +
-      "<p class='nota-formula'>Aisla exclusivamente la porcion de comision retenida por no alcanzar el Factor de Presupuesto. Nunca recupera reducciones causadas por IEC, edad de cartera, notas de credito o devoluciones.</p>" +
+      "<p class='nota-formula'>Aisla exclusivamente la porcion de comision retenida por no alcanzar el Factor de Presupuesto. Nunca recupera reducciones causadas por IEC, edad de cartera, notas de credito o devoluciones. CHANGE REQUEST v1.6: el trimestre se evalua sobre meses calendario de desempeño, no sobre períodos de cobranza 26-25.</p>" +
       "<table class='tabla-resumen'><thead><tr><th>Cumplimiento trimestral</th><th class='num'>% de liberacion</th></tr></thead><tbody>" + filasDiferido + "</tbody></table>" +
       "<p class='nota-formula'>Condiciones para liberar: IEC trimestral minimo " + params.diferido_trimestral.iec_minimo + "%, cartera dentro de estandar, sin observaciones financieras graves.</p>" +
       "</section>" +

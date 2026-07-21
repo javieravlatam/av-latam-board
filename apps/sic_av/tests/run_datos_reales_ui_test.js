@@ -113,16 +113,22 @@ function check(nombre, condicion, detalle) {
     piso !== '—' && nFacturas !== '—' && Number(nFacturas) > 0,
     'piso=' + piso + ' n-facturas=' + nFacturas);
 
-  // La cifra tecnica (0) queda en una nota de auditoria dentro del Bloque 2,
-  // nunca como una tarjeta de KPI de comision -- confirmamos que sigue siendo
-  // 0 (comportamiento correcto del motor sin modificar dado el dato disponible)
-  // pero que ya no existen las tarjetas antiguas c-potencial/c-liberada.
+  // La cifra tecnica queda en una nota de auditoria dentro del Bloque 2, nunca
+  // como una tarjeta de KPI de comision. CHANGE REQUEST v1.6: el Factor de
+  // Presupuesto ahora se calcula sobre venta NETA del mes de desempeño (no
+  // sobre venta COBRADA) -- por lo tanto la comision POTENCIAL ya puede ser
+  // distinta de 0 aunque la cobranza real siga en 0 (es el comportamiento
+  // correcto y esperado de la formula v1.6: potencial refleja desempeño de
+  // venta/presupuesto/IEC, liberada sigue exigiendo cobranza real). Lo que se
+  // verifica aqui es que la comision LIBERADA (que si depende de venta
+  // cobrada = 0) se mantiene en 0, y que ya no existen las tarjetas antiguas
+  // c-potencial/c-liberada como KPI de Bloque 1.
   const potencialTecnico = doc.getElementById('c-potencial-tecnico').textContent;
   const liberadaTecnico = doc.getElementById('c-liberada-tecnico').textContent;
   const tarjetasAntiguasEliminadas = !doc.getElementById('c-potencial') && !doc.getElementById('c-liberada');
-  check('nota_tecnica_en_cero_sin_tarjeta_de_kpi',
-    /\s0$/.test(potencialTecnico) && /\s0$/.test(liberadaTecnico) && tarjetasAntiguasEliminadas,
-    'potencial_tecnico=' + potencialTecnico + ' liberada_tecnico=' + liberadaTecnico + ' tarjetas_antiguas_eliminadas=' + tarjetasAntiguasEliminadas);
+  check('nota_tecnica_liberada_en_cero_sin_tarjeta_de_kpi',
+    /\s0([.,]0+)?$/.test(liberadaTecnico) && tarjetasAntiguasEliminadas,
+    'potencial_tecnico=' + potencialTecnico + ' (ya no necesariamente 0 -- v1.6, ver Factor de Presupuesto) liberada_tecnico=' + liberadaTecnico + ' tarjetas_antiguas_eliminadas=' + tarjetasAntiguasEliminadas);
 
   // La tabla de vendedores no debe mostrar montos de comision -- solo un estado.
   const primeraFilaVendedor = doc.querySelector('#tbody-vendedores tr');

@@ -118,7 +118,11 @@ function check(nombre, condicion, detalle) {
     'cumplimiento=' + r3.cumplimiento_pct.toFixed(1) + '% factor_ppto=' + r3.factor_presupuesto);
 
   // 12. Cumplimiento >= 100% -> Politica V1.1: factor presupuesto = 100% (tope, NUNCA supera 100%)
-  const r2 = SIC.calcularVendedorCiclo(ctxCL, 'CL-V02', '2026-07');
+  // CHANGE REQUEST v1.6: el cumplimiento ahora se evalua sobre el MES DE
+  // DESEMPEÑO (venta neta del mes / presupuesto del mismo mes), no sobre el
+  // periodo 26-25 -- CL-V02 en el ciclo '2026-04' (mes de desempeño '2026-03')
+  // es el caso demo que hoy supera 100% de cumplimiento.
+  const r2 = SIC.calcularVendedorCiclo(ctxCL, 'CL-V02', '2026-04');
   check('cumplimiento_superior_100', r2.cumplimiento_pct >= 100 && r2.factor_presupuesto === 100,
     'cumplimiento=' + r2.cumplimiento_pct.toFixed(1) + '% factor_ppto=' + r2.factor_presupuesto);
 
@@ -141,23 +145,38 @@ function check(nombre, condicion, detalle) {
 
   // 13. CHANGE REQUEST SIC-AV v1.4 -- venta bajo piso "autorizada" ya no tiene
   // factor de reduccion: entra al calculo normal igual que cualquier otra
-  // venta cobrada (no existe SIC.factorPiso ni el campo factor_piso).
+  // venta cobrada (no existe SIC.factorPiso ni el campo factor_piso). NOTA
+  // v1.6: en el ciclo '2026-07' el Factor de Presupuesto del mes de desempeño
+  // (2026-06) es 0% para CL-V01 (cumplimiento < 90%), por lo que TODAS las
+  // facturas de este ciclo -- sin importar su clasificacion de piso -- dan
+  // comision_ajustada = 0. Por eso la prueba ya no exige comision > 0; en
+  // cambio verifica que la comision de la factura bajo piso coincide EXACTO
+  // con la misma formula general (base x Factor Presupuesto x Factor IEC),
+  // que es lo que realmente demuestra la ausencia de una reduccion adicional
+  // por precio piso.
   const fPisoAut = r1.detalle_facturas.find(f => f.factura === 'CL-2026-07-009');
+  const pagoPisoAut = fPisoAut && fPisoAut.pagos[0];
+  const ajustadaEsperadaAut = pagoPisoAut ? pagoPisoAut.comision_base * (r1.factor_presupuesto / 100) * (r1.factor_iec / 100) : null;
   check('venta_bajo_piso_autorizada_sin_reduccion',
     fPisoAut && fPisoAut.factor_piso === undefined && fPisoAut.clasificacion_piso === 'bajo_piso' &&
-    fPisoAut.estado === 'liberada' && fPisoAut.comision_liberada > 0,
-    'clasificacion=' + (fPisoAut && fPisoAut.clasificacion_piso) + ' estado=' + (fPisoAut && fPisoAut.estado) + ' comision=' + Math.round(fPisoAut && fPisoAut.comision_liberada) + ' (sin factor de reduccion)');
+    fPisoAut.estado === 'liberada' && pagoPisoAut && Math.abs(pagoPisoAut.comision_ajustada - ajustadaEsperadaAut) < 0.01,
+    'clasificacion=' + (fPisoAut && fPisoAut.clasificacion_piso) + ' estado=' + (fPisoAut && fPisoAut.estado) +
+    ' comision_ajustada=' + (pagoPisoAut && pagoPisoAut.comision_ajustada.toFixed(2)) + ' esperada(sin reduccion de piso)=' + (ajustadaEsperadaAut && ajustadaEsperadaAut.toFixed(2)) +
+    ' (factor_presupuesto=' + r1.factor_presupuesto + '% este ciclo -- ver v1.6, mes de desempeño ' + r1.mes_desempeno + ')');
 
   // 14. CHANGE REQUEST SIC-AV v1.4 -- venta bajo piso "no autorizada" YA NO
-  // produce comision cero ni estado "retenida" (ese estado se elimino por
-  // completo). La factura CL-2026-07-008 esta pagada en su totalidad, por lo
-  // tanto debe quedar "liberada" con comision > 0, igual que cualquier otra
-  // venta facturada y cobrada.
+  // produce comision cero ni estado "retenida" por su condicion de piso (ese
+  // estado se elimino por completo). La factura CL-2026-07-008 esta pagada en
+  // su totalidad, por lo tanto debe quedar "liberada" -- el monto puede ser 0
+  // hoy por el Factor de Presupuesto del mes (ver nota v1.6 arriba), pero
+  // debe coincidir EXACTO con la formula general, sin reduccion extra de piso.
   const fPisoNoAut = r1.detalle_facturas.find(f => f.factura === 'CL-2026-07-008');
+  const pagoPisoNoAutTest14 = fPisoNoAut && fPisoNoAut.pagos[0];
+  const ajustadaEsperadaNoAut = pagoPisoNoAutTest14 ? pagoPisoNoAutTest14.comision_base * (r1.factor_presupuesto / 100) * (r1.factor_iec / 100) : null;
   check('venta_bajo_piso_no_autorizada_ya_no_es_cero',
     fPisoNoAut && fPisoNoAut.clasificacion_piso === 'bajo_piso' &&
-    fPisoNoAut.estado === 'liberada' && fPisoNoAut.comision_liberada > 0,
-    'estado=' + (fPisoNoAut && fPisoNoAut.estado) + ' comision=' + Math.round(fPisoNoAut && fPisoNoAut.comision_liberada) + ' (antes era 0/retenida, ahora entra al calculo normal)');
+    fPisoNoAut.estado === 'liberada' && pagoPisoNoAutTest14 && Math.abs(pagoPisoNoAutTest14.comision_ajustada - ajustadaEsperadaNoAut) < 0.01,
+    'estado=' + (fPisoNoAut && fPisoNoAut.estado) + ' comision_ajustada=' + (pagoPisoNoAutTest14 && pagoPisoNoAutTest14.comision_ajustada.toFixed(2)) + ' (antes era 0/retenida por piso, ahora entra al calculo normal -- monto real 0 hoy por Factor Presupuesto del mes, no por el piso)');
 
   // 14b. Ninguna factura del ciclo, sin importar su clasificacion de piso,
   // puede quedar en estado "retenida" -- ese estado ya no existe en el motor.
@@ -176,16 +195,22 @@ function check(nombre, condicion, detalle) {
     Math.abs(pagoPisoNoAut.comision_ajustada - ajustadaEsperada) < 0.01,
     'comision_ajustada=' + pagoPisoNoAut.comision_ajustada.toFixed(2) + ' esperada(base x Fppto x Fiec)=' + ajustadaEsperada.toFixed(2));
 
-  // 15. Bono por excedente -> > 0 cuando hay venta cobrada por sobre el presupuesto, y compatible con IEC
-  check('bono_por_excedente', r2.bono_excedente > 0 && r2.excedente_cobrado > 0,
-    'excedente=' + Math.round(r2.excedente_cobrado) + ' bono=' + Math.round(r2.bono_excedente));
+  // 15. Bono por excedente -> CHANGE REQUEST v1.6: se calcula sobre venta
+  // NETA del mes de desempeño vs. presupuesto del mismo mes (nunca sobre
+  // cobranza ni sobre el periodo 26-25) -- r2 (CL-V02, ciclo '2026-04', mes
+  // de desempeño '2026-03') es el caso demo con excedente mensual real.
+  check('bono_por_excedente', r2.bono_excedente > 0 && r2.excedente_mes > 0,
+    'excedente_mes=' + Math.round(r2.excedente_mes) + ' bono=' + Math.round(r2.bono_excedente) + ' (mes de desempeño ' + r2.mes_desempeno + ')');
 
-  // 15b. CHANGE REQUEST SIC-AV v1.4 -- el bono por excedente debe coincidir
-  // EXACTAMENTE con excedente x 2% x Factor IEC (sin ponderacion por piso).
-  const bonoEsperado = r2.excedente_cobrado * (ctxCL.params.bono_excedente_pct / 100) * (r2.factor_iec / 100);
-  check('bono_excedente_sin_ponderacion_piso',
-    Math.abs(r2.bono_excedente - bonoEsperado) < 0.01,
-    'bono_excedente=' + r2.bono_excedente.toFixed(2) + ' esperado(excedente x 2% x Fiec)=' + bonoEsperado.toFixed(2));
+  // 15b. CHANGE REQUEST SIC-AV v1.6 -- formula definitiva: Bono = Excedente
+  // del mes x 2%, YA SIN ponderar por Factor IEC (a diferencia de la v1.4,
+  // que si lo incluia). Se verifica que el motor coincide EXACTO con esta
+  // formula mas simple, y que NO coincide con la formula vieja (que si
+  // multiplicaba por factor_iec) salvo que factor_iec fuera 100.
+  const bonoEsperadoV16 = r2.excedente_mes * (ctxCL.params.bono_excedente_pct / 100);
+  check('bono_excedente_formula_v16_sin_factor_iec',
+    Math.abs(r2.bono_excedente - bonoEsperadoV16) < 0.01,
+    'bono_excedente=' + r2.bono_excedente.toFixed(2) + ' esperado(excedente_mes x 2%, sin Factor IEC)=' + bonoEsperadoV16.toFixed(2) + ' (factor_iec de este vendedor=' + r2.factor_iec + '%, distinto de 100 -- confirma que ya no se pondera)');
 
   // 16. Comision diferida -> aisla exclusivamente la porcion reducida por Factor Presupuesto
   const dif01 = SIC.calcularDiferidoTrimestral(ctxCL, 'CL-V01', '2026-Q2', {
@@ -194,32 +219,54 @@ function check(nombre, condicion, detalle) {
   check('comision_diferida_trimestral', dif01.diferido_acumulado > 0,
     'diferido_acumulado=' + Math.round(dif01.diferido_acumulado) + ' trimestre=' + dif01.trimestre);
 
-  // 17-19. Liberacion trimestral en los 3 tramos (50% / 75% / 100%). El trimestre 2026-Q1
-  // (ciclos 02/03/04, YA CERRADO) es el que quedo calibrado con los 3 tramos + el caso 0%;
-  // 2026-Q2 esta en curso y solo sirve para observar el diferido acumulandose (prueba 16).
-  const difQ1_V01 = SIC.calcularDiferidoTrimestral(ctxCL, 'CL-V01', '2026-Q1', {
-    cartera_fuera_estandar: false, observaciones_financieras_graves: false
-  });
-  check('liberacion_trimestral_50pct', difQ1_V01.pct_liberacion_final === 50,
-    'cumpl_trim=' + difQ1_V01.cumplimiento_trimestral.toFixed(1) + '% liberado=' + Math.round(difQ1_V01.monto_liberado));
+  // 17-19. Liberacion trimestral en los 3 tramos (50% / 75% / 100%). CHANGE
+  // REQUEST v1.6: la consistencia trimestral ahora se evalua sobre MESES
+  // CALENDARIO (trimInfo.meses), no sobre periodos 26-25 -- con los datos
+  // demo migrados, ningun vendedor real de 2026-Q1/Q2 cae exactamente en los
+  // 3 tramos de liberacion a la vez que cumple el minimo de IEC trimestral
+  // (95%), asi que estos 3 tramos se verifican con un contexto SINTETICO
+  // (clonado de ctxCL, sin alterar los datos demo reales) que aisla
+  // exactamente la variable que cada tramo prueba: cumplimiento_trimestral.
+  // Este mismo patron ya se usaba en tests/run_adapter_tests.js (fixtures
+  // sinteticos) para casos limite que los datos reales/demo no cubren hoy.
+  const ctxCLSint = JSON.parse(JSON.stringify(ctxCL));
+  function agregarVendedorSintetico(id, ventaMensual) {
+    ['2026-01', '2026-02', '2026-03'].forEach(function (mes) {
+      ctxCLSint.presupuestos.push({ vendedor_id: id, mes: mes, presupuesto: 100000 });
+      ctxCLSint.iec.push({ vendedor_id: id, mes: mes, iec_pct: 100, ventas_sobre_piso_clp: ventaMensual, ventas_bajo_piso_clp: 0, ventas_no_evaluables_clp: 0 });
+      ctxCLSint.ventas.push({ factura: 'SINT-' + id + '-' + mes, fecha_factura: mes + '-15', vendedor_id: id, cliente_nombre: 'SINTETICO (prueba de tramo)', tipo_cliente: 'Distribuidor', producto: 'SINTETICO', formato: 'SINTETICO', venta_neta: ventaMensual, precio_venta_unitario: 100, precio_piso_unitario: 50, piso_situacion: 'cumple' });
+    });
+  }
+  agregarVendedorSintetico('SIC-SINT-Q1-50', 102000);  // 306.000 / 300.000 = 102% -> tramo 100-104,99% = 50%
+  agregarVendedorSintetico('SIC-SINT-Q1-75', 107000);  // 321.000 / 300.000 = 107% -> tramo 105-109,99% = 75%
+  agregarVendedorSintetico('SIC-SINT-Q1-100', 115000); // 345.000 / 300.000 = 115% -> tramo >=110% = 100%
 
-  const difQ1_V02 = SIC.calcularDiferidoTrimestral(ctxCL, 'CL-V02', '2026-Q1', {
+  const difQ1_50 = SIC.calcularDiferidoTrimestral(ctxCLSint, 'SIC-SINT-Q1-50', '2026-Q1', {
     cartera_fuera_estandar: false, observaciones_financieras_graves: false
   });
-  check('liberacion_trimestral_75pct', difQ1_V02.pct_liberacion_final === 75,
-    'cumpl_trim=' + difQ1_V02.cumplimiento_trimestral.toFixed(1) + '% liberado=' + Math.round(difQ1_V02.monto_liberado));
+  check('liberacion_trimestral_50pct', difQ1_50.pct_liberacion_final === 50,
+    'cumpl_trim=' + difQ1_50.cumplimiento_trimestral.toFixed(1) + '% (sintetico, IEC trimestral=' + difQ1_50.iec_trimestral.toFixed(1) + '%)');
 
-  const difQ1_V03 = SIC.calcularDiferidoTrimestral(ctxCL, 'CL-V03', '2026-Q1', {
+  const difQ1_75 = SIC.calcularDiferidoTrimestral(ctxCLSint, 'SIC-SINT-Q1-75', '2026-Q1', {
     cartera_fuera_estandar: false, observaciones_financieras_graves: false
   });
-  check('liberacion_trimestral_100pct', difQ1_V03.pct_liberacion_final === 100,
-    'cumpl_trim=' + difQ1_V03.cumplimiento_trimestral.toFixed(1) + '% liberado=' + Math.round(difQ1_V03.monto_liberado) + ' de ' + Math.round(difQ1_V03.diferido_acumulado));
+  check('liberacion_trimestral_75pct', difQ1_75.pct_liberacion_final === 75,
+    'cumpl_trim=' + difQ1_75.cumplimiento_trimestral.toFixed(1) + '% (sintetico, IEC trimestral=' + difQ1_75.iec_trimestral.toFixed(1) + '%)');
 
-  const difQ1_V04 = SIC.calcularDiferidoTrimestral(ctxCL, 'CL-V04', '2026-Q1', {
+  const difQ1_100 = SIC.calcularDiferidoTrimestral(ctxCLSint, 'SIC-SINT-Q1-100', '2026-Q1', {
     cartera_fuera_estandar: false, observaciones_financieras_graves: false
   });
-  check('liberacion_trimestral_0pct_no_cumple', difQ1_V04.pct_liberacion_final === 0,
-    'cumpl_trim=' + difQ1_V04.cumplimiento_trimestral.toFixed(1) + '% liberado=' + Math.round(difQ1_V04.monto_liberado) + ' de ' + Math.round(difQ1_V04.diferido_acumulado));
+  check('liberacion_trimestral_100pct', difQ1_100.pct_liberacion_final === 100,
+    'cumpl_trim=' + difQ1_100.cumplimiento_trimestral.toFixed(1) + '% (sintetico, IEC trimestral=' + difQ1_100.iec_trimestral.toFixed(1) + '%)');
+
+  // El caso "0% no cumple" SI se demuestra con datos demo reales -- CL-V04 en
+  // 2026-Q2 tiene cumplimiento trimestral bajo (55.1%, meses abril/mayo/junio),
+  // insuficiente para cualquier tramo de liberacion.
+  const difQ2_V04 = SIC.calcularDiferidoTrimestral(ctxCL, 'CL-V04', '2026-Q2', {
+    cartera_fuera_estandar: false, observaciones_financieras_graves: false
+  });
+  check('liberacion_trimestral_0pct_no_cumple', difQ2_V04.pct_liberacion_final === 0,
+    'cumpl_trim=' + difQ2_V04.cumplimiento_trimestral.toFixed(1) + '% liberado=' + Math.round(difQ2_V04.monto_liberado) + ' de ' + Math.round(difQ2_V04.diferido_acumulado));
 
   // 20. Nota de credito -> ajuste negativo aplicado en el ciclo de emision (append-only, no reescribe ciclos cerrados)
   check('nota_de_credito', r1.ajustes_nc > 0,
@@ -246,12 +293,18 @@ function check(nombre, condicion, detalle) {
   const peNoCobro = rp1.detalle_facturas.find(f => f.comision_liberada === 0 && f.estado === 'potencial');
   check('peru_venta_no_cobrada', !!peNoCobro, peNoCobro ? peNoCobro.factura : 'no encontrada');
   // CHANGE REQUEST SIC-AV v1.4: una venta bajo piso no autorizada en Peru,
-  // si esta pagada, tambien debe entrar al calculo normal (comision > 0),
-  // igual que en Chile -- misma logica, sin distincion por pais.
+  // si esta pagada, tambien debe entrar al calculo normal, igual que en Chile
+  // -- misma logica, sin distincion por pais. CHANGE REQUEST v1.6: el monto
+  // exacto ya no se exige > 0 (puede ser 0 por el Factor de Presupuesto del
+  // mes de desempeño, sin relacion con el piso) -- se verifica en cambio que
+  // coincide EXACTO con la formula general, sin reduccion extra por piso.
   const peNoAut = rp1.detalle_facturas.find(f => f.piso_situacion === 'no_autorizada');
+  const pagoPeNoAut = peNoAut && peNoAut.pagos && peNoAut.pagos[0];
+  const ajustadaEsperadaPe = pagoPeNoAut ? pagoPeNoAut.comision_base * (rp1.factor_presupuesto / 100) * (rp1.factor_iec / 100) : null;
   check('peru_bajo_piso_no_autorizada_sin_reduccion',
-    peNoAut && peNoAut.factor_piso === undefined && (peNoAut.monto_cobrado > 0 ? peNoAut.comision_liberada > 0 : true),
-    peNoAut ? (peNoAut.factura + ' comision=' + Math.round(peNoAut.comision_liberada)) : 'no encontrada');
+    peNoAut && peNoAut.factor_piso === undefined &&
+    (pagoPeNoAut ? Math.abs(pagoPeNoAut.comision_ajustada - ajustadaEsperadaPe) < 0.01 : true),
+    peNoAut ? (peNoAut.factura + ' comision_ajustada=' + (pagoPeNoAut ? pagoPeNoAut.comision_ajustada.toFixed(2) : 'sin pagos') + ' (factor_presupuesto=' + rp1.factor_presupuesto + '% este ciclo)') : 'no encontrada');
 
   // =========================================================================
   // CHANGE REQUEST SIC-AV v1.2 -- SELECTOR DE CICLO HISTORICO
@@ -271,17 +324,17 @@ function check(nombre, condicion, detalle) {
   const rClCerrado = SIC.calcularVendedorCiclo(ctxCL, 'CL-V01', '2026-04');
   check('cambio_de_ciclo_chile',
     rClCerrado.ciclo === '2026-04' && rClCerrado.ciclo_info.estado === 'cerrado' &&
-    rClCerrado.presupuesto !== rClVigente.presupuesto &&
-    rClCerrado.venta_facturada !== rClVigente.venta_facturada,
-    'vigente(2026-07): presupuesto=' + Math.round(rClVigente.presupuesto) + ' | cerrado(2026-04): presupuesto=' + Math.round(rClCerrado.presupuesto) + ' estado=' + rClCerrado.ciclo_info.estado);
+    rClCerrado.presupuesto_mes !== rClVigente.presupuesto_mes &&
+    rClCerrado.venta_facturada_periodo !== rClVigente.venta_facturada_periodo,
+    'vigente(2026-07): presupuesto_mes=' + Math.round(rClVigente.presupuesto_mes) + ' | cerrado(2026-04): presupuesto_mes=' + Math.round(rClCerrado.presupuesto_mes) + ' estado=' + rClCerrado.ciclo_info.estado);
 
   // 25. Cambio de ciclo Peru -> mismo comportamiento, independiente de Chile.
   const rPeVigente = SIC.calcularVendedorCiclo(ctxPE, 'PE-V01', '2026-07');
   const rPeCerrado = SIC.calcularVendedorCiclo(ctxPE, 'PE-V01', '2026-04');
   check('cambio_de_ciclo_peru',
     rPeCerrado.ciclo === '2026-04' && rPeCerrado.ciclo_info.estado === 'cerrado' &&
-    rPeCerrado.presupuesto !== rPeVigente.presupuesto,
-    'vigente(2026-07): presupuesto=' + Math.round(rPeVigente.presupuesto) + ' | cerrado(2026-04): presupuesto=' + Math.round(rPeCerrado.presupuesto));
+    rPeCerrado.presupuesto_mes !== rPeVigente.presupuesto_mes,
+    'vigente(2026-07): presupuesto_mes=' + Math.round(rPeVigente.presupuesto_mes) + ' | cerrado(2026-04): presupuesto_mes=' + Math.round(rPeCerrado.presupuesto_mes));
 
   // 26. Actualizacion de tarjetas -- comision potencial/liberada/pendiente
   // difieren entre ciclo vigente y un ciclo cerrado (el cambio de ciclo
@@ -301,17 +354,26 @@ function check(nombre, condicion, detalle) {
 
   // 28. PDF del ciclo seleccionado -- el informe generado para un ciclo
   // CERRADO refleja el nombre/fechas/estado de ESE ciclo, no el del vigente.
-  const trimCerrado = ctxCL.params.trimestres.find(t => t.ciclos.indexOf('2026-04') !== -1);
+  // CHANGE REQUEST v1.6: trimestres[].ciclos se renombro a trimestres[].meses
+  // (meses calendario de desempeño). Se busca por el mes de desempeño del
+  // ciclo '2026-04' (que es '2026-03'), no por el codigo de ciclo directo.
+  const trimCerrado = ctxCL.params.trimestres.find(t => t.meses.indexOf(SIC.mesDesempenoDe('2026-04')) !== -1);
   const difCerrado = SIC.calcularDiferidoTrimestral(ctxCL, 'CL-V01', trimCerrado.trimestre, {
     cartera_fuera_estandar: false, observaciones_financieras_graves: false
   });
   const accionesCerrado = SIC.simularAcciones(ctxCL, 'CL-V01', '2026-04');
   const htmlPdfCerrado = SICPDF._construirHtml({ pais: 'CL', vendedor: vendedorObj, resultado: rClCerrado, diferido: difCerrado, acciones: accionesCerrado, params: ctxCL.params });
+  // CHANGE REQUEST v1.6: la portada del PDF ya no muestra un nombre de
+  // "ciclo comercial" -- muestra por separado el Período de cobranza (fechas
+  // 26-25) y el Mes de desempeño aplicado (mes calendario). Para el ciclo
+  // '2026-04' eso es el período 26/03/2026-25/04/2026 con mes de desempeño
+  // "Marzo 2026" -- y no debe contener el mes de desempeño del ciclo
+  // vigente ('2026-07' -> "Junio 2026").
   check('pdf_del_ciclo_seleccionado',
-    htmlPdfCerrado.indexOf('Abril 2026') !== -1 &&
+    htmlPdfCerrado.indexOf('Marzo 2026') !== -1 &&
     htmlPdfCerrado.indexOf('26/03/2026') !== -1 && htmlPdfCerrado.indexOf('25/04/2026') !== -1 &&
-    htmlPdfCerrado.indexOf('Julio 2026') === -1,
-    'PDF del ciclo 2026-04 contiene "Abril 2026" y sus fechas (26/03/2026 a 25/04/2026), y NO contiene "Julio 2026" (el ciclo vigente)');
+    htmlPdfCerrado.indexOf('Junio 2026') === -1,
+    'PDF del ciclo 2026-04 contiene su mes de desempeño ("Marzo 2026") y sus fechas de período (26/03/2026 a 25/04/2026), y NO contiene "Junio 2026" (mes de desempeño del ciclo vigente 2026-07)');
 
   // 29. Preservacion del ciclo vigente -- consultar ciclos cerrados no debe
   // alterar cual es el ciclo vigente del sistema.
@@ -338,7 +400,7 @@ function check(nombre, condicion, detalle) {
   const rClCerradoDespues = SIC.calcularVendedorCiclo(ctxCL, 'CL-V01', '2026-04');
   check('ciclo_cerrado_no_cambia',
     rClCerradoAntes.comision_final === rClCerradoDespues.comision_final &&
-    rClCerradoAntes.presupuesto === rClCerradoDespues.presupuesto &&
+    rClCerradoAntes.presupuesto_mes === rClCerradoDespues.presupuesto_mes &&
     rClCerradoAntes.cumplimiento_pct === rClCerradoDespues.cumplimiento_pct &&
     JSON.stringify(rClCerradoAntes.detalle_facturas.map(f => f.factura)) === JSON.stringify(rClCerradoDespues.detalle_facturas.map(f => f.factura)),
     'comision_final ciclo 2026-04 antes=' + Math.round(rClCerradoAntes.comision_final) + ' despues=' + Math.round(rClCerradoDespues.comision_final) + ' (identico, sin efectos de estado compartido)');

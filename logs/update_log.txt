@@ -1102,3 +1102,110 @@ VALIDACIÓN JSDOM: ✅ 64/64 aserciones OK (acumulados, fórmulas, pendientes, f
 VENDEDORES CON DATOS REALES (5): F. Velásquez, P. Laratro, J. Caroca, I. Veverka, R. Encina
 VENDEDORES PENDIENTES DE CARGA (3): F. Riffo, G. Pradenas, D. Camilla
 ======================================================================
+
+────────────────────────────────────────────────────────────────────
+AUDITORÍA PERÚ + ESTÁNDAR DE PANEL EJECUTIVO
+Fecha: 2026-07-13
+────────────────────────────────────────────────────────────────────
+
+ARCHIVOS PROCESADOS (solo lectura — no se modificó ningún HTML):
+  - Panel_IEC_Auditoria_2026.html (TX_PE: 92 registros analizados)
+  - Panel_Jefes_Peru_2026.html (estructura de vendedoresData auditada)
+  - avboard_data.js (peru.ventas.rtc_mensual_real + rtc_ppto_anual verificados)
+  - scripts/update_avboard.py (pipeline Perú: build_tx_pe ausente confirmado)
+  - apps/sic_av/js/sic_data_adapter.js (mecanismo de parseo TX_PE verificado)
+  - apps/sic_av/DATA_SOURCE_AUDIT.md (secciones 3.2 y 7 verificadas)
+
+ACCIONES REALIZADAS:
+  1. Análisis causal del bug de fechas TX_PE:
+     - 40/92 registros con DD/MM invertido (DD≤12 → tratado como MM)
+     - 48/92 registros con fecha NaN (DD en 13-25 → mes inválido)
+     - 4/92 registros correctos (DD≥26, sin ambigüedad)
+     - Causa: parseo sin dayfirst=True ni format='%d/%m/%Y'
+     - Consecuencia adicional: TX_PE nunca se regenera en el pipeline (build_tx_pe ausente)
+  2. Auditoría funcional Panel_Jefes_Peru_2026.html:
+     - meses26 hardcodeado (no lee AVBOARD rtc_mensual_real)
+     - Discrepancia infante enero: Panel 16.5K vs AVBOARD 32.8K
+     - Jun 2026 ausente en todos los vendedores del Panel (AVBOARD ya tiene datos)
+     - Valladares: ppto null en Panel vs 142K USD en AVBOARD
+     - Geldres: avbKey=null (inactivo, no en AVBOARD rtc_mensual_real)
+     - Gráfico falta serie Real 2025
+  3. Diseño estándar Perú equivalente a Chile (sin implementar)
+  4. Control de calidad de datos centralizado creado
+
+ARCHIVOS CREADOS:
+  - apps/sic_av/PERU_DATE_ROOT_CAUSE_ANALYSIS.md (FASE 1 — análisis completo)
+  - apps/sic_av/DATA_QUALITY_CONTROL_AV_LATAM.md (FASE 4 — 12 ítems DQ)
+  - apps/sic_av/PERU_PREIMPLEMENTACION_REPORT.md (FASE 5 — 10 ítems + diseño)
+
+ESTADO: Panel_Jefes_Peru_2026.html NO modificado.
+        Implementación bloqueada hasta confirmación de 4 decisiones gerenciales.
+        Ver PERU_PREIMPLEMENTACION_REPORT.md Parte C para checklist.
+
+ALERTAS ACTIVAS (ver DATA_QUALITY_CONTROL_AV_LATAM.md):
+  DQ-001 🔴 TX_PE: 88/92 fechas incorrectas (no se puede usar para SIC-AV Perú)
+  DQ-002 🔴 TX_PE: no se regenera en el pipeline (función build_tx_pe ausente)
+  DQ-003 🔴 CxC Perú congelado al 10/05/2026 (no se actualiza automáticamente)
+  DQ-004 🟠 Infante enero: Panel 16.5K vs AVBOARD 32.8K (pendiente validación)
+  DQ-005 🟠 Panel Perú sin datos junio (stale hardcoded)
+  DQ-006 🟠 Valladares: ppto null en Panel vs 142K en AVBOARD
+
+────────────────────────────────────────────────────────────────────
+DECISIONES GG — NORMALIZACIÓN VENDEDORES PERÚ
+Fecha: 2026-07-13
+────────────────────────────────────────────────────────────────────
+
+FUENTES AUDITADAS:
+  TX_PE (92 registros), AVBOARD.peru.ventas.rtc_mensual_real, hoja RESUMEN
+
+HALLAZGOS CRÍTICOS:
+  1. NICOLL NAVARRO = LIZBETH AGUIRRE (confirmado, alias sin doble conteo)
+     Aliases detectados: NICOLL NAVARRO / LISBETH AGUIRRE / LIZBETH AGUIRRE
+     Folios navarro (8) y aguirre (31) son disjuntos — sin superposición
+     YTD combinado (AVBOARD, jun): USD 123,767
+
+  2. FOLIO 926 (USD 16,320, REGALIA MAX, ENERO):
+     TX_PE atribuye a NICOLL NAVARRO
+     AVBOARD (RESUMEN Excel) atribuye a OSCAR INFANTE
+     VERIFICACIÓN: Infante TX_PE jan 16,511 + folio 926 (16,320) = 32,831 = AVBOARD ✓
+     → Esta es la causa exacta de la discrepancia Infante enero 16.5K vs 32.8K
+     → PENDIENTE: verificar factura 926 en sistema contable AGROVECA PERU
+
+  3. INFANTE MAYO: TX_PE 13,296 vs AVBOARD 22,328 (diff 9,032)
+     Causa: TX_PE es snapshot anterior al cierre de mayo
+     AVBOARD es fuente más completa → usar AVBOARD para mayo
+
+  4. DÍAZ ene-mar: ceros REALES (0 registros en TX_PE)
+     Díaz abr (6,300) y may (2,600) CONFIRMADOS en TX_PE
+     Díaz jun (8,320): solo en AVBOARD, no en TX_PE (snapshot antiguo)
+
+  5. VALLADARES: ppto anual USD 142,372 confirmado en AVBOARD (Libro Base)
+     Mensual → "Pendiente de distribución mensual" (no prorratear sin aprobación)
+
+ARCHIVOS CREADOS:
+  - apps/sic_av/PERU_VENDOR_NORMALIZATION_REPORT.md
+  - apps/sic_av/DATA_QUALITY_CONTROL_AV_LATAM.md actualizado (DQ-013 agregado)
+
+ESTADO: NO SE MODIFICÓ NINGÚN PANEL HTML
+        Bloqueado en folio 926 — pendiente confirmación operativa
+        No hacer commit hasta recibir decisión sobre factura 926
+
+======================================================================
+CORTE: 2026-07-21 12:21
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 30-06-2026 - AGLM.xlsx
+  - AGROVECA PERU -  VENTAS  AL 16.07.2026.xlsx
+  - Cuentas Cobrar  Agrocomercial 21-06.xlsx
+  - Cuentas Cobrar Agroveca 21-06.xlsx
+  - precios piso CHile .xlsx
+  - precio piso peru.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 30/06/2026
+  · avboard_clientes.js regenerado · 148 clientes CL
+  · Panel_IEC TX_CL · 1500 transacciones
+  · IEC Chile 34.0% · BP CLP 215,695,266
+  · CxC Chile CLP 66,426,892 · +90d CLP 26,073,690
+  · Módulo Productos: 177 SKUs · 11 margen negativo · 40 sin costo
+  · Cache-busting ?v=20260721 sincronizado en 14 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================

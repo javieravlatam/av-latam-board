@@ -1,123 +1,124 @@
 {
+  "_migracion_v1.6": "CHANGE REQUEST SIC-AV v1.6 (2026-07-13): el campo 'ciclo' se renombro a 'mes' (mes calendario de desempeno) y los valores se recorrieron -1 mes respecto a su etiqueta anterior, para preservar la cifra que ya se mostraba en cada periodo de cobranza vigente/cerrado. Ver TEMPORAL_MODEL_AUDIT_v1.6.md.",
   "presupuestos": [
     {
       "vendedor_id": "PE-V01",
-      "ciclo": "2026-02",
+      "mes": "2026-01",
       "presupuesto": 96116.5
     },
     {
       "vendedor_id": "PE-V01",
-      "ciclo": "2026-03",
+      "mes": "2026-02",
       "presupuesto": 99320.39
     },
     {
       "vendedor_id": "PE-V01",
-      "ciclo": "2026-04",
+      "mes": "2026-03",
       "presupuesto": 102524.27
     },
     {
       "vendedor_id": "PE-V01",
-      "ciclo": "2026-05",
+      "mes": "2026-04",
       "presupuesto": 104660.19
     },
     {
       "vendedor_id": "PE-V01",
-      "ciclo": "2026-06",
+      "mes": "2026-05",
       "presupuesto": 106796.12
     },
     {
       "vendedor_id": "PE-V01",
-      "ciclo": "2026-07",
+      "mes": "2026-06",
       "presupuesto": 110000.0
     },
     {
       "vendedor_id": "PE-V02",
-      "ciclo": "2026-02",
+      "mes": "2026-01",
       "presupuesto": 61165.05
     },
     {
       "vendedor_id": "PE-V02",
-      "ciclo": "2026-03",
+      "mes": "2026-02",
       "presupuesto": 63203.88
     },
     {
       "vendedor_id": "PE-V02",
-      "ciclo": "2026-04",
+      "mes": "2026-03",
       "presupuesto": 65242.72
     },
     {
       "vendedor_id": "PE-V02",
-      "ciclo": "2026-05",
+      "mes": "2026-04",
       "presupuesto": 66601.94
     },
     {
       "vendedor_id": "PE-V02",
-      "ciclo": "2026-06",
+      "mes": "2026-05",
       "presupuesto": 67961.17
     },
     {
       "vendedor_id": "PE-V02",
-      "ciclo": "2026-07",
+      "mes": "2026-06",
       "presupuesto": 70000.0
     },
     {
       "vendedor_id": "PE-V03",
-      "ciclo": "2026-02",
+      "mes": "2026-01",
       "presupuesto": 17475.73
     },
     {
       "vendedor_id": "PE-V03",
-      "ciclo": "2026-03",
+      "mes": "2026-02",
       "presupuesto": 18058.25
     },
     {
       "vendedor_id": "PE-V03",
-      "ciclo": "2026-04",
+      "mes": "2026-03",
       "presupuesto": 18640.78
     },
     {
       "vendedor_id": "PE-V03",
-      "ciclo": "2026-05",
+      "mes": "2026-04",
       "presupuesto": 19029.13
     },
     {
       "vendedor_id": "PE-V03",
-      "ciclo": "2026-06",
+      "mes": "2026-05",
       "presupuesto": 19417.48
     },
     {
       "vendedor_id": "PE-V03",
-      "ciclo": "2026-07",
+      "mes": "2026-06",
       "presupuesto": 20000.0
     },
     {
       "vendedor_id": "PE-V04",
-      "ciclo": "2026-02",
+      "mes": "2026-01",
       "presupuesto": 39320.39
     },
     {
       "vendedor_id": "PE-V04",
-      "ciclo": "2026-03",
+      "mes": "2026-02",
       "presupuesto": 40631.07
     },
     {
       "vendedor_id": "PE-V04",
-      "ciclo": "2026-04",
+      "mes": "2026-03",
       "presupuesto": 41941.75
     },
     {
       "vendedor_id": "PE-V04",
-      "ciclo": "2026-05",
+      "mes": "2026-04",
       "presupuesto": 42815.53
     },
     {
       "vendedor_id": "PE-V04",
-      "ciclo": "2026-06",
+      "mes": "2026-05",
       "presupuesto": 43689.32
     },
     {
       "vendedor_id": "PE-V04",
-      "ciclo": "2026-07",
+      "mes": "2026-06",
       "presupuesto": 45000.0
     }
   ]

@@ -2,6 +2,8 @@
 
 Fecha: 2026-07-13 (presentación: mañana). Este documento resume, para quien va a presentar, qué del SIC-AV está listo para mostrarse hoy con datos reales, qué sigue siendo demostrativo, y qué riesgos hay que tener presentes.
 
+> **Nota v1.6 (2026-07-13):** este documento fue escrito antes del CHANGE REQUEST v1.6 (arquitectura temporal definitiva, ver `TEMPORAL_MODEL_v1.6.md`). Dos afirmaciones de abajo quedaron desactualizadas por ese cambio, no por un error nuevo: (1) el "presupuesto" ya no se prorratea al ciclo 26-25 — se lee directamente del mes calendario de desempeño; (2) la comisión **potencial** ya puede ser distinta de $0 con datos reales, porque el Factor de Presupuesto ahora depende de venta neta/presupuesto del mes de desempeño (no de cobranza) — la comisión **liberada** sigue en $0 hasta que exista cobranza real, que es la afirmación central de este documento y sigue vigente.
+
 ## Qué está listo
 
 El motor de cálculo (`sic_core.js`) está operativo y sin cambios desde la Fase 4 original — las reglas de Presupuesto, IEC, cartera y la eliminación del Factor de Precio Piso (v1.1-v1.4) siguen vigentes y aprobadas. El adaptador de datos reales (`js/sic_data_adapter.js`) conecta el motor a las fuentes reales del AV LATAM Board sin modificarlo. La página `sic_datos_reales.html` muestra un ciclo comercial real completo (26→25) por país, con conciliación exacta entre la fuente (`TX_CL`/`TX_PE`) y lo que construyó el adaptador. 108 pruebas automatizadas están en OK, 0 fallos.
