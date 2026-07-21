@@ -1229,3 +1229,125 @@ ACCIONES:
   · Cache-busting ?v=20260721 sincronizado en 0 paneles HTML
 VALIDACIÓN JS: ✅ OK
 ======================================================================
+
+======================================================================
+CORRECCIÓN RUNTIME: 2026-07-21
+ARCHIVO MODIFICADO: Panel_Presupuesto_AV_2026.html
+TIPO: Bugfix — errores de ejecución en consola del navegador
+
+CAUSA RAÍZ:
+  Error 1: const G/A/R/RD/B/GD/BD definidas en Block E (línea 813)
+           pero referenciadas en CH_RTC_DATA / PE_RTC_DATA en Block D (línea 31).
+           Block D aborta con "G is not defined".
+
+  Error 2 (cascada de Error 1): let chRTCChart declarado en Block D línea 82.
+           Como Block D abortó, el binding quedó en TDZ.
+           Block E línea 932 intentó asignar chRTCChart → TDZ → ReferenceError.
+
+  Bonus: navarro.ytd lanzaba TypeError porque navarro fue fusionado en aguirre (GG-002)
+         y ya no existe como clave en AVBOARD.peru.ventas.por_vendedor.
+
+CAMBIOS:
+  1. Movidas constantes G/G2/A/R/RD/B/GD/BD al tope de Block D (antes de CH_RTC_DATA)
+  2. Eliminada declaración duplicada de Block E (reemplazada por comentario)
+  3. Agregado guard if(!chRTCChart) return en setChileRTC()
+  4. Agregado guard if(!chCurvaChart) return en setChileCurva()
+  5. Agregado guard if(!peRTCChart) return en setPeruRTC()
+  6. Agregado guard if(!peCurvaChart) return en setPeruCurva()
+  7. Fix navarro.ytd: agregado guard &&navarro antes de acceder .ytd
+
+VALIDACIÓN (Node.js vm — 9/9 checks):
+  ✅ G definida antes de CH_RTC_DATA (línea 21 vs 29)
+  ✅ const G declarada exactamente una vez
+  ✅ 4 defensive guards presentes
+  ✅ let chRTCChart declarado una vez
+  ✅ 4 instancias Chart creadas
+  ✅ Folio 926 / O. Infante presente
+  ✅ AVBOARD version 2026-07-21
+  ✅ SIC no tocado
+  ✅ Script tags balanceados (5 open, 5 close)
+  ✅ G='#7AB648' accesible dentro del scope del VM
+  ✅ CH_RTC_DATA.equipo.colors = ["#7AB648","#F5A623","#F5A623","#E74C3C","#C0392B"]
+  ✅ PE_RTC_DATA.equipo.colors = ["#F5A623","#7AB648","#7AB648","#E74C3C","#E74C3C"]
+  ✅ chRTCChart declarado y accesible
+  ✅ Guard null-check: setChileRTC con chart=null → no throw
+  ✅ AVBOARD populate ejecutó: Chile YTD=CLP 342.9M · Perú YTD=USD 334.1K
+
+INSTRUCCIONES POST-FIX:
+  git add Panel_Presupuesto_AV_2026.html
+  git commit -m "fix: Panel_Presupuesto runtime errors G+chRTCChart TDZ [skip ci]"
+  git push
+
+======================================================================
+CORTE: 2026-07-21 17:31
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 30-06-2026 - AGLM.xlsx
+  - AGROVECA PERU -  VENTAS  AL 16.07.2026.xlsx
+  - Cuentas Cobrar  Agrocomercial 21-06.xlsx
+  - Cuentas Cobrar Agroveca 21-06.xlsx
+  - precios piso CHile .xlsx
+  - precio piso peru.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 30/06/2026
+  · avboard_clientes.js regenerado · 148 clientes CL
+  · Panel_IEC TX_CL · 1500 transacciones
+  · Panel_IEC TX_PE · 123 transacciones · DQ-001/DQ-002 fix aplicado
+  · IEC Chile 34.0% · BP CLP 215,695,266
+  · CxC Chile CLP 66,426,892 · +90d CLP 26,073,690
+  · Módulo Productos: 177 SKUs · 11 margen negativo · 40 sin costo
+  · Cache-busting ?v=20260721 sincronizado en 0 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
+
+======================================================================
+ACTUALIZACIÓN: 2026-07-21 — Perú YTD Jul-16 + Fix curva acumulada
+ARCHIVOS PROCESADOS:
+  - AGROVECA PERU - VENTAS AL 16.07.2026.xlsx (fuente: inbox local)
+ACCIONES:
+
+1. DIAGNÓSTICO CI/CD REGRESSION
+   - avboard_data.js regresó de 7 meses → 5 meses en auto-pipeline
+   - Causa: .gitignore tiene inbox/*.xlsx; archivos Jun/Jul no estaban en repo
+   - CI/CD en GitHub Actions solo veía AGROVECA PERU - VENTAS AL 18.05.2026.xlsx
+   - Fix: git add -f inbox/AGROVECA PERU - VENTAS AL 16.07.2026.xlsx
+
+2. PIPELINE RE-EJECUTADO LOCALMENTE
+   - Fuente: AGROVECA PERU - VENTAS AL 16.07.2026.xlsx (16/07/2026)
+   - Perú YTD anterior (stale): USD 334,136 (5 meses)
+   - Perú YTD actualizado:      USD 417,236 (7 meses: Ene-Jul)
+   - mensual_real: [70232, 38180, 87967, 63434, 84159, 46084, 27179, 0...]
+   - corte peru_ventas: '16/07/2026'
+
+3. MESES RECUPERADOS
+   - Junio 2026:  USD 46,084 (equipo)
+   - Julio 2026:  USD 27,179 (parcial al 16/07)
+
+4. FIX CURVA ACUMULADA — Panel_Presupuesto_AV_2026.html
+   - Bug: acumVal() con gap (v=0) ponía null; en mes siguiente null+v=v (perdía acumulado)
+   - Ejemplo: Infante Jun=0, Jul=5840 → acumVal daba 5840 en Jul (debía dar 159184)
+   - Fix: nueva lógica en setChileCurva() y setPeruCurva() con prevAcc
+     → si v=0 dentro del corte: prevAcc += 0 (mantiene total anterior)
+     → si i >= nReal: null (mes futuro, sin punto en gráfico)
+   - Regla respetada: curva acumulada nunca cae ni reinicia
+
+5. VALIDACIÓN NODE.JS — 5 VENDEDORES PERÚ
+   equipo:     YTD = 417,235 ✅ curva nunca cae ✅
+   infante:    YTD = 159,184 ✅ Jun=153344 (flat), Jul=159184 ✅
+   aguirre:    YTD = 119,320 ✅ curva nunca cae ✅
+   atalaya:    YTD =  85,589 ✅ Jul=85589 (flat, sin venta Jul) ✅
+   valladares: YTD =  20,360 ✅ curva nunca cae ✅
+   CHILE (6 RTC): todos ✅ curva nunca cae
+
+ARCHIVOS MODIFICADOS (pendientes commit + push):
+  - avboard_data.js              (pipeline re-ejecutado con Jul-16)
+  - avboard_clientes.js          (pipeline)
+  - Panel_Presupuesto_AV_2026.html (fix setChileCurva + setPeruCurva)
+  - inbox/AGROVECA PERU - VENTAS AL 16.07.2026.xlsx (force-tracked)
+  - logs/update_log.txt (este registro)
+
+INSTRUCCIONES COMMIT:
+  git add avboard_data.js avboard_clientes.js Panel_Presupuesto_AV_2026.html
+  git add "inbox/AGROVECA PERU -  VENTAS  AL 16.07.2026.xlsx"
+  git add logs/update_log.txt
+  git commit -m "fix: Peru YTD Jul-16 (7m) + curva acumulada nunca cae + CI/CD inbox [skip ci]"
+  git push

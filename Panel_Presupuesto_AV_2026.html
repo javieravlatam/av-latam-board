@@ -116,8 +116,14 @@ function setChileCurva(key, btn) {
   const d = CH_MES_DATA[key];
   const nReal = CH_REAL.filter(function(v){return v>0;}).length || 5;
   const pptoAc = acumVal(d.ppto);
-  const realVals = d.real.map(function(v,i){return i < nReal ? v : null;});
-  const realAc = acumVal(realVals.map(function(v){return v||0;})).map(function(v,i){return realVals[i]!==null||i===0?v:null;});
+  // Acumulado real: mantiene total anterior si mes=0 (nunca reinicia a cero).
+  // Meses fuera del corte (i >= nReal) → null (sin punto en gráfico).
+  var prevChAc = 0;
+  const realAc = d.real.map(function(v, i) {
+    if (i >= nReal) return null;
+    prevChAc += (v > 0 ? v : 0);
+    return prevChAc;
+  });
   chCurvaChart.data.datasets[0].data = pptoAc;
   chCurvaChart.data.datasets[1].data = realAc;
   chCurvaChart.update('none');
@@ -144,8 +150,14 @@ function setPeruCurva(key, btn) {
   const d = PE_MES_DATA[key];
   const nReal = PE_REAL.filter(function(v){return v>0;}).length || 4;
   const pptoAc = acumVal(d.ppto);
-  const realVals = d.real.map((v,i) => i < nReal ? v : null);
-  const realAc = acumVal(realVals.map(v => v || 0)).map((v,i) => realVals[i] !== null || i === 0 ? v : null);
+  // Acumulado real: mantiene total anterior si mes=0 (nunca reinicia a cero).
+  // Meses fuera del corte (i >= nReal) → null (sin punto en gráfico).
+  var prevPeAc = 0;
+  const realAc = d.real.map(function(v, i) {
+    if (i >= nReal) return null;
+    prevPeAc += (v > 0 ? v : 0);
+    return prevPeAc;
+  });
   peCurvaChart.data.datasets[0].data = pptoAc;
   peCurvaChart.data.datasets[1].data = realAc;
   peCurvaChart.update();
