@@ -15,7 +15,8 @@
 <title>Panel Presupuesto · AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="avboard_data.js?v=20260721"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
 
 // =====================================================
 // DATOS POR VENDEDOR — CHILE & PERÚ
@@ -58,7 +59,7 @@ const PE_RTC_DATA = {
     colors: [A, G, G, R, R]
   },
   infante:    { labels:['O. Infante'],       ppto:[485058], real:[94144], colors:[A] },
-  aguirre:    { labels:['Aguirre/Navarro'],   ppto:[223930], real:[74347], colors:[G] },
+  aguirre:    { labels:['L. Aguirre'],   ppto:[223930], real:[74347], colors:[G] },
   atalaya:    { labels:['O. Atalaya'],        ppto:[248424], real:[59072], colors:[G] },
   gonzales:   { labels:['A. Gonzales'],       ppto:[37250],  real:[696],   colors:[R] },
   valladares: { labels:['P. Valladares'],     ppto:[142372], real:[1000],  colors:[R] },
@@ -162,7 +163,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 .logo { width:36px; height:36px; background:var(--green); border-radius:7px; display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue'; font-size:17px; color:var(--bg); }
 .htitle { font-family:'Bebas Neue'; font-size:19px; letter-spacing:2px; color:var(--green); }
 .hsub { font-size:9px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
-.hcorte { font-family:'DM Mono'; font-size:10px; color:var(--dim); text-align:right; }
+.hcorte { font-family:'DM Mono'; font-size:12px; color:var(--dim); text-align:right; }
 .hcorte b { color:var(--green); }
 
 .page { max-width:1500px; margin:0 auto; padding:20px 28px 60px; }
@@ -172,7 +173,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 .c-name { font-family:'Bebas Neue'; font-size:26px; letter-spacing:3px; }
 .c-name.cl { color:var(--green); } .c-name.pe { color:var(--blue); }
 .c-line { flex:1; height:1px; background:linear-gradient(90deg,var(--bdr),transparent); }
-.c-kpi { text-align:right; font-family:'DM Mono'; font-size:11px; color:var(--dim); }
+.c-kpi { text-align:right; font-family:'DM Mono'; font-size:12px; color:var(--dim); }
 .c-kpi strong { font-size:15px; display:block; }
 .c-kpi strong.cl { color:var(--green); } .c-kpi strong.pe { color:var(--blue); }
 
@@ -195,9 +196,9 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 .kval { font-family:'Bebas Neue'; font-size:24px; line-height:1; }
 .kval.cl { color:var(--green); } .kval.pe { color:var(--blue); }
 .kval.ok { color:var(--green); } .kval.am { color:var(--amber); } .kval.rd { color:var(--red); }
-.ksub { font-family:'DM Mono'; font-size:9px; color:var(--muted); margin-top:3px; }
+.ksub { font-family:'DM Mono'; font-size:12px; color:var(--muted); margin-top:3px; }
 
-.bt { width:100%; border-collapse:collapse; font-size:10px; }
+.bt { width:100%; border-collapse:collapse; font-size:12px; }
 .bt thead th { font-size:8px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; padding:0 5px 8px; border-bottom:1px solid var(--bdim); font-weight:500; text-align:right; white-space:nowrap; }
 .bt thead th:first-child { text-align:left; min-width:100px; }
 .bt tbody tr { border-bottom:1px solid var(--bdim); }
@@ -205,13 +206,13 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 .bt tbody tr:hover { background:var(--s2); }
 .bt td { padding:7px 5px; vertical-align:middle; }
 .bt tfoot tr { background:var(--s3); border-top:1px solid var(--bdr); }
-.bt tfoot td { padding:9px 5px; font-weight:700; font-size:11px; }
+.bt tfoot td { padding:9px 5px; font-weight:700; font-size:12px; }
 
-.cp { font-family:'DM Mono'; font-size:9px; text-align:right; color:var(--dim); }
-.cr { font-family:'DM Mono'; font-size:9px; text-align:right; font-weight:600; }
+.cp { font-family:'DM Mono'; font-size:12px; text-align:right; color:var(--dim); }
+.cr { font-family:'DM Mono'; font-size:12px; text-align:right; font-weight:600; }
 .cr.hit { color:var(--green); } .cr.miss { color:var(--amber); }
 .cr.crit { color:var(--red); } .cr.na { color:var(--muted); font-weight:400; }
-.mono { font-family:'DM Mono'; font-size:9px; }
+.mono { font-family:'DM Mono'; font-size:12px; }
 
 .pb { display:inline-block; padding:1px 6px; border-radius:3px; font-size:8px; font-weight:700; white-space:nowrap; }
 .pbok { background:rgba(122,182,72,0.15); color:var(--green); }
@@ -225,8 +226,8 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 .s { display:inline-block; width:6px; height:6px; border-radius:50%; margin-right:4px; }
 .sg { background:var(--green); } .sa { background:var(--amber); } .sr { background:var(--red); }
 
-.gp { font-family:'DM Mono'; font-size:9px; text-align:right; color:var(--green); }
-.gn { font-family:'DM Mono'; font-size:9px; text-align:right; color:var(--red); }
+.gp { font-family:'DM Mono'; font-size:12px; text-align:right; color:var(--green); }
+.gn { font-family:'DM Mono'; font-size:12px; text-align:right; color:var(--red); }
 
 .ch { position:relative; }
 .ch-xl { height:300px; } .ch-lg { height:260px; } .ch-md { height:220px; }
@@ -236,7 +237,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 .cur-pe { background:rgba(74,158,219,0.04); }
 
 .ftr { border-top:1px solid var(--bdim); padding:14px 28px; display:flex; justify-content:space-between; align-items:center; margin-top:20px; font-size:9px; color:var(--muted); }
-.np { background:var(--s2); border:1px solid var(--bdr); border-radius:6px; padding:5px 11px; font-size:10px; color:var(--dim); text-decoration:none; transition:all .2s; }
+.np { background:var(--s2); border:1px solid var(--bdr); border-radius:6px; padding:5px 11px; font-size:12px; color:var(--dim); text-decoration:none; transition:all .2s; }
 .np:hover { background:var(--green); color:var(--bg); border-color:var(--green); }
 .npills { display:flex; gap:7px; }
 
@@ -245,7 +246,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 /* ── SELECTOR BUTTONS ── */
 .sel-btn {
   background: var(--s2); border: 1px solid var(--bdr);
-  border-radius: 6px; padding: 5px 12px; font-size: 10px;
+  border-radius: 6px; padding: 5px 12px; font-size: 12px;
   font-family: 'DM Mono', monospace; color: var(--dim);
   cursor: pointer; transition: all 0.18s; white-space: nowrap;
   letter-spacing: 0.5px;
@@ -256,7 +257,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 .sel-btn.pe-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
 
 
-  .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
+  .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:12px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
   .btn-logout:hover { background:rgba(231,76,60,0.10); }
 </style>
 </head>
@@ -272,7 +273,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
   </div>
   <div class="hcorte">
     <div>Datos reales: <b id="av-ppto-hcorte">Chile 18/05 · Perú 15/05/2026</b></div>
-    <div style="font-size:8px;margin-top:2px;">TC=950 CLP/USD · L. Aguirre = zona unificada Aguirre/Navarro · Ppto oficial aprobado</div>
+    <div style="font-size:8px;margin-top:2px;">TC=950 CLP/USD · L. Aguirre = zona unificada L. Aguirre · Ppto oficial aprobado</div>
   </div>
   <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
 </header>
@@ -282,12 +283,12 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 <!-- ══ CHILE ══ -->
 <div class="c-hdr">
   <span class="c-flag">🇨🇱</span>
-  <div><div class="c-name cl">Chile</div><div style="font-size:9px;color:var(--muted);" id="cl-ppto-anual-header">CLP · Ppto anual CLP 792,640,368 · USD 834,358</div></div>
+  <div><div class="c-name cl">Chile</div><div style="font-size:12px;color:var(--muted);" id="cl-ppto-anual-header">CLP · Ppto anual CLP 792,640,368 · USD 834,358</div></div>
   <div class="c-line"></div>
   <div class="c-kpi">
-    <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Real YTD 5m</div>
+    <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Real YTD 5m</div>
     <strong class="cl" id="av-ppto-cl-ytd-hero">CLP 332.0M</strong>
-    <div style="font-size:9px;color:var(--green);" id="av-ppto-cl-cumpl-hero">125.5% Ppto 5m ✅</div>
+    <div style="font-size:12px;color:var(--green);" id="av-ppto-cl-cumpl-hero">125.5% Ppto 5m ✅</div>
   </div>
 </div>
 
@@ -393,7 +394,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
         <td class="mono" style="text-align:right;color:var(--amber);">14.599K</td>
       </tr></tfoot>
     </table>
-    <div style="margin-top:8px;padding:8px 10px;background:var(--s2);border-radius:5px;font-size:9px;color:var(--dim);">
+    <div style="margin-top:8px;padding:8px 10px;background:var(--s2);border-radius:5px;font-size:12px;color:var(--dim);">
       ⚡ <span style="color:var(--green);">Caroca</span> aporta +20.1M sobre su ppto y cubre el déficit del grupo · <span style="color:var(--red);">Veverka</span> deja 9.2M sin ejecutar
     </div>
   </div>
@@ -494,12 +495,12 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 <!-- ══ PERÚ ══ -->
 <div class="c-hdr">
   <span class="c-flag">🇵🇪</span>
-  <div><div class="c-name pe">Perú</div><div style="font-size:9px;color:var(--muted);">USD · Ppto anual USD 1,380,015 · L. Aguirre = zona unificada Aguirre/Navarro</div></div>
+  <div><div class="c-name pe">Perú</div><div style="font-size:12px;color:var(--muted);">USD · Ppto anual USD 1,380,015 · L. Aguirre = zona unificada L. Aguirre</div></div>
   <div class="c-line"></div>
   <div class="c-kpi">
-    <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Real YTD 5m</div>
+    <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Real YTD 5m</div>
     <strong class="pe" id="av-ppto-pe-ytd-hero">USD 325,103</strong>
-    <div style="font-size:9px;color:var(--amber);" id="av-ppto-pe-cumpl-hero">93.8% Ppto 5m</div>
+    <div style="font-size:12px;color:var(--amber);" id="av-ppto-pe-cumpl-hero">93.8% Ppto 5m</div>
   </div>
 </div>
 
@@ -602,7 +603,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
         <td class="mono" style="text-align:right;color:var(--blue);">229.259</td>
       </tr></tfoot>
     </table>
-    <div style="margin-top:8px;padding:8px 10px;background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.2);border-radius:5px;font-size:9px;color:var(--dim);">
+    <div style="margin-top:8px;padding:8px 10px;background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.2);border-radius:5px;font-size:12px;color:var(--dim);">
       ⚠️ <strong style="color:var(--amber);">Infante</strong> tiene el ppto anual más alto (USD 485K) pero ejecutó solo 62.4% T1 · Brecha –USD 43K · Aceleración urgente Q2
     </div>
   </div>
@@ -611,7 +612,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
     <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;" id="selectorPeruRTC">
       <button class="sel-btn pe-btn active" onclick="setPeruRTC('equipo',this)">Equipo completo</button>
       <button class="sel-btn pe-btn" onclick="setPeruRTC('infante',this)">O. Infante</button>
-      <button class="sel-btn pe-btn" onclick="setPeruRTC('aguirre',this)">Aguirre/Navarro</button>
+      <button class="sel-btn pe-btn" onclick="setPeruRTC('aguirre',this)">L. Aguirre</button>
       <button class="sel-btn pe-btn" onclick="setPeruRTC('atalaya',this)">O. Atalaya</button>
       <button class="sel-btn pe-btn" onclick="setPeruRTC('gonzales',this)">A. Gonzales</button>
       <button class="sel-btn pe-btn" onclick="setPeruRTC('valladares',this)">P. Valladares</button>
@@ -627,7 +628,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
     <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;" id="selectorPeruCurva">
       <button class="sel-btn pe-btn active" onclick="setPeruCurva('equipo',this)">Equipo completo</button>
       <button class="sel-btn pe-btn" onclick="setPeruCurva('infante',this)">O. Infante</button>
-      <button class="sel-btn pe-btn" onclick="setPeruCurva('aguirre',this)">Aguirre/Navarro</button>
+      <button class="sel-btn pe-btn" onclick="setPeruCurva('aguirre',this)">L. Aguirre</button>
       <button class="sel-btn pe-btn" onclick="setPeruCurva('atalaya',this)">O. Atalaya</button>
       <button class="sel-btn pe-btn" onclick="setPeruCurva('gonzales',this)">A. Gonzales</button>
       <button class="sel-btn pe-btn" onclick="setPeruCurva('valladares',this)">P. Valladares</button>
@@ -663,7 +664,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
         <td class="cr hit" id="pe-real-0">70.232</td><td class="cr miss" id="pe-real-1">38.180</td><td class="cr miss" id="pe-real-2">87.967</td><td class="cr miss" id="pe-real-3">63.434</td>
         <td class="cr na" id="pe-real-4">–</td><td class="cr na" id="pe-real-5">–</td><td class="cr na" id="pe-real-6">–</td><td class="cr na" id="pe-real-7">–</td>
         <td class="cr na" id="pe-real-8">–</td><td class="cr na" id="pe-real-9">–</td><td class="cr na" id="pe-real-10">–</td><td class="cr na" id="pe-real-11">–</td>
-        <td style="font-family:'DM Mono';font-size:9px;text-align:right;color:var(--blue);" id="pe-real-tot">—</td>
+        <td style="font-family:'DM Mono';font-size:12px;text-align:right;color:var(--blue);" id="pe-real-tot">—</td>
       </tr>
       <tr id="pe-cumpl-row"><td style="color:var(--dim);">% Cumpl.</td>
         <td style="text-align:right;" id="pe-cumpl-0"><span class="pb pbok">135.9%</span></td>
@@ -714,7 +715,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
           <div style="font-family:'Bebas Neue';font-size:14px;letter-spacing:1px;color:var(--green);">🇨🇱 Chile</div>
           <span class="pb pbok">103.2% T1</span>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:9px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:12px;">
           <div><div style="color:var(--muted);">Ppto Anual</div><div style="font-family:'DM Mono';color:var(--dim);" id="cl-resumen-ppto-clp">CLP 861.3M</div></div>
           <div><div style="color:var(--muted);">en USD (TC 950)</div><div style="font-family:'DM Mono';color:var(--dim);" id="cl-resumen-ppto-usd">USD 906.7K</div></div>
           <div><div style="color:var(--muted);">Real YTD 5m USD</div><div id="ppto-grp-cl-ytd" style="font-family:'DM Mono';color:var(--green);">USD —</div></div>
@@ -725,7 +726,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
           <div style="font-family:'Bebas Neue';font-size:14px;letter-spacing:1px;color:var(--blue);">🇵🇪 Perú</div>
           <span class="pb pbw">95.8% T1</span>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:9px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:12px;">
           <div><div style="color:var(--muted);">Ppto Anual</div><div style="font-family:'DM Mono';color:var(--dim);">USD 1.380M</div></div>
           <div><div style="color:var(--muted);">Real T1</div><div style="font-family:'DM Mono';color:var(--blue);">USD 196.4K</div></div>
           <div><div style="color:var(--muted);">YTD 5m</div><div id="ppto-grp-pe-ytd" style="font-family:'DM Mono';color:var(--blue);">USD —</div></div>
@@ -736,23 +737,23 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
           <div style="font-family:'Bebas Neue';font-size:14px;letter-spacing:1px;">🌎 GRUPO TOTAL</div>
           <span class="pb pbw">98.3% T1</span>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:9px;">
-          <div><div style="color:var(--muted);">Ppto Anual Grupo</div><div style="font-family:'DM Mono';font-size:11px;color:var(--text);" id="grp-resumen-ppto-anual">USD 2.044M</div></div>
-          <div><div style="color:var(--muted);">Real T1 Grupo</div><div style="font-family:'DM Mono';font-size:11px;color:var(--green);">USD 381.9K</div></div>
-          <div><div style="color:var(--muted);" id="ppto-grp-ytd-corte">YTD 5m</div><div id="ppto-grp-ytd-val" style="font-family:'DM Mono';font-size:11px;color:var(--green);">USD —</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:12px;">
+          <div><div style="color:var(--muted);">Ppto Anual Grupo</div><div style="font-family:'DM Mono';font-size:12px;color:var(--text);" id="grp-resumen-ppto-anual">USD 2.044M</div></div>
+          <div><div style="color:var(--muted);">Real T1 Grupo</div><div style="font-family:'DM Mono';font-size:12px;color:var(--green);">USD 381.9K</div></div>
+          <div><div style="color:var(--muted);" id="ppto-grp-ytd-corte">YTD 5m</div><div id="ppto-grp-ytd-val" style="font-family:'DM Mono';font-size:12px;color:var(--green);">USD —</div></div>
         </div>
       </div>
       <div style="background:rgba(245,166,35,0.05);border:1px solid rgba(245,166,35,0.2);border-radius:8px;padding:12px;">
-        <div style="font-size:9px;color:var(--amber);font-weight:700;margin-bottom:6px;">⚠️ ALERTA EJECUCIÓN — O. INFANTE (PERÚ)</div>
-        <div style="font-size:9px;color:var(--dim);line-height:1.8;">
+        <div style="font-size:12px;color:var(--amber);font-weight:700;margin-bottom:6px;">⚠️ ALERTA EJECUCIÓN — O. INFANTE (PERÚ)</div>
+        <div style="font-size:12px;color:var(--dim);line-height:1.8;">
           Ppto anual más alto del grupo: <span style="color:var(--text);font-family:'DM Mono';">USD 485,058</span><br>
           Ejecutado T1: <span style="color:var(--amber);font-family:'DM Mono';">USD 71,594 (62.4%)</span> · Brecha: <span style="color:var(--red);font-family:'DM Mono';">–USD 43,141</span><br>
           Requiere USD 413K adicional en May–Dic para cumplir anual
         </div>
       </div>
       <div style="background:rgba(122,182,72,0.04);border:1px solid rgba(122,182,72,0.1);border-radius:8px;padding:12px;">
-        <div style="font-size:9px;color:var(--green);font-weight:700;margin-bottom:6px;">📅 HITOS CLAVE H2</div>
-        <div style="font-size:9px;color:var(--dim);line-height:1.8;font-family:'DM Mono';">
+        <div style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:6px;">📅 HITOS CLAVE H2</div>
+        <div style="font-size:12px;color:var(--dim);line-height:1.8;font-family:'DM Mono';">
           Mayo CL: CLP 51M · Encina con camioneta activa<br>
           Junio CL: CLP 49.7M · Velásquez en evaluación<br>
           Agosto PE: USD 178K · mes pico Perú<br>

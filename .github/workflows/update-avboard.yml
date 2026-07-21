@@ -1,0 +1,59 @@
+name: Actualizar AVBOARD
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'inbox/**'
+      - 'scripts/update_avboard.py'
+      - 'scripts/ppto_libro_base.py'
+
+jobs:
+  update-avboard:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Ejecutar pipeline AVBOARD
+        run: |
+          python3 scripts/update_avboard.py
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+
+      - name: Verificar archivos generados
+        run: |
+          echo "=== avboard_data.js ==="
+          head -5 avboard_data.js || echo "ERROR: avboard_data.js no generado"
+          echo "=== avboard_clientes.js ==="
+          head -5 avboard_clientes.js || echo "ERROR: avboard_clientes.js no generado"
+
+      - name: Commit y push de archivos actualizados
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(avboard): actualización automática pipeline [skip ci]"
+          file_pattern: |
+            avboard_data.js
+            avboard_clientes.js
+            Panel_IEC_Auditoria_2026.html
+            Panel_*.html
+            logs/update_log.txt
+            logs/resumen_actualizacion.md
+            logs/alertas.md
+          commit_user_name: "AVBOARD Pipeline"
+          commit_user_email: "pipeline@av-latam.com"

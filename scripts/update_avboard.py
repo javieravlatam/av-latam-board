@@ -317,14 +317,15 @@ def extract_peru_ventas(path):
 
     # Find rows with vendor data (before "Total general")
     vend_map_pe = {
-        'OSCAR INFANTE': 'infante',
-        'NICOLL NAVARRO': 'navarro',
-        'OMAR ATALAYA': 'atalaya',
-        'ANTONIO GONZALES': 'gonzales',
-        'LISBETH AGUIRRE': 'aguirre',
-        'PATRICIA VALLADARES': 'valladares',
-        'SUSAN DIAZ': 'diaz',
-        'SUSAN DÍAZ': 'diaz',
+        'OSCAR INFANTE':      'infante',
+        'NICOLL NAVARRO':     'navarro',    # → se fusiona con aguirre en _apply_peru_vendor_gg_decisions()
+        'OMAR ATALAYA':       'atalaya',
+        'ANTONIO GONZALES':   'gonzales',
+        'LISBETH AGUIRRE':    'aguirre',
+        'LIZBETH AGUIRRE':    'aguirre',    # variante ortográfica — GG decision 2026-07-21
+        'PATRICIA VALLADARES':'valladares',
+        'SUSAN DIAZ':         'diaz',
+        'SUSAN DÍAZ':         'diaz',
     }
 
     # Detectar dinámicamente TODAS las columnas de mes presentes en el archivo
@@ -408,6 +409,78 @@ def extract_peru_ventas(path):
         'por_vendedor':    por_vendedor,
         'rtc_mensual':     rtc_mensual_pe,
     }
+
+
+def _apply_peru_vendor_gg_decisions(pe_data):
+    """
+    Aplica decisiones de Gerencia General sobre atribución de vendedores Perú.
+    Se ejecuta DESPUÉS de extract_peru_ventas() como capa de normalización.
+    NO modifica la fuente original.
+
+    GG-001 (2026-07-21): Folio 926 · REGALIA MAX · ENERO · USD 16,320 → OSCAR INFANTE
+        La fuente (VENTAS ACUMULADAS) lo registra bajo NICOLL NAVARRO, pero GG
+        determina que corresponde a Oscar Infante. Se traslada el monto exacto
+        de navarro.enero a infante.enero en las series agregadas.
+
+    GG-002 (2026-07-21): NICOLL NAVARRO + LISBETH AGUIRRE + LIZBETH AGUIRRE
+        → Master name: LIZBETH AGUIRRE (key 'aguirre').
+        Cualquier data residual de 'navarro' tras GG-001 se fusiona en 'aguirre'.
+    """
+    FOLIO_926_AMOUNT = 16320   # USD — monto exacto, no redondear
+    ENE_IDX = 0                # enero = índice 0
+
+    pv = pe_data.get('por_vendedor', {})
+    rm = pe_data.get('rtc_mensual',  {})
+    ms = pe_data.get('mensual',      [0] * 12)
+
+    # ── GG-001: Reasignar folio 926 de navarro.enero → infante.enero ──────────
+    if 'navarro' in pv and 'infante' in pv:
+        navarro_m  = list(rm.get('navarro', [0] * 12))
+        infante_m  = list(rm.get('infante', [0] * 12))
+        navarro_ene = navarro_m[ENE_IDX]
+        adj = min(FOLIO_926_AMOUNT, max(0, navarro_ene))
+        if adj > 0:
+            navarro_m[ENE_IDX] = round(navarro_ene - adj)
+            infante_m[ENE_IDX] = round(infante_m[ENE_IDX] + adj)
+            rm['navarro'] = navarro_m
+            rm['infante'] = infante_m
+            pv['navarro']['ytd'] = max(0, round(pv['navarro'].get('ytd', 0) - adj))
+            pv['infante']['ytd'] = round(pv['infante'].get('ytd', 0) + adj)
+            print(f"   GG-001 ✓ Folio 926 (USD {adj:,}) navarro.enero → infante.enero | "
+                  f"Infante enero={infante_m[ENE_IDX]:,}")
+        else:
+            print(f"   GG-001 ⚠ navarro.enero={navarro_ene} — sin ajuste (adj=0)")
+    elif 'navarro' not in pv:
+        print("   GG-001 ℹ 'navarro' no encontrado en por_vendedor — sin ajuste folio 926")
+
+    # ── GG-002: Fusionar navarro → aguirre (NICOLL NAVARRO = LIZBETH AGUIRRE) ─
+    if 'navarro' in pv:
+        nav_ytd = pv['navarro'].get('ytd', 0)
+        nav_m   = list(rm.get('navarro', [0] * 12))
+        if 'aguirre' not in pv:
+            pv['aguirre'] = {'nombre': 'Lizbeth Aguirre', 'ytd': 0}
+            rm['aguirre'] = [0] * 12
+        aguirre_m = list(rm.get('aguirre', [0] * 12))
+        rm['aguirre'] = [round(aguirre_m[i] + nav_m[i]) for i in range(12)]
+        pv['aguirre']['ytd']    = round(pv['aguirre'].get('ytd', 0) + nav_ytd)
+        pv['aguirre']['nombre'] = 'Lizbeth Aguirre'
+        del pv['navarro']
+        if 'navarro' in rm:
+            del rm['navarro']
+        # recalcular mensual consolidado (ms suma todos los vendedores por mes)
+        ms_new = [0] * 12
+        for key, arr in rm.items():
+            for i, v in enumerate(arr):
+                ms_new[i] += round(v)
+        ms = ms_new
+        print(f"   GG-002 ✓ NICOLL NAVARRO fusionada en LIZBETH AGUIRRE | aguirre.ytd={pv['aguirre']['ytd']:,}")
+
+    pe_data['por_vendedor'] = pv
+    pe_data['rtc_mensual']  = rm
+    pe_data['mensual']      = ms
+    # recalcular ytd_5m
+    pe_data['ytd_5m'] = sum(v.get('ytd', 0) for v in pv.values())
+    return pe_data
 
 
 def extract_cxc_chile(agro_path, avch_path):
@@ -1746,6 +1819,142 @@ def update_panel_iec(tx_cl, corte_date):
     return len(tx_cl)
 
 
+def build_tx_pe(df_sku, piso_pe):
+    """Construye el array TX_PE completo desde la hoja VENTAS ACUMULADAS 2026.
+
+    FIX DQ-001: Parsea FECHA EMISION con format='%%d/%%m/%%Y' (DD/MM/YYYY)
+    eliminando el bug histórico donde se leía como MM/DD/YYYY produciendo
+    fechas invertidas (40 registros) o NaN (48 registros).
+
+    FIX DQ-002: TX_PE ahora se regenera en cada corrida del pipeline,
+    igual que TX_CL, en lugar de ser una constante estática.
+    """
+    _vend_map = {
+        'OSCAR INFANTE':      'infante',
+        'NICOLL NAVARRO':     'navarro',
+        'OMAR ATALAYA':       'atalaya',
+        'ANTONIO GONZALES':   'gonzales',
+        'LISBETH AGUIRRE':    'aguirre',
+        'LIZBETH AGUIRRE':    'aguirre',
+        'PATRICIA VALLADARES':'valladares',
+        'SUSAN DIAZ':         'diaz',
+        'SUSAN DÍAZ':         'diaz',
+    }
+
+    df = df_sku.copy()
+    required = {'PERIODO', 'FECHA EMISION', 'FACTURA', 'DENOMINACION O RAZON SOCIAL',
+                'CONCEPTO', 'DOLARES', 'VENDEDOR'}
+    missing = required - set(df.columns)
+    if missing:
+        print(f"   ⚠ build_tx_pe: columnas faltantes en df_sku: {missing} — TX_PE no actualizado")
+        return []
+
+    df = df[df['PERIODO'].notna()].copy()
+
+    # ── Parseo de fecha con formato explícito DD/MM/YYYY (corrige DQ-001) ──
+    df['fecha_dt'] = pd.to_datetime(
+        df['FECHA EMISION'],
+        format='%d/%m/%Y',
+        dayfirst=True,
+        errors='coerce'
+    )
+
+    # ── Extraer mes desde PERIODO: "01 ENERO 2026" → "ENERO" ──
+    def _extract_mes(periodo):
+        parts = str(periodo).strip().split()
+        return parts[1].upper() if len(parts) >= 2 else ''
+    df['mes_str'] = df['PERIODO'].apply(_extract_mes)
+
+    df['DOLARES'] = pd.to_numeric(df['DOLARES'], errors='coerce').fillna(0)
+
+    tx_list = []
+    n_fecha_ok, n_fecha_nan = 0, 0
+
+    for _, row in df.iterrows():
+        total = float(row['DOLARES'])
+        if total <= 0:
+            continue
+
+        fecha_dt = row['fecha_dt']
+        if pd.notna(fecha_dt):
+            fecha_str = fecha_dt.strftime('%Y-%m-%d')
+            n_fecha_ok += 1
+        else:
+            fecha_str = ''
+            n_fecha_nan += 1
+
+        folio    = str(int(row['FACTURA'])) if pd.notna(row.get('FACTURA')) else ''
+        cliente  = str(row.get('DENOMINACION O RAZON SOCIAL', '')).strip()[:80]
+        vendedor = str(row.get('VENDEDOR', '')).strip()
+        concepto = str(row.get('CONCEPTO', '')).strip()
+        mes      = row['mes_str']
+
+        # GG-001 (2026-07-21): Folio 926 → OSCAR INFANTE (override de NICOLL NAVARRO)
+        if folio == '926':
+            vendedor = 'OSCAR INFANTE'
+
+        parsed = parse_concepto_pe(concepto)
+        if parsed:
+            qty, name_raw = parsed
+            entry, prod_n = buscar_piso_peru(piso_pe, name_raw, qty)
+            tier  = nearest_tier_pe(qty, piso_pe['tiers'].get(prod_n)) if entry else None
+            fmt   = (f"{int(tier)} L" if isinstance(tier, (int, float)) else str(tier)) if tier else '?'
+            prod  = normalize_prod_name(name_raw)
+            pp    = float(entry['pp']) if entry and entry.get('pp') is not None else None
+            pv    = round(total / qty, 4) if qty > 0 else None
+
+            if pp is not None and total > 0:
+                elegible = True
+                cumple   = pv is not None and pv >= pp
+                sp       = round(total if cumple else 0, 2)
+                bp       = round(total if not cumple else 0, 2)
+            else:
+                elegible = False
+                cumple   = None
+                sp, bp   = 0, 0
+        else:
+            qty, prod, fmt, pp, pv = None, '?', '?', None, None
+            elegible, cumple, sp, bp = False, None, 0, 0
+
+        tx_list.append({
+            'mes':      mes,
+            'fecha':    fecha_str,
+            'folio':    folio,
+            'cliente':  cliente,
+            'vendedor': vendedor,
+            'concepto': concepto,
+            'producto': prod,
+            'formato':  fmt,
+            'qty':      qty,
+            'total':    round(total, 2),
+            'pv':       pv,
+            'pp':       pp,
+            'elegible': elegible,
+            'sp':       sp,
+            'bp':       bp,
+            'cumple':   cumple,
+        })
+
+    pct_ok = round(n_fecha_ok / max(len(tx_list), 1) * 100, 1)
+    print(f"   → TX_PE: {len(tx_list)} registros · fechas OK: {n_fecha_ok} ({pct_ok}%) · NaN: {n_fecha_nan}")
+    return tx_list
+
+
+def update_panel_iec_pe(tx_pe, corte_date):
+    """Reemplaza TX_PE en Panel_IEC y actualiza la fecha de corte Perú."""
+    with open(PANEL_IEC, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    tx_json = _jdumps(tx_pe, separators=(',', ':'))
+    new_tx  = f'const TX_PE = {tx_json};'
+    content = re.sub(r'const TX_PE = \[.*?\];', new_tx, content, flags=re.DOTALL)
+
+    with open(PANEL_IEC, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+    return len(tx_pe)
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 #  6.5 SINCRONIZAR CACHE-BUSTING (?v=) EN TODOS LOS PANELES HTML
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1974,7 +2183,12 @@ def main():
 
     print("   Perú ventas...")
     pe_v = extract_peru_ventas(files['peru_ventas'])
-    print(f"   → YTD: USD {pe_v['ytd_5m']:,}")
+    print(f"   → YTD bruto: USD {pe_v['ytd_5m']:,}")
+
+    # Aplicar decisiones GG de atribución de vendedores Perú
+    print("   Aplicando decisiones GG (folio 926 + normalización NICOLL/LIZBETH)...")
+    pe_v = _apply_peru_vendor_gg_decisions(pe_v)
+    print(f"   → YTD post-GG: USD {pe_v['ytd_5m']:,}")
 
     print("   CxC Chile (2 entidades)...")
     cl_cxc = extract_cxc_chile(files['cxc_agro'], files['cxc_avch'])
@@ -2038,6 +2252,17 @@ def main():
     n_tx  = update_panel_iec(tx_cl, cortes['chile_ventas'])
     print(f"   → {n_tx} transacciones · corte {cortes['chile_ventas']}")
 
+    # 8.1 Actualizar Panel_IEC TX_PE (fix DQ-001 + DQ-002)
+    print("\n🔬 Actualizando Panel_IEC TX_PE (fix DQ-001/DQ-002)...")
+    if 'peru_ventas' in files:
+        _pe_sku_for_tx = extract_peru_ventas_sku(files['peru_ventas'])
+        tx_pe  = build_tx_pe(_pe_sku_for_tx, piso_pe_dict)
+        n_tx_pe = update_panel_iec_pe(tx_pe, cortes['peru_ventas'])
+        print(f"   → TX_PE actualizado · corte {cortes['peru_ventas']}")
+    else:
+        n_tx_pe = 0
+        print("   ⚠ peru_ventas no disponible — TX_PE no actualizado")
+
     # 8.5 Sincronizar cache-busting en todos los paneles
     print(f"\n🔄 Sincronizando cache-busting (?v={CACHE_V}) en paneles HTML...")
     panels_synced = sync_cache_busting()
@@ -2050,6 +2275,7 @@ def main():
         f"avboard_data.js generado · corte {cortes['chile_ventas']}",
         f"avboard_clientes.js regenerado · {len(clientes_cl)} clientes CL",
         f"Panel_IEC TX_CL · {n_tx} transacciones",
+        f"Panel_IEC TX_PE · {n_tx_pe} transacciones · DQ-001/DQ-002 fix aplicado",
         f"IEC Chile {iec_cl['total']:.1%} · BP CLP {iec_cl['bp_total']:,}",
         f"CxC Chile CLP {cl_cxc['total']:,} · +90d CLP {cl_cxc['tramos']['t90']:,}",
         f"Módulo Productos: {len(productos['detalle'])} SKUs · {n_neg} margen negativo · {n_sin_costo} sin costo",
