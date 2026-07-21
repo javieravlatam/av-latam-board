@@ -524,7 +524,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 </div>
 
 <div class="krow" style="margin-bottom:16px;">
-  <div class="kpi pe"><div class="klbl">Ppto Anual</div><div class="kval">1.380M</div><div class="ksub">USD total oficial 2026</div></div>
+  <div class="kpi pe"><div class="klbl">Ppto Anual</div><div class="kval" id="av-ppto-pe-anual-val">1.210M</div><div class="ksub">USD total oficial 2026</div></div>
   <div class="kpi pe"><div class="klbl">Real YTD 5m</div><div class="kval pe" id="av-ppto-pe-ytd-val">334.1K</div><div class="ksub" id="av-ppto-pe-ytd-sub">USD · al 15/05/2026</div></div>
   <div class="kpi pe"><div class="klbl">Ppto YTD 5m</div><div class="kval" id="av-ppto-pe-ppto5m">346.6K</div><div class="ksub">USD Ene–May acumulado</div></div>
   <div class="kpi am"><div class="klbl">Cumplimiento YTD</div><div class="kval am" id="av-ppto-pe-cumpl-val">96.4%</div><div class="ksub" id="av-ppto-pe-cumpl-sub">T1 92.0% · May 119.5%</div></div>
@@ -535,7 +535,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 <div class="panel pe" style="margin-bottom:15px;">
   <div class="ptitle pe">PRESUPUESTO OFICIAL 2026 · PERÚ <span class="ptag">USD · por zona · 12 meses · L. Aguirre = zona unificada</span></div>
   <div style="overflow-x:auto;">
-  <table class="bt">
+  <table class="bt" id="pe-ppto-mensual-tbl">
     <thead><tr>
       <th style="text-align:left;">Zona</th>
       <th>Ene</th><th>Feb</th><th>Mar</th><th style="color:var(--amber);">Abr</th>
@@ -593,8 +593,8 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 <!-- Real vs Ppto Perú + Barras -->
 <div class="g2" style="margin-bottom:15px;align-items:start;">
   <div class="panel pe">
-    <div class="ptitle pe">REAL vs PPTO T1 · POR ZONA <span class="ptag">USD · Ene–Mar 2026</span></div>
-    <table class="bt">
+    <div class="ptitle pe">REAL vs PPTO T1 · POR ZONA <span class="ptag" id="pe-t1-tag">USD · Ene–Mar 2026</span></div>
+    <table class="bt" id="pe-t1-tbl">
       <thead><tr><th style="text-align:left;">Zona</th><th>Ppto T1</th><th>Real T1</th><th>Gap</th><th style="text-align:center;">%</th><th>Ppto Anual</th><th>YTD+Abr</th></tr></thead>
       <tbody>
         <tr><td><span class="s sg"></span><strong>L. Aguirre</strong></td><td class="cp">35.370</td><td class="cr hit">72.175</td><td class="gp">+36.805</td>
@@ -1164,6 +1164,56 @@ new Chart(document.getElementById('cGrupo'),{
       if(rmp.gonzales&&PE_MES_DATA.gonzales) PE_MES_DATA.gonzales.real=rmp.gonzales.slice(0,12);
       if(rmp.valladares&&PE_MES_DATA.valladares) PE_MES_DATA.valladares.real=rmp.valladares.slice(0,12);
     }
+    // ── Actualizar tablas estáticas Perú desde AVBOARD ──────────────────────────
+    (function(){
+      var rmp=pv.rtc_mensual_real||{};
+      var pvd=pv.por_vendedor||{};
+      var rtcP=pv.rtc_ppto_anual||{};
+      var fmt=function(n){return Math.round(n).toLocaleString('es-CL');};
+      var pct=function(r){return (r*100).toFixed(1)+'%';};
+      // 1. KPI Ppto Anual
+      set('av-ppto-pe-anual-val',(pv.ppto_anual/1e6).toFixed(1)+'M');
+      // 2. TOTAL row de tabla ppto mensual
+      var pTbl=document.getElementById('pe-ppto-mensual-tbl');
+      if(pTbl&&pv.mensual_ppto){
+        var tftds=pTbl.querySelectorAll('tfoot td');
+        for(var i=0;i<12;i++){ if(tftds[i+1]) tftds[i+1].textContent=fmt(pv.mensual_ppto[i]||0); }
+        if(tftds[13]) tftds[13].textContent=fmt(pv.ppto_anual);
+      }
+      // 3. Tabla "Real vs Ppto T1" — rows: aguirre(0), atalaya(1), infante(2), gonzales(3), valladares(4)
+      var t1Tbl=document.getElementById('pe-t1-tbl');
+      if(t1Tbl){
+        var vks=['aguirre','atalaya','infante','gonzales','valladares'];
+        var rows=t1Tbl.querySelectorAll('tbody tr');
+        var totRealT1=0,totPptoT1=0,totYTD=0,totPptoA=0;
+        for(var j=0;j<Math.min(rows.length,vks.length);j++){
+          var vk=vks[j], tds=rows[j].querySelectorAll('td');
+          var mArr=rmp[vk]||[];
+          var realT1=(mArr[0]||0)+(mArr[1]||0)+(mArr[2]||0);
+          var pptoT1=(PE_MES_DATA[vk]?PE_MES_DATA[vk].ppto.slice(0,3).reduce(function(a,b){return a+b;},0):0);
+          var gap=realT1-pptoT1;
+          var ratio=pptoT1>0?realT1/pptoT1:0;
+          var ytd=(pvd[vk]&&pvd[vk].ytd)||0;
+          var pptoA=rtcP[vk]||0;
+          totRealT1+=realT1; totPptoT1+=pptoT1; totYTD+=ytd; totPptoA+=pptoA;
+          if(tds[2]){tds[2].textContent=fmt(realT1); tds[2].className='cr '+(ratio>=1?'hit':(ratio>=0.8?'miss':'crit'));}
+          if(tds[3]){tds[3].textContent=(gap>=0?'+':'')+fmt(Math.abs(gap)); tds[3].className=gap>=0?'gp':'gn';}
+          if(tds[4]){var cls=ratio>=1?'pbok':(ratio>=0.8?'pbw':'pbd');tds[4].innerHTML='<span class="pb '+cls+'">'+pct(ratio)+'</span><div class="mb"><div class="mbf" style="width:'+Math.min(100,ratio*100).toFixed(1)+'%;background:'+(ratio>=1?'var(--green)':(ratio>=0.8?'var(--amber)':'var(--red2)'))+'"></div></div>';}
+          if(tds[5]){tds[5].textContent=fmt(pptoA);}
+          if(tds[6]){tds[6].textContent=fmt(ytd); tds[6].className='cr '+(ytd>=pptoA?'hit':(ytd>=pptoA*0.8?'miss':'crit'));}
+        }
+        // Total row
+        var tft=t1Tbl.querySelectorAll('tfoot td');
+        if(tft[1]) tft[1].textContent=fmt(totPptoT1);
+        if(tft[2]){tft[2].textContent=fmt(totRealT1); tft[2].style.color=totRealT1>=totPptoT1?'var(--green)':'var(--blue)';}
+        if(tft[3]){var tg=totRealT1-totPptoT1; tft[3].textContent=(tg>=0?'+':'')+fmt(Math.abs(tg)); tft[3].className=tg>=0?'gp':'gn';}
+        if(tft[5]) tft[5].textContent=fmt(pv.ppto_anual);
+        if(tft[6]) tft[6].textContent=fmt(totYTD);
+      }
+      // Actualizar tag corte T1
+      var t1Tag=document.getElementById('pe-t1-tag');
+      if(t1Tag) t1Tag.textContent='USD · Ene–Mar · YTD al '+cortesPE;
+    })();
     // Re-render curvas activas
     var actBtn=document.querySelector('#selectorChileCurva .sel-btn.active');
     if(actBtn){var actKey=actBtn.getAttribute('onclick').match(/'([^']+)'/)[1];setChileCurva(actKey,actBtn);}
