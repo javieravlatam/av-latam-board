@@ -1,0 +1,138 @@
+/* ==========================================================================
+   FORMATO JAVIER v1.1 — Base
+   AV LATAM Design System · Estándar Oficial
+   Autor: Javier Almeida · 2026-07-21
+   --------------------------------------------------------------------------
+   Reset mínimo · Fuentes · Body base · Contenedor · Clases tipográficas
+   Dependencia: formato-javier-tokens.css (debe cargarse antes)
+   ========================================================================== */
+
+
+/* ==========================================================================
+   FUENTES — Google Fonts
+   Bebas Neue: display/KPIs · DM Sans: cuerpo UI · DM Mono: datos/tablas
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+
+/* ==========================================================================
+   RESET MÍNIMO
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+img, svg, canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+
+/* ==========================================================================
+   BODY BASE
+   ========================================================================== */
+body {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* ==========================================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================================== */
+.av-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+}
+
+.av-page {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-6) var(--space-12);
+}
+
+
+/* ==========================================================================
+   CLASES TIPOGRÁFICAS
+   Jerarquía completa: display (Bebas Neue) · headings · body · mono
+   Tamaño mínimo: 11px — nunca inferior en ningún componente del sistema
+   ========================================================================== */
+
+/* Display — KPI values, cifras destacadas */
+.av-display-xl { font-family: var(--font-display); font-size: 56px; line-height: 1; color: var(--text); }
+.av-display-lg { font-family: var(--font-display); font-size: 40px; line-height: 1; color: var(--text); }
+.av-display-md { font-family: var(--font-display); font-size: 28px; line-height: 1; color: var(--text); }
+.av-display-sm { font-family: var(--font-display); font-size: 22px; line-height: 1; color: var(--text); }
+
+/* Headings — DM Sans semibold */
+.av-h1 { font-family: var(--font-body); font-size: 18px; font-weight: 600; color: var(--text); }
+.av-h2 { font-family: var(--font-body); font-size: 14px; font-weight: 600; color: var(--text); }
+.av-h3 { font-family: var(--font-body); font-size: 12px; font-weight: 600; color: var(--text-dim); }
+
+/* Body */
+.av-body    { font-family: var(--font-body); font-size: 13px; font-weight: 400; color: var(--text); }
+.av-body-sm { font-family: var(--font-body); font-size: 12px; font-weight: 400; color: var(--text-dim); }
+
+/* Caption — 11px mínimo, uso en ejes, metadatos */
+.av-caption { font-family: var(--font-body); font-size: 11px; font-weight: 400; color: var(--text-muted); line-height: 1.4; }
+
+/* Mono — datos en tablas, porcentajes, cifras comparativas */
+.av-mono    { font-family: var(--font-mono); font-size: 13px; font-weight: 400; }
+.av-mono-sm { font-family: var(--font-mono); font-size: 11px; font-weight: 400; color: var(--text-muted); }
+
+/* Label — encabezados de tabla, tags de sección */
+.av-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Colores semánticos sobre tipografía */
+.av-text-positive { color: var(--positive); }
+.av-text-warning  { color: var(--warning); }
+.av-text-danger   { color: var(--danger); }
+.av-text-info     { color: var(--info); }
+.av-text-muted    { color: var(--text-muted); }
+.av-text-dim      { color: var(--text-dim); }
+
+
+/* ==========================================================================
+   LINKS Y FOCUS
+   ========================================================================== */
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover { opacity: 0.85; }
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--domain-accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}

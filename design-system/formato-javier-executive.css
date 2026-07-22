@@ -1,0 +1,363 @@
+/* ==========================================================================
+   FORMATO JAVIER v1.1 — Executive Components
+   AV LATAM Design System · Estándar Oficial
+   Autor: Javier Almeida · 2026-07-21
+   --------------------------------------------------------------------------
+   Componentes diseñados específicamente para la toma de decisiones ejecutivas.
+   Implementan el modelo de cuatro preguntas:
+     Zona 1: ¿Cómo estamos?     → av-exec-summary
+     Zona 2: ¿Qué cambió?       → av-forecast, av-delta-chip (en components)
+     Zona 3: ¿Por qué cambió?   → av-table (en components) + charts externos
+     Zona 4: ¿Qué debo hacer?   → av-alert-banner, av-risk, av-opportunity,
+                                   av-action, av-insight, av-decision
+   --------------------------------------------------------------------------
+   Dependencia: formato-javier-tokens.css
+   ========================================================================== */
+
+
+/* ==========================================================================
+   AV-EXEC-SUMMARY — Resumen ejecutivo de panel (Zona 1)
+   Grid automático de KPI cards. Responde ¿Cómo estamos? en < 3 seg.
+   Uso: exactamente uno por pantalla, en la posición top de Zona 1.
+   ========================================================================== */
+.av-exec-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+
+/* ==========================================================================
+   AV-INSIGHT — Hallazgo de análisis (Zona 2-3)
+   Patrón detectado que merece atención ejecutiva. No urgente.
+   NO usar para: alertas activas, acciones requeridas, riesgos operativos.
+   ========================================================================== */
+.av-insight {
+  background: rgba(74, 158, 219, 0.06);
+  border: 1px solid rgba(74, 158, 219, 0.20);
+  border-left: 3px solid var(--info);
+  border-radius: 0 var(--component-radius) var(--component-radius) 0;
+  padding: 10px var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.av-insight__title {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.av-insight__body {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+
+/* ==========================================================================
+   AV-RISK — Riesgo activo (Zona 4)
+   Amenaza identificada sobre KPI, cliente, producto o vendedor.
+   Requiere: objeto del riesgo + magnitud + status.
+   NO usar para: hipótesis, proyecciones sin datos, riesgos futuros sin base.
+   ========================================================================== */
+.av-risk {
+  background: rgba(231, 76, 60, 0.06);
+  border: 1px solid rgba(231, 76, 60, 0.20);
+  border-left: 3px solid var(--danger);
+  border-radius: 0 var(--component-radius) var(--component-radius) 0;
+  padding: 10px var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.av-risk__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: 4px;
+}
+
+.av-risk__title {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.av-risk__body {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+
+/* ==========================================================================
+   AV-OPPORTUNITY — Oportunidad de negocio (Zona 4)
+   Upside cuantificable y accionable en el período actual.
+   NO usar para: análisis de largo plazo, proyecciones sin datos históricos.
+   ========================================================================== */
+.av-opportunity {
+  background: rgba(122, 182, 72, 0.06);
+  border: 1px solid rgba(122, 182, 72, 0.20);
+  border-left: 3px solid var(--positive);
+  border-radius: 0 var(--component-radius) var(--component-radius) 0;
+  padding: 10px var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.av-opportunity__title {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.av-opportunity__body {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+
+/* ==========================================================================
+   AV-ACTION — Acción recomendada (Zona 4)
+   La acción más poderosa del sistema. Cierra el loop decisión→ejecución.
+   OBLIGATORIO: acción específica + responsable + plazo + impacto esperado.
+   Si falta alguno de los cuatro: usar av-insight o av-risk en su lugar.
+   ========================================================================== */
+.av-action {
+  background: rgba(245, 166, 35, 0.06);
+  border: 1px solid rgba(245, 166, 35, 0.20);
+  border-left: 3px solid var(--warning);
+  border-radius: 0 var(--component-radius) var(--component-radius) 0;
+  padding: 10px var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.av-action__title {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.av-action__meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+
+/* ==========================================================================
+   AV-FORECAST — Proyección de cierre (Zona 1-2)
+   Complementa al KPI real — nunca lo reemplaza.
+   OBLIGATORIO: indicador de confianza (porcentaje o rango).
+   NO usar: sin intervalo de confianza, como KPI hero principal.
+   ========================================================================== */
+.av-forecast {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--panel-radius);
+  padding: 14px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.av-forecast::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--info);
+  opacity: 0.5;
+}
+
+.av-forecast__label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+
+.av-forecast__val {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.av-forecast__delta {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+
+.av-forecast__confidence {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+
+/* ==========================================================================
+   AV-ALERT-BANNER — Alerta crítica de panel (Zona 4)
+   Ancho completo. Máximo 2 banners visibles simultáneamente.
+   Si hay más de 2 alertas activas: mostrar banner de resumen con link.
+   ========================================================================== */
+.av-alert-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  border-radius: var(--component-radius);
+  padding: 10px var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.av-alert-banner.alert {
+  background: rgba(231, 76, 60, 0.08);
+  border: 1px solid rgba(231, 76, 60, 0.24);
+}
+
+.av-alert-banner.warn {
+  background: rgba(245, 166, 35, 0.08);
+  border: 1px solid rgba(245, 166, 35, 0.24);
+}
+
+.av-alert-banner.info {
+  background: rgba(74, 158, 219, 0.08);
+  border: 1px solid rgba(74, 158, 219, 0.24);
+}
+
+.av-alert-banner.ok {
+  background: rgba(122, 182, 72, 0.07);
+  border: 1px solid rgba(122, 182, 72, 0.20);
+}
+
+.av-alert-banner__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.av-alert-banner.alert .av-alert-banner__dot { background: var(--danger); }
+.av-alert-banner.warn  .av-alert-banner__dot { background: var(--warning); }
+.av-alert-banner.info  .av-alert-banner__dot { background: var(--info); }
+.av-alert-banner.ok    .av-alert-banner__dot { background: var(--positive); }
+
+.av-alert-banner__text {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text);
+  flex: 1;
+  line-height: 1.4;
+}
+
+.av-alert-banner__tag {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.av-alert-banner.alert .av-alert-banner__tag { color: var(--danger); }
+.av-alert-banner.warn  .av-alert-banner__tag { color: var(--warning); }
+.av-alert-banner.info  .av-alert-banner__tag { color: var(--info); }
+.av-alert-banner.ok    .av-alert-banner__tag { color: var(--positive); }
+
+
+/* ==========================================================================
+   AV-DECISION — Tarjeta de decisión (módulos de aprobación)
+   Compras, Finanzas, RR.HH. Presenta decisión con contexto + acciones.
+   Si la decisión requiere investigación adicional: incluir link, no datos inline.
+   ========================================================================== */
+.av-decision {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--panel-radius);
+  padding: var(--space-5) var(--space-6);
+}
+
+.av-decision__title {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: var(--space-3);
+}
+
+.av-decision__body {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: var(--space-5);
+}
+
+.av-decision__actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.av-decision__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.av-decision__btn:hover { border-color: var(--domain-accent); }
+
+.av-decision__btn.primary {
+  background: var(--domain-accent);
+  border-color: var(--domain-accent);
+  color: var(--bg);
+}
+
+.av-decision__btn.danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.av-decision__btn.danger:hover {
+  background: var(--danger);
+  color: white;
+}
+
+
+/* ==========================================================================
+   AV-ZONA-4 — Contenedor de zona de acciones
+   Agrupa banners, risk cards, opportunity cards y action cards.
+   ========================================================================== */
+.av-zona-4 {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}

@@ -1,0 +1,30 @@
+/* ==========================================================================
+   FORMATO JAVIER v1.1 — Bundler Entry Point
+   AV LATAM Design System · Estándar Oficial
+   Autor: Javier Almeida · 2026-07-21
+   --------------------------------------------------------------------------
+
+   ⚠️  ESTE ARCHIVO ES SOLO PARA BUNDLERS (Vite / Rollup / Webpack).
+       Los paneles HTML estáticos NO deben importar este archivo.
+       En HTML, cargar las hojas individuales con <link> directamente:
+
+       <link rel="stylesheet" href="design-system/formato-javier-tokens.css">
+       <link rel="stylesheet" href="design-system/formato-javier-base.css">
+       <link rel="stylesheet" href="design-system/formato-javier-components.css">
+       <link rel="stylesheet" href="design-system/formato-javier-executive.css">
+       <link rel="stylesheet" href="design-system/formato-javier-motion.css">
+       <link rel="stylesheet" href="design-system/formato-javier-utilities.css">
+       <!-- Domain override: cargar el que corresponda a la aplicación -->
+       <link rel="stylesheet" href="design-system/domains/formato-javier-board.css">
+
+   Razón: los <link> se cargan en paralelo (HTTP/2) y no bloquean el
+   parser. Los @import son secuenciales y empeoran el TTFB en HTML estático.
+
+   ========================================================================== */
+
+@import './formato-javier-tokens.css';
+@import './formato-javier-base.css';
+@import './formato-javier-components.css';
+@import './formato-javier-executive.css';
+@import './formato-javier-motion.css';
+@import './formato-javier-utilities.css';

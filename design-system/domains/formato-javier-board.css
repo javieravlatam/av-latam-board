@@ -1,0 +1,17 @@
+/* ==========================================================================
+   FORMATO JAVIER v1.1 — Domain: BOARD (av-latam-board)
+   AV LATAM Design System · Estándar Oficial
+   Autor: Javier Almeida · 2026-07-21
+   --------------------------------------------------------------------------
+   Overrides específicos de la aplicación BOARD.
+   Establece el acento de dominio verde AV (#7AB648) y ajustes menores.
+   Cargar DESPUÉS de formato-javier-tokens.css.
+   ========================================================================== */
+
+:root {
+  --domain-accent: var(--av-green-500);   /* #7AB648 — verde de marca AV */
+}
+
+/* Los bordes del BOARD tienen tinte verde; ya definido en tokens.css como default.
+   Este archivo existe para adherir al patrón de domains y como punto de
+   extensión si se requieren overrides adicionales específicos de BOARD en el futuro. */

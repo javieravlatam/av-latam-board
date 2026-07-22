@@ -10,220 +10,150 @@
 </script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Panel Jefes · Chile 2026 · AV Latam</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=20260721"></script>
+<!-- FORMATO JAVIER v1.1 Phosphor Icons Regular -->
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<!-- FORMATO JAVIER v1.1 Design System (orden obligatorio) -->
+<link rel="stylesheet" href="design-system/formato-javier-tokens.css">
+<link rel="stylesheet" href="design-system/formato-javier-base.css">
+<link rel="stylesheet" href="design-system/formato-javier-components.css">
+<link rel="stylesheet" href="design-system/formato-javier-executive.css">
+<link rel="stylesheet" href="design-system/formato-javier-motion.css">
+<link rel="stylesheet" href="design-system/formato-javier-utilities.css">
+<link rel="stylesheet" href="design-system/domains/formato-javier-board.css">
+<script src="avboard_data.js?v=20260722"></script>
+<script src="js/av-chart-colors.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#080e09;--s1:#0f1a10;--s2:#162118;--s3:#1c2b1e;
-  --green:#7AB648;--amber:#F5A623;--red:#E74C3C;--red2:#C0392B;
-  --blue:#4A9EDB;--orange:#E67E22;--purple:#9B59B6;
-  --text:#e8f0e9;--dim:#8fa892;--muted:#5a7060;
-  --bdr:rgba(122,182,72,0.18);--bdim:rgba(122,182,72,0.07);
-}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh}
+/* =================================================================
+   PANEL_JEFES_CHILE_2026 - CSS RESIDUAL - FORMATO JAVIER v1.1
+   DEUDA v1.2 (Opcion B aprobada 2026-07-22):
+     .mes-table | .cxc-grid/.cxc-card | .pricing-cards/.pc | .tbl-exec
+   R-002: --orange -> --warning (tramo CxC 61-90d pierde diferenciacion visual)
+   REGLA: no aumentar este bloque. Evaluar candidatos v1.2 tras 2do panel.
+   ================================================================= */
 
-/* HEADER */
-.hdr{background:linear-gradient(180deg,#0c1a0d,var(--bg));border-bottom:1px solid var(--bdr);
-  padding:12px 28px;display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;z-index:100}
-.hdr-l{display:flex;align-items:center;gap:13px}
-.logo{width:36px;height:36px;background:var(--green);border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue';font-size:15px;color:var(--bg)}
-.htitle{font-family:'Bebas Neue';font-size:19px;letter-spacing:2px;color:var(--green)}
-.hsub{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
-.hcorte{font-family:'DM Mono';font-size:10px;color:var(--dim);text-align:right;line-height:1.6}
-.hcorte b{color:var(--green)}
-.hnav{display:flex;gap:8px}
-.np{background:var(--s2);border:1px solid var(--bdr);border-radius:6px;
-  padding:5px 12px;font-size:10px;color:var(--dim);text-decoration:none;transition:all .2s}
-.np:hover{background:var(--green);color:var(--bg);border-color:var(--green)}
-
-/* PAGE */
-.page{max-width:1320px;margin:0 auto;padding:24px 32px 60px}
-
-/* KPI BANNER */
-.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:22px}
-.kpi{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;padding:14px 16px}
-.kpi-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px}
-.kpi-val{font-family:'Bebas Neue';font-size:24px;line-height:1;margin-bottom:3px}
-.kpi-sub{font-size:10px;color:var(--dim)}
-.kpi-g{color:var(--green)}.kpi-a{color:var(--amber)}.kpi-r{color:var(--red)}.kpi-b{color:var(--blue)}
-
-/* TABS */
-.tabs{display:flex;gap:0;background:var(--s1);border:1px solid var(--bdr);border-radius:10px;
-  padding:4px;margin-bottom:20px;width:fit-content}
-.tab{padding:8px 20px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;
-  letter-spacing:.5px;color:var(--dim);border:none;background:transparent;transition:all .2s}
-.tab.active{background:var(--green);color:var(--bg)}
+/* Tab funcional */
 .tab-content{display:none}
 .tab-content.active{display:block}
 
-/* SECTION TITLE */
-.sec{font-family:'Bebas Neue';font-size:13px;letter-spacing:3px;color:var(--green);
-  border-left:3px solid var(--green);padding-left:10px;margin:22px 0 14px;
-  display:flex;align-items:center;gap:10px}
-.sec span{font-family:'DM Mono';font-size:9px;color:var(--muted);font-weight:400;letter-spacing:0}
+/* Seccion interior (border-left verde, sin equiv DS v1.1) */
+.sec{font-family:var(--font-display);font-size:13px;letter-spacing:3px;
+  color:var(--domain-accent);border-left:3px solid var(--domain-accent);
+  padding-left:10px;margin:22px 0 14px;display:flex;align-items:center;gap:10px}
+.sec span{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);
+  font-weight:400;letter-spacing:0}
 
-/* CHART CONTAINERS */
-.chart-wrap{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;padding:16px}
-.chart-title{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;font-weight:600}
+/* tbl-wrap: av-panel + overflow:hidden (para corner-clip de tablas) */
+.tbl-wrap{overflow:hidden}
+
+
+/* Canvas heights */
 .chart-canvas{height:280px;position:relative}
 .chart-canvas-sm{height:220px;position:relative}
 
-/* GRID */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+/* Footer */
+.footer{text-align:center;padding:20px 32px;font-size:11px;color:var(--text-muted);
+  border-top:1px solid var(--border-dim);margin-top:20px;
+  display:flex;justify-content:space-between;align-items:center}
 
-/* TABLE */
-.tbl-wrap{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;overflow:hidden}
-.tbl-head{padding:12px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
-.tbl-head-title{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;font-weight:600}
-table.tbl{width:100%;border-collapse:collapse;font-size:12px}
-table.tbl th{padding:9px 12px;text-align:left;font-size:9px;text-transform:uppercase;
-  letter-spacing:1px;color:var(--muted);background:var(--s2);font-weight:600;border-bottom:1px solid var(--bdr)}
-table.tbl td{padding:8px 12px;border-bottom:1px solid rgba(122,182,72,0.06)}
-table.tbl tr:last-child td{border-bottom:none}
-table.tbl tr:hover td{background:rgba(122,182,72,0.04)}
-.c{text-align:center}.r{text-align:right}
-.mono{font-family:'DM Mono';font-size:11px}
+/* == v1.2 DEBT: Grilla mensual 12 col == */
 
-/* SEMAFORO */
-.sema{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
-.s-ok{background:var(--green)}.s-warn{background:var(--amber)}.s-risk{background:var(--orange)}.s-crit{background:var(--red)}
-.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600}
-.b-ok{background:rgba(122,182,72,0.15);color:var(--green)}
-.b-warn{background:rgba(245,166,35,0.15);color:var(--amber)}
-.b-risk{background:rgba(230,126,34,0.15);color:var(--orange)}
-.b-crit{background:rgba(231,76,60,0.15);color:var(--red)}
-.b-nd{background:rgba(90,112,96,0.15);color:var(--muted)}
-
-/* VENDEDOR SELECTOR */
-.vend-btns{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
-.vbtn{padding:5px 12px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;
-  background:var(--s2);border:1px solid var(--bdr);color:var(--dim);transition:all .2s}
-.vbtn.active,.vbtn:hover{background:var(--green);color:var(--bg);border-color:var(--green)}
-
-/* MES TABLE INLINE */
-.mes-table{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin-top:14px}
-.mes-cell{background:var(--s2);border-radius:5px;padding:6px 4px;text-align:center}
-.mes-cell .mes-lbl{font-size:8px;color:var(--muted);text-transform:uppercase}
-.mes-cell .mes-v{font-family:'Bebas Neue';font-size:13px;color:var(--text)}
-.mes-cell .mes-p{font-size:8px;margin-top:2px}
-
-/* CxC SUMMARY */
+/* == v1.2 DEBT: CxC tramo cards (61-90d = --warning per R-002) == */
 .cxc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.cxc-card{border-radius:8px;padding:14px 16px}
-.cxc-card .tramo{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:6px}
-.cxc-card .monto{font-family:'Bebas Neue';font-size:22px;line-height:1;margin-bottom:4px}
-.cxc-card .detail{font-size:10px;color:var(--dim)}
+.cxc-card{border-radius:var(--component-radius);padding:14px 16px}
+.cxc-card .tramo{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:6px}
+.cxc-card .monto{font-family:var(--font-display);font-size:22px;line-height:1;margin-bottom:4px}
+.cxc-card .detail{font-size:11px;color:var(--text-dim)}
 
-/* PRICING SECTION */
-.pricing-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.pc{background:var(--s2);border:1px solid;border-radius:8px;padding:14px}
+/* == v1.2 DEBT: IEC pricing cards == */
+.pc{background:var(--surface-2);border:1px solid;border-radius:var(--component-radius);padding:14px}
 .pc-icon{font-size:20px;margin-bottom:8px}
-.pc-val{font-family:'Bebas Neue';font-size:26px;line-height:1;margin-bottom:4px}
-.pc-lbl{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:1px}
+.pc-val{font-family:var(--font-display);font-size:26px;line-height:1;margin-bottom:4px}
+.pc-lbl{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px}
 
-/* CUMPLIMIENTO BAR */
-.cumpl-bar{height:5px;background:var(--s3);border-radius:3px;margin-top:6px;overflow:hidden}
-.cumpl-fill{height:100%;border-radius:3px;transition:width .3s}
-
-/* FOOTER */
-.footer{text-align:center;padding:20px 32px;font-size:10px;color:var(--muted);
-  border-top:1px solid var(--bdim);margin-top:20px;display:flex;justify-content:space-between;align-items:center}
-
-  .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
-  .btn-logout:hover { background:rgba(231,76,60,0.10); }
-
-/* ── CUADRO EJECUTIVO POR VENDEDOR ── */
-.exec-wrap{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;overflow:hidden;margin-top:4px}
+/* == v1.2 DEBT: Tabla ejecutiva scrollable con sticky primera col == */
+.exec-wrap{background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--panel-radius);overflow:hidden;margin-top:4px}
 .exec-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table.tbl-exec{width:max-content;min-width:100%;border-collapse:collapse;font-size:11px}
-table.tbl-exec th{padding:8px 10px;text-align:right;font-size:8px;text-transform:uppercase;
-  letter-spacing:1px;color:var(--muted);background:var(--s2);font-weight:600;
-  border-bottom:1px solid var(--bdr);white-space:nowrap}
+table.tbl-exec th{padding:8px 10px;text-align:right;font-size:11px;text-transform:uppercase;
+  letter-spacing:1px;color:var(--text-muted);background:var(--surface-2);font-weight:600;
+  border-bottom:1px solid var(--border);white-space:nowrap}
 table.tbl-exec td{padding:7px 10px;border-bottom:1px solid rgba(122,182,72,0.06);white-space:nowrap}
 table.tbl-exec tr:last-child td{border-bottom:none}
-table.tbl-exec th:first-child{text-align:left;min-width:130px;position:sticky;left:0;z-index:3;background:var(--s2)}
-table.tbl-exec td:first-child{text-align:left;position:sticky;left:0;z-index:2;background:var(--s1)}
+table.tbl-exec th:first-child{text-align:left;min-width:130px;
+  position:sticky;left:0;z-index:3;background:var(--surface-2)}
+table.tbl-exec td:first-child{text-align:left;
+  position:sticky;left:0;z-index:2;background:var(--surface)}
 table.tbl-exec th.th-acum{border-left:2px solid rgba(122,182,72,0.35);background:rgba(122,182,72,0.04)}
-table.tbl-exec td.td-acum{border-left:2px solid rgba(122,182,72,0.35);background:rgba(122,182,72,0.04);font-weight:700}
-.ce-bajo{color:var(--red)}.ce-parcial{color:var(--amber)}.ce-ok{color:var(--green)}
-.ce-cursor{background:rgba(122,182,72,0.07) !important;border-left:1px solid rgba(122,182,72,0.22) !important;border-right:1px solid rgba(122,182,72,0.22) !important}
-.ce-nd{color:var(--muted);font-size:9px;font-style:italic;font-family:'DM Sans',sans-serif}
-/* BLOQUE RESUMEN */
-.res-bloque{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-.res-card{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;padding:16px}
-.res-card-title{font-family:'Bebas Neue';font-size:11px;letter-spacing:2px;margin-bottom:12px;color:var(--dim)}
-.res-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.res-kpi-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.res-kpi-val{font-family:'Bebas Neue';font-size:22px;line-height:1}
+table.tbl-exec td.td-acum{border-left:2px solid rgba(122,182,72,0.35);
+  background:rgba(122,182,72,0.04);font-weight:700}
+.ce-cursor{background:rgba(122,182,72,0.07)!important;
+  border-left:1px solid rgba(122,182,72,0.22)!important;
+  border-right:1px solid rgba(122,182,72,0.22)!important}
+.ce-nd{color:var(--text-muted);font-size:11px;font-style:italic}
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
-<div class="hdr">
-  <div class="hdr-l">
-    <div class="logo">AV</div>
+<div class="av-nav">
+  <div class="av-nav__brand">
+    <div class="av-nav__logo">AV</div>
     <div>
-      <div class="htitle">🇨🇱 JEFES · CHILE</div>
-      <div class="hsub">Panel Comercial · Real 2026 vs Ppto 2026 · CLP</div>
+      <div class="av-nav__title">JEFES · CHILE</div>
+      <div class="av-nav__sub">Panel Comercial · Real 2026 vs Ppto 2026 · CLP</div>
     </div>
   </div>
-  <div class="hnav">
-    <a href="Panel_Jefes_Index.html" class="np">← Hub Jefes</a>
-    <a href="Panel_IEC_Auditoria_2026.html" class="np">⚡ IEC · Auditoría de Comisiones</a>
-    <a href="Panel_CxC_AV_Latam_2026.html" class="np">📋 CxC Detalle</a>
+  <div class="av-nav__links">
+    <a href="Panel_Jefes_Index.html" class="av-nav-item">← Hub Jefes</a>
+    <a href="Panel_IEC_Auditoria_2026.html" class="av-nav-item"><i class="ph ph-lightning"></i> IEC · Auditoría de Comisiones</a>
+    <a href="Panel_CxC_AV_Latam_2026.html" class="av-nav-item"><i class="ph ph-clipboard-text"></i> CxC Detalle</a>
   </div>
-  <div class="hcorte">
+  <div class="av-nav__meta">
     <div>Jefatura País Chile · <b id="jch-corte-hdr">Corte: May 2026 (Ene–May 26)</b></div>
-    <div style="color:var(--muted)" id="jch-corte-sub">Real 2026 YTD · corte 18/05/2026</div>
+    <div style="color:var(--text-muted)" id="jch-corte-sub">Real 2026 YTD · corte 18/05/2026</div>
   </div>
-  <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
+  <button class="av-btn danger" onclick="cerrarSesion()"><i class="ph ph-lock"></i> Cambiar acceso</button>
 </div>
 
-<div class="page">
+<div class="av-page">
 
 <!-- KPI BANNER -->
-<div class="kpis">
-  <div class="kpi">
-    <div class="kpi-lbl" id="jch-kpi-ytd-lbl">Real 2026 · Acum Ene–May</div>
-    <div class="kpi-val kpi-g" id="jch-kpi-ytd-val">CLP 342.9M</div>
-    <div class="kpi-sub" id="jch-kpi-ytd-sub">5 meses · corte 18/05/2026</div>
+<div class="av-exec-summary">
+  <div class="av-kpi-lg">
+    <div class="av-kpi-lg__label" id="jch-kpi-ytd-lbl">Real 2026 · Acum Ene–May</div>
+    <div class="av-kpi-lg__val av-ok" id="jch-kpi-ytd-val">CLP 342.9M</div>
+    <div class="av-kpi-lg__sub" id="jch-kpi-ytd-sub">5 meses · corte 18/05/2026</div>
   </div>
-  <div class="kpi">
-    <div class="kpi-lbl" id="jch-kpi-cumpl-lbl">Cumplimiento vs Ppto 5m</div>
-    <div class="kpi-val kpi-g" id="jch-kpi-cumpl-val">129.6%</div>
-    <div class="kpi-sub" id="jch-kpi-cumpl-sub">342.9M vs ppto 264.6M (Ene–May)</div>
+  <div class="av-kpi-lg">
+    <div class="av-kpi-lg__label" id="jch-kpi-cumpl-lbl">Cumplimiento vs Ppto 5m</div>
+    <div class="av-kpi-lg__val av-ok" id="jch-kpi-cumpl-val">129.6%</div>
+    <div class="av-kpi-lg__sub" id="jch-kpi-cumpl-sub">342.9M vs ppto 264.6M (Ene–May)</div>
   </div>
-  <div class="kpi">
-    <div class="kpi-lbl">Presupuesto 2026 · Anual</div>
-    <div class="kpi-val kpi-b" id="jch-kpi-ppto-val">CLP 861.3M</div>
-    <div class="kpi-sub">Meta anual · 6 RTCs activos</div>
+  <div class="av-kpi-lg">
+    <div class="av-kpi-lg__label">Presupuesto 2026 · Anual</div>
+    <div class="av-kpi-lg__val av-text-info" id="jch-kpi-ppto-val">CLP 861.3M</div>
+    <div class="av-kpi-lg__sub">Meta anual · 6 RTCs activos</div>
   </div>
-  <div class="kpi">
-    <div class="kpi-lbl">Top Vendedor 2026</div>
-    <div class="kpi-val kpi-g" style="font-size:17px" id="jch-kpi-top-name">J. CAROCA</div>
-    <div class="kpi-sub" id="jch-kpi-top-sub">CLP 63.3M · 4 meses</div>
+  <div class="av-kpi-lg">
+    <div class="av-kpi-lg__label">Top Vendedor 2026</div>
+    <div class="av-kpi-lg__val av-ok av-display-sm" id="jch-kpi-top-name">J. CAROCA</div>
+    <div class="av-kpi-lg__sub" id="jch-kpi-top-sub">CLP 63.3M · 4 meses</div>
   </div>
-  <div class="kpi">
-    <div class="kpi-lbl">IEC 2026 YTD</div>
-    <div class="kpi-val kpi-r">43.1%</div>
-    <div class="kpi-sub">Eficiencia vs precio piso propuesto</div>
+  <div class="av-kpi-lg">
+    <div class="av-kpi-lg__label">IEC 2026 YTD</div>
+    <div class="av-kpi-lg__val av-alert">43.1%</div>
+    <div class="av-kpi-lg__sub">Eficiencia vs precio piso propuesto</div>
   </div>
 </div>
 
 <!-- TABS -->
-<div class="tabs">
-  <button class="tab active" onclick="switchTab('ventas',this)">📈 Ventas & Presupuesto</button>
-  <button class="tab" onclick="switchTab('vendedores',this)">👤 Vendedores</button>
-  <button class="tab" onclick="switchTab('clientes',this)">🏢 Clientes</button>
-  <button class="tab" onclick="switchTab('cxc',this)">💳 CxC & Eficiencia</button>
+<div class="av-nav-tabs">
+  <button class="av-tab active" onclick="switchTab('ventas',this)"><i class="ph ph-chart-line"></i> Ventas & Presupuesto</button>
+  <button class="av-tab" onclick="switchTab('vendedores',this)"><i class="ph ph-user"></i> Vendedores</button>
+  <button class="av-tab" onclick="switchTab('clientes',this)"><i class="ph ph-buildings"></i> Clientes</button>
+  <button class="av-tab" onclick="switchTab('cxc',this)"><i class="ph ph-credit-card"></i> CxC & Eficiencia</button>
 </div>
 
 <!-- ══════════════════════════════════════════════ -->
@@ -231,26 +161,26 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(122,182,72,0.35);background
 <!-- ══════════════════════════════════════════════ -->
 <div id="tab-ventas" class="tab-content active">
 
-  <div class="chart-wrap" style="margin-bottom:16px">
-    <div class="chart-title">Ventas Mensuales Chile (CLP Millones) · Real 2026 vs Presupuesto 2026 · Referencia 2025</div>
+  <div class="av-panel" style="margin-bottom:16px">
+    <div class="av-panel__subtitle av-mb-3">Ventas Mensuales Chile (CLP Millones) · Real 2026 vs Presupuesto 2026 · Referencia 2025</div>
     <div class="chart-canvas">
       <canvas id="chartVentas"></canvas>
     </div>
   </div>
 
-  <div class="tbl-wrap">
-    <div class="tbl-head">
-      <div class="tbl-head-title">Detalle mensual · Ppto 2026 vs Real 2026 · Referencia Real 2025</div>
+  <div class="av-panel tbl-wrap">
+    <div class="av-panel__header">
+      <div class="av-panel__subtitle">Detalle mensual · Ppto 2026 vs Real 2026 · Referencia Real 2025</div>
     </div>
-    <table class="tbl">
+    <table class="av-table">
       <thead>
         <tr>
-          <th>Mes</th>
-          <th class="r">Ppto 2026 (M)</th>
-          <th class="r">Real 2026 (M)</th>
-          <th class="c">% Cumpl 2026</th>
-          <th class="r">Real 2025 (M)</th>
-          <th class="c">Estado</th>
+          <th scope="col">Mes</th>
+          <th scope="col" class="av-text-right">Ppto 2026 (M)</th>
+          <th scope="col" class="av-text-right">Real 2026 (M)</th>
+          <th scope="col" class="av-text-center">% Cumpl 2026</th>
+          <th scope="col" class="av-text-right">Real 2025 (M)</th>
+          <th scope="col" class="av-text-center">Estado</th>
         </tr>
       </thead>
       <tbody id="tbody-ventas"></tbody>
@@ -258,68 +188,68 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(122,182,72,0.35);background
   </div>
 
   <!-- ── SEMÁFORO MENSUAL + DONUT CUMPLIMIENTO YTD ── -->
-  <div class="g2" style="margin-top:16px">
+  <div class="av-grid-2" style="margin-top:16px">
 
     <!-- Semáforo izquierdo -->
-    <div class="chart-wrap">
-      <div class="chart-title">Semáforo Mensual · Real 2026 vs Ppto 2026 · CLP</div>
+    <div class="av-panel">
+      <div class="av-panel__subtitle av-mb-3">Semáforo Mensual · Real 2026 vs Ppto 2026 · CLP</div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(122,182,72,0.06);border-radius:6px;border-left:3px solid var(--green)">
-          <span style="font-family:'DM Mono';font-size:10px;color:var(--muted);width:28px">ENE</span>
-          <div style="flex:1"><div class="cumpl-bar"><div class="cumpl-fill" style="width:100%;background:var(--green)"></div></div></div>
-          <span style="font-family:'DM Mono';font-size:11px;color:var(--green);width:44px;text-align:right">105.4%</span>
-          <span style="font-size:9px;color:var(--dim);width:60px;text-align:right">88.2 / 83.6M</span>
-          <span class="badge b-ok" style="font-size:9px;white-space:nowrap">✅ Meta</span>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(122,182,72,0.06);border-radius:6px;border-left:3px solid var(--positive)">
+          <span style="font-family:'DM Mono';font-size:11px;color:var(--text-muted);width:28px">ENE</span>
+          <div style="flex:1"><div class="av-progress-wrap"><div class="av-progress-fill" style="width:100%;background:var(--positive)"></div></div></div>
+          <span style="font-family:'DM Mono';font-size:11px;color:var(--positive);width:44px;text-align:right">105.4%</span>
+          <span style="font-size:11px;color:var(--text-dim);width:60px;text-align:right">88.2 / 83.6M</span>
+          <span class="av-badge ok" style="font-size:11px;white-space:nowrap">Meta</span>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(245,166,35,0.05);border-radius:6px;border-left:3px solid var(--amber)">
-          <span style="font-family:'DM Mono';font-size:10px;color:var(--muted);width:28px">FEB</span>
-          <div style="flex:1"><div class="cumpl-bar"><div class="cumpl-fill" style="width:85.7%;background:var(--amber)"></div></div></div>
-          <span style="font-family:'DM Mono';font-size:11px;color:var(--amber);width:44px;text-align:right">85.7%</span>
-          <span style="font-size:9px;color:var(--dim);width:60px;text-align:right">35.7 / 41.6M</span>
-          <span class="badge b-warn" style="font-size:9px;white-space:nowrap">🟡 Bajo</span>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(245,166,35,0.05);border-radius:6px;border-left:3px solid var(--warning)">
+          <span style="font-family:'DM Mono';font-size:11px;color:var(--text-muted);width:28px">FEB</span>
+          <div style="flex:1"><div class="av-progress-wrap"><div class="av-progress-fill" style="width:85.7%;background:var(--warning)"></div></div></div>
+          <span style="font-family:'DM Mono';font-size:11px;color:var(--warning);width:44px;text-align:right">85.7%</span>
+          <span style="font-size:11px;color:var(--text-dim);width:60px;text-align:right">35.7 / 41.6M</span>
+          <span class="av-badge warn" style="font-size:11px;white-space:nowrap">Bajo</span>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(122,182,72,0.06);border-radius:6px;border-left:3px solid var(--green)">
-          <span style="font-family:'DM Mono';font-size:10px;color:var(--muted);width:28px">MAR</span>
-          <div style="flex:1"><div class="cumpl-bar"><div class="cumpl-fill" style="width:100%;background:var(--green)"></div></div></div>
-          <span style="font-family:'DM Mono';font-size:11px;color:var(--green);width:44px;text-align:right">124.7%</span>
-          <span style="font-size:9px;color:var(--dim);width:60px;text-align:right">52.4 / 42.0M</span>
-          <span class="badge b-ok" style="font-size:9px;white-space:nowrap">✅ Meta</span>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(122,182,72,0.06);border-radius:6px;border-left:3px solid var(--positive)">
+          <span style="font-family:'DM Mono';font-size:11px;color:var(--text-muted);width:28px">MAR</span>
+          <div style="flex:1"><div class="av-progress-wrap"><div class="av-progress-fill" style="width:100%;background:var(--positive)"></div></div></div>
+          <span style="font-family:'DM Mono';font-size:11px;color:var(--positive);width:44px;text-align:right">124.7%</span>
+          <span style="font-size:11px;color:var(--text-dim);width:60px;text-align:right">52.4 / 42.0M</span>
+          <span class="av-badge ok" style="font-size:11px;white-space:nowrap">Meta</span>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(231,76,60,0.05);border-radius:6px;border-left:3px solid var(--red)">
-          <span style="font-family:'DM Mono';font-size:10px;color:var(--muted);width:28px">ABR</span>
-          <div style="flex:1"><div class="cumpl-bar"><div class="cumpl-fill" style="width:50.4%;background:var(--red)"></div></div></div>
-          <span style="font-family:'DM Mono';font-size:11px;color:var(--red);width:44px;text-align:right">50.4%</span>
-          <span style="font-size:9px;color:var(--dim);width:60px;text-align:right">23.4 / 46.4M</span>
-          <span class="badge b-crit" style="font-size:9px;white-space:nowrap">🔴 Parcial</span>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(231,76,60,0.05);border-radius:6px;border-left:3px solid var(--danger)">
+          <span style="font-family:'DM Mono';font-size:11px;color:var(--text-muted);width:28px">ABR</span>
+          <div style="flex:1"><div class="av-progress-wrap"><div class="av-progress-fill" style="width:50.4%;background:var(--danger)"></div></div></div>
+          <span style="font-family:'DM Mono';font-size:11px;color:var(--danger);width:44px;text-align:right">50.4%</span>
+          <span style="font-size:11px;color:var(--text-dim);width:60px;text-align:right">23.4 / 46.4M</span>
+          <span class="av-badge alert" style="font-size:11px;white-space:nowrap">Parcial</span>
         </div>
       </div>
-      <div style="margin-top:10px;padding:9px 12px;background:var(--s2);border-radius:7px;display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:10px;font-weight:600;color:var(--text)" id="jch-ytd-strip-lbl">YTD —</span>
-        <span style="font-family:'DM Mono';font-size:14px;color:var(--amber);font-weight:700" id="jch-ytd-strip-pct">—%</span>
-        <span style="font-size:10px;color:var(--dim)" id="jch-ytd-strip-vals">— / —</span>
-        <span class="badge b-warn" id="jch-ytd-strip-brecha">Brecha —</span>
+      <div style="margin-top:10px;padding:9px 12px;background:var(--surface-2);border-radius:7px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:11px;font-weight:600;color:var(--text)" id="jch-ytd-strip-lbl">YTD —</span>
+        <span style="font-family:'DM Mono';font-size:14px;color:var(--warning);font-weight:700" id="jch-ytd-strip-pct">—%</span>
+        <span style="font-size:11px;color:var(--text-dim)" id="jch-ytd-strip-vals">— / —</span>
+        <span class="av-badge warn" id="jch-ytd-strip-brecha">Brecha —</span>
       </div>
     </div>
 
     <!-- Donut cumplimiento YTD -->
-    <div class="chart-wrap">
-      <div class="chart-title" id="jch-donut-title">Cumplimiento YTD · Real 2026 vs Ppto Ene–May</div>
+    <div class="av-panel">
+      <div class="av-panel__subtitle av-mb-3" id="jch-donut-title">Cumplimiento YTD · Real 2026 vs Ppto Ene–May</div>
       <div style="position:relative;height:210px">
         <canvas id="chartCumplCL"></canvas>
         <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-65%);text-align:center;pointer-events:none">
-          <div id="jch-donut-pct" style="font-family:'Bebas Neue';font-size:36px;color:var(--amber);line-height:1">—%</div>
-          <div style="font-size:8px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:3px">Cumpl. YTD</div>
-          <div id="jch-donut-lbl" style="font-size:9px;color:var(--dim);margin-top:1px">—</div>
+          <div id="jch-donut-pct" style="font-family:'Bebas Neue';font-size:36px;color:var(--warning);line-height:1">—%</div>
+          <div style="font-size:11px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:3px">Cumpl. YTD</div>
+          <div id="jch-donut-lbl" style="font-size:11px;color:var(--text-dim);margin-top:1px">—</div>
         </div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
         <div style="padding:8px;background:rgba(122,182,72,0.07);border-radius:5px;text-align:center">
-          <div id="jch-donut-real" style="font-family:'DM Mono';font-size:14px;color:var(--green);font-weight:700">—M</div>
-          <div style="font-size:8px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:1px">Real 2026 YTD</div>
+          <div id="jch-donut-real" style="font-family:'DM Mono';font-size:14px;color:var(--positive);font-weight:700">—M</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px;text-transform:uppercase;letter-spacing:1px">Real 2026 YTD</div>
         </div>
         <div style="padding:8px;background:rgba(231,76,60,0.06);border-radius:5px;text-align:center">
-          <div id="jch-donut-brecha" style="font-family:'DM Mono';font-size:14px;color:var(--red);font-weight:700">—M</div>
-          <div id="jch-donut-brecha-lbl" style="font-size:8px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:1px">Brecha vs Ppto —m</div>
+          <div id="jch-donut-brecha" style="font-family:'DM Mono';font-size:14px;color:var(--danger);font-weight:700">—M</div>
+          <div id="jch-donut-brecha-lbl" style="font-size:11px;color:var(--text-muted);margin-top:2px;text-transform:uppercase;letter-spacing:1px">Brecha vs Ppto —m</div>
         </div>
       </div>
     </div>
@@ -334,16 +264,16 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(122,182,72,0.35);background
 <div id="tab-vendedores" class="tab-content">
 
   <div class="sec">Ranking 2026 YTD + Ref. 2025 <span>Real anual 2025 vs Presupuesto 2026 · base histórica</span></div>
-  <div class="tbl-wrap" style="margin-bottom:20px">
-    <table class="tbl">
+  <div class="av-panel tbl-wrap" style="margin-bottom:20px">
+    <table class="av-table">
       <thead>
         <tr>
-          <th>#</th>
-          <th>Vendedor</th>
-          <th class="r">Real 2025 (M)</th>
-          <th class="r">Ppto 2026 (M)</th>
-          <th class="c">% Cumpl 2025</th>
-          <th class="c">Semáforo</th>
+          <th scope="col">#</th>
+          <th scope="col">Vendedor</th>
+          <th scope="col" class="av-text-right">Real 2025 (M)</th>
+          <th scope="col" class="av-text-right">Ppto 2026 (M)</th>
+          <th scope="col" class="av-text-center">% Cumpl 2025</th>
+          <th scope="col" class="av-text-center">Semáforo</th>
         </tr>
       </thead>
       <tbody id="tbody-vendedores"></tbody>
@@ -351,10 +281,10 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(122,182,72,0.35);background
   </div>
 
   <div class="sec">Detalle Mensual por Vendedor <span>Selecciona un vendedor para ver su curva</span></div>
-  <div class="vend-btns" id="vend-selector"></div>
+  <div class="av-sel-group" id="vend-selector"></div>
 
-  <div class="chart-wrap">
-    <div class="chart-title" id="vend-chart-title">Ventas mensuales 2025 vs Presupuesto 2026</div>
+  <div class="av-panel">
+    <div class="av-panel__subtitle av-mb-3" id="vend-chart-title">Ventas mensuales 2025 vs Presupuesto 2026</div>
     <div class="chart-canvas">
       <canvas id="chartVendedor"></canvas>
     </div>
@@ -367,34 +297,34 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(122,182,72,0.35);background
     </div>
   </div>
 
-  <div class="res-bloque">
-    <div class="res-card">
-      <div class="res-card-title">A · Acumulado al Corte</div>
-      <div class="res-kpis">
+  <div class="av-grid-2">
+    <div class="av-panel">
+      <div class="av-label">A · Acumulado al Corte</div>
+      <div class="av-grid-3">
         <div>
-          <div class="res-kpi-lbl">Ppto Acum.</div>
-          <div class="res-kpi-val kpi-b" id="res-ppto-corte">—</div>
+          <div class="av-caption">Ppto Acum.</div>
+          <div class="av-display-sm av-text-info" id="res-ppto-corte">—</div>
         </div>
         <div>
-          <div class="res-kpi-lbl">Real Acum.</div>
-          <div class="res-kpi-val kpi-g" id="res-real-acum">—</div>
+          <div class="av-caption">Real Acum.</div>
+          <div class="av-display-sm av-ok" id="res-real-acum">—</div>
         </div>
         <div>
-          <div class="res-kpi-lbl">Cumplimiento</div>
+          <div class="av-caption">Cumplimiento</div>
           <div id="res-cumpl-corte" style="font-family:'Bebas Neue';font-size:22px;line-height:1">—</div>
         </div>
       </div>
-      <div class="cumpl-bar" style="margin-top:10px" id="res-cumpl-bar">
-        <div class="cumpl-fill" style="width:0%"></div>
+      <div class="av-progress-wrap" style="margin-top:10px" id="res-cumpl-bar">
+        <div class="av-progress-fill" style="width:0%"></div>
       </div>
     </div>
-    <div class="res-card">
-      <div class="res-card-title">B · Presupuesto Anual</div>
+    <div class="av-panel">
+      <div class="av-label">B · Presupuesto Anual</div>
       <div>
-        <div class="res-kpi-lbl">Total Anual 2026</div>
-        <div class="res-kpi-val kpi-b" id="res-ppto-anual">—</div>
+        <div class="av-caption">Total Anual 2026</div>
+        <div class="av-display-sm av-text-info" id="res-ppto-anual">—</div>
       </div>
-      <div style="font-size:10px;color:var(--dim);margin-top:8px" id="res-ppto-anual-sub">Ene–Dic 2026</div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:8px" id="res-ppto-anual-sub">Ene–Dic 2026</div>
     </div>
   </div>
 
@@ -406,17 +336,17 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(122,182,72,0.35);background
 <div id="tab-clientes" class="tab-content">
 
   <div class="sec">Top 15 Clientes Chile · 2025 <span>Por facturación anual · 38.9% del total</span></div>
-  <div class="tbl-wrap">
-    <table class="tbl">
+  <div class="av-panel tbl-wrap">
+    <table class="av-table">
       <thead>
         <tr>
-          <th class="c">#</th>
-          <th>Cliente</th>
-          <th>Vendedor</th>
-          <th class="r">Ventas 2025</th>
-          <th class="c">% Total</th>
-          <th class="c">% Acum</th>
-          <th class="c">Estado CxC</th>
+          <th scope="col" class="av-text-center">#</th>
+          <th scope="col">Cliente</th>
+          <th scope="col">Vendedor</th>
+          <th scope="col" class="av-text-right">Ventas 2025</th>
+          <th scope="col" class="av-text-center">% Total</th>
+          <th scope="col" class="av-text-center">% Acum</th>
+          <th scope="col" class="av-text-center">Estado CxC</th>
         </tr>
       </thead>
       <tbody id="tbody-clientes"></tbody>
@@ -424,15 +354,15 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(122,182,72,0.35);background
   </div>
 
   <div class="sec" style="margin-top:22px">Concentración por Vendedor <span>Participación en total 2025</span></div>
-  <div class="g2" style="margin-top:8px">
-    <div class="chart-wrap">
-      <div class="chart-title">Ventas por RTC · 2025 (M CLP)</div>
+  <div class="av-grid-2" style="margin-top:8px">
+    <div class="av-panel">
+      <div class="av-panel__subtitle av-mb-3">Ventas por RTC · 2025 (M CLP)</div>
       <div class="chart-canvas-sm">
         <canvas id="chartRTC"></canvas>
       </div>
     </div>
-    <div class="chart-wrap">
-      <div class="chart-title">Distribución por Región · 2025</div>
+    <div class="av-panel">
+      <div class="av-panel__subtitle av-mb-3">Distribución por Región · 2025</div>
       <div class="chart-canvas-sm">
         <canvas id="chartRegion"></canvas>
       </div>
@@ -450,60 +380,60 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(122,182,72,0.35);background
 
   <div class="cxc-grid" style="margin-bottom:20px">
     <div class="cxc-card" style="background:rgba(122,182,72,0.07);border:1px solid rgba(122,182,72,0.25)">
-      <div class="tramo" style="color:var(--green)">✅ 0–30d Normal</div>
-      <div class="monto" style="color:var(--green)" id="jch-cxc-030-monto">98.5M</div>
+      <div class="tramo" style="color:var(--positive)">0–30d Normal</div>
+      <div class="monto" style="color:var(--positive)" id="jch-cxc-030-monto">98.5M</div>
       <div class="detail" id="jch-cxc-030-detail">73.1% de cartera · En cobro</div>
     </div>
     <div class="cxc-card" style="background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.25)">
-      <div class="tramo" style="color:var(--amber)">🟡 31–60d Alerta</div>
-      <div class="monto" style="color:var(--amber)" id="jch-cxc-3160-monto">13.0M</div>
+      <div class="tramo" style="color:var(--warning)">31–60d Alerta</div>
+      <div class="monto" style="color:var(--warning)" id="jch-cxc-3160-monto">13.0M</div>
       <div class="detail" id="jch-cxc-3160-detail">9.6% de cartera · Gestión activa</div>
     </div>
     <div class="cxc-card" style="background:rgba(230,126,34,0.07);border:1px solid rgba(230,126,34,0.25)">
-      <div class="tramo" style="color:var(--orange)">🟠 61–90d Riesgo</div>
-      <div class="monto" style="color:var(--orange)" id="jch-cxc-6190-monto">7.4M</div>
+      <div class="tramo" style="color:var(--warning)">61–90d Riesgo</div>
+      <div class="monto" style="color:var(--warning)" id="jch-cxc-6190-monto">7.4M</div>
       <div class="detail" id="jch-cxc-6190-detail">5.5% de cartera · Acuerdo urgente</div>
     </div>
     <div class="cxc-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.3)">
-      <div class="tramo" style="color:var(--red)">🔴 +90d Crítico</div>
-      <div class="monto" style="color:var(--red)" id="jch-cxc-90-monto">15.9M</div>
+      <div class="tramo" style="color:var(--danger)">+90d Crítico</div>
+      <div class="monto" style="color:var(--danger)" id="jch-cxc-90-monto">15.9M</div>
       <div class="detail" id="jch-cxc-90-detail">11.8% de cartera · Acción inmediata</div>
     </div>
   </div>
 
   <div class="sec">Clientes Críticos Chile <span>Vencimiento mayor a 90 días · Corte 17/05</span></div>
-  <div class="tbl-wrap" style="margin-bottom:20px">
-    <table class="tbl">
+  <div class="av-panel tbl-wrap" style="margin-bottom:20px">
+    <table class="av-table">
       <thead>
-        <tr><th>Cliente</th><th>RTC</th><th class="c">Días mora</th><th class="r">Monto CLP</th><th class="c">Acción</th></tr>
+        <tr><th scope="col">Cliente</th><th scope="col">RTC</th><th scope="col" class="av-text-center">Días mora</th><th scope="col" class="av-text-right">Monto CLP</th><th scope="col" class="av-text-center">Acción</th></tr>
       </thead>
       <tbody id="jch-tbody-criticos">
         <tr>
           <td><strong>LOMA LARGA LTDA</strong><br>
-              <span style="font-size:9px;color:var(--muted)">Neira + Laratro · 2 entidades</span></td>
-          <td style="font-size:11px;color:var(--dim)">Neira / Laratro</td>
-          <td class="c"><span class="badge b-crit">92–114d</span></td>
-          <td class="r mono" style="color:var(--red)">12,421,934</td>
-          <td class="c"><span class="badge b-crit">URGENTE</span></td>
+              <span style="font-size:11px;color:var(--text-muted)">Neira + Laratro · 2 entidades</span></td>
+          <td style="font-size:11px;color:var(--text-dim)">Neira / Laratro</td>
+          <td class="av-text-center"><span class="av-badge alert">92–114d</span></td>
+          <td class="av-text-right av-mono-sm" style="color:var(--danger)">12,421,934</td>
+          <td class="av-text-center"><span class="av-badge alert">URGENTE</span></td>
         </tr>
         <tr>
           <td><strong>AGRICOLA RIBERA LIMITADA</strong></td>
-          <td style="font-size:11px;color:var(--dim)">Jorge Caroca</td>
-          <td class="c"><span class="badge b-crit">104d</span></td>
-          <td class="r mono" style="color:var(--red)">1,473,696</td>
-          <td class="c"><span class="badge b-crit">URGENTE</span></td>
+          <td style="font-size:11px;color:var(--text-dim)">Jorge Caroca</td>
+          <td class="av-text-center"><span class="av-badge alert">104d</span></td>
+          <td class="av-text-right av-mono-sm" style="color:var(--danger)">1,473,696</td>
+          <td class="av-text-center"><span class="av-badge alert">URGENTE</span></td>
         </tr>
         <tr>
           <td><strong>AGROINSUMOS KULLIN</strong><br>
-              <span style="font-size:9px;color:var(--muted)">2 entidades consolidado</span></td>
-          <td style="font-size:11px;color:var(--dim)">Pablo Laratro</td>
-          <td class="c"><span class="badge b-crit">97d</span></td>
-          <td class="r mono" style="color:var(--red)">1,460,166</td>
-          <td class="c"><span class="badge b-crit">URGENTE</span></td>
+              <span style="font-size:11px;color:var(--text-muted)">2 entidades consolidado</span></td>
+          <td style="font-size:11px;color:var(--text-dim)">Pablo Laratro</td>
+          <td class="av-text-center"><span class="av-badge alert">97d</span></td>
+          <td class="av-text-right av-mono-sm" style="color:var(--danger)">1,460,166</td>
+          <td class="av-text-center"><span class="av-badge alert">URGENTE</span></td>
         </tr>
-        <tr style="background:var(--s2)">
+        <tr style="background:var(--surface-2)">
           <td colspan="3" style="font-weight:600">Total +90d cartera</td>
-          <td class="r mono" style="color:var(--red);font-weight:700">15,873,883</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--danger);font-weight:700">15,873,883</td>
           <td></td>
         </tr>
       </tbody>
@@ -515,368 +445,368 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(122,182,72,0.35);background
   <!-- KPI row -->
   <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px">
     <div class="pc" style="border-color:rgba(231,76,60,0.5);background:rgba(231,76,60,0.05)">
-      <div class="pc-icon">📊</div>
-      <div class="pc-val" style="color:var(--red)">43.1%</div>
+      <div class="pc-icon"><i class="ph ph-chart-bar"></i></div>
+      <div class="pc-val" style="color:var(--danger)">43.1%</div>
       <div class="pc-lbl">IEC 2026 YTD — eficiencia vs piso</div>
     </div>
     <div class="pc" style="border-color:rgba(231,76,60,0.35)">
-      <div class="pc-icon">⚠️</div>
-      <div class="pc-val" style="color:var(--red)">73.2M</div>
+      <div class="pc-icon"><i class="ph ph-warning"></i></div>
+      <div class="pc-val" style="color:var(--danger)">73.2M</div>
       <div class="pc-lbl">CLP vendido bajo precio piso</div>
     </div>
     <div class="pc" style="border-color:rgba(245,166,35,0.35)">
-      <div class="pc-icon">📋</div>
-      <div class="pc-val" style="color:var(--amber)">56.1%</div>
+      <div class="pc-icon"><i class="ph ph-clipboard-text"></i></div>
+      <div class="pc-val" style="color:var(--warning)">56.1%</div>
       <div class="pc-lbl">% Transacciones bajo piso</div>
     </div>
     <div class="pc" style="border-color:rgba(245,166,35,0.35)">
-      <div class="pc-icon">💰</div>
-      <div class="pc-val" style="color:var(--amber)">16.3M</div>
+      <div class="pc-icon"><i class="ph ph-money"></i></div>
+      <div class="pc-val" style="color:var(--warning)">16.3M</div>
       <div class="pc-lbl">Impacto estimado (gap × unidad)</div>
     </div>
     <div class="pc" style="border-color:rgba(230,126,34,0.5);background:rgba(230,126,34,0.05)">
-      <div class="pc-icon">🗂️</div>
-      <div class="pc-val" style="color:var(--orange)">66.6%</div>
-      <div class="pc-lbl">Cobertura de pricing<br><span style="font-size:8px;color:var(--muted)">🟠 Baja — 64.5M sin piso definido</span></div>
+      <div class="pc-icon"><i class="ph ph-folders"></i></div>
+      <div class="pc-val" style="color:var(--warning)">66.6%</div>
+      <div class="pc-lbl">Cobertura de pricing<br><span style="font-size:11px;color:var(--text-muted)">Baja — 64.5M sin piso definido</span></div>
     </div>
   </div>
 
   <!-- Selector IEC -->
-  <div class="vend-btns" id="iec-sel-cl">
-    <button class="vbtn active" onclick="iecTab('cl','vend',this)">👤 Vendedores</button>
-    <button class="vbtn" onclick="iecTab('cl','prod',this)">📦 Productos (Top 10)</button>
-    <button class="vbtn" onclick="iecTab('cl','cli',this)">🏢 Clientes (Top 10)</button>
+  <div class="av-sel-group" id="iec-sel-cl">
+    <button class="av-sel--chip active" onclick="iecTab('cl','vend',this)"><i class="ph ph-user"></i> Vendedores</button>
+    <button class="av-sel--chip" onclick="iecTab('cl','prod',this)"><i class="ph ph-package"></i> Productos (Top 10)</button>
+    <button class="av-sel--chip" onclick="iecTab('cl','cli',this)"><i class="ph ph-buildings"></i> Clientes (Top 10)</button>
   </div>
 
   <!-- Tabla Vendedores CL -->
-  <div id="iec-cl-vend" class="tbl-wrap">
-    <table class="tbl">
+  <div id="iec-cl-vend" class="av-panel tbl-wrap">
+    <table class="av-table">
       <thead>
         <tr>
-          <th>Vendedor</th><th class="r">Venta YTD</th><th class="c">IEC%</th>
-          <th class="c">Estado</th><th class="c">Gap%</th><th class="r">Impacto CLP</th><th>Acción</th>
+          <th scope="col">Vendedor</th><th scope="col" class="av-text-right">Venta YTD</th><th scope="col" class="av-text-center">IEC%</th>
+          <th scope="col" class="av-text-center">Estado</th><th scope="col" class="av-text-center">Gap%</th><th scope="col" class="av-text-right">Impacto CLP</th><th scope="col">Acción</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>PABLO LARATRO</strong></td>
-          <td class="r mono">50.4M</td><td class="c mono">45.8%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−19.5%</td>
-          <td class="r mono" style="color:var(--amber)">4,696,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">50.4M</td><td class="av-text-center av-mono-sm">45.8%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−19.5%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">4,696,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>FRANCISCO VELASQUEZ</strong></td>
-          <td class="r mono">32.0M</td><td class="c mono">41.3%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−16.2%</td>
-          <td class="r mono" style="color:var(--red)">6,736,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">32.0M</td><td class="av-text-center av-mono-sm">41.3%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−16.2%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--danger)">6,736,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>RODRIGO ENCINA</strong></td>
-          <td class="r mono">28.0M</td><td class="c mono">31.6%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−21.4%</td>
-          <td class="r mono" style="color:var(--amber)">3,779,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">28.0M</td><td class="av-text-center av-mono-sm">31.6%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−21.4%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">3,779,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>JORGE CAROCA</strong></td>
-          <td class="r mono">11.7M</td><td class="c mono">67.7%</td>
-          <td class="c"><span class="badge" style="background:rgba(245,166,35,0.15);color:var(--amber)">Parcial</span></td>
-          <td class="c mono" style="color:var(--amber)">−12.5%</td>
-          <td class="r mono" style="color:var(--amber)">745,000</td>
-          <td style="font-size:10px;color:var(--amber)">🔧 Reforzar</td>
+          <td class="av-text-right av-mono-sm">11.7M</td><td class="av-text-center av-mono-sm">67.7%</td>
+          <td class="av-text-center"><span class="av-badge" style="background:rgba(245,166,35,0.15);color:var(--warning)">Parcial</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--warning)">−12.5%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">745,000</td>
+          <td style="font-size:11px;color:var(--warning)">Reforzar</td>
         </tr>
         <tr>
           <td><strong>VALENTINA MUÑOZ</strong></td>
-          <td class="r mono">2.3M</td><td class="c mono">50.0%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−17.5%</td>
-          <td class="r mono" style="color:var(--dim)">287,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">2.3M</td><td class="av-text-center av-mono-sm">50.0%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−17.5%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--text-dim)">287,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>IVAN VEVERKA</strong></td>
-          <td class="r mono">4.4M</td><td class="c mono">75.0%</td>
-          <td class="c"><span class="badge" style="background:rgba(245,166,35,0.15);color:var(--amber)">Parcial</span></td>
-          <td class="c mono" style="color:var(--amber)">−6.5%</td>
-          <td class="r mono" style="color:var(--dim)">88,000</td>
-          <td style="font-size:10px;color:var(--amber)">⚠️ Monitorear</td>
+          <td class="av-text-right av-mono-sm">4.4M</td><td class="av-text-center av-mono-sm">75.0%</td>
+          <td class="av-text-center"><span class="av-badge" style="background:rgba(245,166,35,0.15);color:var(--warning)">Parcial</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--warning)">−6.5%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--text-dim)">88,000</td>
+          <td style="font-size:11px;color:var(--warning)">Monitorear</td>
         </tr>
         <tr>
           <td><strong>RAYEN BERNAZAR</strong></td>
-          <td class="r mono">0.04M</td><td class="c mono">100.0%</td>
-          <td class="c"><span class="badge b-ok">Sobre piso</span></td>
-          <td class="c mono" style="color:var(--muted)">—</td>
-          <td class="r mono" style="color:var(--muted)">0</td>
-          <td style="font-size:10px;color:var(--green)">✅ Sin acción</td>
+          <td class="av-text-right av-mono-sm">0.04M</td><td class="av-text-center av-mono-sm">100.0%</td>
+          <td class="av-text-center"><span class="av-badge ok">Sobre piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--text-muted)">—</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--text-muted)">0</td>
+          <td style="font-size:11px;color:var(--positive)">Sin acción</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <!-- Tabla Productos CL -->
-  <div id="iec-cl-prod" class="tbl-wrap" style="display:none">
-    <table class="tbl">
+  <div id="iec-cl-prod" class="av-panel tbl-wrap" style="display:none">
+    <table class="av-table">
       <thead>
         <tr>
-          <th>Producto</th><th class="r">Venta YTD</th><th class="c">IEC%</th>
-          <th class="c">Estado</th><th class="c">Gap%</th><th class="r">Impacto CLP</th><th>Acción</th>
+          <th scope="col">Producto</th><th scope="col" class="av-text-right">Venta YTD</th><th scope="col" class="av-text-center">IEC%</th>
+          <th scope="col" class="av-text-center">Estado</th><th scope="col" class="av-text-center">Gap%</th><th scope="col" class="av-text-right">Impacto CLP</th><th scope="col">Acción</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>AV HUMIC ROOT</strong></td>
-          <td class="r mono">15.9M</td><td class="c mono">17.6%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−25.1%</td>
-          <td class="r mono" style="color:var(--red)">4,354,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">15.9M</td><td class="av-text-center av-mono-sm">17.6%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−25.1%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--danger)">4,354,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>AV MAX FULVIC 45%</strong></td>
-          <td class="r mono">5.7M</td><td class="c mono">15.5%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−23.6%</td>
-          <td class="r mono" style="color:var(--red)">1,758,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">5.7M</td><td class="av-text-center av-mono-sm">15.5%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−23.6%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--danger)">1,758,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>AV PLUS MICRO MIX</strong></td>
-          <td class="r mono">4.4M</td><td class="c mono">68.0%</td>
-          <td class="c"><span class="badge" style="background:rgba(245,166,35,0.15);color:var(--amber)">Parcial</span></td>
-          <td class="c mono" style="color:var(--red)">−44.7%</td>
-          <td class="r mono" style="color:var(--amber)">1,682,000</td>
-          <td style="font-size:10px;color:var(--amber)">🔧 Reforzar</td>
+          <td class="av-text-right av-mono-sm">4.4M</td><td class="av-text-center av-mono-sm">68.0%</td>
+          <td class="av-text-center"><span class="av-badge" style="background:rgba(245,166,35,0.15);color:var(--warning)">Parcial</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−44.7%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">1,682,000</td>
+          <td style="font-size:11px;color:var(--warning)">Reforzar</td>
         </tr>
         <tr>
           <td><strong>AV PLUS POTASIO</strong></td>
-          <td class="r mono">7.6M</td><td class="c mono">38.6%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−19.1%</td>
-          <td class="r mono" style="color:var(--amber)">1,347,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">7.6M</td><td class="av-text-center av-mono-sm">38.6%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−19.1%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">1,347,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>AV MOVE</strong></td>
-          <td class="r mono">28.9M</td><td class="c mono">64.1%</td>
-          <td class="c"><span class="badge" style="background:rgba(245,166,35,0.15);color:var(--amber)">Parcial</span></td>
-          <td class="c mono" style="color:var(--amber)">−11.8%</td>
-          <td class="r mono" style="color:var(--amber)">1,289,000</td>
-          <td style="font-size:10px;color:var(--amber)">🔧 Reforzar</td>
+          <td class="av-text-right av-mono-sm">28.9M</td><td class="av-text-center av-mono-sm">64.1%</td>
+          <td class="av-text-center"><span class="av-badge" style="background:rgba(245,166,35,0.15);color:var(--warning)">Parcial</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--warning)">−11.8%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">1,289,000</td>
+          <td style="font-size:11px;color:var(--warning)">Reforzar</td>
         </tr>
         <tr>
           <td><strong>AV AMIN SUGAR</strong></td>
-          <td class="r mono">9.6M</td><td class="c mono">29.8%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−21.0%</td>
-          <td class="r mono" style="color:var(--amber)">1,224,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">9.6M</td><td class="av-text-center av-mono-sm">29.8%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−21.0%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">1,224,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>AV SILFORTE</strong></td>
-          <td class="r mono">12.2M</td><td class="c mono">46.6%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−13.3%</td>
-          <td class="r mono" style="color:var(--dim)">763,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">12.2M</td><td class="av-text-center av-mono-sm">46.6%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−13.3%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--text-dim)">763,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>AV15 40-20</strong></td>
-          <td class="r mono">3.9M</td><td class="c mono">27.1%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−22.6%</td>
-          <td class="r mono" style="color:var(--dim)">725,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">3.9M</td><td class="av-text-center av-mono-sm">27.1%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−22.6%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--text-dim)">725,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>BIOVECA RAIZ</strong></td>
-          <td class="r mono">3.2M</td><td class="c mono">35.6%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−19.2%</td>
-          <td class="r mono" style="color:var(--dim)">680,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">3.2M</td><td class="av-text-center av-mono-sm">35.6%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−19.2%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--text-dim)">680,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>BIOVECA PRADERAS</strong></td>
-          <td class="r mono">3.0M</td><td class="c mono">4.6%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−12.1%</td>
-          <td class="r mono" style="color:var(--dim)">541,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">3.0M</td><td class="av-text-center av-mono-sm">4.6%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−12.1%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--text-dim)">541,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <!-- Tabla Clientes CL -->
-  <div id="iec-cl-cli" class="tbl-wrap" style="display:none">
-    <table class="tbl">
+  <div id="iec-cl-cli" class="av-panel tbl-wrap" style="display:none">
+    <table class="av-table">
       <thead>
         <tr>
-          <th>Cliente</th><th class="r">Venta YTD</th><th class="c">IEC%</th>
-          <th class="c">Estado</th><th class="c">Gap%</th><th class="r">Impacto CLP</th><th>Acción</th>
+          <th scope="col">Cliente</th><th scope="col" class="av-text-right">Venta YTD</th><th scope="col" class="av-text-center">IEC%</th>
+          <th scope="col" class="av-text-center">Estado</th><th scope="col" class="av-text-center">Gap%</th><th scope="col" class="av-text-right">Impacto CLP</th><th scope="col">Acción</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>FRUTICOLA RIO BLANCO SPA</strong></td>
-          <td class="r mono">4.6M</td><td class="c mono">0.0%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−34.6%</td>
-          <td class="r mono" style="color:var(--red)">1,971,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">4.6M</td><td class="av-text-center av-mono-sm">0.0%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−34.6%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--danger)">1,971,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>COMERCIALIZADORA LA COLONIA LTDA</strong></td>
-          <td class="r mono">7.9M</td><td class="c mono">0.0%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−21.0%</td>
-          <td class="r mono" style="color:var(--red)">1,945,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">7.9M</td><td class="av-text-center av-mono-sm">0.0%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−21.0%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--danger)">1,945,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>AGRICOLA E INVERSIONES VGV SPA</strong></td>
-          <td class="r mono">4.0M</td><td class="c mono">6.2%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−30.8%</td>
-          <td class="r mono" style="color:var(--red)">1,865,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">4.0M</td><td class="av-text-center av-mono-sm">6.2%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−30.8%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--danger)">1,865,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>H R INVERSIONES SPA</strong></td>
-          <td class="r mono">2.5M</td><td class="c mono">0.0%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−35.3%</td>
-          <td class="r mono" style="color:var(--amber)">1,036,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">2.5M</td><td class="av-text-center av-mono-sm">0.0%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−35.3%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">1,036,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>AGRICOLA SAN PEDRO SPA</strong></td>
-          <td class="r mono">7.1M</td><td class="c mono">11.0%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−21.5%</td>
-          <td class="r mono" style="color:var(--amber)">988,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">7.1M</td><td class="av-text-center av-mono-sm">11.0%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−21.5%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">988,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>AGRICOLA LAS VERTIENTES S.A.</strong></td>
-          <td class="r mono">4.6M</td><td class="c mono">6.9%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−15.3%</td>
-          <td class="r mono" style="color:var(--amber)">865,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">4.6M</td><td class="av-text-center av-mono-sm">6.9%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−15.3%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">865,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>AGRICOLA FUNDO LA PIEDRA LTDA</strong></td>
-          <td class="r mono">2.0M</td><td class="c mono">0.0%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−28.6%</td>
-          <td class="r mono" style="color:var(--amber)">800,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">2.0M</td><td class="av-text-center av-mono-sm">0.0%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−28.6%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">800,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>AGROINVEST SPA</strong></td>
-          <td class="r mono">1.2M</td><td class="c mono">0.0%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−40.9%</td>
-          <td class="r mono" style="color:var(--amber)">768,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">1.2M</td><td class="av-text-center av-mono-sm">0.0%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−40.9%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">768,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>JOSE CRISTOBAL GONZALEZ CORREA</strong></td>
-          <td class="r mono">1.7M</td><td class="c mono">0.0%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−29.7%</td>
-          <td class="r mono" style="color:var(--amber)">675,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">1.7M</td><td class="av-text-center av-mono-sm">0.0%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−29.7%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">675,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
         <tr>
           <td><strong>SOC. AGRÍCOLA COMERCIAL SIEMBRA SPA</strong></td>
-          <td class="r mono">1.3M</td><td class="c mono">6.2%</td>
-          <td class="c"><span class="badge b-crit">Bajo piso</span></td>
-          <td class="c mono" style="color:var(--red)">−34.0%</td>
-          <td class="r mono" style="color:var(--dim)">616,000</td>
-          <td style="font-size:10px;color:var(--red)">🚨 Revisar urgente</td>
+          <td class="av-text-right av-mono-sm">1.3M</td><td class="av-text-center av-mono-sm">6.2%</td>
+          <td class="av-text-center"><span class="av-badge alert">Bajo piso</span></td>
+          <td class="av-text-center av-mono-sm" style="color:var(--danger)">−34.0%</td>
+          <td class="av-text-right av-mono-sm" style="color:var(--text-dim)">616,000</td>
+          <td style="font-size:11px;color:var(--danger)">Revisar urgente</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <div style="margin-top:10px;font-size:10px;color:var(--muted)">
+  <div style="margin-top:10px;font-size:11px;color:var(--text-muted)">
     Base: 428 transacciones con precio unitario y piso conocido · 82.0% cobertura tx · 66.6% cobertura revenue · Ene–Abr 26, 2026
   </div>
 
   <!-- ALERTA COBERTURA PRICING -->
   <div style="margin-top:14px;background:rgba(230,126,34,0.06);border:1px solid rgba(230,126,34,0.35);border-radius:10px;padding:14px 16px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <div style="font-family:'Bebas Neue';font-size:12px;letter-spacing:2px;color:var(--orange)">
-        🗂️ Productos sin precio piso · Excluidos del IEC
+      <div style="font-family:'Bebas Neue';font-size:12px;letter-spacing:2px;color:var(--warning)">
+        <i class="ph ph-folders"></i> Productos sin precio piso · Excluidos del IEC
       </div>
-      <div style="font-size:9px;color:var(--muted);text-align:right">
+      <div style="font-size:11px;color:var(--text-muted);text-align:right">
         64.5M CLP · 94 tx · 33.4% del revenue total<br>
-        <span style="color:var(--orange);font-weight:600">Acción: solicitar precio piso a gerencia</span>
+        <span style="color:var(--warning);font-weight:600">Acción: solicitar precio piso a gerencia</span>
       </div>
     </div>
-    <table class="tbl" style="font-size:11px">
+    <table class="av-table" style="font-size:11px">
       <thead>
         <tr>
-          <th>Producto sin piso</th>
-          <th class="r">Monto CLP</th>
-          <th class="c">Tx</th>
-          <th>Vendedor responsable</th>
-          <th class="c">Acción</th>
+          <th scope="col">Producto sin piso</th>
+          <th scope="col" class="av-text-right">Monto CLP</th>
+          <th scope="col" class="av-text-center">Tx</th>
+          <th scope="col">Vendedor responsable</th>
+          <th scope="col" class="av-text-center">Acción</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>CRYOPHILE - 250 GR</strong></td>
-          <td class="r mono" style="color:var(--orange)">15,356,000</td>
-          <td class="c mono" style="color:var(--muted)">2</td>
-          <td style="font-size:10px;color:var(--dim)">J. Caroca</td>
-          <td class="c"><span class="badge b-risk">Sin piso</span></td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">15,356,000</td>
+          <td class="av-text-center av-mono-sm" style="color:var(--text-muted)">2</td>
+          <td style="font-size:11px;color:var(--text-dim)">J. Caroca</td>
+          <td class="av-text-center"><span class="av-badge warn">Sin piso</span></td>
         </tr>
         <tr>
           <td><strong>PROTECT PRADERAS</strong></td>
-          <td class="r mono" style="color:var(--orange)">10,800,000</td>
-          <td class="c mono" style="color:var(--muted)">1</td>
-          <td style="font-size:10px;color:var(--dim)">J. Caroca</td>
-          <td class="c"><span class="badge b-risk">Sin piso</span></td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">10,800,000</td>
+          <td class="av-text-center av-mono-sm" style="color:var(--text-muted)">1</td>
+          <td style="font-size:11px;color:var(--text-dim)">J. Caroca</td>
+          <td class="av-text-center"><span class="av-badge warn">Sin piso</span></td>
         </tr>
         <tr>
           <td><strong>FOLIBAC BIO INVIERNO</strong></td>
-          <td class="r mono" style="color:var(--orange)">7,950,000</td>
-          <td class="c mono" style="color:var(--muted)">2</td>
-          <td style="font-size:10px;color:var(--dim)">J. Caroca</td>
-          <td class="c"><span class="badge b-risk">Sin piso</span></td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">7,950,000</td>
+          <td class="av-text-center av-mono-sm" style="color:var(--text-muted)">2</td>
+          <td style="font-size:11px;color:var(--text-dim)">J. Caroca</td>
+          <td class="av-text-center"><span class="av-badge warn">Sin piso</span></td>
         </tr>
         <tr>
           <td><strong>SOLUFOS - 500 GR</strong></td>
-          <td class="r mono" style="color:var(--orange)">5,000,000</td>
-          <td class="c mono" style="color:var(--muted)">1</td>
-          <td style="font-size:10px;color:var(--dim)">J. Caroca</td>
-          <td class="c"><span class="badge b-risk">Sin piso</span></td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">5,000,000</td>
+          <td class="av-text-center av-mono-sm" style="color:var(--text-muted)">1</td>
+          <td style="font-size:11px;color:var(--text-dim)">J. Caroca</td>
+          <td class="av-text-center"><span class="av-badge warn">Sin piso</span></td>
         </tr>
         <tr>
           <td><strong>BODENPRO POTASIO</strong></td>
-          <td class="r mono" style="color:var(--orange)">3,780,000</td>
-          <td class="c mono" style="color:var(--muted)">1</td>
-          <td style="font-size:10px;color:var(--dim)">J. Caroca</td>
-          <td class="c"><span class="badge b-risk">Sin piso</span></td>
+          <td class="av-text-right av-mono-sm" style="color:var(--warning)">3,780,000</td>
+          <td class="av-text-center av-mono-sm" style="color:var(--text-muted)">1</td>
+          <td style="font-size:11px;color:var(--text-dim)">J. Caroca</td>
+          <td class="av-text-center"><span class="av-badge warn">Sin piso</span></td>
         </tr>
-        <tr style="background:var(--s2)">
-          <td colspan="2" style="font-weight:600;font-size:10px;color:var(--muted)">+ 5 productos adicionales (AV ROOT MAX X, VECA BALANCE, XCARATOR, AV MOVE X, VECA PLUS POTASIO)</td>
-          <td class="c mono" style="color:var(--muted)">87</td>
-          <td style="font-size:10px;color:var(--muted)">Veverka, Laratro, Encina</td>
-          <td class="c"><span class="badge b-risk">Sin piso</span></td>
+        <tr style="background:var(--surface-2)">
+          <td colspan="2" style="font-weight:600;font-size:11px;color:var(--text-muted)">+ 5 productos adicionales (AV ROOT MAX X, VECA BALANCE, XCARATOR, AV MOVE X, VECA PLUS POTASIO)</td>
+          <td class="av-text-center av-mono-sm" style="color:var(--text-muted)">87</td>
+          <td style="font-size:11px;color:var(--text-muted)">Veverka, Laratro, Encina</td>
+          <td class="av-text-center"><span class="av-badge warn">Sin piso</span></td>
         </tr>
       </tbody>
     </table>
-    <div style="margin-top:8px;padding:8px 10px;background:rgba(230,126,34,0.08);border-radius:6px;font-size:10px;color:var(--dim);border-left:2px solid var(--orange)">
-      ⚠️ <strong style="color:var(--orange)">Alerta estructura:</strong> J. Caroca concentra 43.7M (67.7%) de ventas sin piso — mayoritariamente productos externos (Cryophile, Folibac, Solufos). Su IEC 67.7% puede estar sobreestimado. Solicitar política de precio piso para productos de terceros o separar en categoría aparte.
+    <div style="margin-top:8px;padding:8px 10px;background:rgba(230,126,34,0.08);border-radius:6px;font-size:11px;color:var(--text-dim);border-left:2px solid var(--warning)">
+      <i class="ph ph-warning"></i> <strong style="color:var(--warning)">Alerta estructura:</strong> J. Caroca concentra 43.7M (67.7%) de ventas sin piso — mayoritariamente productos externos (Cryophile, Folibac, Solufos). Su IEC 67.7% puede estar sobreestimado. Solicitar política de precio piso para productos de terceros o separar en categoría aparte.
     </div>
   </div>
 
@@ -886,9 +816,9 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(122,182,72,0.35);background
 
 <div class="footer">
   <div id="jch-footer-txt">AV Latam BI Platform · Jefes País · Chile</div>
-  <div class="hnav">
-    <a href="Panel_Jefes_Index.html" class="np">🏠 Hub Jefes</a>
-    <a href="Panel_CxC_AV_Latam_2026.html" class="np">📋 CxC</a>
+  <div class="av-nav__links">
+    <a href="Panel_Jefes_Index.html" class="av-nav-item"><i class="ph ph-house"></i> Hub Jefes</a>
+    <a href="Panel_CxC_AV_Latam_2026.html" class="av-nav-item"><i class="ph ph-clipboard-text"></i> CxC</a>
   </div>
 </div>
 
@@ -923,11 +853,11 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(122,182,72,0.35);background
 /* ── FIN GUARD ──────────────────────────────────────────────────────────── */
 
 
-Chart.defaults.color='#8fa892';
+Chart.defaults.color=AV_CHART_COLORS.TEXT_MUTED;
 Chart.defaults.font.family="'DM Mono',monospace";
-Chart.defaults.font.size=10;
+Chart.defaults.font.size=11; // FJ v1.1 minimo 11px
 
-const G='#7AB648',A='#F5A623',O='#E67E22',R='#E74C3C',B='#4A9EDB',M='#9B59B6';
+const G=AV_CHART_COLORS.GREEN,A=AV_CHART_COLORS.WARNING,O=AV_CHART_COLORS.WARNING,R=AV_CHART_COLORS.DANGER,B=AV_CHART_COLORS.INFO,M='#9B59B6'; // O=WARNING per R-002; M sin equiv DS
 const LABELS=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
 
 // ── DATA ──
@@ -994,7 +924,7 @@ const clientesData=[
 
 // ── TAB SWITCH ──
 function switchTab(t,el){
-  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.av-tab').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('tab-'+t).classList.add('active');
@@ -1019,10 +949,10 @@ new Chart(document.getElementById('chartVentas'),{
       tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: CLP ${ctx.parsed.y}M`}}
     },
     scales:{
-      x:{grid:{color:'rgba(122,182,72,0.06)'}},
-      y:{grid:{color:'rgba(122,182,72,0.06)'},
+      x:{grid:{color:AV_CHART_COLORS.GRID}},
+      y:{grid:{color:AV_CHART_COLORS.GRID},
         ticks:{callback:v=>v+'M'},
-        title:{display:true,text:'CLP Millones',color:'#5a7060',font:{size:9}}}
+        title:{display:true,text:'CLP Millones',color:AV_CHART_COLORS.TEXT_MUTED,font:{size:11}}}
     }
   }
 });
@@ -1042,31 +972,31 @@ new Chart(document.getElementById('chartVentas'),{
     if(hasData) {tot26+=v26; totPpto+=pp;}
     tot25+=v25;
     const cumpl=hasData?(v26/pp*100).toFixed(1):null;
-    const cumplColor=cumpl>=100?'color:var(--green)':cumpl>=80?'color:var(--amber)':'color:var(--red)';
+    const cumplColor=cumpl>=100?'color:var(--positive)':cumpl>=80?'color:var(--warning)':'color:var(--danger)';
     const cumplArrow=cumpl>=100?'▲':'▼';
     let estadoBadge;
-    if(!hasData){estadoBadge='<span class="badge b-nd">Sin dato</span>';}
-    else if(isPartial && v26<pp){estadoBadge='<span class="badge b-warn">Abr parcial</span>';}
-    else if(v26>=pp){estadoBadge='<span class="badge b-ok">≥ Ppto</span>';}
-    else if(v26/pp>=0.8){estadoBadge='<span class="badge b-warn">< Ppto</span>';}
-    else{estadoBadge='<span class="badge b-crit">< Ppto</span>';}
+    if(!hasData){estadoBadge='<span class="av-badge neutral">Sin dato</span>';}
+    else if(isPartial && v26<pp){estadoBadge='<span class="av-badge warn">Abr parcial</span>';}
+    else if(v26>=pp){estadoBadge='<span class="av-badge ok">≥ Ppto</span>';}
+    else if(v26/pp>=0.8){estadoBadge='<span class="av-badge warn">< Ppto</span>';}
+    else{estadoBadge='<span class="av-badge alert">< Ppto</span>';}
     html+=`<tr>
       <td style="font-weight:500">${meses[i]}</td>
-      <td class="r mono" style="color:var(--blue)">${pp.toFixed(1)}</td>
-      <td class="r mono" style="font-weight:600">${hasData?v26.toFixed(1):'—'}</td>
-      <td class="c" style="${hasData?cumplColor:'color:var(--muted)'};font-family:'DM Mono';font-size:11px">${hasData?`${cumplArrow} ${Math.abs(cumpl)}%`:'—'}</td>
-      <td class="r mono" style="color:var(--dim)">${v25.toFixed(1)}</td>
-      <td class="c">${estadoBadge}</td>
+      <td class="av-text-right av-mono-sm" style="color:var(--info)">${pp.toFixed(1)}</td>
+      <td class="av-text-right av-mono-sm" style="font-weight:600">${hasData?v26.toFixed(1):'—'}</td>
+      <td class="av-text-center" style="${hasData?cumplColor:'color:var(--text-muted)'};font-family:'DM Mono';font-size:11px">${hasData?`${cumplArrow} ${Math.abs(cumpl)}%`:'—'}</td>
+      <td class="av-text-right av-mono-sm" style="color:var(--text-dim)">${v25.toFixed(1)}</td>
+      <td class="av-text-center">${estadoBadge}</td>
     </tr>`;
   });
   const cumplTot=(tot26/totPpto*100).toFixed(1);
-  html+=`<tr style="background:var(--s2);font-weight:700">
+  html+=`<tr style="background:var(--surface-2);font-weight:700">
     <td>YTD ENE–${curMesNmJC.slice(0,3).toUpperCase()}</td>
-    <td class="r mono" style="color:var(--blue)">${totPpto.toFixed(1)}</td>
-    <td class="r mono">${tot26.toFixed(1)}</td>
-    <td class="c" style="color:${cumplTot>=100?'var(--green)':'var(--amber)'};font-family:'DM Mono';font-size:11px">${cumplTot>=100?'▲':'▼'} ${Math.abs(cumplTot)}%</td>
-    <td class="r mono" style="color:var(--dim)">${(real2025.slice(0,lastDataIdxJC+1).reduce((a,b)=>a+b,0)).toFixed(1)}</td>
-    <td class="c"><span class="badge b-warn">${curMesNmJC} parcial</span></td>
+    <td class="av-text-right av-mono-sm" style="color:var(--info)">${totPpto.toFixed(1)}</td>
+    <td class="av-text-right av-mono-sm">${tot26.toFixed(1)}</td>
+    <td class="av-text-center" style="color:${cumplTot>=100?'var(--positive)':'var(--warning)'};font-family:'DM Mono';font-size:11px">${cumplTot>=100?'▲':'▼'} ${Math.abs(cumplTot)}%</td>
+    <td class="av-text-right av-mono-sm" style="color:var(--text-dim)">${(real2025.slice(0,lastDataIdxJC+1).reduce((a,b)=>a+b,0)).toFixed(1)}</td>
+    <td class="av-text-center"><span class="av-badge warn">${curMesNmJC} parcial</span></td>
   </tr>`;
   document.getElementById('tbody-ventas').innerHTML=html;
 })();
@@ -1076,22 +1006,22 @@ new Chart(document.getElementById('chartVentas'),{
   let html='';
   vendedoresData.forEach((v,i)=>{
     const cumpl=v.ppto?Math.round(v.real/v.ppto*100):null;
-    let sem='b-nd',semDot='s-crit';
-    if(cumpl===null){sem='b-nd';semDot='s-crit';}
-    else if(cumpl>=90){sem='b-ok';semDot='s-ok';}
-    else if(cumpl>=70){sem='b-warn';semDot='s-warn';}
-    else if(cumpl>=40){sem='b-risk';semDot='s-risk';}
-    else{sem='b-crit';semDot='s-crit';}
+    let sem='b-nd',semDot='alert';
+    if(cumpl===null){sem='neutral';semDot='alert';}
+    else if(cumpl>=90){sem='ok';semDot='ok';}
+    else if(cumpl>=70){sem='warn';semDot='warn';}
+    else if(cumpl>=40){sem='warn';semDot='warn';}
+    else{sem='alert';semDot='alert';}
     const pptoStr=v.ppto?v.ppto.toFixed(1)+'M':'—';
-    const cumplStr=cumpl?`<span class="badge ${sem}">${cumpl}%</span>`:'<span class="badge b-nd">Sin ppto</span>';
+    const cumplStr=cumpl?`<span class="av-badge ${sem}">${cumpl}%</span>`:'<span class="av-badge neutral">Sin ppto</span>';
     html+=`<tr>
-      <td class="c mono" style="color:var(--muted)">${i+1}</td>
-      <td><span class="sema ${semDot}"></span><strong>${v.nombre}</strong></td>
-      <td class="r mono" style="font-weight:600">${v.real.toFixed(1)}M</td>
-      <td class="r mono" style="color:var(--blue)">${pptoStr}</td>
-      <td class="c">${cumplStr}</td>
-      <td class="c">
-        ${v.ppto?`<div class="cumpl-bar" style="width:80px;margin:0 auto"><div class="cumpl-fill" style="width:${Math.min(cumpl,100)}%;background:${cumpl>=90?G:cumpl>=70?A:O}"></div></div>`:'—'}
+      <td class="av-text-center av-mono-sm" style="color:var(--text-muted)">${i+1}</td>
+      <td><span class="av-badge-dot ${semDot}"></span><strong>${v.nombre}</strong></td>
+      <td class="av-text-right av-mono-sm" style="font-weight:600">${v.real.toFixed(1)}M</td>
+      <td class="av-text-right av-mono-sm" style="color:var(--info)">${pptoStr}</td>
+      <td class="av-text-center">${cumplStr}</td>
+      <td class="av-text-center">
+        ${v.ppto?`<div class="av-progress-wrap" style="width:80px;margin:0 auto"><div class="av-progress-fill" style="width:${Math.min(cumpl,100)}%;background:${cumpl>=90?G:cumpl>=70?A:O}"></div></div>`:'—'}
       </td>
     </tr>`;
   });
@@ -1104,10 +1034,10 @@ let chartVend=null;
   const sel=document.getElementById('vend-selector');
   vendedoresData.forEach((v,i)=>{
     const btn=document.createElement('button');
-    btn.className='vbtn'+(i===0?' active':'');
+    btn.className='av-sel--chip'+(i===0?' active':'');
     btn.textContent=v.corto;
     btn.onclick=()=>{
-      document.querySelectorAll('.vbtn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.av-sel--chip').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
       updateVendChart(i);
     };
@@ -1164,8 +1094,8 @@ function updateVendChart(idx){
         plugins:{legend:{position:'top',labels:{boxWidth:12,padding:14,usePointStyle:true}},
           tooltip:{callbacks:{label:function(ctx){return ctx.dataset.label+': CLP '+ctx.parsed.y+'M';}}}},
         scales:{
-          x:{grid:{color:'rgba(122,182,72,0.06)'}},
-          y:{grid:{color:'rgba(122,182,72,0.06)'},ticks:{callback:function(v){return v+'M';}}}
+          x:{grid:{color:AV_CHART_COLORS.GRID}},
+          y:{grid:{color:AV_CHART_COLORS.GRID},ticks:{callback:function(v){return v+'M';}}}
         }
       }
     });
@@ -1203,16 +1133,16 @@ function updateCuadroEjecutivo(idx){
 
   // Construir tabla completa (thead + tbody)
   var tbl='<table class="tbl-exec"><thead><tr>';
-  tbl+='<th>Indicador</th>';
+  tbl+='<th scope="col">Indicador</th>';
   for(var i=0;i<12;i++){
     var isCurr=(i===corteIdxCL);
-    tbl+='<th class="r'+(isCurr?' ce-cursor':'')+'">'+(isCurr?'▸ ':'')+LABELS[i]+'</th>';
+    tbl+='<th scope="col" class="r'+(isCurr?' ce-cursor':'')+'">'+(isCurr?'▸ ':'')+LABELS[i]+'</th>';
   }
-  tbl+='<th class="r th-acum">Acum. al corte</th>';
+  tbl+='<th scope="col" class="av-text-right th-acum">Acum. al corte</th>';
   tbl+='</tr></thead><tbody>';
 
   // Fila 1: Ppto 2026
-  tbl+='<tr><td style="font-weight:600;color:var(--dim)">Ppto 2026</td>';
+  tbl+='<tr><td style="font-weight:600;color:var(--text-dim)">Ppto 2026</td>';
   for(var j=0;j<12;j++){
     var isCurr=(j===corteIdxCL);
     var val=pptoArr?pptoArr[j]:null;
@@ -1221,31 +1151,31 @@ function updateCuadroEjecutivo(idx){
     else disp=val.toFixed(1)+'M';
     tbl+='<td class="r'+(isCurr?' ce-cursor':'')+'">'+disp+'</td>';
   }
-  tbl+='<td class="r td-acum">'+(pptoAcum>0?pptoAcum.toFixed(1)+'M':'<span class="ce-nd">N/A</span>')+'</td></tr>';
+  tbl+='<td class="av-text-right td-acum">'+(pptoAcum>0?pptoAcum.toFixed(1)+'M':'<span class="ce-nd">N/A</span>')+'</td></tr>';
 
   // Fila 2: Real 2026
-  tbl+='<tr><td style="font-weight:600;color:var(--green)">Real 2026</td>';
+  tbl+='<tr><td style="font-weight:600;color:var(--positive)">Real 2026</td>';
   for(var k=0;k<12;k++){
     var isFut=(k>corteIdxCL);
     var isCurr=(k===corteIdxCL);
     if(isFut){
-      tbl+='<td class="r" style="color:var(--muted)">—</td>';
+      tbl+='<td class="av-text-right" style="color:var(--text-muted)">—</td>';
     } else if(!realArr){
       tbl+='<td class="r'+(isCurr?' ce-cursor':'')+'"><span class="ce-nd">Pend.</span></td>';
     } else {
-      tbl+='<td class="r'+(isCurr?' ce-cursor':'')+'" style="color:var(--green)">'+realArr[k].toFixed(1)+'M</td>';
+      tbl+='<td class="r'+(isCurr?' ce-cursor':'')+'" style="color:var(--positive)">'+realArr[k].toFixed(1)+'M</td>';
     }
   }
-  var realAcumDisp=realArr?'<span style="color:var(--green)">'+realAcum.toFixed(1)+'M</span>':'<span class="ce-nd">Pend.</span>';
-  tbl+='<td class="r td-acum">'+realAcumDisp+'</td></tr>';
+  var realAcumDisp=realArr?'<span style="color:var(--positive)">'+realAcum.toFixed(1)+'M</span>':'<span class="ce-nd">Pend.</span>';
+  tbl+='<td class="av-text-right td-acum">'+realAcumDisp+'</td></tr>';
 
   // Fila 3: Cumpl. Mensual
-  tbl+='<tr><td style="font-weight:600;font-size:10px;color:var(--dim)">Cumpl. Mensual</td>';
+  tbl+='<tr><td style="font-weight:600;font-size:11px;color:var(--text-dim)">Cumpl. Mensual</td>';
   for(var n=0;n<12;n++){
     var isFut=(n>corteIdxCL);
     var isCurr=(n===corteIdxCL);
     if(isFut){
-      tbl+='<td class="r" style="color:var(--muted)">—</td>';
+      tbl+='<td class="av-text-right" style="color:var(--text-muted)">—</td>';
     } else if(!realArr){
       tbl+='<td class="r'+(isCurr?' ce-cursor':'')+'"><span class="ce-nd">N/A</span></td>';
     } else {
@@ -1254,18 +1184,18 @@ function updateCuadroEjecutivo(idx){
         tbl+='<td class="r'+(isCurr?' ce-cursor':'')+'"><span class="ce-nd">N/A</span></td>';
       } else {
         var pct=Math.round(realArr[n]/pp*1000)/10;
-        var cc=pct>=100?'ce-ok':(pct>=85?'ce-parcial':'ce-bajo');
-        tbl+='<td class="r '+(isCurr?'ce-cursor ':'')+cc+'">'+pct+'%</td>';
+        var cc=pct>=100?'av-text-positive':(pct>=85?'av-text-warning':'av-text-danger');
+        tbl+='<td class="av-text-right '+(isCurr?'ce-cursor ':'')+cc+'">'+pct+'%</td>';
       }
     }
   }
   var cumplAcumDisp;
   if(cumplAcum===null) cumplAcumDisp='<span class="ce-nd">N/A</span>';
   else{
-    var cc2=cumplAcum>=100?'ce-ok':(cumplAcum>=85?'ce-parcial':'ce-bajo');
+    var cc2=cumplAcum>=100?'av-text-positive':(cumplAcum>=85?'av-text-warning':'av-text-danger');
     cumplAcumDisp='<span class="'+cc2+'">'+cumplAcum+'%</span>';
   }
-  tbl+='<td class="r td-acum">'+cumplAcumDisp+'</td></tr>';
+  tbl+='<td class="av-text-right td-acum">'+cumplAcumDisp+'</td></tr>';
 
   tbl+='</tbody></table>';
   document.getElementById('tbl-exec-container').innerHTML=tbl;
@@ -1279,18 +1209,18 @@ function updateCuadroEjecutivo(idx){
   set('res-ppto-corte',pptoAcum>0?'CLP '+pptoAcum.toFixed(1)+'M':'N/A');
   set('res-real-acum',realArr?'CLP '+realAcum.toFixed(1)+'M':'Pendiente');
   if(cumplAcum!==null){
-    var cc3=cumplAcum>=100?'kpi-g':(cumplAcum>=85?'kpi-a':'kpi-r');
+    var cc3=cumplAcum>=100?'av-ok':(cumplAcum>=85?'av-warn':'av-alert');
     setH('res-cumpl-corte','<span class="'+cc3+'" style="font-family:\'Bebas Neue\';font-size:22px">'+cumplAcum+'%</span>');
     var barEl=document.getElementById('res-cumpl-bar');
     if(barEl){
       var fp=Math.min(cumplAcum,100);
-      var bc=cumplAcum>=100?'var(--green)':(cumplAcum>=85?'var(--amber)':'var(--red)');
-      barEl.innerHTML='<div class="cumpl-fill" style="width:'+fp+'%;background:'+bc+'"></div>';
+      var bc=cumplAcum>=100?'var(--positive)':(cumplAcum>=85?'var(--warning)':'var(--danger)');
+      barEl.innerHTML='<div class="av-progress-fill" style="width:'+fp+'%;background:'+bc+'"></div>';
     }
   } else {
     set('res-cumpl-corte','N/A');
     var barEl2=document.getElementById('res-cumpl-bar');
-    if(barEl2) barEl2.innerHTML='<div class="cumpl-fill" style="width:0%"></div>';
+    if(barEl2) barEl2.innerHTML='<div class="av-progress-fill" style="width:0%"></div>';
   }
 
   // Panel B — presupuesto anual
@@ -1310,17 +1240,17 @@ function updateCuadroEjecutivo(idx){
 // ── TABLA CLIENTES ──
 (function(){
   const cxcMap={ok:'b-ok',crit:'b-crit',warn:'b-warn'};
-  const cxcLabel={ok:'Al día',crit:'⚠️ Mora +90d',warn:'En seguimiento'};
+  const cxcLabel={ok:'Al día',crit:'<i class="ph ph-warning"></i> Mora +90d',warn:'En seguimiento'};
   let html='';
   clientesData.forEach((c,i)=>{
     html+=`<tr>
-      <td class="c mono" style="color:var(--muted)">${i+1}</td>
+      <td class="av-text-center av-mono-sm" style="color:var(--text-muted)">${i+1}</td>
       <td style="font-weight:${i<3?'600':'400'}">${c.cli}</td>
-      <td style="font-size:11px;color:var(--dim)">${c.rtc}</td>
-      <td class="r mono" style="font-weight:600">${c.monto.toLocaleString('es-CL')}</td>
-      <td class="c"><span class="badge b-nd">${c.pct}%</span></td>
-      <td class="c"><span class="badge ${c.cum<=20?'b-ok':'b-nd'}">${c.cum.toFixed(1)}%</span></td>
-      <td class="c"><span class="badge ${cxcMap[c.cxc]}">${cxcLabel[c.cxc]}</span></td>
+      <td style="font-size:11px;color:var(--text-dim)">${c.rtc}</td>
+      <td class="av-text-right av-mono-sm" style="font-weight:600">${c.monto.toLocaleString('es-CL')}</td>
+      <td class="av-text-center"><span class="av-badge neutral">${c.pct}%</span></td>
+      <td class="av-text-center"><span class="av-badge ${c.cum<=20?'b-ok':'b-nd'}">${c.cum.toFixed(1)}%</span></td>
+      <td class="av-text-center"><span class="av-badge ${cxcMap[c.cxc]}">${cxcLabel[c.cxc]}</span></td>
     </tr>`;
   });
   document.getElementById('tbody-clientes').innerHTML=html;
@@ -1341,7 +1271,7 @@ new Chart(document.getElementById('chartRTC'),{
   options:{
     indexAxis:'y',responsive:true,maintainAspectRatio:false,
     plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`CLP ${ctx.parsed.x}M`}}},
-    scales:{x:{grid:{color:'rgba(122,182,72,0.06)'},ticks:{callback:v=>v+'M'}},
+    scales:{x:{grid:{color:AV_CHART_COLORS.GRID},ticks:{callback:v=>v+'M'}},
       y:{grid:{display:false}}}
   }
 });
@@ -1360,7 +1290,7 @@ new Chart(document.getElementById('chartRegion'),{
   options:{
     responsive:true,maintainAspectRatio:false,cutout:'58%',
     plugins:{
-      legend:{position:'bottom',labels:{boxWidth:10,padding:8,font:{size:9}}},
+      legend:{position:'bottom',labels:{boxWidth:10,padding:8,font:{size:11}}},
       tooltip:{callbacks:{label:ctx=>`${ctx.label}: CLP ${ctx.parsed}M`}}
     }
   }
@@ -1383,7 +1313,7 @@ new Chart(document.getElementById('chartCumplCL'),{
       legend:{
         display:true,
         position:'bottom',
-        labels:{font:{size:9},color:'#999',boxWidth:10,padding:8}
+        labels:{font:{size:11},color:AV_CHART_COLORS.TEXT_MUTED,boxWidth:10,padding:8}
       },
       tooltip:{
         callbacks:{
@@ -1401,7 +1331,7 @@ function iecTab(country, tab, btn) {
     if(el) el.style.display = t===tab ? '' : 'none';
   });
   const sel = document.getElementById('iec-sel-'+country);
-  if(sel) sel.querySelectorAll('.vbtn').forEach(b => b.classList.remove('active'));
+  if(sel) sel.querySelectorAll('.av-sel--chip').forEach(b => b.classList.remove('active'));
   if(btn) btn.classList.add('active');
 }
 
@@ -1439,9 +1369,9 @@ function cerrarSesion() {
     set('jch-kpi-ytd-lbl','Real 2026 · Acum Ene–'+mesRango);
     set('jch-kpi-ytd-val','CLP '+ytdM+'M');
     set('jch-kpi-ytd-sub',nMeses+' meses · corte '+corte);
-    var cumplClass=cumplPct>=100?'kpi-g':(cumplPct>=85?'kpi-a':'kpi-r');
+    var cumplClass=cumplPct>=100?'av-ok':(cumplPct>=85?'av-warn':'av-alert');
     var elCumpl=document.getElementById('jch-kpi-cumpl-val');
-    if(elCumpl){elCumpl.textContent=cumplPct+'%';elCumpl.className='kpi-val '+cumplClass;}
+    if(elCumpl){elCumpl.textContent=cumplPct+'%';elCumpl.className='av-kpi-lg__val '+cumplClass;}
     set('jch-kpi-cumpl-lbl','Cumplimiento vs Ppto '+nMeses+'m');
     set('jch-kpi-cumpl-sub',ytdM+'M vs ppto '+p5m+'M (Ene–'+mesRango+')');
     // Strip YTD + donut + footer
@@ -1520,25 +1450,25 @@ function cerrarSesion() {
         var accion=r.alerta==='PRIORIDAD_MAXIMA'?'PRIORIDAD MÁXIMA':'URGENTE';
         rowsHtmlCL+='<tr>'+
           '<td><strong>'+r.cliente+'</strong></td>'+
-          '<td style="font-size:11px;color:var(--dim)">'+r.rtc+'</td>'+
-          '<td class="c"><span class="badge b-crit">'+diasTxtCL(r.dias)+'</span></td>'+
-          '<td class="r mono" style="color:var(--red)">'+Math.round(r.monto).toLocaleString('en-US')+'</td>'+
-          '<td class="c"><span class="badge b-crit">'+accion+'</span></td>'+
+          '<td style="font-size:11px;color:var(--text-dim)">'+r.rtc+'</td>'+
+          '<td class="av-text-center"><span class="av-badge alert">'+diasTxtCL(r.dias)+'</span></td>'+
+          '<td class="av-text-right av-mono-sm" style="color:var(--danger)">'+Math.round(r.monto).toLocaleString('en-US')+'</td>'+
+          '<td class="av-text-center"><span class="av-badge alert">'+accion+'</span></td>'+
         '</tr>';
       });
       resueltoCL.forEach(function(r){
         rowsHtmlCL+='<tr style="background:rgba(122,182,72,0.05)">'+
-          '<td><strong style="color:var(--green)">'+r.cliente+'</strong>'+(r.nota?'<br><span style="font-size:9px;color:var(--muted)">'+r.nota+'</span>':'')+'</td>'+
-          '<td style="font-size:11px;color:var(--dim)">'+r.rtc+'</td>'+
-          '<td class="c">—</td>'+
-          '<td class="r mono" style="color:var(--green)">✅ PAGADO</td>'+
-          '<td class="c"><span class="badge b-ok">CERRADO</span></td>'+
+          '<td><strong style="color:var(--positive)">'+r.cliente+'</strong>'+(r.nota?'<br><span style="font-size:11px;color:var(--text-muted)">'+r.nota+'</span>':'')+'</td>'+
+          '<td style="font-size:11px;color:var(--text-dim)">'+r.rtc+'</td>'+
+          '<td class="av-text-center">—</td>'+
+          '<td class="av-text-right av-mono-sm" style="color:var(--positive)">✅ PAGADO</td>'+
+          '<td class="av-text-center"><span class="av-badge ok">CERRADO</span></td>'+
         '</tr>';
       });
       var totalCritMonto=critCL.reduce(function(a,r){return a+r.monto;},0);
-      rowsHtmlCL+='<tr style="background:var(--s2)">'+
+      rowsHtmlCL+='<tr style="background:var(--surface-2)">'+
         '<td colspan="3" style="font-weight:600">Total +90d cartera</td>'+
-        '<td class="r mono" style="color:var(--red);font-weight:700">'+Math.round(totalCritMonto).toLocaleString('en-US')+'</td>'+
+        '<td class="av-text-right av-mono-sm" style="color:var(--danger);font-weight:700">'+Math.round(totalCritMonto).toLocaleString('en-US')+'</td>'+
         '<td></td>'+
       '</tr>';
       tbCritCL.innerHTML=rowsHtmlCL;

@@ -1456,3 +1456,62 @@ ACCIONES:
   · Cache-busting ?v=20260721 sincronizado en 0 paneles HTML
 VALIDACIÓN JS: ✅ OK
 ======================================================================
+
+======================================================================
+CORTE: 2026-07-21 22:10
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 30-06-2026 - AGLM.xlsx
+  - AGROVECA PERU -  VENTAS  AL 20.07.2026.xlsx
+  - Cuentas Cobrar  Agrocomercial 21-06.xlsx
+  - Cuentas Cobrar Agroveca 21-06.xlsx
+  - precios piso CHile .xlsx
+  - precio piso peru.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 30/06/2026
+  · avboard_clientes.js regenerado · 148 clientes CL
+  · Panel_IEC TX_CL · 1500 transacciones
+  · Panel_IEC TX_PE · 125 transacciones · DQ-001/DQ-002 fix aplicado
+  · IEC Chile 34.0% · BP CLP 215,695,266
+  · CxC Chile CLP 66,426,892 · +90d CLP 26,073,690
+  · Módulo Productos: 177 SKUs · 11 margen negativo · 40 sin costo
+  · Cache-busting ?v=20260721 sincronizado en 0 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
+
+---
+FECHA: 2026-07-22
+TAREA: Migración piloto Panel_Jefes_Chile_2026.html → FORMATO JAVIER v1.1 (Task #93)
+
+ARCHIVOS PROCESADOS:
+  - Panel_Jefes_Chile_2026.html (MIGRADO)
+  - Panel_Jefes_Chile_2026.html.bak_20260722 (backup intacto)
+
+ACCIONES REALIZADAS:
+  Fase A (sesión anterior):
+    - Creados 8 archivos DS: formato-javier-tokens/base/components/executive/motion/utilities/board + formato-javier.css
+    - Creado js/av-chart-colors.js (AV_CHART_COLORS, AV_CHART_SEQUENCES, AV_CHART_DEFAULTS)
+    - Creados CHANGELOG-FORMATO-JAVIER.md y FORMATO-JAVIER-COMPONENT-INVENTORY.md
+    - Auditoría pre-migración + REPORTE_AUDITORIA_PREMIG_JCH.md
+
+  Fase B (esta sesión):
+    - F1: 273 reemplazos de CSS vars obsoletas → tokens DS
+    - F2: Head section — Google Fonts eliminado, 8 DS links + Phosphor Icons CDN + av-chart-colors.js
+    - F3: Bloque <style> → CSS residual 60 reglas (Opción B aprobada)
+    - F4: ~35 sustituciones de clases HTML → DS BEM (av-nav, av-kpi-lg, av-tab, av-table, av-badge, etc.)
+    - F5: 25+ emojis UI → Phosphor Icons Regular / texto semántico
+    - F6: font-size < 11px → 11px en inline styles (FJ v1.1 mínimo)
+    - F7: JS — switchTab/.av-tab, btn/.av-sel--chip, G/A/R/B → AV_CHART_COLORS, sem variables, font.size=11
+    - F8: scope="col" en 50/50 <th> estáticos + JS dinámicos
+    - F9: Fix 2 emojis residuales (pc-icon 🗂️, span 🟠)
+
+RESULTADO: 10/10 pruebas PASS · Ver REPORTE_POSTMIG_JCH.md
+
+MÉTRICAS:
+  - Líneas: 1551 → 1495 (−56)
+  - Hex HTML: 16 → 0
+  - UI emojis: ~25 → 0
+  - Phosphor icons: 0 → 20
+  - scope="col": 0/50 → 50/50
+
+PENDIENTE: validación visual en navegador + commit/push con aprobación de Javier
+NO MODIFICADO: avboard_data.js, archivos DS, otros paneles

@@ -1,0 +1,163 @@
+/* ==========================================================================
+   FORMATO JAVIER v1.1 — Utilities
+   AV LATAM Design System · Estándar Oficial
+   Autor: Javier Almeida · 2026-07-21
+   --------------------------------------------------------------------------
+   Grid helpers · Flex helpers · Spacing · Accesibilidad
+   Dependencia: formato-javier-tokens.css
+   ========================================================================== */
+
+
+/* ==========================================================================
+   GRIDS — Columnas fijas
+   ========================================================================== */
+.av-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
+.av-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+.av-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
+
+/* Auto-fill responsivo — columnas mínimo 200px */
+.av-grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); }
+
+/* KPI grid — columnas más pequeñas, para filas de KPI cards */
+.av-grid-kpi  { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-3); }
+
+
+/* ==========================================================================
+   GRIDS — Layouts asimétricos frecuentes en dashboards
+   ========================================================================== */
+
+/* 2/3 + 1/3 — gráfico principal + sidebar */
+.av-grid-2-1 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-4);
+}
+
+/* 3/4 + 1/4 — gráfico ancho + KPI stack */
+.av-grid-3-1 {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: var(--space-4);
+}
+
+/* 1/2 + 1/4 + 1/4 */
+.av-grid-2-1-1 {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: var(--space-4);
+}
+
+
+/* ==========================================================================
+   FLEX HELPERS
+   ========================================================================== */
+.av-flex        { display: flex; }
+.av-flex-col    { display: flex; flex-direction: column; }
+.av-flex-center { display: flex; align-items: center; justify-content: center; }
+.av-flex-between{ display: flex; align-items: center; justify-content: space-between; }
+.av-flex-start  { display: flex; align-items: center; justify-content: flex-start; }
+.av-flex-end    { display: flex; align-items: center; justify-content: flex-end; }
+.av-flex-wrap   { flex-wrap: wrap; }
+
+.av-flex-1  { flex: 1; }
+.av-flex-0  { flex: 0; flex-shrink: 0; }
+
+/* Gaps de flex */
+.av-gap-1 { gap: var(--space-1); }
+.av-gap-2 { gap: var(--space-2); }
+.av-gap-3 { gap: var(--space-3); }
+.av-gap-4 { gap: var(--space-4); }
+.av-gap-5 { gap: var(--space-5); }
+.av-gap-6 { gap: var(--space-6); }
+
+
+/* ==========================================================================
+   SPACING HELPERS — margin/padding utilitarios
+   Uso moderado: preferir spacing integrado en componentes
+   ========================================================================== */
+.av-mt-3  { margin-top:    var(--space-3); }
+.av-mt-4  { margin-top:    var(--space-4); }
+.av-mt-5  { margin-top:    var(--space-5); }
+.av-mt-6  { margin-top:    var(--space-6); }
+.av-mb-3  { margin-bottom: var(--space-3); }
+.av-mb-4  { margin-bottom: var(--space-4); }
+.av-mb-5  { margin-bottom: var(--space-5); }
+.av-mb-6  { margin-bottom: var(--space-6); }
+
+.av-p-4   { padding: var(--space-4); }
+.av-p-5   { padding: var(--space-5); }
+.av-p-6   { padding: var(--space-6); }
+
+/* Divisor horizontal */
+.av-divider {
+  border: none;
+  border-top: 1px solid var(--border-dim);
+  margin: var(--space-4) 0;
+}
+
+
+/* ==========================================================================
+   DISPLAY HELPERS
+   ========================================================================== */
+.av-hidden { display: none !important; }
+
+/* Visualmente oculto, accesible para screen readers */
+.av-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Revelado al recibir foco — para skip links */
+.av-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: var(--space-2) var(--space-4);
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  background: var(--domain-accent);
+  color: var(--bg);
+  border-radius: var(--component-radius);
+}
+
+
+/* ==========================================================================
+   TEXTO — Alineación y truncado
+   ========================================================================== */
+.av-text-left   { text-align: left; }
+.av-text-center { text-align: center; }
+.av-text-right  { text-align: right; }
+
+.av-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ==========================================================================
+   BREAKPOINTS RESPONSIVOS — aplicar sobre grids cuando sea necesario
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .av-grid-4   { grid-template-columns: repeat(2, 1fr); }
+  .av-grid-3   { grid-template-columns: repeat(2, 1fr); }
+  .av-grid-3-1 { grid-template-columns: 1fr; }
+  .av-grid-2-1 { grid-template-columns: 1fr; }
+  .av-grid-2-1-1 { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 640px) {
+  .av-grid-2   { grid-template-columns: 1fr; }
+  .av-grid-4   { grid-template-columns: 1fr; }
+  .av-grid-kpi { grid-template-columns: repeat(2, 1fr); }
+  .av-grid-2-1-1 { grid-template-columns: 1fr; }
+}

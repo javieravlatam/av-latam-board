@@ -1,0 +1,649 @@
+/* ==========================================================================
+   FORMATO JAVIER v1.1 — Components
+   AV LATAM Design System · Estándar Oficial
+   Autor: Javier Almeida · 2026-07-21
+   --------------------------------------------------------------------------
+   Componentes Core del sistema. Todos los paneles del ecosistema usan
+   estas clases. No modificar por necesidades específicas de un panel —
+   extender mediante el archivo de dominio o proponer evolución del sistema.
+   --------------------------------------------------------------------------
+   Dependencia: formato-javier-tokens.css + formato-javier-base.css
+   ========================================================================== */
+
+
+/* ==========================================================================
+   AV-PANEL — Contenedor de sección
+   ========================================================================== */
+.av-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--panel-radius);
+  padding: var(--panel-padding);
+}
+
+.av-panel__title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--domain-accent);
+  margin-bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.av-panel__subtitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.av-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+
+/* ==========================================================================
+   AV-KPI — Tarjetas de indicador clave
+   Variantes: xl (56px), lg (40px), sm (22px), inline
+   Regla: un solo .av-kpi-xl hero por panel. Tamaño mínimo: 11px en labels.
+   ========================================================================== */
+
+/* Base compartida por xl, lg, sm */
+.av-kpi-xl,
+.av-kpi-lg,
+.av-kpi-sm {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--panel-radius);
+  padding: 14px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Línea inferior semántica */
+.av-kpi-xl::after,
+.av-kpi-lg::after,
+.av-kpi-sm::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--domain-accent);
+}
+
+/* Modificadores semánticos de color en la línea */
+.av-kpi-xl.av-ok::after,
+.av-kpi-lg.av-ok::after,
+.av-kpi-sm.av-ok::after  { background: var(--positive); }
+.av-kpi-xl.av-warn::after,
+.av-kpi-lg.av-warn::after,
+.av-kpi-sm.av-warn::after { background: var(--warning); }
+.av-kpi-xl.av-alert::after,
+.av-kpi-lg.av-alert::after,
+.av-kpi-sm.av-alert::after { background: var(--danger); }
+
+/* Labels — 11px mínimo obligatorio */
+.av-kpi-xl__label,
+.av-kpi-lg__label,
+.av-kpi-sm__label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+
+/* Valores en Bebas Neue — tamaños por variante */
+.av-kpi-xl__val { font-family: var(--font-display); font-size: 56px; line-height: 1; color: var(--text); }
+.av-kpi-lg__val { font-family: var(--font-display); font-size: 40px; line-height: 1; color: var(--text); }
+.av-kpi-sm__val { font-family: var(--font-display); font-size: 22px; line-height: 1; color: var(--text); }
+
+/* Colores semánticos en valor */
+.av-kpi-xl__val.av-ok, .av-kpi-lg__val.av-ok, .av-kpi-sm__val.av-ok    { color: var(--positive); }
+.av-kpi-xl__val.av-warn,.av-kpi-lg__val.av-warn,.av-kpi-sm__val.av-warn  { color: var(--warning); }
+.av-kpi-xl__val.av-alert,.av-kpi-lg__val.av-alert,.av-kpi-sm__val.av-alert { color: var(--danger); }
+
+/* Sub-texto — cifra de referencia o unidad */
+.av-kpi-xl__sub,
+.av-kpi-lg__sub,
+.av-kpi-sm__sub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+/* Badge dentro de KPI (cumplimiento, delta) */
+.av-kpi-xl__badge,
+.av-kpi-lg__badge,
+.av-kpi-sm__badge {
+  display: inline-block;
+  margin-top: 5px;
+}
+
+/* Variante inline — label + valor en una línea, para tablas y resúmenes */
+.av-kpi-inline {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+}
+
+.av-kpi-inline__label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.av-kpi-inline__val {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+
+/* ==========================================================================
+   AV-NAV — Barra de navegación principal (sticky, altura 52px)
+   ========================================================================== */
+.av-nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  min-height: 52px;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.av-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.av-nav__logo {
+  width: 34px;
+  height: 34px;
+  background: var(--domain-accent);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--bg);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.av-nav__title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: var(--domain-accent);
+  line-height: 1;
+}
+
+.av-nav__sub {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.av-nav__meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: right;
+  line-height: 1.4;
+}
+
+.av-nav__meta b { color: var(--domain-accent); font-weight: 500; }
+
+.av-nav__links {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Ítem de navegación entre paneles */
+.av-nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border-dim);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-dim);
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.av-nav-item:hover,
+.av-nav-item.active {
+  background: var(--domain-accent);
+  border-color: var(--domain-accent);
+  color: var(--bg);
+}
+
+/* Tabs de contenido (dentro de un panel o sección) */
+.av-nav-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--space-4);
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.av-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 9px 16px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.av-tab:hover { color: var(--text-dim); }
+
+.av-tab.active {
+  color: var(--domain-accent);
+  border-bottom-color: var(--domain-accent);
+  font-weight: 500;
+}
+
+
+/* ==========================================================================
+   AV-SEL — Botones de selección y filtro
+   Variantes: pill (período/ciclo), chip (listas densas), tab (subsección)
+   ========================================================================== */
+
+/* Pill — filtros de período, ciclo, agrupación */
+.av-sel--pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.av-sel--pill:hover { border-color: var(--domain-accent); color: var(--text); }
+.av-sel--pill.active {
+  background: var(--domain-accent);
+  border-color: var(--domain-accent);
+  color: var(--bg);
+}
+
+/* Chip — listas densas: vendedores, productos, clientes */
+.av-sel--chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.av-sel--chip:hover { border-color: var(--domain-accent); color: var(--text); }
+.av-sel--chip.active {
+  background: var(--domain-accent);
+  border-color: var(--domain-accent);
+  color: var(--bg);
+}
+
+/* Tab-sel — tabs de subsección, sin fondo */
+.av-sel--tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 7px 14px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.av-sel--tab:hover { color: var(--text-dim); }
+.av-sel--tab.active {
+  color: var(--domain-accent);
+  border-bottom-color: var(--domain-accent);
+  font-weight: 500;
+}
+
+/* Grupo de selectores */
+.av-sel-group {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+
+/* ==========================================================================
+   AV-TABLE — Tabla de datos estándar
+   Encabezados: 11px uppercase · Celdas numéricas: DM Mono right-aligned
+   Accesibilidad: usar <thead> con scope="col" y <th scope="row"> donde aplique
+   ========================================================================== */
+.av-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.av-table thead th {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-2);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.av-table thead th.num { text-align: right; }
+
+.av-table tbody tr {
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.av-table tbody tr:last-child { border-bottom: none; }
+
+.av-table tbody td {
+  padding: 10px var(--space-3);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+/* Celdas numéricas: DM Mono, alineación derecha */
+.av-table tbody td.num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Celda de estado/nombre */
+.av-table tbody td.name { font-weight: 500; }
+
+/* Celda muted — metadatos secundarios */
+.av-table tbody td.muted {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+/* Fila de totales */
+.av-table tfoot td {
+  padding: 10px var(--space-3);
+  font-weight: 600;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.av-table tfoot td.num { text-align: right; }
+
+
+/* ==========================================================================
+   AV-BADGE — Etiqueta de estado (semáforo)
+   Un componente, cinco estados semánticos.
+   Regla: nunca solo color — incluir texto o ícono para daltonismo.
+   ========================================================================== */
+.av-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: 3px 8px;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.av-badge.ok {
+  background: rgba(122, 182, 72, 0.14);
+  color: var(--av-green-900);
+  border: 1px solid rgba(122, 182, 72, 0.28);
+}
+
+.av-badge.warn {
+  background: rgba(245, 166, 35, 0.14);
+  color: var(--av-amber-700);
+  border: 1px solid rgba(245, 166, 35, 0.28);
+}
+
+.av-badge.alert {
+  background: rgba(231, 76, 60, 0.12);
+  color: var(--danger-dark);
+  border: 1px solid rgba(231, 76, 60, 0.24);
+}
+
+.av-badge.info {
+  background: rgba(74, 158, 219, 0.12);
+  color: var(--av-blue-700);
+  border: 1px solid rgba(74, 158, 219, 0.24);
+}
+
+.av-badge.neutral {
+  background: var(--surface-2);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+/* Punto semáforo — variante solo color, requiere texto alternativo en el padre */
+.av-badge-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.av-badge-dot.ok      { background: var(--positive); }
+.av-badge-dot.warn    { background: var(--warning); }
+.av-badge-dot.alert   { background: var(--danger); }
+.av-badge-dot.info    { background: var(--info); }
+.av-badge-dot.neutral { background: var(--text-muted); }
+
+
+/* ==========================================================================
+   AV-PROGRESS — Barra de progreso con semáforo automático
+   Umbrales: ≥90% ok, 70-89% warn, <70% alert
+   Aplicar clase de estado en .av-progress-fill según el valor
+   ========================================================================== */
+.av-progress-wrap {
+  background: var(--surface-2);
+  border-radius: 4px;
+  height: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border-dim);
+  flex: 1;
+}
+
+.av-progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--domain-accent);
+  min-width: 2px;
+}
+
+.av-progress-fill.ok    { background: var(--positive); }
+.av-progress-fill.warn  { background: var(--warning); }
+.av-progress-fill.alert { background: var(--danger); }
+
+/* Row helper para label + barra + pct en línea */
+.av-progress-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.av-progress-row:last-child { margin-bottom: 0; }
+
+.av-progress-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-dim);
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.av-progress-pct {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  min-width: 36px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.av-progress-pct.ok    { color: var(--positive); }
+.av-progress-pct.warn  { color: var(--warning); }
+.av-progress-pct.alert { color: var(--danger); }
+
+
+/* ==========================================================================
+   AV-DELTA-CHIP — Indicador de variación (Zona 2)
+   Responde: ¿Qué cambió?
+   ========================================================================== */
+.av-delta-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--component-radius);
+  padding: 7px var(--space-3);
+  flex: 1;
+  min-width: 0;
+}
+
+.av-delta-chip__label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.av-delta-chip__val {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.av-delta-chip__val.ok    { color: var(--positive); }
+.av-delta-chip__val.warn  { color: var(--warning); }
+.av-delta-chip__val.alert { color: var(--danger); }
+.av-delta-chip__val.info  { color: var(--info); }
+
+/* Fila de delta chips */
+.av-delta-row {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+
+/* ==========================================================================
+   AV-BTN — Botón de acción genérico (logout, acciones secundarias)
+   ========================================================================== */
+.av-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px 14px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.av-btn:hover {
+  border-color: var(--domain-accent);
+  color: var(--text);
+}
+
+.av-btn.primary {
+  background: var(--domain-accent);
+  border-color: var(--domain-accent);
+  color: var(--bg);
+}
+
+.av-btn.danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.av-btn.danger:hover {
+  background: var(--danger);
+  color: white;
+}

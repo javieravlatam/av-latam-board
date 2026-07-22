@@ -1,0 +1,146 @@
+/* ==========================================================================
+   FORMATO JAVIER v1.1 — Tokens
+   AV LATAM Design System · Estándar Oficial
+   Autor: Javier Almeida · 2026-07-21
+   --------------------------------------------------------------------------
+   CAPA 1 — Paleta primitiva (valores absolutos, no usar en componentes)
+   CAPA 2 — Tokens semánticos (lo que consumen los componentes)
+   CAPA 3 — Override modo claro [data-theme="light"]
+   --------------------------------------------------------------------------
+   © AV LATAM — Estándar de uso interno
+   ========================================================================== */
+
+
+/* ==========================================================================
+   CAPA 1 · PALETA PRIMITIVA
+   No referenciar directamente en componentes ni paneles.
+   ========================================================================== */
+:root {
+  /* AV Green — color de marca primario */
+  --av-green-900: #3d6024;
+  --av-green-700: #5a8f35;
+  --av-green-500: #7AB648;
+  --av-green-300: #a8d07d;
+  --av-green-100: #d4ebb8;
+
+  /* Estado: peligro */
+  --av-red-700:   #C0392B;
+  --av-red-500:   #E74C3C;
+  --av-red-300:   #ef7b6f;
+
+  /* Estado: advertencia */
+  --av-amber-700: #b8791a;
+  --av-amber-500: #F5A623;
+  --av-amber-300: #f8c36f;
+
+  /* Estado: información */
+  --av-blue-700:  #185fa5;
+  --av-blue-500:  #4A9EDB;
+  --av-blue-300:  #87bde8;
+
+  /* Neutros BOARD (escala verde-oscura) */
+  --av-neutral-950: #04080a;
+  --av-neutral-900: #080e09;
+  --av-neutral-800: #0f1a10;
+  --av-neutral-700: #162118;
+  --av-neutral-600: #1c2b1e;
+  --av-neutral-500: #2d4030;
+  --av-neutral-400: #3d5540;
+  --av-neutral-300: #6a8070;   /* ajustado para cumplir WCAG AA */
+  --av-neutral-200: #8fa892;
+  --av-neutral-100: #c4d4c6;
+  --av-neutral-50:  #e8f0e9;
+
+  /* Corporativo (SIC, CRM, Finanzas) */
+  --av-corporate-900: #082742;
+  --av-corporate-700: #0d3b66;
+  --av-corporate-500: #4a7fb5;
+  --av-corporate-100: #eef3f8;
+
+  /* Domain extras */
+  --av-teal-500: #2bbfb0;
+  --av-violet-500: #8b5cf6;
+}
+
+
+/* ==========================================================================
+   CAPA 2 · TOKENS SEMÁNTICOS — MODO OSCURO (default: BOARD y apps oscuras)
+   ========================================================================== */
+:root {
+  /* Fondos */
+  --bg:        var(--av-neutral-900);
+  --surface:   var(--av-neutral-800);
+  --surface-2: var(--av-neutral-700);
+  --surface-3: var(--av-neutral-600);
+
+  /* Bordes */
+  --border:     rgba(122, 182, 72, 0.18);
+  --border-dim: rgba(122, 182, 72, 0.08);
+
+  /* Texto */
+  --text:       var(--av-neutral-50);
+  --text-dim:   var(--av-neutral-200);
+  --text-muted: var(--av-neutral-300);
+
+  /* Acción / identidad */
+  --accent:        var(--av-green-500);
+  --domain-accent: var(--av-green-500);   /* sobreescrito en cada domain file */
+
+  /* Estados semánticos */
+  --positive:    var(--av-green-500);
+  --warning:     var(--av-amber-500);
+  --danger:      var(--av-red-500);
+  --danger-dark: var(--av-red-700);
+  --info:        var(--av-blue-500);
+
+  /* Tipografía */
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+  --font-mono:    'DM Mono', 'Courier New', monospace;
+
+  /* Espaciado (escala 4px) */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Layout */
+  --container-max:  1440px;
+  --panel-padding:  20px 24px;
+  --panel-radius:   10px;
+  --component-radius: 6px;
+}
+
+
+/* ==========================================================================
+   CAPA 3 · OVERRIDE MODO CLARO
+   Aplicar a [data-theme="light"] en el <html> o <body> del panel.
+   Uso: SIC, CRM, Finanzas, RR.HH., Compras, Logística.
+   ========================================================================== */
+[data-theme="light"] {
+  --bg:        #f7f8fa;
+  --surface:   #ffffff;
+  --surface-2: var(--av-corporate-100);
+  --surface-3: #e4e7eb;
+
+  --border:     #e4e7eb;
+  --border-dim: #f0f2f5;
+
+  --text:       #1a2332;
+  --text-dim:   var(--av-corporate-700);
+  --text-muted: #5b6470;
+
+  --accent:        var(--av-corporate-700);
+  --domain-accent: var(--av-corporate-700);
+
+  --positive:    #1e7d4a;
+  --warning:     #b8791a;
+  --danger:      #a83232;
+  --danger-dark: #7a1e13;
+  --info:        var(--av-corporate-500);
+}
