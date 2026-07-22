@@ -165,6 +165,236 @@ function setPeruCurva(key, btn) {
   peCurvaChart.update();
 }
 
+// ── PERIODOS ──────────────────────────────────────────────────────────────────
+var PERIODOS = {
+  t1:  {s:0,  e:2,  lbl:'Ene–Mar'},
+  t2:  {s:3,  e:5,  lbl:'Abr–Jun'},
+  t3:  {s:6,  e:8,  lbl:'Jul–Sep'},
+  t4:  {s:9,  e:11, lbl:'Oct–Dic'},
+  s1:  {s:0,  e:5,  lbl:'Ene–Jun'},
+  s2:  {s:6,  e:11, lbl:'Jul–Dic'},
+  ytd: {s:0,  e:-1, lbl:'YTD'}
+};
+
+// ── Chile "Real vs Ppto" por período ──────────────────────────────────────────
+function renderChileRvsPpto(periodoKey, btn) {
+  if (typeof AVBOARD === 'undefined') return;
+  if (btn) {
+    document.querySelectorAll('#selectorChilePeriodo .sel-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+  var cv = AVBOARD.chile.ventas;
+  var rmb = cv.rtc_mensual_real || {};
+  var rmp = cv.rtc_mensual_ppto || {};
+  var p = PERIODOS[periodoKey];
+  var nReal = cv.mensual_real.filter(function(v){ return v > 0; }).length;
+  var startIdx = p.s;
+  var endIdx = (periodoKey === 'ytd') ? Math.max(0, nReal - 1) : p.e;
+  var MES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var lblRange = (periodoKey === 'ytd') ? ('Ene–' + (MES[endIdx] || 'Jun')) : p.lbl;
+
+  var vendors = [
+    {key:'caroca',    lbl:'J. Caroca',       clsS:'sg', bold:true},
+    {key:'laratro',   lbl:'P. Laratro',      clsS:'sa', bold:false},
+    {key:'encina',    lbl:'R. Encina',       clsS:'sa', bold:false},
+    {key:'velasquez', lbl:'F. Velásquez', clsS:'sr', bold:false},
+    {key:'veverka',   lbl:'I. Veverka',      clsS:'sr', bold:false},
+    {key:'munoz',     lbl:'V. Muñoz',   clsS:'sg', bold:false}
+  ];
+
+  var fmtK   = function(n){ return Math.round(n/1000).toLocaleString('es-CL') + 'K'; };
+  var fmtGap = function(n){ var v = Math.round(n/1000); return (v >= 0 ? '+' : '–') + Math.abs(v).toLocaleString('es-CL') + 'K'; };
+  var pctFmt = function(r){ return (r * 100).toFixed(1) + '%'; };
+
+  var rows = '', totReal = 0, totPpto = 0, totAnual = 0;
+  for (var vi = 0; vi < vendors.length; vi++) {
+    var vd = vendors[vi];
+    var realArr = rmb[vd.key] || [];
+    var pptoArr = rmp[vd.key] || [];
+    var realPer = 0, pptoPer = 0;
+    for (var i = startIdx; i <= endIdx; i++) { realPer += (realArr[i]||0); pptoPer += (pptoArr[i]||0); }
+    var pptoAnual = pptoArr.reduce(function(a,b){ return a+(b||0); }, 0);
+    var gap = realPer - pptoPer;
+    var ratio = pptoPer > 0 ? realPer/pptoPer : null;
+    var ratioCls = ratio===null?'na':(ratio>=1?'hit':(ratio>=0.8?'miss':'crit'));
+    var pbCls   = ratio===null?'pbnp':(ratio>=1?'pbok':(ratio>=0.8?'pbw':'pbd'));
+    var pctStr  = ratio===null?'–':pctFmt(ratio);
+    var barW    = ratio===null?0:Math.min(100,ratio*100).toFixed(1);
+    var barClr  = (ratio!==null&&ratio>=1)?'var(--green)':((ratio!==null&&ratio>=0.8)?'var(--amber)':'var(--red2)');
+    var nameHtml= vd.bold ? '<strong>'+vd.lbl+'</strong>' : vd.lbl;
+    totReal += realPer; totPpto += pptoPer; totAnual += pptoAnual;
+    rows += '<tr>'+
+      '<td><span class="s '+vd.clsS+'"></span>'+nameHtml+'</td>'+
+      '<td class="cp">'+(pptoPer>0?fmtK(pptoPer):'–')+'</td>'+
+      '<td class="cr '+ratioCls+'">'+fmtK(realPer)+'</td>'+
+      '<td class="'+(gap>=0?'gp':'gn')+'">'+fmtGap(gap)+'</td>'+
+      '<td style="text-align:center;"><span class="pb '+pbCls+'">'+pctStr+'</span>'+
+        (ratio!==null?'<div class="mb"><div class="mbf" style="width:'+barW+'%;background:'+barClr+';"></div></div>':'')+'</td>'+
+      '<td class="cp">'+(pptoAnual>0?fmtK(pptoAnual):'–')+'</td>'+
+    '</tr>';
+  }
+  var totGap = totReal - totPpto;
+  var totRatio = totPpto > 0 ? totReal/totPpto : 0;
+  var totPbCls = totRatio>=1?'pbok':(totRatio>=0.8?'pbw':'pbd');
+  var tfoot = '<tr><td>TOTAL '+periodoKey.toUpperCase()+'</td>'+
+    '<td class="mono" style="text-align:right;">'+fmtK(totPpto)+'</td>'+
+    '<td class="mono" style="text-align:right;color:var(--green);">'+fmtK(totReal)+'</td>'+
+    '<td class="'+(totGap>=0?'gp':'gn')+'">'+fmtGap(totGap)+'</td>'+
+    '<td style="text-align:center;"><span class="pb '+totPbCls+'">'+pctFmt(totRatio)+'</span></td>'+
+    '<td class="mono" style="text-align:right;">'+fmtK(totAnual)+'</td></tr>';
+
+  var tbl = document.getElementById('ch-rvsp-tbl');
+  if (!tbl) return;
+  tbl.querySelector('tbody').innerHTML = rows;
+  tbl.querySelector('tfoot').innerHTML = tfoot;
+  var tag = document.getElementById('ch-rvsp-tag');
+  if (tag) tag.textContent = 'CLP · ' + lblRange + ' 2026';
+  var note = document.getElementById('ch-rvsp-note');
+  if (note) note.innerHTML = '⚡ Período <strong>' + periodoKey.toUpperCase() + '</strong> (' + lblRange + ') · Cumplimiento: <span style="color:' + (totRatio>=1?'var(--green)':'var(--amber)') + '">' + pctFmt(totRatio) + '</span> · Real CLP ' + fmtK(totReal) + ' · * Muñoz sin ppto oficial registrado';
+}
+
+// ── Perú "Real vs Ppto" por período ──────────────────────────────────────────
+function renderPeruRvsPpto(periodoKey, btn) {
+  if (typeof AVBOARD === 'undefined') return;
+  if (btn) {
+    document.querySelectorAll('#selectorPeruPeriodo .sel-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+  var pv = AVBOARD.peru.ventas;
+  var rmp = pv.rtc_mensual_real || {};
+  var p = PERIODOS[periodoKey];
+  var nReal = pv.mensual_real.filter(function(v){ return v > 0; }).length;
+  var startIdx = p.s;
+  var endIdx = (periodoKey === 'ytd') ? Math.max(0, nReal - 1) : p.e;
+  var MES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var lblRange = (periodoKey === 'ytd') ? ('Ene–' + (MES[endIdx] || 'Jul')) : p.lbl;
+  var rtcPA = pv.rtc_ppto_anual || {};
+  var cortesPE = AVBOARD.meta.cortes.peru_ventas;
+
+  var vendors = [
+    {key:'aguirre',    lbl:'L. Aguirre',     clsS:'sg', bold:true,  note:'(zona unif.)'},
+    {key:'atalaya',    lbl:'O. Atalaya',      clsS:'sg', bold:false, note:''},
+    {key:'infante',    lbl:'O. Infante',      clsS:'sa', bold:false, note:''},
+    {key:'gonzales',   lbl:'A. Gonzales',     clsS:'sr', bold:false, note:''},
+    {key:'valladares', lbl:'P. Valladares',   clsS:'sr', bold:false, note:''},
+    {key:'martha',     lbl:'M. Hidalgo',      clsS:'sr', bold:false, note:'(KAM)'}
+  ];
+
+  var fmtU   = function(n){ return Math.round(n).toLocaleString('es-CL'); };
+  var fmtGap = function(n){ var v = Math.round(n); return (v >= 0 ? '+' : '–') + Math.abs(v).toLocaleString('es-CL'); };
+  var pctFmt = function(r){ return (r * 100).toFixed(1) + '%'; };
+
+  var rows = '', totReal = 0, totPpto = 0;
+  for (var vi = 0; vi < vendors.length; vi++) {
+    var vd = vendors[vi];
+    var realArr = (rmp[vd.key] || []).slice();
+    var pptoArr = (PE_MES_DATA[vd.key] && PE_MES_DATA[vd.key].ppto) || [];
+    var realPer = 0, pptoPer = 0;
+    for (var i = startIdx; i <= endIdx; i++) { realPer += (realArr[i]||0); pptoPer += (pptoArr[i]||0); }
+    var pptoAnual = rtcPA[vd.key] || pptoArr.reduce(function(a,b){ return a+(b||0); }, 0);
+    var gap = realPer - pptoPer;
+    var ratio = pptoPer > 0 ? realPer/pptoPer : null;
+    var ratioCls = ratio===null?'na':(ratio>=1?'hit':(ratio>=0.8?'miss':'crit'));
+    var pbCls   = ratio===null?'pbnp':(ratio>=1?'pbok':(ratio>=0.8?'pbw':'pbd'));
+    var pctStr  = ratio===null?'–':pctFmt(ratio);
+    var barW    = ratio===null?0:Math.min(100,ratio*100).toFixed(1);
+    var barClr  = (ratio!==null&&ratio>=1)?'var(--green)':((ratio!==null&&ratio>=0.8)?'var(--amber)':'var(--red2)');
+    var nameHtml = (vd.bold?'<strong>'+vd.lbl+'</strong>':vd.lbl) + (vd.note?' <span style="font-size:8px;color:var(--muted);">'+vd.note+'</span>':'');
+    totReal += realPer; totPpto += pptoPer;
+    rows += '<tr>'+
+      '<td><span class="s '+vd.clsS+'"></span>'+nameHtml+'</td>'+
+      '<td class="cp">'+fmtU(pptoPer)+'</td>'+
+      '<td class="cr '+ratioCls+'">'+fmtU(realPer)+'</td>'+
+      '<td class="'+(gap>=0?'gp':'gn')+'">'+fmtGap(gap)+'</td>'+
+      '<td style="text-align:center;"><span class="pb '+pbCls+'">'+pctStr+'</span>'+
+        (ratio!==null?'<div class="mb"><div class="mbf" style="width:'+barW+'%;background:'+barClr+';"></div></div>':'')+'</td>'+
+      '<td class="cp">'+fmtU(pptoAnual)+'</td>'+
+    '</tr>';
+  }
+  var totGap = totReal - totPpto;
+  var totRatio = totPpto > 0 ? totReal/totPpto : 0;
+  var totPbCls = totRatio>=1?'pbok':(totRatio>=0.8?'pbw':'pbd');
+  var tfoot = '<tr><td>TOTAL '+periodoKey.toUpperCase()+'</td>'+
+    '<td class="mono" style="text-align:right;">'+fmtU(totPpto)+'</td>'+
+    '<td class="mono" style="text-align:right;color:var(--blue);">'+fmtU(totReal)+'</td>'+
+    '<td class="'+(totGap>=0?'gp':'gn')+'">'+fmtGap(totGap)+'</td>'+
+    '<td style="text-align:center;"><span class="pb '+totPbCls+'">'+pctFmt(totRatio)+'</span></td>'+
+    '<td class="mono" style="text-align:right;">'+fmtU(pv.ppto_anual)+'</td></tr>';
+
+  var tbl = document.getElementById('pe-t1-tbl');
+  if (!tbl) return;
+  tbl.querySelector('tbody').innerHTML = rows;
+  tbl.querySelector('tfoot').innerHTML = tfoot;
+  var tag = document.getElementById('pe-t1-tag');
+  if (tag) tag.textContent = 'USD · ' + lblRange + ' 2026 · al ' + cortesPE;
+  var note = document.getElementById('pe-rvsp-note');
+  if (note) note.innerHTML = '⚠️ Período <strong>' + periodoKey.toUpperCase() + '</strong> (' + lblRange + ') · Cumplimiento: <span style="color:' + (totRatio>=1?'var(--green)':'var(--amber)') + '">' + pctFmt(totRatio) + '</span> · Infante ppto anual más alto: USD ' + fmtU(rtcPA.infante||0);
+}
+
+// ── Chile Seguimiento mes a mes — selector de vendor ─────────────────────────
+function setChileMesVendor(key, btn) {
+  document.querySelectorAll('#selectorChileMes .sel-btn').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  if (typeof AVBOARD === 'undefined') return;
+  var cv = AVBOARD.chile.ventas;
+  var clMesActual = mesActualDeCorte(AVBOARD.meta.cortes.chile_ventas);
+  var Mm = function(n){ return (n/1e6).toFixed(1)+'M'; };
+  var pptousdRow = document.getElementById('cl-pptousd-row');
+  if (key === 'equipo') {
+    if (pptousdRow) pptousdRow.style.display = '';
+    pintarMesAMes({
+      prefix:'cl', mensualReal:cv.mensual_real, mensualPpto:cv.mensual_ppto,
+      mesActualIdx:clMesActual, divisor:1000, locale:'es-CL', currency:'CLP',
+      totalReal:cv.ytd_5m, pendienteAnual:(cv.ppto_anual||0)-cv.ytd_5m, fmtPend:Mm
+    });
+  } else {
+    if (pptousdRow) pptousdRow.style.display = 'none';
+    var realFull = (cv.rtc_mensual_real && cv.rtc_mensual_real[key])
+      ? cv.rtc_mensual_real[key].slice(0,12)
+      : (CH_MES_DATA[key]||{real:Array(12).fill(0)}).real.map(function(v){ return (v||0)*1000; });
+    var pptoFull = (cv.rtc_mensual_ppto && cv.rtc_mensual_ppto[key])
+      ? cv.rtc_mensual_ppto[key].slice(0,12)
+      : (CH_MES_DATA[key]||{ppto:Array(12).fill(0)}).ppto.map(function(v){ return (v||0)*1000; });
+    var totReal = 0;
+    for (var i = 0; i <= clMesActual; i++) totReal += (realFull[i]||0);
+    var pptoAnual = pptoFull.reduce(function(a,b){ return a+b; }, 0);
+    pintarMesAMes({
+      prefix:'cl', mensualReal:realFull, mensualPpto:pptoFull,
+      mesActualIdx:clMesActual, divisor:1000, locale:'es-CL', currency:'CLP',
+      totalReal:totReal, pendienteAnual:pptoAnual-totReal, fmtPend:Mm
+    });
+  }
+}
+
+// ── Perú Seguimiento mes a mes — selector de vendor ──────────────────────────
+function setPeruMesVendor(key, btn) {
+  document.querySelectorAll('#selectorPeruMes .sel-btn').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  if (typeof AVBOARD === 'undefined') return;
+  var pv = AVBOARD.peru.ventas;
+  var peMesActual = mesActualDeCorte(AVBOARD.meta.cortes.peru_ventas);
+  var Kk = function(n){ return (n/1000).toFixed(1)+'K'; };
+  if (key === 'equipo') {
+    pintarMesAMes({
+      prefix:'pe', mensualReal:pv.mensual_real, mensualPpto:pv.mensual_ppto,
+      mesActualIdx:peMesActual, divisor:1, locale:'es-CL', currency:'USD',
+      totalReal:pv.ytd_5m, pendienteAnual:(pv.ppto_anual||0)-pv.ytd_5m, fmtPend:Kk
+    });
+  } else {
+    var rmp = pv.rtc_mensual_real || {};
+    var real = (rmp[key] || []).slice(0,12);
+    var ppto = (PE_MES_DATA[key] && PE_MES_DATA[key].ppto) || Array(12).fill(0);
+    var totReal = 0;
+    for (var i = 0; i <= peMesActual; i++) totReal += (real[i]||0);
+    var pptoAnual = ppto.reduce(function(a,b){ return a+b; }, 0);
+    pintarMesAMes({
+      prefix:'pe', mensualReal:real, mensualPpto:ppto,
+      mesActualIdx:peMesActual, divisor:1, locale:'es-CL', currency:'USD',
+      totalReal:totReal, pendienteAnual:pptoAnual-totReal, fmtPend:Kk
+    });
+  }
+}
+
 </script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -383,41 +613,22 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 <!-- Real vs Ppto Chile + Curvas -->
 <div class="g2" style="margin-bottom:15px;align-items:start;">
   <div class="panel">
-    <div class="ptitle">REAL vs PPTO T1 · POR RTC <span class="ptag">CLP · Ene–Mar 2026</span></div>
-    <table class="bt">
-      <thead><tr><th style="text-align:left;">RTC</th><th>Ppto T1</th><th>Real T1</th><th>Gap</th><th style="text-align:center;">%</th><th>Ppto Anual</th><th>Abr real</th></tr></thead>
-      <tbody>
-        <tr><td><span class="s sg"></span><strong>J. Caroca</strong></td><td class="cp">33.000K</td><td class="cr hit">53.123K</td><td class="gp">+20.123K</td>
-          <td style="text-align:center;"><span class="pb pbok">161.0%</span><div class="mb"><div class="mbf" style="width:100%;background:var(--green);"></div></div></td>
-          <td class="cp">131.561K</td><td class="cr hit">7.950K</td></tr>
-        <tr><td><span class="s sa"></span>P. Laratro</td><td class="cp">54.100K</td><td class="cr miss">52.893K</td><td class="gn">–1.207K</td>
-          <td style="text-align:center;"><span class="pb pbw">97.8%</span><div class="mb"><div class="mbf" style="width:97.8%;background:var(--amber);"></div></div></td>
-          <td class="cp">234.000K</td><td class="cr na">–</td></tr>
-        <tr><td><span class="s sa"></span>R. Encina</td><td class="cp">29.200K</td><td class="cr miss">27.593K</td><td class="gn">–1.607K</td>
-          <td style="text-align:center;"><span class="pb pbw">94.5%</span><div class="mb"><div class="mbf" style="width:94.5%;background:var(--amber);"></div></div></td>
-          <td class="cp">169.900K</td><td class="cr na">–</td></tr>
-        <tr><td><span class="s sr"></span>F. Velásquez</td><td class="cp">32.860K</td><td class="cr miss">29.600K</td><td class="gn">–3.260K</td>
-          <td style="text-align:center;"><span class="pb pbw">90.1%</span><div class="mb"><div class="mbf" style="width:90.1%;background:var(--red);"></div></div></td>
-          <td class="cp">253.860K</td><td class="cr miss">890K</td></tr>
-        <tr><td><span class="s sr"></span>I. Veverka</td><td class="cp">18.000K</td><td class="cr crit">8.810K</td><td class="gn">–9.190K</td>
-          <td style="text-align:center;"><span class="pb pbd">48.9%</span><div class="mb"><div class="mbf" style="width:48.9%;background:var(--red2);"></div></div></td>
-          <td class="cp">72.000K</td><td class="cr na">–</td></tr>
-        <tr><td><span class="s sg"></span>V. Muñoz</td><td class="cp">3.600K</td><td class="cr hit">4.236K</td><td class="gp">+636K</td>
-          <td style="text-align:center;"><span class="pb pbok">117.7%</span><div class="mb"><div class="mbf" style="width:100%;background:var(--green);"></div></div></td>
-          <td class="cp">–</td><td class="cr na">–</td></tr>
-      </tbody>
-      <tfoot><tr>
-        <td>TOTAL</td><td class="mono" style="text-align:right;">170.760K</td>
-        <td class="mono" style="text-align:right;color:var(--green);">176.254K</td>
-        <td class="gp">+5.494K</td>
-        <td style="text-align:center;"><span class="pb pbok">103.2%</span></td>
-        <td class="mono" style="text-align:right;">861.321K</td>
-        <td class="mono" style="text-align:right;color:var(--amber);">14.599K</td>
-      </tr></tfoot>
-    </table>
-    <div style="margin-top:8px;padding:8px 10px;background:var(--s2);border-radius:5px;font-size:12px;color:var(--dim);">
-      ⚡ <span style="color:var(--green);">Caroca</span> aporta +20.1M sobre su ppto y cubre el déficit del grupo · <span style="color:var(--red);">Veverka</span> deja 9.2M sin ejecutar
+    <div class="ptitle">REAL vs PPTO · POR RTC <span class="ptag" id="ch-rvsp-tag">CLP · Ene–Mar 2026</span></div>
+    <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;" id="selectorChilePeriodo">
+      <button class="sel-btn active" onclick="renderChileRvsPpto('t1',this)">T1</button>
+      <button class="sel-btn" onclick="renderChileRvsPpto('t2',this)">T2</button>
+      <button class="sel-btn" onclick="renderChileRvsPpto('t3',this)">T3</button>
+      <button class="sel-btn" onclick="renderChileRvsPpto('t4',this)">T4</button>
+      <button class="sel-btn" onclick="renderChileRvsPpto('s1',this)">S1</button>
+      <button class="sel-btn" onclick="renderChileRvsPpto('s2',this)">S2</button>
+      <button class="sel-btn" onclick="renderChileRvsPpto('ytd',this)">YTD</button>
     </div>
+    <table class="bt" id="ch-rvsp-tbl">
+      <thead><tr><th style="text-align:left;">RTC</th><th>Ppto</th><th>Real</th><th>Gap</th><th style="text-align:center;">%</th><th>Ppto Anual</th></tr></thead>
+      <tbody><!-- populated by renderChileRvsPpto --></tbody>
+      <tfoot><tr><td colspan="6" style="color:var(--muted);text-align:center;font-size:10px;">Cargando desde AVBOARD…</td></tr></tfoot>
+    </table>
+    <div id="ch-rvsp-note" style="margin-top:8px;padding:8px 10px;background:var(--s2);border-radius:5px;font-size:12px;color:var(--dim);">⚡ Cargando datos desde AVBOARD…</div>
   </div>
   <div class="panel">
     <div class="ptitle">PPTO vs REAL POR RTC · T1 <span class="ptag">CLP millones</span></div>
@@ -456,6 +667,14 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 <!-- Tabla mes a mes Chile -->
 <div class="panel" style="margin-bottom:0;">
   <div class="ptitle">SEGUIMIENTO MES A MES · CHILE <span class="ptag">CLP · todos los meses 2026</span></div>
+  <div style="display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap;" id="selectorChileMes">
+    <button class="sel-btn active" onclick="setChileMesVendor('equipo',this)" style="font-size:11px;padding:4px 10px;">Equipo completo</button>
+    <button class="sel-btn" onclick="setChileMesVendor('caroca',this)" style="font-size:11px;padding:4px 10px;">J. Caroca</button>
+    <button class="sel-btn" onclick="setChileMesVendor('laratro',this)" style="font-size:11px;padding:4px 10px;">P. Laratro</button>
+    <button class="sel-btn" onclick="setChileMesVendor('encina',this)" style="font-size:11px;padding:4px 10px;">R. Encina</button>
+    <button class="sel-btn" onclick="setChileMesVendor('velasquez',this)" style="font-size:11px;padding:4px 10px;">F. Velásquez</button>
+    <button class="sel-btn" onclick="setChileMesVendor('veverka',this)" style="font-size:11px;padding:4px 10px;">I. Veverka</button>
+  </div>
   <div style="overflow-x:auto;">
   <table class="bt">
     <thead><tr>
@@ -499,7 +718,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
         <td id="cl-gap-8">—</td><td id="cl-gap-9">—</td><td id="cl-gap-10">—</td><td id="cl-gap-11">—</td>
         <td id="cl-gap-tot">—</td>
       </tr>
-      <tr><td style="color:var(--dim);">Ppto USD</td>
+      <tr id="cl-pptousd-row"><td style="color:var(--dim);">Ppto USD</td>
         <td class="cp" id="cl-pptousd-0">87.956</td><td class="cp" id="cl-pptousd-1">43.792</td><td class="cp" id="cl-pptousd-2">44.211</td><td class="cp" id="cl-pptousd-3">48.875</td>
         <td class="cp" id="cl-pptousd-4">53.684</td><td class="cp" id="cl-pptousd-5">52.347</td><td class="cp" id="cl-pptousd-6">66.105</td><td class="cp" id="cl-pptousd-7">80.526</td>
         <td class="cp" id="cl-pptousd-8">116.632</td><td class="cp" id="cl-pptousd-9">118.632</td><td class="cp" id="cl-pptousd-10">102.632</td><td class="cp" id="cl-pptousd-11">91.263</td>
@@ -601,41 +820,22 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 <!-- Real vs Ppto Perú + Barras -->
 <div class="g2" style="margin-bottom:15px;align-items:start;">
   <div class="panel pe">
-    <div class="ptitle pe">REAL vs PPTO T1 · POR ZONA <span class="ptag" id="pe-t1-tag">USD · Ene–Mar 2026</span></div>
-    <table class="bt" id="pe-t1-tbl">
-      <thead><tr><th style="text-align:left;">Zona</th><th>Ppto T1</th><th>Real T1</th><th>Gap</th><th style="text-align:center;">%</th><th>Ppto Anual</th><th>YTD+Abr</th></tr></thead>
-      <tbody>
-        <tr><td><span class="s sg"></span><strong>L. Aguirre</strong></td><td class="cp">35.370</td><td class="cr hit">72.175</td><td class="gp">+36.805</td>
-          <td style="text-align:center;"><span class="pb pbok">204.1%</span><div class="mb"><div class="mbf" style="width:100%;background:var(--green);"></div></div></td>
-          <td class="cp">223.930</td><td class="cr hit">74.347</td></tr>
-        <tr><td><span class="s sg"></span>O. Atalaya</td><td class="cp">53.634</td><td class="cr hit">59.072</td><td class="gp">+5.438</td>
-          <td style="text-align:center;"><span class="pb pbok">110.1%</span><div class="mb"><div class="mbf" style="width:100%;background:var(--green);"></div></div></td>
-          <td class="cp">248.424</td><td class="cr hit">59.072</td></tr>
-        <tr><td><span class="s sa"></span>O. Infante</td><td class="cp">114.735</td><td class="cr miss">71.594</td><td class="gn">–43.141</td>
-          <td style="text-align:center;"><span class="pb pbw">62.4%</span><div class="mb"><div class="mbf" style="width:62.4%;background:var(--amber);"></div></div></td>
-          <td class="cp">485.058</td><td class="cr miss">85.432</td></tr>
-        <tr><td><span class="s sr"></span>A. Gonzales</td><td class="cp">4.000</td><td class="cr crit">696</td><td class="gn">–3.304</td>
-          <td style="text-align:center;"><span class="pb pbd">17.4%</span><div class="mb"><div class="mbf" style="width:17.4%;background:var(--red2);"></div></div></td>
-          <td class="cp">37.250</td><td class="cr crit">696</td></tr>
-        <tr><td><span class="s sr"></span>P. Valladares</td><td class="cp">5.646</td><td class="cr crit">1.000</td><td class="gn">–4.646</td>
-          <td style="text-align:center;"><span class="pb pbd">17.7%</span><div class="mb"><div class="mbf" style="width:17.7%;background:var(--red2);"></div></div></td>
-          <td class="cp">142.372</td><td class="cr crit">1.000</td></tr>
-        <tr><td><span class="s sr"></span>M. Hidalgo <span style="font-size:8px;color:var(--muted);">(KAM)</span></td><td class="cp">0</td><td class="cr crit">0</td><td class="gn">—</td>
-          <td style="text-align:center;"><span class="pb pbd">—</span><div class="mb"><div class="mbf" style="width:0%;background:var(--red2);"></div></div></td>
-          <td class="cp">65.000</td><td class="cr crit">0</td></tr>
-      </tbody>
-      <tfoot><tr>
-        <td>TOTAL T1</td><td class="mono" style="text-align:right;">213.385</td>
-        <td class="mono" style="text-align:right;color:var(--blue);">204.537</td>
-        <td class="gn">–8.848</td>
-        <td style="text-align:center;"><span class="pb pbw">95.8%</span></td>
-        <td class="mono" style="text-align:right;">1.380.015</td>
-        <td class="mono" style="text-align:right;color:var(--blue);">229.259</td>
-      </tr></tfoot>
-    </table>
-    <div style="margin-top:8px;padding:8px 10px;background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.2);border-radius:5px;font-size:12px;color:var(--dim);">
-      ⚠️ <strong style="color:var(--amber);">Infante</strong> tiene el ppto anual más alto (USD 485K) pero ejecutó solo 62.4% T1 · Brecha –USD 43K · Aceleración urgente Q2
+    <div class="ptitle pe">REAL vs PPTO · POR ZONA <span class="ptag" id="pe-t1-tag">USD · Ene–Mar 2026</span></div>
+    <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;" id="selectorPeruPeriodo">
+      <button class="sel-btn pe-btn active" onclick="renderPeruRvsPpto('t1',this)">T1</button>
+      <button class="sel-btn pe-btn" onclick="renderPeruRvsPpto('t2',this)">T2</button>
+      <button class="sel-btn pe-btn" onclick="renderPeruRvsPpto('t3',this)">T3</button>
+      <button class="sel-btn pe-btn" onclick="renderPeruRvsPpto('t4',this)">T4</button>
+      <button class="sel-btn pe-btn" onclick="renderPeruRvsPpto('s1',this)">S1</button>
+      <button class="sel-btn pe-btn" onclick="renderPeruRvsPpto('s2',this)">S2</button>
+      <button class="sel-btn pe-btn" onclick="renderPeruRvsPpto('ytd',this)">YTD</button>
     </div>
+    <table class="bt" id="pe-t1-tbl">
+      <thead><tr><th style="text-align:left;">Zona</th><th>Ppto</th><th>Real</th><th>Gap</th><th style="text-align:center;">%</th><th>Ppto Anual</th></tr></thead>
+      <tbody><!-- populated by renderPeruRvsPpto --></tbody>
+      <tfoot><tr><td colspan="6" style="color:var(--muted);text-align:center;font-size:10px;">Cargando desde AVBOARD…</td></tr></tfoot>
+    </table>
+    <div id="pe-rvsp-note" style="margin-top:8px;padding:8px 10px;background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.2);border-radius:5px;font-size:12px;color:var(--dim);">⚠️ Cargando datos desde AVBOARD…</div>
   </div>
   <div class="panel pe">
     <div class="ptitle pe">PPTO ANUAL vs REAL YTD · PERÚ <span class="ptag">USD · por zona</span></div>
@@ -676,6 +876,15 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 <!-- Tabla mes a mes Perú -->
 <div class="panel pe" style="margin-bottom:0;">
   <div class="ptitle pe">SEGUIMIENTO MES A MES · PERÚ <span class="ptag">USD · todos los meses 2026</span></div>
+  <div style="display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap;" id="selectorPeruMes">
+    <button class="sel-btn pe-btn active" onclick="setPeruMesVendor('equipo',this)" style="font-size:11px;padding:4px 10px;">Equipo completo</button>
+    <button class="sel-btn pe-btn" onclick="setPeruMesVendor('infante',this)" style="font-size:11px;padding:4px 10px;">O. Infante</button>
+    <button class="sel-btn pe-btn" onclick="setPeruMesVendor('aguirre',this)" style="font-size:11px;padding:4px 10px;">L. Aguirre</button>
+    <button class="sel-btn pe-btn" onclick="setPeruMesVendor('atalaya',this)" style="font-size:11px;padding:4px 10px;">O. Atalaya</button>
+    <button class="sel-btn pe-btn" onclick="setPeruMesVendor('gonzales',this)" style="font-size:11px;padding:4px 10px;">A. Gonzales</button>
+    <button class="sel-btn pe-btn" onclick="setPeruMesVendor('valladares',this)" style="font-size:11px;padding:4px 10px;">P. Valladares</button>
+    <button class="sel-btn pe-btn" onclick="setPeruMesVendor('martha',this)" style="font-size:11px;padding:4px 10px;">M. Hidalgo</button>
+  </div>
   <div style="overflow-x:auto;">
   <table class="bt">
     <thead><tr>
@@ -1178,56 +1387,20 @@ new Chart(document.getElementById('cGrupo'),{
       if(rmp.valladares&&PE_MES_DATA.valladares) PE_MES_DATA.valladares.real=rmp.valladares.slice(0,12);
       if(rmp.martha&&PE_MES_DATA.martha) PE_MES_DATA.martha.real=rmp.martha.slice(0,12);
     }
-    // ── Actualizar tablas estáticas Perú desde AVBOARD ──────────────────────────
+    // ── KPI Ppto Anual + TOTAL row tabla ppto mensual Perú ───────────────────────
     (function(){
-      var rmp=pv.rtc_mensual_real||{};
-      var pvd=pv.por_vendedor||{};
-      var rtcP=pv.rtc_ppto_anual||{};
       var fmt=function(n){return Math.round(n).toLocaleString('es-CL');};
-      var pct=function(r){return (r*100).toFixed(1)+'%';};
-      // 1. KPI Ppto Anual
       set('av-ppto-pe-anual-val',(pv.ppto_anual/1e6).toFixed(1)+'M');
-      // 2. TOTAL row de tabla ppto mensual
       var pTbl=document.getElementById('pe-ppto-mensual-tbl');
       if(pTbl&&pv.mensual_ppto){
         var tftds=pTbl.querySelectorAll('tfoot td');
         for(var i=0;i<12;i++){ if(tftds[i+1]) tftds[i+1].textContent=fmt(pv.mensual_ppto[i]||0); }
         if(tftds[13]) tftds[13].textContent=fmt(pv.ppto_anual);
       }
-      // 3. Tabla "Real vs Ppto T1" — rows: aguirre(0), atalaya(1), infante(2), gonzales(3), valladares(4)
-      var t1Tbl=document.getElementById('pe-t1-tbl');
-      if(t1Tbl){
-        var vks=['aguirre','atalaya','infante','gonzales','valladares','martha'];
-        var rows=t1Tbl.querySelectorAll('tbody tr');
-        var totRealT1=0,totPptoT1=0,totYTD=0,totPptoA=0;
-        for(var j=0;j<Math.min(rows.length,vks.length);j++){
-          var vk=vks[j], tds=rows[j].querySelectorAll('td');
-          var mArr=rmp[vk]||[];
-          var realT1=(mArr[0]||0)+(mArr[1]||0)+(mArr[2]||0);
-          var pptoT1=(PE_MES_DATA[vk]?PE_MES_DATA[vk].ppto.slice(0,3).reduce(function(a,b){return a+b;},0):0);
-          var gap=realT1-pptoT1;
-          var ratio=pptoT1>0?realT1/pptoT1:0;
-          var ytd=(pvd[vk]&&pvd[vk].ytd)||0;
-          var pptoA=rtcP[vk]||0;
-          totRealT1+=realT1; totPptoT1+=pptoT1; totYTD+=ytd; totPptoA+=pptoA;
-          if(tds[2]){tds[2].textContent=fmt(realT1); tds[2].className='cr '+(ratio>=1?'hit':(ratio>=0.8?'miss':'crit'));}
-          if(tds[3]){tds[3].textContent=(gap>=0?'+':'')+fmt(Math.abs(gap)); tds[3].className=gap>=0?'gp':'gn';}
-          if(tds[4]){var cls=ratio>=1?'pbok':(ratio>=0.8?'pbw':'pbd');tds[4].innerHTML='<span class="pb '+cls+'">'+pct(ratio)+'</span><div class="mb"><div class="mbf" style="width:'+Math.min(100,ratio*100).toFixed(1)+'%;background:'+(ratio>=1?'var(--green)':(ratio>=0.8?'var(--amber)':'var(--red2)'))+'"></div></div>';}
-          if(tds[5]){tds[5].textContent=fmt(pptoA);}
-          if(tds[6]){tds[6].textContent=fmt(ytd); tds[6].className='cr '+(ytd>=pptoA?'hit':(ytd>=pptoA*0.8?'miss':'crit'));}
-        }
-        // Total row
-        var tft=t1Tbl.querySelectorAll('tfoot td');
-        if(tft[1]) tft[1].textContent=fmt(totPptoT1);
-        if(tft[2]){tft[2].textContent=fmt(totRealT1); tft[2].style.color=totRealT1>=totPptoT1?'var(--green)':'var(--blue)';}
-        if(tft[3]){var tg=totRealT1-totPptoT1; tft[3].textContent=(tg>=0?'+':'')+fmt(Math.abs(tg)); tft[3].className=tg>=0?'gp':'gn';}
-        if(tft[5]) tft[5].textContent=fmt(pv.ppto_anual);
-        if(tft[6]) tft[6].textContent=fmt(totYTD);
-      }
-      // Actualizar tag corte T1
-      var t1Tag=document.getElementById('pe-t1-tag');
-      if(t1Tag) t1Tag.textContent='USD · Ene–Mar · YTD al '+cortesPE;
     })();
+    // ── Renderizar tablas "Real vs Ppto" con selector de período ─────────────────
+    renderChileRvsPpto('t1');
+    renderPeruRvsPpto('t1');
     // Re-render curvas activas
     var actBtn=document.querySelector('#selectorChileCurva .sel-btn.active');
     if(actBtn){var actKey=actBtn.getAttribute('onclick').match(/'([^']+)'/)[1];setChileCurva(actKey,actBtn);}
