@@ -8,3 +8,6 @@
 *.swp
 *.tmp
 *~
+
+# Archivos de entrada (procesados localmente, no versionar)
+inbox/
