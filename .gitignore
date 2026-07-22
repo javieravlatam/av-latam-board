@@ -11,3 +11,12 @@
 
 # Archivos de entrada (procesados localmente, no versionar)
 inbox/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Versiones locales de datos (snapshots generados localmente)
+versions/base/
+versions/data/
+versions/logs/
