@@ -87,11 +87,13 @@ const PE_MES_DATA = {
 let chRTCChart, chCurvaChart, peRTCChart, peCurvaChart;
 
 // ── UTILIDADES ──
-const acumVal = arr => arr.reduce((a,v,i) => {
-  const prev = i > 0 ? a[i-1] : 0;
-  a.push(v > 0 ? prev + v : (prev > 0 ? null : 0));
-  return a;
-}, []);
+// acumVal: acumulado plateau — cuando un mes tiene ppto=0 después de haber
+// iniciado (e.g. Gonzales con meses discontinuos), mantiene el valor anterior
+// en vez de retornar null (que luego se colapsa a 0 en el siguiente ciclo).
+const acumVal = arr => {
+  let cum=0, started=false;
+  return arr.map(v => { if(v>0){cum+=v;started=true;return cum;} return started?cum:0; });
+};
 
 function colorBar(realArr, pptoArr) {
   return realArr.map((v,i) => v === 0 ? 'transparent' : v >= pptoArr[i] ? 'rgba(122,182,72,0.82)' : 'rgba(245,166,35,0.82)');
