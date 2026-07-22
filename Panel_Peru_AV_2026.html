@@ -833,11 +833,11 @@ new Chart(document.getElementById('cCxC'),{
     if(cB){
       var pve=pv.por_vendedor;
       cB.data.datasets[1].data=[
-        pve.infante.ytd,
-        (pve.aguirre.ytd||0)+(pve.navarro.ytd||0),
-        pve.atalaya.ytd,
-        pve.valladares.ytd,
-        pve.gonzales.ytd
+        (pve.infante&&pve.infante.ytd)||0,
+        (pve.aguirre&&pve.aguirre.ytd||0)+((pve.navarro&&pve.navarro.ytd)||0),
+        (pve.atalaya&&pve.atalaya.ytd)||0,
+        (pve.valladares&&pve.valladares.ytd)||0,
+        (pve.gonzales&&pve.gonzales.ytd)||0
       ];
       cB.update();
     }
@@ -845,12 +845,17 @@ new Chart(document.getElementById('cCxC'),{
     // ── Chart: cCurva — acumulado 12 meses ───────────────────────────────────
     var cCv=Chart.getChart(document.getElementById('cCurva'));
     if(cCv){
-      var running=0, realAc=[];
+      // Ppto acumulado desde AVBOARD (reemplaza legacy hardcodeado)
+      var pptoRunning=0, pptoAcDyn=[];
+      for(var i=0;i<12;i++){pptoRunning+=(pv.mensual_ppto[i]||0);pptoAcDyn.push(pptoRunning);}
+      cCv.data.datasets[0].data=pptoAcDyn;
+      // Real acumulado hasta el último mes con datos
+      var running=0, realAcDyn=[];
       for(var i=0;i<12;i++){
         running+=(pv.mensual_real[i]||0);
-        realAc.push(i<nRealPE?running:null);
+        realAcDyn.push(i<nRealPE?running:null);
       }
-      cCv.data.datasets[1].data=realAc;
+      cCv.data.datasets[1].data=realAcDyn;
       cCv.update();
     }
 
@@ -942,7 +947,8 @@ new Chart(document.getElementById('cCxC'),{
     // Tfoot totales
     var t4m=pv.mensual_real.slice(0,4).reduce(function(a,b){return a+b;},0);
     var mayTotal=pv.mensual_real[nRealPE-1]||0;
-    var pptoT1=213385, pptoA=pv.ppto_anual||1137034;
+    var pptoT1=pv.mensual_ppto.slice(0,3).reduce(function(a,b){return a+b;},0)||213385;
+    var pptoA=pv.ppto_anual||1210600;
     set('pe-tfoot-t1', t4m.toLocaleString('en-US'));
     set('pe-tfoot-cumpl', (t4m/pptoT1*100).toFixed(1)+'%');
     set('pe-tfoot-may', mayTotal.toLocaleString('en-US'));

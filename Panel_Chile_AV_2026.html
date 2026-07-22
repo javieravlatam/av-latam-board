@@ -646,7 +646,7 @@ function cerrarSesion() {
     set('av-cl-hsub', 'Jefe Comercial · Ene–' + curMesNmCL + ' 2026 · al ' + cHV);
     set('av-cl-hdr-corte',
       '<div>Corte ventas <b>' + cHV + '</b> · CxC <b>' + cHC + '</b></div>' +
-      '<div style="font-size:8px;margin-top:1px;">TC = ' + D.tc() + ' CLP/USD · Ppto anual CLP 861,321,350</div>');
+      '<div style="font-size:8px;margin-top:1px;">TC = ' + D.tc() + ' CLP/USD · Ppto anual CLP ' + cv.ppto_anual.toLocaleString('es-CL') + '</div>');
 
     // ── KPI 1: YTD Chile 5m ──────────────────────────────────────
     set('av-cl-kpi-ytd-lbl',   'YTD Chile ' + nRealCL + 'm');
@@ -729,7 +729,7 @@ function cerrarSesion() {
     // ── CxC footer ────────────────────────────────────────────────
     set('av-cl-footer-txt',
       'AV Latam BI Platform · Panel Chile · Corte ventas ' + sHV +
-      ' · CxC ' + sHC + '/' + cHC.slice(6) + ' · TC ' + D.tc() + ' CLP/USD · Ppto anual CLP 861,321,350');
+      ' · CxC ' + sHC + '/' + cHC.slice(6) + ' · TC ' + D.tc() + ' CLP/USD · Ppto anual CLP ' + cv.ppto_anual.toLocaleString('es-CL'));
 
     // ── Actualizar charts ─────────────────────────────────────────
     // cStack: mensual apilado por RTC (meses completos, excluye mes parcial)
@@ -747,9 +747,12 @@ function cerrarSesion() {
       cStack.update();
     }
 
-    // cCurva: acumulada real N meses
+    // cCurva: acumulada ppto (desde AVBOARD, reemplaza legacy 861M) + real N meses
     var cCurva = Chart.getChart(document.getElementById('cCurva'));
     if (cCurva) {
+      var pptoRunCL=0, pptoAcCL=[];
+      cv.mensual_ppto.forEach(function(v){pptoRunCL+=v; pptoAcCL.push(Math.round(pptoRunCL/1000));});
+      cCurva.data.datasets[0].data = pptoAcCL;
       var realAcum = [null,null,null,null,null,null,null,null,null,null,null,null];
       var sum = 0;
       cv.mensual_real.slice(0, nRealCL).forEach(function(v, i) {
