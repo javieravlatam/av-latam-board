@@ -121,6 +121,20 @@ PPTO_RTC_ANUAL_PE = {
     'martha':      65000,   # Martha Hidalgo - KAM (incorporada ago 2026)
 }
 
+# Presupuesto Perú por RTC mensual (USD) — distribución real del Libro Base.
+# Suma por fila coincide exactamente con PPTO_RTC_ANUAL_PE (validado 2026-07-21).
+# Fuente: hoja "Presupuesto Pais" → secciones individuales por RTC.
+# Aclaración: PPTO_MENSUAL_PE (arriba) es el TOTAL equipo por mes; esto es
+# la DISTRIBUCIÓN por vendedor individual.
+PPTO_RTC_MENSUAL_PE = {
+    'infante':    [18238, 29737, 66760, 38833, 26906, 24924, 24281, 67338, 52582, 51270, 60359, 23830],
+    'aguirre':    [11200,  9190, 14980,  9170,  6970,  9240, 15490, 37590, 29760, 60280, 15800,  4260],
+    'atalaya':    [22236, 19322, 12076, 18346, 22790, 27596, 25818, 28780, 23122, 18458, 16418, 13462],
+    'gonzales':   [    0,     0,  4000,     0,     0,  7000,  7000, 19250,     0,     0,     0,     0],
+    'valladares': [    0,   240,  5406,  4950,  5280,  9950, 28086, 25222, 20100, 35834,  5904,  1400],
+    'martha':     [    0,     0,     0,     0,     0,     0,     0, 10000, 10000, 15000, 15000, 15000],
+}
+
 # NOTA: la antigua tabla estática RENTABILIDAD (alertas hardcodeadas) fue
 # reemplazada 2026-06-24 por compute_productos(), que calcula rentabilidad
 # real por país×producto×formato desde precios piso + ventas. Ver sección
@@ -1478,6 +1492,7 @@ var AVBOARD = (function() {{
     rtc_ppto_anual: {{
       {ppto_pe_anual_str}
     }},
+    rtc_mensual_ppto: {js_rtc_ppto(PPTO_RTC_MENSUAL_PE)},
     rtc_mensual_real: {js_rtc_mensual(pe_v['rtc_mensual'])},
     iec: {{
       total: null, aguirre: null, infante: null,

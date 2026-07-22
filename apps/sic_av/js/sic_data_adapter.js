@@ -213,8 +213,11 @@
       },
       PE: {
         rtc_ppto_anual: (peruVentas && peruVentas.rtc_ppto_anual) || {},
+        rtc_mensual_ppto: (peruVentas && peruVentas.rtc_mensual_ppto) || null,
         rtc_mensual_real: (peruVentas && peruVentas.rtc_mensual_real) || {},
-        fuente: "avboard_data.js -> peru_ventas.rtc_ppto_anual (real, SOLO ANUAL -- no existe desglose mensual real para Peru)"
+        fuente: (peruVentas && peruVentas.rtc_mensual_ppto)
+          ? "avboard_data.js -> peru_ventas.rtc_mensual_ppto (real, mensual por vendedor)"
+          : "avboard_data.js -> peru_ventas.rtc_ppto_anual (real, SOLO ANUAL -- fallback anual/12)"
       }
     };
   };
@@ -501,9 +504,17 @@
       var val = serie[mesIdx];
       return (val === undefined || val === null) ? null : val;
     }
-    // Peru: solo hay presupuesto ANUAL real -- aproximacion anual/12,
-    // mantenida (no es un prorrateo de ciclo, es la unica granularidad real
-    // disponible para Peru; ver DATA_SOURCE_AUDIT.md).
+    // Peru: usar rtc_mensual_ppto si está disponible (CHANGE REQUEST v1.6+:
+    // campo agregado a avboard_data.js desde Libro Base, distribución real
+    // por mes y vendedor -- ver REPORTE_AUDITORIA_SIC.md 2026-07-21).
+    // Fallback anual/12 solo si el campo no existe en AVBOARD (compatibilidad
+    // con versiones anteriores de avboard_data.js sin el campo).
+    var seriePE = presupuestoReal.PE.rtc_mensual_ppto && presupuestoReal.PE.rtc_mensual_ppto[vendedorClave];
+    if (seriePE) {
+      var valPE = seriePE[mesIdx];
+      return (valPE === undefined || valPE === null) ? null : valPE;
+    }
+    // Fallback: presupuesto anual / 12 (aproximación gruesa, solo si no hay mensual).
     var anual = presupuestoReal.PE.rtc_ppto_anual[vendedorClave];
     if (anual === undefined) return null;
     return Math.round((anual / 12) * 100) / 100;
