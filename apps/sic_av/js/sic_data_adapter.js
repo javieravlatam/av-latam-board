@@ -83,8 +83,22 @@
       "SUSAN DIAZ": "diaz",
       "ANTONIO GONZALEZ": "gonzales",
       "ANTONIO GONZALES": "gonzales",
-      "LIZBETH AGUIRRE": "aguirre",
+      "LISBETH AGUIRRE": "aguirre",     // variante ortográfica — fuente TX_PE usa S (GG-002)
+      "LIZBETH AGUIRRE": "aguirre",     // variante ortográfica — Z (forma canónica GG-002)
       "PATRICIA VALLADARES": "valladares"
+    }
+  };
+
+  // Catálogo de vendedores que deben aparecer en el selector AUNQUE no tengan
+  // transacciones en el ciclo consultado (ej. KAMs recién incorporados o
+  // vendedores con presupuesto asignado antes de su primera venta real).
+  // Se agregan solo si tienen presupuesto > 0 en el mes de desempeño.
+  // Clave: id normalizado (mismo que en rtc_mensual_ppto / rtc_ppto_anual).
+  // Nombre: forma canónica para mostrar en la UI.
+  SICAdapter.VENDEDORES_SEMILLA = {
+    CL: {},
+    PE: {
+      "martha": "MARTHA HIDALGO"   // KAM incorporada ago 2026 — sin ventas hasta jul 2026
     }
   };
 
@@ -398,6 +412,22 @@
     // automaticamente el dia que exista una fuente real de cobranza -- hoy
     // son un no-op porque `cobranzas` siempre esta vacio (brecha 3.1).
     SICAdapter._validarCobranzas(cobranzas, ventas, advertencias);
+
+    // -- Vendedores semilla: incluir en el selector a vendedores que tienen
+    // presupuesto pero no transacciones en este ciclo/mes (ej. KAMs recién
+    // incorporados). Se agregan a vendedoresVistos ANTES de construir
+    // presupuestos e IEC para que aparezcan en todos los pasos siguientes.
+    var semilla = SICAdapter.VENDEDORES_SEMILLA[pais] || {};
+    Object.keys(semilla).forEach(function (clave) {
+      if (vendedoresVistos[clave]) return; // ya tiene transacciones — no duplicar
+      var ppto = SICAdapter._presupuestoDelMes(pais, clave, mesDesempeno, fuentes.presupuesto);
+      if (ppto === null || ppto === 0) return; // sin presupuesto en este mes — no agregar
+      vendedoresVistos[clave] = semilla[clave];
+      advertencias.push({
+        tipo: "vendedor_semilla_sin_ventas",
+        detalle: "Vendedor '" + clave + "' (" + semilla[clave] + ") incluido desde catálogo (presupuesto=" + ppto + " en " + mesDesempeno + ") sin ventas reales en este ciclo."
+      });
+    });
 
     // -- Presupuesto: CHANGE REQUEST v1.6 -- lectura DIRECTA del mes
     // calendario de desempeño, sin prorratear entre dos meses. Se guarda
