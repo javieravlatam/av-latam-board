@@ -120,13 +120,12 @@ function setChileCurva(key, btn) {
   const d = CH_MES_DATA[key];
   const nReal = CH_REAL.filter(function(v){return v>0;}).length || 5;
   const pptoAc = acumVal(d.ppto);
-  // Acumulado real: mantiene total anterior si mes=0 (nunca reinicia a cero).
-  // Meses fuera del corte (i >= nReal) → null (sin punto en gráfico).
+  // Acumulado real: plateau después del corte (igual que ac()).
+  // Retornar null solo si aún no hay ventas (no dibujar línea en cero).
   var prevChAc = 0;
   const realAc = d.real.map(function(v, i) {
-    if (i >= nReal) return null;
-    prevChAc += (v > 0 ? v : 0);
-    return prevChAc;
+    if (i < nReal) prevChAc += (v > 0 ? v : 0);
+    return prevChAc > 0 ? prevChAc : null;
   });
   chCurvaChart.data.datasets[0].data = pptoAc;
   chCurvaChart.data.datasets[1].data = realAc;
@@ -154,13 +153,12 @@ function setPeruCurva(key, btn) {
   const d = PE_MES_DATA[key];
   const nReal = PE_REAL.filter(function(v){return v>0;}).length || 4;
   const pptoAc = acumVal(d.ppto);
-  // Acumulado real: mantiene total anterior si mes=0 (nunca reinicia a cero).
-  // Meses fuera del corte (i >= nReal) → null (sin punto en gráfico).
+  // Acumulado real: plateau después del corte (igual que ac()).
+  // Retornar null solo si aún no hay ventas (no dibujar línea en cero).
   var prevPeAc = 0;
   const realAc = d.real.map(function(v, i) {
-    if (i >= nReal) return null;
-    prevPeAc += (v > 0 ? v : 0);
-    return prevPeAc;
+    if (i < nReal) prevPeAc += (v > 0 ? v : 0);
+    return prevPeAc > 0 ? prevPeAc : null;
   });
   peCurvaChart.data.datasets[0].data = pptoAc;
   peCurvaChart.data.datasets[1].data = realAc;
