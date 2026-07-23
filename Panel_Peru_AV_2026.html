@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <script>
@@ -19,18 +19,19 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#080e09;--s1:#0f1a10;--s2:#162118;--s3:#1c2b1e;
-  --blue:#4A9EDB;--blue2:#2980b9;--blue-dim:rgba(74,158,219,0.12);--blue-bdr:rgba(74,158,219,0.25);
-  --green:#7AB648;--amber:#F5A623;--red:#E74C3C;--red2:#C0392B;
-  --text:#e8f0e9;--dim:#8fa892;--muted:#5a7060;
-  --bdr:rgba(74,158,219,0.22);--bdim:rgba(74,158,219,0.08);
-  --gbdr:rgba(122,182,72,0.18);
+  /* AV LATAM BOARD · Light Mode · Azul corporativo #1B4F8A estructural */
+  --bg:#F4F6F9;--s1:#FFFFFF;--s2:#EDF1F7;--s3:#E2E8F0;
+  --blue:#1B4F8A;--blue2:#0d3b66;--blue-dim:rgba(27,79,138,0.07);--blue-bdr:rgba(27,79,138,0.20);
+  --green:#5a8f35;--amber:#C47A0F;--red:#C0392B;--red2:#8B1F14;
+  --text:#1A2332;--dim:#3D5270;--muted:#7A90AA;
+  --bdr:rgba(27,79,138,0.18);--bdim:rgba(27,79,138,0.08);
+  --gbdr:rgba(27,79,138,0.12);
 }
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh}
 
 /* HEADER */
-.hdr{background:linear-gradient(180deg,#0a1520,var(--bg));border-bottom:1px solid var(--bdr);
+.hdr{background:linear-gradient(180deg,rgba(27,79,138,0.06),var(--bg));border-bottom:1px solid var(--bdr);
   padding:14px 28px;display:flex;align-items:center;justify-content:space-between;
   position:sticky;top:0;z-index:100}
 .hdr-l{display:flex;align-items:center;gap:13px}
@@ -626,7 +627,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 /* ── FIN GUARD ──────────────────────────────────────────────────────────── */
 
 
-Chart.defaults.color = '#8fa892';
+Chart.defaults.color = '#7A90AA'; /* light mode axis labels */
 Chart.defaults.font.family = "'DM Mono', monospace";
 Chart.defaults.font.size = 10;
 const G='#7AB648', A='#F5A623', R='#E74C3C', B='#4A9EDB', O='#E67E22';
@@ -640,7 +641,7 @@ new Chart(document.getElementById('cDonut'),{
     datasets:[{
       data:[95.9,4.1],
       backgroundColor:['rgba(245,166,35,0.85)','rgba(26,44,64,0.8)'],
-      borderColor:'#080e09',borderWidth:3
+      borderColor:'#ffffff',borderWidth:3
     }]
   },
   options:{
@@ -726,7 +727,7 @@ new Chart(document.getElementById('cCxC'),{
     datasets:[{
       data:[50.8,10.9,5.1,2.4,30.8],
       backgroundColor:[G,'#5ab648',A,O,R],
-      borderColor:'#080e09',borderWidth:3
+      borderColor:'#ffffff',borderWidth:3
     }]
   },
   options:{

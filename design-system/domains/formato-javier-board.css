@@ -8,10 +8,13 @@
    Cargar DESPUÉS de formato-javier-tokens.css.
    ========================================================================== */
 
+/* Modo oscuro (default): acento verde AV */
 :root {
   --domain-accent: var(--av-green-500);   /* #7AB648 — verde de marca AV */
 }
 
-/* Los bordes del BOARD tienen tinte verde; ya definido en tokens.css como default.
-   Este archivo existe para adherir al patrón de domains y como punto de
-   extensión si se requieren overrides adicionales específicos de BOARD en el futuro. */
+/* Modo claro: azul corporativo AV LATAM como color estructural.
+   Verde AV queda reservado exclusivamente para estados semánticos positivos. */
+[data-theme="light"] {
+  --domain-accent: var(--av-corporate-600);   /* #1B4F8A — azul corporativo AV */
+}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <script>
@@ -23,19 +23,20 @@ function cerrarSesion() {
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #080e09;
-    --surface: #0f1a10;
-    --surface2: #162118;
-    --green: #7AB648;
-    --green-dim: #5a8a35;
-    --amber: #F5A623;
-    --red: #E74C3C;
-    --blue: #4A9EDB;
-    --text: #e8f0e9;
-    --text-dim: #8fa892;
-    --text-muted: #5a7060;
-    --border: rgba(122,182,72,0.18);
-    --border-dim: rgba(122,182,72,0.08);
+    /* AV LATAM BOARD · Light Mode · Dashboard */
+    --bg: #F4F6F9;
+    --surface: #FFFFFF;
+    --surface2: #EDF1F7;
+    --green: #5a8f35;
+    --green-dim: #3d6024;
+    --amber: #C47A0F;
+    --red: #C0392B;
+    --blue: #1B4F8A;
+    --text: #1A2332;
+    --text-dim: #3D5270;
+    --text-muted: #7A90AA;
+    --border: rgba(27,79,138,0.18);
+    --border-dim: rgba(27,79,138,0.08);
   }
   body {
     background: var(--bg);
@@ -50,7 +51,7 @@ function cerrarSesion() {
   .hero {
     padding: 60px 40px 40px;
     text-align: center;
-    background: radial-gradient(ellipse at 50% 0%, rgba(122,182,72,0.08) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 50% 0%, rgba(27,79,138,0.05) 0%, transparent 60%);
     border-bottom: 1px solid var(--border-dim);
   }
   .logo-wrap {
@@ -59,15 +60,15 @@ function cerrarSesion() {
   }
   .logo-mark {
     width: 64px; height: 64px;
-    background: var(--green);
+    background: var(--blue);
     border-radius: 14px;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 32px; color: var(--bg);
-    box-shadow: 0 0 32px rgba(122,182,72,0.25);
+    font-size: 32px; color: #fff;
+    box-shadow: 0 0 32px rgba(27,79,138,0.20);
   }
   .logo-text { text-align: left; }
-  .logo-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 4px; color: var(--green); line-height: 1; }
+  .logo-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 4px; color: var(--blue); line-height: 1; }
   .logo-sub { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 4px; }
 
   .hero-tagline {
@@ -93,7 +94,7 @@ function cerrarSesion() {
   .kpi-b-item::before {
     content: ''; position: absolute;
     top: 0; left: 20%; right: 20%; height: 2px;
-    background: var(--green);
+    background: var(--blue);
   }
   .kpi-b-item.amber::before { background: var(--amber); }
   .kpi-b-item.red::before { background: var(--red); }
@@ -133,14 +134,14 @@ function cerrarSesion() {
   .card::before {
     content: ''; position: absolute;
     top: 0; left: 0; right: 0; height: 3px;
-    background: var(--green);
+    background: var(--blue);
     transform: scaleX(0); transform-origin: left;
     transition: transform 0.3s;
   }
   .card.amber::before { background: var(--amber); }
   .card.blue::before { background: var(--blue); }
   .card.purple::before { background: #9B59B6; }
-  .card:hover { border-color: var(--green); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(122,182,72,0.1); }
+  .card:hover { border-color: var(--blue); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(27,79,138,0.1); }
   .card:hover::before { transform: scaleX(1); }
   .card.amber:hover { border-color: var(--amber); box-shadow: 0 8px 32px rgba(245,166,35,0.1); }
   .card.blue:hover { border-color: var(--blue); box-shadow: 0 8px 32px rgba(74,158,219,0.1); }
@@ -172,15 +173,15 @@ function cerrarSesion() {
   .corte-info { font-size: 11px; color: var(--text-dim); }
   .corte-info strong { color: var(--text); }
   .corte-badge {
-    background: rgba(122,182,72,0.12); border: 1px solid var(--border);
+    background: rgba(27,79,138,0.08); border: 1px solid var(--border);
     border-radius: 6px; padding: 4px 12px;
-    font-family: 'DM Mono', monospace; font-size: 10px; color: var(--green);
+    font-family: 'DM Mono', monospace; font-size: 10px; color: var(--blue);
   }
 
   /* EXECUTIVE CARD */
   .card.executive {
-    background: linear-gradient(135deg, #0f1a10 0%, #1a1408 100%);
-    border-color: rgba(192,160,96,0.35);
+    background: linear-gradient(135deg, #FFFDF5 0%, #FFF8E7 100%);
+    border-color: rgba(192,160,96,0.40);
   }
   .card.executive::before { background: linear-gradient(90deg, #C0A060, #8a6830); }
   .card.executive:hover { border-color: #C0A060; box-shadow: 0 8px 40px rgba(192,160,96,0.15); }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <script>
@@ -16,25 +16,25 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#080e09;--s1:#0f1a10;--s2:#162118;--s3:#1c2b1e;
-  --green:#7AB648;--amber:#F5A623;--red:#E74C3C;--red2:#C0392B;
-  --blue:#4A9EDB;--purple:#9B59B6;
-  --text:#e8f0e9;--dim:#8fa892;--muted:#5a7060;
-  --bdr:rgba(122,182,72,0.18);--bdim:rgba(122,182,72,0.07);
-  --bbdr:rgba(74,158,219,0.22);--bbdim:rgba(74,158,219,0.08);
+  --bg:#F4F6F9;--s1:#FFFFFF;--s2:#EDF1F7;--s3:#E2E8F0;
+  --green:#5a8f35;--amber:#C47A0F;--red:#C0392B;--red2:#8B1F14;
+  --blue:#1B4F8A;--purple:#9B59B6;
+  --text:#1A2332;--dim:#3D5270;--muted:#7A90AA;
+  --bdr:rgba(27,79,138,0.18);--bdim:rgba(27,79,138,0.07);
+  --bbdr:rgba(27,79,138,0.18);--bbdim:rgba(27,79,138,0.07);
 }
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh}
 
 /* HEADER */
-.hdr{background:linear-gradient(180deg,#0c1a0d,var(--bg));border-bottom:1px solid var(--bdr);
+.hdr{background:linear-gradient(180deg,rgba(27,79,138,0.06),var(--bg));border-bottom:1px solid var(--bdr);
   padding:14px 28px;display:flex;align-items:center;justify-content:space-between;
   position:sticky;top:0;z-index:100}
 .hdr-l{display:flex;align-items:center;gap:13px}
-.logo{width:38px;height:38px;background:var(--green);border-radius:8px;
+.logo{width:38px;height:38px;background:var(--blue);border-radius:8px;
   display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue';font-size:16px;color:var(--bg);letter-spacing:0}
-.htitle{font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;color:var(--green)}
+  font-family:'Bebas Neue';font-size:16px;color:#fff;letter-spacing:0}
+.htitle{font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;color:var(--blue)}
 .hsub{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
 .hcorte{font-family:'DM Mono';font-size:10px;color:var(--dim);text-align:right}
 .hcorte b{color:var(--green)}
@@ -70,7 +70,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .country-card.pe{border-color:var(--bbdr)}
 .country-card:hover{transform:translateY(-2px)}
 .country-card.cl:hover{box-shadow:0 8px 32px rgba(122,182,72,0.12)}
-.country-card.pe:hover{box-shadow:0 8px 32px rgba(74,158,219,0.12)}
+.country-card.pe:hover{box-shadow:0 8px 32px rgba(27,79,138,0.10)}
 
 /* Card header */
 .cc-head{padding:18px 22px 14px;display:flex;align-items:center;justify-content:space-between}
@@ -116,7 +116,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .cc-cta.cl{border-color:var(--bdim)}.cc-cta.pe{border-color:var(--bbdim)}
 .cta-btn{font-family:'DM Mono';font-size:10px;letter-spacing:1px;padding:6px 16px;border-radius:6px;font-weight:600}
 .cta-btn.cl{color:var(--green);background:rgba(122,182,72,0.1);border:1px solid rgba(122,182,72,0.3)}
-.cta-btn.pe{color:var(--blue);background:rgba(74,158,219,0.1);border:1px solid rgba(74,158,219,0.3)}
+.cta-btn.pe{color:var(--blue);background:rgba(27,79,138,0.10);border:1px solid rgba(27,79,138,0.20)}
 .cta-hint{font-size:9px;color:var(--muted)}
 
 /* MINI CHART */
@@ -146,7 +146,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .ak-txt b{color:var(--text)}
 .ak-tag{display:inline-block;font-size:8px;font-weight:700;letter-spacing:1px;padding:1px 5px;border-radius:3px;margin-right:4px;vertical-align:middle}
 .ak-tag.cl{background:rgba(122,182,72,0.15);color:var(--green)}
-.ak-tag.pe{background:rgba(74,158,219,0.15);color:var(--blue)}
+.ak-tag.pe{background:rgba(27,79,138,0.12);color:var(--blue)}
 
 /* IEC COMPARE PANEL */
 .iec-cmp{background:var(--s1);border:1px solid var(--bdr);border-radius:11px;padding:16px 18px}
@@ -678,11 +678,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 </div>
 
 <script>
-Chart.defaults.color = '#8fa892';
+Chart.defaults.color = '#7A90AA';
 Chart.defaults.font.family = "'DM Mono', monospace";
 Chart.defaults.font.size = 9;
-const G='#7AB648',A='#F5A623',R='#E74C3C',B='#4A9EDB',G2='#5a8a35',RD='#C0392B';
-const GD='rgba(122,182,72,0.1)',BD='rgba(74,158,219,0.1)';
+const G='#7AB648',A='#F5A623',R='#E74C3C',B='#1B4F8A',G2='#5a8a35',RD='#C0392B';
+const GD='rgba(27,79,138,0.07)',BD='rgba(27,79,138,0.07)';
 
 // Mini chart Chile — barras mensuales ppto vs real
 new Chart(document.getElementById('cChileMini'),{
@@ -690,7 +690,7 @@ new Chart(document.getElementById('cChileMini'),{
   data:{
     labels:['Ene','Feb','Mar','Abr*'],
     datasets:[
-      {label:'Ppto',data:[83558,41602,42000,46431],backgroundColor:'rgba(255,255,255,0.06)',borderRadius:2,borderColor:'rgba(255,255,255,0.1)',borderWidth:1},
+      {label:'Ppto',data:[83558,41602,42000,46431],backgroundColor:'rgba(27,79,138,0.07)',borderRadius:2,borderColor:'rgba(27,79,138,0.12)',borderWidth:1},
       {label:'Real',data:[88231,35652,52371,14599],backgroundColor:[G,R,G,A],borderRadius:2}
     ]
   },
@@ -710,7 +710,7 @@ new Chart(document.getElementById('cPeruMini'),{
   data:{
     labels:['Ene','Feb','Mar','Abr*'],
     datasets:[
-      {label:'Ppto',data:[51674,58489,103222,71299],backgroundColor:'rgba(74,158,219,0.12)',borderRadius:2,borderColor:'rgba(74,158,219,0.2)',borderWidth:1},
+      {label:'Ppto',data:[51674,58489,103222,71299],backgroundColor:'rgba(27,79,138,0.10)',borderRadius:2,borderColor:'rgba(27,79,138,0.16)',borderWidth:1},
       {label:'Real',data:[73511,39409,91616,24722],backgroundColor:[G,R,A,A],borderRadius:2}
     ]
   },

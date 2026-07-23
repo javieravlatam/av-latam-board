@@ -54,6 +54,7 @@
   /* Corporativo (SIC, CRM, Finanzas) */
   --av-corporate-900: #082742;
   --av-corporate-700: #0d3b66;
+  --av-corporate-600: #1B4F8A;   /* AV LATAM azul corporativo oficial */
   --av-corporate-500: #4a7fb5;
   --av-corporate-100: #eef3f8;
 
@@ -118,29 +119,34 @@
 
 
 /* ==========================================================================
-   CAPA 3 · OVERRIDE MODO CLARO
-   Aplicar a [data-theme="light"] en el <html> o <body> del panel.
-   Uso: SIC, CRM, Finanzas, RR.HH., Compras, Logística.
+   CAPA 3 · OVERRIDE MODO CLARO — AV LATAM BOARD
+   Aplicar con data-theme="light" en el <html> de cada panel.
+   Paleta: azul corporativo #1B4F8A estructural · verde AV semántico.
    ========================================================================== */
 [data-theme="light"] {
-  --bg:        #f7f8fa;
-  --surface:   #ffffff;
-  --surface-2: var(--av-corporate-100);
-  --surface-3: #e4e7eb;
+  /* Fondos */
+  --bg:        #F4F6F9;   /* gris azulado muy sutil — fondo general */
+  --surface:   #FFFFFF;   /* blanco puro — tarjetas y paneles */
+  --surface-2: #EDF1F7;   /* superficies secundarias */
+  --surface-3: #E2E8F0;   /* strips, fondos de tabla, margen strip */
 
-  --border:     #e4e7eb;
-  --border-dim: #f0f2f5;
+  /* Bordes */
+  --border:     #D4DCE8;  /* azul-gris sutil */
+  --border-dim: #EAF0F8;  /* muy sutil para separadores */
 
-  --text:       #1a2332;
-  --text-dim:   var(--av-corporate-700);
-  --text-muted: #5b6470;
+  /* Texto */
+  --text:       #1A2332;  /* azul noche — texto principal */
+  --text-dim:   #3D5270;  /* azul medio — texto secundario */
+  --text-muted: #7A90AA;  /* azul gris — labels, ejes, metadatos */
 
-  --accent:        var(--av-corporate-700);
-  --domain-accent: var(--av-corporate-700);
+  /* Identidad corporativa AV LATAM */
+  --accent:        var(--av-corporate-600);   /* #1B4F8A */
+  --domain-accent: var(--av-corporate-600);   /* #1B4F8A */
 
-  --positive:    #1e7d4a;
-  --warning:     #b8791a;
-  --danger:      #a83232;
-  --danger-dark: #7a1e13;
-  --info:        var(--av-corporate-500);
+  /* Estados semánticos — ajustados para contraste sobre fondo claro */
+  --positive:    #5a8f35;  /* verde AV oscuro — AA sobre blanco */
+  --warning:     #C47A0F;  /* ámbar oscuro */
+  --danger:      #C0392B;  /* rojo oscuro */
+  --danger-dark: #8B1F14;
+  --info:        var(--av-corporate-600);   /* #1B4F8A */
 }

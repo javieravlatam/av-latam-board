@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,23 +10,23 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:         #080e09;
-  --surface:    #0f1a10;
-  --surface2:   #162118;
-  --surface3:   #1c2a1e;
-  --gold:       #C0A060;
-  --gold-dim:   #8a7040;
-  --gold-glow:  rgba(192,160,96,0.15);
-  --gold-border:rgba(192,160,96,0.25);
-  --green:      #7AB648;
-  --amber:      #F5A623;
-  --red:        #E74C3C;
-  --blue:       #4A9EDB;
-  --text:       #e8f0e9;
-  --text-dim:   #8fa892;
-  --text-muted: #5a7060;
-  --border:     rgba(192,160,96,0.18);
-  --border-dim: rgba(192,160,96,0.08);
+  --bg:         #F4F6F9;
+  --surface:    #FFFFFF;
+  --surface2:   #EDF1F7;
+  --surface3:   #E2E8F0;
+  --gold:       #1B4F8A;
+  --gold-dim:   #0d3b66;
+  --gold-glow:  rgba(27,79,138,0.12);
+  --gold-border:rgba(27,79,138,0.20);
+  --green:      #5a8f35;
+  --amber:      #C47A0F;
+  --red:        #C0392B;
+  --blue:       #1B4F8A;
+  --text:       #1A2332;
+  --text-dim:   #3D5270;
+  --text-muted: #7A90AA;
+  --border:     rgba(27,79,138,0.18);
+  --border-dim: rgba(27,79,138,0.08);
 }
 
 body {
@@ -41,9 +41,10 @@ body {
 /* ═══════════════════════════════════════
    AUTH OVERLAY
 ═══════════════════════════════════════ */
+
 #auth-overlay {
   position: fixed; inset: 0; z-index: 9999;
-  background: #080e09;
+  background: var(--bg);
   display: flex; align-items: center; justify-content: center;
   flex-direction: column;
 }
@@ -53,18 +54,18 @@ body {
   border-radius: 20px;
   padding: 48px 56px;
   text-align: center;
-  box-shadow: 0 0 80px rgba(192,160,96,0.08), 0 0 20px rgba(0,0,0,0.8);
+  box-shadow: 0 0 80px rgba(27,79,138,0.07), 0 0 20px rgba(27,79,138,0.10);
   max-width: 360px; width: 90%;
 }
 .auth-logo {
   width: 72px; height: 72px;
-  background: linear-gradient(135deg, var(--gold) 0%, #8a6830 100%);
+  background: var(--gold);
   border-radius: 18px;
   display: flex; align-items: center; justify-content: center;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 34px; color: #080e09;
+  font-size: 34px; color: #fff;
   margin: 0 auto 20px;
-  box-shadow: 0 0 32px rgba(192,160,96,0.3);
+  box-shadow: 0 0 32px rgba(27,79,138,0.20);
 }
 .auth-title {
   font-family: 'Bebas Neue', sans-serif;
@@ -94,11 +95,11 @@ body {
 .auth-input:focus { border-color: var(--gold); }
 .auth-btn {
   width: 100%; padding: 13px;
-  background: linear-gradient(135deg, var(--gold) 0%, #8a6830 100%);
+  background: var(--gold);
   border: none; border-radius: 10px;
   font-family: 'Bebas Neue', sans-serif;
   font-size: 18px; letter-spacing: 3px;
-  color: #080e09; cursor: pointer;
+  color: #fff; cursor: pointer;
   transition: opacity 0.2s, transform 0.1s;
 }
 .auth-btn:hover { opacity: 0.9; }
@@ -122,7 +123,7 @@ body {
 /* HEADER */
 .ex-header {
   padding: 20px 32px;
-  background: linear-gradient(90deg, var(--surface) 0%, rgba(15,26,16,0.8) 100%);
+  background: linear-gradient(180deg, rgba(27,79,138,0.06) 0%, var(--bg) 100%);
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
   position: sticky; top: 0; z-index: 100;
@@ -131,12 +132,12 @@ body {
 .ex-logo-wrap { display: flex; align-items: center; gap: 14px; }
 .ex-logo-mark {
   width: 44px; height: 44px;
-  background: linear-gradient(135deg, var(--gold) 0%, #8a6830 100%);
+  background: var(--gold);
   border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px; color: #080e09;
-  box-shadow: 0 0 16px rgba(192,160,96,0.25);
+  font-size: 20px; color: #fff;
+  box-shadow: 0 0 16px rgba(27,79,138,0.20);
   flex-shrink: 0;
 }
 .ex-logo-text { line-height: 1; }
@@ -150,7 +151,7 @@ body {
 }
 .ex-header-right { display: flex; align-items: center; gap: 16px; }
 .ex-badge {
-  background: rgba(192,160,96,0.1); border: 1px solid var(--gold-border);
+  background: rgba(27,79,138,0.08); border: 1px solid var(--gold-border);
   border-radius: 6px; padding: 4px 12px;
   font-size: 9px; color: var(--gold);
   text-transform: uppercase; letter-spacing: 1.5px;
@@ -159,12 +160,12 @@ body {
   font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted);
 }
 .btn-ex-logout {
-  background: transparent; border: 1px solid rgba(192,160,96,0.3);
+  background: transparent; border: 1px solid rgba(27,79,138,0.20);
   border-radius: 6px; padding: 5px 12px; font-size: 11px;
   color: var(--gold-dim); cursor: pointer;
   font-family: 'DM Sans', sans-serif; transition: all .2s;
 }
-.btn-ex-logout:hover { background: rgba(192,160,96,0.08); color: var(--gold); }
+.btn-ex-logout:hover { background: rgba(27,79,138,0.07); color: var(--gold); }
 
 /* TABS */
 .ex-tabs {
@@ -193,7 +194,7 @@ body {
   margin-right: 6px; font-weight: 600; color: var(--text-muted);
 }
 .ex-tab.active .ex-tab-num {
-  background: rgba(192,160,96,0.2); color: var(--gold);
+  background: rgba(27,79,138,0.16); color: var(--gold);
 }
 
 /* MODULE PANELS */
@@ -279,7 +280,7 @@ thead th {
 }
 tbody tr { border-bottom: 1px solid var(--border-dim); transition: background 0.15s; }
 tbody tr:last-child { border-bottom: none; }
-tbody tr:hover { background: rgba(192,160,96,0.04); }
+tbody tr:hover { background: rgba(27,79,138,0.04); }
 tbody td { padding: 12px 16px; font-size: 12px; }
 .td-mono { font-family: 'DM Mono', monospace; font-size: 11px; }
 .td-right { text-align: right; }
@@ -296,7 +297,7 @@ tbody td { padding: 12px 16px; font-size: 12px; }
 .badge-amber  { background: rgba(245,166,35,0.15); color: var(--amber); border: 1px solid rgba(245,166,35,0.3); }
 .badge-green  { background: rgba(122,182,72,0.12); color: var(--green); border: 1px solid rgba(122,182,72,0.25); }
 .badge-gold   { background: rgba(192,160,96,0.12); color: var(--gold); border: 1px solid var(--gold-border); }
-.badge-blue   { background: rgba(74,158,219,0.12); color: var(--blue); border: 1px solid rgba(74,158,219,0.3); }
+.badge-blue   { background: rgba(27,79,138,0.10); color: var(--blue); border: 1px solid rgba(27,79,138,0.20); }
 .badge-muted  { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border-dim); }
 
 /* IEC BAR */
@@ -341,7 +342,7 @@ tbody td { padding: 12px 16px; font-size: 12px; }
 }
 .insight-card.priority-alta  { border-color: rgba(231,76,60,0.35); }
 .insight-card.priority-media { border-color: rgba(245,166,35,0.3); }
-.insight-card.priority-baja  { border-color: rgba(192,160,96,0.2); }
+.insight-card.priority-baja  { border-color: rgba(27,79,138,0.16); }
 .insight-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .insight-num {
   font-family: 'Bebas Neue', sans-serif; font-size: 28px;
@@ -1061,7 +1062,7 @@ function renderEvolChart(cv) {
           label: 'Ppto (CLP M)',
           data: ppto,
           type: 'line',
-          borderColor: 'rgba(192,160,96,0.6)',
+          borderColor: 'rgba(27,79,138,0.55)',
           backgroundColor: 'transparent',
           pointBackgroundColor: 'var(--gold)',
           pointRadius: 4, tension: 0.3, borderWidth: 1.5
@@ -1071,12 +1072,12 @@ function renderEvolChart(cv) {
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: {
-        legend: { labels: { color: '#8fa892', font: { size: 10 }, boxWidth: 12 } }
+        legend: { labels: { color: '#7A90AA', font: { size: 10 }, boxWidth: 12 } }
       },
       scales: {
         x: { ticks: { color: '#5a7060', font: { size: 10 } }, grid: { display: false } },
         y: { ticks: { color: '#5a7060', font: { size: 10 }, callback: function(v){ return v+'M'; } },
-             grid: { color: 'rgba(192,160,96,0.06)' } }
+             grid: { color: 'rgba(27,79,138,0.07)' } }
       }
     }
   };

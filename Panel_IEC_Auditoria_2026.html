@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>IEC Auditoria · AV LATAM 2026</title>
 <style>
 :root{
-  --bg:#0e0d09;--s1:#161410;--s2:#1c1a13;--s3:#23201a;
-  --border:rgba(255,255,255,0.07);--bdim:rgba(255,255,255,0.04);
-  --text:#e8dfc8;--dim:#8a8070;--muted:#5a5448;
-  --green:#7ab648;--blue:#4a9edb;--amber:#f5a623;--red:#e74c3c;--orange:#e67e22;
+  --bg:#F4F6F9;--s1:#FFFFFF;--s2:#EDF1F7;--s3:#E2E8F0;
+  --border:rgba(27,79,138,0.12);--bdim:rgba(27,79,138,0.07);
+  --text:#1A2332;--dim:#3D5270;--muted:#7A90AA;
+  --green:#7ab648;--blue:#1B4F8A;--amber:#f5a623;--red:#e74c3c;--orange:#e67e22;
   --font:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -51,7 +51,7 @@ select:focus{outline:none;border-color:var(--amber)}
 .fs-low{background:rgba(230,126,34,0.15);color:var(--orange);border-color:rgba(230,126,34,0.3)}
 .fs-ok{background:rgba(245,166,35,0.15);color:var(--amber);border-color:rgba(245,166,35,0.3)}
 .fs-good{background:rgba(122,182,72,0.15);color:var(--green);border-color:rgba(122,182,72,0.3)}
-.fs-exc{background:rgba(74,158,219,0.15);color:var(--blue);border-color:rgba(74,158,219,0.3)}
+.fs-exc{background:rgba(27,79,138,0.12);color:var(--blue);border-color:rgba(27,79,138,0.20)}
 .fs-item.active-factor{box-shadow:0 0 0 2px var(--amber);transform:scale(1.08)}
 /* TABS PANEL */
 .tab-nav{display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 20px;background:var(--s1);margin-top:4px}
@@ -71,7 +71,7 @@ thead tr{background:var(--s2);border-bottom:1px solid var(--border)}
 thead th{padding:9px 10px;text-align:left;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;white-space:nowrap}
 tbody tr{border-bottom:1px solid var(--bdim);transition:background 0.1s;cursor:pointer}
 tbody tr:last-child{border-bottom:none}
-tbody tr:hover{background:rgba(255,255,255,0.03)}
+tbody tr:hover{background:rgba(27,79,138,0.04)}
 tbody tr.selected{background:rgba(245,166,35,0.08);border-left:2px solid var(--amber)}
 td{padding:8px 10px;vertical-align:middle}
 .r{text-align:right}.c{text-align:center}
@@ -82,7 +82,7 @@ td{padding:8px 10px;vertical-align:middle}
 .b-low{background:rgba(230,126,34,0.15);color:var(--orange);border:1px solid rgba(230,126,34,0.3)}
 .b-ok{background:rgba(245,166,35,0.15);color:var(--amber);border:1px solid rgba(245,166,35,0.3)}
 .b-good{background:rgba(122,182,72,0.15);color:var(--green);border:1px solid rgba(122,182,72,0.3)}
-.b-exc{background:rgba(74,158,219,0.15);color:var(--blue);border:1px solid rgba(74,158,219,0.3)}
+.b-exc{background:rgba(27,79,138,0.12);color:var(--blue);border:1px solid rgba(27,79,138,0.20)}
 .b-na{background:var(--s3);color:var(--muted);border:1px solid var(--bdim)}
 .b-si{background:rgba(122,182,72,0.12);color:var(--green);border:1px solid rgba(122,182,72,0.25)}
 .b-no{background:rgba(231,76,60,0.12);color:var(--red);border:1px solid rgba(231,76,60,0.25)}
@@ -128,8 +128,8 @@ footer{text-align:center;padding:16px;font-size:9px;color:var(--muted);border-to
 .rec-crit{background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.25);color:#e8c8c8}
 .rec-alerta{background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.2);color:#e8d8b0}
 .rec-ok{background:rgba(122,182,72,0.07);border:1px solid rgba(122,182,72,0.2);color:#c8e0b0}
-.rec-oportunidad{background:rgba(74,158,219,0.07);border:1px solid rgba(74,158,219,0.2);color:#b0d0f0}
-.sim-box{background:rgba(74,158,219,0.05);border:1px solid rgba(74,158,219,0.18);border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.rec-oportunidad{background:rgba(27,79,138,0.06);border:1px solid rgba(27,79,138,0.16);color:#b0d0f0}
+.sim-box{background:rgba(27,79,138,0.05);border:1px solid rgba(27,79,138,0.15);border-radius:10px;padding:16px 18px;margin-bottom:16px}
 .sim-val{font-size:26px;font-weight:900;font-family:var(--mono);line-height:1}
 /* RESPONSIVE */
 @media(max-width:900px){.kpi-strip{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:1fr}.ic-summary{grid-template-columns:repeat(3,1fr)}}
@@ -313,7 +313,7 @@ footer{text-align:center;padding:16px;font-size:9px;color:var(--muted);border-to
 <!-- TAB: PRODUCTOS -->
 <div class="tab-panel main" id="tab-productos">
   <div class="sec-title">IEC por Producto</div>
-  <div style="font-size:11px;color:var(--blue);margin-bottom:10px;padding:6px 10px;background:rgba(74,158,219,0.07);border-radius:6px;border-left:3px solid var(--blue)">
+  <div style="font-size:11px;color:var(--blue);margin-bottom:10px;padding:6px 10px;background:rgba(27,79,138,0.06);border-radius:6px;border-left:3px solid var(--blue)">
     👆 Haz click en un producto para ver el detalle transaccional
   </div>
   <div class="tbl-wrap">
@@ -530,7 +530,7 @@ function getBannerStyle(iec){
   if(iec<0.85) return 'background:rgba(230,126,34,0.08);border:1px solid rgba(230,126,34,0.3)';
   if(iec<0.92) return 'background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.3)';
   if(iec<0.95) return 'background:rgba(122,182,72,0.07);border:1px solid rgba(122,182,72,0.3)';
-  return 'background:rgba(74,158,219,0.07);border:1px solid rgba(74,158,219,0.3)';
+  return 'background:rgba(27,79,138,0.06);border:1px solid rgba(27,79,138,0.20)';
 }
 
 // ============================================================
@@ -888,7 +888,7 @@ function renderHeatmap(){
       const k=v+'||'+p;
       if(cell[k]&&cell[k].ve>0){
         const iec=cell[k].sp/cell[k].ve;
-        const bg=iec>=0.95?'rgba(74,158,219,0.4)':iec>=0.92?'rgba(122,182,72,0.35)':iec>=0.85?'rgba(245,166,35,0.3)':iec>=0.7?'rgba(230,126,34,0.3)':'rgba(231,76,60,0.3)';
+        const bg=iec>=0.95?'rgba(27,79,138,0.35)':iec>=0.92?'rgba(122,182,72,0.35)':iec>=0.85?'rgba(245,166,35,0.3)':iec>=0.7?'rgba(230,126,34,0.3)':'rgba(231,76,60,0.3)';
         const tc=getIecColor(iec);
         html+=`<td><span class="heat-cell" style="background:${bg};color:${tc}">${fmtPct(iec)}</span></td>`;
       } else { html+='<td><span style="color:var(--bdim)">—</span></td>'; }

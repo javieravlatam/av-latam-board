@@ -1,5 +1,30 @@
 
 ======================================================================
+CORTE: 2026-07-23 — VALIDACIÓN FINAL FORMATO JAVIER LIGHT MODE
+TIPO: Validación pre-commit (NO se hizo git add / commit / push)
+PANELES VALIDADOS: 19/19
+
+BUGS CORREGIDOS DURANTE VALIDACIÓN:
+  1. Panel_Jefes_Grupo_AV_2026.html — borderColor:'#1a170f' (oscuro) en 2 donuts CxC → corregido a '#ffffff'
+  2. Panel_Chile_AV_2026.html — const G=G (redeclaración de var G) → corregido a const G2=GD,A=W,RD,O (sin redeclarar G,R,B)
+  3. Panel_Chile_AV_2026.html — GD grid dim en rgba(122,182,72) → actualizado a rgba(27,79,138,0.07) blue light mode
+  4. Panel_Chile_AV_2026.html — rgba(255,255,255,...) en 3 series de chart (ppto bars, curva) → blue equivalents
+  5. Executive_Board_View_AV_Latam_2026.html — rgba(255,255,255,0.2/0.4) en Ppto bar + Meta line → blue equivalents
+
+RESULTADO VALIDACIÓN:
+  V1 AVBOARD: 19/19 PASS — avboard_data.js intacto (62098 bytes, md5: 0f8aa0f41729b78fc49e069013a98736)
+  V2 JS Sintaxis: 19/19 PASS — cero errores de sintaxis
+  V3 Chart.js: 19/19 PASS — sin grids verdes, tooltips oscuros, ni donuts con borde oscuro
+  V4 Navegación: PASS — todos los links inter-panel resuelven
+  V5 Visual: PASS — data-theme=light en 19/19; sin residuos de bg oscuro
+  V6 Repo: PASS — solo HTML+CSS+logs modificados; avboard_data.js, avboard_clientes.js, update_avboard.py, ppto_libro_base.py INTACTOS
+  git diff --check: 0 errores de whitespace
+  Restore hash: ed8513916bdf949001745da66d4de8dac9648bcf
+
+NOTA: Panel_Clientes y Dashboard_Comercial sin AVBOARD guard banner — condición PRE-EXISTENTE, no introducida por la migración.
+ESTADO: LISTO PARA COMMIT. Esperando autorización de Javier.
+
+======================================================================
 CORTE: 2026-05-18 22:50
 ARCHIVOS PROCESADOS:
   - Libro de Ventas 18-05-2026.xlsx
@@ -1515,3 +1540,68 @@ MÉTRICAS:
 
 PENDIENTE: validación visual en navegador + commit/push con aprobación de Javier
 NO MODIFICADO: avboard_data.js, archivos DS, otros paneles
+
+================================================================================
+FECHA: 2026-07-23
+OPERACIÓN: MIGRACIÓN VISUAL COMPLETA → FORMATO JAVIER LIGHT MODE
+================================================================================
+
+ALCANCE:
+  19 paneles HTML migrados a light mode FORMATO JAVIER v1.1
+
+ARCHIVOS MODIFICADOS:
+  Design System:
+    - design-system/formato-javier-tokens.css (tokens CAPA 3 light mode)
+    - design-system/domains/formato-javier-board.css (--domain-accent blue en light)
+
+  Paneles (19/19):
+    Panel_Chile_AV_2026.html ✓
+    Panel_Jefes_Chile_2026.html ✓
+    Panel_Peru_AV_2026.html ✓
+    Panel_Ecuador_AV_2026.html ✓
+    Panel_General_AV_2026.html ✓
+    dashboard.html ✓
+    index.html ✓
+    Panel_CxC_AV_Latam_2026.html ✓
+    Panel_Presupuesto_AV_2026.html ✓
+    Panel_Productos_AV_2026.html ✓
+    Panel_Rentabilidad_AV_2026.html ✓
+    Panel_Clientes_AV_2026.html ✓
+    Executive_Board_View_AV_Latam_2026.html ✓
+    Executive_Intelligence_2026.html ✓
+    Panel_Jefes_Peru_2026.html ✓
+    Panel_Jefes_Grupo_AV_2026.html ✓
+    Panel_Jefes_Index.html ✓
+    Panel_IEC_Auditoria_2026.html ✓
+    Dashboard_Comercial_AV_Latam_2026.html ✓
+
+CAMBIOS APLICADOS POR PANEL:
+  1. data-theme="light" en tag <html>
+  2. Variables :root {} actualizadas a paleta light mode
+     --bg: #F4F6F9 | --surface: #FFFFFF | --surface2: #EDF1F7
+     --blue: #1B4F8A | --green: #5a8f35 | --text: #1A2332
+  3. Header gradient: dark green → rgba(27,79,138,0.06)
+  4. Logo/título estructural: verde/ámbar/oro → azul corporativo #1B4F8A
+  5. Chart.defaults.color: '#8fa892'/'#8a8070' → '#7A90AA'
+  6. borderColor donut/pie charts: dark bg color → '#ffffff'
+  7. Constantes JS de chart grid: rgba(122,182,72,...) → rgba(27,79,138,...)
+  8. rgba(255,255,255,...) overlays: → rgba(0,0,0,...) o rgba(27,79,138,...)
+  9. Colores semánticos (verde=positivo, ámbar=alerta, rojo=negativo): PRESERVADOS
+  10. avboard_data.js: NO MODIFICADO (62098 bytes, intacto)
+
+VERIFICACIÓN FINAL:
+  ✓ 19/19 paneles con data-theme="light"
+  ✓ 0 paneles con --bg oscuro residual
+  ✓ 0 borderColor de charts con valores oscuros
+  ✓ Chart.defaults.color = '#7A90AA' en todos los paneles
+  ✓ avboard_data.js sin cambios
+  ✓ 21 archivos modificados, 833 ins / 736 del
+
+PENDIENTE:
+  - Commit y push al repo (instrucciones abajo)
+  - QA visual en navegador post-push
+
+INSTRUCCIONES COMMIT:
+  git add -A
+  git commit -m "feat: migración visual completa → FORMATO JAVIER light mode (19 paneles)"
+  git push origin main

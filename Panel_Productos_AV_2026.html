@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <script>
@@ -19,22 +19,22 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #080e09;
-    --surface: #0f1a10;
-    --surface2: #162118;
-    --surface3: #1c2b1e;
-    --green: #7AB648;
-    --green-dim: #5a8a35;
-    --green-glow: rgba(122,182,72,0.12);
-    --amber: #F5A623;
-    --red: #E74C3C;
-    --red-dark: #C0392B;
-    --blue: #4A9EDB;
-    --text: #e8f0e9;
-    --text-dim: #8fa892;
-    --text-muted: #5a7060;
-    --border: rgba(122,182,72,0.18);
-    --border-dim: rgba(122,182,72,0.08);
+    --bg: #F4F6F9;
+    --surface: #FFFFFF;
+    --surface2: #EDF1F7;
+    --surface3: #E2E8F0;
+    --green: #5a8f35;
+    --green-dim: #3d6024;
+    --green-glow: rgba(90,143,53,0.10);
+    --amber: #C47A0F;
+    --red: #C0392B;
+    --red-dark: #8B1F14;
+    --blue: #1B4F8A;
+    --text: #1A2332;
+    --text-dim: #3D5270;
+    --text-muted: #7A90AA;
+    --border: rgba(27,79,138,0.18);
+    --border-dim: rgba(27,79,138,0.08);
   }
   body {
     background: var(--bg);
@@ -47,7 +47,7 @@
 
   /* ── HEADER ── */
   .header {
-    background: linear-gradient(180deg, #0c1a0d 0%, var(--bg) 100%);
+    background: linear-gradient(180deg, rgba(27,79,138,0.06) 0%, var(--bg) 100%);
     border-bottom: 1px solid var(--border);
     padding: 18px 32px;
     display: flex; align-items: center; justify-content: space-between;
@@ -55,10 +55,10 @@
     backdrop-filter: blur(12px);
   }
   .header-left { display: flex; align-items: center; gap: 16px; }
-  .logo-mark { width: 38px; height: 38px; background: var(--green); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--bg); }
-  .header-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--green); }
+  .logo-mark { width: 38px; height: 38px; background: var(--blue); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #fff; }
+  .header-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--blue); }
   .header-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
-  .corte-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--green); text-align: right; }
+  .corte-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--blue); text-align: right; }
   .corte-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
   /* ── PAGE ── */
@@ -133,7 +133,7 @@
   .chart-box-lg { position: relative; height: 300px; }
 
   /* ── SECTION HEADER ── */
-  .section-h { font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 3px; color: var(--green); border-left: 3px solid var(--green); padding-left: 10px; margin: 24px 0 14px; }
+  .section-h { font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 3px; color: var(--blue); border-left: 3px solid var(--blue); padding-left: 10px; margin: 24px 0 14px; }
 
   /* ── ALERT BOX ── */
   .alert-box {
@@ -977,7 +977,7 @@
 })();
 /* ── FIN GUARD ──────────────────────────────────────────────────────────── */
 
-Chart.defaults.color = '#8fa892';
+Chart.defaults.color = '#7A90AA';
 Chart.defaults.font.family = "'DM Mono', monospace";
 Chart.defaults.font.size = 10;
 
@@ -987,8 +987,8 @@ const GD  = '#5a8a35';
 const A   = '#F5A623';
 const R   = '#E74C3C';
 const B   = '#4A9EDB';
-const BDR = 'rgba(122,182,72,0.08)';
-const TXT = '#8fa892';
+const BDR = 'rgba(27,79,138,0.08)';
+const TXT = '#7A90AA';
 
 /* ── Opciones comunes de ejes ── */
 const axisOpts = {
@@ -1392,7 +1392,7 @@ function cerrarSesion() {
         datasets: [{
           data: [buckets.EXCELENTE.v, buckets.SANO.v, buckets.ALERTA.v, critInviableV, buckets.NEG.v, ventasSC_CL],
           backgroundColor: [G, '#3a8a5a', A, '#E67E22', R, '#3a5a42'],
-          borderColor: '#080e09',
+          borderColor: '#ffffff',
           borderWidth: 3,
           hoverOffset: 6
         }]
@@ -1456,7 +1456,7 @@ function cerrarSesion() {
         datasets: [{
           data: peData,
           backgroundColor: peColors,
-          borderColor: '#080e09',
+          borderColor: '#ffffff',
           borderWidth: 3,
           hoverOffset: 6
         }]
