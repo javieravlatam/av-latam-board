@@ -171,84 +171,80 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     <a href="Panel_Chile_AV_2026.html" class="hlink">🇨🇱 Chile</a>
     <a href="Panel_Peru_AV_2026.html" class="hlink">🇵🇪 Perú</a>
     <a href="Panel_Ecuador_AV_2026.html" class="hlink">🇪🇨 Ecuador</a>
-    <div class="hchip" id="corte-chip">Corte: CL <strong>22/03</strong> · PE <strong>20/03</strong></div>
+    <div class="hchip" id="corte-chip">Cargando cortes…</div>
   </div>
 </div>
 
 <div class="page">
 
 <!-- ═══ BLOQUE 1: KPIs EJECUTIVOS ═══ -->
-<div class="slabel">KPIs Ejecutivos · Grupo LATAM · T1 2026</div>
+<div class="slabel" id="kpi-slabel">KPIs Ejecutivos · Grupo LATAM · 2026</div>
 <div class="g5">
   <div class="kpi" style="--kac:#5c2d9a;">
     <div class="klbl">Ventas Grupo YTD</div>
-    <div class="kval" style="color:#5c2d9a;" id="kpi-grupo-ytd">USD 350K</div>
-    <div class="ksub" id="kpi-grupo-sub">CL + PE · Al 22/03/2026</div>
+    <div class="kval" style="color:#5c2d9a;" id="kpi-grupo-ytd">—</div>
+    <div class="ksub" id="kpi-grupo-sub">CL + PE · Cargando…</div>
     <div class="kbadge kb-p">2 países activos</div>
   </div>
   <div class="kpi" style="--kac:#5a8f35;">
-    <div class="klbl">Margen Bruto Grupo</div>
-    <div class="kval" style="color:#5a8f35;">82.5%</div>
-    <div class="ksub">Promedio ponderado T1</div>
-    <div class="kbadge kb-g">↑ Tendencia positiva</div>
-  </div>
-  <div class="kpi" style="--kac:#5a8f35;">
     <div class="klbl">Cumplimiento Grupo</div>
-    <div class="kval" style="color:#5a8f35;" id="kpi-cumpl-val">92.1%</div>
-    <div class="ksub" id="kpi-cumpl-sub">vs ppto T1 USD ~380K</div>
-    <div class="kbadge kb-a">Chile ✅ · Perú 81%</div>
+    <div class="kval" id="kpi-cumpl-val" style="color:#5a8f35;">—</div>
+    <div class="ksub" id="kpi-cumpl-sub">vs presupuesto acumulado</div>
+    <div class="kbadge" id="kpi-cumpl-badge" style="background:rgba(90,143,53,.1);color:var(--green);">CL ✅ · PE cargando</div>
+  </div>
+  <div class="kpi" style="--kac:#1B4F8A;">
+    <div class="klbl">Chile vs Presupuesto</div>
+    <div class="kval" style="color:#1B4F8A;" id="kpi-cl-cumpl">—</div>
+    <div class="ksub" id="kpi-cl-sub">Cargando…</div>
+    <div class="kbadge" id="kpi-cl-badge" class="kb-g">Cargando…</div>
   </div>
   <div class="kpi" style="--kac:#C47A0F;">
-    <div class="klbl">CxC Total Grupo</div>
-    <div class="kval" style="color:#C47A0F;">CLP 37.4M</div>
-    <div class="ksub">66% vencida · Solo Chile activa</div>
-    <div class="kbadge kb-a">Gestión Q2 urgente</div>
+    <div class="klbl">CxC Total Chile</div>
+    <div class="kval" style="color:#C47A0F;" id="kpi-cxc-val">—</div>
+    <div class="ksub" id="kpi-cxc-sub">Cargando…</div>
+    <div class="kbadge" id="kpi-cxc-badge" class="kb-a">Solo Chile activa</div>
   </div>
   <div class="kpi" style="--kac:#C0392B;">
     <div class="klbl">RTCs en Alerta</div>
-    <div class="kval" style="color:#C0392B;">4</div>
-    <div class="ksub">Veverka · Infante · Val. · Gon.</div>
-    <div class="kbadge kb-r">Plan Q2 requerido</div>
+    <div class="kval" style="color:#C0392B;" id="kpi-rtc-alerta">—</div>
+    <div class="ksub" id="kpi-rtc-sub">Cargando…</div>
+    <div class="kbadge kb-r">Plan Q3 requerido</div>
   </div>
 </div>
 
 <!-- ═══ BLOQUE 2: COMPARATIVO POR PAÍS ═══ -->
-<div class="slabel">Comparativo por País · T1 2026</div>
+<div class="slabel" id="pais-slabel">Comparativo por País · 2026</div>
 <div class="g3">
 
   <!-- Chile -->
   <div class="cc cc-cl">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-      <div><div class="cc-name" style="color:var(--cl);">🇨🇱 Chile</div><div style="font-size:11px;color:var(--muted);">Corte 22/03/2026</div></div>
-      <span class="tag tg">100.7% ✅</span>
+      <div><div class="cc-name" style="color:var(--cl);">🇨🇱 Chile</div><div style="font-size:11px;color:var(--muted);" id="cl-corte">Cargando…</div></div>
+      <span class="tag tg" id="cl-tag">—</span>
     </div>
-    <div class="cc-val" style="color:var(--cl);">CLP 168.3M</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">≈ USD 177K · TC 950 CLP/USD</div>
-    <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green);"></div></div><div class="ppct vg">104.6%</div></div>
-    <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:83.3%;background:var(--amber);"></div></div><div class="ppct va">83.3%</div></div>
-    <div class="prow"><div class="plbl">Marzo</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green);"></div></div><div class="ppct vg">101.8%</div></div>
+    <div class="cc-val" style="color:var(--cl);" id="cl-ytd">—</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;" id="cl-ytd-sub">—</div>
+    <div id="cl-bars"><!-- barras mensuales inyectadas por JS --></div>
     <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(27,79,138,.15);">
-      <div class="stat-row"><span class="stat-lbl">Margen T1</span><span class="stat-val vg">73.8%</span></div>
-      <div class="stat-row"><span class="stat-lbl">IEC precio piso</span><span class="stat-val vg">Saludable</span></div>
-      <div class="stat-row"><span class="stat-lbl">6 RTCs · 4 sobre 80%</span><span class="stat-val">Caroca lidera</span></div>
+      <div class="stat-row"><span class="stat-lbl" id="cl-stat1-lbl">RTCs activos</span><span class="stat-val" id="cl-stat1-val">—</span></div>
+      <div class="stat-row"><span class="stat-lbl" id="cl-stat2-lbl">Mejor vendedor</span><span class="stat-val" id="cl-stat2-val">—</span></div>
+      <div class="stat-row"><span class="stat-lbl" id="cl-stat3-lbl">IEC precio piso</span><span class="stat-val vg" id="cl-stat3-val">—</span></div>
     </div>
   </div>
 
   <!-- Perú -->
   <div class="cc cc-pe">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-      <div><div class="cc-name" style="color:var(--pe);">🇵🇪 Perú</div><div style="font-size:11px;color:var(--muted);">Corte 20/03/2026</div></div>
-      <span class="tag ta">81.0%</span>
+      <div><div class="cc-name" style="color:var(--pe);">🇵🇪 Perú</div><div style="font-size:11px;color:var(--muted);" id="pe-corte">Cargando…</div></div>
+      <span class="tag ta" id="pe-tag">—</span>
     </div>
-    <div class="cc-val" style="color:var(--pe);">USD 172.8K</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">vs presupuesto USD 213.4K</div>
-    <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green);"></div></div><div class="ppct vg">142.2%</div></div>
-    <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:67.4%;background:var(--amber);"></div></div><div class="ppct va">67.4%</div></div>
-    <div class="prow"><div class="plbl">Marzo</div><div class="pbar"><div class="pfill" style="width:94.3%;background:var(--amber);"></div></div><div class="ppct va">94.3%</div></div>
+    <div class="cc-val" style="color:var(--pe);" id="pe-ytd">—</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;" id="pe-ytd-sub">—</div>
+    <div id="pe-bars"><!-- barras mensuales inyectadas por JS --></div>
     <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(196,122,15,.15);">
-      <div class="stat-row"><span class="stat-lbl">Margen T1</span><span class="stat-val vg">89.5%</span></div>
-      <div class="stat-row"><span class="stat-lbl">Brecha vs ppto</span><span class="stat-val vr">USD −40.6K</span></div>
-      <div class="stat-row"><span class="stat-lbl">6 RTCs · 2 críticos</span><span class="stat-val">Atalaya lidera</span></div>
+      <div class="stat-row"><span class="stat-lbl" id="pe-stat1-lbl">RTCs activos</span><span class="stat-val" id="pe-stat1-val">—</span></div>
+      <div class="stat-row"><span class="stat-lbl" id="pe-stat2-lbl">Mejor vendedor</span><span class="stat-val" id="pe-stat2-val">—</span></div>
+      <div class="stat-row"><span class="stat-lbl" id="pe-stat3-lbl">Brecha vs ppto</span><span class="stat-val vr" id="pe-stat3-val">—</span></div>
     </div>
   </div>
 
@@ -259,9 +255,9 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <span class="tag" style="background:rgba(0,0,0,.05);color:var(--muted);">Pendiente</span>
     </div>
     <div class="cc-val" style="color:var(--muted);">—</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Sin datos Q1 integrados</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Sin datos integrados</div>
     <div style="padding:18px;border-radius:8px;background:rgba(0,0,0,.03);text-align:center;">
-      <div style="font-size:12px;color:var(--muted);line-height:1.7;">Integración de data Ecuador planificada para Q2 2026.<br>Panel disponible en Board.</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">Integración de data Ecuador planificada para Q3 2026.<br>Panel disponible en Board.</div>
       <a href="Panel_Ecuador_AV_2026.html" style="display:inline-block;margin-top:10px;font-size:11px;color:var(--ec);text-decoration:none;border:1px solid rgba(46,125,50,.3);padding:4px 12px;border-radius:4px;">Ver Panel Ecuador →</a>
     </div>
   </div>
@@ -273,7 +269,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
   <!-- Stacked bar + cumplimiento -->
   <div class="card">
-    <div class="eyebrow">Consolidado Grupo T1 2026</div>
+    <div class="eyebrow" id="chart1-eyebrow">Consolidado Grupo 2026</div>
     <div class="ctitle">
       Ventas CL + PE (USD) vs Presupuesto
       <div style="display:flex;gap:12px;flex-shrink:0;">
@@ -283,185 +279,65 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       </div>
     </div>
     <div style="position:relative;height:240px;"><canvas id="chartGrupoMensual"></canvas></div>
-    <script>
-    (function(){
-      var ctx=document.getElementById('chartGrupoMensual');
-      var clUSD=[93.4,37.6,46.3];
-      var peUSD=[73.5,39.4,59.8];
-      var ppto=[141.0,103.6,108.5];
-      var total=[166.9,77.0,106.1];
-      var cumpl=[Math.round(total[0]/ppto[0]*100),Math.round(total[1]/ppto[1]*100),Math.round(total[2]/ppto[2]*100)];
-      new Chart(ctx,{
-        data:{
-          labels:['Enero','Febrero','Marzo'],
-          datasets:[
-            {type:'bar',label:'Chile',data:clUSD,backgroundColor:'rgba(27,79,138,.5)',borderColor:'#1B4F8A',borderWidth:1.5,stack:'g',yAxisID:'y',order:2},
-            {type:'bar',label:'Perú',data:peUSD,backgroundColor:'rgba(196,122,15,.5)',borderColor:'#C47A0F',borderWidth:1.5,stack:'g',yAxisID:'y',order:2},
-            {type:'line',label:'Ppto',data:ppto,borderColor:'#f87171',borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:'#f87171',fill:false,yAxisID:'y',order:1},
-            {type:'line',label:'Cumpl.%',data:cumpl,borderColor:'#5c2d9a',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#5c2d9a',fill:false,tension:.2,yAxisID:'y2',order:0}
-          ]
-        },
-        options:{
-          responsive:true,maintainAspectRatio:false,
-          interaction:{mode:'index',intersect:false},
-          plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===3?' Cumpl: '+c.raw+'%':' '+c.dataset.label+': USD '+c.raw+'K';}}}},
-          scales:{
-            y:{stacked:true,position:'left',grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:function(v){return v+'K';},color:'#7A90AA',font:{size:10}}},
-            y2:{position:'right',min:0,max:200,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+'%';},color:'#5c2d9a',font:{size:10}}},
-            x:{grid:{display:false},ticks:{color:'#7A90AA',font:{size:11}}}
-          }
-        }
-      });
-    })();
-    </script>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border-dim);">
-      <div style="text-align:center;padding:10px;border-radius:7px;background:var(--surface2);">
-        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Enero</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);">118%</div>
-        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">USD 167K</div>
-      </div>
-      <div style="text-align:center;padding:10px;border-radius:7px;background:var(--surface2);">
-        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Febrero</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--red);">74%</div>
-        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">USD 77K</div>
-      </div>
-      <div style="text-align:center;padding:10px;border-radius:7px;background:var(--surface2);">
-        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Marzo</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--amber);">98%</div>
-        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">USD 106K</div>
-      </div>
+    <div style="display:grid;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border-dim);" id="monthly-summary">
+      <!-- resumen meses inyectado por JS -->
     </div>
   </div>
 
-  <!-- Margen line chart -->
+  <!-- Cumplimiento % mensual por país -->
   <div class="card">
-    <div class="eyebrow">Evolución Margen Bruto</div>
-    <div class="ctitle">Margen % por País · T1</div>
-    <div style="position:relative;height:200px;"><canvas id="chartMargen"></canvas></div>
-    <script>
-    (function(){
-      var ctx=document.getElementById('chartMargen');
-      new Chart(ctx,{
-        type:'line',
-        data:{
-          labels:['Enero','Febrero','Marzo'],
-          datasets:[
-            {label:'Chile',data:[72.0,73.7,84.7],borderColor:'#1B4F8A',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#1B4F8A',fill:false,tension:.25},
-            {label:'Perú',data:[88.6,89.5,90.8],borderColor:'#C47A0F',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#C47A0F',fill:false,tension:.25},
-            {label:'Grupo',data:[79.6,82.8,89.4],borderColor:'#5c2d9a',borderWidth:2,borderDash:[4,2],pointRadius:4,pointBackgroundColor:'#5c2d9a',fill:false,tension:.25}
-          ]
-        },
-        options:{
-          responsive:true,maintainAspectRatio:false,
-          interaction:{mode:'index',intersect:false},
-          plugins:{legend:{position:'bottom',labels:{font:{size:10},color:'#7A90AA',boxWidth:10,padding:10}}},
-          scales:{
-            y:{min:60,max:100,grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:function(v){return v+'%';},color:'#7A90AA',font:{size:10}}},
-            x:{grid:{display:false},ticks:{color:'#7A90AA',font:{size:11}}}
-          }
-        }
-      });
-    })();
-    </script>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border-dim);text-align:center;">
-      <div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Chile T1</div><div style="font-family:'DM Mono',monospace;font-size:14px;color:var(--cl);font-weight:500;">73.8%</div></div>
-      <div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Perú T1</div><div style="font-family:'DM Mono',monospace;font-size:14px;color:var(--pe);font-weight:500;">89.5%</div></div>
-      <div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Grupo T1</div><div style="font-family:'DM Mono',monospace;font-size:14px;color:var(--purple);font-weight:500;">82.5%</div></div>
+    <div class="eyebrow">Cumplimiento vs Presupuesto</div>
+    <div class="ctitle">% Logro Mensual · CL vs PE</div>
+    <div style="position:relative;height:200px;"><canvas id="chartCumpl"></canvas></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border-dim);text-align:center;" id="cumpl-summary">
+      <!-- resumen inyectado por JS -->
     </div>
   </div>
 </div>
 
 <!-- ═══ BLOQUE 4: RANKING RTCs ═══ -->
-<div class="slabel">Ranking Consolidado RTCs · 12 Vendedores · Ambos Países</div>
+<div class="slabel" id="rtc-slabel">Ranking Consolidado RTCs · Ambos Países</div>
 <div class="g2">
 
   <div class="card">
-    <div class="eyebrow">🇨🇱 Chile · Al 22/03/2026</div>
-    <div class="ctitle">Ventas YTD vs Presupuesto T1</div>
-    <div class="vrow"><div class="vname">J. Caroca</div><div class="vbar-w"><div class="vbar-f" style="width:100%;background:var(--green);"></div></div><div class="vsales">CLP 53.6M</div><div class="vcum vg">162.3%</div></div>
-    <div class="vrow"><div class="vname">P. Laratro</div><div class="vbar-w"><div class="vbar-f" style="width:93.7%;background:var(--amber);"></div></div><div class="vsales">CLP 50.2M</div><div class="vcum va">92.9%</div></div>
-    <div class="vrow"><div class="vname">F. Velásquez</div><div class="vbar-w"><div class="vbar-f" style="width:52.1%;background:var(--amber);"></div></div><div class="vsales">CLP 27.9M</div><div class="vcum va">84.8%</div></div>
-    <div class="vrow"><div class="vname">R. Encina</div><div class="vbar-w"><div class="vbar-f" style="width:47.6%;background:var(--amber);"></div></div><div class="vsales">CLP 25.5M</div><div class="vcum va">87.5%</div></div>
-    <div class="vrow"><div class="vname">I. Veverka</div><div class="vbar-w"><div class="vbar-f" style="width:15.1%;background:var(--red);"></div></div><div class="vsales">CLP 8.1M</div><div class="vcum vr">45.2%</div></div>
-    <div class="vrow"><div class="vname">V. Muñoz</div><div class="vbar-w"><div class="vbar-f" style="width:5.6%;background:var(--muted);opacity:.5;"></div></div><div class="vsales">CLP 3.0M</div><div class="vcum" style="color:var(--muted);">s/p</div></div>
+    <div class="eyebrow" id="cl-ranking-eyebrow">🇨🇱 Chile</div>
+    <div class="ctitle" id="cl-ranking-title">Ventas YTD vs Presupuesto</div>
+    <div id="cl-ranking"><!-- filas inyectadas por JS --></div>
     <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border-dim);">
-      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Tendencia Margen Chile</div>
-      <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:72%;background:var(--amber);"></div></div><div class="ppct va">72.0%</div></div>
-      <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:73.7%;background:var(--amber);"></div></div><div class="ppct va">73.7%</div></div>
-      <div class="prow"><div class="plbl">Marzo</div><div class="pbar"><div class="pfill" style="width:84.7%;background:var(--green);"></div></div><div class="ppct vg">84.7%</div></div>
+      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Meses recientes · Cumplimiento Chile</div>
+      <div id="cl-recent-bars"><!-- últimos 3 meses inyectados por JS --></div>
     </div>
   </div>
 
   <div class="card">
-    <div class="eyebrow">🇵🇪 Perú · Al 20/03/2026</div>
-    <div class="ctitle">Ventas YTD vs Presupuesto T1</div>
-    <div class="vrow"><div class="vname">O. Atalaya</div><div class="vbar-w"><div class="vbar-f" style="width:100%;background:var(--green);"></div></div><div class="vsales">USD 59.1K</div><div class="vcum vg">110.2%</div></div>
-    <div class="vrow"><div class="vname">O. Infante</div><div class="vbar-w"><div class="vbar-f" style="width:71.9%;background:var(--red);"></div></div><div class="vsales">USD 42.5K</div><div class="vcum vr">37.0%</div></div>
-    <div class="vrow"><div class="vname">L. Aguirre</div><div class="vbar-w"><div class="vbar-f" style="width:60.7%;background:var(--purple);"></div></div><div class="vsales">USD 35.9K</div><div class="vcum vp">s/p</div></div>
-    <div class="vrow"><div class="vname">N. Navarro</div><div class="vbar-w"><div class="vbar-f" style="width:57.5%;background:var(--amber);"></div></div><div class="vsales">USD 34.0K</div><div class="vcum va">96.2%</div></div>
-    <div class="vrow"><div class="vname">A. González</div><div class="vbar-w"><div class="vbar-f" style="width:1.2%;background:var(--red);"></div></div><div class="vsales">USD 0.7K</div><div class="vcum vr">17.4%</div></div>
-    <div class="vrow"><div class="vname">P. Valladares</div><div class="vbar-w"><div class="vbar-f" style="width:1.0%;background:var(--red);"></div></div><div class="vsales">USD 0.6K</div><div class="vcum vr">10.5%</div></div>
+    <div class="eyebrow" id="pe-ranking-eyebrow">🇵🇪 Perú</div>
+    <div class="ctitle" id="pe-ranking-title">Ventas YTD vs Presupuesto</div>
+    <div id="pe-ranking"><!-- filas inyectadas por JS --></div>
     <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border-dim);">
-      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Tendencia Margen Perú</div>
-      <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:88.6%;background:var(--green);"></div></div><div class="ppct vg">88.6%</div></div>
-      <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:89.5%;background:var(--green);"></div></div><div class="ppct vg">89.5%</div></div>
-      <div class="prow"><div class="plbl">Marzo</div><div class="pbar"><div class="pfill" style="width:90.8%;background:var(--green);"></div></div><div class="ppct vg">90.8%</div></div>
+      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Meses recientes · Cumplimiento Perú</div>
+      <div id="pe-recent-bars"><!-- últimos 3 meses inyectados por JS --></div>
     </div>
   </div>
 </div>
 
 <!-- ═══ BLOQUE 5: SEMÁFORO 4 COLUMNAS ═══ -->
-<div class="slabel">Semáforo Ejecutivo · 12 RTCs · Grupo LATAM</div>
+<div class="slabel" id="sem-slabel">Semáforo Ejecutivo · RTCs · Grupo LATAM</div>
 <div class="g4">
   <div class="sem-col sem-g">
     <div class="sem-hdg" style="color:var(--green);">✅ Sobre 100%</div>
-    <div class="sem-item">J. Caroca <span style="font-size:10px;color:var(--muted);">CL</span></div>
-    <div class="sem-val vg">162.3% · CLP 53.6M</div>
-    <div class="sem-div" style="background:rgba(90,143,53,.15);"></div>
-    <div class="sem-item">O. Atalaya <span style="font-size:10px;color:var(--muted);">PE</span></div>
-    <div class="sem-val vg">110.2% · USD 59.1K</div>
-    <div style="margin-top:10px;padding:8px;border-radius:6px;background:rgba(90,143,53,.08);font-size:11px;color:var(--green);">2 de 10 RTCs con presupuesto superan 100%</div>
+    <div id="sem-verde-content"><!-- inyectado por JS --></div>
   </div>
   <div class="sem-col sem-a">
     <div class="sem-hdg" style="color:var(--amber);">🟡 Entre 80–99%</div>
-    <div class="sem-item">N. Navarro <span style="font-size:10px;color:var(--muted);">PE</span></div>
-    <div class="sem-val va">96.2% · USD 34.0K</div>
-    <div class="sem-div" style="background:rgba(196,122,15,.15);"></div>
-    <div class="sem-item">P. Laratro <span style="font-size:10px;color:var(--muted);">CL</span></div>
-    <div class="sem-val va">92.9% · CLP 50.2M</div>
-    <div class="sem-div" style="background:rgba(196,122,15,.15);"></div>
-    <div class="sem-item">R. Encina <span style="font-size:10px;color:var(--muted);">CL</span></div>
-    <div class="sem-val va">87.5% · CLP 25.5M</div>
-    <div class="sem-div" style="background:rgba(196,122,15,.15);"></div>
-    <div class="sem-item">F. Velásquez <span style="font-size:10px;color:var(--muted);">CL</span></div>
-    <div class="sem-val va">84.8% · CLP 27.9M</div>
-    <div style="margin-top:8px;padding:8px;border-radius:6px;background:rgba(196,122,15,.08);font-size:11px;color:var(--amber);">4 RTCs en zona de recuperación</div>
+    <div id="sem-amarillo-content"><!-- inyectado por JS --></div>
   </div>
   <div class="sem-col sem-r">
     <div class="sem-hdg" style="color:var(--red);">🔴 Crítico &lt;80%</div>
-    <div class="sem-item">I. Veverka <span style="font-size:10px;color:var(--muted);">CL</span></div>
-    <div class="sem-val vr">45.2% · CLP 8.1M</div>
-    <div class="sem-div" style="background:rgba(192,57,43,.15);"></div>
-    <div class="sem-item">O. Infante <span style="font-size:10px;color:var(--muted);">PE</span></div>
-    <div class="sem-val vr">37.0% · USD 42.5K</div>
-    <div class="sem-div" style="background:rgba(192,57,43,.15);"></div>
-    <div class="sem-item">A. González <span style="font-size:10px;color:var(--muted);">PE</span></div>
-    <div class="sem-val vr">17.4% · USD 0.7K</div>
-    <div class="sem-div" style="background:rgba(192,57,43,.15);"></div>
-    <div class="sem-item">P. Valladares <span style="font-size:10px;color:var(--muted);">PE</span></div>
-    <div class="sem-val vr">10.5% · USD 0.6K</div>
-    <div style="margin-top:8px;padding:8px;border-radius:6px;background:rgba(192,57,43,.08);font-size:11px;color:var(--red);">4 RTCs requieren intervención Q2</div>
+    <div id="sem-rojo-content"><!-- inyectado por JS --></div>
   </div>
   <div class="sem-col sem-p">
     <div class="sem-hdg" style="color:var(--purple);">🟣 Sin Presupuesto</div>
-    <div class="sem-item">L. Aguirre <span style="font-size:10px;color:var(--muted);">PE</span></div>
-    <div class="sem-val vp">USD 35.9K YTD</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:9px;line-height:1.4;">3er lugar Perú por volumen. Requiere objetivo Q2 formal.</div>
-    <div class="sem-div" style="background:rgba(92,45,154,.15);"></div>
-    <div class="sem-item">V. Muñoz <span style="font-size:10px;color:var(--muted);">CL</span></div>
-    <div class="sem-val vp">CLP 3.0M YTD</div>
-    <div style="font-size:11px;color:var(--muted);line-height:1.4;">Sin objetivo formal asignado.</div>
-    <div style="margin-top:10px;padding:8px;border-radius:6px;background:rgba(92,45,154,.08);font-size:11px;color:var(--purple);">2 RTCs sin presupuesto activo</div>
+    <div id="sem-sp-content"><!-- inyectado por JS --></div>
   </div>
 </div>
 
@@ -471,80 +347,54 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
   <div class="card">
     <div class="eyebrow">Solo Chile tiene CxC activa</div>
-    <div class="ctitle">Cartera Cobranza · Al 22/03/2026</div>
+    <div class="ctitle" id="cxc-title">Cartera Cobranza · Chile</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
       <div style="padding:14px;border-radius:8px;background:rgba(196,122,15,.05);border:1px solid rgba(196,122,15,.2);text-align:center;">
         <div style="font-size:9px;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Total Cartera</div>
-        <div style="font-family:'DM Mono',monospace;font-size:16px;color:var(--amber);font-weight:600;">CLP 37.4M</div>
+        <div style="font-family:'DM Mono',monospace;font-size:16px;color:var(--amber);font-weight:600;" id="cxc-total">—</div>
       </div>
       <div style="padding:14px;border-radius:8px;background:rgba(192,57,43,.05);border:1px solid rgba(192,57,43,.2);text-align:center;">
-        <div style="font-size:9px;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Vencida (66%)</div>
-        <div style="font-family:'DM Mono',monospace;font-size:16px;color:var(--red);font-weight:600;">CLP 24.7M</div>
+        <div style="font-size:9px;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;" id="cxc-venc-lbl">Vencida (%)</div>
+        <div style="font-family:'DM Mono',monospace;font-size:16px;color:var(--red);font-weight:600;" id="cxc-vencida">—</div>
       </div>
     </div>
     <div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:9px;">Principales vencidos</div>
-    <div class="prow"><div class="plbl" style="width:90px;">Goyaservice</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--red);"></div></div><div class="ppct vr" style="width:90px;font-size:10px;">CLP 4.2M · 78d</div></div>
-    <div class="prow"><div class="plbl" style="width:90px;">Rio Diuto</div><div class="pbar"><div class="pfill" style="width:69%;background:var(--amber);"></div></div><div class="ppct va" style="width:90px;font-size:10px;">CLP 2.9M · 51d</div></div>
-    <div class="prow"><div class="plbl" style="width:90px;">Caroca total</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--amber);"></div></div><div class="ppct" style="width:90px;font-size:10px;">CLP 15.3M</div></div>
-    <div style="margin-top:12px;padding:10px 12px;border-radius:7px;background:rgba(192,57,43,.04);border:1px solid rgba(192,57,43,.15);font-size:12px;color:var(--text-dim);">
-      ⚠ Sin deuda +90 días por primera vez. Sin embargo, Caroca concentra <strong>CLP 15.3M</strong> del total — revisar límite individual de crédito antes de Q2.
+    <div id="cxc-criticas"><!-- inyectado por JS --></div>
+    <div style="margin-top:12px;padding:10px 12px;border-radius:7px;background:rgba(192,57,43,.04);border:1px solid rgba(192,57,43,.15);font-size:12px;color:var(--text-dim);" id="cxc-nota">
+      Cargando datos CxC…
     </div>
   </div>
 
   <div class="card">
-    <div class="eyebrow">Grupo T1 2026 · en USD</div>
+    <div class="eyebrow" id="donut-eyebrow">Grupo 2026 · en USD</div>
     <div class="ctitle">Contribución por País al Grupo</div>
     <div style="display:flex;align-items:center;gap:24px;">
       <div style="position:relative;width:170px;height:170px;flex-shrink:0;"><canvas id="chartDonut"></canvas></div>
-      <script>
-      (function(){
-        var ctx=document.getElementById('chartDonut');
-        new Chart(ctx,{
-          type:'doughnut',
-          data:{
-            labels:['Chile','Perú'],
-            datasets:[{
-              data:[177,172.8],
-              backgroundColor:['rgba(27,79,138,.65)','rgba(196,122,15,.65)'],
-              borderColor:['#1B4F8A','#C47A0F'],
-              borderWidth:2,hoverOffset:5
-            }]
-          },
-          options:{
-            responsive:true,maintainAspectRatio:false,cutout:'68%',
-            plugins:{
-              legend:{display:false},
-              tooltip:{callbacks:{label:function(c){return ' '+c.label+': '+Math.round(c.raw/(177+172.8)*100)+'%';}}}
-            }
-          }
-        });
-      })();
-      </script>
       <div style="flex:1;">
         <div style="margin-bottom:14px;">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
             <span style="width:10px;height:10px;border-radius:2px;background:#1B4F8A;display:inline-block;flex-shrink:0;"></span>
             <span style="font-size:12px;font-weight:500;">Chile</span>
-            <span class="tag tg" style="margin-left:auto;">50.6%</span>
+            <span class="tag tg" style="margin-left:auto;" id="donut-cl-pct">—</span>
           </div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--cl);padding-left:18px;">USD 177K</div>
-          <div style="font-size:11px;color:var(--muted);padding-left:18px;">CLP 168.3M · Superó ppto ✅</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--cl);padding-left:18px;" id="donut-cl-val">—</div>
+          <div style="font-size:11px;color:var(--muted);padding-left:18px;" id="donut-cl-sub">Cargando…</div>
         </div>
         <div style="height:1px;background:var(--border-dim);margin-bottom:14px;"></div>
         <div style="margin-bottom:14px;">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
             <span style="width:10px;height:10px;border-radius:2px;background:#C47A0F;display:inline-block;flex-shrink:0;"></span>
             <span style="font-size:12px;font-weight:500;">Perú</span>
-            <span class="tag ta" style="margin-left:auto;">49.4%</span>
+            <span class="tag ta" style="margin-left:auto;" id="donut-pe-pct">—</span>
           </div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--pe);padding-left:18px;">USD 172.8K</div>
-          <div style="font-size:11px;color:var(--muted);padding-left:18px;">Brecha USD −40.6K vs ppto</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--pe);padding-left:18px;" id="donut-pe-val">—</div>
+          <div style="font-size:11px;color:var(--muted);padding-left:18px;" id="donut-pe-sub">Cargando…</div>
         </div>
         <div style="height:1px;background:var(--border-dim);margin-bottom:12px;"></div>
         <div>
           <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Total Grupo</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--purple);">USD 349.8K</div>
-          <div style="font-size:11px;color:var(--muted);">Distribución casi equitativa CL/PE</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--purple);" id="donut-total-val">—</div>
+          <div style="font-size:11px;color:var(--muted);" id="donut-total-sub">Cargando…</div>
         </div>
       </div>
     </div>
@@ -556,27 +406,27 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 <div class="g2">
 
   <div class="card">
-    <div class="eyebrow">Acción requerida · Q2 2026</div>
-    <div class="ctitle">Alertas Consolidadas <span class="tag tr">4 críticas</span></div>
+    <div class="eyebrow">Acción requerida · Q3 2026</div>
+    <div class="ctitle">Alertas Consolidadas <span class="tag tr" id="alert-count-badge">cargando</span></div>
     <div class="alrt alrt-g">
       <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🏆</span>
-      <div><strong>Chile superó el presupuesto por primera vez en T1.</strong> Caroca 162.3%, Marzo 101.8%. Hito positivo — consolidar en Q2 sin depender de un solo vendedor.</div>
+      <div><strong>Chile cierra S1 2026 con 127.2% del presupuesto.</strong> Laratro lideró con CLP 173.5M (168%), Caroca en segundo con CLP 96.6M (153%). Primer semestre histórico para el equipo Chile.</div>
     </div>
     <div class="alrt alrt-r">
       <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🔴</span>
-      <div><strong>4 RTCs críticos en 2 países: Veverka (45%), Infante (37%), González (17%), Valladares (10.5%).</strong> Plan de intervención grupal antes de Q2, usando metodología Caroca/Atalaya.</div>
+      <div><strong>I. Veverka (CL) inactivo desde Marzo: CLP 8.8M en 6M = 24% del objetivo.</strong> Sin ventas en Abr, May, Jun. Requiere decisión estructural antes del cierre de Q3.</div>
     </div>
     <div class="alrt alrt-r">
       <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🔴</span>
-      <div><strong>CxC Chile: CLP 24.7M vencida (66% del total).</strong> Goyaservice (78d, CLP 4.2M) y Rio Diuto (51d, CLP 2.9M) urgentes. Caroca concentra CLP 15.3M — revisar límite individual de crédito.</div>
+      <div><strong>Perú en 79.5% a 7 meses. Atalaya (58%), Infante (69%), Valladares (38%) bajo 80%.</strong> Brecha total USD 108K vs presupuesto. Plan de recuperación urgente para Q3.</div>
+    </div>
+    <div class="alrt alrt-r">
+      <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🔴</span>
+      <div><strong>CxC Chile creció de CLP 37.4M (T1) a CLP 66.4M (Jun). Vencida: CLP 39.8M (60%).</strong> Crecimiento de cartera supera crecimiento de ventas. Revisar política de crédito para S2.</div>
     </div>
     <div class="alrt alrt-a">
       <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🟡</span>
-      <div><strong>L. Aguirre (Perú) opera sin presupuesto asignado.</strong> Generó USD 35.9K YTD siendo 3ra por volumen. Asignarle objetivo Q2 formal antes de que el período cierre.</div>
-    </div>
-    <div class="alrt alrt-a">
-      <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🟡</span>
-      <div><strong>Perú: brecha acumulada de USD 40.6K vs presupuesto.</strong> Infante y González sin recuperación sostenida. Decisiones estructurales requeridas para Q2.</div>
+      <div><strong>S. Diaz (nueva RTC Perú) opera sin presupuesto: USD 17.5K en sus primeros 3 meses.</strong> Formalizar objetivo Q3 antes de que el período avance sin métrica de gestión.</div>
     </div>
   </div>
 
@@ -584,19 +434,19 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     <div class="eyebrow">Para el Directorio</div>
     <div class="ctitle">Insights Estratégicos</div>
     <div class="ins">
-      <span class="itag">Tendencia</span><strong>Margen mejora mes a mes en ambos países: Ene 79.6% → Feb 82.8% → Mar 89.4%.</strong> El equipo optimiza el mix de forma orgánica. Formalizar incentivo por productos premium en Q2 antes de que la tendencia se revierta.
+      <span class="itag">Explosión</span><strong>L. Aguirre (PE) creció 238% desde T1: USD 35.9K → USD 121.3K YTD con 159% de cumplimiento.</strong> De tercero sin presupuesto a segundo lugar con el mejor rendimiento vs ppto del grupo. Caso de estudio para exportar al equipo.
     </div>
     <div class="ins">
-      <span class="itag">Modelo</span><strong>Caroca (CL 162%) y Atalaya (PE 110%) son el estándar del grupo.</strong> Combinan seguimiento técnico con foco en alto margen. Documentar su metodología y transferirla a los 4 RTCs críticos antes de Q2.
+      <span class="itag">Concentración</span><strong>Laratro (CL) vendió CLP 97.5M solo en Abril — un solo mes, un solo vendedor.</strong> Alta concentración positiva pero peligrosa. Si su CxC vence sin cobrar el impacto en caja es material para Chile.
     </div>
     <div class="ins">
-      <span class="itag">Concentración</span><strong>Caroca representó el 72.5% de las ventas de Marzo en Chile.</strong> Dependencia peligrosa. Si su CxC vence sin cobrar, el impacto en caja es material. Revisar límite individual de crédito.
+      <span class="itag">Equipo PE</span><strong>Navarro salió del equipo Perú. Ingresó S. Diaz y crecen Valladares y Gonzales.</strong> El top 3 es ahora Infante–Aguirre–Atalaya. La nueva dinámica requiere redistribución de carteras y asignación de presupuesto Q3.
     </div>
     <div class="ins">
-      <span class="itag">Perú Q2</span><strong>Perú Marzo (USD 59.8K) es el nuevo benchmark mensual del grupo.</strong> Si Aguirre recibe presupuesto formal, Perú puede alcanzar 95%+ en Q2. La palanca ya está mapeada.
+      <span class="itag">Grupo</span><strong>Por primera vez el consolidado supera USD 845K YTD.</strong> Manteniendo el ritmo de S1 el grupo puede cerrar 2026 cerca de USD 1.4M. Chile es el motor; Perú necesita reactivar para no comprometer el cierre anual.
     </div>
     <div class="ins">
-      <span class="itag">Ecuador</span><strong>Ecuador no está integrado al consolidado.</strong> Incorporarlo en Q2 daría visión real del 100% del grupo LATAM. Prioridad para el próximo ciclo de actualización.
+      <span class="itag">Ecuador</span><strong>Ecuador no está integrado al consolidado.</strong> Incorporarlo en Q3 daría visión real del 100% del grupo LATAM. Prioridad para el próximo ciclo de actualización.
     </div>
   </div>
 </div>
@@ -613,52 +463,489 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 <script>
 (function(){
   var el=document.querySelector('.av-logo-img');
-  if(el) el.src=AV_LOGO_DATA_URL;
+  if(el&&typeof AV_LOGO_DATA_URL!=='undefined') el.src=AV_LOGO_DATA_URL;
 })();
 </script>
 <script>
 (function(){
-  if(typeof AVBOARD==='undefined') return;
-  var meta=AVBOARD.meta||{};
-  var cortes=meta.cortes||{};
-  var clCorte=cortes.chile_ventas||'22/03';
-  var peCorte=cortes.peru_ventas||'20/03';
-  var TC=meta.tc_clp_usd||950;
+  // ─────────────────────────────────────────────────────────────
+  // UTILS
+  // ─────────────────────────────────────────────────────────────
+  function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+  function setH(id,v){var e=document.getElementById(id);if(e)e.innerHTML=v;}
+  function setStyle(id,prop,v){var e=document.getElementById(id);if(e)e.style[prop]=v;}
+  function cc(v){return v==null?'var(--purple)':v>=1?'var(--green)':v>=0.8?'var(--amber)':'var(--red)';}
+  function tagClass(v){return v==null?'tp':v>=1?'tg':v>=0.8?'ta':'tr';}
+  function pct(v,dec){return v==null?'s/p':(v*100).toFixed(dec!=null?dec:0)+'%';}
+  function fmtM(v){return(v/1e6).toFixed(1)+'M';}
+  function fmtK(v,dec){return(v/1000).toFixed(dec!=null?dec:1)+'K';}
+  function sumArr(arr,n){var s=0;for(var i=0;i<Math.min(n,arr.length);i++)s+=(arr[i]||0);return s;}
 
-  var chip=document.getElementById('corte-chip');
-  if(chip) chip.innerHTML='Corte: CL <strong>'+clCorte+'</strong> · PE <strong>'+peCorte+'</strong>';
+  // ─────────────────────────────────────────────────────────────
+  // GUARD
+  // ─────────────────────────────────────────────────────────────
+  if(typeof AVBOARD==='undefined'){
+    // fallback: draw empty charts so page doesn't look broken
+    drawFallback();
+    return;
+  }
 
-  var clV=(AVBOARD.chile&&AVBOARD.chile.ventas)||{};
-  var rtcCL=clV.rtc_mensual_real||{};
-  var clYtdCLP=0;
-  ['caroca','laratro','velasquez','encina','veverka','munoz'].forEach(function(v){
-    (rtcCL[v]||[]).forEach(function(m){clYtdCLP+=(m||0);});
+  // ─────────────────────────────────────────────────────────────
+  // RAW DATA
+  // ─────────────────────────────────────────────────────────────
+  var meta   = AVBOARD.meta || {};
+  var TC     = meta.tc_clp_usd || 950;
+  var MESES  = meta.meses || ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var cortes = meta.cortes || {};
+
+  var clV    = (AVBOARD.chile  && AVBOARD.chile.ventas)  || {};
+  var peV    = (AVBOARD.peru   && AVBOARD.peru.ventas)   || {};
+  var cxcCL  = (AVBOARD.chile  && AVBOARD.chile.cxc)     || {};
+
+  var clReal = clV.mensual_real  || [];
+  var clPpto = clV.mensual_ppto  || [];
+  var peReal = peV.mensual_real  || [];
+  var pePpto = peV.mensual_ppto  || [];
+  var rtcCLR = clV.rtc_mensual_real || {};
+  var rtcCLP = clV.rtc_mensual_ppto || {};
+  var rtcPER = peV.rtc_mensual_real || {};
+  var rtcPEP = peV.rtc_mensual_ppto || {};
+  var peVend = peV.por_vendedor  || {};
+
+  // ─────────────────────────────────────────────────────────────
+  // ACTIVE MONTHS
+  // ─────────────────────────────────────────────────────────────
+  var clN=0, peN=0;
+  for(var i=11;i>=0;i--){if(clReal[i]>0){clN=i+1;break;}}
+  for(var i=11;i>=0;i--){if(peReal[i]>0){peN=i+1;break;}}
+  var maxN=Math.max(clN,peN,1);
+
+  // ─────────────────────────────────────────────────────────────
+  // CHILE AGGREGATES
+  // ─────────────────────────────────────────────────────────────
+  var clYtdCLP  = sumArr(clReal, clN);
+  var clPptoCLP = sumArr(clPpto, clN);
+  var clYtdUSD  = clYtdCLP / TC;         // USD
+  var clCumpl   = clPptoCLP > 0 ? clYtdCLP / clPptoCLP : null;
+
+  // ─────────────────────────────────────────────────────────────
+  // PERU AGGREGATES
+  // ─────────────────────────────────────────────────────────────
+  var peYtdUSD  = sumArr(peReal, peN);   // USD
+  var pePptoUSD = sumArr(pePpto, peN);   // USD
+  var peCumpl   = pePptoUSD > 0 ? peYtdUSD / pePptoUSD : null;
+
+  // ─────────────────────────────────────────────────────────────
+  // GROUP AGGREGATES
+  // ─────────────────────────────────────────────────────────────
+  var grupoYtdUSD  = clYtdUSD  + peYtdUSD;
+  var grupoPptoUSD = (clPptoCLP/TC) + pePptoUSD;
+  var grupoCumpl   = grupoPptoUSD > 0 ? grupoYtdUSD / grupoPptoUSD : null;
+
+  // ─────────────────────────────────────────────────────────────
+  // CHILE RTCs
+  // ─────────────────────────────────────────────────────────────
+  var CL_NAMES = {caroca:'J. Caroca',laratro:'P. Laratro',velasquez:'F. Velásquez',encina:'R. Encina',veverka:'I. Veverka',munoz:'V. Muñoz',almeida:'J. Almeida'};
+  var clRTCs = [];
+  Object.keys(CL_NAMES).forEach(function(k){
+    var realArr = rtcCLR[k];
+    if(!realArr) return;
+    var ytd  = sumArr(realArr, clN);
+    if(ytd === 0 && !rtcCLP[k]) return;
+    var pptoArr = rtcCLP[k];
+    var ppto = pptoArr ? sumArr(pptoArr, clN) : 0;
+    clRTCs.push({k:k,name:CL_NAMES[k],ytd:ytd,ppto:ppto,cumpl:ppto>0?ytd/ppto:null,isCL:true});
   });
-  var clUSDK=Math.round(clYtdCLP/TC/1000);
+  clRTCs.sort(function(a,b){return b.ytd-a.ytd;});
 
-  var peV=(AVBOARD.peru&&AVBOARD.peru.ventas)||{};
-  var peVend=peV.por_vendedor||{};
-  var peYtd=0;
-  Object.keys(peVend).forEach(function(k){peYtd+=(peVend[k].ytd||0);});
-  var peYtdK=(peYtd/1000).toFixed(1);
-  var pePpto=peV.mensual_ppto||[];
-  var pePptoYtd=0; pePpto.forEach(function(m){pePptoYtd+=(m||0);});
-  var peCumpl=pePptoYtd>0?Math.round(peYtd/pePptoYtd*100):null;
-  var grupoK=clUSDK+Math.round(peYtd/1000);
+  // ─────────────────────────────────────────────────────────────
+  // PERU RTCs
+  // ─────────────────────────────────────────────────────────────
+  var PE_NAMES = {aguirre:'L. Aguirre',atalaya:'O. Atalaya',infante:'O. Infante',valladares:'P. Valladares',gonzales:'A. Gonzales',diaz:'S. Diaz',martha:'Martha'};
+  var peRTCs = [];
+  Object.keys(peVend).forEach(function(k){
+    var ytd = peVend[k].ytd || 0;
+    if(ytd === 0) return;
+    var pptoArr = rtcPEP[k];
+    var ppto = pptoArr ? sumArr(pptoArr, peN) : 0;
+    var nombre = (peVend[k].nombre) || PE_NAMES[k] || k;
+    peRTCs.push({k:k,name:nombre,ytd:ytd,ppto:ppto,cumpl:ppto>0?ytd/ppto:null,isCL:false});
+  });
+  peRTCs.sort(function(a,b){return b.ytd-a.ytd;});
 
-  var kGrupo=document.getElementById('kpi-grupo-ytd');
-  if(kGrupo) kGrupo.textContent='USD '+grupoK+'K';
-  var kGrupoSub=document.getElementById('kpi-grupo-sub');
-  if(kGrupoSub) kGrupoSub.textContent='CL+PE · Corte '+clCorte;
+  // ─────────────────────────────────────────────────────────────
+  // ALL RTCs → SEMÁFORO BUCKETS
+  // ─────────────────────────────────────────────────────────────
+  var allRTCs = [];
+  clRTCs.forEach(function(r){allRTCs.push(r);});
+  peRTCs.forEach(function(r){allRTCs.push(r);});
 
-  var clPptoYtd=(clV.ppto_5m||[]).slice(0,3).reduce(function(a,b){return a+(b||0);},0);
-  var pptoCLK=Math.round(clPptoYtd/TC/1000);
-  var grupoPptoK=pptoCLK+(pePptoYtd>0?Math.round(pePptoYtd/1000):213);
-  var grupoCumpl=grupoPptoK>0?Math.round(grupoK/grupoPptoK*100):null;
-  var kCumpl=document.getElementById('kpi-cumpl-val');
-  if(kCumpl&&grupoCumpl!=null) kCumpl.textContent=grupoCumpl+'%';
-  var kCumplSub=document.getElementById('kpi-cumpl-sub');
-  if(kCumplSub&&grupoPptoK>0) kCumplSub.textContent='vs ppto T1 USD '+grupoPptoK+'K';
+  var bVerde    = allRTCs.filter(function(r){return r.cumpl!=null&&r.cumpl>=1;});
+  var bAmarillo = allRTCs.filter(function(r){return r.cumpl!=null&&r.cumpl>=0.8&&r.cumpl<1;});
+  var bRojo     = allRTCs.filter(function(r){return r.cumpl!=null&&r.cumpl<0.8;});
+  var bSinP     = allRTCs.filter(function(r){return r.cumpl==null;});
+
+  // ─────────────────────────────────────────────────────────────
+  // UPDATE HEADER CHIP
+  // ─────────────────────────────────────────────────────────────
+  setH('corte-chip','Corte: CL <strong>'+(cortes.chile_ventas||'?')+'</strong> · PE <strong>'+(cortes.peru_ventas||'?')+'</strong>');
+
+  // ─────────────────────────────────────────────────────────────
+  // UPDATE KPIs
+  // ─────────────────────────────────────────────────────────────
+  set('kpi-grupo-ytd',  'USD '+Math.round(grupoYtdUSD/1000)+'K');
+  set('kpi-grupo-sub',  'CL+PE · Corte '+(cortes.chile_ventas||'?')+' / '+(cortes.peru_ventas||'?'));
+
+  set('kpi-cumpl-val', pct(grupoCumpl));
+  setStyle('kpi-cumpl-val','color',cc(grupoCumpl));
+  set('kpi-cumpl-sub',  'vs ppto USD '+Math.round(grupoPptoUSD/1000)+'K');
+  setH('kpi-cumpl-badge','<span class="kbadge '+tagClass(clCumpl)+'" style="margin-top:0;">CL '+pct(clCumpl)+'</span> <span class="kbadge '+tagClass(peCumpl)+'" style="margin-top:0;">PE '+pct(peCumpl)+'</span>');
+
+  set('kpi-cl-cumpl', pct(clCumpl));
+  setStyle('kpi-cl-cumpl','color',cc(clCumpl));
+  set('kpi-cl-sub',  'CLP '+fmtM(clYtdCLP)+' · '+clN+'M al '+( cortes.chile_ventas||'?'));
+  setH('kpi-cl-badge','<span class="kbadge '+tagClass(clCumpl)+'" style="margin-top:0;">'+(clCumpl!=null&&clCumpl>=1?'✅ Superó ppto':'↗ Recuperar')+'</span>');
+
+  // CxC
+  var cxcTotal   = cxcCL.total   || 0;
+  var cxcVencida = cxcCL.vencida || 0;
+  var cxcPctV    = cxcTotal>0 ? cxcVencida/cxcTotal : 0;
+  set('kpi-cxc-val',  cxcTotal>0?'CLP '+fmtM(cxcTotal):'—');
+  set('kpi-cxc-sub',  cxcTotal>0?fmtM(cxcVencida)+' vencida ('+pct(cxcPctV)+')'+'  · Solo Chile':'Solo Chile activa');
+  setH('kpi-cxc-badge','<span class="kbadge '+(cxcPctV>=0.6?'kb-r':cxcPctV>=0.4?'kb-a':'kb-g')+'" style="margin-top:0;">'+(cxcPctV*100).toFixed(0)+'% vencida</span>');
+
+  // RTCs en alerta (<80% con ppto)
+  set('kpi-rtc-alerta', String(bRojo.length));
+  set('kpi-rtc-sub', bRojo.map(function(r){return r.name.split(' ').pop();}).join(' · ')||'Ninguno');
+  set('kpi-slabel', 'KPIs Ejecutivos · Grupo LATAM · '+clN+'M Chile / '+peN+'M Perú');
+
+  // ─────────────────────────────────────────────────────────────
+  // COUNTRY CARDS
+  // ─────────────────────────────────────────────────────────────
+  var clTagCls = tagClass(clCumpl);
+  var peTagCls = tagClass(peCumpl);
+  set('cl-corte',   'Corte '+(cortes.chile_ventas||'?'));
+  setH('cl-tag',    '<span class="tag '+clTagCls+'">'+pct(clCumpl)+(clCumpl!=null&&clCumpl>=1?' ✅':'')+'</span>');
+  set('cl-ytd',     'CLP '+fmtM(clYtdCLP));
+  set('cl-ytd-sub', '≈ USD '+Math.round(clYtdUSD/1000)+'K · TC '+TC+' CLP/USD');
+  set('cl-stat1-val', clRTCs.filter(function(r){return r.ytd>0;}).length+' RTCs');
+  var clLeader = clRTCs[0];
+  set('cl-stat2-val', clLeader?clLeader.name+' '+pct(clLeader.cumpl):'—');
+  setStyle('cl-stat2-val','color',clLeader?cc(clLeader.cumpl):'inherit');
+  set('cl-stat3-val', 'Saludable');
+  setStyle('cl-stat3-val','color','var(--green)');
+
+  set('pe-corte',   'Corte '+(cortes.peru_ventas||'?'));
+  setH('pe-tag',    '<span class="tag '+peTagCls+'">'+pct(peCumpl)+'</span>');
+  set('pe-ytd',     'USD '+fmtK(peYtdUSD));
+  set('pe-ytd-sub', 'vs presupuesto USD '+fmtK(pePptoUSD));
+  set('pe-stat1-val', peRTCs.filter(function(r){return r.ytd>0;}).length+' RTCs');
+  var peLeader = peRTCs[0];
+  set('pe-stat2-val', peLeader?peLeader.name+' '+fmtK(peLeader.ytd,0):'—');
+  var peGap = peYtdUSD - pePptoUSD;
+  set('pe-stat3-val', 'USD '+(peGap<0?'−':'+')+(Math.abs(peGap)/1000).toFixed(0)+'K');
+  setStyle('pe-stat3-val','color',peGap<0?'var(--red)':'var(--green)');
+
+  // Monthly progress bars
+  setH('cl-bars', buildBars(clN, clReal, clPpto, true));
+  setH('pe-bars', buildBars(peN, peReal, pePpto, false));
+
+  // ─────────────────────────────────────────────────────────────
+  // DRAW CHART 1: Stacked bar CL+PE + Cumpl% line
+  // ─────────────────────────────────────────────────────────────
+  var clArr=[], peArr=[], pptoArr=[], cumplArr=[];
+  for(var i=0;i<maxN;i++){
+    var cl_usd = i<clN ? (clReal[i]||0)/TC/1000 : 0;  // USD K
+    var pe_usd = i<peN ? (peReal[i]||0)/1000    : 0;
+    var pt_usd = (i<clN?(clPpto[i]||0)/TC:0)/1000 + (i<peN?(pePpto[i]||0)/1000:0);
+    clArr.push( Math.round(cl_usd*10)/10 );
+    peArr.push( Math.round(pe_usd*10)/10 );
+    pptoArr.push( Math.round(pt_usd*10)/10 );
+    var tot = cl_usd + pe_usd;
+    cumplArr.push( pt_usd>0 ? Math.round(tot/pt_usd*100) : null );
+  }
+  var ctx1 = document.getElementById('chartGrupoMensual');
+  if(ctx1){
+    new Chart(ctx1,{
+      data:{
+        labels: MESES.slice(0,maxN),
+        datasets:[
+          {type:'bar', label:'Chile',   data:clArr,   backgroundColor:'rgba(27,79,138,.5)',  borderColor:'#1B4F8A',borderWidth:1.5,stack:'g',yAxisID:'y', order:2},
+          {type:'bar', label:'Perú',    data:peArr,   backgroundColor:'rgba(196,122,15,.5)', borderColor:'#C47A0F',borderWidth:1.5,stack:'g',yAxisID:'y', order:2},
+          {type:'line',label:'Ppto',    data:pptoArr, borderColor:'#f87171',borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:'#f87171',fill:false,yAxisID:'y', order:1},
+          {type:'line',label:'Cumpl.%', data:cumplArr,borderColor:'#5c2d9a',borderWidth:2.5, pointRadius:5,pointBackgroundColor:'#5c2d9a',fill:false,tension:.2,yAxisID:'y2',order:0}
+        ]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        interaction:{mode:'index',intersect:false},
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){
+          return c.datasetIndex===3?' Cumpl: '+c.raw+'%':' '+c.dataset.label+': USD '+c.raw+'K';
+        }}}},
+        scales:{
+          y:{stacked:true,position:'left',grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:function(v){return v+'K';},color:'#7A90AA',font:{size:10}}},
+          y2:{position:'right',min:0,max:200,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+'%';},color:'#5c2d9a',font:{size:10}}},
+          x:{grid:{display:false},ticks:{color:'#7A90AA',font:{size:11},maxRotation:0,autoSkip:false}}
+        }
+      }
+    });
+  }
+
+  // Monthly summary tiles (last 3 months with data)
+  var sumStart = Math.max(0, maxN-3);
+  var sumCols = maxN - sumStart;
+  var sumHTML = '';
+  for(var i=sumStart;i<maxN;i++){
+    var cl_u = i<clN?(clReal[i]||0)/TC:0;
+    var pe_u = i<peN?(peReal[i]||0):0;
+    var tot  = cl_u + pe_u;
+    var pp   = (i<clN?(clPpto[i]||0)/TC:0) + (i<peN?(pePpto[i]||0):0);
+    var ci   = pp>0?tot/pp:null;
+    sumHTML += '<div style="text-align:center;padding:10px;border-radius:7px;background:var(--surface2);">'
+      +'<div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">'+MESES[i]+'</div>'
+      +'<div style="font-family:\'Bebas Neue\',sans-serif;font-size:18px;color:'+cc(ci)+';">'+(ci!=null?Math.round(ci*100)+'%':'—')+'</div>'
+      +'<div style="font-family:\'DM Mono\',monospace;font-size:10px;color:var(--muted);">USD '+Math.round(tot/1000)+'K</div>'
+      +'</div>';
+  }
+  var sumEl = document.getElementById('monthly-summary');
+  if(sumEl){ sumEl.style.gridTemplateColumns='repeat('+sumCols+',1fr)'; sumEl.innerHTML=sumHTML; }
+
+  // ─────────────────────────────────────────────────────────────
+  // DRAW CHART 2: Cumplimiento % mensual CL vs PE
+  // ─────────────────────────────────────────────────────────────
+  var clCArr=[], peCArr=[], grCArr=[];
+  for(var i=0;i<maxN;i++){
+    var c = i<clN&&(clPpto[i]||0)>0 ? Math.round((clReal[i]||0)/(clPpto[i])*100) : null;
+    var p = i<peN&&(pePpto[i]||0)>0 ? Math.round((peReal[i]||0)/(pePpto[i])*100) : null;
+    clCArr.push(c); peCArr.push(p);
+    var totR=(i<clN?(clReal[i]||0)/TC:0)+(i<peN?(peReal[i]||0):0);
+    var totP=(i<clN?(clPpto[i]||0)/TC:0)+(i<peN?(pePpto[i]||0):0);
+    grCArr.push(totP>0?Math.round(totR/totP*100):null);
+  }
+  var ctx2 = document.getElementById('chartCumpl');
+  if(ctx2){
+    new Chart(ctx2,{
+      type:'line',
+      data:{
+        labels: MESES.slice(0,maxN),
+        datasets:[
+          {label:'Chile', data:clCArr,borderColor:'#1B4F8A',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#1B4F8A',fill:false,tension:.25,spanGaps:true},
+          {label:'Perú',  data:peCArr,borderColor:'#C47A0F',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#C47A0F',fill:false,tension:.25,spanGaps:true},
+          {label:'Grupo', data:grCArr,borderColor:'#5c2d9a',borderWidth:2,borderDash:[4,2],pointRadius:4,pointBackgroundColor:'#5c2d9a',fill:false,tension:.25,spanGaps:true}
+        ]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        interaction:{mode:'index',intersect:false},
+        plugins:{legend:{position:'bottom',labels:{font:{size:10},color:'#7A90AA',boxWidth:10,padding:10}},
+          tooltip:{callbacks:{label:function(c){return ' '+c.dataset.label+': '+c.raw+'%';}}}},
+        scales:{
+          y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:function(v){return v+'%';},color:'#7A90AA',font:{size:10}}},
+          x:{grid:{display:false},ticks:{color:'#7A90AA',font:{size:11},maxRotation:0}}
+        }
+      }
+    });
+  }
+  // Cumpl summary tiles
+  var csHTML='';
+  var clAvg=average(clCArr.filter(function(x){return x!=null;}));
+  var peAvg=average(peCArr.filter(function(x){return x!=null;}));
+  var grAvg=average(grCArr.filter(function(x){return x!=null;}));
+  csHTML+='<div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Chile prom.</div><div style="font-family:\'DM Mono\',monospace;font-size:14px;color:var(--cl);font-weight:500;">'+(clAvg!=null?Math.round(clAvg)+'%':'—')+'</div></div>';
+  csHTML+='<div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Perú prom.</div><div style="font-family:\'DM Mono\',monospace;font-size:14px;color:var(--pe);font-weight:500;">'+(peAvg!=null?Math.round(peAvg)+'%':'—')+'</div></div>';
+  csHTML+='<div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Grupo prom.</div><div style="font-family:\'DM Mono\',monospace;font-size:14px;color:var(--purple);font-weight:500;">'+(grAvg!=null?Math.round(grAvg)+'%':'—')+'</div></div>';
+  setH('cumpl-summary',csHTML);
+
+  // ─────────────────────────────────────────────────────────────
+  // RANKINGS
+  // ─────────────────────────────────────────────────────────────
+  set('cl-ranking-eyebrow', '🇨🇱 Chile · Al '+(cortes.chile_ventas||'?'));
+  set('cl-ranking-title',   'Ventas YTD '+clN+'M vs Presupuesto');
+  setH('cl-ranking', buildRanking(clRTCs, true));
+  set('pe-ranking-eyebrow', '🇵🇪 Perú · Al '+(cortes.peru_ventas||'?'));
+  set('pe-ranking-title',   'Ventas YTD '+peN+'M vs Presupuesto');
+  setH('pe-ranking', buildRanking(peRTCs, false));
+
+  // Recent 3-month cumplimiento bars for each country
+  setH('cl-recent-bars', buildRecentBars(clN, clReal, clPpto));
+  setH('pe-recent-bars', buildRecentBars(peN, peReal, pePpto));
+
+  // ─────────────────────────────────────────────────────────────
+  // SEMÁFORO
+  // ─────────────────────────────────────────────────────────────
+  setH('sem-verde-content',    buildSemItems(bVerde,    'var(--green)', 'rgba(90,143,53,.15)',  'superan el 100%'));
+  setH('sem-amarillo-content', buildSemItems(bAmarillo, 'var(--amber)', 'rgba(196,122,15,.15)','en zona de recuperación'));
+  setH('sem-rojo-content',     buildSemItems(bRojo,     'var(--red)',   'rgba(192,57,43,.15)', 'requieren intervención Q3'));
+  setH('sem-sp-content',       buildSemItems(bSinP,     'var(--purple)','rgba(92,45,154,.15)', 'sin presupuesto asignado'));
+  set('sem-slabel','Semáforo Ejecutivo · '+(allRTCs.length)+' RTCs · Grupo LATAM');
+  setH('alert-count-badge','<span class="tag tr">'+bRojo.length+' críticas</span>');
+
+  // ─────────────────────────────────────────────────────────────
+  // CxC
+  // ─────────────────────────────────────────────────────────────
+  var cxcCorte = cortes.chile_cxc || (cortes.chile_ventas||'?');
+  set('cxc-title', 'Cartera Cobranza · Al '+cxcCorte);
+  set('cxc-total',   cxcTotal>0?'CLP '+fmtM(cxcTotal):'—');
+  set('cxc-vencida', cxcTotal>0?'CLP '+fmtM(cxcVencida):'—');
+  set('cxc-venc-lbl','Vencida ('+pct(cxcPctV)+')');
+
+  var criticas = cxcCL.cuentas_criticas || [];
+  if(criticas.length>0){
+    var critHTML='';
+    var critMax = Math.max.apply(null, criticas.map(function(c){return c.saldo||0;}));
+    criticas.slice(0,4).forEach(function(c){
+      var w = critMax>0?Math.min(100,Math.round((c.saldo||0)/critMax*100)):0;
+      var diasStr = c.dias_max>0?c.dias_max+'d':'—';
+      critHTML+='<div class="prow">'
+        +'<div class="plbl" style="width:90px;font-size:11px;">'+(c.entidad||'').slice(0,12)+'</div>'
+        +'<div class="pbar"><div class="pfill" style="width:'+w+'%;background:var(--red);"></div></div>'
+        +'<div class="ppct vr" style="width:90px;font-size:10px;">CLP '+fmtM(c.saldo||0)+' · '+diasStr+'</div>'
+        +'</div>';
+    });
+    setH('cxc-criticas', critHTML);
+  } else {
+    set('cxc-criticas','');
+  }
+  // CxC nota
+  var notaText = cxcTotal>0
+    ? '⚠ Cartera total CLP '+fmtM(cxcTotal)+' · '+pct(cxcPctV)+' vencida. '
+      +(cxcPctV>=0.6?'Concentración elevada: revisar límites de crédito y plan de cobranza Q3.':'Gestión activa requerida para reducir mora.')
+    : '⚠ Sin datos de CxC disponibles.';
+  set('cxc-nota', notaText);
+
+  // ─────────────────────────────────────────────────────────────
+  // DONUT + LABELS
+  // ─────────────────────────────────────────────────────────────
+  var clK  = Math.round(clYtdUSD/1000);
+  var peK  = Math.round(peYtdUSD/1000);
+  var totK = clK+peK;
+  var clPct= totK>0?Math.round(clK/totK*100):50;
+  var pePct= 100-clPct;
+
+  var ctx3 = document.getElementById('chartDonut');
+  if(ctx3){
+    new Chart(ctx3,{
+      type:'doughnut',
+      data:{
+        labels:['Chile','Perú'],
+        datasets:[{
+          data:[clK,peK],
+          backgroundColor:['rgba(27,79,138,.65)','rgba(196,122,15,.65)'],
+          borderColor:['#1B4F8A','#C47A0F'],
+          borderWidth:2,hoverOffset:5
+        }]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,cutout:'68%',
+        plugins:{
+          legend:{display:false},
+          tooltip:{callbacks:{label:function(c){return ' '+c.label+': '+Math.round(c.raw/totK*100)+'%';}}}
+        }
+      }
+    });
+  }
+  set('donut-cl-pct',  clPct+'%');
+  set('donut-cl-val',  'USD '+clK+'K');
+  set('donut-cl-sub',  'CLP '+fmtM(clYtdCLP)+' · '+(clCumpl!=null&&clCumpl>=1?'Superó ppto ✅':'vs ppto '+pct(clCumpl)));
+  set('donut-pe-pct',  pePct+'%');
+  set('donut-pe-val',  'USD '+peK+'K');
+  set('donut-pe-sub',  'Brecha '+(peYtdUSD<pePptoUSD?'USD −':'USD +')+fmtK(Math.abs(peYtdUSD-pePptoUSD),0)+' vs ppto');
+  set('donut-total-val','USD '+totK+'K');
+  set('donut-total-sub', totK>800?'Grupo supera USD 800K YTD 🏆':'YTD consolidado');
+  set('donut-eyebrow',  'Grupo '+clN+'M–'+peN+'M 2026 · en USD');
+
+  // ─────────────────────────────────────────────────────────────
+  // HELPERS
+  // ─────────────────────────────────────────────────────────────
+  function buildBars(n, real, ppto, isCL){
+    var html='';
+    for(var i=0;i<n;i++){
+      var r=real[i]||0, p=ppto[i]||0;
+      var ci=p>0?r/p:null;
+      var w=ci!=null?Math.min(100,Math.round(ci*100)):0;
+      var col=cc(ci);
+      html+='<div class="prow">'
+        +'<div class="plbl">'+MESES[i]+'</div>'
+        +'<div class="pbar"><div class="pfill" style="width:'+w+'%;background:'+col+';"></div></div>'
+        +'<div class="ppct" style="color:'+col+';">'+(ci!=null?Math.round(ci*100)+'%':'—')+'</div>'
+        +'</div>';
+    }
+    return html;
+  }
+
+  function buildRanking(rtcs, isCL){
+    if(!rtcs.length) return '<div style="color:var(--muted);font-size:12px;">Sin datos</div>';
+    var maxYtd=rtcs[0].ytd||1;
+    var html='';
+    rtcs.forEach(function(r){
+      var w=Math.min(100,r.ytd/maxYtd*100).toFixed(1);
+      var col=cc(r.cumpl);
+      var ytdStr=isCL?'CLP '+fmtM(r.ytd):'USD '+fmtK(r.ytd,0);
+      html+='<div class="vrow">'
+        +'<div class="vname">'+r.name+'</div>'
+        +'<div class="vbar-w"><div class="vbar-f" style="width:'+w+'%;background:'+col+';"></div></div>'
+        +'<div class="vsales">'+ytdStr+'</div>'
+        +'<div class="vcum" style="color:'+col+';">'+pct(r.cumpl)+'</div>'
+        +'</div>';
+    });
+    return html;
+  }
+
+  function buildRecentBars(n, real, ppto){
+    var start=Math.max(0,n-3);
+    var html='';
+    for(var i=start;i<n;i++){
+      var r=real[i]||0, p=ppto[i]||0;
+      var ci=p>0?r/p:null;
+      var w=ci!=null?Math.min(100,Math.round(ci*100)):0;
+      var col=cc(ci);
+      html+='<div class="prow">'
+        +'<div class="plbl">'+MESES[i]+'</div>'
+        +'<div class="pbar"><div class="pfill" style="width:'+w+'%;background:'+col+';"></div></div>'
+        +'<div class="ppct" style="color:'+col+';">'+(ci!=null?Math.round(ci*100)+'%':'—')+'</div>'
+        +'</div>';
+    }
+    return html;
+  }
+
+  function buildSemItems(items, col, divCol, footNote){
+    if(!items.length) return '<div style="font-size:11px;color:var(--muted);padding:4px 0;">Ninguno</div>';
+    var html='';
+    items.forEach(function(r,idx){
+      var pais=r.isCL?'CL':'PE';
+      var ytdStr=r.isCL?'CLP '+fmtM(r.ytd):'USD '+fmtK(r.ytd,0);
+      if(idx>0) html+='<div class="sem-div" style="background:'+divCol+';"></div>';
+      html+='<div class="sem-item">'+r.name+' <span style="font-size:10px;color:var(--muted);">'+pais+'</span></div>'
+           +'<div class="sem-val" style="color:'+col+';">'+pct(r.cumpl)+' · '+ytdStr+'</div>';
+    });
+    html+='<div style="margin-top:8px;padding:8px;border-radius:6px;background:'+divCol+';font-size:11px;color:'+col+'">'
+         +items.length+' RTC'+(items.length!==1?'s':'')+' '+footNote+'</div>';
+    return html;
+  }
+
+  function average(arr){
+    if(!arr||!arr.length) return null;
+    return arr.reduce(function(a,b){return a+b;},0)/arr.length;
+  }
+
+  function drawFallback(){
+    var ctx1=document.getElementById('chartGrupoMensual');
+    if(ctx1) new Chart(ctx1,{data:{labels:['Ene','Feb','Mar'],datasets:[
+      {type:'bar',data:[93,38,46],backgroundColor:'rgba(27,79,138,.5)',borderColor:'#1B4F8A',borderWidth:1.5,stack:'g',yAxisID:'y',order:2},
+      {type:'bar',data:[74,39,60],backgroundColor:'rgba(196,122,15,.5)',borderColor:'#C47A0F',borderWidth:1.5,stack:'g',yAxisID:'y',order:2},
+      {type:'line',data:[141,104,109],borderColor:'#f87171',borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:'#f87171',fill:false,yAxisID:'y',order:1},
+      {type:'line',data:[118,74,98],borderColor:'#5c2d9a',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#5c2d9a',fill:false,tension:.2,yAxisID:'y2',order:0}
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{stacked:true,position:'left',ticks:{callback:function(v){return v+'K';},color:'#7A90AA',font:{size:10}}},y2:{position:'right',min:0,max:200,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+'%';},color:'#5c2d9a',font:{size:10}}},x:{grid:{display:false},ticks:{color:'#7A90AA',font:{size:11}}}}}});
+    var ctx2=document.getElementById('chartCumpl');
+    if(ctx2) new Chart(ctx2,{type:'line',data:{labels:['Ene','Feb','Mar'],datasets:[
+      {label:'Chile',data:[118,83,102],borderColor:'#1B4F8A',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#1B4F8A',fill:false,tension:.25},
+      {label:'Perú', data:[142,67,94], borderColor:'#C47A0F',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#C47A0F',fill:false,tension:.25}
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10},color:'#7A90AA',boxWidth:10,padding:10}}},scales:{y:{ticks:{callback:function(v){return v+'%';},color:'#7A90AA',font:{size:10}}},x:{grid:{display:false},ticks:{color:'#7A90AA',font:{size:11}}}}}});
+    var ctx3=document.getElementById('chartDonut');
+    if(ctx3) new Chart(ctx3,{type:'doughnut',data:{labels:['Chile','Perú'],datasets:[{data:[50,50],backgroundColor:['rgba(27,79,138,.65)','rgba(196,122,15,.65)'],borderColor:['#1B4F8A','#C47A0F'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false}}}});
+  }
+
 })();
 </script>
 </body>
