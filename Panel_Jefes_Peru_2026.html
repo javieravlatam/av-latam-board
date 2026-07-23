@@ -138,6 +138,7 @@ table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
 
   .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
   .btn-logout:hover { background:rgba(231,76,60,0.10); }
+.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
 </head>
 <body>
@@ -145,7 +146,7 @@ table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
 <!-- HEADER -->
 <div class="hdr">
   <div class="hdr-l">
-    <div class="logo">AV</div>
+    <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
     <div>
       <div class="htitle">🇵🇪 JEFES · PERÚ</div>
       <div class="hsub">Panel Comercial · Real 2026 vs Ppto 2026 · USD</div>
@@ -1403,5 +1404,7 @@ function cerrarSesion() {
   }catch(e){console.warn('[AVBOARD][JPE]',e);}
 })();
 </script>
+<script src="assets_logo.js"></script>
+<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 </body>
 </html>

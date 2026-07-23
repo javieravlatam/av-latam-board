@@ -92,6 +92,7 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(27,79,138,0.35);
   border-left:1px solid rgba(27,79,138,0.22)!important;
   border-right:1px solid rgba(27,79,138,0.22)!important}
 .ce-nd{color:var(--text-muted);font-size:11px;font-style:italic}
+.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
 </head>
 <body>
@@ -99,7 +100,7 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(27,79,138,0.35);
 <!-- HEADER -->
 <div class="av-nav">
   <div class="av-nav__brand">
-    <div class="av-nav__logo">AV</div>
+    <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
     <div>
       <div class="av-nav__title">JEFES · CHILE</div>
       <div class="av-nav__sub">Panel Comercial · Real 2026 vs Ppto 2026 · CLP</div>
@@ -1476,5 +1477,7 @@ function cerrarSesion() {
   }catch(e){console.warn('[AVBOARD][JCH]',e);}
 })();
 </script>
+<script src="assets_logo.js"></script>
+<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 </body>
 </html>

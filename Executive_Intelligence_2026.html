@@ -390,6 +390,7 @@ tbody td { padding: 12px 16px; font-size: 12px; }
   .ex-header { padding: 14px 16px; }
   .ex-tabs { padding: 0 16px; }
 }
+.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
 </head>
 <body>
@@ -399,7 +400,7 @@ tbody td { padding: 12px 16px; font-size: 12px; }
 ═══════════════════════════════════════════════ -->
 <div id="auth-overlay">
   <div class="auth-card">
-    <div class="auth-logo">EI</div>
+    <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
     <div class="auth-title">Executive Intelligence</div>
     <div class="auth-subtitle">Agroveca Grupo LATAM · 2026</div>
     <label class="auth-label" for="auth-pin">Clave de acceso ejecutivo</label>
@@ -426,7 +427,7 @@ tbody td { padding: 12px 16px; font-size: 12px; }
   <!-- HEADER -->
   <div class="ex-header">
     <div class="ex-logo-wrap">
-      <div class="ex-logo-mark">EI</div>
+      <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
       <div class="ex-logo-text">
         <div class="ex-logo-title">Executive Intelligence</div>
         <div class="ex-logo-sub">Agroveca Grupo LATAM · Temporada 2026</div>
@@ -1461,5 +1462,7 @@ function initDashboard() {
 }
 </script>
 
+<script src="assets_logo.js"></script>
+<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 </body>
 </html>

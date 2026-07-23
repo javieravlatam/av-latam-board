@@ -150,13 +150,14 @@
   font-family:'DM Sans',sans-serif;letter-spacing:.3px;transition:all .2s;}
 .btn-logout:hover{background:rgba(231,76,60,0.10);}
 
+.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
 </head>
 <body>
 
 <header class="hdr">
   <div class="hdr-l">
-    <div class="logo">CL</div>
+    <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
     <div>
       <div class="htitle">Panel Comercial · 🇨🇱 Chile</div>
       <div id="av-cl-hsub" class="hsub">Jefe Comercial · Ene–May 2026</div>
@@ -860,5 +861,7 @@ function cerrarSesion() {
   }
 })();
 </script>
+<script src="assets_logo.js"></script>
+<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 </body>
 </html>

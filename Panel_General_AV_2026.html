@@ -122,12 +122,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
 .cbox{border-radius:10px;padding:14px 16px;border:1px solid;}
 .cbox-cl{background:var(--cl-d);border-color:rgba(27,79,138,.25);}
 .cbox-pe{background:var(--pe-d);border-color:rgba(196,122,15,.25);}
+.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
 </head>
 <body>
 <div class="hdr">
   <div class="hbrand">
-    <div class="hlogo" style="background:linear-gradient(135deg,#b48aff,#8c5cf0);color:#fff;">AV</div>
+    <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
     <div><div class="hname">Vista General · Grupo Latam</div><div class="hsub">Panel Comercial Jefes · 2026</div></div>
   </div>
   <div class="hnav">
@@ -538,5 +539,7 @@ peDraw("todos");
   <div class="fnote">AV Grupo Latam · Fuente: AVBOARD (avboard_data.js) · Solo uso interno</div>
   <div class="fdisclaim">⚠ No incluye costos internos ni información confidencial de producción</div>
 </div>
+<script src="assets_logo.js"></script>
+<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 </body>
 </html>

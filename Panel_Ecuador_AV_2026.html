@@ -164,13 +164,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
 .ref-card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:20px 22px;}
 .ref-item{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:7px;border:1px solid var(--border2);background:rgba(0,0,0,.015);margin-bottom:7px;}
 .ref-item:last-child{margin-bottom:0;}
+.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
 </head>
 <body>
 
 <div class="hdr">
   <div class="hbrand">
-    <div class="hlogo" style="background:linear-gradient(135deg,var(--ec),var(--ec2));color:#fff;">AV</div>
+    <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
     <div>
       <div class="hname">Panel Comercial · 🇪🇨 Ecuador</div>
       <div class="hsub">Jefe Comercial · En desarrollo · Q2 2026</div>
@@ -325,5 +326,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);mi
   <div class="fnote">AV Ecuador · Panel en desarrollo · IC Fertilizantes v4 disponible · Solo uso interno</div>
   <div class="fdisclaim">⚠ No incluye costos internos ni información confidencial de producción</div>
 </div>
+<script src="assets_logo.js"></script>
+<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 </body>
 </html>

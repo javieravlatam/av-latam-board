@@ -250,6 +250,7 @@ footer{text-align:center;padding:14px 20px;font-size:9px;color:var(--muted);
   .charts-section{grid-template-columns:1fr}
   .hdr-nav{display:none}
 }
+.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
 </head>
 <body>
@@ -257,7 +258,7 @@ footer{text-align:center;padding:14px 20px;font-size:9px;color:var(--muted);
 <!-- HEADER -->
 <header class="hdr">
   <div class="hdr-brand">
-    <div class="hdr-logo">AV</div>
+    <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
     <div>
       <div class="hdr-title">Panel Clientes · AV Latam 2026</div>
       <div class="hdr-sub">CRM Ejecutivo · Corte 11/05 · Chile + Perú</div>
@@ -1423,5 +1424,7 @@ populateVendedorSelect();
 applyFilters();
 renderCxcOrphans();
 </script>
+<script src="assets_logo.js"></script>
+<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 </body>
 </html>
