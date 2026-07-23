@@ -401,53 +401,20 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   </div>
 </div>
 
-<!-- ═══ BLOQUE 7: ALERTAS + INSIGHTS ═══ -->
-<div class="slabel">Alertas Directivas · Insights Estratégicos</div>
+<!-- ═══ BLOQUE 7: ALERTAS + INSIGHTS (100% dinámicos desde AVBOARD) ═══ -->
+<div class="slabel">Alertas Directivas · Insights Estratégicos · Generados desde datos</div>
 <div class="g2">
 
   <div class="card">
-    <div class="eyebrow">Acción requerida · Q3 2026</div>
-    <div class="ctitle">Alertas Consolidadas <span class="tag tr" id="alert-count-badge">cargando</span></div>
-    <div class="alrt alrt-g">
-      <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🏆</span>
-      <div><strong>Chile cierra S1 2026 con 127.2% del presupuesto.</strong> Laratro lideró con CLP 173.5M (168%), Caroca en segundo con CLP 96.6M (153%). Primer semestre histórico para el equipo Chile.</div>
-    </div>
-    <div class="alrt alrt-r">
-      <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🔴</span>
-      <div><strong>I. Veverka (CL) inactivo desde Marzo: CLP 8.8M en 6M = 24% del objetivo.</strong> Sin ventas en Abr, May, Jun. Requiere decisión estructural antes del cierre de Q3.</div>
-    </div>
-    <div class="alrt alrt-r">
-      <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🔴</span>
-      <div><strong>Perú en 79.5% a 7 meses. Atalaya (58%), Infante (69%), Valladares (38%) bajo 80%.</strong> Brecha total USD 108K vs presupuesto. Plan de recuperación urgente para Q3.</div>
-    </div>
-    <div class="alrt alrt-r">
-      <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🔴</span>
-      <div><strong>CxC Chile creció de CLP 37.4M (T1) a CLP 66.4M (Jun). Vencida: CLP 39.8M (60%).</strong> Crecimiento de cartera supera crecimiento de ventas. Revisar política de crédito para S2.</div>
-    </div>
-    <div class="alrt alrt-a">
-      <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🟡</span>
-      <div><strong>S. Diaz (nueva RTC Perú) opera sin presupuesto: USD 17.5K en sus primeros 3 meses.</strong> Formalizar objetivo Q3 antes de que el período avance sin métrica de gestión.</div>
-    </div>
+    <div class="eyebrow" id="alert-eyebrow">Análisis automático · desde AVBOARD</div>
+    <div class="ctitle">Alertas Ejecutivas <span id="alert-count-badge" class="tag tr">…</span></div>
+    <div id="alertas-content" style="color:var(--muted);font-size:12px;">Cargando análisis…</div>
   </div>
 
   <div class="card">
-    <div class="eyebrow">Para el Directorio</div>
+    <div class="eyebrow">Visión CEO · Generado desde datos reales</div>
     <div class="ctitle">Insights Estratégicos</div>
-    <div class="ins">
-      <span class="itag">Explosión</span><strong>L. Aguirre (PE) creció 238% desde T1: USD 35.9K → USD 121.3K YTD con 159% de cumplimiento.</strong> De tercero sin presupuesto a segundo lugar con el mejor rendimiento vs ppto del grupo. Caso de estudio para exportar al equipo.
-    </div>
-    <div class="ins">
-      <span class="itag">Concentración</span><strong>Laratro (CL) vendió CLP 97.5M solo en Abril — un solo mes, un solo vendedor.</strong> Alta concentración positiva pero peligrosa. Si su CxC vence sin cobrar el impacto en caja es material para Chile.
-    </div>
-    <div class="ins">
-      <span class="itag">Equipo PE</span><strong>Navarro salió del equipo Perú. Ingresó S. Diaz y crecen Valladares y Gonzales.</strong> El top 3 es ahora Infante–Aguirre–Atalaya. La nueva dinámica requiere redistribución de carteras y asignación de presupuesto Q3.
-    </div>
-    <div class="ins">
-      <span class="itag">Grupo</span><strong>Por primera vez el consolidado supera USD 845K YTD.</strong> Manteniendo el ritmo de S1 el grupo puede cerrar 2026 cerca de USD 1.4M. Chile es el motor; Perú necesita reactivar para no comprometer el cierre anual.
-    </div>
-    <div class="ins">
-      <span class="itag">Ecuador</span><strong>Ecuador no está integrado al consolidado.</strong> Incorporarlo en Q3 daría visión real del 100% del grupo LATAM. Prioridad para el próximo ciclo de actualización.
-    </div>
+    <div id="insights-content" style="color:var(--muted);font-size:12px;">Cargando insights…</div>
   </div>
 </div>
 
@@ -853,6 +820,238 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   set('donut-total-val','USD '+totK+'K');
   set('donut-total-sub', totK>800?'Grupo supera USD 800K YTD 🏆':'YTD consolidado');
   set('donut-eyebrow',  'Grupo '+clN+'M–'+peN+'M 2026 · en USD');
+
+  // ─────────────────────────────────────────────────────────────
+  // MOTOR DE ANÁLISIS EJECUTIVO (CEO-level)
+  // ─────────────────────────────────────────────────────────────
+
+  function generateAlertas() {
+    var list = [];
+
+    // ── 1. HEADLINE GRUPO ──
+    if (grupoCumpl >= 1.1) {
+      list.push({t:'g', i:'🏆',
+        msg:'<strong>Grupo supera el presupuesto consolidado al '+pct(grupoCumpl)+'.</strong> '
+          +'Chile ('+pct(clCumpl)+' en '+clN+'M) compensa el déficit de Perú ('+pct(peCumpl)+' en '+peN+'M). '
+          +'Modelo de compensación entre países funciona en la práctica.'});
+    } else if (grupoCumpl >= 0.95) {
+      list.push({t:'g', i:'✅',
+        msg:'<strong>Grupo en línea con presupuesto al '+pct(grupoCumpl)+'.</strong> '
+          +'El sólido desempeño de Chile ('+pct(clCumpl)+') absorbe el shortfall de Perú ('+pct(peCumpl)+'). '
+          +'Balance frágil: si Chile cede, el grupo cae bajo plan.'});
+    } else if (grupoCumpl >= 0.80) {
+      list.push({t:'a', i:'🟡',
+        msg:'<strong>Grupo al '+pct(grupoCumpl)+' del presupuesto.</strong> '
+          +'Recuperación posible si Perú reactiva en Q3. '
+          +'Foco en los '+bRojo.length+' RTCs en zona roja.'});
+    } else {
+      list.push({t:'r', i:'🔴',
+        msg:'<strong>Grupo en zona crítica al '+pct(grupoCumpl)+'.</strong> '
+          +'Intervención ejecutiva urgente. Revisar estructuras de venta y objetivos de ambos países.'});
+    }
+
+    // ── 2. CHILE DESTACADO ──
+    if (clCumpl != null && clCumpl >= 1.10) {
+      var clTop = clRTCs[0];
+      list.push({t:'g', i:'🏆',
+        msg:'<strong>Chile cierra '+clN+'M con '+pct(clCumpl)+' del presupuesto.</strong> '
+          +(clTop ? clTop.name+' lidera con '+pct(clTop.cumpl)+' ('+fmtM(clTop.ytd)+' CLP YTD). ' : '')
+          +'Resultado histórico — identificar factores para sostener en H2.'});
+    }
+
+    // ── 3. PERÚ SITUACIÓN ──
+    if (peCumpl != null && peCumpl < 0.85) {
+      var brechaK = Math.round((pePptoUSD - peYtdUSD) / 1000);
+      var peRojos = bRojo.filter(function(r){return !r.isCL;});
+      list.push({t:'r', i:'🔴',
+        msg:'<strong>Perú al '+pct(peCumpl)+' a '+peN+' meses — brecha de USD '+brechaK+'K vs presupuesto.</strong> '
+          +(peRojos.length ? peRojos.map(function(r){return r.name+' '+pct(r.cumpl);}).join(', ')+' bajo el 80%. ' : '')
+          +'Plan de recuperación Q3 requerido antes del cierre trimestral.'});
+    }
+
+    // ── 4. RTCs SÚPER CRÍTICOS (<35%) + inactividad detectada ──
+    var superCritKeys = {};
+    var superCrit = bRojo.filter(function(r){return r.cumpl != null && r.cumpl < 0.35;});
+    superCrit.forEach(function(r){
+      superCritKeys[r.k] = true;
+      var ytdStr = r.isCL ? 'CLP '+fmtM(r.ytd) : 'USD '+fmtK(r.ytd,0);
+      var nMeses = r.isCL ? clN : peN;
+      // Detectar meses consecutivos en 0 para incluir en el mismo alert
+      var arr = r.isCL ? rtcCLR[r.k] : rtcPER[r.k];
+      var cerosFinales = 0;
+      if(arr){for(var i=nMeses-1;i>=0&&(arr[i]||0)===0;i--)cerosFinales++;}
+      var inactivoStr = cerosFinales >= 2
+        ? ' Sin ventas en los últimos '+cerosFinales+' meses.'
+        : '';
+      list.push({t:'r', i:'🔴',
+        msg:'<strong>'+r.name+' ('+( r.isCL?'Chile':'Perú')+') al '+pct(r.cumpl)
+          +' en '+nMeses+'M — '+ytdStr+' YTD.</strong>'
+          +inactivoStr
+          +' Nivel de actividad incompatible con el presupuesto asignado. '
+          +'Decisión ejecutiva: plan de recuperación o revisión de rol en Q3.'});
+    });
+
+    // ── 5. INACTIVIDAD DETECTADA (solo RTCs no cubiertos arriba) ──
+    allRTCs.forEach(function(r){
+      if(superCritKeys[r.k]) return; // ya alertado
+      var arr = r.isCL ? rtcCLR[r.k] : rtcPER[r.k];
+      if(!arr) return;
+      var n = r.isCL ? clN : peN;
+      var cerosFinales = 0;
+      for(var i=n-1;i>=0&&(arr[i]||0)===0;i--) cerosFinales++;
+      if(cerosFinales >= 2 && r.ytd > 0){
+        list.push({t:'a', i:'⚠️',
+          msg:'<strong>'+r.name+' ('+( r.isCL?'CL':'PE')+') sin ventas en los últimos '+cerosFinales+' meses.</strong> '
+            +'YTD acumulado: '+(r.isCL?'CLP '+fmtM(r.ytd):'USD '+fmtK(r.ytd,0))+'. '
+            +'Confirmar estado de cartera antes del corte Q3.'});
+      }
+    });
+
+    // ── 6. CxC ──
+    if (cxcTotal > 0) {
+      var cxcType = cxcPctV >= 0.55 ? 'r' : cxcPctV >= 0.35 ? 'a' : 'g';
+      var cxcIcon = cxcPctV >= 0.55 ? '🔴' : '🟡';
+      list.push({t:cxcType, i:cxcIcon,
+        msg:'<strong>CxC Chile: CLP '+fmtM(cxcTotal)+' total — '+pct(cxcPctV)+' vencida (CLP '+fmtM(cxcVencida)+').</strong> '
+          +(cxcPctV >= 0.55
+            ? 'Concentración crítica de mora. Revisar política de crédito y activar gestión de cobranza antes de nuevas entregas.'
+            : 'Cartera bajo control pero requiere seguimiento activo para evitar deterioro en Q3.')});
+    }
+
+    // ── 7. VENDEDORES SIN PRESUPUESTO CON VENTAS ──
+    var conVentas = bSinP.filter(function(r){return r.ytd > 0;});
+    if (conVentas.length > 0) {
+      var totalSpK = Math.round(conVentas.reduce(function(a,r){
+        return a + (r.isCL ? r.ytd/TC : r.ytd);
+      }, 0) / 1000);
+      list.push({t:'a', i:'🟡',
+        msg:'<strong>'+conVentas.map(function(r){return r.name;}).join(', ')
+          +' opera'+(conVentas.length>1?'n':'')+' sin presupuesto asignado</strong> '
+          +'(USD ~'+totalSpK+'K YTD combinado). '
+          +'Sin objetivo formal no hay palanca de gestión. Asignar antes de cerrar julio.'});
+    }
+
+    return list;
+  }
+
+  function generateInsights() {
+    var list = [];
+
+    // ── 1. STAR PERFORMER (mayor cumplimiento con ppto) ──
+    var rtcsConPpto = allRTCs.filter(function(r){return r.cumpl!=null&&r.ppto>0;});
+    rtcsConPpto.sort(function(a,b){return b.cumpl-a.cumpl;});
+    var star = rtcsConPpto[0];
+    if (star && star.cumpl > 1.3) {
+      var starYtd = star.isCL ? 'CLP '+fmtM(star.ytd) : 'USD '+fmtK(star.ytd,0);
+      list.push({tag:'STAR',
+        msg:'<strong>'+star.name+' ('+( star.isCL?'Chile':'Perú')+') lidera el grupo con '+pct(star.cumpl)
+          +' de cumplimiento — '+starYtd+' YTD.</strong> '
+          +'Identificar su metodología de prospección y seguimiento para transferirla a los RTCs en zona roja. '
+          +'Este perfil debe ser el estándar de comparación del grupo.'});
+    }
+
+    // ── 2. PROYECCIÓN ANUAL ──
+    var projCLK = clN > 0 ? Math.round(clYtdUSD / clN * 12 / 1000) : 0;
+    var projPEK = peN > 0 ? Math.round(peYtdUSD / peN * 12 / 1000) : 0;
+    var projTotalK = projCLK + projPEK;
+    var pptoCLAnualK = Math.round(sumArr(clV.mensual_ppto||[],12) / TC / 1000);
+    var pptoPEAnualK = Math.round(sumArr(peV.mensual_ppto||[],12) / 1000);
+    var pptoAnualK = pptoCLAnualK + pptoPEAnualK;
+    list.push({tag:'PROYECCIÓN',
+      msg:'<strong>Al ritmo actual, el grupo puede cerrar 2026 en USD '+projTotalK+'K</strong> '
+        +'(Chile USD '+projCLK+'K · Perú USD '+projPEK+'K). '
+        +'El presupuesto anual es USD '+pptoAnualK+'K. '
+        +(projTotalK >= pptoAnualK
+          ? 'El grupo está en camino de superar el plan anual si mantiene el ritmo.'
+          : 'Para alcanzar el plan, Perú necesita crecer un '
+            +Math.round((pptoAnualK-projCLK)/projPEK*100-100)+'% en H2.')});
+
+    // ── 3. CONCENTRACIÓN DE VENTAS ──
+    var topCLRTC = clRTCs[0];
+    if (topCLRTC && clYtdCLP > 0) {
+      var concPct = Math.round(topCLRTC.ytd / clYtdCLP * 100);
+      if (concPct > 35) {
+        list.push({tag:'CONCENTRACIÓN',
+          msg:'<strong>'+topCLRTC.name+' representa el '+concPct+'% de las ventas totales Chile YTD.</strong> '
+            +'Alta dependencia de un solo vendedor crea riesgo operacional y financiero. '
+            +'Si su CxC vence sin cobrar el impacto en caja es directo. '
+            +'Evaluar límite individual de crédito y plan de diversificación de cartera.'});
+      }
+    }
+
+    // ── 4. QUICK WIN — RTC más cercano al 100% ──
+    var nearMiss = allRTCs.filter(function(r){return r.cumpl!=null&&r.cumpl>=0.80&&r.cumpl<1.0;});
+    nearMiss.sort(function(a,b){return b.cumpl-a.cumpl;});
+    if (nearMiss.length > 0) {
+      var nm = nearMiss[0];
+      var gapV = nm.ppto - nm.ytd;
+      var gapStr = nm.isCL ? 'CLP '+fmtM(gapV) : 'USD '+fmtK(gapV,0);
+      list.push({tag:'QUICK WIN',
+        msg:'<strong>'+nm.name+' está al '+pct(nm.cumpl)
+          +' — le faltan solo '+gapStr+' para alcanzar el 100%.</strong> '
+          +'Con una gestión enfocada en Q3 este RTC puede cruzar el plan. '
+          +'Identificar 2–3 cuentas clave en su cartera y activar ciclo de cierre antes del corte.'});
+    }
+
+    // ── 5. BALANCE ENTRE PAÍSES ──
+    if (grupoYtdUSD > 0) {
+      var clShare = Math.round(clYtdUSD / grupoYtdUSD * 100);
+      var peShare = 100 - clShare;
+      if (Math.abs(clShare - 50) > 8) {
+        var dom = clShare > 50 ? 'Chile' : 'Perú';
+        var domPct = clShare > 50 ? clShare : peShare;
+        list.push({tag:'BALANCE',
+          msg:'<strong>'+dom+' representa el '+domPct+'% del consolidado grupo.</strong> '
+            +'Distribución '+(domPct > 60 ? 'muy desbalanceada' : 'moderadamente concentrada')+'. '
+            +'Diversificar el aporte entre países reduce el riesgo sistémico del grupo y mejora la resiliencia ante estacionalidades locales.'});
+      } else {
+        list.push({tag:'BALANCE',
+          msg:'<strong>Distribución grupo casi equitativa: Chile '+clShare+'% · Perú '+peShare+'%.</strong> '
+            +'El portafolio LATAM está naturalmente diversificado. '
+            +'Mantener esta paridad en H2: si Chile crece, asegurarse que Perú también lo haga para preservar el equilibrio.'});
+      }
+    }
+
+    // ── 6. DINÁMICA DE EQUIPO (salidas: en ppto pero sin real) ──
+    var ppeKeys=Object.keys(rtcPEP); var preKeys=Object.keys(rtcPER);
+    var salidas=ppeKeys.filter(function(k){
+      return preKeys.indexOf(k)<0 && sumArr(rtcPEP[k]||[],peN)>5000;
+    });
+    if(salidas.length>0){
+      var salidaNames=salidas.join(', ');
+      list.push({tag:'EQUIPO',
+        msg:'<strong>RTCs con presupuesto Perú sin ventas registradas: '+salidaNames+'.</strong> '
+          +'Verificar si están activos o si el presupuesto requiere reasignación antes del cierre Q3.'});
+    }
+
+    // ── 7. ECUADOR (siempre presente hasta integración) ──
+    list.push({tag:'ECUADOR',
+      msg:'<strong>Ecuador no está integrado al consolidado LATAM.</strong> '
+        +'Incorporarlo en Q3 daría visión real del 100% del grupo y puede cambiar el ranking de contribución entre países. '
+        +'Prioridad de datos para el próximo ciclo de actualización.'});
+
+    return list;
+  }
+
+  // ── RENDER ALERTAS ──
+  var alertasList = generateAlertas();
+  var alertHTML = '';
+  alertasList.forEach(function(a){
+    alertHTML += '<div class="alrt alrt-'+a.t+'">'
+      +'<span style="font-size:15px;flex-shrink:0;margin-top:1px;">'+a.i+'</span>'
+      +'<div>'+a.msg+'</div></div>';
+  });
+  setH('alertas-content', alertHTML||'<div style="color:var(--muted);font-size:12px;">Sin alertas generadas.</div>');
+  setH('alert-count-badge','<span class="tag tr">'+bRojo.length+' críticas</span>');
+  set('alert-eyebrow','Análisis automático · '+clN+'M Chile / '+peN+'M Perú · '+new Date().toLocaleDateString('es-CL',{day:'2-digit',month:'short',year:'numeric'}));
+
+  // ── RENDER INSIGHTS ──
+  var insightsList = generateInsights();
+  var insHTML = '';
+  insightsList.forEach(function(ins){
+    insHTML += '<div class="ins"><span class="itag">'+ins.tag+'</span>'+ins.msg+'</div>';
+  });
+  setH('insights-content', insHTML||'<div style="color:var(--muted);font-size:12px;">Sin insights generados.</div>');
 
   // ─────────────────────────────────────────────────────────────
   // HELPERS
