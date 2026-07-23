@@ -2,544 +2,664 @@
 <html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
+<script>
+  (function(){
+    if(sessionStorage.getItem('av_auth')!=='7cd4374e16e78510de24a08115c3b44f6d0d72762d41054e6ef8fa0cb5e0c45b')
+      window.location.replace('index.html');
+  })();
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Panel General · Grupo Latam · AV 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<style>:root{
-  /* AV LATAM BOARD · Light Mode · Panel General Grupo */
-  --bg:#F4F6F9;--surface:#FFFFFF;--card:#FFFFFF;--border:#D4DCE8;--border2:#EAF0F8;
-  --white:#1A2332;--muted:#7A90AA;--faint:#7A90AA;
-  --green:#5a8f35;--amber:#C47A0F;--red:#C0392B;
-  --cl:#1B4F8A;--cl2:#0d3b66;--cl-d:rgba(27,79,138,.08);
-  --pe:#C47A0F;--pe2:#b8791a;--pe-d:rgba(196,122,15,.08);
-  --ec:#2e7d32;--ec2:#1b5e20;--ec-d:rgba(46,125,50,.08);
-  --gr:#5c2d9a;--gr2:#3d1c6e;--gr-d:rgba(92,45,154,.08);
-  --ac:var(--cl);--ac2:var(--cl2);--ac-d:var(--cl-d);
-}
+<title>Vista General Grupo · AV LATAM 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;font-size:13px;line-height:1.5;}
-.hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:0 44px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
-.hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--ac) 0%,transparent 50%);opacity:.5;}
+:root{
+  --bg:#F4F6F9;--surface:#FFFFFF;--surface2:#EDF1F7;
+  --border:rgba(27,79,138,.18);--border-dim:rgba(27,79,138,.08);
+  --text:#1A2C3D;--text-dim:#3D5270;--muted:#7A90AA;
+  --green:#5a8f35;--amber:#C47A0F;--red:#C0392B;
+  --blue:#1B4F8A;--purple:#5c2d9a;--purple2:#3d1c6e;
+  --cl:#1B4F8A;--pe:#C47A0F;--ec:#2e7d32;
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.5;min-height:100vh;}
+
+/* HEADER */
+.header{background:#fff;border-bottom:1px solid var(--border);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple) 0%,transparent 55%);opacity:.7;}
 .hbrand{display:flex;align-items:center;gap:10px;}
-.hlogo{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:#000;flex-shrink:0;}
-.hname{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;letter-spacing:-.3px;}
+.htitle{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1.5px;color:var(--purple);}
 .hsub{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px;}
 .hnav{display:flex;align-items:center;gap:6px;}
-.hlink{font-size:12px;color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:4px;border:1px solid var(--border);letter-spacing:.5px;transition:all .2s;white-space:nowrap;}
-.hlink:hover{color:var(--ac);border-color:var(--ac);}
-.hlink.act{color:var(--ac);border-color:var(--ac);background:var(--ac-d);}
-.hchip{font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(0,0,0,.04);border:1px solid var(--border);color:var(--muted);letter-spacing:.5px;white-space:nowrap;}
-.hchip strong{color:var(--ac);}
-.wrap{padding:24px 44px 48px;}
-.slabel{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--faint);font-weight:600;margin:22px 0 11px;display:flex;align-items:center;gap:10px;}
-.slabel::after{content:'';flex:1;height:1px;background:var(--border2);}
-.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;}
-.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
-.g21{display:grid;grid-template-columns:1.65fr 1fr;gap:11px;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:18px 20px;}
-.card-t{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;}
-.eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--faint);font-weight:600;margin-bottom:2px;}
-.ctitle{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;letter-spacing:-.2px;}
-.kpi{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s;}
-.kpi:hover{border-color:var(--ac);}
-.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--ac),transparent);opacity:0;transition:opacity .2s;}
-.kpi:hover::before{opacity:1;}
-.klbl{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--faint);margin-bottom:7px;font-weight:600;}
-.kval{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-1px;line-height:1;}
-.ksub{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);margin-top:5px;}
-.kbadge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600;margin-top:7px;}
-.kb-g{background:rgba(74,222,128,.1);color:var(--green);}
-.kb-a{background:rgba(251,191,36,.1);color:var(--amber);}
-.kb-r{background:rgba(248,113,113,.1);color:var(--red);}
-.kb-b{background:var(--ac-d);color:var(--ac);}
-.tag{font-size:9px;padding:3px 8px;border-radius:4px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;}
-.tg{background:rgba(74,222,128,.1);color:var(--green);}
-.ta{background:rgba(251,191,36,.1);color:var(--amber);}
-.tr{background:rgba(248,113,113,.1);color:var(--red);}
-.tb{background:var(--ac-d);color:var(--ac);}
-.srow{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:7px;border:1px solid var(--border2);background:rgba(0,0,0,.015);margin-bottom:7px;transition:background .15s;}
-.srow:last-child{margin-bottom:0;}
-.srow:hover{background:rgba(0,0,0,.035);}
-.sleft{display:flex;align-items:center;gap:9px;}
-.sname{font-size:12px;font-weight:500;}
-.sdet{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);margin-top:1px;}
-.sright{display:flex;align-items:center;gap:8px;}
-.sval{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;text-align:right;}
-.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.dg{background:var(--green);box-shadow:0 0 5px var(--green);}
-.da{background:var(--amber);box-shadow:0 0 5px var(--amber);}
-.dr{background:var(--red);box-shadow:0 0 5px var(--red);}
-.dn{background:var(--faint);}
-.prow{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
-.plbl{font-size:12px;color:var(--white);width:125px;flex-shrink:0;font-weight:500;}
-.pbar{flex:1;height:5px;background:rgba(0,0,0,.06);border-radius:3px;overflow:hidden;}
-.pfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .8s cubic-bezier(.4,0,.2,1);}
-.ppct{font-family:'DM Mono',monospace;font-size:12px;width:36px;text-align:right;flex-shrink:0;}
-.tbl{width:100%;border-collapse:collapse;margin-top:12px;}
-.tbl th{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);padding:0 10px 8px;text-align:right;border-bottom:1px solid var(--border2);font-weight:600;}
-.tbl th:first-child{text-align:left;}
-.tbl td{padding:9px 10px;font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);border-bottom:1px solid var(--border2);text-align:right;vertical-align:middle;}
-.tbl td:first-child{text-align:left;color:var(--white);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;}
-.tbl tr:last-child td{border-bottom:none;}
-.tbl tr:hover td{background:rgba(0,0,0,.02);}
-.vg{color:var(--green)!important;}.va{color:var(--amber)!important;}.vr{color:var(--red)!important;}.vh{color:var(--white)!important;font-weight:500!important;}
-.alrt{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border-radius:7px;border:1px solid;font-size:11.5px;line-height:1.5;margin-bottom:7px;}
-.alrt:last-child{margin-bottom:0;}
-.alrt-r{background:rgba(248,113,113,.05);border-color:rgba(248,113,113,.2);}
-.alrt-a{background:rgba(251,191,36,.04);border-color:rgba(251,191,36,.2);}
-.alrt-g{background:rgba(74,222,128,.04);border-color:rgba(74,222,128,.2);}
-.alrt strong{font-weight:600;}
-.ins-item{padding:11px 13px;border-radius:7px;background:rgba(0,0,0,.02);border-left:3px solid var(--ac);font-size:11.5px;line-height:1.6;color:var(--muted);margin-bottom:8px;}
-.ins-item:last-child{margin-bottom:0;}
-.ins-item strong{color:var(--white);}
-.itag{display:inline;font-size:9px;background:var(--ac-d);color:var(--ac);padding:2px 6px;border-radius:3px;margin-right:5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
-.mrow{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
-.mrow:last-child{margin-bottom:0;}
-.mname{font-size:12px;color:var(--white);width:115px;flex-shrink:0;font-weight:500;}
-.mbar{flex:1;height:4px;background:rgba(0,0,0,.05);border-radius:2px;overflow:hidden;}
-.mfill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--ac),var(--ac2));}
-.mval{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);width:46px;text-align:right;flex-shrink:0;}
-.mmgn{font-family:'DM Mono',monospace;font-size:12px;width:38px;text-align:right;flex-shrink:0;}
-.gauge-wrap{display:flex;flex-direction:column;align-items:center;padding:8px 0 4px;}
-.gauge-ring{position:relative;width:96px;height:96px;}
-.gauge-ring svg{transform:rotate(-90deg);}
-.gauge-ring circle{fill:none;stroke-width:7;stroke-linecap:round;}
-.g-track{stroke:rgba(0,0,0,.06);}
-.g-fill{stroke:var(--ac);transition:stroke-dashoffset .8s ease;}
-.gauge-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.gauge-pct{font-family:'Syne',sans-serif;font-weight:800;font-size:19px;letter-spacing:-1px;}
-.gauge-sub{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.8px;}
-.footer{padding:12px 44px;border-top:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;}
-.fnote{font-size:10px;color:var(--faint);}
-.fdisclaim{font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.15);color:var(--amber);}
-.card,.kpi{animation:fadeUp .35s ease both;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-@media(max-width:1100px){.g5{grid-template-columns:repeat(3,1fr);}.g21{grid-template-columns:1fr;}}
-@media(max-width:768px){.hdr,.wrap,.footer{padding-left:14px;padding-right:14px;}.g5,.g3,.g2,.g21{grid-template-columns:1fr;}.hnav{display:none;}}
+.hlink{font-size:11px;color:var(--muted);text-decoration:none;padding:5px 12px;border-radius:5px;border:1px solid var(--border-dim);letter-spacing:.3px;transition:all .2s;white-space:nowrap;}
+.hlink:hover{color:var(--purple);border-color:var(--purple);}
+.hlink.act{color:var(--purple);border-color:var(--purple);background:rgba(92,45,154,.07);}
+.hchip{font-family:'DM Mono',monospace;font-size:10px;padding:4px 10px;border-radius:4px;background:rgba(92,45,154,.06);border:1px solid rgba(92,45,154,.2);color:var(--muted);}
+.hchip strong{color:var(--purple);}
 
-:root{--ac:var(--gr);--ac2:var(--gr2);--ac-d:var(--gr-d);}
-.cbox{border-radius:10px;padding:14px 16px;border:1px solid;}
-.cbox-cl{background:var(--cl-d);border-color:rgba(27,79,138,.25);}
-.cbox-pe{background:var(--pe-d);border-color:rgba(196,122,15,.25);}
-.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
+/* LAYOUT */
+.page{max-width:1440px;margin:0 auto;padding:24px 32px 48px;}
+.slabel{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);font-weight:600;margin:26px 0 13px;display:flex;align-items:center;gap:10px;}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border-dim);}
+
+/* GRIDS */
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.g21{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;}
+.g12{display:grid;grid-template-columns:1fr 1.65fr;gap:14px;}
+
+/* CARDS */
+.card{background:#fff;border:1px solid var(--border-dim);border-radius:12px;padding:18px 20px;}
+.eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:3px;font-weight:600;}
+.ctitle{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.8px;color:var(--text);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+
+/* KPI STRIP */
+.kpi{background:#fff;border:1px solid var(--border-dim);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s;}
+.kpi:hover{border-color:var(--kac,var(--purple));}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--kac,var(--purple));opacity:0;transition:opacity .2s;}
+.kpi:hover::before{opacity:1;}
+.klbl{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:6px;font-weight:600;}
+.kval{font-family:'Bebas Neue',sans-serif;font-size:27px;line-height:1;letter-spacing:-.3px;}
+.ksub{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-top:5px;}
+.kbadge{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:12px;font-size:10px;font-weight:600;margin-top:8px;}
+.kb-g{background:rgba(90,143,53,.1);color:var(--green);}
+.kb-a{background:rgba(196,122,15,.1);color:var(--amber);}
+.kb-r{background:rgba(192,57,43,.1);color:var(--red);}
+.kb-p{background:rgba(92,45,154,.1);color:var(--purple);}
+
+/* TAGS */
+.tag{font-size:9px;padding:3px 8px;border-radius:4px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;}
+.tg{background:rgba(90,143,53,.1);color:var(--green);}
+.ta{background:rgba(196,122,15,.1);color:var(--amber);}
+.tr{background:rgba(192,57,43,.1);color:var(--red);}
+.tp{background:rgba(92,45,154,.1);color:var(--purple);}
+
+/* COUNTRY ACCENT CARDS */
+.cc{border-radius:12px;padding:20px;border:1px solid;}
+.cc-cl{background:rgba(27,79,138,.03);border-color:rgba(27,79,138,.2);}
+.cc-pe{background:rgba(196,122,15,.03);border-color:rgba(196,122,15,.2);}
+.cc-ec{background:rgba(46,125,50,.03);border-color:rgba(46,125,50,.18);opacity:.72;}
+.cc-name{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;margin-bottom:3px;}
+.cc-val{font-family:'Bebas Neue',sans-serif;font-size:30px;line-height:1;margin:10px 0 4px;}
+
+/* PROGRESS BARS */
+.prow{display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+.prow:last-child{margin-bottom:0;}
+.plbl{font-size:11px;color:var(--text);width:72px;flex-shrink:0;font-weight:500;}
+.pbar{flex:1;height:5px;background:rgba(0,0,0,.06);border-radius:3px;overflow:hidden;}
+.pfill{height:100%;border-radius:3px;transition:width .8s cubic-bezier(.4,0,.2,1);}
+.ppct{font-family:'DM Mono',monospace;font-size:11px;width:40px;text-align:right;flex-shrink:0;}
+
+/* VENDOR RANKING */
+.vrow{display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+.vrow:last-child{margin-bottom:0;}
+.vname{font-size:12px;font-weight:500;width:115px;flex-shrink:0;color:var(--text);}
+.vbar-w{flex:1;height:5px;background:rgba(0,0,0,.06);border-radius:3px;overflow:hidden;}
+.vbar-f{height:100%;border-radius:3px;}
+.vsales{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);width:60px;text-align:right;flex-shrink:0;}
+.vcum{font-family:'DM Mono',monospace;font-size:11px;font-weight:600;width:44px;text-align:right;flex-shrink:0;}
+
+/* SEMAFORO */
+.sem-col{padding:14px;border-radius:9px;border:1px solid;}
+.sem-g{background:rgba(90,143,53,.05);border-color:rgba(90,143,53,.2);}
+.sem-a{background:rgba(196,122,15,.05);border-color:rgba(196,122,15,.2);}
+.sem-r{background:rgba(192,57,43,.05);border-color:rgba(192,57,43,.2);}
+.sem-p{background:rgba(92,45,154,.05);border-color:rgba(92,45,154,.2);}
+.sem-hdg{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:9px;}
+.sem-item{font-size:12px;font-weight:500;color:var(--text);margin-bottom:2px;}
+.sem-val{font-family:'DM Mono',monospace;font-size:11px;margin-bottom:8px;}
+.sem-div{height:1px;margin:7px 0;}
+
+/* ALERTS */
+.alrt{display:flex;align-items:flex-start;gap:9px;padding:11px 13px;border-radius:8px;border:1px solid;font-size:12px;line-height:1.55;margin-bottom:8px;}
+.alrt:last-child{margin-bottom:0;}
+.alrt-r{background:rgba(192,57,43,.04);border-color:rgba(192,57,43,.18);}
+.alrt-a{background:rgba(196,122,15,.04);border-color:rgba(196,122,15,.18);}
+.alrt-g{background:rgba(90,143,53,.04);border-color:rgba(90,143,53,.18);}
+.alrt strong{font-weight:600;color:var(--text);}
+
+/* INSIGHTS */
+.ins{padding:11px 14px;border-radius:8px;background:rgba(0,0,0,.02);border-left:3px solid var(--purple);font-size:12px;line-height:1.6;color:var(--text-dim);margin-bottom:9px;}
+.ins:last-child{margin-bottom:0;}
+.ins strong{color:var(--text);}
+.itag{display:inline;font-size:9px;background:rgba(92,45,154,.1);color:var(--purple);padding:2px 6px;border-radius:3px;margin-right:5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
+
+/* STAT ROW */
+.stat-row{display:flex;justify-content:space-between;font-size:11px;margin-top:4px;}
+.stat-lbl{color:var(--muted);}
+.stat-val{font-family:'DM Mono',monospace;font-weight:500;}
+
+/* COLOR UTILS */
+.vg{color:var(--green)!important;}
+.va{color:var(--amber)!important;}
+.vr{color:var(--red)!important;}
+.vp{color:var(--purple)!important;}
+
+/* LOGO */
+.logo-mark-img{display:flex;align-items:center;}
+.logo-mark-img img{height:28px;width:auto;display:block;}
+
+/* FOOTER */
+.footer{padding:14px 32px;border-top:1px solid var(--border-dim);display:flex;justify-content:space-between;align-items:center;}
+.fnote{font-size:10px;color:var(--muted);}
+.fdisclaim{font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(196,122,15,.05);border:1px solid rgba(196,122,15,.15);color:var(--amber);}
+
+/* ANIM */
+.card,.kpi,.cc{animation:fadeUp .3s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+@media(max-width:1100px){.g5{grid-template-columns:repeat(3,1fr);}.g21,.g12{grid-template-columns:1fr;}}
+@media(max-width:768px){.header,.page,.footer{padding-left:14px;padding-right:14px;}.g5,.g4,.g3,.g2,.g21,.g12{grid-template-columns:1fr;}.hnav{display:none;}}
 </style>
 </head>
 <body>
-<div class="hdr">
+
+<!-- HEADER -->
+<div class="header">
   <div class="hbrand">
     <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
-    <div><div class="hname">Vista General · Grupo Latam</div><div class="hsub">Panel Comercial Jefes · 2026</div></div>
+    <div>
+      <div class="htitle">Vista General Grupo LATAM</div>
+      <div class="hsub">Panel Directorio · 2026</div>
+    </div>
   </div>
   <div class="hnav">
-    <a href="Panel_Jefes_Index.html" class="hlink">← Países</a>
-    <a href="Panel_General_AV_2026.html" class="hlink act">🌎 General</a>
+    <a href="dashboard.html" class="hlink">← Board</a>
+    <a href="Panel_General_AV_2026.html" class="hlink act">🌎 Grupo</a>
     <a href="Panel_Chile_AV_2026.html" class="hlink">🇨🇱 Chile</a>
     <a href="Panel_Peru_AV_2026.html" class="hlink">🇵🇪 Perú</a>
     <a href="Panel_Ecuador_AV_2026.html" class="hlink">🇪🇨 Ecuador</a>
-    <div class="hchip">Chile <strong>22/03</strong> · Perú <strong>20/03</strong></div>
+    <div class="hchip" id="corte-chip">Corte: CL <strong>22/03</strong> · PE <strong>20/03</strong></div>
   </div>
 </div>
-<div class="wrap">
 
-<!-- [AVBOARD LIVE] Sección dinámica — poblada por script -->
-<div id="avb-live" style="display:none;">
-  <div class="slabel" style="color:var(--green);display:flex;align-items:center;gap:8px;">⚡ KPIs Actuales · Fuente AVBOARD<span id="avb-corte-chip" style="font-size:9px;font-weight:400;font-family:monospace;color:#444c66;margin-left:auto;"></span></div>
-  <div class="g5" id="avb-kpi-row"></div>
-</div>
-<div id="avb-sep" style="display:none;margin:22px 0 0;padding:12px 16px;border:1px solid rgba(245,166,35,0.25);border-radius:8px;background:rgba(245,166,35,0.03);">
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <span style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#f5a623;font-weight:700;">📁 Archivo Histórico</span>
-      <span style="flex:1;height:1px;background:rgba(245,166,35,0.25);min-width:40px;"></span>
-      <span style="font-size:9px;color:#444c66;font-style:italic;">T1 2026 · Ene–Mar · Cierre 22/03/2026 · no responde a filtros actuales</span>
-    </div>
-    <button id="avb-hist-toggle" onclick="(function(){var s=document.getElementById('avb-hist-body');var b=document.getElementById('avb-hist-toggle');if(!s)return;var hidden=s.style.display==='none';s.style.display=hidden?'':'none';b.textContent=hidden?'▲ Ocultar':'▼ Ver histórico';if(hidden){try{clDraw('todos');peDraw('todos');}catch(e){}}})()" style="font-size:12px;padding:4px 10px;border-radius:4px;border:1px solid rgba(245,166,35,0.3);background:transparent;color:#f5a623;cursor:pointer;white-space:nowrap;">▼ Ver histórico</button>
-  </div>
-</div>
-<div id="avb-hist-body" style="display:none;">
-<div class="slabel" style="color:#444c66;margin-top:14px;">Indicadores Históricos · T1 2026 (Ene–Mar · Al 22/03/2026)</div>
+<div class="page">
+
+<!-- ═══ BLOQUE 1: KPIs EJECUTIVOS ═══ -->
+<div class="slabel">KPIs Ejecutivos · Grupo LATAM · T1 2026</div>
 <div class="g5">
-  <div class="kpi" style="--ac:#b48aff;--ac2:#8c5cf0;--ac-d:rgba(180,138,255,.09);">
+  <div class="kpi" style="--kac:#5c2d9a;">
     <div class="klbl">Ventas Grupo YTD</div>
-    <div class="kval" style="color:#b48aff;">USD 349.9K</div>
-    <div class="ksub">CLP 168.3M + USD 172.8K</div>
-    <div class="kbadge" style="background:rgba(180,138,255,.1);color:#b48aff;">2 países activos</div>
+    <div class="kval" style="color:#5c2d9a;" id="kpi-grupo-ytd">USD 350K</div>
+    <div class="ksub" id="kpi-grupo-sub">CL + PE · Al 22/03/2026</div>
+    <div class="kbadge kb-p">2 países activos</div>
   </div>
-  <div class="kpi"><div class="klbl">Margen Bruto Grupo</div><div class="kval" style="color:var(--green);">82.5%</div><div class="ksub">USD 241.5K sobre ventas</div><div class="kbadge kb-g">↑ Mejora mensual</div></div>
-  <div class="kpi"><div class="klbl">Chile YTD</div><div class="kval" style="color:var(--green);">100.7%</div><div class="ksub">CLP 168.3M · Superó ppto ✅</div><div class="kbadge kb-g">Hito T1</div></div>
-  <div class="kpi"><div class="klbl">Perú YTD</div><div class="kval" style="color:var(--amber);">81.0%</div><div class="ksub">USD 172.8K · vs ppto 213.4K</div><div class="kbadge kb-a">↑ Mejora vs 76.1%</div></div>
-  <div class="kpi"><div class="klbl">RTCs críticos</div><div class="kval" style="color:var(--red);">4</div><div class="ksub">Veverka · Infante · Val. · Gon.</div><div class="kbadge kb-r">Plan Q2 urgente</div></div>
-</div>
-
-<div class="slabel">Comparativo Chile vs Perú · T1 2026</div>
-<div class="g2">
-  <div class="card">
-    <div class="card-t"><div><div class="eyebrow">🇨🇱 Chile · Al 22/03/2026</div><div class="ctitle">✅ Cerró T1 sobre presupuesto</div></div><span class="tag tg">100.7%</span></div>
-    <div style="margin:14px 0 10px;">
-      <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:100%;"></div></div><div class="ppct" style="color:var(--green);">104.6%</div></div>
-      <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:83.3%;"></div></div><div class="ppct" style="color:var(--amber);">83.3%</div></div>
-      <div class="prow"><div class="plbl">Marzo ✅</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green)!important;"></div></div><div class="ppct" style="color:var(--green);">101.8%</div></div>
-      <div class="prow"><div class="plbl">YTD ✅</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green)!important;"></div></div><div class="ppct" style="color:var(--green);">100.7%</div></div>
-    </div>
-    <div class="g2" style="gap:8px;">
-      <div class="cbox cbox-cl"><div style="font-size:12px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Margen YTD</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--cl);">73.8%</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">CLP 91.4M</div></div>
-      <div class="cbox cbox-cl"><div style="font-size:12px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Cartera vencida</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--amber);">66%</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">CLP 24.7M de 37.4M</div></div>
-    </div>
-    <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
-      <span class="tag tg">J. Caroca 162.3%</span><span class="tag ta">P. Laratro 92.9%</span><span class="tag tr">I. Veverka 45.2%</span>
-    </div>
+  <div class="kpi" style="--kac:#5a8f35;">
+    <div class="klbl">Margen Bruto Grupo</div>
+    <div class="kval" style="color:#5a8f35;">82.5%</div>
+    <div class="ksub">Promedio ponderado T1</div>
+    <div class="kbadge kb-g">↑ Tendencia positiva</div>
   </div>
-  <div class="card">
-    <div class="card-t"><div><div class="eyebrow">🇵🇪 Perú · Al 20/03/2026</div><div class="ctitle">↑ Mejorando — Marzo fue el mejor mes</div></div><span class="tag ta">81.0%</span></div>
-    <div style="margin:14px 0 10px;">
-      <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green)!important;"></div></div><div class="ppct" style="color:var(--green);">142.2%</div></div>
-      <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:67.4%;background:linear-gradient(90deg,var(--pe),var(--pe2))!important;"></div></div><div class="ppct" style="color:var(--amber);">67.4%</div></div>
-      <div class="prow"><div class="plbl">Marzo</div><div class="pbar"><div class="pfill" style="width:94.3%;background:linear-gradient(90deg,var(--pe),var(--pe2))!important;"></div></div><div class="ppct" style="color:var(--amber);">94.3%</div></div>
-      <div class="prow"><div class="plbl">YTD</div><div class="pbar"><div class="pfill" style="width:81%;background:linear-gradient(90deg,var(--pe),var(--pe2))!important;"></div></div><div class="ppct" style="color:var(--amber);">81.0%</div></div>
-    </div>
-    <div class="g2" style="gap:8px;">
-      <div class="cbox cbox-pe"><div style="font-size:12px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Margen YTD</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--pe);">89.5%</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">USD 145.2K</div></div>
-      <div class="cbox cbox-pe"><div style="font-size:12px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Marzo</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--white);">USD 59.8K</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">Mejor mes del año</div></div>
-    </div>
-    <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
-      <span class="tag tg">O. Atalaya 110%</span><span class="tag tg">L. Aguirre USD 35.9K s/p</span><span class="tag tr">O. Infante 37%</span>
-    </div>
+  <div class="kpi" style="--kac:#5a8f35;">
+    <div class="klbl">Cumplimiento Grupo</div>
+    <div class="kval" style="color:#5a8f35;" id="kpi-cumpl-val">92.1%</div>
+    <div class="ksub" id="kpi-cumpl-sub">vs ppto T1 USD ~380K</div>
+    <div class="kbadge kb-a">Chile ✅ · Perú 81%</div>
+  </div>
+  <div class="kpi" style="--kac:#C47A0F;">
+    <div class="klbl">CxC Total Grupo</div>
+    <div class="kval" style="color:#C47A0F;">CLP 37.4M</div>
+    <div class="ksub">66% vencida · Solo Chile activa</div>
+    <div class="kbadge kb-a">Gestión Q2 urgente</div>
+  </div>
+  <div class="kpi" style="--kac:#C0392B;">
+    <div class="klbl">RTCs en Alerta</div>
+    <div class="kval" style="color:#C0392B;">4</div>
+    <div class="ksub">Veverka · Infante · Val. · Gon.</div>
+    <div class="kbadge kb-r">Plan Q2 requerido</div>
   </div>
 </div>
 
-<div class="slabel">Tendencia Margen Mensual · Grupo</div>
+<!-- ═══ BLOQUE 2: COMPARATIVO POR PAÍS ═══ -->
+<div class="slabel">Comparativo por País · T1 2026</div>
 <div class="g3">
-  <div class="card">
-    <div class="eyebrow">Enero 2026</div><div class="ctitle" style="color:var(--amber);">79.6% margen grupo</div>
-    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-      <div style="text-align:center;padding:10px;background:rgba(0,0,0,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--faint);">🇨🇱 Chile</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--cl);margin:4px 0;">72.0%</div><div style="font-size:12px;color:var(--muted);">CLP 88.7M</div></div>
-      <div style="text-align:center;padding:10px;background:rgba(0,0,0,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--faint);">🇵🇪 Perú</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--pe);margin:4px 0;">88.6%</div><div style="font-size:12px;color:var(--muted);">USD 73.5K</div></div>
+
+  <!-- Chile -->
+  <div class="cc cc-cl">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+      <div><div class="cc-name" style="color:var(--cl);">🇨🇱 Chile</div><div style="font-size:11px;color:var(--muted);">Corte 22/03/2026</div></div>
+      <span class="tag tg">100.7% ✅</span>
     </div>
-    <div style="margin-top:8px;padding:8px;background:rgba(74,222,128,.04);border-radius:6px;border:1px solid rgba(74,222,128,.15);font-size:12px;color:var(--muted);">Perú excelente: 142% vs ppto</div>
+    <div class="cc-val" style="color:var(--cl);">CLP 168.3M</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">≈ USD 177K · TC 950 CLP/USD</div>
+    <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green);"></div></div><div class="ppct vg">104.6%</div></div>
+    <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:83.3%;background:var(--amber);"></div></div><div class="ppct va">83.3%</div></div>
+    <div class="prow"><div class="plbl">Marzo</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green);"></div></div><div class="ppct vg">101.8%</div></div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(27,79,138,.15);">
+      <div class="stat-row"><span class="stat-lbl">Margen T1</span><span class="stat-val vg">73.8%</span></div>
+      <div class="stat-row"><span class="stat-lbl">IEC precio piso</span><span class="stat-val vg">Saludable</span></div>
+      <div class="stat-row"><span class="stat-lbl">6 RTCs · 4 sobre 80%</span><span class="stat-val">Caroca lidera</span></div>
+    </div>
   </div>
-  <div class="card">
-    <div class="eyebrow">Febrero 2026</div><div class="ctitle" style="color:var(--amber);">82.8% margen grupo</div>
-    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-      <div style="text-align:center;padding:10px;background:rgba(0,0,0,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--faint);">🇨🇱 Chile</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--cl);margin:4px 0;">73.7%</div><div style="font-size:12px;color:var(--muted);">CLP 35.7M</div></div>
-      <div style="text-align:center;padding:10px;background:rgba(0,0,0,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--faint);">🇵🇪 Perú</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--pe);margin:4px 0;">89.5%</div><div style="font-size:12px;color:var(--muted);">USD 39.4K</div></div>
+
+  <!-- Perú -->
+  <div class="cc cc-pe">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+      <div><div class="cc-name" style="color:var(--pe);">🇵🇪 Perú</div><div style="font-size:11px;color:var(--muted);">Corte 20/03/2026</div></div>
+      <span class="tag ta">81.0%</span>
     </div>
-    <div style="margin-top:8px;padding:8px;background:rgba(74,222,128,.04);border-radius:6px;border:1px solid rgba(74,222,128,.15);font-size:12px;color:var(--muted);">↑ Mejora en ambos países</div>
+    <div class="cc-val" style="color:var(--pe);">USD 172.8K</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">vs presupuesto USD 213.4K</div>
+    <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green);"></div></div><div class="ppct vg">142.2%</div></div>
+    <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:67.4%;background:var(--amber);"></div></div><div class="ppct va">67.4%</div></div>
+    <div class="prow"><div class="plbl">Marzo</div><div class="pbar"><div class="pfill" style="width:94.3%;background:var(--amber);"></div></div><div class="ppct va">94.3%</div></div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(196,122,15,.15);">
+      <div class="stat-row"><span class="stat-lbl">Margen T1</span><span class="stat-val vg">89.5%</span></div>
+      <div class="stat-row"><span class="stat-lbl">Brecha vs ppto</span><span class="stat-val vr">USD −40.6K</span></div>
+      <div class="stat-row"><span class="stat-lbl">6 RTCs · 2 críticos</span><span class="stat-val">Atalaya lidera</span></div>
+    </div>
   </div>
-  <div class="card">
-    <div class="eyebrow">Marzo 2026</div><div class="ctitle" style="color:var(--green);">89.4% margen grupo ⭐</div>
-    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-      <div style="text-align:center;padding:10px;background:rgba(0,0,0,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--faint);">🇨🇱 Chile</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--cl);margin:4px 0;">84.7%</div><div style="font-size:12px;color:var(--muted);">CLP 44.0M ✅</div></div>
-      <div style="text-align:center;padding:10px;background:rgba(0,0,0,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--faint);">🇵🇪 Perú</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--pe);margin:4px 0;">90.8%</div><div style="font-size:12px;color:var(--muted);">USD 59.8K ⭐</div></div>
+
+  <!-- Ecuador -->
+  <div class="cc cc-ec">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+      <div><div class="cc-name" style="color:var(--ec);">🇪🇨 Ecuador</div><div style="font-size:11px;color:var(--muted);">Panel en desarrollo</div></div>
+      <span class="tag" style="background:rgba(0,0,0,.05);color:var(--muted);">Pendiente</span>
     </div>
-    <div style="margin-top:8px;padding:8px;background:rgba(74,222,128,.06);border-radius:6px;border:1px solid rgba(74,222,128,.2);font-size:12px;color:var(--muted);">⭐ Mejor mes del año. Chile sobre ppto. Perú mejor mes.</div>
+    <div class="cc-val" style="color:var(--muted);">—</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Sin datos Q1 integrados</div>
+    <div style="padding:18px;border-radius:8px;background:rgba(0,0,0,.03);text-align:center;">
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">Integración de data Ecuador planificada para Q2 2026.<br>Panel disponible en Board.</div>
+      <a href="Panel_Ecuador_AV_2026.html" style="display:inline-block;margin-top:10px;font-size:11px;color:var(--ec);text-decoration:none;border:1px solid rgba(46,125,50,.3);padding:4px 12px;border-radius:4px;">Ver Panel Ecuador →</a>
+    </div>
   </div>
 </div>
 
-<div class="slabel">Alertas Cruzadas · Insights Estratégicos</div>
+<!-- ═══ BLOQUE 3: GRÁFICOS PRINCIPALES ═══ -->
+<div class="slabel">Evolución Mensual Grupo · Ventas vs Presupuesto</div>
+<div class="g21">
+
+  <!-- Stacked bar + cumplimiento -->
+  <div class="card">
+    <div class="eyebrow">Consolidado Grupo T1 2026</div>
+    <div class="ctitle">
+      Ventas CL + PE (USD) vs Presupuesto
+      <div style="display:flex;gap:12px;flex-shrink:0;">
+        <span style="display:flex;align-items:center;gap:4px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;color:var(--muted);letter-spacing:0;"><span style="width:10px;height:10px;border-radius:2px;background:rgba(27,79,138,.55);display:inline-block;"></span>Chile</span>
+        <span style="display:flex;align-items:center;gap:4px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;color:var(--muted);letter-spacing:0;"><span style="width:10px;height:10px;border-radius:2px;background:rgba(196,122,15,.55);display:inline-block;"></span>Perú</span>
+        <span style="display:flex;align-items:center;gap:4px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;color:var(--muted);letter-spacing:0;"><span style="width:18px;height:2px;background:var(--purple);display:inline-block;"></span>Cumpl.%</span>
+      </div>
+    </div>
+    <div style="position:relative;height:240px;"><canvas id="chartGrupoMensual"></canvas></div>
+    <script>
+    (function(){
+      var ctx=document.getElementById('chartGrupoMensual');
+      var clUSD=[93.4,37.6,46.3];
+      var peUSD=[73.5,39.4,59.8];
+      var ppto=[141.0,103.6,108.5];
+      var total=[166.9,77.0,106.1];
+      var cumpl=[Math.round(total[0]/ppto[0]*100),Math.round(total[1]/ppto[1]*100),Math.round(total[2]/ppto[2]*100)];
+      new Chart(ctx,{
+        data:{
+          labels:['Enero','Febrero','Marzo'],
+          datasets:[
+            {type:'bar',label:'Chile',data:clUSD,backgroundColor:'rgba(27,79,138,.5)',borderColor:'#1B4F8A',borderWidth:1.5,stack:'g',yAxisID:'y',order:2},
+            {type:'bar',label:'Perú',data:peUSD,backgroundColor:'rgba(196,122,15,.5)',borderColor:'#C47A0F',borderWidth:1.5,stack:'g',yAxisID:'y',order:2},
+            {type:'line',label:'Ppto',data:ppto,borderColor:'#f87171',borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:'#f87171',fill:false,yAxisID:'y',order:1},
+            {type:'line',label:'Cumpl.%',data:cumpl,borderColor:'#5c2d9a',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#5c2d9a',fill:false,tension:.2,yAxisID:'y2',order:0}
+          ]
+        },
+        options:{
+          responsive:true,maintainAspectRatio:false,
+          interaction:{mode:'index',intersect:false},
+          plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===3?' Cumpl: '+c.raw+'%':' '+c.dataset.label+': USD '+c.raw+'K';}}}},
+          scales:{
+            y:{stacked:true,position:'left',grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:function(v){return v+'K';},color:'#7A90AA',font:{size:10}}},
+            y2:{position:'right',min:0,max:200,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+'%';},color:'#5c2d9a',font:{size:10}}},
+            x:{grid:{display:false},ticks:{color:'#7A90AA',font:{size:11}}}
+          }
+        }
+      });
+    })();
+    </script>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border-dim);">
+      <div style="text-align:center;padding:10px;border-radius:7px;background:var(--surface2);">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Enero</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);">118%</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">USD 167K</div>
+      </div>
+      <div style="text-align:center;padding:10px;border-radius:7px;background:var(--surface2);">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Febrero</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--red);">74%</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">USD 77K</div>
+      </div>
+      <div style="text-align:center;padding:10px;border-radius:7px;background:var(--surface2);">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Marzo</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--amber);">98%</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">USD 106K</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Margen line chart -->
+  <div class="card">
+    <div class="eyebrow">Evolución Margen Bruto</div>
+    <div class="ctitle">Margen % por País · T1</div>
+    <div style="position:relative;height:200px;"><canvas id="chartMargen"></canvas></div>
+    <script>
+    (function(){
+      var ctx=document.getElementById('chartMargen');
+      new Chart(ctx,{
+        type:'line',
+        data:{
+          labels:['Enero','Febrero','Marzo'],
+          datasets:[
+            {label:'Chile',data:[72.0,73.7,84.7],borderColor:'#1B4F8A',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#1B4F8A',fill:false,tension:.25},
+            {label:'Perú',data:[88.6,89.5,90.8],borderColor:'#C47A0F',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#C47A0F',fill:false,tension:.25},
+            {label:'Grupo',data:[79.6,82.8,89.4],borderColor:'#5c2d9a',borderWidth:2,borderDash:[4,2],pointRadius:4,pointBackgroundColor:'#5c2d9a',fill:false,tension:.25}
+          ]
+        },
+        options:{
+          responsive:true,maintainAspectRatio:false,
+          interaction:{mode:'index',intersect:false},
+          plugins:{legend:{position:'bottom',labels:{font:{size:10},color:'#7A90AA',boxWidth:10,padding:10}}},
+          scales:{
+            y:{min:60,max:100,grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:function(v){return v+'%';},color:'#7A90AA',font:{size:10}}},
+            x:{grid:{display:false},ticks:{color:'#7A90AA',font:{size:11}}}
+          }
+        }
+      });
+    })();
+    </script>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border-dim);text-align:center;">
+      <div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Chile T1</div><div style="font-family:'DM Mono',monospace;font-size:14px;color:var(--cl);font-weight:500;">73.8%</div></div>
+      <div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Perú T1</div><div style="font-family:'DM Mono',monospace;font-size:14px;color:var(--pe);font-weight:500;">89.5%</div></div>
+      <div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Grupo T1</div><div style="font-family:'DM Mono',monospace;font-size:14px;color:var(--purple);font-weight:500;">82.5%</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BLOQUE 4: RANKING RTCs ═══ -->
+<div class="slabel">Ranking Consolidado RTCs · 12 Vendedores · Ambos Países</div>
 <div class="g2">
+
   <div class="card">
-    <div class="card-t"><div><div class="eyebrow">Alertas Consolidadas</div><div class="ctitle">Prioridades Dirección Comercial Q2</div></div><span class="tag tr">4 críticas</span></div>
-    <div style="margin-top:12px;">
-      <div class="alrt alrt-g"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🏆</span><div><strong>Chile superó el 100% YTD por primera vez.</strong> Caroca en 162%, Marzo en 101.8%. Hito positivo que debe consolidarse en Q2 sin depender de un solo vendedor.</div></div>
-      <div class="alrt alrt-r"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🔴</span><div><strong>Veverka (CL 45%) + Infante (PE 37%) + Valladares (PE 10%).</strong> 3 RTCs críticos en 2 países. Plan de intervención grupal con metodología Caroca/Atalaya.</div></div>
-      <div class="alrt alrt-r"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🔴</span><div><strong>Cartera Chile: CLP 24.7M vencida (66%).</strong> Goyaservice (78d, CLP 4.2M) y Rio Diuto (51d, CLP 2.9M) son los más urgentes. Caroca concentra el mayor riesgo de cobro.</div></div>
-      <div class="alrt alrt-a"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🟡</span><div><strong>L. Aguirre (Perú) sin presupuesto asignado.</strong> Generó USD 35.9K YTD siendo la 3era por volumen. Incorporarla formalmente al semáforo con objetivo Q2.</div></div>
-      <div class="alrt alrt-a"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🟡</span><div><strong>Perú: brecha de USD 40.6K vs ppto.</strong> Infante y González no muestran recuperación sostenida. Q2 necesita decisiones estructurales sobre estos RTCs.</div></div>
+    <div class="eyebrow">🇨🇱 Chile · Al 22/03/2026</div>
+    <div class="ctitle">Ventas YTD vs Presupuesto T1</div>
+    <div class="vrow"><div class="vname">J. Caroca</div><div class="vbar-w"><div class="vbar-f" style="width:100%;background:var(--green);"></div></div><div class="vsales">CLP 53.6M</div><div class="vcum vg">162.3%</div></div>
+    <div class="vrow"><div class="vname">P. Laratro</div><div class="vbar-w"><div class="vbar-f" style="width:93.7%;background:var(--amber);"></div></div><div class="vsales">CLP 50.2M</div><div class="vcum va">92.9%</div></div>
+    <div class="vrow"><div class="vname">F. Velásquez</div><div class="vbar-w"><div class="vbar-f" style="width:52.1%;background:var(--amber);"></div></div><div class="vsales">CLP 27.9M</div><div class="vcum va">84.8%</div></div>
+    <div class="vrow"><div class="vname">R. Encina</div><div class="vbar-w"><div class="vbar-f" style="width:47.6%;background:var(--amber);"></div></div><div class="vsales">CLP 25.5M</div><div class="vcum va">87.5%</div></div>
+    <div class="vrow"><div class="vname">I. Veverka</div><div class="vbar-w"><div class="vbar-f" style="width:15.1%;background:var(--red);"></div></div><div class="vsales">CLP 8.1M</div><div class="vcum vr">45.2%</div></div>
+    <div class="vrow"><div class="vname">V. Muñoz</div><div class="vbar-w"><div class="vbar-f" style="width:5.6%;background:var(--muted);opacity:.5;"></div></div><div class="vsales">CLP 3.0M</div><div class="vcum" style="color:var(--muted);">s/p</div></div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border-dim);">
+      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Tendencia Margen Chile</div>
+      <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:72%;background:var(--amber);"></div></div><div class="ppct va">72.0%</div></div>
+      <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:73.7%;background:var(--amber);"></div></div><div class="ppct va">73.7%</div></div>
+      <div class="prow"><div class="plbl">Marzo</div><div class="pbar"><div class="pfill" style="width:84.7%;background:var(--green);"></div></div><div class="ppct vg">84.7%</div></div>
     </div>
   </div>
+
   <div class="card">
-    <div class="eyebrow">Insights Estratégicos</div><div class="ctitle">Recomendaciones para Jefes Comerciales</div>
-    <div style="margin-top:12px;">
-      <div class="ins-item" style="border-left-color:#b48aff;"><span class="itag" style="background:var(--gr-d);color:var(--gr);">Grupo</span>El margen mejora <strong>mes a mes en ambos países</strong>: Ene 79.6% → Feb 82.8% → Mar 89.4%. El equipo está mejorando el mix de forma orgánica. Formalizar incentivo por productos premium en Q2.</div>
-      <div class="ins-item" style="border-left-color:#b48aff;"><span class="itag" style="background:var(--gr-d);color:var(--gr);">Modelo</span><strong>Caroca (CL 162%) y Atalaya (PE 110%)</strong> superan el 100%. Ambos combinan seguimiento técnico con foco en productos premium. Documentar y transferir su metodología al equipo.</div>
-      <div class="ins-item" style="border-left-color:#b48aff;"><span class="itag" style="background:var(--gr-d);color:var(--gr);">Cartera</span>Chile: sin deuda +90 días por primera vez en el año. La gestión de cobro mejora pero Caroca concentra CLP 15.3M en CxC total — revisar límite individual de crédito.</div>
-      <div class="ins-item" style="border-left-color:#b48aff;"><span class="itag" style="background:var(--gr-d);color:var(--gr);">Q2 foco</span>Perú Marzo (USD 59.8K) es el nuevo benchmark mensual. Si Aguirre (USD 29.4K) recibe ppto y recursos, Perú puede llegar al 95% en Q2. La palanca está en activar ese potencial.</div>
+    <div class="eyebrow">🇵🇪 Perú · Al 20/03/2026</div>
+    <div class="ctitle">Ventas YTD vs Presupuesto T1</div>
+    <div class="vrow"><div class="vname">O. Atalaya</div><div class="vbar-w"><div class="vbar-f" style="width:100%;background:var(--green);"></div></div><div class="vsales">USD 59.1K</div><div class="vcum vg">110.2%</div></div>
+    <div class="vrow"><div class="vname">O. Infante</div><div class="vbar-w"><div class="vbar-f" style="width:71.9%;background:var(--red);"></div></div><div class="vsales">USD 42.5K</div><div class="vcum vr">37.0%</div></div>
+    <div class="vrow"><div class="vname">L. Aguirre</div><div class="vbar-w"><div class="vbar-f" style="width:60.7%;background:var(--purple);"></div></div><div class="vsales">USD 35.9K</div><div class="vcum vp">s/p</div></div>
+    <div class="vrow"><div class="vname">N. Navarro</div><div class="vbar-w"><div class="vbar-f" style="width:57.5%;background:var(--amber);"></div></div><div class="vsales">USD 34.0K</div><div class="vcum va">96.2%</div></div>
+    <div class="vrow"><div class="vname">A. González</div><div class="vbar-w"><div class="vbar-f" style="width:1.2%;background:var(--red);"></div></div><div class="vsales">USD 0.7K</div><div class="vcum vr">17.4%</div></div>
+    <div class="vrow"><div class="vname">P. Valladares</div><div class="vbar-w"><div class="vbar-f" style="width:1.0%;background:var(--red);"></div></div><div class="vsales">USD 0.6K</div><div class="vcum vr">10.5%</div></div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border-dim);">
+      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Tendencia Margen Perú</div>
+      <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:88.6%;background:var(--green);"></div></div><div class="ppct vg">88.6%</div></div>
+      <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:89.5%;background:var(--green);"></div></div><div class="ppct vg">89.5%</div></div>
+      <div class="prow"><div class="plbl">Marzo</div><div class="pbar"><div class="pfill" style="width:90.8%;background:var(--green);"></div></div><div class="ppct vg">90.8%</div></div>
     </div>
   </div>
 </div>
 
-
-
-<script>
-var CL={
-  todos:{v:[88.7,35.7,44.0],p:[84.8,42.8,43.2],c:"#00a8c8"},
-  caroca:{v:[15.3,6.4,31.9],p:[12.5,6.0,14.5],c:"#4ade80"},
-  laratro:{v:[37.0,10.4,2.8],p:[36.0,10.6,7.5],c:"#00a8c8"},
-  velasquez:{v:[14.5,9.9,3.5],p:[14.9,11.5,6.5],c:"#fbbf24"},
-  encina:{v:[13.5,7.3,4.8],p:[14.2,7.5,7.5],c:"#b48aff"},
-  veverka:{v:[6.2,0.9,1.0],p:[6.0,6.0,6.0],c:"#f87171"},
-  munoz:{v:[2.2,0.8,0.0],p:[1.2,1.2,1.2],c:"#7c849e"}
-};
-var CL_R=[
-  {n:"J. Caroca",y:53.6,p:33.0,t:162.3,c:"#4ade80"},{n:"P. Laratro",y:50.2,p:54.1,t:92.9,c:"#00a8c8"},
-  {n:"R. Encina",y:25.5,p:29.2,t:87.5,c:"#b48aff"},{n:"F. Velásquez",y:27.9,p:32.9,t:84.8,c:"#fbbf24"},
-  {n:"I. Veverka",y:8.1,p:18.0,t:45.2,c:"#f87171"},{n:"V. Muñoz",y:3.0,p:null,t:null,c:"#7c849e"}
-];
-function clC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
-function clB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
-function clP(v,p){return p>0?Math.round(v/p*100):0;}
-function clDraw(k){
-  var d=CL[k],tv=0,tp=0;
-  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
-  var tc=clP(tv,tp);
-  document.getElementById("cl-kpis").innerHTML=[["Ventas YTD","CLP "+tv.toFixed(1)+"M",null],["Ppto YTD","CLP "+tp.toFixed(1)+"M",null],["Cumpl. T1",tc+"%",tc],["Marzo","CLP "+d.v[2].toFixed(1)+"M",clP(d.v[2],d.p[2])]].map(function(c){return'<div style="background:rgba(0,0,0,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?clC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
-  var w=document.getElementById("cl-wrap");
-  w.innerHTML="<canvas></canvas>";
-  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(clP(d.v[i],d.p[i]));}
-  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2},{type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1},{type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" CLP "+Number(c.raw).toFixed(1)+"M";}}}},scales:{y:{position:"left",grid:{color:"rgba(0,0,0,.05)"},ticks:{callback:function(v){return v+"M";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
-  var mx=54.1;
-  document.getElementById("cl-rank").innerHTML=CL_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+clB(r.t)+';color:'+clC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:12px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#7c849e;">CLP '+r.y+'M</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(0,0,0,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
-}
-clDraw("todos");
-</script>
-
-<script>
-var PE={
-  todos:{v:[73.5,39.4,59.8],p:[51.7,58.5,63.0],c:"#c4841a"},
-  atalaya:{v:[30.1,9.0,20.0],p:[18.0,18.0,18.0],c:"#4ade80"},
-  navarro:{v:[26.3,7.7,0.0],p:[11.8,11.8,11.8],c:"#f5a623"},
-  aguirre:{v:[0.0,6.5,29.4],p:[0,0,0],c:"#b48aff"},
-  infante:{v:[16.5,16.2,9.8],p:[37.8,37.8,37.8],c:"#f87171"},
-  gonzalez:{v:[0.6,0.0,0.1],p:[2.0,2.0,2.0],c:"#7c849e"},
-  valladares:{v:[0.0,0.0,0.6],p:[2.9,2.9,2.9],c:"#7c849e"}
-};
-var PE_R=[
-  {n:"O. Atalaya",y:59.1,p:53.7,t:110.2,c:"#4ade80"},{n:"L. Aguirre",y:35.9,p:null,t:null,c:"#b48aff"},
-  {n:"O. Infante",y:42.5,p:114.9,t:37.0,c:"#f87171"},{n:"N. Navarro",y:34.0,p:35.4,t:96.2,c:"#f5a623"},
-  {n:"A. González",y:0.7,p:6.0,t:17.4,c:"#7c849e"},{n:"P. Valladares",y:0.6,p:5.7,t:10.5,c:"#7c849e"}
-];
-function peC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
-function peB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
-function peP(v,p){return p>0?Math.round(v/p*100):0;}
-function peDraw(k){
-  var d=PE[k],tv=0,tp=0;
-  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
-  var tc=tp>0?peP(tv,tp):null;
-  document.getElementById("pe-kpis").innerHTML=[["Ventas YTD","USD "+tv.toFixed(1)+"K",null],["Ppto YTD",tp>0?"USD "+tp.toFixed(1)+"K":"Sin ppto",null],["Cumpl. T1",tc!=null?tc+"%":"—",tc],["Marzo","USD "+d.v[2].toFixed(1)+"K",d.p[2]>0?peP(d.v[2],d.p[2]):null]].map(function(c){return'<div style="background:rgba(0,0,0,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?peC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
-  var w=document.getElementById("pe-wrap");
-  w.innerHTML="<canvas></canvas>";
-  var hasPp=d.p.some(function(v){return v>0;});
-  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(d.p[i]>0?peP(d.v[i],d.p[i]):null);}
-  var ds=[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2}];
-  if(hasPp){ds.push({type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1});ds.push({type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0});}
-  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" USD "+Number(c.raw).toFixed(1)+"K";}}}},scales:{y:{position:"left",grid:{color:"rgba(0,0,0,.05)"},ticks:{callback:function(v){return v+"K";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
-  var mx=59.1;
-  document.getElementById("pe-rank").innerHTML=PE_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+peB(r.t)+';color:'+peC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:12px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#7c849e;">USD '+r.y.toFixed(1)+'K</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(0,0,0,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
-}
-peDraw("todos");
-</script>
-
-<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border2,#1e2333);">
-<div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#444c66;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px;">Ventas vs Presupuesto &middot; Chile<span style="flex:1;height:1px;background:#1e2333;"></span></div>
-<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
-  <div style="display:flex;gap:14px;font-size:12px;flex-wrap:wrap;">
-    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:9px;border-radius:2px;background:#00a8c8;display:inline-block;"></span>Ventas</span>
-    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;border-top:2px dashed #f87171;display:inline-block;"></span>Ppto</span>
-    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;background:#4ade80;display:inline-block;"></span>Cumpl.%</span>
+<!-- ═══ BLOQUE 5: SEMÁFORO 4 COLUMNAS ═══ -->
+<div class="slabel">Semáforo Ejecutivo · 12 RTCs · Grupo LATAM</div>
+<div class="g4">
+  <div class="sem-col sem-g">
+    <div class="sem-hdg" style="color:var(--green);">✅ Sobre 100%</div>
+    <div class="sem-item">J. Caroca <span style="font-size:10px;color:var(--muted);">CL</span></div>
+    <div class="sem-val vg">162.3% · CLP 53.6M</div>
+    <div class="sem-div" style="background:rgba(90,143,53,.15);"></div>
+    <div class="sem-item">O. Atalaya <span style="font-size:10px;color:var(--muted);">PE</span></div>
+    <div class="sem-val vg">110.2% · USD 59.1K</div>
+    <div style="margin-top:10px;padding:8px;border-radius:6px;background:rgba(90,143,53,.08);font-size:11px;color:var(--green);">2 de 10 RTCs con presupuesto superan 100%</div>
   </div>
-  <select onchange="clDraw(this.value)" style="font-size:12px;padding:4px 8px;border-radius:6px;background:#191d28;color:#f0f2f8;border:1px solid #252a38;">
-    <option value="todos">Equipo completo</option><option value="caroca">J. Caroca</option><option value="laratro">P. Laratro</option><option value="velasquez">F. Velásquez</option><option value="encina">R. Encina</option><option value="veverka">I. Veverka</option><option value="munoz">V. Muñoz</option>
-  </select>
-</div>
-<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;" id="cl-kpis"></div>
-<div id="cl-wrap" style="position:relative;width:100%;height:220px;"></div>
-<div style="margin-top:14px;" id="cl-rank"></div>
-</div>
-<script src="avboard_data.js?v=20260721"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script>
-var CL={
-  todos:{v:[88.7,35.7,44.0],p:[84.8,42.8,43.2],c:"#00a8c8"},
-  caroca:{v:[15.3,6.4,31.9],p:[12.5,6.0,14.5],c:"#4ade80"},
-  laratro:{v:[37.0,10.4,2.8],p:[36.0,10.6,7.5],c:"#00a8c8"},
-  velasquez:{v:[14.5,9.9,3.5],p:[14.9,11.5,6.5],c:"#fbbf24"},
-  encina:{v:[13.5,7.3,4.8],p:[14.2,7.5,7.5],c:"#b48aff"},
-  veverka:{v:[6.2,0.9,1.0],p:[6.0,6.0,6.0],c:"#f87171"},
-  munoz:{v:[2.2,0.8,0.0],p:[1.2,1.2,1.2],c:"#7c849e"}
-};
-var CL_R=[
-  {n:"J. Caroca",y:53.6,p:33.0,t:162.3,c:"#4ade80"},{n:"P. Laratro",y:50.2,p:54.1,t:92.9,c:"#00a8c8"},
-  {n:"R. Encina",y:25.5,p:29.2,t:87.5,c:"#b48aff"},{n:"F. Velásquez",y:27.9,p:32.9,t:84.8,c:"#fbbf24"},
-  {n:"I. Veverka",y:8.1,p:18.0,t:45.2,c:"#f87171"},{n:"V. Muñoz",y:3.0,p:null,t:null,c:"#7c849e"}
-];
-function clC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
-function clB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
-function clP(v,p){return p>0?Math.round(v/p*100):0;}
-function clDraw(k){
-  var d=CL[k],tv=0,tp=0;
-  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
-  var tc=clP(tv,tp);
-  document.getElementById("cl-kpis").innerHTML=[["Ventas YTD","CLP "+tv.toFixed(1)+"M",null],["Ppto YTD","CLP "+tp.toFixed(1)+"M",null],["Cumpl. T1",tc+"%",tc],["Marzo","CLP "+d.v[2].toFixed(1)+"M",clP(d.v[2],d.p[2])]].map(function(c){return'<div style="background:rgba(0,0,0,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?clC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
-  var w=document.getElementById("cl-wrap");
-  w.innerHTML="<canvas></canvas>";
-  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(clP(d.v[i],d.p[i]));}
-  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2},{type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1},{type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" CLP "+Number(c.raw).toFixed(1)+"M";}}}},scales:{y:{position:"left",grid:{color:"rgba(0,0,0,.05)"},ticks:{callback:function(v){return v+"M";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
-  var mx=54.1;
-  document.getElementById("cl-rank").innerHTML=CL_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+clB(r.t)+';color:'+clC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:12px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#7c849e;">CLP '+r.y+'M</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(0,0,0,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
-}
-clDraw("todos");
-</script>
-
-<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border2,#1e2333);">
-<div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#444c66;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px;">Ventas vs Presupuesto &middot; Perú<span style="flex:1;height:1px;background:#1e2333;"></span></div>
-<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
-  <div style="display:flex;gap:14px;font-size:12px;flex-wrap:wrap;">
-    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:9px;border-radius:2px;background:#c4841a;display:inline-block;"></span>Ventas</span>
-    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;border-top:2px dashed #f87171;display:inline-block;"></span>Ppto</span>
-    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;background:#4ade80;display:inline-block;"></span>Cumpl.%</span>
+  <div class="sem-col sem-a">
+    <div class="sem-hdg" style="color:var(--amber);">🟡 Entre 80–99%</div>
+    <div class="sem-item">N. Navarro <span style="font-size:10px;color:var(--muted);">PE</span></div>
+    <div class="sem-val va">96.2% · USD 34.0K</div>
+    <div class="sem-div" style="background:rgba(196,122,15,.15);"></div>
+    <div class="sem-item">P. Laratro <span style="font-size:10px;color:var(--muted);">CL</span></div>
+    <div class="sem-val va">92.9% · CLP 50.2M</div>
+    <div class="sem-div" style="background:rgba(196,122,15,.15);"></div>
+    <div class="sem-item">R. Encina <span style="font-size:10px;color:var(--muted);">CL</span></div>
+    <div class="sem-val va">87.5% · CLP 25.5M</div>
+    <div class="sem-div" style="background:rgba(196,122,15,.15);"></div>
+    <div class="sem-item">F. Velásquez <span style="font-size:10px;color:var(--muted);">CL</span></div>
+    <div class="sem-val va">84.8% · CLP 27.9M</div>
+    <div style="margin-top:8px;padding:8px;border-radius:6px;background:rgba(196,122,15,.08);font-size:11px;color:var(--amber);">4 RTCs en zona de recuperación</div>
   </div>
-  <select onchange="peDraw(this.value)" style="font-size:12px;padding:4px 8px;border-radius:6px;background:#191d28;color:#f0f2f8;border:1px solid #252a38;">
-    <option value="todos">Equipo completo</option><option value="atalaya">O. Atalaya</option><option value="navarro">N. Navarro</option><option value="aguirre">L. Aguirre</option><option value="infante">O. Infante</option><option value="gonzalez">A. González</option><option value="valladares">P. Valladares</option>
-  </select>
+  <div class="sem-col sem-r">
+    <div class="sem-hdg" style="color:var(--red);">🔴 Crítico &lt;80%</div>
+    <div class="sem-item">I. Veverka <span style="font-size:10px;color:var(--muted);">CL</span></div>
+    <div class="sem-val vr">45.2% · CLP 8.1M</div>
+    <div class="sem-div" style="background:rgba(192,57,43,.15);"></div>
+    <div class="sem-item">O. Infante <span style="font-size:10px;color:var(--muted);">PE</span></div>
+    <div class="sem-val vr">37.0% · USD 42.5K</div>
+    <div class="sem-div" style="background:rgba(192,57,43,.15);"></div>
+    <div class="sem-item">A. González <span style="font-size:10px;color:var(--muted);">PE</span></div>
+    <div class="sem-val vr">17.4% · USD 0.7K</div>
+    <div class="sem-div" style="background:rgba(192,57,43,.15);"></div>
+    <div class="sem-item">P. Valladares <span style="font-size:10px;color:var(--muted);">PE</span></div>
+    <div class="sem-val vr">10.5% · USD 0.6K</div>
+    <div style="margin-top:8px;padding:8px;border-radius:6px;background:rgba(192,57,43,.08);font-size:11px;color:var(--red);">4 RTCs requieren intervención Q2</div>
+  </div>
+  <div class="sem-col sem-p">
+    <div class="sem-hdg" style="color:var(--purple);">🟣 Sin Presupuesto</div>
+    <div class="sem-item">L. Aguirre <span style="font-size:10px;color:var(--muted);">PE</span></div>
+    <div class="sem-val vp">USD 35.9K YTD</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:9px;line-height:1.4;">3er lugar Perú por volumen. Requiere objetivo Q2 formal.</div>
+    <div class="sem-div" style="background:rgba(92,45,154,.15);"></div>
+    <div class="sem-item">V. Muñoz <span style="font-size:10px;color:var(--muted);">CL</span></div>
+    <div class="sem-val vp">CLP 3.0M YTD</div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.4;">Sin objetivo formal asignado.</div>
+    <div style="margin-top:10px;padding:8px;border-radius:6px;background:rgba(92,45,154,.08);font-size:11px;color:var(--purple);">2 RTCs sin presupuesto activo</div>
+  </div>
 </div>
-<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;" id="pe-kpis"></div>
-<div id="pe-wrap" style="position:relative;width:100%;height:220px;"></div>
-<div style="margin-top:14px;" id="pe-rank"></div>
+
+<!-- ═══ BLOQUE 6: CxC + CONTRIBUCIÓN ═══ -->
+<div class="slabel">Cartera de Cobranza · Distribución por País</div>
+<div class="g12">
+
+  <div class="card">
+    <div class="eyebrow">Solo Chile tiene CxC activa</div>
+    <div class="ctitle">Cartera Cobranza · Al 22/03/2026</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+      <div style="padding:14px;border-radius:8px;background:rgba(196,122,15,.05);border:1px solid rgba(196,122,15,.2);text-align:center;">
+        <div style="font-size:9px;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Total Cartera</div>
+        <div style="font-family:'DM Mono',monospace;font-size:16px;color:var(--amber);font-weight:600;">CLP 37.4M</div>
+      </div>
+      <div style="padding:14px;border-radius:8px;background:rgba(192,57,43,.05);border:1px solid rgba(192,57,43,.2);text-align:center;">
+        <div style="font-size:9px;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Vencida (66%)</div>
+        <div style="font-family:'DM Mono',monospace;font-size:16px;color:var(--red);font-weight:600;">CLP 24.7M</div>
+      </div>
+    </div>
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:9px;">Principales vencidos</div>
+    <div class="prow"><div class="plbl" style="width:90px;">Goyaservice</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--red);"></div></div><div class="ppct vr" style="width:90px;font-size:10px;">CLP 4.2M · 78d</div></div>
+    <div class="prow"><div class="plbl" style="width:90px;">Rio Diuto</div><div class="pbar"><div class="pfill" style="width:69%;background:var(--amber);"></div></div><div class="ppct va" style="width:90px;font-size:10px;">CLP 2.9M · 51d</div></div>
+    <div class="prow"><div class="plbl" style="width:90px;">Caroca total</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--amber);"></div></div><div class="ppct" style="width:90px;font-size:10px;">CLP 15.3M</div></div>
+    <div style="margin-top:12px;padding:10px 12px;border-radius:7px;background:rgba(192,57,43,.04);border:1px solid rgba(192,57,43,.15);font-size:12px;color:var(--text-dim);">
+      ⚠ Sin deuda +90 días por primera vez. Sin embargo, Caroca concentra <strong>CLP 15.3M</strong> del total — revisar límite individual de crédito antes de Q2.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">Grupo T1 2026 · en USD</div>
+    <div class="ctitle">Contribución por País al Grupo</div>
+    <div style="display:flex;align-items:center;gap:24px;">
+      <div style="position:relative;width:170px;height:170px;flex-shrink:0;"><canvas id="chartDonut"></canvas></div>
+      <script>
+      (function(){
+        var ctx=document.getElementById('chartDonut');
+        new Chart(ctx,{
+          type:'doughnut',
+          data:{
+            labels:['Chile','Perú'],
+            datasets:[{
+              data:[177,172.8],
+              backgroundColor:['rgba(27,79,138,.65)','rgba(196,122,15,.65)'],
+              borderColor:['#1B4F8A','#C47A0F'],
+              borderWidth:2,hoverOffset:5
+            }]
+          },
+          options:{
+            responsive:true,maintainAspectRatio:false,cutout:'68%',
+            plugins:{
+              legend:{display:false},
+              tooltip:{callbacks:{label:function(c){return ' '+c.label+': '+Math.round(c.raw/(177+172.8)*100)+'%';}}}
+            }
+          }
+        });
+      })();
+      </script>
+      <div style="flex:1;">
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span style="width:10px;height:10px;border-radius:2px;background:#1B4F8A;display:inline-block;flex-shrink:0;"></span>
+            <span style="font-size:12px;font-weight:500;">Chile</span>
+            <span class="tag tg" style="margin-left:auto;">50.6%</span>
+          </div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--cl);padding-left:18px;">USD 177K</div>
+          <div style="font-size:11px;color:var(--muted);padding-left:18px;">CLP 168.3M · Superó ppto ✅</div>
+        </div>
+        <div style="height:1px;background:var(--border-dim);margin-bottom:14px;"></div>
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span style="width:10px;height:10px;border-radius:2px;background:#C47A0F;display:inline-block;flex-shrink:0;"></span>
+            <span style="font-size:12px;font-weight:500;">Perú</span>
+            <span class="tag ta" style="margin-left:auto;">49.4%</span>
+          </div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--pe);padding-left:18px;">USD 172.8K</div>
+          <div style="font-size:11px;color:var(--muted);padding-left:18px;">Brecha USD −40.6K vs ppto</div>
+        </div>
+        <div style="height:1px;background:var(--border-dim);margin-bottom:12px;"></div>
+        <div>
+          <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Total Grupo</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--purple);">USD 349.8K</div>
+          <div style="font-size:11px;color:var(--muted);">Distribución casi equitativa CL/PE</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- ═══ BLOQUE 7: ALERTAS + INSIGHTS ═══ -->
+<div class="slabel">Alertas Directivas · Insights Estratégicos</div>
+<div class="g2">
+
+  <div class="card">
+    <div class="eyebrow">Acción requerida · Q2 2026</div>
+    <div class="ctitle">Alertas Consolidadas <span class="tag tr">4 críticas</span></div>
+    <div class="alrt alrt-g">
+      <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🏆</span>
+      <div><strong>Chile superó el presupuesto por primera vez en T1.</strong> Caroca 162.3%, Marzo 101.8%. Hito positivo — consolidar en Q2 sin depender de un solo vendedor.</div>
+    </div>
+    <div class="alrt alrt-r">
+      <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🔴</span>
+      <div><strong>4 RTCs críticos en 2 países: Veverka (45%), Infante (37%), González (17%), Valladares (10.5%).</strong> Plan de intervención grupal antes de Q2, usando metodología Caroca/Atalaya.</div>
+    </div>
+    <div class="alrt alrt-r">
+      <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🔴</span>
+      <div><strong>CxC Chile: CLP 24.7M vencida (66% del total).</strong> Goyaservice (78d, CLP 4.2M) y Rio Diuto (51d, CLP 2.9M) urgentes. Caroca concentra CLP 15.3M — revisar límite individual de crédito.</div>
+    </div>
+    <div class="alrt alrt-a">
+      <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🟡</span>
+      <div><strong>L. Aguirre (Perú) opera sin presupuesto asignado.</strong> Generó USD 35.9K YTD siendo 3ra por volumen. Asignarle objetivo Q2 formal antes de que el período cierre.</div>
+    </div>
+    <div class="alrt alrt-a">
+      <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🟡</span>
+      <div><strong>Perú: brecha acumulada de USD 40.6K vs presupuesto.</strong> Infante y González sin recuperación sostenida. Decisiones estructurales requeridas para Q2.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">Para el Directorio</div>
+    <div class="ctitle">Insights Estratégicos</div>
+    <div class="ins">
+      <span class="itag">Tendencia</span><strong>Margen mejora mes a mes en ambos países: Ene 79.6% → Feb 82.8% → Mar 89.4%.</strong> El equipo optimiza el mix de forma orgánica. Formalizar incentivo por productos premium en Q2 antes de que la tendencia se revierta.
+    </div>
+    <div class="ins">
+      <span class="itag">Modelo</span><strong>Caroca (CL 162%) y Atalaya (PE 110%) son el estándar del grupo.</strong> Combinan seguimiento técnico con foco en alto margen. Documentar su metodología y transferirla a los 4 RTCs críticos antes de Q2.
+    </div>
+    <div class="ins">
+      <span class="itag">Concentración</span><strong>Caroca representó el 72.5% de las ventas de Marzo en Chile.</strong> Dependencia peligrosa. Si su CxC vence sin cobrar, el impacto en caja es material. Revisar límite individual de crédito.
+    </div>
+    <div class="ins">
+      <span class="itag">Perú Q2</span><strong>Perú Marzo (USD 59.8K) es el nuevo benchmark mensual del grupo.</strong> Si Aguirre recibe presupuesto formal, Perú puede alcanzar 95%+ en Q2. La palanca ya está mapeada.
+    </div>
+    <div class="ins">
+      <span class="itag">Ecuador</span><strong>Ecuador no está integrado al consolidado.</strong> Incorporarlo en Q2 daría visión real del 100% del grupo LATAM. Prioridad para el próximo ciclo de actualización.
+    </div>
+  </div>
+</div>
+
+</div><!-- /page -->
+
+<div class="footer">
+  <div class="fnote">AV Grupo LATAM · Panel Directorio · Fuente: AVBOARD (avboard_data.js) · Solo uso interno</div>
+  <div class="fdisclaim">⚠ Datos al corte indicado · No incluye costos internos ni información confidencial de producción</div>
+</div>
+
+<script src="avboard_data.js?v=20260723"></script>
+<script src="assets_logo.js"></script>
 <script>
-var PE={
-  todos:{v:[73.5,39.4,59.8],p:[51.7,58.5,63.0],c:"#c4841a"},
-  atalaya:{v:[30.1,9.0,20.0],p:[18.0,18.0,18.0],c:"#4ade80"},
-  navarro:{v:[26.3,7.7,0.0],p:[11.8,11.8,11.8],c:"#f5a623"},
-  aguirre:{v:[0.0,6.5,29.4],p:[0,0,0],c:"#b48aff"},
-  infante:{v:[16.5,16.2,9.8],p:[37.8,37.8,37.8],c:"#f87171"},
-  gonzalez:{v:[0.6,0.0,0.1],p:[2.0,2.0,2.0],c:"#7c849e"},
-  valladares:{v:[0.0,0.0,0.6],p:[2.9,2.9,2.9],c:"#7c849e"}
-};
-var PE_R=[
-  {n:"O. Atalaya",y:59.1,p:53.7,t:110.2,c:"#4ade80"},{n:"L. Aguirre",y:35.9,p:null,t:null,c:"#b48aff"},
-  {n:"O. Infante",y:42.5,p:114.9,t:37.0,c:"#f87171"},{n:"N. Navarro",y:34.0,p:35.4,t:96.2,c:"#f5a623"},
-  {n:"A. González",y:0.7,p:6.0,t:17.4,c:"#7c849e"},{n:"P. Valladares",y:0.6,p:5.7,t:10.5,c:"#7c849e"}
-];
-function peC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
-function peB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
-function peP(v,p){return p>0?Math.round(v/p*100):0;}
-function peDraw(k){
-  var d=PE[k],tv=0,tp=0;
-  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
-  var tc=tp>0?peP(tv,tp):null;
-  document.getElementById("pe-kpis").innerHTML=[["Ventas YTD","USD "+tv.toFixed(1)+"K",null],["Ppto YTD",tp>0?"USD "+tp.toFixed(1)+"K":"Sin ppto",null],["Cumpl. T1",tc!=null?tc+"%":"—",tc],["Marzo","USD "+d.v[2].toFixed(1)+"K",d.p[2]>0?peP(d.v[2],d.p[2]):null]].map(function(c){return'<div style="background:rgba(0,0,0,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?peC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
-  var w=document.getElementById("pe-wrap");
-  w.innerHTML="<canvas></canvas>";
-  var hasPp=d.p.some(function(v){return v>0;});
-  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(d.p[i]>0?peP(d.v[i],d.p[i]):null);}
-  var ds=[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2}];
-  if(hasPp){ds.push({type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1});ds.push({type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0});}
-  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" USD "+Number(c.raw).toFixed(1)+"K";}}}},scales:{y:{position:"left",grid:{color:"rgba(0,0,0,.05)"},ticks:{callback:function(v){return v+"K";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
-  var mx=59.1;
-  document.getElementById("pe-rank").innerHTML=PE_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+peB(r.t)+';color:'+peC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:12px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#7c849e;">USD '+r.y.toFixed(1)+'K</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(0,0,0,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
-}
-peDraw("todos");
-</script>
-</div><!-- /avb-hist-body -->
-<script>
-(function() {
-  if (typeof AVBOARD === 'undefined') { return; }
-
-  // === Corte dates → header chip ===
-  var meta   = AVBOARD.meta   || {};
-  var cortes = meta.cortes    || {};
-  var clCorte = cortes.chile_ventas || '—';
-  var peCorte = cortes.peru_ventas  || '—';
-  var TC = meta.tc_clp_usd || 950;
-
-  var chip = document.querySelector('.hchip');
-  if (chip) chip.innerHTML = 'Chile <strong>' + clCorte + '</strong> · Perú <strong>' + peCorte + '</strong>';
-
-  var cchip = document.getElementById('avb-corte-chip');
-  if (cchip) cchip.textContent = 'CL ' + clCorte + ' · PE ' + peCorte;
-
-  // === Chile YTD (CLP) from rtc_mensual_real ===
-  var clV   = (AVBOARD.chile && AVBOARD.chile.ventas) || {};
-  var rtcCL = clV.rtc_mensual_real || {};
-  var clYtdCLP = 0;
-  ['caroca','laratro','velasquez','encina','veverka','munoz'].forEach(function(v) {
-    (rtcCL[v] || []).forEach(function(m) { clYtdCLP += (m || 0); });
-  });
-  var clYtdM   = clYtdCLP / 1e6;           // CLP millones
-  var clUSDK   = Math.round(clYtdCLP / TC / 1000);  // USD miles
-
-  // === Perú YTD (USD) from por_vendedor ===
-  var peV    = (AVBOARD.peru && AVBOARD.peru.ventas) || {};
-  var peVend = peV.por_vendedor || {};
-  var peYtd  = 0;
-  Object.keys(peVend).forEach(function(k) { peYtd += (peVend[k].ytd || 0); });
-  var peYtdK = peYtd / 1000;
-
-  // Cumplimiento Perú vs presupuesto anual acumulado
-  var pePpto = peV.mensual_ppto || [];
-  var pePptoYtd = 0;
-  pePpto.forEach(function(m) { pePptoYtd += (m || 0); });
-  var peCumpl = pePptoYtd > 0 ? Math.round(peYtd / pePptoYtd * 100) : null;
-
-  // === Grupo consolidado ===
-  var grupoK = clUSDK + Math.round(peYtdK);
-
-  // === IEC Chile ===
-  var iec    = clV.iec || {};
-  var iecPct = iec.total != null ? Math.round(iec.total * 100) : null;
-
-  // === Helpers ===
-  function kc(x) { return x >= 100 ? '#4ade80' : x >= 80 ? '#fbbf24' : '#f87171'; }
-  function kb(x) { return x >= 100 ? 'rgba(74,222,128,.1)' : x >= 80 ? 'rgba(251,191,36,.1)' : 'rgba(248,113,113,.1)'; }
-  function mkKpi(ac, acD, label, val, sub, badge) {
-    return '<div class="kpi" style="--ac:' + ac + ';--ac2:' + ac + ';--ac-d:' + acD + ';">' +
-      '<div class="klbl">' + label + '</div>' +
-      '<div class="kval" style="color:' + ac + ';">' + val + '</div>' +
-      '<div class="ksub">' + sub + '</div>' +
-      '<div class="kbadge" style="background:' + acD + ';color:' + ac + ';">' + badge + '</div>' +
-      '</div>';
-  }
-
-  var peColor = peCumpl != null ? kc(peCumpl) : '#c4841a';
-  var peBg    = peCumpl != null ? kb(peCumpl)  : 'rgba(196,132,26,.09)';
-  var iecColor = (iecPct != null && iecPct >= 80) ? '#4ade80' : '#fbbf24';
-  var iecBg    = (iecPct != null && iecPct >= 80) ? 'rgba(74,222,128,.1)' : 'rgba(251,191,36,.1)';
-
-  var row = document.getElementById('avb-kpi-row');
-  if (!row) return;
-
-  row.innerHTML =
-    mkKpi('#b48aff','rgba(180,138,255,.09)',
-      'Chile YTD',
-      'CLP ' + clYtdM.toFixed(1) + 'M',
-      'Corte ' + clCorte,
-      '≈ USD ' + clUSDK + 'K') +
-    mkKpi(peColor, peBg,
-      'Perú YTD',
-      'USD ' + peYtdK.toFixed(1) + 'K',
-      'Corte ' + peCorte,
-      peCumpl != null ? peCumpl + '% vs ppto año' : '—') +
-    mkKpi('#b48aff','rgba(180,138,255,.09)',
-      'Grupo YTD (est.)',
-      'USD ' + grupoK + 'K',
-      'TC ' + TC + ' CLP/USD',
-      '2 países activos') +
-    mkKpi(iecColor, iecBg,
-      'IEC Chile',
-      iecPct != null ? iecPct + '% sobre piso' : '—',
-      'Precio piso · ventas CL',
-      iecPct != null ? (iecPct >= 80 ? '✅ Saludable' : '⚠ Revisar') : '—') +
-    mkKpi('#00a8c8','rgba(0,168,200,.09)',
-      'Fuente',
-      'AVBOARD',
-      'avboard_data.js',
-      'Sistema activo ✓');
-
-  // Mostrar sección live
-  var live = document.getElementById('avb-live');
-  if (live) live.style.display = '';
-  var sep = document.getElementById('avb-sep');
-  if (sep) sep.style.display = '';
+(function(){
+  var el=document.querySelector('.av-logo-img');
+  if(el) el.src=AV_LOGO_DATA_URL;
 })();
 </script>
-</div>
-<div class="footer">
-  <div class="fnote">AV Grupo Latam · Fuente: AVBOARD (avboard_data.js) · Solo uso interno</div>
-  <div class="fdisclaim">⚠ No incluye costos internos ni información confidencial de producción</div>
-</div>
-<script src="assets_logo.js"></script>
-<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
+<script>
+(function(){
+  if(typeof AVBOARD==='undefined') return;
+  var meta=AVBOARD.meta||{};
+  var cortes=meta.cortes||{};
+  var clCorte=cortes.chile_ventas||'22/03';
+  var peCorte=cortes.peru_ventas||'20/03';
+  var TC=meta.tc_clp_usd||950;
+
+  var chip=document.getElementById('corte-chip');
+  if(chip) chip.innerHTML='Corte: CL <strong>'+clCorte+'</strong> · PE <strong>'+peCorte+'</strong>';
+
+  var clV=(AVBOARD.chile&&AVBOARD.chile.ventas)||{};
+  var rtcCL=clV.rtc_mensual_real||{};
+  var clYtdCLP=0;
+  ['caroca','laratro','velasquez','encina','veverka','munoz'].forEach(function(v){
+    (rtcCL[v]||[]).forEach(function(m){clYtdCLP+=(m||0);});
+  });
+  var clUSDK=Math.round(clYtdCLP/TC/1000);
+
+  var peV=(AVBOARD.peru&&AVBOARD.peru.ventas)||{};
+  var peVend=peV.por_vendedor||{};
+  var peYtd=0;
+  Object.keys(peVend).forEach(function(k){peYtd+=(peVend[k].ytd||0);});
+  var peYtdK=(peYtd/1000).toFixed(1);
+  var pePpto=peV.mensual_ppto||[];
+  var pePptoYtd=0; pePpto.forEach(function(m){pePptoYtd+=(m||0);});
+  var peCumpl=pePptoYtd>0?Math.round(peYtd/pePptoYtd*100):null;
+  var grupoK=clUSDK+Math.round(peYtd/1000);
+
+  var kGrupo=document.getElementById('kpi-grupo-ytd');
+  if(kGrupo) kGrupo.textContent='USD '+grupoK+'K';
+  var kGrupoSub=document.getElementById('kpi-grupo-sub');
+  if(kGrupoSub) kGrupoSub.textContent='CL+PE · Corte '+clCorte;
+
+  var clPptoYtd=(clV.ppto_5m||[]).slice(0,3).reduce(function(a,b){return a+(b||0);},0);
+  var pptoCLK=Math.round(clPptoYtd/TC/1000);
+  var grupoPptoK=pptoCLK+(pePptoYtd>0?Math.round(pePptoYtd/1000):213);
+  var grupoCumpl=grupoPptoK>0?Math.round(grupoK/grupoPptoK*100):null;
+  var kCumpl=document.getElementById('kpi-cumpl-val');
+  if(kCumpl&&grupoCumpl!=null) kCumpl.textContent=grupoCumpl+'%';
+  var kCumplSub=document.getElementById('kpi-cumpl-sub');
+  if(kCumplSub&&grupoPptoK>0) kCumplSub.textContent='vs ppto T1 USD '+grupoPptoK+'K';
+})();
+</script>
 </body>
 </html>
