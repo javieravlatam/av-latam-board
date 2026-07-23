@@ -1,16 +1,16 @@
 /* ══════════════════════════════════════════════════════════════════
    COTIZADOR AV LATAM · Hoja de estilos compartida
-   Paleta e identidad tipográfica alineadas con los paneles de
-   av-latam-board (Bebas Neue / DM Sans / DM Mono, tema oscuro verde).
-   Módulo visualmente independiente — no importa CSS de los dashboards.
+   FORMATO JAVIER v1.1 Light Mode — azul corporativo #1B4F8A
+   Migración 2026-07-23: dark verde → light mode alineado con
+   los 19 paneles de av-latam-board.
    ══════════════════════════════════════════════════════════════════ */
 
 :root{
-  --bg:#080e09; --s1:#0f1a10; --s2:#162118; --s3:#1c2b1e;
-  --green:#7AB648; --green2:#5a8a35; --amber:#F5A623; --orange:#E08A2B;
-  --red:#E74C3C; --red2:#C0392B; --blue:#4A9EDB;
-  --text:#e8f0e9; --dim:#8fa892; --muted:#5a7060;
-  --bdr:rgba(122,182,72,0.18); --bdim:rgba(122,182,72,0.07);
+  --bg:#F4F6F9; --s1:#FFFFFF; --s2:#EDF1F7; --s3:#E2E8F0;
+  --green:#5a8f35; --green2:#3d6e20; --amber:#C47A0F; --orange:#B8601A;
+  --red:#C0392B; --red2:#9B2622; --blue:#1B4F8A;
+  --text:#1A2332; --dim:#3D5270; --muted:#7A90AA;
+  --bdr:rgba(27,79,138,0.18); --bdim:rgba(27,79,138,0.08);
 }
 
 *{box-sizing:border-box}
@@ -23,11 +23,11 @@ body{
 h1,h2,h3,.brand,.titulo{font-family:'Bebas Neue',sans-serif; letter-spacing:1.5px}
 .mono,.num,.money{font-family:'DM Mono',monospace}
 
-a{color:var(--green); text-decoration:none}
+a{color:var(--blue); text-decoration:none}
 
 /* ── Encabezado global (Fase 2 — misma línea gráfica que Executive Board) ── */
 .header{
-  background:linear-gradient(180deg,#0c1a0d 0%,var(--bg) 100%);
+  background:linear-gradient(180deg,rgba(27,79,138,0.06) 0%,var(--bg) 100%);
   border-bottom:1px solid var(--bdr);
   padding:16px 28px 14px;
   display:flex; align-items:center; justify-content:space-between;
@@ -53,11 +53,11 @@ a{color:var(--green); text-decoration:none}
   padding:4px 10px; flex-shrink:0;
 }
 .logo-mark-img img{ height:28px; width:auto; display:block; }
-.header-title{font-family:'Bebas Neue',sans-serif; font-size:21px; letter-spacing:2px; color:var(--green); line-height:1.1}
+.header-title{font-family:'Bebas Neue',sans-serif; font-size:21px; letter-spacing:2px; color:var(--blue); line-height:1.1}
 .header-sub{font-size:11px; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:2px}
 .header-corte{text-align:right}
 .corte-label{font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:1px}
-.corte-date{font-family:'DM Mono',monospace; font-size:12px; color:var(--green)}
+.corte-date{font-family:'DM Mono',monospace; font-size:12px; color:var(--blue)}
 
 /* ── Navegación superior (Centro Comercial AV LATAM) ─────────────── */
 .header-nav{display:flex; align-items:center; gap:4px; flex-wrap:wrap}
@@ -66,8 +66,8 @@ a{color:var(--green); text-decoration:none}
   padding:6px 13px; border-radius:20px; border:1px solid transparent; cursor:pointer;
   background:transparent; transition:all .15s;
 }
-.nav-pill:hover{color:var(--green); border-color:var(--bdr)}
-.nav-pill.activo{color:var(--bg); background:var(--green); font-weight:600}
+.nav-pill:hover{color:var(--blue); border-color:var(--bdr)}
+.nav-pill.activo{color:#fff; background:var(--blue); font-weight:600}
 .nav-pill.proximamente{color:var(--muted); cursor:default; opacity:.6; position:relative}
 .nav-pill.proximamente:hover{color:var(--muted); border-color:transparent}
 .nav-pill.proximamente::after{
@@ -78,29 +78,29 @@ a{color:var(--green); text-decoration:none}
 
 /* ── Portal (index.html) ─────────────────────────────────────────── */
 .portal-wrap{max-width:980px; margin:0 auto; padding:60px 24px; text-align:center}
-.portal-title{font-size:38px; color:var(--green); letter-spacing:3px}
+.portal-title{font-size:38px; color:var(--blue); letter-spacing:3px}
 .portal-sub{color:var(--dim); font-size:13px; margin-top:-6px; margin-bottom:44px; font-family:'DM Mono',monospace}
 .portal-cards{display:grid; grid-template-columns:1fr 1fr; gap:28px}
 @media(max-width:720px){.portal-cards{grid-template-columns:1fr}}
 
 .portal-card{
-  background:linear-gradient(160deg,var(--s1),var(--s2));
+  background:var(--s1);
   border:1px solid var(--bdr); border-radius:16px; padding:40px 28px;
   cursor:pointer; transition:transform .15s ease, border-color .15s ease;
   text-align:left; position:relative; overflow:hidden;
 }
-.portal-card:hover{transform:translateY(-4px); border-color:var(--green)}
+.portal-card:hover{transform:translateY(-4px); border-color:var(--blue)}
 .portal-card .flag{font-size:48px; margin-bottom:12px; display:block}
 .portal-card h2{font-size:30px; color:var(--text); margin:0 0 4px}
 .portal-card .moneda-tag{
   display:inline-block; font-family:'DM Mono',monospace; font-size:11px;
-  color:var(--green); background:var(--bdim); border:1px solid var(--bdr);
+  color:var(--blue); background:var(--bdim); border:1px solid var(--bdr);
   border-radius:20px; padding:4px 12px; margin-bottom:16px;
 }
 .portal-card p{color:var(--dim); font-size:13px; line-height:1.6; margin:0}
 .portal-card .cta{
   margin-top:20px; font-family:'DM Mono',monospace; font-size:12px;
-  color:var(--green); letter-spacing:1px;
+  color:var(--blue); letter-spacing:1px;
 }
 
 /* ── Layout general de trabajo (cotizador_chile / peru) ─────────── */
@@ -113,7 +113,7 @@ a{color:var(--green); text-decoration:none}
   padding:20px; margin-bottom:20px;
 }
 .panel h3{
-  font-size:14px; letter-spacing:2px; color:var(--green); margin:0 0 14px;
+  font-size:14px; letter-spacing:2px; color:var(--blue); margin:0 0 14px;
   display:flex; align-items:center; justify-content:space-between;
 }
 .panel h3 .tag{font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); letter-spacing:0}
@@ -124,7 +124,7 @@ input,select,textarea{
   width:100%; background:var(--s2); border:1px solid var(--bdr); border-radius:6px;
   color:var(--text); padding:8px 10px; font-family:'DM Sans',sans-serif; font-size:13px;
 }
-input:focus,select:focus,textarea:focus{outline:none; border-color:var(--green)}
+input:focus,select:focus,textarea:focus{outline:none; border-color:var(--blue)}
 .form-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
 .form-grid.cols-2{grid-template-columns:repeat(2,1fr)}
 @media(max-width:700px){.form-grid{grid-template-columns:1fr}}
@@ -145,20 +145,20 @@ table.lineas input,table.lineas select{padding:5px 7px; font-size:12px}
 }
 .btn-mini:hover{color:var(--red); border-color:var(--red)}
 
-.row-bajo-piso{background:rgba(231,76,60,0.08)}
-.row-en-piso{background:rgba(245,166,35,0.08)}
+.row-bajo-piso{background:rgba(192,57,43,0.07)}
+.row-en-piso{background:rgba(196,122,15,0.07)}
 
 /* ── Botones ──────────────────────────────────────────────────────── */
 .btn{
-  background:var(--green); color:#0d1a0e; border:none; border-radius:8px;
+  background:var(--blue); color:#fff; border:none; border-radius:8px;
   padding:10px 18px; font-family:'DM Sans',sans-serif; font-weight:600; font-size:13px;
   cursor:pointer; letter-spacing:.3px;
 }
-.btn:hover{background:#8fce55}
-.btn.secundario{background:transparent; color:var(--green); border:1px solid var(--green)}
+.btn:hover{background:#15407A}
+.btn.secundario{background:transparent; color:var(--blue); border:1px solid var(--blue)}
 .btn.secundario:hover{background:var(--bdim)}
 .btn.peligro{background:transparent; color:var(--red); border:1px solid var(--red)}
-.btn.peligro:hover{background:rgba(231,76,60,0.1)}
+.btn.peligro:hover{background:rgba(192,57,43,0.08)}
 .btn:disabled{opacity:.4; cursor:not-allowed}
 .btn-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
 
@@ -180,9 +180,9 @@ table.lineas input,table.lineas select{padding:5px 7px; font-size:12px}
 /* ── Alertas internas ─────────────────────────────────────────────── */
 .alerta{
   font-size:12px; padding:8px 10px; border-radius:6px; margin-bottom:6px;
-  border-left:3px solid var(--red); background:rgba(231,76,60,0.08); color:var(--text);
+  border-left:3px solid var(--red); background:rgba(192,57,43,0.07); color:var(--text);
 }
-.alerta.amber{border-color:var(--amber); background:rgba(245,166,35,0.08)}
+.alerta.amber{border-color:var(--amber); background:rgba(196,122,15,0.07)}
 
 /* ── Badges de estado ─────────────────────────────────────────────── */
 .badge{
@@ -229,11 +229,11 @@ table.historial tr:hover td{background:var(--bdim)}
 .quote-hero{
   display:flex; align-items:center; justify-content:space-between; gap:16px;
   flex-wrap:wrap; padding:22px 24px; margin-bottom:20px;
-  background:linear-gradient(135deg,var(--s1),var(--s2));
+  background:var(--s1);
   border:1px solid var(--bdr); border-radius:14px;
 }
 .quote-hero-id .eyebrow{font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-bottom:4px}
-.quote-hero-id .numero{font-family:'Bebas Neue',sans-serif; font-size:32px; color:var(--green); letter-spacing:1px; line-height:1}
+.quote-hero-id .numero{font-family:'Bebas Neue',sans-serif; font-size:32px; color:var(--blue); letter-spacing:1px; line-height:1}
 .quote-hero-meta{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
 .chip{
   font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.5px; color:var(--dim);
@@ -248,10 +248,10 @@ table.historial tr:hover td{background:var(--bdim)}
   background:transparent; border:1px solid var(--bdr); color:var(--dim); border-radius:8px;
   padding:10px 14px; font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer;
 }
-.tools-btn:hover{color:var(--green); border-color:var(--green)}
+.tools-btn:hover{color:var(--blue); border-color:var(--blue)}
 .tools-menu{
   position:absolute; right:0; top:calc(100% + 6px); background:var(--s2); border:1px solid var(--bdr);
-  border-radius:10px; padding:6px; min-width:190px; box-shadow:0 12px 30px rgba(0,0,0,.4);
+  border-radius:10px; padding:6px; min-width:190px; box-shadow:0 8px 24px rgba(27,79,138,0.12);
   display:none; z-index:50;
 }
 .tools-menu.abierto{display:block}
@@ -259,7 +259,7 @@ table.historial tr:hover td{background:var(--bdim)}
   width:100%; text-align:left; background:transparent; border:none; color:var(--text);
   padding:9px 12px; font-size:12.5px; border-radius:6px; cursor:pointer; font-family:'DM Sans',sans-serif;
 }
-.tools-menu button:hover{background:var(--bdim); color:var(--green)}
+.tools-menu button:hover{background:var(--bdim); color:var(--blue)}
 
 /* ── Pipeline visual (decorativo, sin funcionalidad) ─────────────── */
 .pipeline{display:flex; align-items:center; margin:4px 0 22px}
@@ -271,10 +271,10 @@ table.historial tr:hover td{background:var(--bdim)}
 .pipeline-step .label{font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.5px; color:var(--muted); text-transform:uppercase; margin-top:8px; text-align:center}
 .pipeline-step .line{position:absolute; top:11px; left:50%; width:100%; height:2px; background:var(--bdr); z-index:1}
 .pipeline-step:last-child .line{display:none}
-.pipeline-step.completado .dot{background:var(--green); border-color:var(--green); color:var(--bg)}
-.pipeline-step.completado .line{background:var(--green)}
-.pipeline-step.completado .label{color:var(--green)}
-.pipeline-step.actual .dot{background:var(--bg); border-color:var(--green); color:var(--green); box-shadow:0 0 0 4px var(--bdim)}
+.pipeline-step.completado .dot{background:var(--blue); border-color:var(--blue); color:#fff}
+.pipeline-step.completado .line{background:var(--blue)}
+.pipeline-step.completado .label{color:var(--blue)}
+.pipeline-step.actual .dot{background:var(--s1); border-color:var(--blue); color:var(--blue); box-shadow:0 0 0 4px var(--bdim)}
 .pipeline-step.actual .label{color:var(--text); font-weight:600}
 
 /* ── Tarjeta de recomendación comercial (panel derecho) ──────────── */
@@ -285,11 +285,11 @@ table.historial tr:hover td{background:var(--bdim)}
 .reco-card .reco-icono{font-size:26px; line-height:1}
 .reco-card .reco-titulo{font-family:'Bebas Neue',sans-serif; font-size:17px; letter-spacing:.5px; margin-bottom:3px}
 .reco-card .reco-cuerpo{font-size:12px; color:var(--dim); line-height:1.5}
-.reco-card.verde{background:rgba(122,182,72,.08); border-color:var(--green)}
+.reco-card.verde{background:rgba(90,143,53,0.08); border-color:var(--green)}
 .reco-card.verde .reco-titulo{color:var(--green)}
-.reco-card.amarillo{background:rgba(245,166,35,.08); border-color:var(--amber)}
+.reco-card.amarillo{background:rgba(196,122,15,0.08); border-color:var(--amber)}
 .reco-card.amarillo .reco-titulo{color:var(--amber)}
-.reco-card.rojo{background:rgba(231,76,60,.08); border-color:var(--red)}
+.reco-card.rojo{background:rgba(192,57,43,0.08); border-color:var(--red)}
 .reco-card.rojo .reco-titulo{color:var(--red)}
 .reco-card.sin_datos{background:var(--s2)}
 .reco-card.sin_datos .reco-titulo{color:var(--dim)}
