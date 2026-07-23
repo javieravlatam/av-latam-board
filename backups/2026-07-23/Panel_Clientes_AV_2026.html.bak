@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -14,10 +14,10 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root{
-  --bg:#F4F6F9;--s1:#FFFFFF;--s2:#EDF1F7;--s3:#E2E8F0;--s4:#D4DCE8;
-  --border:rgba(27,79,138,0.14);--bdim:rgba(27,79,138,0.07);
-  --text:#1A2332;--dim:#3D5270;--muted:#7A90AA;
-  --green:#5a8f35;--blue:#1B4F8A;--amber:#C47A0F;--red:#C0392B;--orange:#C47A0F;--purple:#9b59b6;
+  --bg:#0e0d09;--s1:#161410;--s2:#1c1a13;--s3:#23201a;--s4:#2a2720;
+  --border:rgba(255,255,255,0.07);--bdim:rgba(255,255,255,0.04);
+  --text:#e8dfc8;--dim:#8a8070;--muted:#5a5448;
+  --green:#7ab648;--blue:#4a9edb;--amber:#f5a623;--red:#e74c3c;--orange:#e67e22;--purple:#9b59b6;
   --font:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -109,7 +109,7 @@ th.sort-asc::after{content:' ↑';color:var(--amber)}
 th.sort-desc::after{content:' ↓';color:var(--amber)}
 tbody tr{border-bottom:1px solid var(--bdim);cursor:pointer;transition:background .1s}
 tbody tr:last-child{border-bottom:none}
-tbody tr:hover{background:rgba(27,79,138,0.04)}
+tbody tr:hover{background:rgba(255,255,255,0.025)}
 tbody tr.sel{background:rgba(245,166,35,0.07);border-left:2px solid var(--amber)}
 tbody tr.priority{background:rgba(231,76,60,0.04)}
 td{padding:7px 10px;vertical-align:middle}
@@ -250,7 +250,6 @@ footer{text-align:center;padding:14px 20px;font-size:9px;color:var(--muted);
   .charts-section{grid-template-columns:1fr}
   .hdr-nav{display:none}
 }
-.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
 </head>
 <body>
@@ -258,7 +257,7 @@ footer{text-align:center;padding:14px 20px;font-size:9px;color:var(--muted);
 <!-- HEADER -->
 <header class="hdr">
   <div class="hdr-brand">
-    <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
+    <div class="hdr-logo">AV</div>
     <div>
       <div class="hdr-title">Panel Clientes · AV Latam 2026</div>
       <div class="hdr-sub">CRM Ejecutivo · Corte 11/05 · Chile + Perú</div>
@@ -455,7 +454,7 @@ footer{text-align:center;padding:14px 20px;font-size:9px;color:var(--muted);
   </div>
 </footer>
 
-<script src="avboard_clientes.js?v=20260723"></script>
+<script src="avboard_clientes.js?v=20260721"></script>
 <script>
 /* ══════════════════════════════════════════
    ESTADO GLOBAL
@@ -1199,8 +1198,8 @@ function renderEvolDetalleChart(c, moneda) {
           }
         },
         scales: {
-          x: {grid: {display: false}, ticks: {color: '#7A90AA', font: {size: 9}}},
-          y: {grid: {color: 'rgba(27,79,138,0.07)'}, ticks: {color: '#7A90AA', font: {size: 9},
+          x: {grid: {display: false}, ticks: {color: '#5a5448', font: {size: 9}}},
+          y: {grid: {color: 'rgba(255,255,255,0.04)'}, ticks: {color: '#5a5448', font: {size: 9},
             callback: v => fmtK(v)}}
         }
       }
@@ -1224,7 +1223,7 @@ function renderProdsDetalleChart(c, moneda) {
       type: 'doughnut',
       data: {
         labels,
-        datasets: [{data: vals, backgroundColor: colors, borderWidth: 1, borderColor: '#ffffff'}]
+        datasets: [{data: vals, backgroundColor: colors, borderWidth: 1, borderColor: '#0e0d09'}]
       },
       options: {
         responsive: true, maintainAspectRatio: false,
@@ -1232,7 +1231,7 @@ function renderProdsDetalleChart(c, moneda) {
         plugins: {
           legend: {
             position: 'right',
-            labels: {color: '#7A90AA', font: {size: 9}, boxWidth: 10, padding: 8}
+            labels: {color: '#8a8070', font: {size: 9}, boxWidth: 10, padding: 8}
           },
           tooltip: {
             callbacks: {label: (ctx2) => `${moneda} ${fmtK(ctx2.raw)} (${c.productos.top[ctx2.dataIndex]?.pct.toFixed(0)}%)`}
@@ -1283,8 +1282,8 @@ function renderEvolGlobal(arr) {
           tooltip: {callbacks: {label: ctx2 => `${ctx2.raw} clientes activos`}}
         },
         scales: {
-          x: {grid: {display: false}, ticks: {color: '#7A90AA', font: {size: 10}}},
-          y: {grid: {color: 'rgba(27,79,138,0.07)'}, ticks: {color: '#7A90AA', font: {size: 10}},
+          x: {grid: {display: false}, ticks: {color: '#5a5448', font: {size: 10}}},
+          y: {grid: {color: 'rgba(255,255,255,0.04)'}, ticks: {color: '#5a5448', font: {size: 10}},
             beginAtZero: true}
         }
       }
@@ -1314,14 +1313,14 @@ function renderConcChart(arr) {
         datasets: [{
           data: vals,
           backgroundColor: ['rgba(245,166,35,0.8)', 'rgba(90,84,72,0.4)'],
-          borderWidth: 1, borderColor: '#ffffff'
+          borderWidth: 1, borderColor: '#161410'
         }]
       },
       options: {
         responsive: true, maintainAspectRatio: false,
         cutout: '65%',
         plugins: {
-          legend: {labels: {color: '#7A90AA', font: {size: 10}, boxWidth: 12}},
+          legend: {labels: {color: '#8a8070', font: {size: 10}, boxWidth: 12}},
           tooltip: {callbacks: {
             label: ctx2 => {
               const pct = total > 0 ? (ctx2.raw / total * 100).toFixed(1) : 0;
@@ -1376,8 +1375,8 @@ function renderIECDist(arr) {
           tooltip: {callbacks: {label: ctx2 => `${ctx2.raw} clientes`}}
         },
         scales: {
-          x: {grid: {display: false}, ticks: {color: '#7A90AA', font: {size: 9}}},
-          y: {grid: {color: 'rgba(27,79,138,0.07)'}, ticks: {color: '#7A90AA', font: {size: 9}},
+          x: {grid: {display: false}, ticks: {color: '#5a5448', font: {size: 9}}},
+          y: {grid: {color: 'rgba(255,255,255,0.04)'}, ticks: {color: '#5a5448', font: {size: 9}},
             beginAtZero: true}
         }
       }
@@ -1416,7 +1415,7 @@ function cerrarSesion() {
 /* ══════════════════════════════════════════
    INIT (sin DOMContentLoaded)
 ══════════════════════════════════════════ */
-Chart.defaults.color = '#7A90AA';
+Chart.defaults.color = '#8a8070';
 Chart.defaults.font.family = "'DM Mono', monospace";
 Chart.defaults.font.size = 10;
 
@@ -1424,7 +1423,5 @@ populateVendedorSelect();
 applyFilters();
 renderCxcOrphans();
 </script>
-<script src="assets_logo.js"></script>
-<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <script>
@@ -23,20 +23,19 @@ function cerrarSesion() {
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    /* AV LATAM BOARD · Light Mode · Dashboard */
-    --bg: #F4F6F9;
-    --surface: #FFFFFF;
-    --surface2: #EDF1F7;
-    --green: #5a8f35;
-    --green-dim: #3d6024;
-    --amber: #C47A0F;
-    --red: #C0392B;
-    --blue: #1B4F8A;
-    --text: #1A2332;
-    --text-dim: #3D5270;
-    --text-muted: #7A90AA;
-    --border: rgba(27,79,138,0.18);
-    --border-dim: rgba(27,79,138,0.08);
+    --bg: #080e09;
+    --surface: #0f1a10;
+    --surface2: #162118;
+    --green: #7AB648;
+    --green-dim: #5a8a35;
+    --amber: #F5A623;
+    --red: #E74C3C;
+    --blue: #4A9EDB;
+    --text: #e8f0e9;
+    --text-dim: #8fa892;
+    --text-muted: #5a7060;
+    --border: rgba(122,182,72,0.18);
+    --border-dim: rgba(122,182,72,0.08);
   }
   body {
     background: var(--bg);
@@ -51,7 +50,7 @@ function cerrarSesion() {
   .hero {
     padding: 60px 40px 40px;
     text-align: center;
-    background: radial-gradient(ellipse at 50% 0%, rgba(27,79,138,0.05) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 50% 0%, rgba(122,182,72,0.08) 0%, transparent 60%);
     border-bottom: 1px solid var(--border-dim);
   }
   .logo-wrap {
@@ -60,15 +59,15 @@ function cerrarSesion() {
   }
   .logo-mark {
     width: 64px; height: 64px;
-    background: var(--blue);
+    background: var(--green);
     border-radius: 14px;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 32px; color: #fff;
-    box-shadow: 0 0 32px rgba(27,79,138,0.20);
+    font-size: 32px; color: var(--bg);
+    box-shadow: 0 0 32px rgba(122,182,72,0.25);
   }
   .logo-text { text-align: left; }
-  .logo-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 4px; color: var(--blue); line-height: 1; }
+  .logo-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 4px; color: var(--green); line-height: 1; }
   .logo-sub { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 4px; }
 
   .hero-tagline {
@@ -94,7 +93,7 @@ function cerrarSesion() {
   .kpi-b-item::before {
     content: ''; position: absolute;
     top: 0; left: 20%; right: 20%; height: 2px;
-    background: var(--blue);
+    background: var(--green);
   }
   .kpi-b-item.amber::before { background: var(--amber); }
   .kpi-b-item.red::before { background: var(--red); }
@@ -134,14 +133,14 @@ function cerrarSesion() {
   .card::before {
     content: ''; position: absolute;
     top: 0; left: 0; right: 0; height: 3px;
-    background: var(--blue);
+    background: var(--green);
     transform: scaleX(0); transform-origin: left;
     transition: transform 0.3s;
   }
   .card.amber::before { background: var(--amber); }
   .card.blue::before { background: var(--blue); }
   .card.purple::before { background: #9B59B6; }
-  .card:hover { border-color: var(--blue); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(27,79,138,0.1); }
+  .card:hover { border-color: var(--green); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(122,182,72,0.1); }
   .card:hover::before { transform: scaleX(1); }
   .card.amber:hover { border-color: var(--amber); box-shadow: 0 8px 32px rgba(245,166,35,0.1); }
   .card.blue:hover { border-color: var(--blue); box-shadow: 0 8px 32px rgba(74,158,219,0.1); }
@@ -173,15 +172,15 @@ function cerrarSesion() {
   .corte-info { font-size: 11px; color: var(--text-dim); }
   .corte-info strong { color: var(--text); }
   .corte-badge {
-    background: rgba(27,79,138,0.08); border: 1px solid var(--border);
+    background: rgba(122,182,72,0.12); border: 1px solid var(--border);
     border-radius: 6px; padding: 4px 12px;
-    font-family: 'DM Mono', monospace; font-size: 10px; color: var(--blue);
+    font-family: 'DM Mono', monospace; font-size: 10px; color: var(--green);
   }
 
   /* EXECUTIVE CARD */
   .card.executive {
-    background: linear-gradient(135deg, #FFFDF5 0%, #FFF8E7 100%);
-    border-color: rgba(192,160,96,0.40);
+    background: linear-gradient(135deg, #0f1a10 0%, #1a1408 100%);
+    border-color: rgba(192,160,96,0.35);
   }
   .card.executive::before { background: linear-gradient(90deg, #C0A060, #8a6830); }
   .card.executive:hover { border-color: #C0A060; box-shadow: 0 8px 40px rgba(192,160,96,0.15); }
@@ -215,7 +214,6 @@ function cerrarSesion() {
 
   .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
   .btn-logout:hover { background:rgba(231,76,60,0.10); }
-.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
 </head>
 <body>
@@ -224,7 +222,7 @@ function cerrarSesion() {
 <div class="hero">
   <div style="display:flex;justify-content:space-between;align-items:flex-start;width:100%;margin-bottom:4px">
     <div class="logo-wrap" style="margin-bottom:0">
-    <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
+    <div class="logo-mark">AV</div>
     <div class="logo-text">
       <div class="logo-title">Agroveca Grupo Latam</div>
       <div class="logo-sub">BI Platform · Temporada 2026</div>
@@ -593,7 +591,7 @@ function cerrarSesion() {
      AVBOARD DATA LAYER · Fuente única de verdad
      Migración piloto · dashboard.html · 2026-05-12
 ════════════════════════════════════════════════ -->
-<script src="avboard_data.js?v=20260723"></script>
+<script src="avboard_data.js?v=20260721"></script>
 <script>
 (function() {
   // Fallback: si AVBOARD no cargó, los valores HTML originales permanecen intactos
@@ -692,7 +690,5 @@ function cerrarSesion() {
   }
 })();
 </script>
-<script src="assets_logo.js"></script>
-<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <script>
@@ -11,28 +11,28 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Panel Jefes · Grupo AV LATAM 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=20260723"></script>
+<script src="avboard_data.js?v=20260721"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#F4F6F9;--s1:#FFFFFF;--s2:#EDF1F7;--s3:#E2E8F0;
-  --green:#5a8f35;--amber:#C47A0F;--red:#C0392B;--red2:#8B1F14;
-  --blue:#1B4F8A;--orange:#E67E22;--purple:#9B59B6;
-  --text:#1A2332;--dim:#3D5270;--muted:#7A90AA;
-  --bdr:rgba(27,79,138,0.18);--bdim:rgba(27,79,138,0.07);
+  --bg:#0e0c08;--s1:#1a170f;--s2:#211e12;--s3:#2b2718;
+  --green:#7AB648;--amber:#F5A623;--red:#E74C3C;--red2:#C0392B;
+  --blue:#4A9EDB;--orange:#E67E22;--purple:#9B59B6;
+  --text:#f0ede8;--dim:#a09070;--muted:#6a5e40;
+  --bdr:rgba(245,166,35,0.22);--bdim:rgba(245,166,35,0.08);
 }
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh}
 
 /* HEADER */
-.hdr{background:linear-gradient(180deg,rgba(27,79,138,0.06),var(--bg));border-bottom:1px solid var(--bdr);
+.hdr{background:linear-gradient(180deg,#150f02,var(--bg));border-bottom:1px solid var(--bdr);
   padding:12px 28px;display:flex;align-items:center;justify-content:space-between;
   position:sticky;top:0;z-index:100}
 .hdr-l{display:flex;align-items:center;gap:13px}
 .logo{width:36px;height:36px;background:var(--amber);border-radius:8px;
   display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue';font-size:15px;color:#fff}
+  font-family:'Bebas Neue';font-size:15px;color:var(--bg)}
 .htitle{font-family:'Bebas Neue';font-size:19px;letter-spacing:2px;color:var(--amber)}
 .hsub{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
 .hcorte{font-family:'DM Mono';font-size:10px;color:var(--dim);text-align:right;line-height:1.6}
@@ -103,7 +103,7 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
 .b-risk{background:rgba(230,126,34,0.15);color:var(--orange)}
 .b-crit{background:rgba(231,76,60,0.15);color:var(--red)}
 .b-cl{background:rgba(122,182,72,0.15);color:var(--green)}
-.b-pe{background:rgba(27,79,138,0.12);color:var(--blue)}
+.b-pe{background:rgba(74,158,219,0.15);color:var(--blue)}
 
 /* CUMPLIMIENTO BAR */
 .cumpl-bar{height:6px;background:var(--s3);border-radius:3px;margin-top:5px;overflow:hidden}
@@ -122,7 +122,7 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
 .cc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .cc-flag{font-size:22px;line-height:1}
 .cc-title{font-family:'Bebas Neue';font-size:16px;letter-spacing:2px}
-.cc-metric{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(27,79,138,0.08)}
+.cc-metric{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
 .cc-metric:last-child{border-bottom:none}
 .cc-k{font-size:10px;color:var(--muted)}
 .cc-v{font-family:'DM Mono';font-size:11px;font-weight:600}
@@ -140,7 +140,6 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
 
   .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
   .btn-logout:hover { background:rgba(231,76,60,0.10); }
-.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
 </head>
 <body>
@@ -148,7 +147,7 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
 <!-- HEADER -->
 <div class="hdr">
   <div class="hdr-l">
-    <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
+    <div class="logo">AV</div>
     <div>
       <div class="htitle">🌎 GRUPO AV LATAM</div>
       <div class="hsub">Vista Consolidada Jefes · Chile + Perú · 2025–2026</div>
@@ -256,7 +255,7 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
     </div>
 
     <!-- PERU -->
-    <div class="country-card" style="border:1px solid rgba(27,79,138,0.20)">
+    <div class="country-card" style="border:1px solid rgba(74,158,219,0.25)">
       <div class="cc-header">
         <div style="display:flex;align-items:center;gap:10px">
           <span class="cc-flag">🇵🇪</span>
@@ -271,7 +270,7 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
         <span class="cc-k">Real 2025</span>
         <span class="cc-v" style="color:var(--blue)">USD 690.4K</span>
       </div>
-      <div class="cc-metric" style="background:rgba(27,79,138,0.07);border-radius:6px;padding:4px 6px;margin:-2px 0">
+      <div class="cc-metric" style="background:rgba(74,158,219,0.08);border-radius:6px;padding:4px 6px;margin:-2px 0">
         <span class="cc-k" style="color:var(--blue)" id="grp-pe-ytd-lbl">Real 2026 YTD</span>
         <span class="cc-v" style="color:var(--blue);font-size:15px" id="grp-pe-ytd-val">—</span>
       </div>
@@ -327,7 +326,7 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
           <th>Mes</th>
           <th class="r" style="color:var(--green)">CL Real 2025 (M)</th>
           <th class="r" style="color:rgba(50,200,100,0.9)">CL Real 2026 (M)</th>
-          <th class="r" style="color:rgba(90,143,53,0.80)">CL Ppto 2026 (M)</th>
+          <th class="r" style="color:rgba(122,182,72,0.6)">CL Ppto 2026 (M)</th>
           <th class="c">Cumpl CL</th>
           <th class="r" style="color:var(--blue)">PE Real 2025 (K USD)</th>
           <th class="r" style="color:rgba(30,120,255,0.9)">PE Real 2026 (K USD)</th>
@@ -453,7 +452,7 @@ table.tbl tr:hover td{background:rgba(245,166,35,0.04)}
       <div class="monto" style="color:var(--green)" id="grp-cxc-pe-nv-monto">USD 79.3K</div>
       <div class="detail" id="grp-cxc-pe-nv-detail">67.2% de cartera total</div>
     </div>
-    <div class="cxc-card" style="background:rgba(27,79,138,0.06);border:1px solid rgba(27,79,138,0.20)">
+    <div class="cxc-card" style="background:rgba(74,158,219,0.07);border:1px solid rgba(74,158,219,0.25)">
       <div class="tramo" style="color:var(--blue)">🔵 0–30d En cobro</div>
       <div class="monto" style="color:var(--blue)" id="grp-cxc-pe-030-monto">USD 10.5K</div>
       <div class="detail" id="grp-cxc-pe-030-detail">8.9% de cartera · Gestión normal</div>
@@ -885,11 +884,11 @@ function switchTab(t, el) {
       <td style="font-weight:600">${m}</td>
       <td class="r mono" style="color:var(--green)">${cl.toFixed(1)}</td>
       ${cl26Txt}
-      <td class="r mono" style="color:rgba(90,143,53,0.70)">${cp.toFixed(1)}</td>
+      <td class="r mono" style="color:rgba(122,182,72,0.55)">${cp.toFixed(1)}</td>
       <td class="c">${cumplCLtxt}</td>
       <td class="r mono" style="color:var(--blue)">${pe.toFixed(1)}</td>
       ${pe26Txt}
-      <td class="r mono" style="color:rgba(27,79,138,0.70)">${pp.toFixed(1)}</td>
+      <td class="r mono" style="color:rgba(74,158,219,0.55)">${pp.toFixed(1)}</td>
       <td class="c">${cumplPEtxt}</td>
     </tr>`;
   });
@@ -899,11 +898,11 @@ function switchTab(t, el) {
     <td>TOTAL</td>
     <td class="r mono" style="color:var(--green)">${rCL.toFixed(1)}</td>
     <td class="r mono" style="color:rgba(50,200,100,0.95)">${r26CL.toFixed(1)} <span style="font-size:8px;opacity:0.6">YTD</span></td>
-    <td class="r mono" style="color:rgba(90,143,53,0.70)">${pCL.toFixed(1)}</td>
+    <td class="r mono" style="color:rgba(122,182,72,0.55)">${pCL.toFixed(1)}</td>
     <td class="c"><span class="badge ${badgeCLt}">${(r26CL/pCL*100).toFixed(0)}%</span></td>
     <td class="r mono" style="color:var(--blue)">${rPE.toFixed(1)}</td>
     <td class="r mono" style="color:rgba(30,120,255,0.9)">${r26PE.toFixed(1)} <span style="font-size:8px;opacity:0.6">YTD</span></td>
-    <td class="r mono" style="color:rgba(27,79,138,0.70)">${pPE.toFixed(1)}</td>
+    <td class="r mono" style="color:rgba(74,158,219,0.55)">${pPE.toFixed(1)}</td>
     <td class="c"><span class="badge ${badgePEt}">${(r26PE/pPE*100).toFixed(0)}%</span></td>
   </tr>`;
 })();
@@ -965,10 +964,10 @@ const AMBER_LINE = 'rgba(245,166,35,0.9)';
 
 const BASE_OPTS = {
   responsive:true, maintainAspectRatio:false,
-  plugins:{legend:{labels:{color:'#7A90AA',font:{size:10},boxWidth:12}},tooltip:{backgroundColor:'#ffffff',borderColor:'rgba(27,79,138,0.2)',borderWidth:1}},
+  plugins:{legend:{labels:{color:'#8fa892',font:{size:10},boxWidth:12}},tooltip:{backgroundColor:'#1a170f',borderColor:'rgba(245,166,35,0.3)',borderWidth:1}},
   scales:{
-    x:{ticks:{color:'#6a5e40',font:{size:10}},grid:{color:'rgba(27,79,138,0.07)'}},
-    y:{ticks:{color:'#6a5e40',font:{size:10}},grid:{color:'rgba(27,79,138,0.08)'}}
+    x:{ticks:{color:'#6a5e40',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},
+    y:{ticks:{color:'#6a5e40',font:{size:10}},grid:{color:'rgba(255,255,255,0.05)'}}
   }
 };
 
@@ -1016,8 +1015,8 @@ new Chart(document.getElementById('chartCumplChile').getContext('2d'),{
     ...BASE_OPTS,
     indexAxis:'y',
     scales:{
-      x:{ticks:{color:'#6a5e40',font:{size:9}},grid:{color:'rgba(27,79,138,0.07)'}},
-      y:{ticks:{color:'#7A90AA',font:{size:9}},grid:{color:'rgba(27,79,138,0.07)'}}
+      x:{ticks:{color:'#6a5e40',font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}},
+      y:{ticks:{color:'#8fa892',font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}}
     }
   }
 });
@@ -1036,8 +1035,8 @@ new Chart(document.getElementById('chartCumplPeru').getContext('2d'),{
     ...BASE_OPTS,
     indexAxis:'y',
     scales:{
-      x:{ticks:{color:'#6a5e40',font:{size:9}},grid:{color:'rgba(27,79,138,0.07)'}},
-      y:{ticks:{color:'#7A90AA',font:{size:9}},grid:{color:'rgba(27,79,138,0.07)'}}
+      x:{ticks:{color:'#6a5e40',font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}},
+      y:{ticks:{color:'#8fa892',font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}}
     }
   }
 });
@@ -1050,14 +1049,14 @@ new Chart(document.getElementById('chartCxcChile').getContext('2d'),{
     datasets:[{
       data:[98.5,13.0,7.4,15.9],
       backgroundColor:['rgba(122,182,72,0.75)','rgba(245,166,35,0.75)','rgba(230,126,34,0.75)','rgba(231,76,60,0.75)'],
-      borderColor:'#ffffff',borderWidth:2
+      borderColor:'#1a170f',borderWidth:2
     }]
   },
   options:{
     responsive:true,maintainAspectRatio:false,
     plugins:{
-      legend:{position:'right',labels:{color:'#7A90AA',font:{size:10},boxWidth:12}},
-      tooltip:{backgroundColor:'#ffffff',borderColor:'rgba(27,79,138,0.2)',borderWidth:1,
+      legend:{position:'right',labels:{color:'#8fa892',font:{size:10},boxWidth:12}},
+      tooltip:{backgroundColor:'#1a170f',borderColor:'rgba(245,166,35,0.3)',borderWidth:1,
         callbacks:{label:(c)=>`${c.label}: CLP ${c.raw}M (${(c.raw/162.2*100).toFixed(1)}%)`}}
     }
   }
@@ -1071,14 +1070,14 @@ new Chart(document.getElementById('chartCxcPeru').getContext('2d'),{
     datasets:[{
       data:[79.3,10.5,4.5,23.6],
       backgroundColor:['rgba(122,182,72,0.75)','rgba(74,158,219,0.75)','rgba(245,166,35,0.75)','rgba(231,76,60,0.75)'],
-      borderColor:'#ffffff',borderWidth:2
+      borderColor:'#1a170f',borderWidth:2
     }]
   },
   options:{
     responsive:true,maintainAspectRatio:false,
     plugins:{
-      legend:{position:'right',labels:{color:'#7A90AA',font:{size:10},boxWidth:12}},
-      tooltip:{backgroundColor:'#ffffff',borderColor:'rgba(27,79,138,0.2)',borderWidth:1,
+      legend:{position:'right',labels:{color:'#8fa892',font:{size:10},boxWidth:12}},
+      tooltip:{backgroundColor:'#1a170f',borderColor:'rgba(245,166,35,0.3)',borderWidth:1,
         callbacks:{label:(c)=>`${c.label}: USD ${c.raw}K (${(c.raw/118.0*100).toFixed(1)}%)`}}
     }
   }
@@ -1253,7 +1252,5 @@ function cerrarSesion() {
 })();
 </script>
 
-<script src="assets_logo.js"></script>
-<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 </body>
 </html>

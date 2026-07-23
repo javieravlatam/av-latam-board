@@ -113,26 +113,29 @@ PPTO_RTC_CL = {
 }
 
 PPTO_RTC_ANUAL_PE = {
-    'infante':    485058,
-    'aguirre':    223930,
-    'atalaya':    248424,
-    'gonzales':    37250,
-    'valladares': 142372,
+    'infante':    193568,
+    'aguirre':    424540,   # Lizbeth Aguirre (RTC ICA 1: 329540 + RTC ICA 2: 95000)
+    'atalaya':    240366,
+    'gonzales':    29000,
+    'valladares':  90826,
+    'diaz':       167300,   # Susan Diaz (incorporada jun 2026)
     'martha':      65000,   # Martha Hidalgo - KAM (incorporada ago 2026)
 }
 
 # Presupuesto Perú por RTC mensual (USD) — distribución real del Libro Base.
-# Suma por fila coincide exactamente con PPTO_RTC_ANUAL_PE (validado 2026-07-21).
-# Fuente: hoja "Presupuesto Pais" → secciones individuales por RTC.
-# Aclaración: PPTO_MENSUAL_PE (arriba) es el TOTAL equipo por mes; esto es
-# la DISTRIBUCIÓN por vendedor individual.
+# Actualizado 2026-07-23 con nuevo libro base AV 2026.xlsx.
+# Fuente: hoja "Presupuesto Pais " → secciones individuales por RTC.
+# Nota: aguirre = Lizbeth Aguirre (RTC ICA 1) + RTC ICA 2 / Lizbeth Aguirre
+#       diaz = Susan Diaz (nueva vendedora, incorporada jun 2026)
+#       infante = H2 todo cero (retiro de territorio)
 PPTO_RTC_MENSUAL_PE = {
-    'infante':    [18238, 29737, 66760, 38833, 26906, 24924, 24281, 67338, 52582, 51270, 60359, 23830],
-    'aguirre':    [11200,  9190, 14980,  9170,  6970,  9240, 15490, 37590, 29760, 60280, 15800,  4260],
-    'atalaya':    [22236, 19322, 12076, 18346, 22790, 27596, 25818, 28780, 23122, 18458, 16418, 13462],
-    'gonzales':   [    0,     0,  4000,     0,     0,  7000,  7000, 19250,     0,     0,     0,     0],
-    'valladares': [    0,   240,  5406,  4950,  5280,  9950, 28086, 25222, 20100, 35834,  5904,  1400],
-    'martha':     [    0,     0,     0,     0,     0,     0,     0, 10000, 10000, 15000, 15000, 15000],
+    'infante':    [16260, 30164, 67708, 37358, 26733, 15346,     0,      0,     0,     0,     0,     0],
+    'aguirre':    [12025, 10573, 16149, 13129,  7644, 15021, 20000, 105000, 65000, 90000, 50000, 20000],
+    'atalaya':    [22123, 17722, 10139, 17028, 21307, 34049, 25000,  19000, 23000, 23000, 18000, 10000],
+    'gonzales':   [ 1261,  1469,  2498,  1820,  1521,  2431,  8000,      0,  5000,     0,  5000,     0],
+    'valladares': [    0,   221,  5310,  4823,  5153, 10319, 10000,  10000, 10000, 15000, 10000, 10000],
+    'diaz':       [    0,     0,     0,     0,     0, 22300, 15000,  15000, 30000, 30000, 20000, 35000],
+    'martha':     [    0,     0,     0,     0,     0,     0,     0,  10000, 10000, 15000, 15000, 15000],
 }
 
 # NOTA: la antigua tabla estática RENTABILIDAD (alertas hardcodeadas) fue

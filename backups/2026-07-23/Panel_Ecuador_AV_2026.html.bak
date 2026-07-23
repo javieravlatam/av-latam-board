@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Panel Ecuador · AV 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+/* ── BASE SHARED CSS ──────────────────────────── */
+:root {
+  --bg:#0c0e12;--surface:#131620;--card:#191d28;--border:#252a38;--border2:#1e2333;
+  --white:#f0f2f8;--muted:#7c849e;--faint:#444c66;
+  --green:#4ade80;--amber:#fbbf24;--red:#f87171;
+  --cl:#00d4ff;--cl2:#00a8c8;--cl-d:rgba(0,212,255,.09);
+  --pe:#f5a623;--pe2:#c4841a;--pe-d:rgba(245,166,35,.09);
+  --ec:#6ee87c;--ec2:#4ab857;--ec-d:rgba(110,232,124,.09);
+  --gr:#b48aff;--gr2:#8c5cf0;--gr-d:rgba(180,138,255,.09);
+  --ac:var(--cl);--ac2:var(--cl2);--ac-d:var(--cl-d);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;font-size:13px;line-height:1.5;}
+
+/* HEADER */
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:0 44px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--ac) 0%,transparent 50%);opacity:.5;}
+.hbrand{display:flex;align-items:center;gap:10px;}
+.hlogo{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:#000;flex-shrink:0;}
+.hname{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;letter-spacing:-.3px;}
+.hsub{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px;}
+.hnav{display:flex;align-items:center;gap:6px;}
+.hlink{font-size:10px;color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:4px;border:1px solid var(--border);letter-spacing:.5px;transition:all .2s;white-space:nowrap;}
+.hlink:hover{color:var(--ac);border-color:var(--ac);}
+.hlink.act{color:var(--ac);border-color:var(--ac);background:var(--ac-d);}
+.hchip{font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);letter-spacing:.5px;white-space:nowrap;}
+.hchip strong{color:var(--ac);}
+
+/* LAYOUT */
+.wrap{padding:24px 44px 48px;}
+.slabel{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--faint);font-weight:600;margin:22px 0 11px;display:flex;align-items:center;gap:10px;}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border2);}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.g21{display:grid;grid-template-columns:1.65fr 1fr;gap:11px;}
+.g12{display:grid;grid-template-columns:1fr 1.65fr;gap:11px;}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:18px 20px;}
+.card-t{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;}
+.eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--faint);font-weight:600;margin-bottom:2px;}
+.ctitle{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;letter-spacing:-.2px;}
+
+/* KPI */
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s;}
+.kpi:hover{border-color:var(--ac);}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--ac),transparent);opacity:0;transition:opacity .2s;}
+.kpi:hover::before{opacity:1;}
+.klbl{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--faint);margin-bottom:7px;font-weight:600;}
+.kval{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-1px;line-height:1;}
+.ksub{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:5px;}
+.kbadge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600;margin-top:7px;}
+.kb-g{background:rgba(74,222,128,.1);color:var(--green);}
+.kb-a{background:rgba(251,191,36,.1);color:var(--amber);}
+.kb-r{background:rgba(248,113,113,.1);color:var(--red);}
+.kb-b{background:var(--ac-d);color:var(--ac);}
+
+/* TAGS */
+.tag{font-size:9px;padding:3px 8px;border-radius:4px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;}
+.tg{background:rgba(74,222,128,.1);color:var(--green);}
+.ta{background:rgba(251,191,36,.1);color:var(--amber);}
+.tr{background:rgba(248,113,113,.1);color:var(--red);}
+.tb{background:var(--ac-d);color:var(--ac);}
+
+/* SEMÁFORO */
+.srow{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:7px;border:1px solid var(--border2);background:rgba(255,255,255,.015);margin-bottom:7px;transition:background .15s;}
+.srow:last-child{margin-bottom:0;}
+.srow:hover{background:rgba(255,255,255,.035);}
+.sleft{display:flex;align-items:center;gap:9px;}
+.sname{font-size:12px;font-weight:500;}
+.sdet{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:1px;}
+.sright{display:flex;align-items:center;gap:8px;}
+.sval{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;text-align:right;}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dg{background:var(--green);box-shadow:0 0 5px var(--green);}
+.da{background:var(--amber);box-shadow:0 0 5px var(--amber);}
+.dr{background:var(--red);box-shadow:0 0 5px var(--red);}
+.dn{background:var(--faint);}
+
+/* PROGRESS */
+.prow{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
+.plbl{font-size:11px;color:var(--white);width:125px;flex-shrink:0;font-weight:500;}
+.pbar{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+.pfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .8s cubic-bezier(.4,0,.2,1);}
+.ppct{font-family:'DM Mono',monospace;font-size:10px;width:36px;text-align:right;flex-shrink:0;}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;margin-top:12px;}
+.tbl th{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);padding:0 10px 8px;text-align:right;border-bottom:1px solid var(--border2);font-weight:600;}
+.tbl th:first-child{text-align:left;}
+.tbl td{padding:9px 10px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);border-bottom:1px solid var(--border2);text-align:right;vertical-align:middle;}
+.tbl td:first-child{text-align:left;color:var(--white);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:rgba(255,255,255,.02);}
+.vg{color:var(--green)!important;}.va{color:var(--amber)!important;}.vr{color:var(--red)!important;}.vh{color:var(--white)!important;font-weight:500!important;}
+
+/* ALERTAS */
+.alrt{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border-radius:7px;border:1px solid;font-size:11.5px;line-height:1.5;margin-bottom:7px;}
+.alrt:last-child{margin-bottom:0;}
+.alrt-r{background:rgba(248,113,113,.05);border-color:rgba(248,113,113,.2);}
+.alrt-a{background:rgba(251,191,36,.04);border-color:rgba(251,191,36,.2);}
+.alrt-g{background:rgba(74,222,128,.04);border-color:rgba(74,222,128,.2);}
+.alrt strong{font-weight:600;}
+
+/* INSIGHTS */
+.ins-item{padding:11px 13px;border-radius:7px;background:rgba(255,255,255,.02);border-left:3px solid var(--ac);font-size:11.5px;line-height:1.6;color:var(--muted);margin-bottom:8px;}
+.ins-item:last-child{margin-bottom:0;}
+.ins-item strong{color:var(--white);}
+.itag{display:inline;font-size:9px;background:var(--ac-d);color:var(--ac);padding:2px 6px;border-radius:3px;margin-right:5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
+
+/* MIX */
+.mrow{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+.mrow:last-child{margin-bottom:0;}
+.mname{font-size:11px;color:var(--white);width:115px;flex-shrink:0;font-weight:500;}
+.mbar{flex:1;height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;}
+.mfill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--ac),var(--ac2));}
+.mval{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);width:46px;text-align:right;flex-shrink:0;}
+.mmgn{font-family:'DM Mono',monospace;font-size:10px;width:38px;text-align:right;flex-shrink:0;}
+
+/* GAUGE */
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;padding:8px 0 4px;}
+.gauge-ring{position:relative;width:96px;height:96px;}
+.gauge-ring svg{transform:rotate(-90deg);}
+.gauge-ring circle{fill:none;stroke-width:7;stroke-linecap:round;}
+.g-track{stroke:rgba(255,255,255,.06);}
+.g-fill{stroke:var(--ac);transition:stroke-dashoffset .8s ease;}
+.gauge-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.gauge-pct{font-family:'Syne',sans-serif;font-weight:800;font-size:19px;letter-spacing:-1px;}
+.gauge-sub{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.8px;}
+
+/* FOOTER */
+.footer{padding:12px 44px;border-top:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;}
+.fnote{font-size:10px;color:var(--faint);}
+.fdisclaim{font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.15);color:var(--amber);}
+
+/* TRENDS */
+.trend{display:flex;align-items:flex-end;gap:5px;height:52px;padding:0 2px;margin-top:10px;}
+.tcol{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
+.tbar{width:100%;border-radius:2px 2px 0 0;background:var(--ac);min-height:3px;}
+.tlbl{font-family:'DM Mono',monospace;font-size:9px;color:var(--faint);}
+
+/* ANIMATIONS */
+.card,.kpi{animation:fadeUp .35s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* RESPONSIVE */
+@media(max-width:1100px){.g5{grid-template-columns:repeat(3,1fr);}.g21,.g12{grid-template-columns:1fr;}}
+@media(max-width:768px){.hdr,.wrap,.footer{padding-left:14px;padding-right:14px;}.g5,.g4,.g3,.g2,.g21,.g12{grid-template-columns:1fr;}.hnav{display:none;}}
+:root{--ac:var(--ec);--ac2:var(--ec2);--ac-d:var(--ec-d);}
+.ph-kpi{background:var(--card);border:1px solid var(--border2);border-radius:11px;padding:16px 18px;opacity:.4;}
+.ph-kpi .kval{color:var(--faint)!important;}
+.ph-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;margin-top:7px;background:rgba(110,232,124,.08);color:var(--ec);}
+.ref-card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:20px 22px;}
+.ref-item{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:7px;border:1px solid var(--border2);background:rgba(255,255,255,.015);margin-bottom:7px;}
+.ref-item:last-child{margin-bottom:0;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hbrand">
+    <div class="hlogo" style="background:linear-gradient(135deg,var(--ec),var(--ec2));color:#000;">AV</div>
+    <div>
+      <div class="hname">Panel Comercial · 🇪🇨 Ecuador</div>
+      <div class="hsub">Jefe Comercial · En desarrollo · Q2 2026</div>
+    </div>
+  </div>
+  <div class="hnav">
+    <a href="Panel_Jefes_Index.html" class="hlink">← Países</a>
+    <a href="Panel_General_AV_2026.html" class="hlink">🌎 General</a>
+    <a href="Panel_Chile_AV_2026.html" class="hlink">🇨🇱 Chile</a>
+    <a href="Panel_Peru_AV_2026.html" class="hlink">🇵🇪 Perú</a>
+    <a href="Panel_Ecuador_AV_2026.html" class="hlink act">🇪🇨 Ecuador</a>
+    <div class="hchip">Estado: <strong style="color:var(--ec);">En desarrollo</strong></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ESTADO BANNER -->
+  <div style="background:rgba(110,232,124,.05);border:1px solid rgba(110,232,124,.2);border-radius:12px;padding:20px 24px;margin-bottom:6px;display:flex;align-items:flex-start;gap:16px;">
+    <div style="font-size:36px;flex-shrink:0;">🇪🇨</div>
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--ec);letter-spacing:-.5px;margin-bottom:4px;">Ecuador · Panel en Construcción</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">La estructura del dashboard está lista. Se activa automáticamente cuando los datos de ventas Ecuador Q2 2026 estén disponibles. El IC Fertilizantes Ecuador ya está disponible como referencia competitiva para preparar la estrategia de entrada.</div>
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+        <div style="padding:6px 14px;border-radius:6px;background:rgba(110,232,124,.1);border:1px solid rgba(110,232,124,.2);color:var(--ec);font-size:11px;font-weight:600;">✓ IC Fertilizantes disponible</div>
+        <div style="padding:6px 14px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);font-size:11px;">⏳ Datos ventas · Q2 2026</div>
+        <div style="padding:6px 14px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);font-size:11px;">⏳ Equipo RTCs · Por definir</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPIs PLACEHOLDER -->
+  <div class="slabel">KPIs Principales · Ecuador (Estructura lista)</div>
+  <div class="g5">
+    <div class="ph-kpi">
+      <div class="klbl">Ventas YTD</div>
+      <div class="kval">USD —</div>
+      <div class="ksub">Datos Q2 2026</div>
+      <div class="ph-badge">⏳ Pendiente</div>
+    </div>
+    <div class="ph-kpi">
+      <div class="klbl">Volumen vendido</div>
+      <div class="kval">— L</div>
+      <div class="ksub">Por facturas</div>
+      <div class="ph-badge">⏳ Pendiente</div>
+    </div>
+    <div class="ph-kpi">
+      <div class="klbl">Precio prom./L</div>
+      <div class="kval">USD —</div>
+      <div class="ksub">Ponderado volumen</div>
+      <div class="ph-badge">⏳ Pendiente</div>
+    </div>
+    <div class="ph-kpi">
+      <div class="klbl">Margen estimado</div>
+      <div class="kval">—%</div>
+      <div class="ksub">Base producción +40%</div>
+      <div class="ph-badge">⏳ Pendiente</div>
+    </div>
+    <div class="ph-kpi">
+      <div class="klbl">Cumplimiento</div>
+      <div class="kval">—%</div>
+      <div class="ksub">vs presupuesto</div>
+      <div class="ph-badge">⏳ Pendiente</div>
+    </div>
+  </div>
+
+  <!-- REFERENCIA IC + PRODUCTOS ESTRATÉGICOS -->
+  <div class="slabel">Inteligencia Competitiva · Referencia para Estrategia de Entrada</div>
+  <div class="g2">
+
+    <div class="ref-card">
+      <div class="card-t">
+        <div><div class="eyebrow">IC Fertilizantes Ecuador 2026 v4</div><div class="ctitle">Posicionamiento vs Mercado</div></div>
+        <span class="tag tg">✓ Disponible</span>
+      </div>
+      <div style="margin-top:14px;font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:14px;">El análisis competitivo completo del mercado ecuatoriano está disponible. 26 productos AV comparados vs líderes de mercado. 25 de 26 son viables para exportación con margen positivo.</div>
+
+      <div class="ref-item">
+        <div><div style="font-size:12px;font-weight:500;color:var(--white);">AV SILFORTE</div><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">Promotor Si — silicio soluble</div></div>
+        <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--ec);">Margen FOB 86%</div><div style="font-size:10px;color:var(--faint);">★ Excepcional vs BARRIER Cosmocel</div></div>
+      </div>
+      <div class="ref-item">
+        <div><div style="font-size:12px;font-weight:500;color:var(--white);">AV BALANCE</div><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">Regulador crec. hormonal</div></div>
+        <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--ec);">Margen FOB 99.3%</div><div style="font-size:10px;color:var(--faint);">Mayor oportunidad del portafolio</div></div>
+      </div>
+      <div class="ref-item">
+        <div><div style="font-size:12px;font-weight:500;color:var(--white);">AV PLUS POTASIO</div><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">Foliar K</div></div>
+        <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--ec);">★ Excepcional</div><div style="font-size:10px;color:var(--faint);">vs K-FOL GBM (115 TM mercado)</div></div>
+      </div>
+      <div class="ref-item">
+        <div><div style="font-size:12px;font-weight:500;color:var(--white);">AV ROOT MAX</div><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">Enraizante IBA</div></div>
+        <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--amber);">Alta similitud</div><div style="font-size:10px;color:var(--faint);">vs ENEROOT Enlasa (249 TM)</div></div>
+      </div>
+      <div class="ref-item">
+        <div><div style="font-size:12px;font-weight:500;color:var(--white);">AV ALGAP 30</div><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">Extracto algas Macrocystis</div></div>
+        <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--amber);">Alta similitud</div><div style="font-size:10px;color:var(--faint);">vs SEAWEED EXTRACT (184 TM)</div></div>
+      </div>
+      <div class="ref-item">
+        <div><div style="font-size:12px;font-weight:500;color:var(--white);">AV BIOSOLARIS</div><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">Si+Mg+Amino+Betaína</div></div>
+        <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--ec);">★ Excepcional</div><div style="font-size:10px;color:var(--faint);">vs ARMUROX (49 TM mercado)</div></div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="eyebrow">Roadmap de Activación</div>
+      <div class="ctitle">Próximos Pasos · Ecuador Q2 2026</div>
+      <div style="margin-top:16px;display:flex;flex-direction:column;gap:10px;">
+
+        <div style="display:flex;gap:12px;padding:12px;border-radius:8px;background:rgba(110,232,124,.05);border:1px solid rgba(110,232,124,.15);">
+          <div style="font-size:20px;flex-shrink:0;">1️⃣</div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--white);margin-bottom:3px;">Definir equipo RTC Ecuador</div>
+            <div style="font-size:11px;color:var(--muted);">Asignar vendedores, territorios y presupuestos Q2-Q3 2026 para activar el semáforo de desempeño.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;padding:12px;border-radius:8px;background:rgba(110,232,124,.05);border:1px solid rgba(110,232,124,.15);">
+          <div style="font-size:20px;flex-shrink:0;">2️⃣</div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--white);margin-bottom:3px;">Primeras ventas y registro</div>
+            <div style="font-size:11px;color:var(--muted);">Ingresar facturas al sistema. El dashboard se activa automáticamente con los primeros datos reales.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;padding:12px;border-radius:8px;background:rgba(255,255,255,.02);border:1px solid var(--border2);">
+          <div style="font-size:20px;flex-shrink:0;">3️⃣</div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--white);margin-bottom:3px;">Definir portafolio de entrada</div>
+            <div style="font-size:11px;color:var(--muted);">Basado en IC: AV BALANCE, AV SILFORTE y AV PLUS POTASIO como productos ancla de mayor margen vs competencia.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;padding:12px;border-radius:8px;background:rgba(255,255,255,.02);border:1px solid var(--border2);">
+          <div style="font-size:20px;flex-shrink:0;">4️⃣</div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--white);margin-bottom:3px;">Estrategia de precios FOB</div>
+            <div style="font-size:11px;color:var(--muted);">TC referencia + logística + margen mínimo 40%. El IC ya tiene los precios objetivo calculados para 26 productos.</div>
+          </div>
+        </div>
+
+        <div style="padding:12px;border-radius:8px;background:rgba(110,232,124,.08);border:1px solid rgba(110,232,124,.2);margin-top:4px;">
+          <div style="font-size:10px;font-weight:700;color:var(--ec);letter-spacing:.5px;margin-bottom:5px;">VENTAJA COMPETITIVA CONFIRMADA</div>
+          <div style="font-size:11px;color:var(--muted);">25 de 26 productos AV son viables para exportación a Ecuador con márgenes positivos. <strong style="color:var(--white);">La oportunidad de mercado está validada.</strong> Solo resta definir equipo y ejecutar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="fnote">AV Ecuador · Panel en desarrollo · IC Fertilizantes v4 disponible · Solo uso interno</div>
+  <div class="fdisclaim">⚠ No incluye costos internos ni información confidencial de producción</div>
+</div>
+</body>
+</html>

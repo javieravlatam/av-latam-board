@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <script>
@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="design-system/formato-javier-motion.css">
 <link rel="stylesheet" href="design-system/formato-javier-utilities.css">
 <link rel="stylesheet" href="design-system/domains/formato-javier-board.css">
-<script src="avboard_data.js?v=20260723"></script>
+<script src="avboard_data.js?v=20260722"></script>
 <script src="js/av-chart-colors.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -79,20 +79,19 @@ table.tbl-exec{width:max-content;min-width:100%;border-collapse:collapse;font-si
 table.tbl-exec th{padding:8px 10px;text-align:right;font-size:11px;text-transform:uppercase;
   letter-spacing:1px;color:var(--text-muted);background:var(--surface-2);font-weight:600;
   border-bottom:1px solid var(--border);white-space:nowrap}
-table.tbl-exec td{padding:7px 10px;border-bottom:1px solid rgba(27,79,138,0.07);white-space:nowrap}
+table.tbl-exec td{padding:7px 10px;border-bottom:1px solid rgba(122,182,72,0.06);white-space:nowrap}
 table.tbl-exec tr:last-child td{border-bottom:none}
 table.tbl-exec th:first-child{text-align:left;min-width:130px;
   position:sticky;left:0;z-index:3;background:var(--surface-2)}
 table.tbl-exec td:first-child{text-align:left;
   position:sticky;left:0;z-index:2;background:var(--surface)}
-table.tbl-exec th.th-acum{border-left:2px solid rgba(27,79,138,0.35);background:rgba(27,79,138,0.04)}
-table.tbl-exec td.td-acum{border-left:2px solid rgba(27,79,138,0.35);
-  background:rgba(27,79,138,0.04);font-weight:700}
-.ce-cursor{background:rgba(27,79,138,0.06)!important;
-  border-left:1px solid rgba(27,79,138,0.22)!important;
-  border-right:1px solid rgba(27,79,138,0.22)!important}
+table.tbl-exec th.th-acum{border-left:2px solid rgba(122,182,72,0.35);background:rgba(122,182,72,0.04)}
+table.tbl-exec td.td-acum{border-left:2px solid rgba(122,182,72,0.35);
+  background:rgba(122,182,72,0.04);font-weight:700}
+.ce-cursor{background:rgba(122,182,72,0.07)!important;
+  border-left:1px solid rgba(122,182,72,0.22)!important;
+  border-right:1px solid rgba(122,182,72,0.22)!important}
 .ce-nd{color:var(--text-muted);font-size:11px;font-style:italic}
-.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
 </head>
 <body>
@@ -100,7 +99,7 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(27,79,138,0.35);
 <!-- HEADER -->
 <div class="av-nav">
   <div class="av-nav__brand">
-    <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
+    <div class="av-nav__logo">AV</div>
     <div>
       <div class="av-nav__title">JEFES · CHILE</div>
       <div class="av-nav__sub">Panel Comercial · Real 2026 vs Ppto 2026 · CLP</div>
@@ -854,7 +853,7 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(27,79,138,0.35);
 /* ── FIN GUARD ──────────────────────────────────────────────────────────── */
 
 
-Chart.defaults.color='#7A90AA'; /* light mode axis labels — text-muted token */
+Chart.defaults.color=AV_CHART_COLORS.TEXT_MUTED;
 Chart.defaults.font.family="'DM Mono',monospace";
 Chart.defaults.font.size=11; // FJ v1.1 minimo 11px
 
@@ -1285,7 +1284,7 @@ new Chart(document.getElementById('chartRegion'),{
     datasets:[{
       data:[176.8,159.3,155.1,115.1,88.8,23.2,48.0],
       backgroundColor:[G,'rgba(122,182,72,0.8)','rgba(122,182,72,0.65)',A,O,B,'#9B59B6'],
-      borderColor:'#ffffff',borderWidth:2
+      borderColor:'#080e09',borderWidth:2
     }]
   },
   options:{
@@ -1477,7 +1476,5 @@ function cerrarSesion() {
   }catch(e){console.warn('[AVBOARD][JCH]',e);}
 })();
 </script>
-<script src="assets_logo.js"></script>
-<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <script>
@@ -11,28 +11,28 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Panel Jefes · Perú 2026 · AV Latam</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=20260723"></script>
+<script src="avboard_data.js?v=20260721"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#F4F6F9;--s1:#FFFFFF;--s2:#EDF1F7;--s3:#E2E8F0;
-  --green:#5a8f35;--amber:#C47A0F;--red:#C0392B;--red2:#8B1F14;
-  --blue:#1B4F8A;--orange:#C47A0F;--purple:#9b59b6;
-  --text:#1A2332;--dim:#3D5270;--muted:#7A90AA;
-  --bdr:rgba(27,79,138,0.20);--bdim:rgba(27,79,138,0.08);
+  --bg:#080e09;--s1:#0f1a10;--s2:#162118;--s3:#1c2b1e;
+  --green:#7AB648;--amber:#F5A623;--red:#E74C3C;--red2:#C0392B;
+  --blue:#4A9EDB;--orange:#E67E22;--purple:#9B59B6;
+  --text:#e8f0e9;--dim:#8fa892;--muted:#5a7060;
+  --bdr:rgba(74,158,219,0.20);--bdim:rgba(74,158,219,0.08);
 }
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh}
 
 /* HEADER */
-.hdr{background:linear-gradient(180deg,rgba(27,79,138,0.06),var(--bg));border-bottom:1px solid var(--bdr);
+.hdr{background:linear-gradient(180deg,#080e14,var(--bg));border-bottom:1px solid var(--bdr);
   padding:12px 28px;display:flex;align-items:center;justify-content:space-between;
   position:sticky;top:0;z-index:100}
 .hdr-l{display:flex;align-items:center;gap:13px}
 .logo{width:36px;height:36px;background:var(--blue);border-radius:8px;
   display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue';font-size:15px;color:#fff}
+  font-family:'Bebas Neue';font-size:15px;color:var(--bg)}
 .htitle{font-family:'Bebas Neue';font-size:19px;letter-spacing:2px;color:var(--blue)}
 .hsub{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
 .hcorte{font-family:'DM Mono';font-size:10px;color:var(--dim);text-align:right;line-height:1.6}
@@ -85,9 +85,9 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 table.tbl{width:100%;border-collapse:collapse;font-size:12px}
 table.tbl th{padding:9px 12px;text-align:left;font-size:9px;text-transform:uppercase;
   letter-spacing:1px;color:var(--muted);background:var(--s2);font-weight:600;border-bottom:1px solid var(--bdr)}
-table.tbl td{padding:8px 12px;border-bottom:1px solid rgba(27,79,138,0.06)}
+table.tbl td{padding:8px 12px;border-bottom:1px solid rgba(74,158,219,0.06)}
 table.tbl tr:last-child td{border-bottom:none}
-table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
+table.tbl tr:hover td{background:rgba(74,158,219,0.04)}
 .c{text-align:center}.r{text-align:right}
 .mono{font-family:'DM Mono';font-size:11px}
 
@@ -100,7 +100,7 @@ table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
 .b-risk{background:rgba(230,126,34,0.15);color:var(--orange)}
 .b-crit{background:rgba(231,76,60,0.15);color:var(--red)}
 .b-nd{background:rgba(90,112,96,0.15);color:var(--muted)}
-.b-blue{background:rgba(27,79,138,0.12);color:var(--blue)}
+.b-blue{background:rgba(74,158,219,0.15);color:var(--blue)}
 
 /* VENDEDOR SELECTOR */
 .vend-btns{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
@@ -138,7 +138,6 @@ table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
 
   .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
   .btn-logout:hover { background:rgba(231,76,60,0.10); }
-.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
 </head>
 <body>
@@ -146,7 +145,7 @@ table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
 <!-- HEADER -->
 <div class="hdr">
   <div class="hdr-l">
-    <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
+    <div class="logo">AV</div>
     <div>
       <div class="htitle">🇵🇪 JEFES · PERÚ</div>
       <div class="hsub">Panel Comercial · Real 2026 vs Ppto 2026 · USD</div>
@@ -246,7 +245,7 @@ table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
 <div id="tab-vendedores" class="tab-content">
 
   <!-- Alerta equipo 2026 -->
-  <div style="background:rgba(27,79,138,0.06);border:1px solid rgba(27,79,138,0.20);border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:flex-start;gap:12px">
+  <div style="background:rgba(74,158,219,0.07);border:1px solid rgba(74,158,219,0.25);border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:flex-start;gap:12px">
     <span style="font-size:18px">ℹ️</span>
     <div>
       <div style="font-size:11px;font-weight:700;color:var(--blue)">Equipo Perú 2026: nuevo roster · Geldres sin actividad · 2 vendedores nuevos (Navarro, Valladares)</div>
@@ -335,7 +334,7 @@ table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
 <!-- ══════════════════════════════════════════════ -->
 <div id="tab-productos" class="tab-content">
 
-  <div style="background:rgba(27,79,138,0.06);border:1px solid rgba(27,79,138,0.16);border-radius:8px;padding:12px 16px;margin-bottom:20px">
+  <div style="background:rgba(74,158,219,0.07);border:1px solid rgba(74,158,219,0.2);border-radius:8px;padding:12px 16px;margin-bottom:20px">
     <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">📦 Portafolio Perú 2026 · Ene–May</div>
     <div style="font-size:11px;color:var(--dim)"><strong style="color:var(--text)">VECASIL FORTE domina con 35.4%</strong> del total facturado. Los 4 primeros productos concentran el <strong style="color:var(--amber)">76.0%</strong> del mix. REGALIA MAX es el segundo más importante (20.1%). El portafolio es estrecho: 9 productos explican el 90% de las ventas.</div>
   </div>
@@ -375,7 +374,7 @@ table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
       <div class="chart-wrap" style="margin-bottom:16px">
         <div class="chart-title">Lectura Ejecutiva · Portafolio Perú 2026</div>
         <div style="display:flex;flex-direction:column;gap:10px;padding-top:4px">
-          <div style="padding:10px;background:rgba(27,79,138,0.06);border-radius:6px;border-left:3px solid var(--blue)">
+          <div style="padding:10px;background:rgba(74,158,219,0.07);border-radius:6px;border-left:3px solid var(--blue)">
             <div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:3px">VECASIL FORTE · Producto ancla</div>
             <div style="font-size:10px;color:var(--dim)">35.4% del total. Vendido a múltiples clientes por todos los vendedores activos. Alta dependencia — proteger ante faltantes de stock o competencia.</div>
           </div>
@@ -492,7 +491,7 @@ table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
 
   <div class="g2" style="margin-bottom:16px">
     <!-- Alerta: equipo 2026 sin Geldres -->
-    <div style="background:var(--s2);border:1px solid rgba(27,79,138,0.20);border-radius:8px;padding:14px">
+    <div style="background:var(--s2);border:1px solid rgba(74,158,219,0.3);border-radius:8px;padding:14px">
       <div style="font-size:10px;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px">📊 Equipo Perú 2026 · Resumen de transición</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(122,182,72,0.08);border-radius:4px">
@@ -516,7 +515,7 @@ table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
     </div>
 
     <!-- Oportunidades comerciales -->
-    <div style="background:var(--s2);border:1px solid rgba(27,79,138,0.20);border-radius:8px;padding:14px">
+    <div style="background:var(--s2);border:1px solid rgba(74,158,219,0.25);border-radius:8px;padding:14px">
       <div style="font-size:10px;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px">📈 Oportunidades Comerciales 2026</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="padding:8px;background:rgba(122,182,72,0.07);border-radius:4px">
@@ -527,7 +526,7 @@ table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
           <div style="font-size:11px;font-weight:600;color:var(--orange);margin-bottom:2px">Oscar Infante — Fuerte aceleración Abril</div>
           <div style="font-size:10px;color:var(--dim)">70.8% cumpl 4m (108.5K vs 153K ppto parcial). Abril sólido: 36.9K. Ppto anual 485K requiere aceleración desde MAY.</div>
         </div>
-        <div style="padding:8px;background:rgba(27,79,138,0.06);border-radius:4px">
+        <div style="padding:8px;background:rgba(74,158,219,0.07);border-radius:4px">
           <div style="font-size:11px;font-weight:600;color:var(--blue);margin-bottom:2px">Bomarea S.R.L. — Cliente nuevo líder</div>
           <div style="font-size:10px;color:var(--dim)">USD 44.5K en 4 meses (solo Atalaya). Cliente de alta frecuencia. Proteger relación y ampliar mix.</div>
         </div>
@@ -575,12 +574,12 @@ table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
       <div class="pc-val" style="color:var(--amber)">13,038</div>
       <div class="pc-lbl">USD vendido bajo precio piso</div>
     </div>
-    <div class="pc" style="border-color:rgba(27,79,138,0.20)">
+    <div class="pc" style="border-color:rgba(74,158,219,0.3)">
       <div class="pc-icon">📋</div>
       <div class="pc-val" style="color:var(--blue)">22.4%</div>
       <div class="pc-lbl">% Transacciones bajo piso</div>
     </div>
-    <div class="pc" style="border-color:rgba(27,79,138,0.20)">
+    <div class="pc" style="border-color:rgba(74,158,219,0.3)">
       <div class="pc-icon">💰</div>
       <div class="pc-val" style="color:var(--blue)">1,687</div>
       <div class="pc-lbl">Impacto estimado (gap × unidad)</div>
@@ -845,11 +844,11 @@ table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
 /* ── FIN GUARD ──────────────────────────────────────────────────────────── */
 
 
-Chart.defaults.color='#7A90AA';
+Chart.defaults.color='#8fa892';
 Chart.defaults.font.family="'DM Mono',monospace";
 Chart.defaults.font.size=10;
 
-const G='#7AB648',A='#F5A623',O='#E67E22',R='#E74C3C',B='#1B4F8A',M='#9B59B6';
+const G='#7AB648',A='#F5A623',O='#E67E22',R='#E74C3C',B='#4A9EDB',M='#9B59B6';
 const LABELS=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
 const MESES_FULL=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
@@ -891,7 +890,7 @@ new Chart(document.getElementById('chartVentas'),{
     labels:LABELS,
     datasets:[
       {label:'Real 2025 (ref.)',data:real2025,
-       backgroundColor:'rgba(27,79,138,0.12)',borderColor:'rgba(27,79,138,0.20)',
+       backgroundColor:'rgba(74,158,219,0.15)',borderColor:'rgba(74,158,219,0.3)',
        borderWidth:1,borderRadius:2,order:3},
       {label:'Real 2026',data:real2026,
        backgroundColor:'rgba(74,158,219,0.75)',borderColor:B,
@@ -912,8 +911,8 @@ new Chart(document.getElementById('chartVentas'),{
       }}}
     },
     scales:{
-      x:{grid:{color:'rgba(27,79,138,0.06)'}},
-      y:{grid:{color:'rgba(27,79,138,0.06)'},
+      x:{grid:{color:'rgba(74,158,219,0.06)'}},
+      y:{grid:{color:'rgba(74,158,219,0.06)'},
         ticks:{callback:v=>v+'K'},
         title:{display:true,text:'USD Miles',color:'#5a7060',font:{size:9}}}
     }
@@ -1115,8 +1114,8 @@ function updateVendChart(v){
             return `${ctx.dataset.label}: USD ${v.toFixed(1)}K`;
           }}}},
         scales:{
-          x:{grid:{color:'rgba(27,79,138,0.06)'}},
-          y:{grid:{color:'rgba(27,79,138,0.06)'},ticks:{callback:v=>v!==null?v+'K':''}}
+          x:{grid:{color:'rgba(74,158,219,0.06)'}},
+          y:{grid:{color:'rgba(74,158,219,0.06)'},ticks:{callback:v=>v!==null?v+'K':''}}
         }
       }
     });
@@ -1174,14 +1173,14 @@ new Chart(document.getElementById('chartRTC'),{
     datasets:[{
       label:'Real 2026 YTD (USD K)',
       data:[94.1,59.1,43.7,34.0,1.2,0.7],
-      backgroundColor:[B,'rgba(74,158,219,0.75)','rgba(74,158,219,0.6)','rgba(74,158,219,0.45)','rgba(27,79,138,0.20)','rgba(27,79,138,0.16)'],
+      backgroundColor:[B,'rgba(74,158,219,0.75)','rgba(74,158,219,0.6)','rgba(74,158,219,0.45)','rgba(74,158,219,0.3)','rgba(74,158,219,0.2)'],
       borderRadius:3,borderWidth:0
     }]
   },
   options:{
     indexAxis:'y',responsive:true,maintainAspectRatio:false,
     plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`USD ${ctx.parsed.x.toFixed(1)}K`}}},
-    scales:{x:{grid:{color:'rgba(27,79,138,0.06)'},ticks:{callback:v=>v+'K'}},
+    scales:{x:{grid:{color:'rgba(74,158,219,0.06)'},ticks:{callback:v=>v+'K'}},
       y:{grid:{display:false}}}
   }
 });
@@ -1194,7 +1193,7 @@ new Chart(document.getElementById('chartConc'),{
     datasets:[{
       data:[19.1,14.9,8.3,7.1,6.8,6.2,37.6],
       backgroundColor:[B,O,A,G,R,M,'rgba(90,112,96,0.5)'],
-      borderColor:'#ffffff',borderWidth:2
+      borderColor:'#080e09',borderWidth:2
     }]
   },
   options:{
@@ -1224,7 +1223,7 @@ const productosData=[
 // ── TABLA PRODUCTOS ──
 (function(){
   let html='', cum=0;
-  const barColors=['rgba(74,158,219,0.9)','rgba(122,182,72,0.85)','rgba(245,166,35,0.8)','rgba(230,126,34,0.75)','rgba(155,89,182,0.7)','rgba(74,158,219,0.55)','rgba(74,158,219,0.45)','rgba(74,158,219,0.35)','rgba(27,79,138,0.20)','rgba(27,79,138,0.16)','rgba(90,112,96,0.4)'];
+  const barColors=['rgba(74,158,219,0.9)','rgba(122,182,72,0.85)','rgba(245,166,35,0.8)','rgba(230,126,34,0.75)','rgba(155,89,182,0.7)','rgba(74,158,219,0.55)','rgba(74,158,219,0.45)','rgba(74,158,219,0.35)','rgba(74,158,219,0.25)','rgba(74,158,219,0.2)','rgba(90,112,96,0.4)'];
   productosData.forEach((p,i)=>{
     cum+=p.pct;
     const barW=Math.min(p.pct/36*100,100);
@@ -1239,7 +1238,7 @@ const productosData=[
       <td class="c"><span class="badge ${cum<=76?'b-crit':cum<=90?'b-warn':'b-nd'}">${cum.toFixed(1)}%</span></td>
       <td style="padding:6px 12px">
         <div class="prod-bar-wrap">
-          <div class="prod-bar-fill" style="width:${barW}%;background:${barColors[i]||'rgba(27,79,138,0.16)'}"></div>
+          <div class="prod-bar-fill" style="width:${barW}%;background:${barColors[i]||'rgba(74,158,219,0.2)'}"></div>
         </div>
       </td>
       <td class="c">${p.estrategico?'<span class="badge b-blue">⭐ Estratégico</span>':'<span class="badge b-nd">Estándar</span>'}</td>
@@ -1255,8 +1254,8 @@ new Chart(document.getElementById('chartProductos'),{
     labels:productosData.map(p=>p.prod+' ('+p.pct+'%)'),
     datasets:[{
       data:productosData.map(p=>p.pct),
-      backgroundColor:[B,G,A,O,M,'rgba(74,158,219,0.5)','rgba(74,158,219,0.4)','rgba(27,79,138,0.20)','rgba(27,79,138,0.16)','rgba(27,79,138,0.12)','rgba(90,112,96,0.4)'],
-      borderColor:'#ffffff',borderWidth:2
+      backgroundColor:[B,G,A,O,M,'rgba(74,158,219,0.5)','rgba(74,158,219,0.4)','rgba(74,158,219,0.3)','rgba(74,158,219,0.2)','rgba(74,158,219,0.15)','rgba(90,112,96,0.4)'],
+      borderColor:'#080e09',borderWidth:2
     }]
   },
   options:{
@@ -1404,7 +1403,5 @@ function cerrarSesion() {
   }catch(e){console.warn('[AVBOARD][JPE]',e);}
 })();
 </script>
-<script src="assets_logo.js"></script>
-<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <script>
@@ -18,20 +18,20 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #F4F6F9;
-    --surface: #FFFFFF;
-    --surface2: #EDF1F7;
-    --surface3: #E2E8F0;
-    --green: #5a8f35;
-    --amber: #C47A0F;
-    --red: #C0392B;
-    --red-dark: #8B1F14;
-    --blue: #1B4F8A;
-    --text: #1A2C3D;
-    --text-dim: #3D5270;
-    --text-muted: #7A90AA;
-    --border: rgba(27,79,138,0.18);
-    --border-dim: rgba(27,79,138,0.08);
+    --bg: #080e09;
+    --surface: #0f1a10;
+    --surface2: #162118;
+    --surface3: #1c2b1e;
+    --green: #7AB648;
+    --amber: #F5A623;
+    --red: #E74C3C;
+    --red-dark: #C0392B;
+    --blue: #4A9EDB;
+    --text: #e8f0e9;
+    --text-dim: #8fa892;
+    --text-muted: #5a7060;
+    --border: rgba(122,182,72,0.18);
+    --border-dim: rgba(122,182,72,0.08);
   }
   body {
     background: var(--bg);
@@ -42,15 +42,15 @@
     min-height: 100vh;
   }
   .header {
-    background: linear-gradient(180deg, rgba(27,79,138,0.06) 0%, var(--bg) 100%);
+    background: linear-gradient(180deg, #0c1a0d 0%, var(--bg) 100%);
     border-bottom: 1px solid var(--border);
     padding: 18px 32px;
     display: flex; align-items: center; justify-content: space-between;
     position: sticky; top: 0; z-index: 100;
   }
   .header-left { display: flex; align-items: center; gap: 16px; }
-  .logo-mark { width: 38px; height: 38px; background: var(--blue); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #fff; }
-  .header-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--blue); }
+  .logo-mark { width: 38px; height: 38px; background: var(--green); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--bg); }
+  .header-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--green); }
   .header-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
   .corte-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--green); text-align: right; }
   .corte-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
@@ -154,7 +154,7 @@
   }
   .nav-pills { display: flex; gap: 8px; }
   .nav-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 11px; color: var(--text-dim); text-decoration: none; transition: all 0.2s; }
-  .nav-pill:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .nav-pill:hover { background: var(--green); color: var(--bg); border-color: var(--green); }
 
   @media (max-width: 900px) {
     .grid-2, .grid-3, .grid-4, .kpi-strip { grid-template-columns: 1fr; }
@@ -162,15 +162,14 @@
 
   .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:11px; color:#E74C3C; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
   .btn-logout:hover { background:rgba(231,76,60,0.10); }
-.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
-  <script src="avboard_data.js?v=20260723"></script>
+  <script src="avboard_data.js?v=20260721"></script>
 </head>
 <body>
 
 <header class="header">
   <div class="header-left">
-    <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
+    <div class="logo-mark">AV</div>
     <div>
       <div class="header-title">Dashboard Comercial · AV Latam 2026</div>
       <div class="header-sub">Jefes de Zona · Control Semanal</div>
@@ -237,7 +236,7 @@
 
     <div class="section-h">Resumen Ejecutivo · Corte 11/05/2026</div>
     <div class="grid-3">
-      <div style="background:rgba(27,79,138,0.05);border:1px solid var(--border);border-radius:10px;padding:14px;">
+      <div style="background:rgba(122,182,72,0.06);border:1px solid var(--border);border-radius:10px;padding:14px;">
         <div style="font-size:10px;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">✅ DESTACADO</div>
         <div style="font-size:11px;color:var(--text-dim);line-height:1.7;">
           • Chile 143.6% ppto 4m · Abril 130.4M CLP 🚀<br>
@@ -397,7 +396,7 @@
         </div>
       </div>
       <div>
-        <div style="background:rgba(27,79,138,0.05);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px;">
+        <div style="background:rgba(122,182,72,0.06);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px;">
           <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:var(--green);margin-bottom:8px;">✅ REFERENTE — J. CAROCA (MN 39.2%)</div>
           <div style="font-size:11px;color:var(--text-dim);line-height:1.7;">
             Aporta 55% de la utilidad real de Chile. Modelo de zona a replicar. YTD 192% del ppto. Abril sólido con CLP 10.2M. Considerar plan de expansión territorial Q3.
@@ -665,7 +664,7 @@
             </tr>
           </tbody>
         </table>
-        <div style="margin-top:10px;padding:10px;background:rgba(27,79,138,0.05);border-radius:6px;font-size:11px;color:var(--text-dim);">
+        <div style="margin-top:10px;padding:10px;background:rgba(122,182,72,0.07);border-radius:6px;font-size:11px;color:var(--text-dim);">
           Nota: USD 196,841 adicional en cuenta PAGADO A SUPRA — tratamiento contable separado. Cartera operativa dentro de rangos normales.
         </div>
       </div>
@@ -702,12 +701,12 @@ function showTab(t) {
   event.target.classList.add('active');
 }
 
-Chart.defaults.color = '#7A90AA';
+Chart.defaults.color = '#8fa892';
 Chart.defaults.font.family = "'DM Mono', monospace";
 Chart.defaults.font.size = 10;
 
-const G = '#7AB648', A = '#F5A623', R = '#E74C3C', RD = '#C0392B', B = '#1B4F8A';
-const BDR = 'rgba(27,79,138,0.12)';
+const G = '#7AB648', A = '#F5A623', R = '#E74C3C', RD = '#C0392B', B = '#4A9EDB';
+const BDR = 'rgba(122,182,72,0.15)';
 
 // ══════════════════════════════════════
 // WIRING A AVBOARD (live) · auditoría integral 2026-06-24
@@ -943,7 +942,7 @@ new Chart(document.getElementById('cGrupoPais'), {
   type: 'doughnut',
   data: {
     labels: ['Chile (' + pctCL_g + '%)', 'Perú (' + pctPE_g + '%)'],
-    datasets: [{ data: [D.grupo.chile_ytd_usd, D.grupo.peru_ytd_usd], backgroundColor: [G, B], borderColor: '#ffffff', borderWidth: 4 }]
+    datasets: [{ data: [D.grupo.chile_ytd_usd, D.grupo.peru_ytd_usd], backgroundColor: [G, B], borderColor: '#080e09', borderWidth: 4 }]
   },
   options: {
     responsive: true, maintainAspectRatio: false, cutout: '60%',
@@ -1015,7 +1014,7 @@ new Chart(document.getElementById('cPeruVend'), {
     datasets: [
       { label: 'Infante', data: rmrPE.infante.slice(0, nPE), backgroundColor: A, borderRadius: 2 },
       { label: 'Atalaya', data: rmrPE.atalaya.slice(0, nPE), backgroundColor: G, borderRadius: 2 },
-      { label: 'Aguirre/Nav.', data: dcSumArr([rmrPE.aguirre, rmrPE.navarro]).slice(0, nPE), backgroundColor: '#1B4F8A', borderRadius: 2 },
+      { label: 'Aguirre/Nav.', data: dcSumArr([rmrPE.aguirre, rmrPE.navarro]).slice(0, nPE), backgroundColor: '#4A9EDB', borderRadius: 2 },
       { label: 'Otros', data: arrOtrosPE.slice(0, nPE), backgroundColor: '#4a6a4a', borderRadius: 2 },
     ]
   },
@@ -1042,7 +1041,7 @@ new Chart(document.getElementById('cCxCChile'), {
     datasets: [{
       data: [cc.tramos.t030/1e6, cc.tramos.t3160/1e6, cc.tramos.t6190/1e6, cc.tramos.t90/1e6],
       backgroundColor: [G, A, '#E67E22', R],
-      borderColor: '#ffffff', borderWidth: 3
+      borderColor: '#080e09', borderWidth: 3
     }]
   },
   options: {
@@ -1089,7 +1088,5 @@ function cerrarSesion() {
   window.location.href = 'index.html';
 }
 </script>
-<script src="assets_logo.js"></script>
-<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <script>
@@ -15,35 +15,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel Rentabilidad & Pricing · AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=20260723"></script>
+<script src="avboard_data.js?v=20260721"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #F4F6F9;
-    --surface: #FFFFFF;
-    --surface2: #EDF1F7;
-    --surface3: #E2E8F0;
-    --green: #5a8f35;
-    --green-dim: #3d6024;
-    --green-glow: rgba(90,143,53,0.10);
-    --amber: #C47A0F;
-    --red: #C0392B;
-    --red-dark: #8B1F14;
-    --blue: #1B4F8A;
-    --text: #1A2332;
-    --text-dim: #3D5270;
-    --text-muted: #7A90AA;
-    --border: rgba(27,79,138,0.18);
-    --border-dim: rgba(27,79,138,0.08);
+    --bg: #080e09;
+    --surface: #0f1a10;
+    --surface2: #162118;
+    --surface3: #1c2b1e;
+    --green: #7AB648;
+    --green-dim: #5a8a35;
+    --green-glow: rgba(122,182,72,0.12);
+    --amber: #F5A623;
+    --red: #E74C3C;
+    --red-dark: #C0392B;
+    --blue: #4A9EDB;
+    --text: #e8f0e9;
+    --text-dim: #8fa892;
+    --text-muted: #5a7060;
+    --border: rgba(122,182,72,0.18);
+    --border-dim: rgba(122,182,72,0.08);
   }
   body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; line-height: 1.5; min-height: 100vh; }
 
   /* ── HEADER ── */
-  .header { background: linear-gradient(180deg,rgba(27,79,138,0.06) 0%,var(--bg) 100%); border-bottom: 1px solid var(--border); padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); }
+  .header { background: linear-gradient(180deg,#0c1a0d 0%,var(--bg) 100%); border-bottom: 1px solid var(--border); padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); }
   .header-left { display: flex; align-items: center; gap: 16px; }
   .logo-mark { width: 38px; height: 38px; background: var(--red); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue',sans-serif; font-size: 18px; color: #fff; }
-  .header-title { font-family: 'Bebas Neue',sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--blue); }
+  .header-title { font-family: 'Bebas Neue',sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--green); }
   .header-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
   .corte-date { font-family: 'DM Mono',monospace; font-size: 12px; color: var(--amber); text-align: right; }
   .corte-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
@@ -88,7 +88,7 @@
   .kpi-mini-sub { font-family: 'DM Mono',monospace; font-size: 12px; color: var(--text-dim); margin-top: 4px; }
 
   /* ── EXEC CARD ── */
-  .exec-card { background: linear-gradient(135deg,rgba(231,76,60,0.08) 0%,transparent 60%); border: 1px solid rgba(192,57,43,0.25); border-radius: 14px; padding: 24px 28px; margin-bottom: 18px; display: flex; align-items: center; gap: 28px; }
+  .exec-card { background: linear-gradient(135deg,rgba(231,76,60,0.10) 0%,rgba(8,14,9,0) 60%); border: 1px solid rgba(231,76,60,0.30); border-radius: 14px; padding: 24px 28px; margin-bottom: 18px; display: flex; align-items: center; gap: 28px; }
   .exec-num { font-family: 'Bebas Neue',sans-serif; font-size: 54px; color: var(--red); line-height: 1; white-space: nowrap; }
   .exec-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--red); margin-bottom: 4px; }
   .exec-msg { font-size: 12px; color: var(--text-dim); line-height: 1.6; max-width: 600px; }
@@ -137,7 +137,7 @@
   .chart-box-lg { position: relative; height: 300px; }
 
   /* ── SECTION HEADER ── */
-  .section-h { font-family: 'Bebas Neue',sans-serif; font-size: 14px; letter-spacing: 3px; color: var(--blue); border-left: 3px solid var(--blue); padding-left: 10px; margin: 24px 0 14px; }
+  .section-h { font-family: 'Bebas Neue',sans-serif; font-size: 14px; letter-spacing: 3px; color: var(--green); border-left: 3px solid var(--green); padding-left: 10px; margin: 24px 0 14px; }
   .section-h.red   { color: var(--red); border-color: var(--red); }
   .section-h.amber { color: var(--amber); border-color: var(--amber); }
   .section-h.blue  { color: var(--blue); border-color: var(--blue); }
@@ -200,7 +200,6 @@
   .pric-corte-tag { margin-left:auto; font-family:'DM Mono',monospace; font-size:10px; color:var(--text-muted); background:var(--surface2); border:1px solid var(--border-dim); border-radius:6px; padding:4px 10px; }
   .btn-logout { background:transparent; border:1px solid rgba(231,76,60,0.40); border-radius:6px; padding:5px 12px; font-size:12px; color:var(--red); cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.3px; transition:all .2s; }
   .btn-logout:hover { background:rgba(231,76,60,0.10); }
-.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
 </head>
 <body>
@@ -208,7 +207,7 @@
 <!-- ══ HEADER ══════════════════════════════════════════════════════════════ -->
 <header class="header">
   <div class="header-left">
-    <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
+    <div class="logo-mark">$</div>
     <div>
       <div class="header-title">RENTABILIDAD &amp; PRICING — CONTROL COMERCIAL</div>
       <div class="header-sub">Agroveca Grupo LATAM · Disciplina de precios piso · Chile + Perú</div>
@@ -962,19 +961,19 @@ function switchTab(id, el) {
 }
 
 /* ── CHART DEFAULTS ── */
-Chart.defaults.color = '#7A90AA';
+Chart.defaults.color = '#8fa892';
 Chart.defaults.font.family = 'DM Sans';
 Chart.defaults.font.size = 11;
 
-var GRID_COLOR  = 'rgba(27,79,138,0.08)';
+var GRID_COLOR  = 'rgba(122,182,72,0.08)';
 var RED         = '#E74C3C';
 var AMBER       = '#F5A623';
-var GREEN       = '#5a8f35';
-var BLUE        = '#1B4F8A';
-var RED_DIM     = 'rgba(192,57,43,0.25)';
-var AMBER_DIM   = 'rgba(196,122,15,0.25)';
-var GREEN_DIM   = 'rgba(90,143,53,0.25)';
-var BLUE_DIM    = 'rgba(27,79,138,0.25)';
+var GREEN       = '#7AB648';
+var BLUE        = '#4A9EDB';
+var RED_DIM     = 'rgba(231,76,60,0.25)';
+var AMBER_DIM   = 'rgba(245,166,35,0.25)';
+var GREEN_DIM   = 'rgba(122,182,72,0.25)';
+var BLUE_DIM    = 'rgba(74,158,219,0.25)';
 
 /* ── AVBOARD DATA LAYER ─────────────────────────────────────────────────── */
 (function() {
@@ -1182,7 +1181,7 @@ var BLUE_DIM    = 'rgba(27,79,138,0.25)';
           'rgba(122,182,72,0.65)','rgba(122,182,72,0.50)','rgba(245,166,35,0.65)',
           'rgba(90,112,96,0.40)'
         ],
-        borderColor: '#ffffff',
+        borderColor: 'rgba(8,14,9,0.8)',
         borderWidth: 2, hoverOffset: 6
       }]
     },
@@ -1428,7 +1427,5 @@ function filtrarPric(){
 
 
 </script>
-<script src="assets_logo.js"></script>
-<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 </body>
 </html>

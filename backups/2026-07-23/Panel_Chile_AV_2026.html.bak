@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <script>
@@ -34,15 +34,15 @@
   padding:14px 28px;display:flex;align-items:center;justify-content:space-between;
   position:sticky;top:0;z-index:100;}
 .hdr::before{content:'';position:absolute;bottom:0;left:0;width:120px;height:2px;
-  background:linear-gradient(90deg,var(--domain-accent),transparent);}
+  background:linear-gradient(90deg,var(--positive),transparent);}
 .hdr-l{display:flex;align-items:center;gap:13px}
-.logo{width:38px;height:38px;background:var(--domain-accent);border-radius:8px;
+.logo{width:38px;height:38px;background:var(--positive);border-radius:8px;
   display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue';font-size:17px;color:#fff}
-.htitle{font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;color:var(--domain-accent)}
+  font-family:'Bebas Neue';font-size:17px;color:var(--bg)}
+.htitle{font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;color:var(--positive)}
 .hsub{font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase}
 .hcorte{font-family:'DM Mono';font-size:10px;color:var(--text-dim);text-align:right}
-.hcorte b{color:var(--domain-accent)}
+.hcorte b{color:var(--positive)}
 .hnav{display:flex;gap:6px;flex-wrap:wrap}
 
 /* ── LAYOUT ─────────────────────────────────────────────────── */
@@ -54,13 +54,13 @@
   letter-spacing:2px;text-transform:uppercase;
   background:var(--surface-2);border:1px solid var(--border-dim);
   border-radius:3px;padding:2px 7px;white-space:nowrap;}
-.zona-title{font-family:'Bebas Neue';font-size:15px;letter-spacing:4px;color:var(--domain-accent);}
+.zona-title{font-family:'Bebas Neue';font-size:15px;letter-spacing:4px;color:var(--positive);}
 .zona-title-risk{color:var(--danger);}
 
 /* ── KPI GRID ───────────────────────────────────────────────── */
 .kpi-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;margin-bottom:24px;}
 .kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;position:relative;overflow:hidden}
-.kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--domain-accent)}
+.kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--positive)}
 .kpi.av-text-warning::after{background:var(--warning)}.kpi.av-text-danger::after{background:var(--danger)}
 .kpi-danger{background:rgba(231,76,60,0.04);border-color:rgba(231,76,60,0.25);border-left:3px solid var(--danger);}
 .kpi-danger::after{background:var(--danger);}
@@ -128,8 +128,8 @@
   padding:12px 20px;margin-bottom:16px;display:flex;align-items:center;gap:32px;}
 
 /* ── SECTION TITLE ───────────────────────────────────────────── */
-.sec{font-family:'Bebas Neue';font-size:14px;letter-spacing:3px;color:var(--domain-accent);
-  border-left:3px solid var(--domain-accent);padding-left:10px;margin:22px 0 14px;
+.sec{font-family:'Bebas Neue';font-size:14px;letter-spacing:3px;color:var(--positive);
+  border-left:3px solid var(--positive);padding-left:10px;margin:22px 0 14px;
   display:flex;align-items:center;gap:8px}
 .sec span{font-family:'DM Mono';font-size:9px;color:var(--text-muted);font-weight:400}
 
@@ -150,14 +150,13 @@
   font-family:'DM Sans',sans-serif;letter-spacing:.3px;transition:all .2s;}
 .btn-logout:hover{background:rgba(231,76,60,0.10);}
 
-.logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
 </head>
 <body>
 
 <header class="hdr">
   <div class="hdr-l">
-    <div class="logo-mark-img"><img class="av-logo-img" alt="AV LATAM"></div>
+    <div class="logo">CL</div>
     <div>
       <div class="htitle">Panel Comercial · 🇨🇱 Chile</div>
       <div id="av-cl-hsub" class="hsub">Jefe Comercial · Ene–May 2026</div>
@@ -564,7 +563,7 @@
   </div>
 </div>
 
-<script src="avboard_data.js?v=20260723"></script>
+<script src="avboard_data.js?v=20260721"></script>
 <script>
 
 /* ── AV_CHART_COLORS — FORMATO JAVIER v1.1 ─────────────────────────────── */
@@ -605,11 +604,11 @@ var TD = AV_CHART_COLORS.TEXT_DIM;     // #8fa892 exact match
 /* ── FIN GUARD ──────────────────────────────────────────────────────────── */
 
 
-Chart.defaults.color = '#7A90AA';
+Chart.defaults.color = TD;
 Chart.defaults.font.family = "'DM Mono', monospace";
 Chart.defaults.font.size = 10;
-const G2=GD, A=W, RD='#C0392B', O=W;
-GD = 'rgba(27,79,138,0.07)';  // grid dim — blue light mode
+const G=G,G2=GD,A=W,R=R,RD='#C0392B',B=B,O=W;
+const GD='rgba(122,182,72,0.1)';
 
 // RTC barras T1
 new Chart(document.getElementById('cRTC'),{
@@ -617,7 +616,7 @@ new Chart(document.getElementById('cRTC'),{
   data:{
     labels:['Caroca','Laratro','Encina','Velásquez','Veverka','Muñoz'],
     datasets:[
-      {label:'Ppto T1',data:[33000,54100,29200,32860,18000,3600],backgroundColor:'rgba(27,79,138,0.07)',borderColor:'rgba(27,79,138,0.18)',borderWidth:1,borderRadius:3},
+      {label:'Ppto T1',data:[33000,54100,29200,32860,18000,3600],backgroundColor:'rgba(255,255,255,0.05)',borderColor:'rgba(255,255,255,0.15)',borderWidth:1,borderRadius:3},
       {label:'Real T1',data:[53123,52893,27593,29600,8810,4236],backgroundColor:[G,A,A,R,RD,G],borderRadius:3}
     ]
   },
@@ -657,9 +656,9 @@ new Chart(document.getElementById('cCurva'),{
   data:{
     labels:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
     datasets:[
-      {label:'Ppto Acumulado',data:pptoAc,borderColor:'rgba(27,79,138,0.30)',borderDash:[6,4],borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(27,79,138,0.30)',tension:0.3,fill:false},
+      {label:'Ppto Acumulado',data:pptoAc,borderColor:'rgba(255,255,255,0.22)',borderDash:[6,4],borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(255,255,255,0.3)',tension:0.3,fill:false},
       {label:'Real Acumulado',data:[null,null,null,null,null,null,null,null,null,null,null,null],borderColor:G,backgroundColor:'rgba(122,182,72,0.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:G,tension:0.3,fill:true},
-      {type:'bar',label:'Ppto Mensual',data:CH_PPTO,backgroundColor:'rgba(27,79,138,0.06)',borderColor:'rgba(27,79,138,0.12)',borderWidth:1,borderRadius:2}
+      {type:'bar',label:'Ppto Mensual',data:CH_PPTO,backgroundColor:'rgba(255,255,255,0.04)',borderColor:'rgba(255,255,255,0.08)',borderWidth:1,borderRadius:2}
     ]
   },
   options:{responsive:true,maintainAspectRatio:false,
@@ -675,7 +674,7 @@ new Chart(document.getElementById('cCxC'),{
     datasets:[{
       data:[21.9,11.0,4.1,2.4],
       backgroundColor:[G,A,O,R],
-      borderColor:'#ffffff',borderWidth:3
+      borderColor:'#080e09',borderWidth:3
     }]
   },
   options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
@@ -861,7 +860,5 @@ function cerrarSesion() {
   }
 })();
 </script>
-<script src="assets_logo.js"></script>
-<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 </body>
 </html>

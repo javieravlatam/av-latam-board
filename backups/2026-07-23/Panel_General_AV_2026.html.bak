@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Panel General · Grupo Latam · AV 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>:root{--bg:#0c0e12;--surface:#131620;--card:#191d28;--border:#252a38;--border2:#1e2333;--white:#f0f2f8;--muted:#7c849e;--faint:#444c66;--green:#4ade80;--amber:#fbbf24;--red:#f87171;--cl:#00d4ff;--cl2:#00a8c8;--cl-d:rgba(0,212,255,.09);--pe:#f5a623;--pe2:#c4841a;--pe-d:rgba(245,166,35,.09);--ec:#6ee87c;--ec2:#4ab857;--ec-d:rgba(110,232,124,.09);--gr:#b48aff;--gr2:#8c5cf0;--gr-d:rgba(180,138,255,.09);--ac:var(--cl);--ac2:var(--cl2);--ac-d:var(--cl-d);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;font-size:13px;line-height:1.5;}
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:0 44px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--ac) 0%,transparent 50%);opacity:.5;}
+.hbrand{display:flex;align-items:center;gap:10px;}
+.hlogo{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:#000;flex-shrink:0;}
+.hname{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;letter-spacing:-.3px;}
+.hsub{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px;}
+.hnav{display:flex;align-items:center;gap:6px;}
+.hlink{font-size:12px;color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:4px;border:1px solid var(--border);letter-spacing:.5px;transition:all .2s;white-space:nowrap;}
+.hlink:hover{color:var(--ac);border-color:var(--ac);}
+.hlink.act{color:var(--ac);border-color:var(--ac);background:var(--ac-d);}
+.hchip{font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);letter-spacing:.5px;white-space:nowrap;}
+.hchip strong{color:var(--ac);}
+.wrap{padding:24px 44px 48px;}
+.slabel{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--faint);font-weight:600;margin:22px 0 11px;display:flex;align-items:center;gap:10px;}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border2);}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.g21{display:grid;grid-template-columns:1.65fr 1fr;gap:11px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:18px 20px;}
+.card-t{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;}
+.eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--faint);font-weight:600;margin-bottom:2px;}
+.ctitle{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;letter-spacing:-.2px;}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s;}
+.kpi:hover{border-color:var(--ac);}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--ac),transparent);opacity:0;transition:opacity .2s;}
+.kpi:hover::before{opacity:1;}
+.klbl{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--faint);margin-bottom:7px;font-weight:600;}
+.kval{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-1px;line-height:1;}
+.ksub{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);margin-top:5px;}
+.kbadge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600;margin-top:7px;}
+.kb-g{background:rgba(74,222,128,.1);color:var(--green);}
+.kb-a{background:rgba(251,191,36,.1);color:var(--amber);}
+.kb-r{background:rgba(248,113,113,.1);color:var(--red);}
+.kb-b{background:var(--ac-d);color:var(--ac);}
+.tag{font-size:9px;padding:3px 8px;border-radius:4px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;}
+.tg{background:rgba(74,222,128,.1);color:var(--green);}
+.ta{background:rgba(251,191,36,.1);color:var(--amber);}
+.tr{background:rgba(248,113,113,.1);color:var(--red);}
+.tb{background:var(--ac-d);color:var(--ac);}
+.srow{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:7px;border:1px solid var(--border2);background:rgba(255,255,255,.015);margin-bottom:7px;transition:background .15s;}
+.srow:last-child{margin-bottom:0;}
+.srow:hover{background:rgba(255,255,255,.035);}
+.sleft{display:flex;align-items:center;gap:9px;}
+.sname{font-size:12px;font-weight:500;}
+.sdet{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);margin-top:1px;}
+.sright{display:flex;align-items:center;gap:8px;}
+.sval{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;text-align:right;}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dg{background:var(--green);box-shadow:0 0 5px var(--green);}
+.da{background:var(--amber);box-shadow:0 0 5px var(--amber);}
+.dr{background:var(--red);box-shadow:0 0 5px var(--red);}
+.dn{background:var(--faint);}
+.prow{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
+.plbl{font-size:12px;color:var(--white);width:125px;flex-shrink:0;font-weight:500;}
+.pbar{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+.pfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .8s cubic-bezier(.4,0,.2,1);}
+.ppct{font-family:'DM Mono',monospace;font-size:12px;width:36px;text-align:right;flex-shrink:0;}
+.tbl{width:100%;border-collapse:collapse;margin-top:12px;}
+.tbl th{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);padding:0 10px 8px;text-align:right;border-bottom:1px solid var(--border2);font-weight:600;}
+.tbl th:first-child{text-align:left;}
+.tbl td{padding:9px 10px;font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);border-bottom:1px solid var(--border2);text-align:right;vertical-align:middle;}
+.tbl td:first-child{text-align:left;color:var(--white);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:rgba(255,255,255,.02);}
+.vg{color:var(--green)!important;}.va{color:var(--amber)!important;}.vr{color:var(--red)!important;}.vh{color:var(--white)!important;font-weight:500!important;}
+.alrt{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border-radius:7px;border:1px solid;font-size:11.5px;line-height:1.5;margin-bottom:7px;}
+.alrt:last-child{margin-bottom:0;}
+.alrt-r{background:rgba(248,113,113,.05);border-color:rgba(248,113,113,.2);}
+.alrt-a{background:rgba(251,191,36,.04);border-color:rgba(251,191,36,.2);}
+.alrt-g{background:rgba(74,222,128,.04);border-color:rgba(74,222,128,.2);}
+.alrt strong{font-weight:600;}
+.ins-item{padding:11px 13px;border-radius:7px;background:rgba(255,255,255,.02);border-left:3px solid var(--ac);font-size:11.5px;line-height:1.6;color:var(--muted);margin-bottom:8px;}
+.ins-item:last-child{margin-bottom:0;}
+.ins-item strong{color:var(--white);}
+.itag{display:inline;font-size:9px;background:var(--ac-d);color:var(--ac);padding:2px 6px;border-radius:3px;margin-right:5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
+.mrow{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+.mrow:last-child{margin-bottom:0;}
+.mname{font-size:12px;color:var(--white);width:115px;flex-shrink:0;font-weight:500;}
+.mbar{flex:1;height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;}
+.mfill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--ac),var(--ac2));}
+.mval{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);width:46px;text-align:right;flex-shrink:0;}
+.mmgn{font-family:'DM Mono',monospace;font-size:12px;width:38px;text-align:right;flex-shrink:0;}
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;padding:8px 0 4px;}
+.gauge-ring{position:relative;width:96px;height:96px;}
+.gauge-ring svg{transform:rotate(-90deg);}
+.gauge-ring circle{fill:none;stroke-width:7;stroke-linecap:round;}
+.g-track{stroke:rgba(255,255,255,.06);}
+.g-fill{stroke:var(--ac);transition:stroke-dashoffset .8s ease;}
+.gauge-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.gauge-pct{font-family:'Syne',sans-serif;font-weight:800;font-size:19px;letter-spacing:-1px;}
+.gauge-sub{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.8px;}
+.footer{padding:12px 44px;border-top:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;}
+.fnote{font-size:10px;color:var(--faint);}
+.fdisclaim{font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.15);color:var(--amber);}
+.card,.kpi{animation:fadeUp .35s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:1100px){.g5{grid-template-columns:repeat(3,1fr);}.g21{grid-template-columns:1fr;}}
+@media(max-width:768px){.hdr,.wrap,.footer{padding-left:14px;padding-right:14px;}.g5,.g3,.g2,.g21{grid-template-columns:1fr;}.hnav{display:none;}}
+
+:root{--ac:var(--gr);--ac2:var(--gr2);--ac-d:var(--gr-d);}
+.cbox{border-radius:10px;padding:14px 16px;border:1px solid;}
+.cbox-cl{background:var(--cl-d);border-color:rgba(0,212,255,.2);}
+.cbox-pe{background:var(--pe-d);border-color:rgba(245,166,35,.2);}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hbrand">
+    <div class="hlogo" style="background:linear-gradient(135deg,#b48aff,#8c5cf0);color:#fff;">AV</div>
+    <div><div class="hname">Vista General · Grupo Latam</div><div class="hsub">Panel Comercial Jefes · 2026</div></div>
+  </div>
+  <div class="hnav">
+    <a href="Panel_Jefes_Index.html" class="hlink">← Países</a>
+    <a href="Panel_General_AV_2026.html" class="hlink act">🌎 General</a>
+    <a href="Panel_Chile_AV_2026.html" class="hlink">🇨🇱 Chile</a>
+    <a href="Panel_Peru_AV_2026.html" class="hlink">🇵🇪 Perú</a>
+    <a href="Panel_Ecuador_AV_2026.html" class="hlink">🇪🇨 Ecuador</a>
+    <div class="hchip">Chile <strong>22/03</strong> · Perú <strong>20/03</strong></div>
+  </div>
+</div>
+<div class="wrap">
+
+<!-- [AVBOARD LIVE] Sección dinámica — poblada por script -->
+<div id="avb-live" style="display:none;">
+  <div class="slabel" style="color:var(--green);display:flex;align-items:center;gap:8px;">⚡ KPIs Actuales · Fuente AVBOARD<span id="avb-corte-chip" style="font-size:9px;font-weight:400;font-family:monospace;color:#444c66;margin-left:auto;"></span></div>
+  <div class="g5" id="avb-kpi-row"></div>
+</div>
+<div id="avb-sep" style="display:none;margin:22px 0 0;padding:12px 16px;border:1px solid rgba(245,166,35,0.25);border-radius:8px;background:rgba(245,166,35,0.03);">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#f5a623;font-weight:700;">📁 Archivo Histórico</span>
+      <span style="flex:1;height:1px;background:rgba(245,166,35,0.25);min-width:40px;"></span>
+      <span style="font-size:9px;color:#444c66;font-style:italic;">T1 2026 · Ene–Mar · Cierre 22/03/2026 · no responde a filtros actuales</span>
+    </div>
+    <button id="avb-hist-toggle" onclick="(function(){var s=document.getElementById('avb-hist-body');var b=document.getElementById('avb-hist-toggle');if(!s)return;var hidden=s.style.display==='none';s.style.display=hidden?'':'none';b.textContent=hidden?'▲ Ocultar':'▼ Ver histórico';if(hidden){try{clDraw('todos');peDraw('todos');}catch(e){}}})()" style="font-size:12px;padding:4px 10px;border-radius:4px;border:1px solid rgba(245,166,35,0.3);background:transparent;color:#f5a623;cursor:pointer;white-space:nowrap;">▼ Ver histórico</button>
+  </div>
+</div>
+<div id="avb-hist-body" style="display:none;">
+<div class="slabel" style="color:#444c66;margin-top:14px;">Indicadores Históricos · T1 2026 (Ene–Mar · Al 22/03/2026)</div>
+<div class="g5">
+  <div class="kpi" style="--ac:#b48aff;--ac2:#8c5cf0;--ac-d:rgba(180,138,255,.09);">
+    <div class="klbl">Ventas Grupo YTD</div>
+    <div class="kval" style="color:#b48aff;">USD 349.9K</div>
+    <div class="ksub">CLP 168.3M + USD 172.8K</div>
+    <div class="kbadge" style="background:rgba(180,138,255,.1);color:#b48aff;">2 países activos</div>
+  </div>
+  <div class="kpi"><div class="klbl">Margen Bruto Grupo</div><div class="kval" style="color:var(--green);">82.5%</div><div class="ksub">USD 241.5K sobre ventas</div><div class="kbadge kb-g">↑ Mejora mensual</div></div>
+  <div class="kpi"><div class="klbl">Chile YTD</div><div class="kval" style="color:var(--green);">100.7%</div><div class="ksub">CLP 168.3M · Superó ppto ✅</div><div class="kbadge kb-g">Hito T1</div></div>
+  <div class="kpi"><div class="klbl">Perú YTD</div><div class="kval" style="color:var(--amber);">81.0%</div><div class="ksub">USD 172.8K · vs ppto 213.4K</div><div class="kbadge kb-a">↑ Mejora vs 76.1%</div></div>
+  <div class="kpi"><div class="klbl">RTCs críticos</div><div class="kval" style="color:var(--red);">4</div><div class="ksub">Veverka · Infante · Val. · Gon.</div><div class="kbadge kb-r">Plan Q2 urgente</div></div>
+</div>
+
+<div class="slabel">Comparativo Chile vs Perú · T1 2026</div>
+<div class="g2">
+  <div class="card">
+    <div class="card-t"><div><div class="eyebrow">🇨🇱 Chile · Al 22/03/2026</div><div class="ctitle">✅ Cerró T1 sobre presupuesto</div></div><span class="tag tg">100.7%</span></div>
+    <div style="margin:14px 0 10px;">
+      <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:100%;"></div></div><div class="ppct" style="color:var(--green);">104.6%</div></div>
+      <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:83.3%;"></div></div><div class="ppct" style="color:var(--amber);">83.3%</div></div>
+      <div class="prow"><div class="plbl">Marzo ✅</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green)!important;"></div></div><div class="ppct" style="color:var(--green);">101.8%</div></div>
+      <div class="prow"><div class="plbl">YTD ✅</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green)!important;"></div></div><div class="ppct" style="color:var(--green);">100.7%</div></div>
+    </div>
+    <div class="g2" style="gap:8px;">
+      <div class="cbox cbox-cl"><div style="font-size:12px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Margen YTD</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--cl);">73.8%</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">CLP 91.4M</div></div>
+      <div class="cbox cbox-cl"><div style="font-size:12px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Cartera vencida</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--amber);">66%</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">CLP 24.7M de 37.4M</div></div>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
+      <span class="tag tg">J. Caroca 162.3%</span><span class="tag ta">P. Laratro 92.9%</span><span class="tag tr">I. Veverka 45.2%</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-t"><div><div class="eyebrow">🇵🇪 Perú · Al 20/03/2026</div><div class="ctitle">↑ Mejorando — Marzo fue el mejor mes</div></div><span class="tag ta">81.0%</span></div>
+    <div style="margin:14px 0 10px;">
+      <div class="prow"><div class="plbl">Enero</div><div class="pbar"><div class="pfill" style="width:100%;background:var(--green)!important;"></div></div><div class="ppct" style="color:var(--green);">142.2%</div></div>
+      <div class="prow"><div class="plbl">Febrero</div><div class="pbar"><div class="pfill" style="width:67.4%;background:linear-gradient(90deg,var(--pe),var(--pe2))!important;"></div></div><div class="ppct" style="color:var(--amber);">67.4%</div></div>
+      <div class="prow"><div class="plbl">Marzo</div><div class="pbar"><div class="pfill" style="width:94.3%;background:linear-gradient(90deg,var(--pe),var(--pe2))!important;"></div></div><div class="ppct" style="color:var(--amber);">94.3%</div></div>
+      <div class="prow"><div class="plbl">YTD</div><div class="pbar"><div class="pfill" style="width:81%;background:linear-gradient(90deg,var(--pe),var(--pe2))!important;"></div></div><div class="ppct" style="color:var(--amber);">81.0%</div></div>
+    </div>
+    <div class="g2" style="gap:8px;">
+      <div class="cbox cbox-pe"><div style="font-size:12px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Margen YTD</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--pe);">89.5%</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">USD 145.2K</div></div>
+      <div class="cbox cbox-pe"><div style="font-size:12px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Marzo</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--white);">USD 59.8K</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">Mejor mes del año</div></div>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
+      <span class="tag tg">O. Atalaya 110%</span><span class="tag tg">L. Aguirre USD 35.9K s/p</span><span class="tag tr">O. Infante 37%</span>
+    </div>
+  </div>
+</div>
+
+<div class="slabel">Tendencia Margen Mensual · Grupo</div>
+<div class="g3">
+  <div class="card">
+    <div class="eyebrow">Enero 2026</div><div class="ctitle" style="color:var(--amber);">79.6% margen grupo</div>
+    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--faint);">🇨🇱 Chile</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--cl);margin:4px 0;">72.0%</div><div style="font-size:12px;color:var(--muted);">CLP 88.7M</div></div>
+      <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--faint);">🇵🇪 Perú</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--pe);margin:4px 0;">88.6%</div><div style="font-size:12px;color:var(--muted);">USD 73.5K</div></div>
+    </div>
+    <div style="margin-top:8px;padding:8px;background:rgba(74,222,128,.04);border-radius:6px;border:1px solid rgba(74,222,128,.15);font-size:12px;color:var(--muted);">Perú excelente: 142% vs ppto</div>
+  </div>
+  <div class="card">
+    <div class="eyebrow">Febrero 2026</div><div class="ctitle" style="color:var(--amber);">82.8% margen grupo</div>
+    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--faint);">🇨🇱 Chile</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--cl);margin:4px 0;">73.7%</div><div style="font-size:12px;color:var(--muted);">CLP 35.7M</div></div>
+      <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--faint);">🇵🇪 Perú</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--pe);margin:4px 0;">89.5%</div><div style="font-size:12px;color:var(--muted);">USD 39.4K</div></div>
+    </div>
+    <div style="margin-top:8px;padding:8px;background:rgba(74,222,128,.04);border-radius:6px;border:1px solid rgba(74,222,128,.15);font-size:12px;color:var(--muted);">↑ Mejora en ambos países</div>
+  </div>
+  <div class="card">
+    <div class="eyebrow">Marzo 2026</div><div class="ctitle" style="color:var(--green);">89.4% margen grupo ⭐</div>
+    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--faint);">🇨🇱 Chile</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--cl);margin:4px 0;">84.7%</div><div style="font-size:12px;color:var(--muted);">CLP 44.0M ✅</div></div>
+      <div style="text-align:center;padding:10px;background:rgba(255,255,255,.02);border-radius:7px;border:1px solid var(--border2);"><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--faint);">🇵🇪 Perú</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--pe);margin:4px 0;">90.8%</div><div style="font-size:12px;color:var(--muted);">USD 59.8K ⭐</div></div>
+    </div>
+    <div style="margin-top:8px;padding:8px;background:rgba(74,222,128,.06);border-radius:6px;border:1px solid rgba(74,222,128,.2);font-size:12px;color:var(--muted);">⭐ Mejor mes del año. Chile sobre ppto. Perú mejor mes.</div>
+  </div>
+</div>
+
+<div class="slabel">Alertas Cruzadas · Insights Estratégicos</div>
+<div class="g2">
+  <div class="card">
+    <div class="card-t"><div><div class="eyebrow">Alertas Consolidadas</div><div class="ctitle">Prioridades Dirección Comercial Q2</div></div><span class="tag tr">4 críticas</span></div>
+    <div style="margin-top:12px;">
+      <div class="alrt alrt-g"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🏆</span><div><strong>Chile superó el 100% YTD por primera vez.</strong> Caroca en 162%, Marzo en 101.8%. Hito positivo que debe consolidarse en Q2 sin depender de un solo vendedor.</div></div>
+      <div class="alrt alrt-r"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🔴</span><div><strong>Veverka (CL 45%) + Infante (PE 37%) + Valladares (PE 10%).</strong> 3 RTCs críticos en 2 países. Plan de intervención grupal con metodología Caroca/Atalaya.</div></div>
+      <div class="alrt alrt-r"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🔴</span><div><strong>Cartera Chile: CLP 24.7M vencida (66%).</strong> Goyaservice (78d, CLP 4.2M) y Rio Diuto (51d, CLP 2.9M) son los más urgentes. Caroca concentra el mayor riesgo de cobro.</div></div>
+      <div class="alrt alrt-a"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🟡</span><div><strong>L. Aguirre (Perú) sin presupuesto asignado.</strong> Generó USD 35.9K YTD siendo la 3era por volumen. Incorporarla formalmente al semáforo con objetivo Q2.</div></div>
+      <div class="alrt alrt-a"><span style="font-size:14px;flex-shrink:0;margin-top:1px;">🟡</span><div><strong>Perú: brecha de USD 40.6K vs ppto.</strong> Infante y González no muestran recuperación sostenida. Q2 necesita decisiones estructurales sobre estos RTCs.</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="eyebrow">Insights Estratégicos</div><div class="ctitle">Recomendaciones para Jefes Comerciales</div>
+    <div style="margin-top:12px;">
+      <div class="ins-item" style="border-left-color:#b48aff;"><span class="itag" style="background:var(--gr-d);color:var(--gr);">Grupo</span>El margen mejora <strong>mes a mes en ambos países</strong>: Ene 79.6% → Feb 82.8% → Mar 89.4%. El equipo está mejorando el mix de forma orgánica. Formalizar incentivo por productos premium en Q2.</div>
+      <div class="ins-item" style="border-left-color:#b48aff;"><span class="itag" style="background:var(--gr-d);color:var(--gr);">Modelo</span><strong>Caroca (CL 162%) y Atalaya (PE 110%)</strong> superan el 100%. Ambos combinan seguimiento técnico con foco en productos premium. Documentar y transferir su metodología al equipo.</div>
+      <div class="ins-item" style="border-left-color:#b48aff;"><span class="itag" style="background:var(--gr-d);color:var(--gr);">Cartera</span>Chile: sin deuda +90 días por primera vez en el año. La gestión de cobro mejora pero Caroca concentra CLP 15.3M en CxC total — revisar límite individual de crédito.</div>
+      <div class="ins-item" style="border-left-color:#b48aff;"><span class="itag" style="background:var(--gr-d);color:var(--gr);">Q2 foco</span>Perú Marzo (USD 59.8K) es el nuevo benchmark mensual. Si Aguirre (USD 29.4K) recibe ppto y recursos, Perú puede llegar al 95% en Q2. La palanca está en activar ese potencial.</div>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+var CL={
+  todos:{v:[88.7,35.7,44.0],p:[84.8,42.8,43.2],c:"#00a8c8"},
+  caroca:{v:[15.3,6.4,31.9],p:[12.5,6.0,14.5],c:"#4ade80"},
+  laratro:{v:[37.0,10.4,2.8],p:[36.0,10.6,7.5],c:"#00a8c8"},
+  velasquez:{v:[14.5,9.9,3.5],p:[14.9,11.5,6.5],c:"#fbbf24"},
+  encina:{v:[13.5,7.3,4.8],p:[14.2,7.5,7.5],c:"#b48aff"},
+  veverka:{v:[6.2,0.9,1.0],p:[6.0,6.0,6.0],c:"#f87171"},
+  munoz:{v:[2.2,0.8,0.0],p:[1.2,1.2,1.2],c:"#7c849e"}
+};
+var CL_R=[
+  {n:"J. Caroca",y:53.6,p:33.0,t:162.3,c:"#4ade80"},{n:"P. Laratro",y:50.2,p:54.1,t:92.9,c:"#00a8c8"},
+  {n:"R. Encina",y:25.5,p:29.2,t:87.5,c:"#b48aff"},{n:"F. Velásquez",y:27.9,p:32.9,t:84.8,c:"#fbbf24"},
+  {n:"I. Veverka",y:8.1,p:18.0,t:45.2,c:"#f87171"},{n:"V. Muñoz",y:3.0,p:null,t:null,c:"#7c849e"}
+];
+function clC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
+function clB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
+function clP(v,p){return p>0?Math.round(v/p*100):0;}
+function clDraw(k){
+  var d=CL[k],tv=0,tp=0;
+  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
+  var tc=clP(tv,tp);
+  document.getElementById("cl-kpis").innerHTML=[["Ventas YTD","CLP "+tv.toFixed(1)+"M",null],["Ppto YTD","CLP "+tp.toFixed(1)+"M",null],["Cumpl. T1",tc+"%",tc],["Marzo","CLP "+d.v[2].toFixed(1)+"M",clP(d.v[2],d.p[2])]].map(function(c){return'<div style="background:rgba(255,255,255,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?clC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
+  var w=document.getElementById("cl-wrap");
+  w.innerHTML="<canvas></canvas>";
+  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(clP(d.v[i],d.p[i]));}
+  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2},{type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1},{type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" CLP "+Number(c.raw).toFixed(1)+"M";}}}},scales:{y:{position:"left",grid:{color:"rgba(255,255,255,.05)"},ticks:{callback:function(v){return v+"M";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
+  var mx=54.1;
+  document.getElementById("cl-rank").innerHTML=CL_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+clB(r.t)+';color:'+clC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:12px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#7c849e;">CLP '+r.y+'M</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(255,255,255,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
+}
+clDraw("todos");
+</script>
+
+<script>
+var PE={
+  todos:{v:[73.5,39.4,59.8],p:[51.7,58.5,63.0],c:"#c4841a"},
+  atalaya:{v:[30.1,9.0,20.0],p:[18.0,18.0,18.0],c:"#4ade80"},
+  navarro:{v:[26.3,7.7,0.0],p:[11.8,11.8,11.8],c:"#f5a623"},
+  aguirre:{v:[0.0,6.5,29.4],p:[0,0,0],c:"#b48aff"},
+  infante:{v:[16.5,16.2,9.8],p:[37.8,37.8,37.8],c:"#f87171"},
+  gonzalez:{v:[0.6,0.0,0.1],p:[2.0,2.0,2.0],c:"#7c849e"},
+  valladares:{v:[0.0,0.0,0.6],p:[2.9,2.9,2.9],c:"#7c849e"}
+};
+var PE_R=[
+  {n:"O. Atalaya",y:59.1,p:53.7,t:110.2,c:"#4ade80"},{n:"L. Aguirre",y:35.9,p:null,t:null,c:"#b48aff"},
+  {n:"O. Infante",y:42.5,p:114.9,t:37.0,c:"#f87171"},{n:"N. Navarro",y:34.0,p:35.4,t:96.2,c:"#f5a623"},
+  {n:"A. González",y:0.7,p:6.0,t:17.4,c:"#7c849e"},{n:"P. Valladares",y:0.6,p:5.7,t:10.5,c:"#7c849e"}
+];
+function peC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
+function peB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
+function peP(v,p){return p>0?Math.round(v/p*100):0;}
+function peDraw(k){
+  var d=PE[k],tv=0,tp=0;
+  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
+  var tc=tp>0?peP(tv,tp):null;
+  document.getElementById("pe-kpis").innerHTML=[["Ventas YTD","USD "+tv.toFixed(1)+"K",null],["Ppto YTD",tp>0?"USD "+tp.toFixed(1)+"K":"Sin ppto",null],["Cumpl. T1",tc!=null?tc+"%":"—",tc],["Marzo","USD "+d.v[2].toFixed(1)+"K",d.p[2]>0?peP(d.v[2],d.p[2]):null]].map(function(c){return'<div style="background:rgba(255,255,255,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?peC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
+  var w=document.getElementById("pe-wrap");
+  w.innerHTML="<canvas></canvas>";
+  var hasPp=d.p.some(function(v){return v>0;});
+  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(d.p[i]>0?peP(d.v[i],d.p[i]):null);}
+  var ds=[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2}];
+  if(hasPp){ds.push({type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1});ds.push({type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0});}
+  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" USD "+Number(c.raw).toFixed(1)+"K";}}}},scales:{y:{position:"left",grid:{color:"rgba(255,255,255,.05)"},ticks:{callback:function(v){return v+"K";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
+  var mx=59.1;
+  document.getElementById("pe-rank").innerHTML=PE_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+peB(r.t)+';color:'+peC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:12px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#7c849e;">USD '+r.y.toFixed(1)+'K</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(255,255,255,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
+}
+peDraw("todos");
+</script>
+
+<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border2,#1e2333);">
+<div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#444c66;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px;">Ventas vs Presupuesto &middot; Chile<span style="flex:1;height:1px;background:#1e2333;"></span></div>
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+  <div style="display:flex;gap:14px;font-size:12px;flex-wrap:wrap;">
+    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:9px;border-radius:2px;background:#00a8c8;display:inline-block;"></span>Ventas</span>
+    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;border-top:2px dashed #f87171;display:inline-block;"></span>Ppto</span>
+    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;background:#4ade80;display:inline-block;"></span>Cumpl.%</span>
+  </div>
+  <select onchange="clDraw(this.value)" style="font-size:12px;padding:4px 8px;border-radius:6px;background:#191d28;color:#f0f2f8;border:1px solid #252a38;">
+    <option value="todos">Equipo completo</option><option value="caroca">J. Caroca</option><option value="laratro">P. Laratro</option><option value="velasquez">F. Velásquez</option><option value="encina">R. Encina</option><option value="veverka">I. Veverka</option><option value="munoz">V. Muñoz</option>
+  </select>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;" id="cl-kpis"></div>
+<div id="cl-wrap" style="position:relative;width:100%;height:220px;"></div>
+<div style="margin-top:14px;" id="cl-rank"></div>
+</div>
+<script src="avboard_data.js?v=20260721"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+var CL={
+  todos:{v:[88.7,35.7,44.0],p:[84.8,42.8,43.2],c:"#00a8c8"},
+  caroca:{v:[15.3,6.4,31.9],p:[12.5,6.0,14.5],c:"#4ade80"},
+  laratro:{v:[37.0,10.4,2.8],p:[36.0,10.6,7.5],c:"#00a8c8"},
+  velasquez:{v:[14.5,9.9,3.5],p:[14.9,11.5,6.5],c:"#fbbf24"},
+  encina:{v:[13.5,7.3,4.8],p:[14.2,7.5,7.5],c:"#b48aff"},
+  veverka:{v:[6.2,0.9,1.0],p:[6.0,6.0,6.0],c:"#f87171"},
+  munoz:{v:[2.2,0.8,0.0],p:[1.2,1.2,1.2],c:"#7c849e"}
+};
+var CL_R=[
+  {n:"J. Caroca",y:53.6,p:33.0,t:162.3,c:"#4ade80"},{n:"P. Laratro",y:50.2,p:54.1,t:92.9,c:"#00a8c8"},
+  {n:"R. Encina",y:25.5,p:29.2,t:87.5,c:"#b48aff"},{n:"F. Velásquez",y:27.9,p:32.9,t:84.8,c:"#fbbf24"},
+  {n:"I. Veverka",y:8.1,p:18.0,t:45.2,c:"#f87171"},{n:"V. Muñoz",y:3.0,p:null,t:null,c:"#7c849e"}
+];
+function clC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
+function clB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
+function clP(v,p){return p>0?Math.round(v/p*100):0;}
+function clDraw(k){
+  var d=CL[k],tv=0,tp=0;
+  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
+  var tc=clP(tv,tp);
+  document.getElementById("cl-kpis").innerHTML=[["Ventas YTD","CLP "+tv.toFixed(1)+"M",null],["Ppto YTD","CLP "+tp.toFixed(1)+"M",null],["Cumpl. T1",tc+"%",tc],["Marzo","CLP "+d.v[2].toFixed(1)+"M",clP(d.v[2],d.p[2])]].map(function(c){return'<div style="background:rgba(255,255,255,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?clC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
+  var w=document.getElementById("cl-wrap");
+  w.innerHTML="<canvas></canvas>";
+  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(clP(d.v[i],d.p[i]));}
+  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2},{type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1},{type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" CLP "+Number(c.raw).toFixed(1)+"M";}}}},scales:{y:{position:"left",grid:{color:"rgba(255,255,255,.05)"},ticks:{callback:function(v){return v+"M";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
+  var mx=54.1;
+  document.getElementById("cl-rank").innerHTML=CL_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+clB(r.t)+';color:'+clC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:12px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#7c849e;">CLP '+r.y+'M</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(255,255,255,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
+}
+clDraw("todos");
+</script>
+
+<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border2,#1e2333);">
+<div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#444c66;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px;">Ventas vs Presupuesto &middot; Perú<span style="flex:1;height:1px;background:#1e2333;"></span></div>
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+  <div style="display:flex;gap:14px;font-size:12px;flex-wrap:wrap;">
+    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:9px;border-radius:2px;background:#c4841a;display:inline-block;"></span>Ventas</span>
+    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;border-top:2px dashed #f87171;display:inline-block;"></span>Ppto</span>
+    <span style="display:flex;align-items:center;gap:5px;color:#7c849e;"><span style="width:20px;height:2px;background:#4ade80;display:inline-block;"></span>Cumpl.%</span>
+  </div>
+  <select onchange="peDraw(this.value)" style="font-size:12px;padding:4px 8px;border-radius:6px;background:#191d28;color:#f0f2f8;border:1px solid #252a38;">
+    <option value="todos">Equipo completo</option><option value="atalaya">O. Atalaya</option><option value="navarro">N. Navarro</option><option value="aguirre">L. Aguirre</option><option value="infante">O. Infante</option><option value="gonzalez">A. González</option><option value="valladares">P. Valladares</option>
+  </select>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;" id="pe-kpis"></div>
+<div id="pe-wrap" style="position:relative;width:100%;height:220px;"></div>
+<div style="margin-top:14px;" id="pe-rank"></div>
+</div>
+<script>
+var PE={
+  todos:{v:[73.5,39.4,59.8],p:[51.7,58.5,63.0],c:"#c4841a"},
+  atalaya:{v:[30.1,9.0,20.0],p:[18.0,18.0,18.0],c:"#4ade80"},
+  navarro:{v:[26.3,7.7,0.0],p:[11.8,11.8,11.8],c:"#f5a623"},
+  aguirre:{v:[0.0,6.5,29.4],p:[0,0,0],c:"#b48aff"},
+  infante:{v:[16.5,16.2,9.8],p:[37.8,37.8,37.8],c:"#f87171"},
+  gonzalez:{v:[0.6,0.0,0.1],p:[2.0,2.0,2.0],c:"#7c849e"},
+  valladares:{v:[0.0,0.0,0.6],p:[2.9,2.9,2.9],c:"#7c849e"}
+};
+var PE_R=[
+  {n:"O. Atalaya",y:59.1,p:53.7,t:110.2,c:"#4ade80"},{n:"L. Aguirre",y:35.9,p:null,t:null,c:"#b48aff"},
+  {n:"O. Infante",y:42.5,p:114.9,t:37.0,c:"#f87171"},{n:"N. Navarro",y:34.0,p:35.4,t:96.2,c:"#f5a623"},
+  {n:"A. González",y:0.7,p:6.0,t:17.4,c:"#7c849e"},{n:"P. Valladares",y:0.6,p:5.7,t:10.5,c:"#7c849e"}
+];
+function peC(x){return x>=100?"#4ade80":x>=80?"#fbbf24":"#f87171";}
+function peB(x){return x>=100?"rgba(74,222,128,.15)":x>=80?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)";}
+function peP(v,p){return p>0?Math.round(v/p*100):0;}
+function peDraw(k){
+  var d=PE[k],tv=0,tp=0;
+  for(var i=0;i<d.v.length;i++){tv+=d.v[i];tp+=d.p[i];}
+  var tc=tp>0?peP(tv,tp):null;
+  document.getElementById("pe-kpis").innerHTML=[["Ventas YTD","USD "+tv.toFixed(1)+"K",null],["Ppto YTD",tp>0?"USD "+tp.toFixed(1)+"K":"Sin ppto",null],["Cumpl. T1",tc!=null?tc+"%":"—",tc],["Marzo","USD "+d.v[2].toFixed(1)+"K",d.p[2]>0?peP(d.v[2],d.p[2]):null]].map(function(c){return'<div style="background:rgba(255,255,255,.03);border:1px solid #252a38;border-radius:8px;padding:9px 12px;min-width:100px;flex:1;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#444c66;margin-bottom:3px;">'+c[0]+'</div><div style="font-size:16px;font-weight:800;color:'+(c[2]!=null?peC(c[2]):"#f0f2f8")+';">'+c[1]+'</div></div>';}).join("");
+  var w=document.getElementById("pe-wrap");
+  w.innerHTML="<canvas></canvas>";
+  var hasPp=d.p.some(function(v){return v>0;});
+  var ps=[];for(var i=0;i<d.v.length;i++){ps.push(d.p[i]>0?peP(d.v[i],d.p[i]):null);}
+  var ds=[{type:"bar",data:d.v,backgroundColor:d.c+"99",borderColor:d.c,borderWidth:1,yAxisID:"y",order:2}];
+  if(hasPp){ds.push({type:"line",data:d.p,borderColor:"#f87171",borderDash:[5,3],borderWidth:2,pointRadius:3,pointBackgroundColor:"#f87171",fill:false,yAxisID:"y",order:1});ds.push({type:"line",data:ps,borderColor:"#4ade80",borderWidth:2,pointRadius:4,pointBackgroundColor:"#4ade80",fill:false,tension:.2,yAxisID:"y2",order:0});}
+  new Chart(w.firstChild,{data:{labels:["Enero","Febrero","Marzo"],datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===2?" Cumpl.: "+c.raw+"%":" USD "+Number(c.raw).toFixed(1)+"K";}}}},scales:{y:{position:"left",grid:{color:"rgba(255,255,255,.05)"},ticks:{callback:function(v){return v+"K";},color:"#7c849e",font:{size:10}}},y2:{position:"right",min:0,max:250,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+"%";},color:"#4ade80",font:{size:10}}},x:{grid:{display:false},ticks:{color:"#7c849e",font:{size:11},autoSkip:false,maxRotation:0}}}}});
+  var mx=59.1;
+  document.getElementById("pe-rank").innerHTML=PE_R.map(function(r){var bw=(Math.min(100,r.y/mx*100)).toFixed(1);var pw=r.p?(Math.min(100,r.p/mx*100)).toFixed(1):0;var badge=r.t!=null?'<span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:'+peB(r.t)+';color:'+peC(r.t)+';">'+r.t+'%</span>':'<span style="font-size:10px;color:#444c66;">s/p</span>';return'<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;"><span style="font-size:12px;color:#f0f2f8;font-weight:500;">'+r.n+'</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#7c849e;">USD '+r.y.toFixed(1)+'K</span>'+badge+'</div></div><div style="position:relative;height:6px;background:rgba(255,255,255,.06);border-radius:3px;"><div style="height:100%;width:'+bw+'%;background:'+r.c+';border-radius:3px;"></div>'+(r.p?'<div style="position:absolute;top:-3px;bottom:-3px;width:2px;background:#f87171;left:'+pw+'%;"></div>':'')+'</div></div>';}).join("");
+}
+peDraw("todos");
+</script>
+</div><!-- /avb-hist-body -->
+<script>
+(function() {
+  if (typeof AVBOARD === 'undefined') { return; }
+
+  // === Corte dates → header chip ===
+  var meta   = AVBOARD.meta   || {};
+  var cortes = meta.cortes    || {};
+  var clCorte = cortes.chile_ventas || '—';
+  var peCorte = cortes.peru_ventas  || '—';
+  var TC = meta.tc_clp_usd || 950;
+
+  var chip = document.querySelector('.hchip');
+  if (chip) chip.innerHTML = 'Chile <strong>' + clCorte + '</strong> · Perú <strong>' + peCorte + '</strong>';
+
+  var cchip = document.getElementById('avb-corte-chip');
+  if (cchip) cchip.textContent = 'CL ' + clCorte + ' · PE ' + peCorte;
+
+  // === Chile YTD (CLP) from rtc_mensual_real ===
+  var clV   = (AVBOARD.chile && AVBOARD.chile.ventas) || {};
+  var rtcCL = clV.rtc_mensual_real || {};
+  var clYtdCLP = 0;
+  ['caroca','laratro','velasquez','encina','veverka','munoz'].forEach(function(v) {
+    (rtcCL[v] || []).forEach(function(m) { clYtdCLP += (m || 0); });
+  });
+  var clYtdM   = clYtdCLP / 1e6;           // CLP millones
+  var clUSDK   = Math.round(clYtdCLP / TC / 1000);  // USD miles
+
+  // === Perú YTD (USD) from por_vendedor ===
+  var peV    = (AVBOARD.peru && AVBOARD.peru.ventas) || {};
+  var peVend = peV.por_vendedor || {};
+  var peYtd  = 0;
+  Object.keys(peVend).forEach(function(k) { peYtd += (peVend[k].ytd || 0); });
+  var peYtdK = peYtd / 1000;
+
+  // Cumplimiento Perú vs presupuesto anual acumulado
+  var pePpto = peV.mensual_ppto || [];
+  var pePptoYtd = 0;
+  pePpto.forEach(function(m) { pePptoYtd += (m || 0); });
+  var peCumpl = pePptoYtd > 0 ? Math.round(peYtd / pePptoYtd * 100) : null;
+
+  // === Grupo consolidado ===
+  var grupoK = clUSDK + Math.round(peYtdK);
+
+  // === IEC Chile ===
+  var iec    = clV.iec || {};
+  var iecPct = iec.total != null ? Math.round(iec.total * 100) : null;
+
+  // === Helpers ===
+  function kc(x) { return x >= 100 ? '#4ade80' : x >= 80 ? '#fbbf24' : '#f87171'; }
+  function kb(x) { return x >= 100 ? 'rgba(74,222,128,.1)' : x >= 80 ? 'rgba(251,191,36,.1)' : 'rgba(248,113,113,.1)'; }
+  function mkKpi(ac, acD, label, val, sub, badge) {
+    return '<div class="kpi" style="--ac:' + ac + ';--ac2:' + ac + ';--ac-d:' + acD + ';">' +
+      '<div class="klbl">' + label + '</div>' +
+      '<div class="kval" style="color:' + ac + ';">' + val + '</div>' +
+      '<div class="ksub">' + sub + '</div>' +
+      '<div class="kbadge" style="background:' + acD + ';color:' + ac + ';">' + badge + '</div>' +
+      '</div>';
+  }
+
+  var peColor = peCumpl != null ? kc(peCumpl) : '#c4841a';
+  var peBg    = peCumpl != null ? kb(peCumpl)  : 'rgba(196,132,26,.09)';
+  var iecColor = (iecPct != null && iecPct >= 80) ? '#4ade80' : '#fbbf24';
+  var iecBg    = (iecPct != null && iecPct >= 80) ? 'rgba(74,222,128,.1)' : 'rgba(251,191,36,.1)';
+
+  var row = document.getElementById('avb-kpi-row');
+  if (!row) return;
+
+  row.innerHTML =
+    mkKpi('#b48aff','rgba(180,138,255,.09)',
+      'Chile YTD',
+      'CLP ' + clYtdM.toFixed(1) + 'M',
+      'Corte ' + clCorte,
+      '≈ USD ' + clUSDK + 'K') +
+    mkKpi(peColor, peBg,
+      'Perú YTD',
+      'USD ' + peYtdK.toFixed(1) + 'K',
+      'Corte ' + peCorte,
+      peCumpl != null ? peCumpl + '% vs ppto año' : '—') +
+    mkKpi('#b48aff','rgba(180,138,255,.09)',
+      'Grupo YTD (est.)',
+      'USD ' + grupoK + 'K',
+      'TC ' + TC + ' CLP/USD',
+      '2 países activos') +
+    mkKpi(iecColor, iecBg,
+      'IEC Chile',
+      iecPct != null ? iecPct + '% sobre piso' : '—',
+      'Precio piso · ventas CL',
+      iecPct != null ? (iecPct >= 80 ? '✅ Saludable' : '⚠ Revisar') : '—') +
+    mkKpi('#00a8c8','rgba(0,168,200,.09)',
+      'Fuente',
+      'AVBOARD',
+      'avboard_data.js',
+      'Sistema activo ✓');
+
+  // Mostrar sección live
+  var live = document.getElementById('avb-live');
+  if (live) live.style.display = '';
+  var sep = document.getElementById('avb-sep');
+  if (sep) sep.style.display = '';
+})();
+</script>
+</div>
+<div class="footer">
+  <div class="fnote">AV Grupo Latam · Fuente: AVBOARD (avboard_data.js) · Solo uso interno</div>
+  <div class="fdisclaim">⚠ No incluye costos internos ni información confidencial de producción</div>
+</div>
+</body>
+</html>
