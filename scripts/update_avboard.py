@@ -53,7 +53,7 @@ PANEL_IEC       = REPO / 'Panel_IEC_Auditoria_2026.html'
 
 TODAY = date.today().strftime('%d/%m/%Y')
 NOW   = datetime.now().strftime('%Y-%m-%d %H:%M')
-CACHE_V = datetime.now().strftime('%Y%m%d')   # cache-busting ?v= para <script src="avboard_*.js">, igual en cada corrida
+CACHE_V = datetime.now().strftime('%Y%m%d%H%M')  # cache-busting ?v= — incluye hora+minuto para forzar re-descarga en cada corrida
 
 # ── Constantes de negocio (estáticas — solo cambian si cambia el presupuesto) ─
 TC_CLP_USD = 950
