@@ -90,7 +90,7 @@
   "navegacion": {
     "_comentario": "Barra superior del futuro Centro Comercial AV LATAM (spec Fase 2, sección BARRA SUPERIOR). disponible:false = visible pero inerte (Próximamente), no se desarrolla todavía. La visión completa de módulos futuros (CRM, Pricing, Pipeline, Reportes, Inteligencia Comercial) queda documentada en README.md — no se agregan aquí hasta que se aborden explícitamente.",
     "items": [
-      { "id": "portal",        "label": "Portal",              "disponible": true },
+      { "id": "portal",        "label": "Cambiar país",         "disponible": true },
       { "id": "nueva",         "label": "Nueva Cotización",     "disponible": true },
       { "id": "historial",     "label": "Historial",            "disponible": true },
       { "id": "clientes",      "label": "Clientes",             "disponible": false },

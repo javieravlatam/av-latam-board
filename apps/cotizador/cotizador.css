@@ -75,6 +75,8 @@ a{color:var(--blue); text-decoration:none}
 }
 .nav-pill.inerte{color:var(--muted); cursor:default; opacity:.5}
 .nav-pill.inerte:hover{color:var(--muted); border-color:transparent}
+.nav-pill.board-link{color:var(--blue); border-color:rgba(27,79,138,0.30); font-weight:500}
+.nav-pill.board-link:hover{background:var(--bdim); border-color:var(--blue)}
 
 /* ── Portal (index.html) ─────────────────────────────────────────── */
 .portal-wrap{max-width:980px; margin:0 auto; padding:60px 24px; text-align:center}
