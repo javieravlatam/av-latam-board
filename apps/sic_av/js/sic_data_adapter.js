@@ -107,6 +107,30 @@
   // CHANGE REQUEST v1.5: "No excluir silenciosamente registros").
   SICAdapter.NO_COMERCIAL = ["OFICINA", "LABORATORIO", "EN TERRENO 1", "JAVIER ALMEIDA"];
 
+  // ---------------------------------------------------------------------
+  // A.1 Universo SIC — vendedores presupuestados (CHANGE REQUEST v1.7 Fase 2)
+  // Lee universo_sic_cl.json (o PE) generado por scripts/reconciliar_ventas_cl.py
+  // y devuelve un Set de claves SIC presupuestadas para el ciclo solicitado.
+  //
+  // REGLA DE NEGOCIO: UNIVERSO SIC = PRESUPUESTO VIGENTE
+  //   - Si la clave del vendedor está en el Set → aparece individualmente en SIC
+  //   - Si NO está → sus transacciones van al bucket "otros" (trazabilidad intacta)
+  //
+  // FALLBACK: si el archivo no se cargó (fuentes.universo_sic_raw === null),
+  // se devuelve un Set vacío. construirCicloReal() interpreta Set vacío como
+  // "universo no disponible → todos individuales" (comportamiento pre-v1.7).
+  // Esto garantiza compatibilidad backward si el archivo aún no existe.
+  // ---------------------------------------------------------------------
+  SICAdapter.derivarUniversoPpto = function (universoRaw, pais) {
+    if (!universoRaw || !Array.isArray(universoRaw.claves_presupuestadas)) {
+      return new Set(); // Set vacío → fallback: todos individuales
+    }
+    if (universoRaw.pais && universoRaw.pais !== (pais || "CL")) {
+      return new Set(); // JSON para otro país — no aplica
+    }
+    return new Set(universoRaw.claves_presupuestadas);
+  };
+
   SICAdapter.normalizarVendedor = function (pais, nombreCrudo) {
     var n = String(nombreCrudo || "").trim().toUpperCase();
     if (SICAdapter.NO_COMERCIAL.indexOf(n) !== -1) {
@@ -269,6 +293,28 @@
       advertencias.push({ tipo: "sin_datos", detalle: "No se encontraron transacciones reales para " + pais + " en " + SICAdapter.RUTAS.panelIec });
     }
 
+    // CHANGE REQUEST v1.7 Fase 2: UNIVERSO SIC = PRESUPUESTO VIGENTE
+    // universoPpto: Set de claves SIC de vendedores con presupuesto activo.
+    // Set vacío → universo no disponible → todos los vendedores son individuales
+    // (backward-compatible con versiones sin universo_sic_cl.json).
+    var universoPpto = SICAdapter.derivarUniversoPpto(fuentes.universo_sic_raw || null, pais);
+    var universoActivo = universoPpto.size > 0;
+    if (universoActivo) {
+      advertencias.push({
+        tipo: "universo_sic_activo",
+        detalle: "Universo SIC cargado desde universo_sic_" + pais.toLowerCase() + ".json: "
+          + Array.from(universoPpto).sort().join(", ")
+          + ". Transacciones de vendedores fuera del presupuesto van al bucket 'otros'."
+      });
+    } else {
+      advertencias.push({
+        tipo: "universo_sic_no_disponible",
+        detalle: "universo_sic_" + pais.toLowerCase() + ".json no cargado — todos los vendedores se tratan como individuales (comportamiento pre-v1.7). Ejecutar reconciliar_ventas_cl.py para generar el archivo."
+      });
+    }
+    // otrosVentas: transacciones de vendedores fuera del presupuesto vigente.
+    var otrosVentas = [];
+
     // CHANGE REQUEST v1.6: se necesita, ademas de la ventana 26-25 del ciclo
     // solicitado, la ventana del mes calendario completo de desempeño (que
     // NO coincide con la ventana del periodo -- puede empezar hasta 25 dias
@@ -320,14 +366,35 @@
       if (!vend.mapeado) {
         advertencias.push({ tipo: "vendedor_sin_mapeo", detalle: "Vendedor real '" + t.vendedor + "' no tiene clave normalizada conocida -- se genero una clave derivada (" + vend.clave + "). Confirmar con Comercial antes de usar en produccion." });
       }
-      vendedoresVistos[vend.clave] = t.vendedor;
 
-      // -- Validaciones de integridad (regla: no excluir en silencio) --
+      // -- Monto: calcular y validar antes de cualquier routing (individual u OTROS) --
       var monto = Number(t.total);
       if (!isFinite(monto)) {
         advertencias.push({ tipo: "monto_invalido", detalle: "Folio " + t.folio + ": total no numerico (" + t.total + ")" });
         return;
       }
+
+      // CHANGE REQUEST v1.7 Fase 2: UNIVERSO SIC = PRESUPUESTO VIGENTE
+      // Si el universo está activo y la clave NO está en el presupuesto →
+      // la transacción va al bucket OTROS (sin aparecer individualmente en SIC).
+      // REGLA: no hardcodear nombres — la decisión la toma el Set universoPpto
+      // derivado dinámicamente del Libro Base (universo_sic_cl.json).
+      if (universoActivo && vend.clave && !universoPpto.has(vend.clave)) {
+        otrosVentas.push({
+          factura:                  "REAL-" + pais + "-" + t.folio,
+          fecha_factura:            t.fecha,
+          vendedor_nombre:          vend.nombre,
+          vendedor_clave_orig:      vend.clave,
+          venta_neta:               monto,
+          _pertenece_periodo:       perteneceAlPeriodo,
+          _pertenece_mes_desempeno: perteneceAlMesDesempeno
+        });
+        return; // NO agregar a ventas individuales ni a vendedoresVistos
+      }
+
+      vendedoresVistos[vend.clave] = t.vendedor;
+
+      // -- Validaciones de integridad adicionales (individual path) --
       if (monto < 0) {
         advertencias.push({ tipo: "monto_negativo", detalle: "Folio " + t.folio + ": monto negativo (" + monto + ") -- no deberia ocurrir segun fuente actual (ver DATA_SOURCE_AUDIT.md 'Notas de credito')" });
       }
@@ -398,20 +465,31 @@
     cicloInfo.fecha_datos = cicloInfo.cierre;
     cicloInfo.origen = "real";
 
-    // -- Cobranza: BRECHA CONOCIDA -- no existe fecha de cobro real en
-    // ninguna fuente conectada (ver DATA_SOURCE_AUDIT.md seccion 3.1). No se
-    // inventa: se deja sin cobranzas, por lo que toda venta real queda en
-    // estado "potencial" hasta que exista una fuente real de pagos.
-    var cobranzas = [];
-    advertencias.push({
-      tipo: "cobranza_no_disponible",
-      detalle: "No existe ninguna fuente conectada con fecha de cobro real por factura. La comision LIBERADA de este ciclo real sera 0 para todas las facturas -- solo la comision POTENCIAL (sobre venta facturada) es representativa. Ver DATA_SOURCE_AUDIT.md seccion 3.1."
+    // -- Cobranza: usar fuente real si está disponible en fuentes.cobranzas_raw --
+    // CHANGE REQUEST SIC-AV v1.7 (Fase 2): reconciliar_ventas_cl.py genera
+    // apps/sic_av/data/cobranzas_cl.json; sic_chile.html lo carga y lo inyecta
+    // en FUENTES.cobranzas_raw antes de llamar a construirCicloReal().
+    // Cuando cobranzas_raw no está disponible, el comportamiento es idéntico al
+    // anterior (cobranzas = [], comision_liberada = 0, advertencia explicita).
+    var cobranzas = SICAdapter.construirCobranzasReales(fuentes.cobranzas_raw || null, pais);
+    if (cobranzas.length === 0) {
+      advertencias.push({
+        tipo: "cobranza_no_disponible",
+        detalle: "No existe ninguna fuente conectada con fecha de cobro real por factura. La comision LIBERADA de este ciclo real sera 0 para todas las facturas -- solo la comision POTENCIAL (sobre venta facturada) es representativa. Ver DATA_SOURCE_AUDIT.md seccion 3.1."
+      });
+    } else {
+      advertencias.push({
+        tipo: "cobranza_fuente_conectada",
+        detalle: "Fuente real de cobranza conectada: " + cobranzas.length + " registros de cobro disponibles (CHANGE REQUEST SIC-AV v1.7). La comision LIBERADA se calcula sobre cobros reales con Fecha Pago Fct. registrada."
+      });
+    }
+    // Validar solo cobranzas dentro de la ventana del ciclo actual para
+    // evitar ruido de "cobro_sin_factura" cuando cobranzas_cl.json contiene
+    // el libro anual completo (todos los ciclos, no solo el consultado).
+    var cobranzasEnVentana = cobranzas.filter(function (c) {
+      return c.fecha_pago >= cicloInfo.inicio && c.fecha_pago <= cicloInfo.cierre;
     });
-    // Validaciones "cobro sin factura" y "cobro superior al facturado" quedan
-    // implementadas aqui mismo (no en un modulo aparte) para que se activen
-    // automaticamente el dia que exista una fuente real de cobranza -- hoy
-    // son un no-op porque `cobranzas` siempre esta vacio (brecha 3.1).
-    SICAdapter._validarCobranzas(cobranzas, ventas, advertencias);
+    SICAdapter._validarCobranzas(cobranzasEnVentana, ventas, advertencias);
 
     // -- Vendedores semilla: incluir en el selector a vendedores que tienen
     // presupuesto pero no transacciones en este ciclo/mes (ej. KAMs recién
@@ -480,6 +558,14 @@
       return { id: clave, nombre: vendedoresVistos[clave], cargo: "No disponible en fuente real (ver DATA_SOURCE_AUDIT.md)" };
     });
 
+    // CHANGE REQUEST v1.7 Fase 2: resumen de OTROS para validación y display
+    var otrosSumaPeriodo = 0, otrosCountPeriodo = 0;
+    var otrosSumaMes = 0, otrosCountMes = 0;
+    otrosVentas.forEach(function (o) {
+      if (o._pertenece_periodo) { otrosSumaPeriodo += o.venta_neta; otrosCountPeriodo++; }
+      if (o._pertenece_mes_desempeno) { otrosSumaMes += o.venta_neta; otrosCountMes++; }
+    });
+
     return {
       pais: pais,
       params: paramsPolitica,
@@ -496,7 +582,23 @@
       // bloques separados sin tener que recalcularlo.
       mes_desempeno: mesDesempeno,
       mes_desempeno_info: rangoMesDesempeno,
-      advertencias: advertencias
+      advertencias: advertencias,
+      // CHANGE REQUEST v1.7 Fase 2: bucket OTROS (vendedores fuera del presupuesto vigente)
+      // Estas transacciones NO entran en ventas[] individuales ni en iec[] ni en presupuestos[].
+      // Se exponen aquí para trazabilidad y validación (validación 7 del CR).
+      otros_ventas: otrosVentas,
+      otros_resumen: {
+        universo_activo:        universoActivo,
+        count_periodo:          otrosCountPeriodo,
+        total_periodo:          otrosSumaPeriodo,
+        count_mes_desempeno:    otrosCountMes,
+        total_mes_desempeno:    otrosSumaMes,
+        claves_excluidas: universoActivo ? (function () {
+          var ex = {};
+          otrosVentas.forEach(function (o) { ex[o.vendedor_clave_orig] = o.vendedor_nombre; });
+          return ex;
+        })() : {}
+      }
     };
   };
 
@@ -560,6 +662,113 @@
       porTipo[a.tipo] = (porTipo[a.tipo] || 0) + 1;
     });
     return porTipo;
+  };
+
+  // ---------------------------------------------------------------------
+  // H. Enriquecimiento con vencimientos (CHANGE REQUEST SIC-AV v1.7)
+  // Lee datos/vencimientos_cl.json (generado por scripts/parse_ventas_grupo_cl.py)
+  // y añade `_fecha_vencimiento` / `_rut_cliente` a cada transacción del ciclo
+  // sin modificar AVBOARD, TX_CL ni el motor de cálculo (sic_core.js intacto).
+  //
+  // Regla de deduplicación Guía→Factura:
+  //   Cuando una Guía de Despacho fue convertida a Factura (mismo cliente + monto),
+  //   el JSON la marca con `reemplazada_por_folio`. La UI debe advertirlo visualmente
+  //   para evitar doble conteo — pero NO suprime ninguna fila de TX_CL (eso requiere
+  //   decisión de negocio).
+  //
+  // Normalización de folio: TX_CL serializa folios como float ("730.0");
+  //   vencimientos_cl.json los almacena como enteros ("730"). Esta función
+  //   normaliza ambos lados antes de cruzar.
+  //
+  // Nota crítica (inalterable por este CR):
+  //   venta_cobrada permanece en 0 para todas las facturas. FECHA VENCIMIENTO
+  //   ≠ FECHA DE COBRO. Este enriquecimiento NO modifica el bloque "Monto cobrado"
+  //   ni libera comisiones. Solo añade contexto de vencimiento para visualización.
+  // ---------------------------------------------------------------------
+  SICAdapter.normalizarFolioStr = function (folioRaw) {
+    if (folioRaw === null || folioRaw === undefined) return null;
+    var s = String(folioRaw).trim();
+    // "730.0" → "730"
+    var n = parseInt(s, 10);
+    return isFinite(n) ? String(n) : s;
+  };
+
+  SICAdapter.construirMapaVencimientos = function (vencimientosData) {
+    // Construye { folio_str → doc } desde el JSON de enriquecimiento.
+    var mapa = {};
+    if (!vencimientosData || !Array.isArray(vencimientosData.documentos)) return mapa;
+    vencimientosData.documentos.forEach(function (d) {
+      if (d.folio) mapa[String(d.folio)] = d;
+    });
+    return mapa;
+  };
+
+  SICAdapter.enriquecerConVencimientos = function (ventas, mapaVencimientos) {
+    // Añade _fecha_vencimiento, _rut_cliente y _guia_reemplazada_por a cada
+    // venta del array (in-place). No retorna nada — modifica el array recibido.
+    if (!ventas || !mapaVencimientos) return;
+    ventas.forEach(function (v) {
+      // Extraer folio desde "REAL-CL-730.0" o "REAL-PE-..."
+      var partes = (v.factura || "").split("-");
+      var folioRaw = partes.slice(2).join("-"); // "730.0", "321.0", etc.
+      var folioNorm = SICAdapter.normalizarFolioStr(folioRaw);
+      var enr = folioNorm ? mapaVencimientos[folioNorm] : null;
+      v._fecha_vencimiento  = enr ? (enr.fecha_vencimiento || null)        : null;
+      v._rut_cliente        = enr ? (enr.rut              || null)         : null;
+      v._guia_reemplazada_por = enr ? (enr.reemplazada_por_folio || null)  : null;
+    });
+  };
+
+  // ---------------------------------------------------------------------
+  // I. Construccion de cobranzas reales desde cobranzas_cl.json
+  // (CHANGE REQUEST SIC-AV v1.7, Fase 2)
+  //
+  // cobranzas_cl.json es generado por scripts/reconciliar_ventas_cl.py y
+  // contiene el listado de facturas con Fecha Pago Fct. valida extraido del
+  // Libro de Ventas (F2). El JSON puede cubrir multiples ciclos (libro anual)
+  // -- este metodo retorna TODOS los registros; el filtrado por ventana de
+  // ciclo ocurre en construirCicloReal() y en sic_core.js (montoCobradoPeriodo
+  // solo suma pagos cuya fecha_pago cae dentro del ciclo consultado).
+  //
+  // Contrato de salida (identico al formato usado por cobranzas_chile_demo.json
+  // para que sic_core.js no requiera cambios):
+  //   [{factura: "REAL-CL-731", fecha_pago: "2026-07-04", monto: 224000}, ...]
+  //
+  // Reglas:
+  //   - Solo se incluyen entradas con factura, fecha_pago y monto >= 0.
+  //   - Se filtra por prefijo de pais ("REAL-CL-" o "REAL-PE-") para garantizar
+  //     que no se mezclan cobranzas de distintos paises en un mismo ctx.
+  //   - monto = 0 es valido (factura de monto cero pagada formalmente).
+  //   - PARCIAL (monto no determinado) y PENDIENTE no aparecen en el JSON de
+  //     entrada (reconciliar_ventas_cl.py los omite), pero si apareciesen, la
+  //     ausencia de fecha_pago los excluiria aqui.
+  // ---------------------------------------------------------------------
+  SICAdapter.construirCobranzasReales = function (cobranzasRaw, pais) {
+    if (!cobranzasRaw || !Array.isArray(cobranzasRaw.cobranzas)) return [];
+    var p = pais || "CL";
+    var prefijo = "REAL-" + p + "-";
+    // IMPORTANTE: TX_CL serializa folios como float ("731.0") porque los datos
+    // de origen vienen de Excel. ventas.push({ factura: "REAL-CL-731.0" }).
+    // cobranzas_cl.json almacena folios normalizados como enteros ("731").
+    // Para que cobrosDeFactura() encuentre el match exacto, se expande la
+    // clave de cobranza al formato usado por TX_CL: "REAL-CL-731" → "REAL-CL-731.0".
+    // Se usa la misma normalización que normalizarFolioStr() pero en sentido
+    // inverso -- aquí se desnormaliza al formato float de TX_CL.
+    return cobranzasRaw.cobranzas
+      .filter(function (c) {
+        return c.factura && String(c.factura).indexOf(prefijo) === 0 && c.fecha_pago;
+      })
+      .map(function (c) {
+        var folioRaw = String(c.factura).slice(prefijo.length); // "731"
+        var folioN = parseInt(folioRaw, 10);
+        // Reconstruir con formato TX_CL: "REAL-CL-731.0"
+        var facturaKey = isFinite(folioN) ? (prefijo + folioN + ".0") : c.factura;
+        return {
+          factura:    facturaKey,
+          fecha_pago: c.fecha_pago,
+          monto:      Number(c.monto) || 0
+        };
+      });
   };
 
   global.SICAdapter = SICAdapter;

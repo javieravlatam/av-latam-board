@@ -1,4 +1,37 @@
 
+## Actualización 2026-07-23 — SIC-AV v1.7 Fase 2: Cobranzas Reales
+
+**Hito:** Integración de datos reales de cobranza en SIC Chile — `c-cobrado` ya muestra monto real.
+
+**Fuente:** `Libro de Ventas 20-07-2026.xlsx` — 487 documentos Chile/AV, campo `Fecha Pago Fct.`
+
+**Resultados clave:**
+- Total cobrado año 2026 demostrable: **CLP 130,309,303** (285 facturas únicas PAGADAS)
+- Total facturado año 2026: **CLP 428,228,304**
+- Pendiente de cobro: **CLP 297,919,001**
+- `c-cobrado` VELASQUEZ ciclo julio: **CLP 544,000** (folios 718+731+738 dentro de ventana)
+- AVBOARD, sic_core.js y dashboards existentes: INTACTOS
+
+**Por vendedor (2026 YTD):**
+- LARATRO: CLP 185.5M fact / CLP 64.2M cobrado (73 PAG, 60 PEND)
+- CAROCA: CLP 97.5M fact / CLP 12.3M cobrado (35 PAG, 36 PEND)
+- VELASQUEZ: CLP 91.0M fact / CLP 37.4M cobrado (83 PAG, 40 PEND)
+- ENCINA: CLP 39.1M fact / CLP 7.9M cobrado (51 PAG, 54 PEND)
+- VEVERKA: CLP 9.1M fact / CLP 4.0M cobrado (11 PAG, 4 PEND)
+- MUÑOZ: CLP 4.5M fact / CLP 3.1M cobrado (17 PAG, 4 PEND)
+- RAYEN BERNAZAR: CLP 1.5M fact / CLP 1.4M cobrado (15 PAG) ⚠ no en VENDEDOR_MAP
+
+**Alertas críticas:**
+- LARATRO: 60 facturas pendientes, CLP 121.3M sin cobrar (65.4% de su cartera)
+- CAROCA: ratio cobro/facturado solo 12.6%
+- Guía 321 ↔ Factura 733: posible doble conteo Velasquez en TX_CL
+- RAYEN BERNAZAR invisible para SIC Chile (no en VENDEDOR_MAP.CL)
+- Folios 739/740: discrepancia monto F1 vs F2
+
+**Estado:** Pendiente aprobación commit. Ver `logs/RECONCILIACION_COBRANZAS_CL_2026-07-23.md`
+
+---
+
 ## Actualización 2026-05-18 22:50 — Corte 18/05/2026
 
 **Chile ventas:** CLP 342,940,920 YTD · Cumpl 4m: 145.1%
@@ -1492,6 +1525,62 @@ números (ver nota en update_avboard.py / compute_productos).
   - REVISAR: AV AMIN SUGAR 1 L (CL) margen -199.8%
   - REVISAR: AV ALGAP 30 5 L (CL) margen -10.0%
   - REVISAR: AV PLUS MICRO MIX 1 L (CL) margen -23.1%
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-07-23 15:24 — Corte 20/07/2026
+
+**Chile ventas:** CLP 432,231,399 YTD · Cumpl 4m: 158.7%
+**Perú ventas:** USD 420,016 YTD · Cumpl 5m: 79.6%
+**CxC Chile:** CLP 55,651,095 total · +90d: CLP 26,222,409
+**IEC Chile:** 36.1% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- AGRICOLA, GANADERA Y FORESTAL SAN RAMON LIMITADA CLP 1,405,390 (480d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 700,134 (157d)
+- AGROINSUMOS KULLIN CLP 499,300 (181d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- JOSE CRISTOBAL GONZALEZ CORREA CLP 170,789 (132d)
+- JUAN FRANCISCO VARGAS MANCILLA CLP 170,259 (123d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- SEGUNDO ALADINO MANSILLA ROJAS CLP 147,560 (373d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 12 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP -1,238,397
+- 6 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 35 SKU(s) Chile ·
+  5 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 83 SKU(s) Chile ·
+  6 SKU(s) Perú
+  - REVISAR: AV PLUS ZINC MANGANESO 20 L (CL) margen -19.0%
+  - REVISAR: AV ALGAP 30 200 L (CL) margen -14.3%
+  - REVISAR: AV MAX FULVIC 45% 20 L (CL) margen -3.8%
+  - REVISAR: AV ROOT MAX 1 L (CL) margen -36.6%
+  - REVISAR: AV SILFORTE 200 L (CL) margen -7.6%
+  - REVISAR: AV BIOSOLARIS 1 L (CL) margen -50.0%
+  - REVISAR: AV PLUS HIERRO 5 L (CL) margen -101.5%
+  - REVISAR: AV PLUS ZINC 5 L (CL) margen -13.5%
+  - REVISAR: AV AMIN SUGAR 1 L (CL) margen -199.8%
+  - REVISAR: AV PLUS MICRO MIX 1 L (CL) margen -12.2%
 
 **Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
 negativo listados arriba; completar costo en tabla piso para los SKU sin costo

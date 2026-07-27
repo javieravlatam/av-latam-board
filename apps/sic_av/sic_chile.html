@@ -25,6 +25,12 @@
   .estado-comision-texto + .estado-comision-texto { margin-top:10px; }
   .estado-comision-tecnico { margin-top:14px; padding-top:12px; border-top:1px dashed #e3cd8f; font-size:11.5px; color:#9a8a5a; }
   .real-advertencias-vendedor { font-size:11.5px; color:var(--av-grey-text); margin:10px 0 0 0; padding-left:18px; }
+  /* CHANGE REQUEST SIC-AV v1.7: columna Vencimiento en tabla de facturas. */
+  .sic-venc { font-size:11px; padding:2px 7px; border-radius:8px; display:inline-block; white-space:nowrap; }
+  .venc-vencida  { background:#fbe9e9; color:#a83232; font-weight:700; }
+  .venc-proxima  { background:#fff3cd; color:#856404; font-weight:700; }
+  .venc-vigente  { background:#e7f6ee; color:#1c7a4d; }
+  .venc-guia-reemplazada { font-size:10px; color:#9a6b00; display:block; margin-top:2px; }
   /* CHANGE REQUEST SIC-AV v1.6: banner de dos periodos, siempre juntos, nunca mezclados. */
   .dos-periodos-banner { display:flex; flex-wrap:wrap; gap:18px; background:#eef4fb; border:1px solid #cfe0f2; border-radius:var(--radius, 10px); padding:14px 18px; margin-bottom:16px; }
   .dos-periodos-bloque { flex:1 1 260px; }
@@ -150,6 +156,7 @@
             <th>Cliente</th>
             <th>Producto</th>
             <th>Venta neta</th>
+            <th>Vencimiento</th>
             <th>Piso</th>
             <th>Estado</th>
           </tr>
@@ -202,6 +209,9 @@
   var VENDEDOR_ACTUAL = null, CICLO_ACTUAL = null;
   var CICLOS_DISPONIBLES = [];
   var FACTURAS_ORDEN = { campo: "fecha_factura", asc: false };
+  // CHANGE REQUEST SIC-AV v1.7: mapa de enriquecimiento con vencimientos
+  // (generado por scripts/parse_ventas_grupo_cl.py → apps/sic_av/data/vencimientos_cl.json)
+  var VENCIMIENTOS_MAP = {};
 
   var sesion = SICAuth.exigirSesion(PAIS);
   if (sesion) { inicializar(); }
@@ -226,13 +236,56 @@
   }
   function pct(n) { return (Math.round((n || 0) * 10) / 10) + "%"; }
 
+  // CHANGE REQUEST SIC-AV v1.7: estado de vencimiento por documento.
+  // Clasifica la fecha de vencimiento relativa a hoy.
+  // IMPORTANTE: fecha_vencimiento ≠ fecha_cobro — esto es contexto de cartera,
+  // NO evidencia de pago. El bloque "Monto cobrado" permanece "Pendiente de integración".
+  function estadoVencimiento(fechaISO) {
+    if (!fechaISO) return { label: "—", cls: "" };
+    var hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+    var venc = new Date(fechaISO + "T00:00:00");
+    var diff = Math.floor((venc - hoy) / 86400000);
+    if (diff < 0)  return { label: "VENCIDA (" + Math.abs(diff) + "d)", cls: "venc-vencida" };
+    if (diff <= 7) return { label: "PRÓXIMA (" + diff + "d)", cls: "venc-proxima" };
+    return { label: "Vigente (" + diff + "d)", cls: "venc-vigente" };
+  }
+
   function inicializar() {
     Promise.all([
       SIC.cargarPais(PAIS).then(function (ctx) { return ctx.params; }),
-      SICAdapter.cargarFuentesReales()
+      SICAdapter.cargarFuentesReales(),
+      // CHANGE REQUEST SIC-AV v1.7: carga no bloqueante del JSON de vencimientos.
+      // Si el archivo no existe (primera ejecución sin parse_ventas_grupo_cl.py),
+      // se ignora silenciosamente y la columna Vencimiento muestra "—".
+      fetch("data/vencimientos_cl.json").then(function (r) {
+        return r.ok ? r.json() : null;
+      }).catch(function () { return null; }),
+      // CHANGE REQUEST SIC-AV v1.7 (Fase 2): carga no bloqueante del JSON de
+      // cobranzas reales (generado por scripts/reconciliar_ventas_cl.py).
+      // Si el archivo no existe, cobranzas queda vacío y el comportamiento es
+      // idéntico al anterior (c-cobrado = "Pendiente de integración").
+      fetch("data/cobranzas_cl.json").then(function (r) {
+        return r.ok ? r.json() : null;
+      }).catch(function () { return null; }),
+      // CHANGE REQUEST SIC-AV v1.7 (Fase 2 — UNIVERSO SIC): carga no bloqueante del
+      // JSON de universo presupuestado (generado por scripts/reconciliar_ventas_cl.py
+      // vía ppto_libro_base.generar_universo_sic). Define qué vendedores aparecen
+      // individualmente en SIC vs. van al bucket OTROS.
+      // Si no existe → SICAdapter.derivarUniversoPpto devuelve Set vacío → fallback:
+      // todos los vendedores son individuales (comportamiento pre-v1.7).
+      fetch("data/universo_sic_cl.json").then(function (r) {
+        return r.ok ? r.json() : null;
+      }).catch(function () { return null; })
     ]).then(function (r) {
       CTX_PARAMS = r[0];
       FUENTES = r[1];
+      // Inyectar cobranzas reales en FUENTES para que construirCicloReal()
+      // las use automáticamente (SICAdapter.construirCobranzasReales).
+      FUENTES.cobranzas_raw = r[3] || null;
+      // Inyectar universo SIC presupuestado en FUENTES.
+      FUENTES.universo_sic_raw = r[4] || null;
+      // Construir mapa folio → doc de enriquecimiento
+      VENCIMIENTOS_MAP = SICAdapter.construirMapaVencimientos(r[2] || {});
 
       var txArray = FUENTES.tx.TX_CL;
       var ciclosVistos = {};
@@ -363,7 +416,12 @@
     var ventasVendedor = cicloReal.ventas.filter(function (v) { return v.vendedor_id === VENDEDOR_ACTUAL && v._pertenece_periodo; });
     document.getElementById("c-facturada").textContent = fmt(r.venta_facturada_periodo);
     document.getElementById("c-n-facturas").textContent = ventasVendedor.length;
-    document.getElementById("c-cobrado").textContent = "Pendiente de integración";
+    // CHANGE REQUEST SIC-AV v1.7 (Fase 2): mostrar cobrado real cuando la fuente
+    // de cobranza está conectada (FUENTES.cobranzas_raw → construirCicloReal →
+    // ctx.cobranzas → SIC.calcularVendedorCiclo → r.venta_cobrada).
+    // Si la fuente no está disponible, permanece "Pendiente de integración".
+    var hayCobranzas = cicloReal.cobranzas && cicloReal.cobranzas.length > 0;
+    document.getElementById("c-cobrado").textContent = hayCobranzas ? fmt(r.venta_cobrada) : "Pendiente de integración";
 
     var sp = 0, bp = 0, ne = 0;
     ventasVendedor.forEach(function (v) {
@@ -417,6 +475,11 @@
         clasificacion_piso: SIC.clasificacionPiso(v.piso_situacion)
       };
     });
+    // CHANGE REQUEST SIC-AV v1.7: añadir fecha_vencimiento desde mapa de enriquecimiento.
+    // Se hace aquí (post-mapeo) para no alterar la estructura de objetos que sic_core.js
+    // ya consume. Los campos añadidos tienen prefijo _ para distinguirlos de los campos
+    // del motor de cálculo (que no los lee ni los modifica).
+    SICAdapter.enriquecerConVencimientos(window._DETALLE_ACTUAL, VENCIMIENTOS_MAP);
     renderTablaFacturas();
 
     // Acciones -- pendiente de cobranza real
@@ -462,9 +525,22 @@
     var tbody = document.getElementById("tbody-facturas");
     tbody.innerHTML = datos.map(function (f) {
       var etiquetaPiso = f.clasificacion_piso === "sobre_piso" ? "Sobre piso" : (f.clasificacion_piso === "bajo_piso" ? "Bajo piso (informativo)" : "No evaluable");
+      // CHANGE REQUEST SIC-AV v1.7: columna Vencimiento (fecha_vencimiento ≠ fecha cobro)
+      var vencCell;
+      if (f._fecha_vencimiento) {
+        var ev = estadoVencimiento(f._fecha_vencimiento);
+        vencCell = "<span class='sic-venc " + ev.cls + "'>" + fechaDDMMYYYY(f._fecha_vencimiento) + "</span>" +
+                   "<span style='font-size:10px;display:block;margin-top:1px;color:#666;'>" + ev.label + "</span>";
+        if (f._guia_reemplazada_por) {
+          vencCell += "<span class='venc-guia-reemplazada'>⚠ Guía → Factura " + f._guia_reemplazada_por + "</span>";
+        }
+      } else {
+        vencCell = "—";
+      }
       return "<tr>" +
         "<td>" + f.factura + "</td><td>" + f.fecha_factura + "</td><td>" + f.cliente_nombre + "</td>" +
         "<td>" + f.producto + "</td><td class='num'>" + fmt(f.venta_neta) + "</td>" +
+        "<td>" + vencCell + "</td>" +
         "<td>" + etiquetaPiso + "</td><td><span class='sic-estado potencial'>Pendiente de cobranza</span></td></tr>";
     }).join("");
     window._DETALLE_FILTRADO = datos;

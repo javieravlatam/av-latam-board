@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "pais": "CL",
+  "fuente": "LIBRO_BASE",
+  "fecha_proceso": "2026-07-23",
+  "claves_presupuestadas": [
+    "caroca",
+    "encina",
+    "franco_riffo",
+    "laratro",
+    "munoz",
+    "velasquez"
+  ],
+  "nombres_canonicos_por_clave": {
+    "franco_riffo": "FRANCO RIFFO",
+    "velasquez": "FRANCISCO VELÁSQUEZ",
+    "encina": "RODRIGO ENCINA",
+    "munoz": "VALENTINA MUÑOZ",
+    "laratro": "PABLO LARATRO",
+    "caroca": "JORGE CAROCA"
+  }
+}

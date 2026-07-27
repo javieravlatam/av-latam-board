@@ -1,5 +1,76 @@
 
 ======================================================================
+CORTE: 2026-07-23 — SIC-AV v1.7 FASE 2b: UNIVERSO SIC DINÁMICO (VENTAS)
+TIPO: Implementación regla UNIVERSO SIC = PRESUPUESTO VIGENTE para ventas en SIC Chile
+
+ARCHIVOS MODIFICADOS:
+  1. scripts/ppto_libro_base.py — NOMBRE_A_CLAVE_SIC + generar_universo_sic() agregados
+  2. scripts/reconciliar_ventas_cl.py — llama generar_universo_sic("CL") al final del proceso
+  3. apps/sic_av/data/universo_sic_cl.json [NUEVO] — 6 claves presupuestadas generadas desde Libro Base
+  4. apps/sic_av/js/sic_data_adapter.js — derivarUniversoPpto() + routing OTROS en construirCicloReal()
+  5. apps/sic_av/sic_chile.html — 5to fetch universo_sic_cl.json → FUENTES.universo_sic_raw
+
+VALIDACIONES: 10/10 ✅ — ver RECONCILIACION_COBRANZAS_CL_2026-07-23.md
+
+IMPACTO EN VENTAS (YTD, todos los ciclos):
+  Total Chile YTD : CLP 610,197,089
+  Vendedores SIC  : CLP 599,426,781 (98.2%) — caroca, encina, franco_riffo, laratro, munoz, velasquez
+  OTROS           : CLP  10,770,308  (1.8%) — VEVERKA (9.1M) + RAYEN BERNAZAR (1.46M)
+
+IMPACTO EN COBRANZAS (YTD):
+  PAGADAS individuales: 249 docs, CLP 115,762,569
+  OTROS (PAGADAS+ABONOS): 26 docs, CLP 5,408,174 — VEVERKA + RAYEN BERNAZAR
+
+REGLA (no hardcodeada):
+  Universo SIC viene de Libro Base Excel → universo_sic_cl.json.
+  Cuando el presupuesto cambie (alta/baja de vendedor), se re-ejecuta
+  reconciliar_ventas_cl.py y el universo se actualiza automáticamente.
+
+INTEGRIDAD:
+  AVBOARD: INTACTO (no se tocó avboard_data.js)
+  sic_core.js: INTACTO
+  Dashboards comerciales: INTACTOS
+
+ESTADO: PENDIENTE APROBACIÓN COMMIT.
+
+======================================================================
+CORTE: 2026-07-23 — SIC-AV v1.7 FASE 2: COBRANZAS REALES
+TIPO: Integración datos reales de cobranza + reconciliación (NO commit/push aún)
+
+FUENTE PROCESADA:
+  - Libro de Ventas 20-07-2026.xlsx (F2 — 487 docs Chile/AV, fuente autoritativa)
+  - Ventas Julio GRUPO AV LATAM.xlsx (F1 — validación cruzada julio)
+
+ARCHIVOS CREADOS/MODIFICADOS:
+  1. scripts/reconciliar_ventas_cl.py [NUEVO] — parser Libro de Ventas → cobranzas_cl.json
+  2. apps/sic_av/data/cobranzas_cl.json [GENERADO] — 285 cobranzas, CLP 130,309,303
+  3. apps/sic_av/js/sic_data_adapter.js [MODIFICADO] — construirCobranzasReales() + bloque cobranza
+  4. apps/sic_av/sic_chile.html [MODIFICADO] — 4to fetch + FUENTES.cobranzas_raw + hayCobranzas
+
+ACCIONES REALIZADAS:
+  - Parseado completo de Fecha Pago Fct. del Libro de Ventas anual 2026
+  - 285 documentos PAGADA/PAGADA_ABONOS identificados (274+11)
+  - 200 pendientes + 2 parciales registrados
+  - Folio float vs integer mismatch detectado y corregido en construirCobranzasReales()
+  - Filtro de ventana de ciclo en _validarCobranzas() para suprimir ruido de ciclos anteriores
+  - Tests Node.js con TX_CL real: venta_cobrada VELASQUEZ julio = CLP 544,000 ✅
+  - 12-ítems reconciliación generados y verificados matemáticamente
+
+KPIs RESULTANTES:
+  Total facturado Chile 2026 (F2): CLP 428,228,304
+  Total cobrado demostrable (F2): CLP 130,309,303
+  Total pendiente: CLP 297,919,001
+  c-cobrado julio VELASQUEZ: CLP 544,000 (folios 718+731+738)
+
+INTEGRIDAD:
+  AVBOARD: INTACTO
+  sic_core.js: INTACTO
+  Dashboards comerciales: INTACTOS
+  Datos históricos: INTACTOS
+
+ESTADO: PENDIENTE APROBACIÓN COMMIT. Ver logs/RECONCILIACION_COBRANZAS_CL_2026-07-23.md
+
+======================================================================
 CORTE: 2026-07-23 — VALIDACIÓN FINAL FORMATO JAVIER LIGHT MODE
 TIPO: Validación pre-commit (NO se hizo git add / commit / push)
 PANELES VALIDADOS: 19/19
@@ -1645,5 +1716,26 @@ ACCIONES:
   · CxC Chile CLP 66,426,892 · +90d CLP 26,073,690
   · Módulo Productos: 177 SKUs · 11 margen negativo · 40 sin costo
   · Cache-busting ?v=202607231443 sincronizado en 16 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
+
+======================================================================
+CORTE: 2026-07-23 15:24
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 20-07-2026.xlsx
+  - AGROVECA PERU -  VENTAS  AL 21.07.2026.xlsx
+  - Cuentas Cobrar  Agrocomercial 21-07.xlsx
+  - Cuentas Cobrar Agroveca 21-06.xlsx
+  - precios piso CHile .xlsx
+  - precio piso peru.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 20/07/2026
+  · avboard_clientes.js regenerado · 167 clientes CL
+  · Panel_IEC TX_CL · 1589 transacciones
+  · Panel_IEC TX_PE · 127 transacciones · DQ-001/DQ-002 fix aplicado
+  · IEC Chile 36.1% · BP CLP 221,251,282
+  · CxC Chile CLP 55,651,095 · +90d CLP 26,222,409
+  · Módulo Productos: 179 SKUs · 12 margen negativo · 40 sin costo
+  · Cache-busting ?v=202607231524 sincronizado en 0 paneles HTML
 VALIDACIÓN JS: ✅ OK
 ======================================================================

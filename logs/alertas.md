@@ -1,4 +1,20 @@
 
+## ⚠ Alertas Activas — 2026-07-23 — SIC Cobranzas Fase 2
+
+| # | Alerta | Urgencia | Contexto |
+|---|--------|----------|---------|
+| A1 | **LARATRO: 60 facturas PENDIENTES — CLP 121.3M sin cobrar (65.4% cartera)** | 🔴 ALTA | Año 2026. La mayor cartera en riesgo del equipo. |
+| A2 | **Guía 321 / Factura 733: doble conteo Velasquez en TX_CL** | 🔴 ALTA | Misma operación (UC Valparaíso, CLP 595K) con 2 folios. Requiere decisión: ¿eliminar Guía 321 de TX_CL? |
+| A3 | ~~RAYEN BERNAZAR no está en VENDEDOR_MAP~~ **→ RESUELTO: clasificada como OTROS** | ✅ CERRADA | Sus 15 facturas (CLP 1.4M) se agrupan en bucket OTROS con trazabilidad completa. No se incorpora al SIC individualmente porque no está en presupuesto vigente. |
+| A3b | ~~IVAN VEVERKA en VENDEDOR_MAP pero NO en presupuesto~~ **→ RESUELTO: ventas y cobranzas clasificadas como OTROS** | ✅ CERRADA | VENDEDOR_MAP.CL lo mantiene para normalización de nombre (regla de negocio: NO eliminar). El universo SIC se deriva dinámicamente de universo_sic_cl.json (Libro Base) — VEVERKA no está ahí → sus 30 TXs (CLP 9.1M) y 26 cobranzas (CLP 5.4M) van al bucket OTROS. Si vuelve al presupuesto, se actualiza automáticamente. |
+| A4 | **Folios 739/740: monto 0 en F1 vs CLP 2.8M en F2** | 🟡 MEDIA | F2 autoritativo; F1 probablemente tiene error de captura. |
+| A5 | **CAROCA: ratio cobro/facturado 12.6%** | 🟡 MEDIA | 36 facturas pendientes, CLP 85.3M sin cobrar. |
+| A6 | **ENCINA: ratio cobro/facturado 20.2%** | 🟡 MEDIA | 54 facturas pendientes, CLP 31.2M sin cobrar. |
+| A7 | **comision_liberada=0 para todos ciclo julio** | 🟡 MEDIA | factorPpto=0% por cumplimiento 54.6% < umbral 70%. No es bug de cobranzas — es la regla de presupuesto. |
+| A8 | **Folio 460: fecha pago 2023-01-23** | 🟢 BAJA | Fecha anómala (año 2023 en Libro de Ventas 2026). Se registró como PAGADA pero puede ser error de captura. |
+
+---
+
 ## ⚠ Alertas Activas — 2026-05-18 22:50
 
 | Cliente | Monto CLP | Días | RTC |
@@ -1052,4 +1068,52 @@ Impacto estimado: CLP -880,257. SKUs sin costo cargado (no evaluables): 35 CL / 
 | GERALDINE MORILLO | 145,950 | 698d | JOSELIN MUÑOZ |
 
 CxC +90d total: CLP 26,073,690
+---
+
+## ⚠ Productos que destruyen margen — 2026-07-23 15:24
+
+| SKU | País | Margen | Acción |
+|-----|------|--------|--------|
+| AV PLUS ZINC MANGANESO 20 L | CL | -19.0% | REVISAR_O_DESCONTINUAR |
+| AV ALGAP 30 200 L | CL | -14.3% | REVISAR_O_DESCONTINUAR |
+| AV MAX FULVIC 45% 20 L | CL | -3.8% | REVISAR_O_DESCONTINUAR |
+| AV ROOT MAX 1 L | CL | -36.6% | REVISAR_O_DESCONTINUAR |
+| AV SILFORTE 200 L | CL | -7.6% | REVISAR_O_DESCONTINUAR |
+| AV BIOSOLARIS 1 L | CL | -50.0% | REVISAR_O_DESCONTINUAR |
+| AV PLUS HIERRO 5 L | CL | -101.5% | REVISAR_O_DESCONTINUAR |
+| AV PLUS ZINC 5 L | CL | -13.5% | REVISAR_O_DESCONTINUAR |
+| AV AMIN SUGAR 1 L | CL | -199.8% | REVISAR_O_DESCONTINUAR |
+| AV PLUS MICRO MIX 1 L | CL | -12.2% | REVISAR_O_DESCONTINUAR |
+| AV ALGAP 30 5 L | CL | -0.9% | REVISAR_O_DESCONTINUAR |
+| AV HUMIC ROOT 5 L | CL | -11.1% | REVISAR_O_DESCONTINUAR |
+
+Impacto estimado: CLP -1,238,397. SKUs sin costo cargado (no evaluables): 35 CL / 5 PE.
+---
+
+## ⚠ Alertas Activas — 2026-07-23 15:24
+
+| Cliente | Monto CLP | Días | RTC |
+|---------|-----------|------|-----|
+| NIVALDO ANTONIO FLORES EGAÑA | 5,318,824 | 597d | CAPEL |
+| TRANSACCIONES AGRICOLAS SPA | 3,856,957 | 193d | JOSÉ LORENZONI |
+| AGRICOLA LOS QUILLAYES SPA | 2,813,517 | 367d | GUILLERMO PRADENAS |
+| AGRIC LOS SAUSALES LTDA | 2,523,276 | 395d | CAPEL |
+| AGROINSUMOS KULLIN SPA | 1,936,809 | 176d | PABLO LARATRO |
+| LOS PARRONALES DE CAMARICO S A | 1,877,820 | 387d | CAPEL |
+| AGRICOLA, GANADERA Y FORESTAL SAN RAMON LIMITADA | 1,405,390 | 480d | MAURICIO ROJAS |
+| COMERCIAL COPELEC S.A. | 1,307,077 | 135d | VALENTINA MUÑOZ |
+| SOC AGRICOLA VIENTO NORTE LTDA | 961,996 | 326d | IVÁN VEVERKA |
+| AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA | 948,192 | 408d | GUILLERMO PRADENAS |
+| VICENTE ADAN LAGOS SALDANA | 742,655 | 524d | GUILLERMO PRADENAS |
+| MAGALY DEL CARMEN ORELLANA PINO | 700,134 | 157d | JORGE CAROCA |
+| AGROINSUMOS KULLIN | 499,300 | 181d | PABLO LARATRO |
+| PEDRO JUAN BUGUENO TELLO | 304,640 | 668d | IVÁN VEVERKA |
+| ROMERO Y RIQUELME SPA | 240,975 | 493d | GUILLERMO PRADENAS |
+| JOSE CRISTOBAL GONZALEZ CORREA | 170,789 | 132d | RODRIGO ENCINA |
+| JUAN FRANCISCO VARGAS MANCILLA | 170,259 | 123d | OFICINA |
+| NEWEN BOTANICUM SPA | 150,289 | 698d | JOSELIN MUÑOZ |
+| SEGUNDO ALADINO MANSILLA ROJAS | 147,560 | 373d | MAURICIO ROJAS |
+| GERALDINE MORILLO | 145,950 | 698d | JOSELIN MUÑOZ |
+
+CxC +90d total: CLP 26,222,409
 ---
