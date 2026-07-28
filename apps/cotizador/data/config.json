@@ -26,22 +26,37 @@
     "semaforo": {
       "verde_min": 1.03,
       "amarillo_min": 0.98,
-      "naranja_min": 0.90,
+      "naranja_min": 0.9,
       "_regla": "IEC >= verde_min -> Verde. amarillo_min <= IEC < verde_min -> Amarillo. naranja_min <= IEC < amarillo_min -> Naranja. IEC < naranja_min -> Rojo.",
       "labels": {
-        "verde":   { "nombre": "Verde",   "descripcion": "Cotización sobre política" },
-        "amarillo":{ "nombre": "Amarillo","descripcion": "Muy cercana al Precio Piso" },
-        "naranja": { "nombre": "Naranja", "descripcion": "Bajo política" },
-        "rojo":    { "nombre": "Rojo",    "descripcion": "Crítica" }
+        "verde": {
+          "nombre": "Verde",
+          "descripcion": "Cotización sobre política"
+        },
+        "amarillo": {
+          "nombre": "Amarillo",
+          "descripcion": "Muy cercana al Precio Piso"
+        },
+        "naranja": {
+          "nombre": "Naranja",
+          "descripcion": "Bajo política"
+        },
+        "rojo": {
+          "nombre": "Rojo",
+          "descripcion": "Crítica"
+        }
       }
     }
   },
   "iec_politica": {
     "_nota": "Política IEC ponderado — VERSIÓN FINAL (2026-07-28). IEC_MIX = Σvne/Σvpt. IEC ÓPTIMO = 100% (vender exactamente al piso ponderado). 90% = umbral aprobación automática (NO el óptimo). 75% = guardrail individual (= 1 - 0.25). ESTADO A: IEC_MIX>=90% Y todos los ítems>=75% → APROBACIÓN AUTOMÁTICA. ESTADO B: IEC_MIX<90% Y todos los ítems>=75% → REQUIERE AUTORIZACIÓN GG/GD (PDF bloqueado hasta backend). ESTADO C: algún ítem<75% → EXCEPCIÓN CRÍTICA (mayor nivel de advertencia, requiere autorización GG/GD + motivo obligatorio). GG/GD conserva facultad de aprobar B y C. Parámetros configurables — no hardcodeados.",
-    "iec_min_autorizado": 0.90,
+    "iec_min_autorizado": 0.9,
     "desviacion_critica_max_item": 0.25,
     "_umbral_critico_item": "1 - desviacion_critica_max_item = 0.75 (75% del precio piso — guardrail individual)",
-    "aprobadores_autorizados": ["javier@agrovecalatam.com", "gaf@agrovecalatam.com"],
+    "aprobadores_autorizados": [
+      "javier@agrovecalatam.com",
+      "gaf@agrovecalatam.com"
+    ],
     "_nota_backend": "La autorización real requiere backend/serverless seguro. En frontend estático: PDF bloqueado técnicamente en B y C; GG/GD puede aprobar cuando exista el backend. Ver docs/ARQUITECTURA_SEGURA_ESTADO_B.md."
   },
   "interes_financiero": {
@@ -56,7 +71,12 @@
     "30 días",
     "45 días",
     "60 días",
-    "Anticipado 50% / saldo contra entrega"
+    "90 días",
+    "120 días",
+    "150 días",
+    "180 días",
+    "Anticipado 50% / saldo contra entrega",
+    "Personalizado"
   ],
   "validez_dias_default": 15,
   "estados": [
@@ -68,10 +88,20 @@
     "CONVERTIDA_A_PEDIDO"
   ],
   "estados_transiciones": {
-    "BORRADOR": ["EMITIDA"],
-    "EMITIDA": ["ENVIADA", "BORRADOR"],
-    "ENVIADA": ["APROBADA", "RECHAZADA"],
-    "APROBADA": ["CONVERTIDA_A_PEDIDO"],
+    "BORRADOR": [
+      "EMITIDA"
+    ],
+    "EMITIDA": [
+      "ENVIADA",
+      "BORRADOR"
+    ],
+    "ENVIADA": [
+      "APROBADA",
+      "RECHAZADA"
+    ],
+    "APROBADA": [
+      "CONVERTIDA_A_PEDIDO"
+    ],
     "RECHAZADA": [],
     "CONVERTIDA_A_PEDIDO": []
   },
@@ -91,7 +121,13 @@
   ],
   "pipeline_visual": {
     "_comentario": "Barra de pipeline puramente decorativa (Fase 2). NO reemplaza estados_transiciones ni tiene funcionalidad de click.",
-    "etapas": ["BORRADOR", "ENVIADA", "NEGOCIACIÓN", "ACEPTADA", "PEDIDO"],
+    "etapas": [
+      "BORRADOR",
+      "ENVIADA",
+      "NEGOCIACIÓN",
+      "ACEPTADA",
+      "PEDIDO"
+    ],
     "mapa_estado_real": {
       "BORRADOR": "BORRADOR",
       "EMITIDA": "ENVIADA",
@@ -104,12 +140,36 @@
   "navegacion": {
     "_comentario": "Barra superior del futuro Centro Comercial AV LATAM (spec Fase 2, sección BARRA SUPERIOR). disponible:false = visible pero inerte (Próximamente), no se desarrolla todavía. La visión completa de módulos futuros (CRM, Pricing, Pipeline, Reportes, Inteligencia Comercial) queda documentada en README.md — no se agregan aquí hasta que se aborden explícitamente.",
     "items": [
-      { "id": "portal",        "label": "Cambiar país",         "disponible": true },
-      { "id": "nueva",         "label": "Nueva Cotización",     "disponible": true },
-      { "id": "historial",     "label": "Historial",            "disponible": true },
-      { "id": "clientes",      "label": "Clientes",             "disponible": false },
-      { "id": "productos",     "label": "Productos",            "disponible": false },
-      { "id": "configuracion", "label": "Configuración",         "disponible": false }
+      {
+        "id": "portal",
+        "label": "Cambiar país",
+        "disponible": true
+      },
+      {
+        "id": "nueva",
+        "label": "Nueva Cotización",
+        "disponible": true
+      },
+      {
+        "id": "historial",
+        "label": "Historial",
+        "disponible": true
+      },
+      {
+        "id": "clientes",
+        "label": "Clientes",
+        "disponible": false
+      },
+      {
+        "id": "productos",
+        "label": "Productos",
+        "disponible": false
+      },
+      {
+        "id": "configuracion",
+        "label": "Configuración",
+        "disponible": false
+      }
     ]
   },
   "logistica": {

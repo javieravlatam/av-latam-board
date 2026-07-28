@@ -813,8 +813,11 @@ var COTIZADOR = (function () {
      * exactamente iguales se incluya o no el despacho.
      */
     totalConDespacho: function (quote) {
+      // Fase 7.1: transporte SIEMPRE forma parte del total cliente.
+      // SEPARADO = transporte en línea propia; INCLUIDO = prorrateado en precios.
+      // En ambos modos el monto financiado incluye transporte.
       var subtotal = quote.totales ? quote.totales.valor_cotizado_total : 0;
-      var despacho = (quote.despacho && quote.despacho.incluido) ? (Number(quote.despacho.costo_despacho) || 0) : 0;
+      var despacho = Number((quote.despacho && quote.despacho.costo_despacho) || 0);
       return { subtotal_productos: subtotal, costo_despacho: despacho, total: subtotal + despacho };
     },
 
