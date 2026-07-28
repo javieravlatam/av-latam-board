@@ -147,6 +147,61 @@
   };
 
   // ---------------------------------------------------------------------
+  // IEC PONDERADO — CHANGE REQUEST SIC-AV v1.7 (2026-07-28)
+  // Fórmula maestra: IEC_MIX = Σ venta_neta_elegible / Σ valor_piso_teorico
+  //   donde valor_piso_teorico_i = cantidad_i × precio_piso_unitario_i.
+  // Aggregable a vendedor/mes/país/grupo — nunca promedio simple de %.
+  // Se calcula directamente desde ctx.ventas (precio_piso_unitario ya viene
+  // por factura en la fuente real). Si el precio piso no está disponible para
+  // un ítem, ese ítem se excluye del cómputo (no es elegible).
+  // Retorna: { iec_pct, venta_neta_elegible, valor_piso_teorico, n_elegible }
+  //   iec_pct es la misma escala 0–100 que iecDelMes() espera en sic_core.js.
+  // ---------------------------------------------------------------------
+  SICAdapter.computarIECPonderadoDelMes = function (ventas, mesCode) {
+    var ventasMes = (ventas || []).filter(function (v) {
+      return v._pertenece_mes_desempeno === true ||
+        (v.fecha_factura && v.fecha_factura.slice(0, 7) === mesCode);
+    });
+    var numerador = 0, denominador = 0, nElegible = 0, nBajoPiso = 0;
+    ventasMes.forEach(function (v) {
+      var pp = Number(v.precio_piso_unitario);
+      var qty = Number(v.cantidad);
+      var vn = Number(v.venta_neta);
+      if (pp > 0 && qty > 0 && vn > 0) {
+        var vpt = qty * pp;
+        numerador += vn;
+        denominador += vpt;
+        nElegible++;
+        if (Number(v.precio_venta_unitario) < pp) nBajoPiso++;
+      }
+    });
+    var iecPct = denominador > 0 ? Math.round((numerador / denominador) * 10000) / 100 : null;
+    return {
+      iec_pct: iecPct,
+      venta_neta_elegible: numerador,
+      valor_piso_teorico: denominador,
+      n_elegible: nElegible,
+      n_bajo_piso: nBajoPiso,
+      _fuente: 'calculado_desde_ventas_reales_v1.7'
+    };
+  };
+
+  // YTD: Σ venta_neta_elegible / Σ valor_piso_teorico de múltiples meses.
+  // Garantiza identidad matemática. Nunca promedia iec_pct individuales.
+  SICAdapter.agregarIECPonderado = function (entradas) {
+    var numTotal = 0, denTotal = 0;
+    (entradas || []).forEach(function (e) {
+      numTotal += (e.venta_neta_elegible || 0);
+      denTotal += (e.valor_piso_teorico || 0);
+    });
+    return {
+      iec_pct: denTotal > 0 ? Math.round((numTotal / denTotal) * 10000) / 100 : null,
+      venta_neta_elegible: numTotal,
+      valor_piso_teorico: denTotal
+    };
+  };
+
+  // ---------------------------------------------------------------------
   // B. Ciclo comercial 26 -> 25 (misma regla que sic_chile.html/sic_peru.html
   // ya documentan): si el dia de la fecha es <= 25, el ciclo es ese mes; si
   // es >= 26, el ciclo es el mes siguiente.
@@ -585,32 +640,48 @@
       presupuestos.push({ vendedor_id: clave, mes: mesDesempeno, presupuesto: monto });
     });
 
-    // -- IEC real: CHANGE REQUEST v1.6 -- se recalcula sobre el MES DE
-    // DESEMPEÑO (mes calendario completo, bandera _pertenece_mes_desempeno),
-    // NUNCA sobre el periodo de cobranza 26-25 (ver TEMPORAL_MODEL_AUDIT_v1.6.md
-    // seccion 3). Misma formula SP/Elegible que docs/AVBOARD_BUSINESS_RULES.md
-    // y que ya usa SIC.factorIEC (misma tabla de tramos 20/70/80/90/105%).
+    // -- IEC real: CHANGE REQUEST SIC-AV v1.7 Fase 7 -- IEC PONDERADO
+    // Formula: IEC_MIX = Σ venta_neta_elegible / Σ valor_piso_teorico
+    // donde valor_piso_teorico_i = cantidad_i × precio_piso_unitario_i.
+    // REEMPLAZA la formula binaria sp/elegible (v1.6): aquella trataba por
+    // igual una venta al 86% del piso y una al 50% del piso, porque solo
+    // preguntaba si la venta cumplia (si/no). La formula ponderada mide la
+    // magnitud real de la desviacion, es agregable (Σnum/Σden) y es la misma
+    // que usa el Cotizador y AVBOARD desde Fase 7.
+    // sic_core.js recibe iec_pct (escala 0-100) sin ningun cambio de interfaz.
     var iec = [];
     Object.keys(vendedoresVistos).forEach(function (clave) {
-      var sp = 0, elegible = 0, bajoPiso = 0, noEvaluable = 0;
+      var numerador = 0, denominador = 0;
+      var sp = 0, bajoPiso = 0, noEvaluable = 0;
       ventas.forEach(function (v) {
         if (v.vendedor_id !== clave) return;
         if (!v._pertenece_mes_desempeno) return;
         if (v.piso_situacion === "no_evaluable") { noEvaluable += v.venta_neta; return; }
-        elegible += v.venta_neta;
+        var qty = Number(v.cantidad);
+        var pp  = Number(v.precio_piso_unitario);
+        var vpt = (isFinite(qty) && qty > 0 && isFinite(pp) && pp > 0) ? qty * pp : 0;
+        if (vpt > 0) {
+          numerador   += v.venta_neta;   // venta_neta_elegible
+          denominador += vpt;            // valor_piso_teorico
+        }
+        // campos informativos (sobre/bajo piso) -- se mantienen para trazabilidad
         if (v.piso_situacion === "cumple") sp += v.venta_neta; else bajoPiso += v.venta_neta;
       });
-      var iecPct = elegible > 0 ? (sp / elegible * 100) : 0;
-      if (elegible === 0) {
-        advertencias.push({ tipo: "vendedor_sin_iec", detalle: "Vendedor '" + clave + "' no tiene ventas elegibles (con precio piso) en el mes de desempeño " + mesDesempeno + " -- IEC no calculable, se usa 0%" });
+      var iecPct = denominador > 0 ? (numerador / denominador * 100) : 0;
+      if (denominador === 0) {
+        advertencias.push({ tipo: "vendedor_sin_iec", detalle: "Vendedor '" + clave + "' no tiene ventas elegibles (con precio piso y cantidad) en el mes de desempeño " + mesDesempeno + " -- IEC ponderado no calculable, se usa 0%" });
       }
-      var campoSobre = pais === "CL" ? "ventas_sobre_piso_clp" : "ventas_sobre_piso_usd";
-      var campoBajo = pais === "CL" ? "ventas_bajo_piso_clp" : "ventas_bajo_piso_usd";
-      var campoNoEval = pais === "CL" ? "ventas_no_evaluables_clp" : "ventas_no_evaluables_usd";
+      var campoSobre  = pais === "CL" ? "ventas_sobre_piso_clp"    : "ventas_sobre_piso_usd";
+      var campoBajo   = pais === "CL" ? "ventas_bajo_piso_clp"     : "ventas_bajo_piso_usd";
+      var campoNoEval = pais === "CL" ? "ventas_no_evaluables_clp"  : "ventas_no_evaluables_usd";
+      var campoNum    = pais === "CL" ? "venta_neta_elegible_clp"   : "venta_neta_elegible_usd";
+      var campoDen    = pais === "CL" ? "valor_piso_teorico_clp"    : "valor_piso_teorico_usd";
       var registro = { vendedor_id: clave, mes: mesDesempeno, iec_pct: Math.round(iecPct * 100) / 100 };
-      registro[campoSobre] = sp;
-      registro[campoBajo] = bajoPiso;
+      registro[campoSobre]  = sp;
+      registro[campoBajo]   = bajoPiso;
       registro[campoNoEval] = noEvaluable;
+      registro[campoNum]    = numerador;   // numerador IEC ponderado (auditable)
+      registro[campoDen]    = denominador; // denominador IEC ponderado (auditable)
       iec.push(registro);
     });
 

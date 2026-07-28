@@ -604,7 +604,7 @@ tbody td { padding: 12px 16px; font-size: 12px; }
         <div class="kpi-card">
           <div class="kpi-label">IEC único saludable CL</div>
           <div class="kpi-value gold" id="perf-iec-ok">—</div>
-          <div class="kpi-sub">≥ 70% objetivo</div>
+          <div class="kpi-sub">≥ 70% piso Factor IEC</div>
         </div>
       </div>
     </div>
@@ -708,9 +708,9 @@ tbody td { padding: 12px 16px; font-size: 12px; }
       <!-- KPIs pricing -->
       <div class="kpi-grid kpi-grid-4">
         <div class="kpi-card red">
-          <div class="kpi-label">IEC Global Chile</div>
+          <div class="kpi-label">IEC Chile YTD</div>
           <div class="kpi-value red" id="p-iec-global">—</div>
-          <div class="kpi-sub">Meta ≥ 70% · Crítico</div>
+          <div class="kpi-sub" id="p-iec-grupo-sub">Grupo: — · Óptimo: 100% · Auto: ≥90%</div>
         </div>
         <div class="kpi-card amber">
           <div class="kpi-label">Impacto Potencial</div>
@@ -729,15 +729,37 @@ tbody td { padding: 12px 16px; font-size: 12px; }
         </div>
       </div>
 
-      <!-- IEC por vendedor -->
+      <!-- IEC por país — Fase 7 (Σvne/Σvpt por país; nunca promedio simple) -->
+      <div class="ex-table-wrap" style="margin-bottom:12px">
+        <div class="ex-table-header">IEC por País — YTD <span>Ponderado Σvne/Σvpt · Ecuador y Perú N/D sin precio piso por transacción</span></div>
+        <table id="tbl-iec-pais">
+          <thead><tr>
+            <th>País</th><th>IEC %</th><th>Barra</th><th>vne (num)</th><th>vpt (den)</th><th>Base</th>
+          </tr></thead>
+          <tbody id="tbl-iec-pais-body"></tbody>
+        </table>
+      </div>
+
+      <!-- IEC por vendedor YTD -->
       <div class="ex-table-wrap">
-        <div class="ex-table-header">IEC por Vendedor Chile <span>Recalculado precios piso 14/05/2026</span></div>
+        <div class="ex-table-header">IEC por Vendedor Chile — YTD <span>Ponderado Σvne/Σvpt · Fase 7 · Fórmula: IEC = Σ Venta / Σ (Qty × Piso)</span></div>
         <table>
           <thead><tr>
             <th>Vendedor</th><th>IEC %</th><th>Barra</th><th>Factor Comisión</th><th>Diagnóstico</th>
           </tr></thead>
           <tbody id="tbl-iec-vend"></tbody>
         </table>
+      </div>
+
+      <!-- IEC mensual por vendedor (Fase 7 — drill-down mes) -->
+      <div class="ex-table-wrap" style="margin-top:12px">
+        <div class="ex-table-header">IEC Mensual Chile por Vendedor <span>Σ venta / Σ (Qty × Piso) por mes · verde ≥ 100% · ámbar ≥ 70% · rojo &lt; 70%</span></div>
+        <div style="overflow-x:auto">
+          <table id="tbl-iec-mensual" style="min-width:480px;white-space:nowrap">
+            <thead><tr id="tbl-iec-mensual-head"></tr></thead>
+            <tbody id="tbl-iec-mensual-body"></tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Escala de factores -->
@@ -1310,6 +1332,62 @@ function initDashboard() {
   set('p-iec-worst',    fPct(cv.iec.velasquez));
   set('p-iec-worst-sub','Velásquez · mayor brecha');
 
+  // ── Tabla IEC por PAÍS (Fase 7) — Σvne/Σvpt por país; NUNCA promedio simple ──
+  // Grupo = Σ vne de todos los países con datos / Σ vpt de todos los países con datos
+  (function renderTblIecPais() {
+    var paisRows = [
+      {
+        pais: '🇨🇱 Chile', moneda: 'CLP',
+        iec: cv.iec.total,
+        vne: cv.iec.vne_total,
+        vpt: cv.iec.vpt_total,
+        base: 'TX_CL · precio piso por línea'
+      },
+      {
+        pais: '🇵🇪 Perú', moneda: 'USD',
+        iec: D.peru && D.peru.ventas && D.peru.ventas.iec ? D.peru.ventas.iec.total : null,
+        vne: null, vpt: null,
+        base: 'Sin precio piso por transacción'
+      },
+      {
+        pais: '🇪🇨 Ecuador', moneda: 'USD',
+        iec: null, vne: null, vpt: null,
+        base: 'Sin datos de precio piso'
+      },
+      {
+        pais: '🌎 Grupo', moneda: '—',
+        iec: D.grupo.iec_grupo,
+        vne: D.grupo.iec_grupo_vne,
+        vpt: D.grupo.iec_grupo_vpt,
+        base: 'Σvne/Σvpt · Chile solamente (Perú/EC N/D)'
+      }
+    ];
+    var html = paisRows.map(function(r) {
+      var iecStr = r.iec !== null && r.iec !== undefined ? fPct(r.iec) : '<span style="color:var(--muted)">N/D</span>';
+      var color  = r.iec === null || r.iec === undefined ? 'color:var(--muted)' :
+                   r.iec >= 1.0  ? 'color:var(--green);font-weight:700' :
+                   r.iec >= 0.70 ? 'color:var(--amber);font-weight:600' : 'color:var(--red);font-weight:600';
+      var barW   = r.iec ? Math.min(r.iec * 100, 120).toFixed(0) : 0;
+      var barCol = r.iec >= 1.0 ? 'var(--green)' : r.iec >= 0.70 ? 'var(--amber)' : 'var(--red)';
+      var barHtml = r.iec ? '<div style="background:var(--s2);border-radius:4px;height:8px;width:120px"><div style="background:'+barCol+';height:8px;border-radius:4px;width:'+barW+'px"></div></div>' : '—';
+      var vneStr = r.vne ? (r.vne/1e6).toFixed(1)+'M ' + r.moneda : '—';
+      var vptStr = r.vpt ? (r.vpt/1e6).toFixed(1)+'M ' + r.moneda : '—';
+      var isBold = r.pais.includes('Grupo') ? 'font-weight:600;border-top:1px solid var(--bdr)' : '';
+      return '<tr style="'+isBold+'">' +
+        '<td>' + r.pais + '</td>' +
+        '<td class="td-mono" style="' + color + '">' + iecStr + '</td>' +
+        '<td>' + barHtml + '</td>' +
+        '<td class="td-mono" style="color:var(--dim)">' + vneStr + '</td>' +
+        '<td class="td-mono" style="color:var(--dim)">' + vptStr + '</td>' +
+        '<td style="font-size:11px;color:var(--muted)">' + r.base + '</td>' +
+        '</tr>';
+    }).join('');
+    set('tbl-iec-pais-body', html);
+  })();
+  // Grupo IEC (Fase 7): Σvne/Σvpt across países con datos de piso (Chile = único por ahora)
+  var grupoIecVal = D.grupo && D.grupo.iec_grupo;
+  set('p-iec-grupo-sub', 'Grupo: ' + (grupoIecVal !== null && grupoIecVal !== undefined ? fPct(grupoIecVal) : '—') + ' · Óptimo: 100% · Auto: ≥90%');
+
   var iecVend = [
     { nombre:'Veverka',   iec: cv.iec.veverka },
     { nombre:'Muñoz',     iec: cv.iec.munoz },
@@ -1330,6 +1408,50 @@ function initDashboard() {
       '<td style="color:' + dColor + ';font-size:11px">' + diagn + '</td>' +
     '</tr>';
   }).join(''));
+
+  // ── IEC Mensual por vendedor (Fase 7 — Σvne/Σvpt por mes) ──────────────
+  var MESES_SHORT = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var iecMens = cv.iec.iec_mensual;
+  var mesesConDatos = [];
+  if (iecMens && iecMens.total) {
+    iecMens.total.forEach(function(v, i) {
+      if (v !== null && v !== undefined) mesesConDatos.push(i);
+    });
+  }
+  if (mesesConDatos.length > 0) {
+    var headHtml = '<th>Vendedor</th>' + mesesConDatos.map(function(i){
+      return '<th class="td-center">' + MESES_SHORT[i] + '</th>';
+    }).join('') + '<th class="td-center">YTD</th>';
+    set('tbl-iec-mensual-head', headHtml);
+
+    function iecCellStyle(v) {
+      if (v === null || v === undefined) return 'color:var(--text-muted)';
+      return v >= 1.0 ? 'color:var(--green);font-weight:600' : v >= 0.70 ? 'color:var(--amber)' : 'color:var(--red)';
+    }
+    function iecCellVal(v) { return (v !== null && v !== undefined) ? (v * 100).toFixed(1) + '%' : '—'; }
+
+    var iecMensRows = [
+      { nombre:'Total País', key:'total',    ytd: cv.iec.total },
+      { nombre:'Caroca',     key:'caroca',   ytd: cv.iec.caroca },
+      { nombre:'Laratro',    key:'laratro',  ytd: cv.iec.laratro },
+      { nombre:'Encina',     key:'encina',   ytd: cv.iec.encina },
+      { nombre:'Muñoz',      key:'munoz',    ytd: cv.iec.munoz },
+      { nombre:'Veverka',    key:'veverka',  ytd: cv.iec.veverka },
+      { nombre:'Velásquez',  key:'velasquez',ytd: cv.iec.velasquez }
+    ];
+    var bodyHtml = iecMensRows.map(function(r) {
+      var arr = (iecMens && iecMens[r.key]) ? iecMens[r.key] : [];
+      var cells = mesesConDatos.map(function(i) {
+        var v = arr[i];
+        return '<td class="td-center td-mono" style="' + iecCellStyle(v) + '">' + iecCellVal(v) + '</td>';
+      }).join('');
+      var fw = r.key === 'total' ? '600' : '400';
+      return '<tr><td style="font-weight:' + fw + '">' + r.nombre + '</td>' + cells +
+             '<td class="td-center td-mono" style="' + iecCellStyle(r.ytd) + ';font-weight:600">' + iecCellVal(r.ytd) + '</td></tr>';
+    }).join('');
+    set('tbl-iec-mensual-body', bodyHtml);
+  }
+  // ── fin IEC Mensual ──────────────────────────────────────────────────────
 
   /* ══════════════════════════════════
      MÓDULO 5 · CONCENTRACIÓN
@@ -1415,7 +1537,7 @@ function initDashboard() {
       titulo: 'Margen neto Chile: 17.9% vs meta 25% — brecha –7.1pp',
       tags: ['MN Chile', '–7.1pp', 'T1 2026'],
       cuerpo: 'El margen neto real de Chile en T1 es 17.9%, 7.1pp bajo la meta de 25%. El precio bajo piso (IEC 36%) y la concentración de ventas en SKUs de bajo margen son los principales drivers. Recuperar IEC al 70% puede cerrar aprox. 4–5pp de la brecha.',
-      accion: 'Análisis de mix de productos · Implementar precio piso como filtro · Meta IEC 70% Q2'
+      accion: 'Análisis de mix de productos · Implementar precio piso como filtro · Objetivo IEC: 100% (auto-aprob. ≥90%)'
     },
     {
       prioridad: 'media',

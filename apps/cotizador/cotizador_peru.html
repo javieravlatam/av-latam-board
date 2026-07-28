@@ -123,7 +123,7 @@
       </div>
 
       <div class="panel">
-        <h3>DESPACHO / ENTREGA <span class="tag">MOTOR LOGÍSTICO · NO AFECTA IEC NI MARGEN</span></h3>
+        <h3>DESPACHO / ENTREGA <span class="tag" id="desp-iec-tag">MODO: SEPARADO · IEC calculado sobre precio producto</span></h3>
         <div class="form-grid cols-2">
           <div class="field"><label>Dirección de entrega</label><input id="f-desp-direccion" placeholder="Calle, número, comuna..."></div>
           <div class="field"><label>Ciudad / zona</label><input id="f-desp-ciudad" placeholder="Ciudad o zona"></div>
@@ -169,7 +169,7 @@
           <div><div class="nombre" id="semaforo-nombre">Sin datos</div><div class="desc" id="semaforo-desc">Agrega líneas para calcular el IEC</div></div>
         </div>
         <div class="kpi-grid">
-          <div class="kpi"><div class="kval" id="k-iec">—</div><div class="klabel">IEC GLOBAL (vs PISO)</div></div>
+          <div class="kpi"><div class="kval" id="k-iec">—</div><div class="klabel" id="k-iec-label">IEC GLOBAL (vs PISO)</div></div>
           <div class="kpi"><div class="kval" id="k-margen">—</div><div class="klabel">MARGEN ESTIMADO</div></div>
           <div class="kpi"><div class="kval" id="k-ganado">—</div><div class="klabel">VALOR GANADO vs PISO</div></div>
           <div class="kpi"><div class="kval" id="k-cedido">—</div><div class="klabel">VALOR CEDIDO vs PISO</div></div>
@@ -181,6 +181,17 @@
       <div class="panel">
         <h3>ALERTAS <span class="tag">USO INTERNO</span></h3>
         <div id="alertas-box"><div class="hint">Sin alertas por ahora.</div></div>
+      </div>
+
+      <!-- ══ ESTADO IEC B/C — Fase 7 (solo informativo, sin fake security) ══ -->
+      <div class="panel" id="panel-estado-autorizacion" style="display:none">
+        <h3>AUTORIZACIÓN IEC <span class="tag">ESTADO COMERCIAL</span></h3>
+        <div class="estado-iec-card sin-datos" id="estado-autorizacion-card">
+          <div class="estado-iec-titulo" id="estado-iec-titulo">—</div>
+          <div id="estado-iec-desc"></div>
+          <div class="estado-iec-fp" id="estado-iec-fp" style="display:none"></div>
+          <div class="estado-iec-nota" id="estado-iec-nota"></div>
+        </div>
       </div>
 
       <div class="panel">
@@ -563,7 +574,23 @@
     $('s-piso-total').textContent = COTIZADOR.util.formatMoney(t.precio_piso_total, quote.moneda);
     $('s-cotizado-total').textContent = COTIZADOR.util.formatMoney(t.valor_cotizado_total, quote.moneda);
 
-    $('k-iec').textContent = t.iec_global === null ? '—' : COTIZADOR.util.formatPct(t.iec_global);
+    // Fase 7 — IEC display con modo transporte SEPARADO / INCLUIDO
+    var _iecDisplay = t.iec_global;
+    var _iecLabelTxt = 'IEC GLOBAL (vs PISO)';
+    var _despachoIncluido = quote.despacho && quote.despacho.incluido && (Number(quote.despacho.costo_despacho) || 0) > 0;
+    if (_despachoIncluido) {
+      var _tp = COTIZADOR.Calc.prorratearTransporte(quote.lineas, Number(quote.despacho.costo_despacho));
+      var _iecNet = COTIZADOR.Calc.calcularIECConTransporte(quote.lineas, _tp, ctx.config);
+      _iecDisplay = _iecNet.iec_mix_neto > 0 ? _iecNet.iec_mix_neto : null;
+      _iecLabelTxt = 'IEC NETO (excl. transporte)';
+      quote.iec_transporte_info = { modo: 'INCLUIDO', iec_neto: _iecDisplay, transporte: Number(quote.despacho.costo_despacho) };
+      $('desp-iec-tag').textContent = 'MODO: INCLUIDO · IEC calculado sobre precio neto producto';
+    } else {
+      quote.iec_transporte_info = { modo: 'SEPARADO', iec_neto: null, transporte: 0 };
+      $('desp-iec-tag').textContent = 'MODO: SEPARADO · IEC calculado sobre precio producto';
+    }
+    $('k-iec').textContent = _iecDisplay === null ? '—' : COTIZADOR.util.formatPct(_iecDisplay);
+    $('k-iec-label').textContent = _iecLabelTxt;
     $('k-margen').textContent = t.margen_estimado === null ? '—' : COTIZADOR.util.formatMoney(t.margen_estimado, quote.moneda);
     $('k-ganado').textContent = COTIZADOR.util.formatMoney(t.valor_ganado, quote.moneda);
     $('k-cedido').textContent = COTIZADOR.util.formatMoney(t.valor_cedido, quote.moneda);
@@ -592,6 +619,65 @@
     if (s.clave === 'rojo') alertas.push({tipo:'red', msg: 'IEC global crítico. Requiere autorización antes de emitir.'});
     var box = $('alertas-box');
     box.innerHTML = alertas.length ? alertas.map(function(a){ return '<div class="alerta ' + (a.tipo==='amber'?'amber':'') + '">' + a.msg + '</div>'; }).join('') : '<div class="hint">Sin alertas por ahora.</div>';
+
+    // Fase 7 — Tarjeta Estado IEC A/B/C (solo informativa, sin fake security)
+    (function pintarEstadoAutorizacion() {
+      var _iec = _iecDisplay;
+      var estado = COTIZADOR.Calc.estadoIEC(quote.lineas, _iec, ctx.config);
+      var panel  = $('panel-estado-autorizacion');
+      var card   = $('estado-autorizacion-card');
+      var titulo = $('estado-iec-titulo');
+      var desc   = $('estado-iec-desc');
+      var fpEl   = $('estado-iec-fp');
+      var nota   = $('estado-iec-nota');
+
+      card.className = 'estado-iec-card';
+
+      if (!estado || estado.estado === 'sin_datos') {
+        panel.style.display = 'none';
+        card.classList.add('sin-datos');
+        return;
+      }
+
+      panel.style.display = '';
+
+      if (estado.estado === 'A') {
+        card.classList.add('estado-a');
+        return;
+      }
+
+      if (estado.estado === 'B') {
+        card.classList.add('estado-b');
+        titulo.textContent = 'ESTADO B · REQUIERE AUTORIZACIÓN GG / GAF';
+        desc.innerHTML =
+          '<p>El IEC está bajo el mínimo autorizado (90%) pero ningún ítem supera la desviación crítica.<br>' +
+          'No se puede emitir el PDF comercial sin autorización explícita.</p>' +
+          '<p><strong>Contactar:</strong> javier@agrovecalatam.com · gaf@agrovecalatam.com</p>';
+        var fp = COTIZADOR.util.generarFingerprint(quote);
+        fpEl.textContent = 'Fingerprint cotización: ' + fp;
+        fpEl.style.display = 'inline-block';
+        nota.innerHTML =
+          '⚠ La autorización debe comunicarse por correo con este fingerprint. ' +
+          'No se almacena ni valida en esta aplicación frontend. ' +
+          'Para un flujo seguro se requiere backend o función serverless. ' +
+          'Ver <code>docs/ARQUITECTURA_SEGURA_ESTADO_B.md</code>';
+        return;
+      }
+
+      if (estado.estado === 'C') {
+        card.classList.add('estado-c');
+        titulo.textContent = 'EXCEPCIÓN CRÍTICA · ESTADO C — REQUIERE AUTORIZACIÓN GG/GD';
+        desc.innerHTML =
+          '<p>Uno o más ítems están cotizados por debajo del guardrail del 75% del precio piso.<br>' +
+          '<strong>PDF bloqueado técnicamente.</strong><br>' +
+          'Requiere autorización expresa GG/GD con motivo de excepción documentado.</p>' +
+          '<p><strong>Ítems bajo guardrail:</strong> ' + (estado.items_criticos || 0) + ' línea(s)</p>';
+        fpEl.style.display = 'none';
+        nota.innerHTML =
+          '🔴 GG/GD puede aprobar esta excepción cuando exista el backend seguro. ' +
+          'PDF bloqueado técnicamente en <code>imprimirConControl()</code>';
+      }
+    })();
 
     // Fase 3 — resumen de despacho (subtotal/costo despacho/total). No toca t/IEC.
     pintarResumenDespacho();
@@ -629,7 +715,9 @@
     }catch(e){ alert(e.message); }
   });
   $('btn-exportar-json').addEventListener('click', function(){ COTIZADOR.Export.descargarJSON(quote); $('tools-menu').classList.remove('abierto'); });
-  $('btn-imprimir').addEventListener('click', function(){ COTIZADOR.PDF.imprimir(quote, PAIS_NOMBRE); });
+  // Fase 7: imprimirConControl valida estados A/B/C antes de generar PDF.
+  // Estado C → bloquea. Estado B sin autorización → alerta. Estado A → imprime.
+  $('btn-imprimir').addEventListener('click', function(){ COTIZADOR.PDF.imprimirConControl(quote, PAIS_NOMBRE, ctx.config); });
 
   function nuevaCotizacion(){
     quote = COTIZADOR.Quote.nueva(PAIS, ctx.paisConfig, quote ? quote.elaborado_por : '');

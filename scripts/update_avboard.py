@@ -848,10 +848,22 @@ def load_piso_chile(piso_path):
 
 
 def compute_iec_chile(df_ventas, piso):
-    """Calcula IEC por transacción. Retorna df enriquecido + resumen por vendedor + por cliente."""
+    """
+    IEC PONDERADO (Fase 7, 2026-07-28).
+    Fórmula maestra: IEC = Σ venta_neta_elegible / Σ valor_piso_teorico
+    donde valor_piso_teorico_i = Cantidad_i × precio_piso_unitario_i.
+    Aggregable a cualquier nivel: vendedor, país, grupo, YTD.
+    NO usar promedio simple de IEC individuales — siempre sumar numeradores y denominadores.
+
+    DIFERENCIA CON FÓRMULA ANTERIOR:
+    - Antes: iec = ventas_sobre_piso / total_elegible  (binario: en piso o no)
+    - Ahora: iec = Σ venta_neta / Σ (qty × piso)  (ponderado por magnitud real)
+    Ejemplo: venta $120 con piso $100 → antes: si venta > piso, $120/$120 = 100%; ahora: $120/$100 = 120%.
+    """
     df = df_ventas.copy()
-    df['total_n'] = pd.to_numeric(df['Total'], errors='coerce').fillna(0)
-    df['pv_n']    = pd.to_numeric(df['Precio Uni'], errors='coerce')
+    df['total_n'] = pd.to_numeric(df['Total'],     errors='coerce').fillna(0)
+    df['cant_n']  = pd.to_numeric(df['Cantidad'],  errors='coerce').fillna(0)
+    df['pv_n']    = pd.to_numeric(df['Precio Uni'],errors='coerce')
     df['prod_base'], df['fmt_parsed'] = zip(*df['Producto'].apply(parse_producto_formato))
 
     def get_pp(row):
@@ -860,12 +872,24 @@ def compute_iec_chile(df_ventas, piso):
 
     df['pp'] = df.apply(get_pp, axis=1)
 
-    df['elegible'] = df.apply(lambda r: r['total_n'] if pd.notna(r['pp']) and r['total_n'] > 0 else 0, axis=1)
+    # valor_piso_teorico = Cantidad × precio_piso  (denominador IEC ponderado)
+    df['valor_piso_teorico'] = df.apply(
+        lambda r: r['cant_n'] * r['pp'] if pd.notna(r['pp']) and r['cant_n'] > 0 else 0, axis=1
+    )
+    # venta_neta_elegible = total de la transacción cuando tiene precio piso definido
+    df['venta_neta_elegible'] = df.apply(
+        lambda r: r['total_n'] if pd.notna(r['pp']) and r['total_n'] > 0 else 0, axis=1
+    )
+    # Bajo piso: precio unitario de venta < precio piso
     df['cumple']   = df.apply(lambda r: 1 if pd.notna(r['pp']) and pd.notna(r['pv_n']) and r['pv_n'] >= r['pp'] else 0, axis=1)
-    df['sp']       = df.apply(lambda r: r['total_n'] if r['cumple'] == 1 else 0, axis=1)
-    df['bp']       = df.apply(lambda r: r['total_n'] if r['elegible'] > 0 and r['cumple'] == 0 else 0, axis=1)
+    df['bp']       = df.apply(lambda r: r['total_n'] if r['valor_piso_teorico'] > 0 and r['cumple'] == 0 else 0, axis=1)
+    # IEC por línea (ratio, no %)
+    df['iec_linea'] = df.apply(
+        lambda r: round(r['total_n'] / r['valor_piso_teorico'], 4)
+        if r['valor_piso_teorico'] > 0 else None, axis=1
+    )
 
-    # Por vendedor
+    # IEC ponderado por vendedor: Σ venta_neta_elegible / Σ valor_piso_teorico
     rtc_map_inv = {
         'PABLO LARATRO': 'laratro', 'FRANCISCO VELASQUEZ': 'velasquez',
         'JORGE CAROCA': 'caroca', 'RODRIGO ENCINA': 'encina',
@@ -873,37 +897,69 @@ def compute_iec_chile(df_ventas, piso):
     }
     iec_vend = {}
     for vend, key in rtc_map_inv.items():
-        sub = df[df['Vendedor'] == vend]
-        elig = sub['elegible'].sum()
-        sp   = sub['sp'].sum()
-        iec_vend[key] = round(sp / elig, 4) if elig > 0 else None
+        sub  = df[df['Vendedor'] == vend]
+        num  = sub['venta_neta_elegible'].sum()
+        den  = sub['valor_piso_teorico'].sum()
+        iec_vend[key] = round(num / den, 4) if den > 0 else None
 
-    total_elig = df['elegible'].sum()
-    total_sp   = df['sp'].sum()
-    iec_total  = round(total_sp / total_elig, 4) if total_elig > 0 else None
+    # IEC ponderado total (país)
+    total_num  = df['venta_neta_elegible'].sum()
+    total_den  = df['valor_piso_teorico'].sum()
+    iec_total  = round(total_num / total_den, 4) if total_den > 0 else None
 
-    # Por cliente (RUT)
+    # IEC ponderado por cliente (RUT)
     iec_cliente = {}
     g = df.groupby('Rut').agg(
-        elig=('elegible', 'sum'), sp=('sp', 'sum'), bp=('bp', 'sum'),
-        tx_elig=('elegible', lambda x: (x > 0).sum()),
+        vne =('venta_neta_elegible', 'sum'),
+        vpt =('valor_piso_teorico',  'sum'),
+        bp  =('bp',   'sum'),
+        tx_elig=('venta_neta_elegible', lambda x: (x > 0).sum()),
         tx_cumple=('cumple', 'sum'),
     )
     for rut, row in g.iterrows():
         iec_cliente[str(rut)] = {
-            'pct':           round(row['sp'] / row['elig'], 4) if row['elig'] > 0 else None,
-            'tx_elegible':   int(row['tx_elig']),
-            'tx_cumple':     int(row['tx_cumple']),
-            'monto_elegible': int(row['elig']),
-            'monto_bajo_piso': int(row['bp']),
+            'pct':            round(row['vne'] / row['vpt'], 4) if row['vpt'] > 0 else None,
+            'tx_elegible':    int(row['tx_elig']),
+            'tx_cumple':      int(row['tx_cumple']),
+            'monto_elegible': int(row['vne']),
+            'monto_bajo_piso':int(row['bp']),
+            # raw para agregación YTD/grupo sin perder identidad matemática
+            'venta_neta_elegible':  int(row['vne']),
+            'valor_piso_teorico':   int(row['vpt']),
         }
 
+    # IEC ponderado mensual por vendedor y total — para drill-down por mes en AVBOARD
+    # Fórmula identica: cada mes = Σ vne / Σ vpt del mes.
+    # Retorna dict: key → lista de 12 valores (uno por mes, None si sin datos).
+    iec_mensual = {}
+    for vend, key in rtc_map_inv.items():
+        vals = []
+        for mes in MESES_FULL:
+            sub_m = df[(df['MES'] == mes) & (df['Vendedor'] == vend)]
+            n_m   = sub_m['venta_neta_elegible'].sum()
+            d_m   = sub_m['valor_piso_teorico'].sum()
+            vals.append(round(n_m / d_m, 4) if d_m > 0 else None)
+        iec_mensual[key] = vals
+    # Total país por mes
+    total_mes = []
+    for mes in MESES_FULL:
+        sub_m = df[df['MES'] == mes]
+        n_m   = sub_m['venta_neta_elegible'].sum()
+        d_m   = sub_m['valor_piso_teorico'].sum()
+        total_mes.append(round(n_m / d_m, 4) if d_m > 0 else None)
+    iec_mensual['total'] = total_mes
+
     return {
-        'df':          df,
+        'df':           df,
         'por_vendedor': iec_vend,
-        'total':       iec_total,
-        'bp_total':    int(df['bp'].sum()),
-        'por_cliente': iec_cliente,
+        'total':        iec_total,
+        'bp_total':     int(df['bp'].sum()),
+        'por_cliente':  iec_cliente,
+        # raw del país para drill-down, YTD y Grupo (Σnum/Σden — nunca promedio)
+        'venta_neta_elegible_total': int(total_num),
+        'valor_piso_teorico_total':  int(total_den),
+        # desglose mensual (Fase 7): país y por vendedor
+        'iec_mensual': iec_mensual,
     }
 
 
@@ -1246,6 +1302,14 @@ def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, peru_cxc_static, 
     ytd_usd = chile_ytd_usd + peru_ytd_usd
     ytd_clp = cl_v['ytd_5m'] + round(pe_v['ytd_5m'] * tc)
 
+    # IEC Grupo: Σnum/Σden de todos los países con datos de precio piso.
+    # Perú: sin datos de precio piso reales → se excluye del numerador/denominador.
+    # Grupo IEC = Chile IEC (únicamente) hasta que Perú disponga de piso por transacción.
+    _g_vne = iec_cl['venta_neta_elegible_total']
+    _g_vpt = iec_cl['valor_piso_teorico_total']
+    grupo_iec_total = round(_g_vne / _g_vpt, 4) if _g_vpt > 0 else None
+    grupo_iec_val   = f"{grupo_iec_total:.4f}" if grupo_iec_total is not None else 'null'
+
     def js_rtc_mensual(rtc_dict):
         lines = []
         for k, arr in sorted(rtc_dict.items()):
@@ -1299,6 +1363,22 @@ def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, peru_cxc_static, 
             val = f"{v:.3f}" if v is not None else 'null'
             lines.append(f"      {k}: {val}")
         lines.append(f"      impacto_potencial_clp: {iec_cl['bp_total']}")
+        # Raw para Grupo (Σnum/Σden — nunca promedio)
+        lines.append(f"      vne_total: {iec_cl['venta_neta_elegible_total']}")
+        lines.append(f"      vpt_total: {iec_cl['valor_piso_teorico_total']}")
+        # Mensual por vendedor y total (Fase 7) — 12 valores, None→null
+        mens = iec_cl.get('iec_mensual', {})
+        def arr12(lst):
+            return '[' + ', '.join(f"{v:.4f}" if v is not None else 'null' for v in (lst or [None]*12)) + ']'
+        lines.append(f"      iec_mensual: {{\n"
+                     f"        total:     {arr12(mens.get('total'))},\n"
+                     f"        velasquez: {arr12(mens.get('velasquez'))},\n"
+                     f"        laratro:   {arr12(mens.get('laratro'))},\n"
+                     f"        caroca:    {arr12(mens.get('caroca'))},\n"
+                     f"        encina:    {arr12(mens.get('encina'))},\n"
+                     f"        veverka:   {arr12(mens.get('veverka'))},\n"
+                     f"        munoz:     {arr12(mens.get('munoz'))}\n"
+                     f"      }}")
         return '{\n' + ',\n'.join(lines) + '\n    }'
 
     def js_por_vendedor_pe(por_vend):
@@ -1406,7 +1486,13 @@ var AVBOARD = (function() {{
     peru_ytd_usd:  {peru_ytd_usd},
     rtc_activos:  12,
     mn_chile:     0.179,
-    mn_peru:      null
+    mn_peru:      null,
+    // IEC Grupo ponderado (Fase 7): Σvne/Σvpt across countries con datos de piso.
+    // Peru excluido hasta tener precio_piso por transacción. Nota: valor < 1.0 = bajo piso.
+    iec_grupo: {grupo_iec_val},
+    iec_grupo_nota: 'Chile solamente — Perú sin precio piso por transacción',
+    iec_grupo_vne: {_g_vne},
+    iec_grupo_vpt: {_g_vpt}
   }};
 
   var chile_ventas = {{

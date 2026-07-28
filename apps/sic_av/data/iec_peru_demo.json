@@ -7,7 +7,10 @@
       "iec_pct": 79.0,
       "ventas_sobre_piso_usd": 19500,
       "ventas_bajo_piso_usd": 5100,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 24600,
+      "valor_piso_teorico_usd": 31139.24,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V02",
@@ -15,7 +18,10 @@
       "iec_pct": 93.0,
       "ventas_sobre_piso_usd": 30800,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 30800,
+      "valor_piso_teorico_usd": 33118.28,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V03",
@@ -23,7 +29,10 @@
       "iec_pct": 97.0,
       "ventas_sobre_piso_usd": 14000,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 14000,
+      "valor_piso_teorico_usd": 14432.99,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V04",
@@ -31,7 +40,10 @@
       "iec_pct": 85.5,
       "ventas_sobre_piso_usd": 22450,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 22450,
+      "valor_piso_teorico_usd": 26257.31,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V01",
@@ -39,7 +51,10 @@
       "iec_pct": 71.0,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V01",
@@ -47,7 +62,10 @@
       "iec_pct": 72.6,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V01",
@@ -55,7 +73,10 @@
       "iec_pct": 74.2,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V01",
@@ -63,7 +84,10 @@
       "iec_pct": 75.8,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V01",
@@ -71,7 +95,10 @@
       "iec_pct": 77.4,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V02",
@@ -79,7 +106,10 @@
       "iec_pct": 87.0,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V02",
@@ -87,7 +117,10 @@
       "iec_pct": 88.6,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V02",
@@ -95,7 +128,10 @@
       "iec_pct": 90.2,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V02",
@@ -103,7 +139,10 @@
       "iec_pct": 91.8,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V02",
@@ -111,7 +150,10 @@
       "iec_pct": 93.4,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V03",
@@ -119,7 +161,10 @@
       "iec_pct": 94.0,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V03",
@@ -127,7 +172,10 @@
       "iec_pct": 95.6,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V03",
@@ -135,7 +183,10 @@
       "iec_pct": 97.2,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V03",
@@ -143,7 +194,10 @@
       "iec_pct": 98.8,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V03",
@@ -151,7 +205,10 @@
       "iec_pct": 100.4,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V04",
@@ -159,7 +216,10 @@
       "iec_pct": 79.0,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V04",
@@ -167,7 +227,10 @@
       "iec_pct": 80.6,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V04",
@@ -175,7 +238,10 @@
       "iec_pct": 82.2,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V04",
@@ -183,7 +249,10 @@
       "iec_pct": 83.8,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     },
     {
       "vendedor_id": "PE-V04",
@@ -191,7 +260,11 @@
       "iec_pct": 85.4,
       "ventas_sobre_piso_usd": 0,
       "ventas_bajo_piso_usd": 0,
-      "ventas_no_evaluables_usd": 0
+      "ventas_no_evaluables_usd": 0,
+      "venta_neta_elegible_usd": 0,
+      "valor_piso_teorico_usd": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD."
     }
-  ]
+  ],
+  "_actualizacion_v1.7": "CHANGE REQUEST SIC-AV v1.7 (2026-07-28): agrega venta_neta_elegible_usd y valor_piso_teorico_usd. IEC ponderado = Σ vne / Σ vpt."
 }

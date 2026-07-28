@@ -397,6 +397,184 @@ var COTIZADOR = (function () {
   }
 
   // ────────────────────────────────────────────────────────────────
+  // POLÍTICA IEC — FASE 7 (2026-07-28)
+  // Estado A/B/C, transporte incluido, interés financiero, fingerprint.
+  // Fórmula maestra: IEC_MIX = Σ venta_neta_elegible / Σ valor_piso_teorico.
+  // Aggregable a cualquier nivel (factura, vendedor/RTC por mes, país, grupo).
+  // ────────────────────────────────────────────────────────────────
+
+  // Estado de política IEC (A/B/C).
+  // lineasCalculadas: array de líneas ya procesadas por Calc.calcularLinea().
+  // iecMix: número (ratio, no %) — si null → sin_datos.
+  // config: objeto config.json completo.
+  //
+  // POLÍTICA IEC — VERSIÓN FINAL (2026-07-28):
+  // IEC ÓPTIMO = 100%. 90% = umbral aprobación automática (≠ óptimo). 75% = guardrail individual.
+  //
+  // A: IEC_MIX >= iec_min Y todos los ítems >= guardrail (75%) → APROBACIÓN AUTOMÁTICA
+  // B: IEC_MIX < iec_min Y todos los ítems >= guardrail       → REQUIERE AUTORIZACIÓN GG/GD
+  // C: algún ítem < guardrail (75%)                           → EXCEPCIÓN CRÍTICA · REQUIERE AUTORIZACIÓN GG/GD
+  //
+  // GG/GD conserva facultad de aprobar B y C — el bloqueo PDF es TÉCNICO hasta que exista backend.
+  // El marketing mix permite ítems bajo piso siempre que estén >= 75% y el IEC MIX >= 90%.
+  Calc.estadoIEC = function (lineasCalculadas, iecMix, config) {
+    var pol = (config && config.iec_politica) || {};
+    var iecMin    = pol.iec_min_autorizado    !== undefined ? pol.iec_min_autorizado    : 0.90;
+    var desviMax  = pol.desviacion_critica_max_item !== undefined ? pol.desviacion_critica_max_item : 0.25;
+    var guardrail = 1 - desviMax; // 0.75 — guardrail individual por ítem
+
+    if (iecMix === null || iecMix === undefined) {
+      return { estado: 'sin_datos', nombre: 'Sin datos', descripcion: 'No hay líneas elegibles con precio piso definido.' };
+    }
+
+    // Estado C: algún ítem elegible con IEC_linea < guardrail (75%) → EXCEPCIÓN CRÍTICA
+    var itemsCriticos = (lineasCalculadas || []).filter(function (l) {
+      return l.elegible_iec && l.iec_linea !== null && l.iec_linea !== undefined && l.iec_linea < guardrail;
+    });
+    if (itemsCriticos.length > 0) {
+      return {
+        estado: 'C',
+        nombre: 'EXCEPCIÓN CRÍTICA',
+        descripcion: itemsCriticos.length + ' ítem(s) con precio < ' + Math.round(guardrail * 100) + '% del precio piso. Requiere autorización expresa GG/GD con motivo de excepción.',
+        items_criticos: itemsCriticos.map(function (l) {
+          return { producto: l.producto, presentacion: l.presentacion, iec_linea: l.iec_linea };
+        }),
+        bloquea_pdf: true
+      };
+    }
+
+    // Estado A: IEC_MIX >= umbral aprobación automática (90%) y todos los ítems >= guardrail
+    if (iecMix >= iecMin) {
+      return {
+        estado: 'A',
+        nombre: 'APROBACIÓN AUTOMÁTICA',
+        descripcion: 'IEC Mix ' + (iecMix * 100).toFixed(1) + '% ≥ ' + Math.round(iecMin * 100) + '% y todos los ítems ≥ ' + Math.round(guardrail * 100) + '%. Marketing mix dentro de política.',
+        bloquea_pdf: false
+      };
+    }
+
+    // Estado B: IEC_MIX < umbral (90%) pero todos los ítems >= guardrail (75%)
+    return {
+      estado: 'B',
+      nombre: 'REQUIERE AUTORIZACIÓN',
+      descripcion: 'IEC Mix ' + (iecMix * 100).toFixed(1) + '% < ' + Math.round(iecMin * 100) + '% (umbral aprobación automática). Todos los ítems ≥ ' + Math.round(guardrail * 100) + '%. Requiere autorización GG/GD.',
+      bloquea_pdf: false // bloqueo técnico de PDF está en imprimirConControl(), no en estadoIEC()
+    };
+  };
+
+  // ────────────────────────────────────────────────────────────────
+  // TRANSPORTE INCLUIDO EN PRECIO (Fase 7)
+  // Proratea el costo de despacho proporcionalmente entre las líneas.
+  // El total al cliente NO cambia. El IEC se calcula sobre la venta neta
+  // de producto (sin transporte). Invariante: Σ transporte_prorrateado = montoTransporte.
+  // ────────────────────────────────────────────────────────────────
+
+  Calc.prorratearTransporte = function (lineasCalculadas, montoTransporte) {
+    if (!montoTransporte || montoTransporte <= 0) {
+      return lineasCalculadas.map(function (l) {
+        return { transporte_prorrateado: 0 };
+      });
+    }
+    var totalLineas = lineasCalculadas.reduce(function (s, l) { return s + (l.total_linea || 0); }, 0);
+    if (totalLineas <= 0) {
+      // Reparto uniforme como fallback si todas las líneas son 0
+      var parte = montoTransporte / (lineasCalculadas.length || 1);
+      return lineasCalculadas.map(function () { return { transporte_prorrateado: parte }; });
+    }
+    var asignado = 0;
+    var result = lineasCalculadas.map(function (l, idx) {
+      var prop;
+      if (idx === lineasCalculadas.length - 1) {
+        prop = montoTransporte - asignado; // última línea absorbe el redondeo
+      } else {
+        prop = Math.round(montoTransporte * ((l.total_linea || 0) / totalLineas));
+        asignado += prop;
+      }
+      return { transporte_prorrateado: prop };
+    });
+    return result;
+  };
+
+  // IEC mix ajustado por transporte incluido.
+  // venta_neta_elegible_i = total_linea_i - transporte_prorrateado_i  (solo para líneas elegibles)
+  // valor_piso_teorico_i = precio_piso_unitario × factor × cantidad    (igual que calcularTotales)
+  // Retorna: { iec_mix_neto, venta_neta_elegible, valor_piso_teorico, transporte_total_prorrateado }
+  Calc.calcularIECConTransporte = function (lineasCalculadas, transporteProrrateado, config) {
+    var ventaElegible = 0;
+    var pisoTotal = 0;
+    var transporteTotalElegible = 0;
+    lineasCalculadas.forEach(function (l, idx) {
+      if (!l.elegible_iec) return;
+      var factor = Number(l.factor_presentacion) || 1;
+      var cantidad = Number(l.cantidad_envases) || 0;
+      var tp = (transporteProrrateado && transporteProrrateado[idx]) ? (transporteProrrateado[idx].transporte_prorrateado || 0) : 0;
+      var ventaNeta = (l.total_linea || 0) - tp;
+      var piso = Number(l.precio_piso_unitario) * factor * cantidad;
+      ventaElegible += ventaNeta;
+      pisoTotal += piso;
+      transporteTotalElegible += tp;
+    });
+    var iecMixNeto = pisoTotal > 0 ? ventaElegible / pisoTotal : null;
+    return {
+      iec_mix_neto: iecMixNeto,
+      venta_neta_elegible: ventaElegible,
+      valor_piso_teorico: pisoTotal,
+      transporte_total_prorrateado: transporteTotalElegible
+    };
+  };
+
+  // ────────────────────────────────────────────────────────────────
+  // INTERÉS FINANCIERO (Fase 7)
+  // Grace 90 días. Tasa mensual configurable (default 1.2%).
+  // El interés NO mejora IEC ni se incluye en venta_neta_elegible.
+  // Separación: venta_producto → IEC / transporte → logística / interés → ingreso financiero.
+  // ────────────────────────────────────────────────────────────────
+
+  Calc.calcularInteresFinanciero = function (plazo_dias, monto_base, config) {
+    var cfg = (config && config.interes_financiero) || {};
+    var gracia = cfg.gracia_dias !== undefined ? cfg.gracia_dias : 90;
+    var tasaMensual = cfg.tasa_mensual_pct !== undefined ? cfg.tasa_mensual_pct : 1.2;
+    plazo_dias = Number(plazo_dias) || 0;
+    monto_base = Number(monto_base) || 0;
+    if (plazo_dias <= gracia) {
+      return { aplica: false, dias_excedentes: 0, monto: 0, gracia_dias: gracia, tasa_mensual_pct: tasaMensual };
+    }
+    var diasExcedentes = plazo_dias - gracia;
+    var monto = monto_base * (tasaMensual / 100) * (diasExcedentes / 30);
+    return { aplica: true, dias_excedentes: diasExcedentes, monto: Math.round(monto), gracia_dias: gracia, tasa_mensual_pct: tasaMensual };
+  };
+
+  // ────────────────────────────────────────────────────────────────
+  // FINGERPRINT DE COTIZACIÓN (Fase 7)
+  // Hash determinista del contenido comercial relevante.
+  // Invalida la autorización si cambia cualquier variable que afecte
+  // IEC o total: producto, cantidad, precio, descuento, transporte,
+  // modo transporte, plazo, interés, cliente.
+  // ────────────────────────────────────────────────────────────────
+  util.generarFingerprint = function (quote) {
+    var contenido = JSON.stringify({
+      id:              quote.id || quote.numero || '',
+      cliente_rut:     quote.cliente && quote.cliente.rut,
+      condicion_pago:  quote.condicion_pago,
+      validez_dias:    quote.validez_dias,
+      lineas: (quote.lineas || []).map(function (l) {
+        return [l.producto, l.presentacion, l.cantidad_envases, l.precio_venta_unitario, l.descuento || 0];
+      }),
+      despacho_modo:   quote.despacho && quote.despacho.modo_transporte,
+      despacho_monto:  quote.despacho && quote.despacho.costo_despacho,
+      despacho_incluido: quote.despacho && quote.despacho.incluido,
+      interes_dias:    quote.interes_dias || 0,
+      aplica_interes:  quote.aplica_interes || false
+    });
+    // djb2 hash — colisión aceptable para control de integridad de UI; para producción usar SHA-256 en backend
+    var hash = 5381;
+    for (var i = 0; i < contenido.length; i++) {
+      hash = (((hash << 5) + hash) + contenido.charCodeAt(i)) & 0x7fffffff;
+    }
+    return 'FP-' + hash.toString(36).toUpperCase().padStart(8, '0');
+  };
+
+  // ────────────────────────────────────────────────────────────────
   // RECOMENDACIÓN COMERCIAL (Fase 2) — capa de presentación sobre los
   // totales ya calculados. NO modifica IEC/semáforo/margen: solo los
   // interpreta en lenguaje de negociación para asistir al vendedor.
@@ -871,6 +1049,65 @@ var COTIZADOR = (function () {
   };
 
   // ────────────────────────────────────────────────────────────────
+  // PDF CON CONTROL IEC — wrapper sobre PDF.imprimir que valida
+  // el estado IEC antes de abrir la ventana de impresión.
+  //
+  // Estado A: IEC MIX >= 90% y todos los ítems >= 75% → PDF permitido.
+  // Estado B: IEC MIX < 90% y todos los ítems >= 75% → PDF bloqueado técnicamente.
+  // Estado C: algún ítem < 75% del piso → PDF bloqueado técnicamente.
+  //
+  // El bloqueo en B y C es TÉCNICO (no existe backend seguro aún).
+  // GG/GD conserva la facultad de aprobar B y C cuando exista el backend.
+  // NINGUNA condición frontend puede desbloquear B o C (elimina fake security).
+  // ────────────────────────────────────────────────────────────────
+  PDF.imprimirConControl = function (quote, paisNombre, config) {
+    var lineas = quote.lineas || [];
+    var totales = quote.totales || {};
+    // Si el transporte está INCLUIDO, evaluar sobre IEC neto (excluyendo transporte).
+    var iecMix;
+    var transpInfo = quote.iec_transporte_info;
+    if (transpInfo && transpInfo.modo === 'INCLUIDO' && transpInfo.iec_neto !== null && transpInfo.iec_neto !== undefined) {
+      iecMix = transpInfo.iec_neto;
+    } else {
+      iecMix = (totales.iec_global !== undefined) ? totales.iec_global : null;
+    }
+    var estado = Calc.estadoIEC(lineas, iecMix, config);
+
+    if (estado.estado === 'C') {
+      // EXCEPCIÓN CRÍTICA: algún ítem < 75% del piso. GG/GD puede aprobar con motivo
+      // de excepción cuando exista backend. Técnicamente bloqueado hasta entonces.
+      alert(
+        'EXCEPCIÓN CRÍTICA · REQUIERE AUTORIZACIÓN GG/GD\n\n' +
+        estado.descripcion + '\n\n' +
+        'Uno o más ítems están cotizados por debajo del guardrail del 75% del precio piso.\n' +
+        'Requiere autorización expresa de GG/GD con motivo de excepción documentado.\n' +
+        'PDF bloqueado técnicamente hasta que exista el backend de autorización segura.'
+      );
+      return false;
+    }
+
+    if (estado.estado === 'B') {
+      // REQUIERE AUTORIZACIÓN: IEC MIX < 90% pero todos los ítems >= 75%.
+      // GG/GD puede aprobar cuando exista backend. Técnicamente bloqueado hasta entonces.
+      // NO hay condición frontend que pueda desbloquear este estado.
+      var fpActual = util.generarFingerprint(quote);
+      alert(
+        'REQUIERE AUTORIZACIÓN GG/GD\n\n' +
+        estado.descripcion + '\n\n' +
+        'Contacta al Gerente General o Gerencia de Dirección para aprobación.\n' +
+        'Fingerprint de esta versión: ' + fpActual + '\n\n' +
+        'El fingerprint identifica la cotización — no constituye autorización.\n' +
+        'PDF bloqueado técnicamente hasta que exista el backend de autorización segura.\n' +
+        'Ver: docs/ARQUITECTURA_SEGURA_ESTADO_B.md'
+      );
+      return false; // bloqueo técnico — sin bypass posible desde frontend
+    }
+
+    PDF.imprimir(quote, paisNombre);
+    return true;
+  };
+
+  // ────────────────────────────────────────────────────────────────
   // EXPORT JSON — snapshot descargable (trazabilidad / respaldo manual)
   // ────────────────────────────────────────────────────────────────
   var Export = {
@@ -903,5 +1140,9 @@ var COTIZADOR = (function () {
     Pipeline: Pipeline,
     // Fase 3 — aditivo:
     Logistica: Logistica
+    // Fase 7 — IEC ponderado, política A/B/C, transporte incluido, interés, fingerprint.
+    // Los nuevos métodos se exponen directamente en Calc y util (ya son parte de los objetos exportados).
+    // Calc.estadoIEC(), Calc.prorratearTransporte(), Calc.calcularIECConTransporte(),
+    // Calc.calcularInteresFinanciero(), util.generarFingerprint(), PDF.imprimirConControl()
   };
 })();

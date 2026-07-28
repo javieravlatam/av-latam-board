@@ -325,3 +325,37 @@ table.lineas input.in-objetivo{border-color:rgba(245,166,35,.4)}
 .logi-estado.error_fallback_manual{color:var(--amber); border-color:var(--amber)}
 .logi-estado.sin_calcular{color:var(--muted); border-color:var(--bdr)}
 .logi-msg{font-size:11px; color:var(--dim); margin-top:6px}
+
+/* ══════════════════════════════════════════════════════════════════
+   FASE 7 — ESTADO IEC B/C · Tarjeta de autorización
+   Estado A: oculto | Estado B: amber (req. auth) | Estado C: rojo (bloqueo)
+   NUNCA almacenar códigos de autorización en frontend estático.
+   ══════════════════════════════════════════════════════════════════ */
+.estado-iec-card{
+  border-radius:10px; padding:16px 20px; margin-top:4px;
+  border-left:4px solid var(--bdr);
+  font-size:13px; line-height:1.6;
+}
+.estado-iec-card.estado-a{ display:none; }
+.estado-iec-card.estado-b{
+  background:rgba(196,122,15,0.08); border-left-color:var(--amber);
+}
+.estado-iec-card.estado-c{
+  background:rgba(192,57,43,0.09); border-left-color:var(--red);
+}
+.estado-iec-card.sin-datos{ display:none; }
+.estado-iec-titulo{
+  font-family:'Bebas Neue',sans-serif; letter-spacing:1px; font-size:15px;
+  margin-bottom:6px;
+}
+.estado-iec-card.estado-b .estado-iec-titulo{ color:var(--amber); }
+.estado-iec-card.estado-c .estado-iec-titulo{ color:var(--red); }
+.estado-iec-fp{
+  font-family:'DM Mono',monospace; font-size:11px; color:var(--dim);
+  background:var(--s2); padding:4px 10px; border-radius:6px;
+  display:inline-block; margin-top:6px; word-break:break-all;
+}
+.estado-iec-nota{
+  font-size:11px; color:var(--muted); margin-top:8px;
+  border-top:1px solid var(--bdr); padding-top:8px;
+}

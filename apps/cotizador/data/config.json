@@ -1,6 +1,6 @@
 {
-  "_comentario": "Configuración comercial del Cotizador AV LATAM. Editable sin tocar cotizador_core.js. Generado 2026-07-01. Extendido 2026-07-01 (Fase 2 — solo adiciones), 2026-07-01 (Fase 3 — motor logístico, solo adiciones) y 2026-07-01 (Corrección Final — vuelta al modelo simple de precio unitario por litro/kilo + presentaciones_por_unidad).",
-  "version": "1.3.0",
+  "_comentario": "Configuración comercial del Cotizador AV LATAM. Editable sin tocar cotizador_core.js. Generado 2026-07-01. Extendido 2026-07-28 (Fase 7 — IEC ponderado, política A/B/C, transporte incluido, interés financiero).",
+  "version": "1.7.0",
   "paises": {
     "CL": {
       "nombre": "Chile",
@@ -35,6 +35,20 @@
         "rojo":    { "nombre": "Rojo",    "descripcion": "Crítica" }
       }
     }
+  },
+  "iec_politica": {
+    "_nota": "Política IEC ponderado — VERSIÓN FINAL (2026-07-28). IEC_MIX = Σvne/Σvpt. IEC ÓPTIMO = 100% (vender exactamente al piso ponderado). 90% = umbral aprobación automática (NO el óptimo). 75% = guardrail individual (= 1 - 0.25). ESTADO A: IEC_MIX>=90% Y todos los ítems>=75% → APROBACIÓN AUTOMÁTICA. ESTADO B: IEC_MIX<90% Y todos los ítems>=75% → REQUIERE AUTORIZACIÓN GG/GD (PDF bloqueado hasta backend). ESTADO C: algún ítem<75% → EXCEPCIÓN CRÍTICA (mayor nivel de advertencia, requiere autorización GG/GD + motivo obligatorio). GG/GD conserva facultad de aprobar B y C. Parámetros configurables — no hardcodeados.",
+    "iec_min_autorizado": 0.90,
+    "desviacion_critica_max_item": 0.25,
+    "_umbral_critico_item": "1 - desviacion_critica_max_item = 0.75 (75% del precio piso — guardrail individual)",
+    "aprobadores_autorizados": ["javier@agrovecalatam.com", "gaf@agrovecalatam.com"],
+    "_nota_backend": "La autorización real requiere backend/serverless seguro. En frontend estático: PDF bloqueado técnicamente en B y C; GG/GD puede aprobar cuando exista el backend. Ver docs/ARQUITECTURA_SEGURA_ESTADO_B.md."
+  },
+  "interes_financiero": {
+    "_nota": "Cargo financiero por plazo extendido. Se muestra separado del producto. NO mejora IEC ni altera venta_neta_elegible. Se aplica solo si el usuario activa la opción en la cotización.",
+    "gracia_dias": 90,
+    "tasa_mensual_pct": 1.2,
+    "_formula": "dias <= 90 → interés = 0. dias > 90 → interés = monto_base × (tasa_mensual_pct/100) × (dias_excedentes/30)"
   },
   "condiciones_pago": [
     "Contado",

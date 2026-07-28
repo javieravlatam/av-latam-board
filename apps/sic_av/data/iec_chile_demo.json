@@ -7,7 +7,10 @@
       "iec_pct": 82.0,
       "ventas_sobre_piso_clp": 5200000,
       "ventas_bajo_piso_clp": 1140000,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 6340000,
+      "valor_piso_teorico_clp": 7731707,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V02",
@@ -15,7 +18,10 @@
       "iec_pct": 91.0,
       "ventas_sobre_piso_clp": 8058000,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 8058000,
+      "valor_piso_teorico_clp": 8854945,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V03",
@@ -23,7 +29,10 @@
       "iec_pct": 96.5,
       "ventas_sobre_piso_clp": 1745000,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 1745000,
+      "valor_piso_teorico_clp": 1808290,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V04",
@@ -31,7 +40,10 @@
       "iec_pct": 88.0,
       "ventas_sobre_piso_clp": 3831500,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 3831500,
+      "valor_piso_teorico_clp": 4353977,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V01",
@@ -39,7 +51,10 @@
       "iec_pct": 96.0,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V01",
@@ -47,7 +62,10 @@
       "iec_pct": 96.0,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V01",
@@ -55,7 +73,10 @@
       "iec_pct": 96.0,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V01",
@@ -63,7 +84,10 @@
       "iec_pct": 78.5,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V01",
@@ -71,7 +95,10 @@
       "iec_pct": 80.0,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V02",
@@ -79,7 +106,10 @@
       "iec_pct": 97.0,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V02",
@@ -87,7 +117,10 @@
       "iec_pct": 97.0,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V02",
@@ -95,7 +128,10 @@
       "iec_pct": 97.0,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V02",
@@ -103,7 +139,10 @@
       "iec_pct": 89.5,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V02",
@@ -111,7 +150,10 @@
       "iec_pct": 91.0,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V03",
@@ -119,7 +161,10 @@
       "iec_pct": 98.0,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V03",
@@ -127,7 +172,10 @@
       "iec_pct": 98.0,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V03",
@@ -135,7 +183,10 @@
       "iec_pct": 98.0,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V03",
@@ -143,7 +194,10 @@
       "iec_pct": 97.5,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V03",
@@ -151,7 +205,10 @@
       "iec_pct": 99.0,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V04",
@@ -159,7 +216,10 @@
       "iec_pct": 80.0,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V04",
@@ -167,7 +227,10 @@
       "iec_pct": 81.5,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V04",
@@ -175,7 +238,10 @@
       "iec_pct": 83.0,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V04",
@@ -183,7 +249,10 @@
       "iec_pct": 84.5,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     },
     {
       "vendedor_id": "CL-V04",
@@ -191,7 +260,11 @@
       "iec_pct": 86.0,
       "ventas_sobre_piso_clp": 0,
       "ventas_bajo_piso_clp": 0,
-      "ventas_no_evaluables_clp": 0
+      "ventas_no_evaluables_clp": 0,
+      "venta_neta_elegible_clp": 0,
+      "valor_piso_teorico_clp": 0,
+      "_nota_raw": "Derivado del iec_pct historico para compatibilidad YTD. Reemplazar con datos reales al conectar fuente por factura."
     }
-  ]
+  ],
+  "_actualizacion_v1.7": "CHANGE REQUEST SIC-AV v1.7 (2026-07-28): agrega venta_neta_elegible_clp y valor_piso_teorico_clp por entrada. IEC ponderado = Σ vne / Σ vpt — aggregable a vendedor/mes/pais/grupo sin promedio simple."
 }

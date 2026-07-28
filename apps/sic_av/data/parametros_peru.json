@@ -208,5 +208,11 @@
   ],
   "_factor_iec_nota": "Politica V1.2 (2026-07-13, aprobada por Gerencia General): tramos fijos, reemplaza por completo la curva continua/interpolada anterior. Ver CHANGE REQUEST SIC-AV v1.3.",
   "politica_vigente_desde": "2026-07-13",
-  "politica_estado": "Vigente"
+  "politica_estado": "Vigente",
+  "iec_politica": {
+    "_nota": "Política IEC ponderado (Fase 7, 2026-07-28). Mismos parámetros que Chile por alineación de política Grupo. IEC_MIX = Σ venta_neta_elegible / Σ valor_piso_teorico.",
+    "iec_min_autorizado_pct": 90,
+    "desviacion_critica_max_item_pct": 25,
+    "_umbral_critico_item_pct": "derivado: 100 - desviacion_critica_max_item_pct = 75"
+  }
 }
