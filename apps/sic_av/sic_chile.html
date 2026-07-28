@@ -416,12 +416,51 @@
     var ventasVendedor = cicloReal.ventas.filter(function (v) { return v.vendedor_id === VENDEDOR_ACTUAL && v._pertenece_periodo; });
     document.getElementById("c-facturada").textContent = fmt(r.venta_facturada_periodo);
     document.getElementById("c-n-facturas").textContent = ventasVendedor.length;
-    // CHANGE REQUEST SIC-AV v1.7 (Fase 2): mostrar cobrado real cuando la fuente
-    // de cobranza está conectada (FUENTES.cobranzas_raw → construirCicloReal →
-    // ctx.cobranzas → SIC.calcularVendedorCiclo → r.venta_cobrada).
-    // Si la fuente no está disponible, permanece "Pendiente de integración".
+    // CHANGE REQUEST SIC-AV v1.7 (Fase 3 — CORRECCIÓN SEMÁNTICA, aprobada):
+    // c-cobrado muestra ÚNICAMENTE cobrado ASIGNABLE AL PERÍODO: eventos con fecha+monto
+    // conocidos dentro de la ventana 26-25 (ctx.cobranzas → r.venta_cobrada).
+    //
+    // REGLA DE NEGOCIO (aprobada por GG): sin monto individual por abono, las facturas
+    // PAGADA_ABONOS NO se asignan a ningún ciclo específico, incluyendo la atribución
+    // por "última fecha de abono" (temporal no demostrada, PROHIBIDA).
+    //
+    // Tres indicadores separados:
+    //   1. Cobrado asignable al período:   r.venta_cobrada (fecha+monto exactos, por ciclo)
+    //   2. Cobrado no asignable por ciclo: PAGADA_ABONOS sin desglose (YTD, global)
+    //   3. Cobrado confirmado acumulado:   suma de 1+2 (cicloReal.cobranza_stats)
+    //
+    // El KPI c-cobrado muestra solo el indicador 1.
+    // El indicador 2 aparece en el subtítulo como "no asignable por ciclo".
     var hayCobranzas = cicloReal.cobranzas && cicloReal.cobranzas.length > 0;
-    document.getElementById("c-cobrado").textContent = hayCobranzas ? fmt(r.venta_cobrada) : "Pendiente de integración";
+
+    // Cobrado no asignable de este vendedor (YTD, sin filtro de ciclo).
+    // NOTA DE IMPLEMENTACIÓN: a.vendedor en el JSON es nombre canónico en mayúsculas
+    // ("FRANCISCO VELASQUEZ"), no la clave SIC ("velasquez"). Se usa _vendedor_clave
+    // computado por el adapter (via normalizarVendedor) para la comparación correcta.
+    var _abonoPendVendedor = 0;
+    var _mapaAbonos = (cicloReal.abonos_por_factura) || {};
+    Object.keys(_mapaAbonos).forEach(function (fKey) {
+      var _ab = _mapaAbonos[fKey];
+      if ((_ab._vendedor_clave || "") !== VENDEDOR_ACTUAL) return;
+      _abonoPendVendedor += (Number(_ab.monto_total_confirmado) || 0);
+    });
+
+    var _elCobrado = document.getElementById("c-cobrado");
+    var _subCobrado = _elCobrado.parentElement.querySelector(".sub");
+    if (hayCobranzas || _abonoPendVendedor > 0) {
+      // Valor KPI: solo cobrado asignable (fecha+monto conocidos en el período 26-25)
+      _elCobrado.textContent = hayCobranzas ? fmt(r.venta_cobrada) : "—";
+      if (_subCobrado) {
+        var _partesCobrado = [];
+        if (hayCobranzas) _partesCobrado.push("Asignable al período: " + fmt(r.venta_cobrada));
+        if (_abonoPendVendedor > 0) {
+          _partesCobrado.push("No asignable a ciclo (YTD): " + fmt(_abonoPendVendedor) + " PAGADA_ABONOS sin desglose temporal — comisión pendiente");
+        }
+        _subCobrado.textContent = _partesCobrado.join(" · ");
+      }
+    } else {
+      _elCobrado.textContent = "Pendiente de integración";
+    }
 
     var sp = 0, bp = 0, ne = 0;
     ventasVendedor.forEach(function (v) {
@@ -537,11 +576,19 @@
       } else {
         vencCell = "—";
       }
+      // CHANGE REQUEST SIC-AV v1.7 Fase 3: para facturas PAGADA_ABONOS, mostrar
+      // estado financiero real (PAGADA, saldo_financiero=0) aunque comision_calculable=false.
+      // Las demás facturas mantienen "Pendiente de cobranza" (estado pre-integración).
+      var _mapaAbonos = window._CICLO_REAL_ACTUAL && window._CICLO_REAL_ACTUAL.abonos_por_factura;
+      var _esAbono = _mapaAbonos && _mapaAbonos[f.factura];
+      var _estadoCobro = _esAbono
+        ? "<span class='sic-estado liberada' title='Factura cancelada. Monto: " + fmt(_esAbono.monto_total_confirmado) + ". Saldo financiero: $0. Comisión: pendiente de desglose de montos por abono individual.'>PAGADA ⏳ Comisión pendiente detalle</span>"
+        : "<span class='sic-estado potencial'>Pendiente de cobranza</span>";
       return "<tr>" +
         "<td>" + f.factura + "</td><td>" + f.fecha_factura + "</td><td>" + f.cliente_nombre + "</td>" +
         "<td>" + f.producto + "</td><td class='num'>" + fmt(f.venta_neta) + "</td>" +
         "<td>" + vencCell + "</td>" +
-        "<td>" + etiquetaPiso + "</td><td><span class='sic-estado potencial'>Pendiente de cobranza</span></td></tr>";
+        "<td>" + etiquetaPiso + "</td><td>" + _estadoCobro + "</td></tr>";
     }).join("");
     window._DETALLE_FILTRADO = datos;
   }

@@ -64,7 +64,7 @@ NO_COMERCIAL = {"OFICINA", "LABORATORIO", "EN TERRENO 1", "JAVIER ALMEIDA"}
 # es la señal de que el archivo es una fuente de cobranzas.
 COLUMNAS_F2_REQUERIDAS = {"Folio", "Rut", "Razón Social", "Vendedor", "PAÍS", "Negocio", "Fecha Pago Fct."}
 
-SCHEMA_VERSION = "cobranzas_cl_v1"
+SCHEMA_VERSION = "cobranzas_cl_v2"
 PAIS_OBJETIVO = "CHILE"
 NEGOCIO_OBJETIVO = "AV"
 
@@ -102,26 +102,41 @@ def normalizar_folio(folio_raw):
 
 def parsear_pago(val):
     """
-    Interpreta el valor bruto de 'Fecha Pago Fct.' y retorna (estado, fecha_iso, nota).
+    Interpreta el valor bruto de 'Fecha Pago Fct.' y retorna
+    (estado, fecha_iso_referencia, nota, extra).
 
     Estados posibles:
-        'PAGADA'          — fecha de pago única válida
-        'PAGADA_ABONOS'   — varias fechas separadas por '/' (ej. '02-07-2026/04-07-2026')
-        'PARCIAL'         — pago parcial sin monto conocido
+        'PAGADA'          — fecha de pago única válida: 1 evento monetario calculable
+        'PAGADA_ABONOS'   — varias fechas separadas por '/' (ej. '02-07-2026/04-07-2026'):
+                            monto por abono desconocido → comision_calculable = False
+        'PARCIAL'         — pago parcial sin monto conocido → comision_calculable = False
         'PENDIENTE'       — sin pago (None, 'PENDIENTE', vacío)
+
+    extra = {
+        'fechas_abono':         list[str],  # fechas ISO parseadas (PAGADA_ABONOS)
+        'n_abonos':             int,        # cantidad de fechas encontradas
+        'data_quality_warning': bool,       # True si hay problema en los datos
+        'dqw_motivo':           str|None,   # descripción del problema detectado
+    }
     """
+    _extra_vacio = {
+        'fechas_abono': [], 'n_abonos': 0,
+        'data_quality_warning': False, 'dqw_motivo': None,
+    }
+
     if val is None:
-        return ("PENDIENTE", None, "")
+        return ("PENDIENTE", None, "", _extra_vacio)
 
     # Objeto fecha nativo de openpyxl
     if hasattr(val, "strftime"):
-        return ("PAGADA", val.strftime("%Y-%m-%d"), "")
+        fecha = val.strftime("%Y-%m-%d")
+        return ("PAGADA", fecha, "", {**_extra_vacio, 'fechas_abono': [fecha], 'n_abonos': 1})
 
     s = str(val).strip()
     su = s.upper()
 
     if not s or su.startswith("PENDIENTE"):
-        return ("PENDIENTE", None, "")
+        return ("PENDIENTE", None, "", _extra_vacio)
 
     if su.startswith("PARCIAL"):
         partes = s.split()
@@ -133,10 +148,12 @@ def parsear_pago(val):
                     break
                 except ValueError:
                     pass
-        return ("PARCIAL", fecha, f"Pago parcial registrado: {s}")
+        return ("PARCIAL", fecha, f"Pago parcial registrado: {s}", _extra_vacio)
 
     if "/" in s:
-        # ¿Múltiples fechas? ej. '02-07-2026/04-07-2026'
+        # Múltiples fechas separadas por '/' — ej. '02-07-2026/04-07-2026'
+        # REGLA: el '/' solo separa fechas completas. Partes que no parseen como
+        # fecha (ej. sufijos numéricos) se ignoran silenciosamente.
         fechas = []
         for parte in s.split("/"):
             parte = parte.strip()
@@ -147,18 +164,31 @@ def parsear_pago(val):
                 except ValueError:
                     pass
         if fechas:
-            return ("PAGADA_ABONOS", fechas[-1], f"Abonos: {s} — monto total consolidado en última fecha")
-        # No pudo parsear — tratar como PENDIENTE
-        return ("PENDIENTE", None, f"Formato no reconocido: {s}")
+            # DATA_QUALITY_WARNING: fechas fuera de orden cronológico
+            dqw = False
+            dqw_motivo = None
+            if fechas != sorted(fechas):
+                dqw = True
+                dqw_motivo = f"Fechas de abono fuera de orden cronológico: {s}"
+            extra = {
+                'fechas_abono': fechas,
+                'n_abonos': len(fechas),
+                'data_quality_warning': dqw,
+                'dqw_motivo': dqw_motivo,
+            }
+            return ("PAGADA_ABONOS", fechas[-1], f"Abonos detectados: {s}", extra)
+        # No pudo parsear ninguna parte como fecha — tratar como PENDIENTE
+        return ("PENDIENTE", None, f"Formato no reconocido: {s}", _extra_vacio)
 
     # Intentar como fecha única en varios formatos
     for fmt in ("%d-%m-%Y", "%Y-%m-%d", "%d/%m/%Y"):
         try:
-            return ("PAGADA", datetime.strptime(s, fmt).strftime("%Y-%m-%d"), "")
+            fecha = datetime.strptime(s, fmt).strftime("%Y-%m-%d")
+            return ("PAGADA", fecha, "", {**_extra_vacio, 'fechas_abono': [fecha], 'n_abonos': 1})
         except ValueError:
             pass
 
-    return ("PENDIENTE", None, f"Valor no reconocido: {s}")
+    return ("PENDIENTE", None, f"Valor no reconocido: {s}", _extra_vacio)
 
 
 # ---- Detección de archivo --------------------------------------------------
@@ -255,7 +285,7 @@ def cargar_libro_ventas(ruta):
 
         if folio_str not in docs:
             # Primera fila de este folio — establece estado y datos maestros
-            estado, fecha_pago, nota = parsear_pago(val_pago)
+            estado, fecha_pago, nota, extra = parsear_pago(val_pago)
             docs[folio_str] = {
                 "folio":         folio_str,
                 "tipo_doc":      tipo_doc,
@@ -268,18 +298,20 @@ def cargar_libro_ventas(ruta):
                 "fecha_pago":    fecha_pago,
                 "nota":          nota,
                 "val_pago_raw":  str(val_pago) if val_pago is not None else "",
+                "extra":         extra,
             }
         else:
             # Fila adicional del mismo folio — acumular Total
             docs[folio_str]["total"] += total_fila
             # Si el estado inicial era PENDIENTE pero esta fila trae fecha_pago, actualizar
             if docs[folio_str]["estado"] == "PENDIENTE" and val_pago is not None:
-                nuevo_estado, nueva_fecha, nueva_nota = parsear_pago(val_pago)
+                nuevo_estado, nueva_fecha, nueva_nota, nuevo_extra = parsear_pago(val_pago)
                 if nuevo_estado != "PENDIENTE":
                     docs[folio_str]["estado"]     = nuevo_estado
                     docs[folio_str]["fecha_pago"] = nueva_fecha
                     docs[folio_str]["nota"]       = nueva_nota
                     docs[folio_str]["val_pago_raw"] = str(val_pago)
+                    docs[folio_str]["extra"]       = nuevo_extra
 
     return docs
 
@@ -382,7 +414,9 @@ def generar_cobranzas_cl(inbox_dir, output_path):
         }
 
     # --- Construir cobranzas ------------------------------------------------
-    cobranzas = []
+    cobranzas = []                   # PAGADA — 1 fecha, comision_calculable=True
+    abonos_pendientes_detalle = []   # PAGADA_ABONOS — N fechas, monto/abono desconocido
+    data_quality_warnings = []       # PAGADA_ABONOS con problemas de calidad de dato
     pendientes = []
     parciales  = []
     advertencias = []
@@ -421,8 +455,38 @@ def generar_cobranzas_cl(inbox_dir, output_path):
             )
 
         estado = doc["estado"]
+        extra = doc.get("extra", {})
 
-        if estado in ("PAGADA", "PAGADA_ABONOS"):
+        if estado == "PAGADA":
+            # ── Pago total con 1 fecha → comision_calculable = True ──────────
+            if en_ppto:
+                resumen_vendedor[vend]["pagadas"] += 1
+                resumen_vendedor[vend]["monto_cobrado"] += doc["total"]
+            else:
+                resumen_otros["pagadas"] += 1
+                resumen_otros["monto_cobrado"] += doc["total"]
+                resumen_otros["detalle"].append({
+                    "folio": folio_str, "vendedor": vend,
+                    "fecha_pago": doc["fecha_pago"], "monto": int(round(doc["total"]))
+                })
+            entrada = {
+                "factura":               f"REAL-CL-{folio_str}",
+                "folio":                 folio_str,
+                "fecha_pago":            doc["fecha_pago"],
+                "monto":                 int(round(doc["total"])),
+                "tipo":                  "PAGADA",
+                "vendedor":              vend,
+                "en_universo_sic":       en_ppto,
+                "categoria_sic":         cat_sic,
+                "comision_calculable":   True,
+                "estado_cobranza":       "PAGADA",
+                "monto_cobrado_confirmado": int(round(doc["total"])),
+            }
+            cobranzas.append(entrada)
+
+        elif estado == "PAGADA_ABONOS":
+            # ── N fechas, monto/abono desconocido → comision_calculable = False
+            # Contar como cobrado documentalmente (para resúmenes)
             if en_ppto:
                 resumen_vendedor[vend]["pagadas"] += 1
                 resumen_vendedor[vend]["monto_cobrado"] += doc["total"]
@@ -434,20 +498,36 @@ def generar_cobranzas_cl(inbox_dir, output_path):
                     "fecha_pago": doc["fecha_pago"], "monto": int(round(doc["total"]))
                 })
 
-            entrada = {
-                "factura":       f"REAL-CL-{folio_str}",
-                "folio":         folio_str,
-                "fecha_pago":    doc["fecha_pago"],
-                "monto":         int(round(doc["total"])),
-                "tipo":          estado,
-                "vendedor":      vend,
-                "en_universo_sic": en_ppto,
-                "categoria_sic": cat_sic,
-            }
-            if doc["nota"]:
-                entrada["nota"] = doc["nota"]
+            fechas_abono = extra.get("fechas_abono", [])
+            dqw          = extra.get("data_quality_warning", False)
+            dqw_motivo   = extra.get("dqw_motivo") or ""
 
-            cobranzas.append(entrada)
+            # Condición adicional de DQW: monto = 0 con múltiples fechas
+            if doc["total"] == 0 and len(fechas_abono) > 1:
+                dqw = True
+                motivo_extra = "Monto = 0 con múltiples fechas de abono registradas"
+                dqw_motivo = (dqw_motivo + "; " + motivo_extra).strip("; ") if dqw_motivo else motivo_extra
+
+            registro = {
+                "factura":               f"REAL-CL-{folio_str}",
+                "folio":                 folio_str,
+                "vendedor":              vend,
+                "razon_social":          doc["razon_social"],
+                "en_universo_sic":       en_ppto,
+                "categoria_sic":         cat_sic,
+                "estado_cobranza":       "PAGADA",
+                "monto_total_confirmado": int(round(doc["total"])),
+                "comision_calculable":   False,
+                "razon_no_calculable":   "DATA_QUALITY_WARNING" if dqw else "MONTO_POR_ABONO_NO_DISPONIBLE_EN_FUENTE",
+                "fechas_abono":          fechas_abono,
+                "n_abonos":              len(fechas_abono),
+                "val_raw":               doc["val_pago_raw"],
+            }
+            if dqw:
+                registro["dqw_motivo"] = dqw_motivo
+                data_quality_warnings.append(registro)
+            else:
+                abonos_pendientes_detalle.append(registro)
 
         elif estado == "PARCIAL":
             if en_ppto:
@@ -472,8 +552,10 @@ def generar_cobranzas_cl(inbox_dir, output_path):
             pendientes.append(folio_str)
 
     # --- Totales ------------------------------------------------------------
-    total_monto_cobrado = sum(c["monto"] for c in cobranzas)
-    total_monto_facturado = sum(d["total"] for d in docs_f2.values())
+    total_monto_cobrado_calculable  = sum(c["monto"] for c in cobranzas)
+    total_monto_abonos_pendiente    = sum(r["monto_total_confirmado"] for r in abonos_pendientes_detalle)
+    total_monto_cobrado_documentado = total_monto_cobrado_calculable + total_monto_abonos_pendiente
+    total_monto_facturado           = sum(d["total"] for d in docs_f2.values())
 
     # Obtener lista del universo presupuestado para el JSON
     universo_presupuestado = []
@@ -494,19 +576,28 @@ def generar_cobranzas_cl(inbox_dir, output_path):
                 "La lista se actualiza automáticamente cuando cambia el Libro Base."
             ),
         },
-        "total_documentos_f2":    len(docs_f2),
-        "total_pagados":          len(cobranzas),
-        "total_pendientes":       len(pendientes),
-        "total_parciales":        len(parciales),
-        "total_monto_facturado":  int(round(total_monto_facturado)),
-        "total_monto_cobrado":    total_monto_cobrado,
-        "total_monto_pendiente":  int(round(total_monto_facturado - total_monto_cobrado)),
-        "cobranzas":              cobranzas,
-        "folios_pendientes":      pendientes,
-        "folios_parciales":       parciales,
-        "resumen_por_vendedor":   resumen_vendedor,
-        "resumen_otros":          resumen_otros,
-        "advertencias":           advertencias,
+        "total_documentos_f2":          len(docs_f2),
+        # Conteos separados por tipo de cobranza
+        "total_pagados_calculables":    len(cobranzas),
+        "total_abonos_pendientes":      len(abonos_pendientes_detalle),
+        "total_data_quality_warnings":  len(data_quality_warnings),
+        "total_pendientes":             len(pendientes),
+        "total_parciales":              len(parciales),
+        # Montos separados
+        "total_monto_facturado":        int(round(total_monto_facturado)),
+        "total_monto_cobrado_calculable":  total_monto_cobrado_calculable,
+        "total_monto_abonos_pendiente": total_monto_abonos_pendiente,
+        "total_monto_cobrado_documentado": total_monto_cobrado_documentado,
+        "total_monto_pendiente":        int(round(total_monto_facturado - total_monto_cobrado_documentado)),
+        # Arrays de documentos
+        "cobranzas":                    cobranzas,
+        "abonos_pendientes_detalle":    abonos_pendientes_detalle,
+        "data_quality_warnings":        data_quality_warnings,
+        "folios_pendientes":            pendientes,
+        "folios_parciales":             parciales,
+        "resumen_por_vendedor":         resumen_vendedor,
+        "resumen_otros":                resumen_otros,
+        "advertencias":                 advertencias,
     }
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -516,7 +607,7 @@ def generar_cobranzas_cl(inbox_dir, output_path):
 
     log.info(
         "reconciliar_ventas_cl: %d cobranzas generadas → %s (cobrado: %s CLP)",
-        len(cobranzas), output_path, f"{total_monto_cobrado:,.0f}"
+        len(cobranzas), output_path, f"{total_monto_cobrado_calculable:,.0f}"
     )
     return True
 
@@ -576,12 +667,21 @@ if __name__ == "__main__":
     print(f"\nÍTEM 3  Documentos no reconciliados:")
     print(f"        {len([a for a in resultado['advertencias'] if 'discrepancia' in a.lower() or 'F1' in a])} con diferencia de monto F1 vs F2")
 
-    print(f"\nÍTEM 4  Documentos con Fecha Pago Fct. válida (PAGADA / PAGADA_ABONOS):")
-    print(f"        {resultado['total_pagados']} documentos")
+    print(f"\nÍTEM 4  Documentos PAGADA calculables (comision_calculable=True):")
+    print(f"        {resultado['total_pagados_calculables']} documentos")
     for c in resultado['cobranzas']:
-        nota = f"  — {c['nota']}" if c.get('nota') else ""
-        print(f"        Folio {c['folio']:>4} | {c['tipo']:<15} | {c['fecha_pago']} | "
-              f"CLP {c['monto']:>9,.0f}{nota}")
+        print(f"        Folio {c['folio']:>4} | PAGADA          | {c['fecha_pago']} | "
+              f"CLP {c['monto']:>9,.0f}")
+    print(f"\nÍTEM 4b Documentos PAGADA_ABONOS (comision_calculable=False):")
+    print(f"        {resultado['total_abonos_pendientes']} documentos — monto por abono no disponible")
+    for a in resultado.get('abonos_pendientes_detalle', []):
+        fechas_str = " / ".join(a['fechas_abono'])
+        print(f"        Folio {a['folio']:>4} | PAGADA_ABONOS   | fechas: {fechas_str} | "
+              f"total CLP {a['monto_total_confirmado']:>9,.0f}")
+    print(f"\nÍTEM 4c DATA_QUALITY_WARNING:")
+    print(f"        {resultado['total_data_quality_warnings']} documentos — excluidos de cálculo")
+    for d in resultado.get('data_quality_warnings', []):
+        print(f"        Folio {d['folio']:>4} | DQW | {d.get('dqw_motivo', '')}")
 
     print(f"\nÍTEM 5  Documentos PENDIENTES:")
     print(f"        {resultado['total_pendientes']} pendientes, {resultado['total_parciales']} parciales")
@@ -589,10 +689,16 @@ if __name__ == "__main__":
     print(f"\nÍTEM 6  Monto facturado total (F2, sin doble conteo):")
     print(f"        CLP {resultado['total_monto_facturado']:>12,.0f}")
 
-    print(f"\nÍTEM 7  Monto cobrado según documentos con Fecha Pago Fct.:")
-    print(f"        CLP {resultado['total_monto_cobrado']:>12,.0f}")
+    print(f"\nÍTEM 7  Monto cobrado calculable (PAGADA 1 fecha, comision_calculable=True):")
+    print(f"        CLP {resultado['total_monto_cobrado_calculable']:>12,.0f}")
 
-    print(f"\nÍTEM 8  Monto pendiente de cobro:")
+    print(f"        Monto PAGADA_ABONOS (documentado, comisión pendiente de detalle):")
+    print(f"        CLP {resultado['total_monto_abonos_pendiente']:>12,.0f}")
+
+    print(f"        Monto cobrado documentado total (calculable + abonos pendientes):")
+    print(f"        CLP {resultado['total_monto_cobrado_documentado']:>12,.0f}")
+
+    print(f"\nÍTEM 8  Monto pendiente de cobro (facturado - cobrado documentado):")
     print(f"        CLP {resultado['total_monto_pendiente']:>12,.0f}")
 
     print(f"\nÍTEM 9  Resultado por vendedor:")
@@ -616,11 +722,16 @@ if __name__ == "__main__":
         print(f"        Sin diferencias detectadas")
 
     print(f"\n{'═'*70}")
-    print(f"TOTAL COBRADO DEMOSTRABLE: CLP {resultado['total_monto_cobrado']:>12,.0f}")
-    print(f"Verificación: suma de PAGADAS con monto > 0")
+    print(f"TOTAL COBRADO CALCULABLE:   CLP {resultado['total_monto_cobrado_calculable']:>12,.0f}")
+    print(f"  ({resultado['total_pagados_calculables']} PAGADA con comision_calculable=True)")
+    print(f"TOTAL ABONOS PENDIENTES:    CLP {resultado['total_monto_abonos_pendiente']:>12,.0f}")
+    print(f"  ({resultado['total_abonos_pendientes']} PAGADA_ABONOS sin detalle de monto/abono)")
+    print(f"DATA QUALITY WARNINGS:          {resultado['total_data_quality_warnings']} documentos excluidos")
+    print(f"TOTAL COBRADO DOCUMENTADO:  CLP {resultado['total_monto_cobrado_documentado']:>12,.0f}")
+    print(f"  (calculable + abonos pendientes, sin DQW)")
+    print(f"{'─'*70}")
+    print(f"Verificación suma PAGADA calculables:")
     pagadas_con_monto = [c for c in resultado['cobranzas'] if c['monto'] > 0]
-    suma = sum(c['monto'] for c in pagadas_con_monto)
-    partes_suma = " + ".join("Folio %s (%s)" % (c["folio"], f"{c['monto']:,.0f}") for c in pagadas_con_monto)
-    print(f"  = {partes_suma}")
-    print(f"  = CLP {suma:,.0f}")
+    suma_calc = sum(c['monto'] for c in pagadas_con_monto)
+    print(f"  Suma de {len(pagadas_con_monto)} PAGADA con monto > 0 = CLP {suma_calc:,.0f}")
     print(f"{'═'*70}\n")

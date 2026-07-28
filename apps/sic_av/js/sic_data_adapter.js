@@ -480,7 +480,30 @@
     } else {
       advertencias.push({
         tipo: "cobranza_fuente_conectada",
-        detalle: "Fuente real de cobranza conectada: " + cobranzas.length + " registros de cobro disponibles (CHANGE REQUEST SIC-AV v1.7). La comision LIBERADA se calcula sobre cobros reales con Fecha Pago Fct. registrada."
+        detalle: "Fuente real de cobranza conectada: " + cobranzas.length + " registros PAGADA con comision_calculable=true (CHANGE REQUEST SIC-AV v1.7 Fase 2). La comision LIBERADA se calcula sobre cobros reales con Fecha Pago Fct. registrada."
+      });
+    }
+
+    // CHANGE REQUEST v1.7 Fase 3 (FACTURA → N ABONOS): facturas con múltiples
+    // fechas de abono cuyo monto individual no está disponible en la fuente.
+    // Estas facturas son documentalmente PAGADAS pero tienen comision_calculable=false.
+    // No entran en ctx.cobranzas — sin comisión liberada hasta integrar el detalle.
+    var abonosPendientesDetalle = (fuentes.cobranzas_raw && fuentes.cobranzas_raw.abonos_pendientes_detalle) || [];
+    if (abonosPendientesDetalle.length > 0) {
+      advertencias.push({
+        tipo: "abonos_pendientes_detalle",
+        detalle: abonosPendientesDetalle.length + " factura(s) pagada(s) mediante multiples abonos sin detalle de monto individual disponible -- comision_calculable=false. Sin comision liberada hasta integrar fuente de pagos. Folios: "
+          + abonosPendientesDetalle.map(function (a) { return a.folio; }).join(", ")
+      });
+    }
+    // DATA_QUALITY_WARNING: facturas excluidas por problemas de calidad de dato
+    // (fechas no cronológicas, monto=0 con múltiples fechas, etc.)
+    var dqwEntradas = (fuentes.cobranzas_raw && fuentes.cobranzas_raw.data_quality_warnings) || [];
+    if (dqwEntradas.length > 0) {
+      advertencias.push({
+        tipo: "data_quality_warning_cobranza",
+        detalle: dqwEntradas.length + " factura(s) excluida(s) de calculo por DATA_QUALITY_WARNING -- requieren validacion manual antes de integrar. Folios: "
+          + dqwEntradas.map(function (a) { return a.folio + " (" + (a.dqw_motivo || "") + ")"; }).join("; ")
       });
     }
     // Validar solo cobranzas dentro de la ventana del ciclo actual para
@@ -490,6 +513,44 @@
       return c.fecha_pago >= cicloInfo.inicio && c.fecha_pago <= cicloInfo.cierre;
     });
     SICAdapter._validarCobranzas(cobranzasEnVentana, ventas, advertencias);
+
+    // CHANGE REQUEST v1.7 Fase 3 (FACTURA → N ABONOS): separar monto cobrado
+    // confirmado (financieramente cancelado) de monto cobrado con comision calculable.
+    //
+    // monto_cobrado_comision_calculable = suma de cobranzas[] (PAGADA con fecha+monto real,
+    //   entra al calculo de comision via sic_core.js).
+    // monto_cobrado_pendiente_detalle = suma de abonos_pendientes_detalle[] (PAGADA
+    //   via multiples abonos, monto individual por abono desconocido, comision_calculable=false).
+    // monto_cobrado_confirmado = suma de ambos (total financieramente cobrado y cancelado).
+    //
+    // Estos montos son GLOBALES (todos los vendedores, todos los ciclos del archivo
+    // cobranzas_cl.json). El filtro por vendedor y ciclo ocurre en la UI usando
+    // abonos_pendientes_detalle[] y abonos_por_factura{} expuestos en el ctx.
+    //
+    // REGLA CRÍTICA: no subestimar el KPI "monto cobrado" por la exclusion de
+    // PAGADA_ABONOS de ctx.cobranzas[] (ver CHANGE REQUEST v1.7 Fase 3).
+    var _montoCalculable = cobranzas.reduce(function (s, c) { return s + (Number(c.monto) || 0); }, 0);
+    var _montoPendienteDetalle = abonosPendientesDetalle.reduce(function (s, a) { return s + (Number(a.monto_total_confirmado) || 0); }, 0);
+
+    // Mapa factura-clave → registro de abono pendiente para que la UI identifique
+    // facturas PAGADA_ABONOS en la tabla de detalle (estado=PAGADA, saldo_financiero=0,
+    // comision=pendiente de detalle) sin re-parsear el JSON completo.
+    // Clave: formato TX_CL "REAL-CL-435.0" (mismo que ctx.ventas[].factura).
+    //
+    // Cada entry del mapa incluye _vendedor_clave (clave normalizada SIC) además del
+    // campo original a.vendedor (nombre canónico en mayúsculas, ej. "FRANCISCO VELASQUEZ").
+    // Esto permite que la UI filtre por VENDEDOR_ACTUAL (clave) sin requerir un mapa
+    // externo de nombre→clave ni depender de la coincidencia exacta del nombre.
+    var _abonosPorFactura = {};
+    abonosPendientesDetalle.forEach(function (a) {
+      var pref = "REAL-" + pais + "-";
+      var fN = parseInt(String(a.folio), 10);
+      var fKey = isFinite(fN) ? (pref + fN + ".0") : (pref + a.folio);
+      var _vNorm = SICAdapter.normalizarVendedor(pais, a.vendedor || "");
+      var _entry = JSON.parse(JSON.stringify(a)); // copia para no mutar el array original
+      _entry._vendedor_clave = _vNorm.clave || a.vendedor;
+      _abonosPorFactura[fKey] = _entry;
+    });
 
     // -- Vendedores semilla: incluir en el selector a vendedores que tienen
     // presupuesto pero no transacciones en este ciclo/mes (ej. KAMs recién
@@ -587,6 +648,26 @@
       // Estas transacciones NO entran en ventas[] individuales ni en iec[] ni en presupuestos[].
       // Se exponen aquí para trazabilidad y validación (validación 7 del CR).
       otros_ventas: otrosVentas,
+      // CHANGE REQUEST v1.7 Fase 3 (FACTURA → N ABONOS):
+      // abonos_pendientes_detalle: facturas PAGADA_ABONOS sin monto/abono disponible.
+      // data_quality_warnings: facturas excluidas por problemas de calidad de dato.
+      // Ambas se exponen para trazabilidad; NO entran en ctx.cobranzas.
+      abonos_pendientes_detalle: abonosPendientesDetalle,
+      data_quality_warnings_cobranza: dqwEntradas,
+      // Agregados de cobranza con separación calculable / confirmado.
+      // Permite a la UI mostrar monto_cobrado_confirmado sin subestimar por exclusión de
+      // PAGADA_ABONOS de ctx.cobranzas[] (ver CHANGE REQUEST v1.7 Fase 3).
+      cobranza_stats: {
+        monto_cobrado_confirmado:         _montoCalculable + _montoPendienteDetalle,
+        monto_cobrado_comision_calculable: _montoCalculable,
+        monto_cobrado_pendiente_detalle:   _montoPendienteDetalle,
+        n_pagada_calculable:               cobranzas.length,
+        n_pagada_abonos_pendiente:         abonosPendientesDetalle.length,
+        n_data_quality_warnings:           dqwEntradas.length
+      },
+      // Lookup folio-clave → registro de abono, para que renderTablaFacturas()
+      // identifique PAGADA_ABONOS y muestre estado/saldo correctos en la UI.
+      abonos_por_factura: _abonosPorFactura,
       otros_resumen: {
         universo_activo:        universoActivo,
         count_periodo:          otrosCountPeriodo,

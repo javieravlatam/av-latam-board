@@ -1,8 +1,8 @@
 {
-  "schema_version": "cobranzas_cl_v1",
+  "schema_version": "cobranzas_cl_v2",
   "fuente_f2": "Libro de Ventas 20-07-2026.xlsx",
   "fuente_f1": "Ventas Julio GRUPO AV LATAM.xlsx",
-  "fecha_proceso": "2026-07-23",
+  "fecha_proceso": "2026-07-27",
   "universo_sic_presupuesto": {
     "fuente": "LIBRO_BASE",
     "vendedores_presupuestados": [
@@ -16,11 +16,15 @@
     "nota": "REGLA: Solo aparecen individualmente en SIC los RTC con presupuesto vigente. Las operaciones de personas sin presupuesto se agrupan en OTROS. La lista se actualiza automáticamente cuando cambia el Libro Base."
   },
   "total_documentos_f2": 487,
-  "total_pagados": 285,
+  "total_pagados_calculables": 274,
+  "total_abonos_pendientes": 9,
+  "total_data_quality_warnings": 2,
   "total_pendientes": 200,
   "total_parciales": 2,
   "total_monto_facturado": 428228304,
-  "total_monto_cobrado": 130309303,
+  "total_monto_cobrado_calculable": 120330743,
+  "total_monto_abonos_pendiente": 9978560,
+  "total_monto_cobrado_documentado": 130309303,
   "total_monto_pendiente": 297919001,
   "cobranzas": [
     {
@@ -31,7 +35,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 35000
     },
     {
       "factura": "REAL-CL-128",
@@ -41,7 +48,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 5943000
     },
     {
       "factura": "REAL-CL-166",
@@ -51,7 +61,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 1056000
     },
     {
       "factura": "REAL-CL-190",
@@ -61,7 +74,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 2125000
     },
     {
       "factura": "REAL-CL-197",
@@ -71,7 +87,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 1010000
     },
     {
       "factura": "REAL-CL-198",
@@ -81,7 +100,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-200",
@@ -91,7 +113,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-210",
@@ -101,7 +126,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 2125000
     },
     {
       "factura": "REAL-CL-252",
@@ -111,7 +139,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 1000000
     },
     {
       "factura": "REAL-CL-395",
@@ -121,7 +152,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 1300000
     },
     {
       "factura": "REAL-CL-396",
@@ -131,7 +165,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 35000
     },
     {
       "factura": "REAL-CL-397",
@@ -141,7 +178,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 1250000
     },
     {
       "factura": "REAL-CL-398",
@@ -151,7 +191,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 160000
     },
     {
       "factura": "REAL-CL-399",
@@ -161,7 +204,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 600000
     },
     {
       "factura": "REAL-CL-400",
@@ -171,7 +217,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 75900
     },
     {
       "factura": "REAL-CL-402",
@@ -181,7 +230,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-403",
@@ -191,7 +243,10 @@
       "tipo": "PAGADA",
       "vendedor": "IVAN VEVERKA",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 2064000
     },
     {
       "factura": "REAL-CL-404",
@@ -201,7 +256,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-405",
@@ -211,7 +269,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-406",
@@ -221,7 +282,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-407",
@@ -231,7 +295,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-408",
@@ -241,7 +308,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-409",
@@ -251,7 +321,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-410",
@@ -261,7 +334,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 130000
     },
     {
       "factura": "REAL-CL-411",
@@ -271,7 +347,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 562350
     },
     {
       "factura": "REAL-CL-412",
@@ -281,7 +360,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 400000
     },
     {
       "factura": "REAL-CL-413",
@@ -291,7 +373,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-415",
@@ -301,7 +386,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-417",
@@ -311,7 +399,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-418",
@@ -321,7 +412,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-419",
@@ -331,7 +425,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-420",
@@ -341,7 +438,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-421",
@@ -351,7 +451,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-422",
@@ -361,7 +464,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-423",
@@ -371,7 +477,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-424",
@@ -381,7 +490,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-425",
@@ -391,7 +503,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-426",
@@ -401,7 +516,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 48150
     },
     {
       "factura": "REAL-CL-427",
@@ -411,7 +529,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 260000
     },
     {
       "factura": "REAL-CL-431",
@@ -421,7 +542,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 30935
     },
     {
       "factura": "REAL-CL-432",
@@ -431,7 +555,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 611520
     },
     {
       "factura": "REAL-CL-433",
@@ -441,7 +568,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 1257795
     },
     {
       "factura": "REAL-CL-434",
@@ -451,18 +581,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
-    },
-    {
-      "factura": "REAL-CL-435",
-      "folio": "435",
-      "fecha_pago": "2026-01-31",
-      "monto": 555660,
-      "tipo": "PAGADA_ABONOS",
-      "vendedor": "RODRIGO ENCINA",
-      "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA",
-      "nota": "Abonos: 17-01-2026/31-01-2026 — monto total consolidado en última fecha"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-436",
@@ -472,7 +594,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-437",
@@ -482,7 +607,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-438",
@@ -492,7 +620,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-439",
@@ -502,7 +633,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-440",
@@ -512,7 +646,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-441",
@@ -522,7 +659,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-442",
@@ -532,7 +672,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-443",
@@ -542,7 +685,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-444",
@@ -552,7 +698,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 2400000
     },
     {
       "factura": "REAL-CL-445",
@@ -562,7 +711,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 310000
     },
     {
       "factura": "REAL-CL-446",
@@ -572,7 +724,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 105000
     },
     {
       "factura": "REAL-CL-447",
@@ -582,7 +737,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 166395
     },
     {
       "factura": "REAL-CL-448",
@@ -592,7 +750,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-449",
@@ -602,7 +763,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-450",
@@ -612,7 +776,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-451",
@@ -622,7 +789,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 1673000
     },
     {
       "factura": "REAL-CL-452",
@@ -632,7 +802,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 170000
     },
     {
       "factura": "REAL-CL-454",
@@ -642,7 +815,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 56000
     },
     {
       "factura": "REAL-CL-455",
@@ -652,7 +828,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 520800
     },
     {
       "factura": "REAL-CL-456",
@@ -662,7 +841,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 371789
     },
     {
       "factura": "REAL-CL-457",
@@ -672,7 +854,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-458",
@@ -682,7 +867,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-459",
@@ -692,7 +880,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-460",
@@ -702,7 +893,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-462",
@@ -712,7 +906,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-463",
@@ -722,7 +919,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-464",
@@ -732,7 +932,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-465",
@@ -742,7 +945,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 520000
     },
     {
       "factura": "REAL-CL-466",
@@ -752,7 +958,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 235080
     },
     {
       "factura": "REAL-CL-467",
@@ -762,7 +971,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-468",
@@ -772,7 +984,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-469",
@@ -782,7 +997,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 2152000
     },
     {
       "factura": "REAL-CL-470",
@@ -792,18 +1010,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
-    },
-    {
-      "factura": "REAL-CL-471",
-      "folio": "471",
-      "fecha_pago": "2026-02-02",
-      "monto": 478600,
-      "tipo": "PAGADA_ABONOS",
-      "vendedor": "RODRIGO ENCINA",
-      "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA",
-      "nota": "Abonos: 30-01-2026/02-02-2026 — monto total consolidado en última fecha"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 483244
     },
     {
       "factura": "REAL-CL-472",
@@ -813,7 +1023,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 1095000
     },
     {
       "factura": "REAL-CL-473",
@@ -823,7 +1036,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 69040
     },
     {
       "factura": "REAL-CL-474",
@@ -833,7 +1049,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 43000
     },
     {
       "factura": "REAL-CL-475",
@@ -843,7 +1062,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 379192
     },
     {
       "factura": "REAL-CL-476",
@@ -853,7 +1075,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 450000
     },
     {
       "factura": "REAL-CL-477",
@@ -863,7 +1088,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 1252890
     },
     {
       "factura": "REAL-CL-478",
@@ -873,7 +1101,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 150000
     },
     {
       "factura": "REAL-CL-481",
@@ -883,7 +1114,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-483",
@@ -893,7 +1127,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 598000
     },
     {
       "factura": "REAL-CL-484",
@@ -903,7 +1140,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 137500
     },
     {
       "factura": "REAL-CL-485",
@@ -913,7 +1153,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-486",
@@ -923,7 +1166,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 2600000
     },
     {
       "factura": "REAL-CL-487",
@@ -933,7 +1179,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 278900
     },
     {
       "factura": "REAL-CL-488",
@@ -943,7 +1192,10 @@
       "tipo": "PAGADA",
       "vendedor": "RAYEN BERNAZAR",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-489",
@@ -953,7 +1205,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-490",
@@ -963,7 +1218,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-491",
@@ -973,7 +1231,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-492",
@@ -983,7 +1244,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-493",
@@ -993,7 +1257,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-495",
@@ -1003,18 +1270,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
-    },
-    {
-      "factura": "REAL-CL-496",
-      "folio": "496",
-      "fecha_pago": "2026-02-23",
-      "monto": 840000,
-      "tipo": "PAGADA_ABONOS",
-      "vendedor": "IVAN VEVERKA",
-      "en_universo_sic": false,
-      "categoria_sic": "OTROS",
-      "nota": "Abonos: 20-02-2026/23-02-2026 — monto total consolidado en última fecha"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 2484000
     },
     {
       "factura": "REAL-CL-497",
@@ -1024,7 +1283,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-498",
@@ -1034,7 +1296,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-499",
@@ -1044,7 +1309,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-500",
@@ -1054,7 +1322,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 858000
     },
     {
       "factura": "REAL-CL-501",
@@ -1064,7 +1335,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 375000
     },
     {
       "factura": "REAL-CL-502",
@@ -1074,7 +1348,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 300000
     },
     {
       "factura": "REAL-CL-503",
@@ -1084,7 +1361,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-504",
@@ -1094,7 +1374,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 42713
     },
     {
       "factura": "REAL-CL-505",
@@ -1104,7 +1387,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-506",
@@ -1114,7 +1400,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-507",
@@ -1124,7 +1413,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 616363
     },
     {
       "factura": "REAL-CL-508",
@@ -1134,7 +1426,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 12800
     },
     {
       "factura": "REAL-CL-509",
@@ -1144,7 +1439,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 116500
     },
     {
       "factura": "REAL-CL-511",
@@ -1154,7 +1452,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-512",
@@ -1164,7 +1465,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 800000
     },
     {
       "factura": "REAL-CL-513",
@@ -1174,7 +1478,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 525000
     },
     {
       "factura": "REAL-CL-514",
@@ -1184,7 +1491,10 @@
       "tipo": "PAGADA",
       "vendedor": "IVAN VEVERKA",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-515",
@@ -1194,7 +1504,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 322500
     },
     {
       "factura": "REAL-CL-516",
@@ -1204,7 +1517,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-517",
@@ -1214,7 +1530,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 900000
     },
     {
       "factura": "REAL-CL-519",
@@ -1224,7 +1543,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-520",
@@ -1234,7 +1556,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-521",
@@ -1244,7 +1569,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 368000
     },
     {
       "factura": "REAL-CL-522",
@@ -1254,7 +1582,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 310500
     },
     {
       "factura": "REAL-CL-523",
@@ -1264,7 +1595,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 478470
     },
     {
       "factura": "REAL-CL-524",
@@ -1274,18 +1608,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
-    },
-    {
-      "factura": "REAL-CL-525",
-      "folio": "525",
-      "fecha_pago": "2026-02-24",
-      "monto": 0,
-      "tipo": "PAGADA_ABONOS",
-      "vendedor": "FRANCISCO VELASQUEZ",
-      "en_universo_sic": true,
       "categoria_sic": "FRANCISCO VELÁSQUEZ",
-      "nota": "Abonos: 10-03-2026/24-04-2026/24-02-2026 — monto total consolidado en última fecha"
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 37500
     },
     {
       "factura": "REAL-CL-526",
@@ -1295,7 +1621,10 @@
       "tipo": "PAGADA",
       "vendedor": "IVAN VEVERKA",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 104000
     },
     {
       "factura": "REAL-CL-527",
@@ -1305,7 +1634,10 @@
       "tipo": "PAGADA",
       "vendedor": "IVAN VEVERKA",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-528",
@@ -1315,7 +1647,10 @@
       "tipo": "PAGADA",
       "vendedor": "RAYEN BERNAZAR",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-529",
@@ -1325,7 +1660,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 765600
     },
     {
       "factura": "REAL-CL-530",
@@ -1335,7 +1673,10 @@
       "tipo": "PAGADA",
       "vendedor": "IVAN VEVERKA",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-533",
@@ -1345,7 +1686,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 200000
     },
     {
       "factura": "REAL-CL-534",
@@ -1355,7 +1699,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-535",
@@ -1365,7 +1712,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 474316
     },
     {
       "factura": "REAL-CL-536",
@@ -1375,7 +1725,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 4000000
     },
     {
       "factura": "REAL-CL-538",
@@ -1385,7 +1738,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-539",
@@ -1395,7 +1751,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 65000
     },
     {
       "factura": "REAL-CL-540",
@@ -1405,7 +1764,10 @@
       "tipo": "PAGADA",
       "vendedor": "RAYEN BERNAZAR",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-541",
@@ -1415,7 +1777,10 @@
       "tipo": "PAGADA",
       "vendedor": "RAYEN BERNAZAR",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-542",
@@ -1425,7 +1790,10 @@
       "tipo": "PAGADA",
       "vendedor": "RAYEN BERNAZAR",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-543",
@@ -1435,7 +1803,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 255000
     },
     {
       "factura": "REAL-CL-544",
@@ -1445,7 +1816,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 113290
     },
     {
       "factura": "REAL-CL-546",
@@ -1455,7 +1829,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-547",
@@ -1465,7 +1842,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-548",
@@ -1475,7 +1855,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-549",
@@ -1485,7 +1868,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-550",
@@ -1495,7 +1881,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-552",
@@ -1505,7 +1894,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 78730
     },
     {
       "factura": "REAL-CL-554",
@@ -1515,7 +1907,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-555",
@@ -1525,18 +1920,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
-    },
-    {
-      "factura": "REAL-CL-556",
-      "folio": "556",
-      "fecha_pago": "2026-04-03",
-      "monto": 2258800,
-      "tipo": "PAGADA_ABONOS",
-      "vendedor": "JORGE CAROCA",
-      "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA",
-      "nota": "Abonos: 16-03-2026/23-03-2026/03-04-2026 — monto total consolidado en última fecha"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 300000
     },
     {
       "factura": "REAL-CL-557",
@@ -1546,7 +1933,10 @@
       "tipo": "PAGADA",
       "vendedor": "IVAN VEVERKA",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-558",
@@ -1556,7 +1946,10 @@
       "tipo": "PAGADA",
       "vendedor": "IVAN VEVERKA",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-559",
@@ -1566,7 +1959,10 @@
       "tipo": "PAGADA",
       "vendedor": "IVAN VEVERKA",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-561",
@@ -1576,7 +1972,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-562",
@@ -1586,7 +1985,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 700000
     },
     {
       "factura": "REAL-CL-563",
@@ -1596,7 +1998,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-564",
@@ -1606,7 +2011,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-565",
@@ -1616,7 +2024,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-566",
@@ -1626,7 +2037,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 805000
     },
     {
       "factura": "REAL-CL-567",
@@ -1636,7 +2050,10 @@
       "tipo": "PAGADA",
       "vendedor": "IVAN VEVERKA",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 1008000
     },
     {
       "factura": "REAL-CL-568",
@@ -1646,7 +2063,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-569",
@@ -1656,7 +2076,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 294120
     },
     {
       "factura": "REAL-CL-570",
@@ -1666,7 +2089,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-571",
@@ -1676,7 +2102,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-572",
@@ -1686,7 +2115,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-574",
@@ -1696,18 +2128,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
-    },
-    {
-      "factura": "REAL-CL-575",
-      "folio": "575",
-      "fecha_pago": "2026-03-31",
-      "monto": 350000,
-      "tipo": "PAGADA_ABONOS",
-      "vendedor": "PABLO LARATRO",
-      "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO",
-      "nota": "Abonos: 27-03-2026/31-03-2026 — monto total consolidado en última fecha"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 634728
     },
     {
       "factura": "REAL-CL-576",
@@ -1717,7 +2141,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 544000
     },
     {
       "factura": "REAL-CL-577",
@@ -1727,7 +2154,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 1144000
     },
     {
       "factura": "REAL-CL-578",
@@ -1737,7 +2167,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-579",
@@ -1747,7 +2180,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-581",
@@ -1757,7 +2193,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 35000
     },
     {
       "factura": "REAL-CL-582",
@@ -1767,7 +2206,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 640000
     },
     {
       "factura": "REAL-CL-584",
@@ -1777,7 +2219,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-586",
@@ -1787,7 +2232,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-588",
@@ -1797,7 +2245,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 520000
     },
     {
       "factura": "REAL-CL-589",
@@ -1807,7 +2258,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 370000
     },
     {
       "factura": "REAL-CL-592",
@@ -1817,7 +2271,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 102408
     },
     {
       "factura": "REAL-CL-593",
@@ -1827,7 +2284,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 161340
     },
     {
       "factura": "REAL-CL-594",
@@ -1837,7 +2297,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 482095
     },
     {
       "factura": "REAL-CL-595",
@@ -1847,7 +2310,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 82000
     },
     {
       "factura": "REAL-CL-596",
@@ -1857,7 +2323,10 @@
       "tipo": "PAGADA",
       "vendedor": "RAYEN BERNAZAR",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 39826
     },
     {
       "factura": "REAL-CL-597",
@@ -1867,7 +2336,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-598",
@@ -1877,7 +2349,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-599",
@@ -1887,7 +2362,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-600",
@@ -1897,7 +2375,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-601",
@@ -1907,7 +2388,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-602",
@@ -1917,7 +2401,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-605",
@@ -1927,7 +2414,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 190000
     },
     {
       "factura": "REAL-CL-607",
@@ -1937,7 +2427,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 305000
     },
     {
       "factura": "REAL-CL-608",
@@ -1947,7 +2440,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-610",
@@ -1957,7 +2453,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-611",
@@ -1967,7 +2466,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-613",
@@ -1977,7 +2479,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 384000
     },
     {
       "factura": "REAL-CL-614",
@@ -1987,7 +2492,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-615",
@@ -1997,7 +2505,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-616",
@@ -2007,7 +2518,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 201677
     },
     {
       "factura": "REAL-CL-617",
@@ -2017,7 +2531,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 136000
     },
     {
       "factura": "REAL-CL-618",
@@ -2027,7 +2544,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 256000
     },
     {
       "factura": "REAL-CL-619",
@@ -2037,7 +2557,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 320000
     },
     {
       "factura": "REAL-CL-620",
@@ -2047,7 +2570,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 768000
     },
     {
       "factura": "REAL-CL-621",
@@ -2057,7 +2583,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 34674000
     },
     {
       "factura": "REAL-CL-625",
@@ -2067,7 +2596,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-626",
@@ -2077,7 +2609,10 @@
       "tipo": "PAGADA",
       "vendedor": "RAYEN BERNAZAR",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 259073
     },
     {
       "factura": "REAL-CL-627",
@@ -2087,7 +2622,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 224000
     },
     {
       "factura": "REAL-CL-628",
@@ -2097,18 +2635,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
-    },
-    {
-      "factura": "REAL-CL-629",
-      "folio": "629",
-      "fecha_pago": "2026-05-20",
-      "monto": 224000,
-      "tipo": "PAGADA_ABONOS",
-      "vendedor": "PABLO LARATRO",
-      "en_universo_sic": true,
       "categoria_sic": "PABLO LARATRO",
-      "nota": "Abonos: 07-05-2026/20-05-2026 — monto total consolidado en última fecha"
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 224000
     },
     {
       "factura": "REAL-CL-630",
@@ -2118,18 +2648,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
-    },
-    {
-      "factura": "REAL-CL-631",
-      "folio": "631",
-      "fecha_pago": "2026-05-21",
-      "monto": 4279500,
-      "tipo": "PAGADA_ABONOS",
-      "vendedor": "FRANCISCO VELASQUEZ",
-      "en_universo_sic": true,
       "categoria_sic": "FRANCISCO VELÁSQUEZ",
-      "nota": "Abonos: 19-05-2026/20-05-2026/21-05-2026 — monto total consolidado en última fecha"
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-633",
@@ -2139,7 +2661,10 @@
       "tipo": "PAGADA",
       "vendedor": "RAYEN BERNAZAR",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 325575
     },
     {
       "factura": "REAL-CL-634",
@@ -2149,7 +2674,10 @@
       "tipo": "PAGADA",
       "vendedor": "RAYEN BERNAZAR",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 60803
     },
     {
       "factura": "REAL-CL-635",
@@ -2159,7 +2687,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 1078925
     },
     {
       "factura": "REAL-CL-636",
@@ -2169,7 +2700,10 @@
       "tipo": "PAGADA",
       "vendedor": "RAYEN BERNAZAR",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 73146
     },
     {
       "factura": "REAL-CL-637",
@@ -2179,7 +2713,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-638",
@@ -2189,7 +2726,10 @@
       "tipo": "PAGADA",
       "vendedor": "RAYEN BERNAZAR",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 84025
     },
     {
       "factura": "REAL-CL-639",
@@ -2199,7 +2739,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 186000
     },
     {
       "factura": "REAL-CL-640",
@@ -2209,7 +2752,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 3632500
     },
     {
       "factura": "REAL-CL-642",
@@ -2219,7 +2765,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 161345
     },
     {
       "factura": "REAL-CL-643",
@@ -2229,7 +2778,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 40332
     },
     {
       "factura": "REAL-CL-644",
@@ -2239,7 +2791,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-645",
@@ -2249,7 +2804,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-646",
@@ -2259,7 +2817,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-647",
@@ -2269,7 +2830,10 @@
       "tipo": "PAGADA",
       "vendedor": "RAYEN BERNAZAR",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 96461
     },
     {
       "factura": "REAL-CL-648",
@@ -2279,7 +2843,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 128000
     },
     {
       "factura": "REAL-CL-649",
@@ -2289,7 +2856,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 128000
     },
     {
       "factura": "REAL-CL-650",
@@ -2299,7 +2869,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-651",
@@ -2309,7 +2882,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 380000
     },
     {
       "factura": "REAL-CL-652",
@@ -2319,7 +2895,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 3083000
     },
     {
       "factura": "REAL-CL-654",
@@ -2329,7 +2908,10 @@
       "tipo": "PAGADA",
       "vendedor": "IVAN VEVERKA",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-655",
@@ -2339,7 +2921,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-656",
@@ -2349,7 +2934,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-657",
@@ -2359,18 +2947,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
-    },
-    {
-      "factura": "REAL-CL-658",
-      "folio": "658",
-      "fecha_pago": "2026-06-08",
-      "monto": 0,
-      "tipo": "PAGADA_ABONOS",
-      "vendedor": "FRANCISCO VELASQUEZ",
-      "en_universo_sic": true,
       "categoria_sic": "FRANCISCO VELÁSQUEZ",
-      "nota": "Abonos: 04-06-2026/08-06-2026 — monto total consolidado en última fecha"
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-659",
@@ -2380,7 +2960,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 801000
     },
     {
       "factura": "REAL-CL-660",
@@ -2390,7 +2973,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-661",
@@ -2400,7 +2986,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-662",
@@ -2410,7 +2999,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 174000
     },
     {
       "factura": "REAL-CL-663",
@@ -2420,7 +3012,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 5357000
     },
     {
       "factura": "REAL-CL-664",
@@ -2430,7 +3025,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 96000
     },
     {
       "factura": "REAL-CL-665",
@@ -2440,7 +3038,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 194750
     },
     {
       "factura": "REAL-CL-666",
@@ -2450,7 +3051,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 480000
     },
     {
       "factura": "REAL-CL-667",
@@ -2460,7 +3064,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 184000
     },
     {
       "factura": "REAL-CL-668",
@@ -2470,7 +3077,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 160000
     },
     {
       "factura": "REAL-CL-670",
@@ -2480,7 +3090,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-671",
@@ -2490,7 +3103,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-672",
@@ -2500,7 +3116,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 312000
     },
     {
       "factura": "REAL-CL-673",
@@ -2510,7 +3129,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-675",
@@ -2520,7 +3142,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 256000
     },
     {
       "factura": "REAL-CL-677",
@@ -2530,7 +3155,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 128000
     },
     {
       "factura": "REAL-CL-678",
@@ -2540,7 +3168,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 160000
     },
     {
       "factura": "REAL-CL-679",
@@ -2550,7 +3181,10 @@
       "tipo": "PAGADA",
       "vendedor": "VALENTINA MUÑOZ",
       "en_universo_sic": true,
-      "categoria_sic": "VALENTINA MUÑOZ"
+      "categoria_sic": "VALENTINA MUÑOZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 61163
     },
     {
       "factura": "REAL-CL-680",
@@ -2560,7 +3194,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 192000
     },
     {
       "factura": "REAL-CL-681",
@@ -2570,7 +3207,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-682",
@@ -2580,7 +3220,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-683",
@@ -2590,7 +3233,10 @@
       "tipo": "PAGADA",
       "vendedor": "RAYEN BERNAZAR",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 207314
     },
     {
       "factura": "REAL-CL-685",
@@ -2600,7 +3246,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 136000
     },
     {
       "factura": "REAL-CL-686",
@@ -2610,7 +3259,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 465000
     },
     {
       "factura": "REAL-CL-687",
@@ -2620,7 +3272,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 1314715
     },
     {
       "factura": "REAL-CL-688",
@@ -2630,18 +3285,10 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
-    },
-    {
-      "factura": "REAL-CL-690",
-      "folio": "690",
-      "fecha_pago": "2026-06-04",
-      "monto": 768000,
-      "tipo": "PAGADA_ABONOS",
-      "vendedor": "FRANCISCO VELASQUEZ",
-      "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ",
-      "nota": "Abonos: 03-06-2026/04-06-2026 — monto total consolidado en última fecha"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 415170
     },
     {
       "factura": "REAL-CL-692",
@@ -2651,7 +3298,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-693",
@@ -2661,7 +3311,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-694",
@@ -2671,7 +3324,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-695",
@@ -2681,7 +3337,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 128000
     },
     {
       "factura": "REAL-CL-699",
@@ -2691,7 +3350,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 220539
     },
     {
       "factura": "REAL-CL-701",
@@ -2701,7 +3363,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-702",
@@ -2711,7 +3376,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-703",
@@ -2721,7 +3389,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-704",
@@ -2731,7 +3402,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-705",
@@ -2741,7 +3415,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-706",
@@ -2751,7 +3428,10 @@
       "tipo": "PAGADA",
       "vendedor": "PABLO LARATRO",
       "en_universo_sic": true,
-      "categoria_sic": "PABLO LARATRO"
+      "categoria_sic": "PABLO LARATRO",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-708",
@@ -2761,7 +3441,10 @@
       "tipo": "PAGADA",
       "vendedor": "RAYEN BERNAZAR",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 185453
     },
     {
       "factura": "REAL-CL-709",
@@ -2771,7 +3454,10 @@
       "tipo": "PAGADA",
       "vendedor": "RAYEN BERNAZAR",
       "en_universo_sic": false,
-      "categoria_sic": "OTROS"
+      "categoria_sic": "OTROS",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 60498
     },
     {
       "factura": "REAL-CL-711",
@@ -2781,7 +3467,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-712",
@@ -2791,7 +3480,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-716",
@@ -2801,7 +3493,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 160000
     },
     {
       "factura": "REAL-CL-718",
@@ -2811,7 +3506,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 160000
     },
     {
       "factura": "REAL-CL-719",
@@ -2821,7 +3519,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-720",
@@ -2831,7 +3532,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-721",
@@ -2841,18 +3545,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
-    },
-    {
-      "factura": "REAL-CL-731",
-      "folio": "731",
-      "fecha_pago": "2026-07-04",
-      "monto": 224000,
-      "tipo": "PAGADA_ABONOS",
-      "vendedor": "FRANCISCO VELASQUEZ",
-      "en_universo_sic": true,
       "categoria_sic": "FRANCISCO VELÁSQUEZ",
-      "nota": "Abonos: 02-07-2026/04-07-2026 — monto total consolidado en última fecha"
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-738",
@@ -2862,7 +3558,10 @@
       "tipo": "PAGADA",
       "vendedor": "FRANCISCO VELASQUEZ",
       "en_universo_sic": true,
-      "categoria_sic": "FRANCISCO VELÁSQUEZ"
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 160000
     },
     {
       "factura": "REAL-CL-749",
@@ -2872,7 +3571,10 @@
       "tipo": "PAGADA",
       "vendedor": "RODRIGO ENCINA",
       "en_universo_sic": true,
-      "categoria_sic": "RODRIGO ENCINA"
+      "categoria_sic": "RODRIGO ENCINA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
     },
     {
       "factura": "REAL-CL-752",
@@ -2882,7 +3584,217 @@
       "tipo": "PAGADA",
       "vendedor": "JORGE CAROCA",
       "en_universo_sic": true,
-      "categoria_sic": "JORGE CAROCA"
+      "categoria_sic": "JORGE CAROCA",
+      "comision_calculable": true,
+      "estado_cobranza": "PAGADA",
+      "monto_cobrado_confirmado": 0
+    }
+  ],
+  "abonos_pendientes_detalle": [
+    {
+      "factura": "REAL-CL-435",
+      "folio": "435",
+      "vendedor": "RODRIGO ENCINA",
+      "razon_social": "AGRODONI LIMITADA",
+      "en_universo_sic": true,
+      "categoria_sic": "RODRIGO ENCINA",
+      "estado_cobranza": "PAGADA",
+      "monto_total_confirmado": 555660,
+      "comision_calculable": false,
+      "razon_no_calculable": "MONTO_POR_ABONO_NO_DISPONIBLE_EN_FUENTE",
+      "fechas_abono": [
+        "2026-01-17",
+        "2026-01-31"
+      ],
+      "n_abonos": 2,
+      "val_raw": "17-01-2026/31-01-2026"
+    },
+    {
+      "factura": "REAL-CL-471",
+      "folio": "471",
+      "vendedor": "RODRIGO ENCINA",
+      "razon_social": "ALUDI ALEJANDRA REYES PEREZ",
+      "en_universo_sic": true,
+      "categoria_sic": "RODRIGO ENCINA",
+      "estado_cobranza": "PAGADA",
+      "monto_total_confirmado": 478600,
+      "comision_calculable": false,
+      "razon_no_calculable": "MONTO_POR_ABONO_NO_DISPONIBLE_EN_FUENTE",
+      "fechas_abono": [
+        "2026-01-30",
+        "2026-02-02"
+      ],
+      "n_abonos": 2,
+      "val_raw": "30-01-2026/02-02-2026"
+    },
+    {
+      "factura": "REAL-CL-496",
+      "folio": "496",
+      "vendedor": "IVAN VEVERKA",
+      "razon_social": "GUILLERMO SEGUNDO CONCHA BUSTOS",
+      "en_universo_sic": false,
+      "categoria_sic": "OTROS",
+      "estado_cobranza": "PAGADA",
+      "monto_total_confirmado": 840000,
+      "comision_calculable": false,
+      "razon_no_calculable": "MONTO_POR_ABONO_NO_DISPONIBLE_EN_FUENTE",
+      "fechas_abono": [
+        "2026-02-20",
+        "2026-02-23"
+      ],
+      "n_abonos": 2,
+      "val_raw": "20-02-2026/23-02-2026"
+    },
+    {
+      "factura": "REAL-CL-556",
+      "folio": "556",
+      "vendedor": "JORGE CAROCA",
+      "razon_social": "GANAFRUT SPA",
+      "en_universo_sic": true,
+      "categoria_sic": "JORGE CAROCA",
+      "estado_cobranza": "PAGADA",
+      "monto_total_confirmado": 2258800,
+      "comision_calculable": false,
+      "razon_no_calculable": "MONTO_POR_ABONO_NO_DISPONIBLE_EN_FUENTE",
+      "fechas_abono": [
+        "2026-03-16",
+        "2026-03-23",
+        "2026-04-03"
+      ],
+      "n_abonos": 3,
+      "val_raw": "16-03-2026/23-03-2026/03-04-2026"
+    },
+    {
+      "factura": "REAL-CL-575",
+      "folio": "575",
+      "vendedor": "PABLO LARATRO",
+      "razon_social": "INVERSIONES COSTA DE ALGARROBO SPA.",
+      "en_universo_sic": true,
+      "categoria_sic": "PABLO LARATRO",
+      "estado_cobranza": "PAGADA",
+      "monto_total_confirmado": 350000,
+      "comision_calculable": false,
+      "razon_no_calculable": "MONTO_POR_ABONO_NO_DISPONIBLE_EN_FUENTE",
+      "fechas_abono": [
+        "2026-03-27",
+        "2026-03-31"
+      ],
+      "n_abonos": 2,
+      "val_raw": "27-03-2026/31-03-2026"
+    },
+    {
+      "factura": "REAL-CL-629",
+      "folio": "629",
+      "vendedor": "PABLO LARATRO",
+      "razon_social": "MARCIA ELVIRA DUBO ORDENES",
+      "en_universo_sic": true,
+      "categoria_sic": "PABLO LARATRO",
+      "estado_cobranza": "PAGADA",
+      "monto_total_confirmado": 224000,
+      "comision_calculable": false,
+      "razon_no_calculable": "MONTO_POR_ABONO_NO_DISPONIBLE_EN_FUENTE",
+      "fechas_abono": [
+        "2026-05-07",
+        "2026-05-20"
+      ],
+      "n_abonos": 2,
+      "val_raw": "07-05-2026/20-05-2026"
+    },
+    {
+      "factura": "REAL-CL-631",
+      "folio": "631",
+      "vendedor": "FRANCISCO VELASQUEZ",
+      "razon_social": "BENJAMIN ESTEBAN REYES BUSTAMANTE",
+      "en_universo_sic": true,
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "estado_cobranza": "PAGADA",
+      "monto_total_confirmado": 4279500,
+      "comision_calculable": false,
+      "razon_no_calculable": "MONTO_POR_ABONO_NO_DISPONIBLE_EN_FUENTE",
+      "fechas_abono": [
+        "2026-05-19",
+        "2026-05-20",
+        "2026-05-21"
+      ],
+      "n_abonos": 3,
+      "val_raw": "19-05-2026/20-05-2026/21-05-2026"
+    },
+    {
+      "factura": "REAL-CL-690",
+      "folio": "690",
+      "vendedor": "FRANCISCO VELASQUEZ",
+      "razon_social": "LA NARANJA SPA",
+      "en_universo_sic": true,
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "estado_cobranza": "PAGADA",
+      "monto_total_confirmado": 768000,
+      "comision_calculable": false,
+      "razon_no_calculable": "MONTO_POR_ABONO_NO_DISPONIBLE_EN_FUENTE",
+      "fechas_abono": [
+        "2026-06-03",
+        "2026-06-04"
+      ],
+      "n_abonos": 2,
+      "val_raw": "03-06-2026/04-06-2026"
+    },
+    {
+      "factura": "REAL-CL-731",
+      "folio": "731",
+      "vendedor": "FRANCISCO VELASQUEZ",
+      "razon_social": "JUAN ALFONSO BRAVO BRAVO",
+      "en_universo_sic": true,
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "estado_cobranza": "PAGADA",
+      "monto_total_confirmado": 224000,
+      "comision_calculable": false,
+      "razon_no_calculable": "MONTO_POR_ABONO_NO_DISPONIBLE_EN_FUENTE",
+      "fechas_abono": [
+        "2026-07-02",
+        "2026-07-04"
+      ],
+      "n_abonos": 2,
+      "val_raw": "02-07-2026/04-07-2026"
+    }
+  ],
+  "data_quality_warnings": [
+    {
+      "factura": "REAL-CL-525",
+      "folio": "525",
+      "vendedor": "FRANCISCO VELASQUEZ",
+      "razon_social": "LEONARDO ENRIQUE OYARCE GENERAL",
+      "en_universo_sic": true,
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "estado_cobranza": "PAGADA",
+      "monto_total_confirmado": 0,
+      "comision_calculable": false,
+      "razon_no_calculable": "DATA_QUALITY_WARNING",
+      "fechas_abono": [
+        "2026-03-10",
+        "2026-04-24",
+        "2026-02-24"
+      ],
+      "n_abonos": 3,
+      "val_raw": "10-03-2026/24-04-2026/24-02-2026",
+      "dqw_motivo": "Fechas de abono fuera de orden cronológico: 10-03-2026/24-04-2026/24-02-2026; Monto = 0 con múltiples fechas de abono registradas"
+    },
+    {
+      "factura": "REAL-CL-658",
+      "folio": "658",
+      "vendedor": "FRANCISCO VELASQUEZ",
+      "razon_social": "SOC AGRIC ENTRE PABLOS LTDA",
+      "en_universo_sic": true,
+      "categoria_sic": "FRANCISCO VELÁSQUEZ",
+      "estado_cobranza": "PAGADA",
+      "monto_total_confirmado": 0,
+      "comision_calculable": false,
+      "razon_no_calculable": "DATA_QUALITY_WARNING",
+      "fechas_abono": [
+        "2026-06-04",
+        "2026-06-08"
+      ],
+      "n_abonos": 2,
+      "val_raw": "04-06-2026/08-06-2026",
+      "dqw_motivo": "Monto = 0 con múltiples fechas de abono registradas"
     }
   ],
   "folios_pendientes": [
