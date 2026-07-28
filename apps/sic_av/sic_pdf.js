@@ -86,7 +86,7 @@
       "<tr><td>Fecha de generacion del informe</td><td>" + fechaGeneracion + "</td></tr>" +
       "<tr><td>Codigo unico del informe</td><td>" + codigo + "</td></tr>" +
       "</table>" +
-      "<div class='banner-demo'>MODELO DEMOSTRATIVO — PENDIENTE DE APROBACION GERENCIAL. Datos sinteticos, sin valor contractual.</div>" +
+      "<div class='banner-demo'>DATOS REALES AV LATAM BOARD — Cobranza integrada: 274 facturas PAGADA con fecha y monto verificados. Comision diferida trimestral pendiente de implementacion. Sujeto a aprobacion gerencial antes de liquidacion oficial.</div>" +
       "</section>" +
 
       // RESUMEN EJECUTIVO -- CHANGE REQUEST v1.6: indicadores del MES DE
@@ -172,12 +172,12 @@
       "<table class='tabla-resumen'>" +
       "<tr><td>Version de politica</td><td>" + esc(params.version_politica) + "</td></tr>" +
       "<tr><td>Modelo utilizado</td><td>Politica V1.4: Factor de Presupuesto por tramos fijos (0% / 80% / 100%) + Factor IEC por tramos fijos (20% / 70% / 80% / 90% / 105%). Sin interpolacion en ningun factor. El Factor de Precio Piso fue eliminado del calculo -- toda venta facturada entra al calculo normal; el precio piso solo impacta la comision de forma indirecta, a traves del Factor IEC.</td></tr>" +
-      "<tr><td>Fecha de datos</td><td>Datos demostrativos, corte sintetico</td></tr>" +
+      "<tr><td>Fecha de datos</td><td>" + fechaDDMMYYYYPdf(r.ciclo_info.fecha_datos) + " — Datos reales AV LATAM Board (cobranzas_cl_v2)</td></tr>" +
       "<tr><td>Fecha de calculo</td><td>" + fechaGeneracion + "</td></tr>" +
       "<tr><td>Fecha de generacion del informe</td><td>" + fechaGeneracion + "</td></tr>" +
       "<tr><td>Codigo unico</td><td>" + codigo + "</td></tr>" +
       "</table>" +
-      "<p class='nota-legal'>Documento generado con datos demostrativos. No constituye liquidacion oficial de remuneraciones.</p>" +
+      "<p class='nota-legal'>Documento generado con datos reales del AV LATAM Board. La comision diferida trimestral es preliminar (pendiente de implementacion de logica multi-ciclo). Sujeto a aprobacion gerencial antes de constituir liquidacion oficial de remuneraciones.</p>" +
       "</section>" +
 
       "<script>window.onload = function(){ setTimeout(function(){ window.print(); }, 300); };<\/script>" +

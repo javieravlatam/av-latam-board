@@ -40,7 +40,7 @@
 </style>
 </head>
 <body>
-<div class="sic-demo-banner">DATOS REALES DEL AV LATAM BOARD — Venta neta, presupuesto e IEC verificados y conciliados contra la fuente, calculados sobre el mes de desempeño (CHANGE REQUEST v1.6). Comisión definitiva pendiente de integración de cobranza real por factura (ver bloque "Estado del cálculo de comisiones").</div>
+<div class="sic-demo-banner">DATOS REALES DEL AV LATAM BOARD — Venta neta, presupuesto e IEC verificados y conciliados contra la fuente (CHANGE REQUEST v1.6). Cobranza integrada: 274 facturas PAGADA con fecha y monto confirmados · 9 facturas PAGADA_ABONOS con monto total confirmado, desglose por abono pendiente.</div>
 
 <div class="sic-header">
   <div class="brand">
@@ -123,13 +123,13 @@
 
   <!-- ============================= BLOQUE 3 — ESTADO DEL CALCULO DE COMISIONES ============================= -->
   <div class="sic-section">
-    <div class="bloque-titulo"><span class="bloque-numero pendiente">3</span><h2 style="margin:0;">Estado del cálculo de comisiones</h2></div>
+    <div class="bloque-titulo"><span class="bloque-numero">3</span><h2 style="margin:0;">Estado del cálculo de comisiones</h2></div>
     <p class="bloque-subtitulo">No es un resultado comercial — es el estado de avance del cálculo definitivo.</p>
     <div class="estado-comision-panel">
-      <div class="estado-comision-titulo">⏳ Cálculo definitivo pendiente de integración de cobranza real por factura.</div>
-      <div class="estado-comision-texto">El motor SIC (<code>sic_core.js</code>) corre sin modificaciones sobre los datos reales de este período — presupuesto, venta neta, cumplimiento e IEC del mes de desempeño ya están conciliados (Bloque 1). La <b>liberación definitiva de comisión</b> requiere fecha y monto real de cobranza por factura dentro del período 26-25, que hoy no existe en ninguna fuente conectada del AV LATAM Board.</div>
-      <div class="estado-comision-texto">Estados pendientes: Cobranza real → <b>Pendiente de integración</b>. Comisión definitiva → <b>Pendiente de cálculo</b>. No se muestra una cifra "$0" como resultado de negocio.</div>
-      <div class="estado-comision-tecnico">Nota técnica (auditoría, no lectura ejecutiva): el motor sin modificar, al recibir venta cobrada = 0, retorna internamente comisión potencial = <span id="c-potencial-tecnico">—</span> y comisión liberada = <span id="c-liberada-tecnico">—</span>. Es el comportamiento esperado del motor dado el dato disponible hoy.</div>
+      <div class="estado-comision-titulo">✅ Cobranza real integrada — comisión calculable sobre facturas PAGADA.</div>
+      <div class="estado-comision-texto">El motor SIC (<code>sic_core.js</code>) corre sin modificaciones sobre los datos reales de este período. Cobranza integrada: <b>274 facturas PAGADA</b> con fecha y monto confirmados (comisión calculable) · <b>9 facturas PAGADA_ABONOS</b> con monto total confirmado pero sin desglose por abono individual (comisión pendiente de detalle) · <b>2 facturas excluidas</b> por inconsistencia de datos en la fuente.</div>
+      <div class="estado-comision-texto">Saldo financiero PAGADA_ABONOS: <b>$0</b> (facturas canceladas). Comisión sobre PAGADA_ABONOS: <b>pendiente de detalle de abonos individuales</b> — no se imputa $0 como resultado comercial.</div>
+      <div class="estado-comision-tecnico">Nota técnica (auditoría): comisión potencial = <span id="c-potencial-tecnico">—</span> · comisión liberada = <span id="c-liberada-tecnico">—</span>. Calculados por el motor sobre las facturas PAGADA del período 26-25.</div>
     </div>
   </div>
 
@@ -169,16 +169,16 @@
   <!-- ============================= ACCIONES PARA GANAR MAS ============================= -->
   <div class="sic-section">
     <h2>Que puedo hacer para aumentar mi comision</h2>
-    <p class="hint">Pendiente de cálculo — requiere cobranza real por factura para proyectar acciones.</p>
+    <p class="hint">Proyecciones de mejora basadas en datos reales del período actual.</p>
     <div class="sic-acciones" id="lista-acciones"></div>
   </div>
 
   <!-- ============================= COMISION DIFERIDA TRIMESTRAL ============================= -->
   <div class="sic-section">
     <h2>Comision diferida trimestral</h2>
-    <p class="hint">Pendiente de integración de cobranza real. Se evalúa sobre meses calendario (CHANGE REQUEST v1.6), no sobre períodos 26-25.</p>
+    <p class="hint">Se evalúa sobre meses calendario (CHANGE REQUEST v1.6), no sobre períodos 26-25.</p>
     <div class="sic-diferido-box">
-      <div class="estado-comision-texto">El cálculo de comisión diferida trimestral depende de la liberación de comisión por cobranza real, que hoy no está disponible en ninguna fuente conectada del AV LATAM Board (ver Bloque 3 arriba). Este bloque quedará operativo cuando exista esa fuente — no se muestra un monto diferido estimado ni en cero.</div>
+      <div class="estado-comision-texto">El cálculo de comisión diferida trimestral requiere acumular la comisión liberada de los tres ciclos del trimestre. La cobranza real ya está integrada — el diferido trimestral quedará operativo cuando se implemente la lógica de acumulación entre ciclos.</div>
     </div>
   </div>
 
@@ -521,8 +521,19 @@
     SICAdapter.enriquecerConVencimientos(window._DETALLE_ACTUAL, VENCIMIENTOS_MAP);
     renderTablaFacturas();
 
-    // Acciones -- pendiente de cobranza real
-    document.getElementById("lista-acciones").innerHTML = "<div class='sic-accion'>Pendiente de cálculo — requiere integración de cobranza real por factura para proyectar acciones de cobro.</div>";
+    // Acciones -- basadas en datos reales del período
+    var _accionesHtml = [];
+    if (r.cumplimiento_pct !== null && r.cumplimiento_pct < 100) {
+      var _falta = r.presupuesto_mes - r.venta_neta_mes;
+      if (_falta > 0) _accionesHtml.push("<div class='sic-accion'>Brecha de presupuesto: " + fmt(_falta) + " para alcanzar el 100% del mes de desempeño y escalar al factor máximo de presupuesto.</div>");
+    }
+    if (r.iec_pct !== null && r.iec_pct < 100) {
+      _accionesHtml.push("<div class='sic-accion'>IEC del mes de desempeño: " + pct(r.iec_pct) + " — elevar ventas sobre precio piso para mejorar el Factor IEC.</div>");
+    }
+    if (r.comision_liberada !== undefined && r.comision_pendiente > 0) {
+      _accionesHtml.push("<div class='sic-accion'>Cartera pendiente de cobranza: " + fmt(r.comision_pendiente) + " en comisión potencial aún no cobrada dentro del período 26-25.</div>");
+    }
+    document.getElementById("lista-acciones").innerHTML = _accionesHtml.length ? _accionesHtml.join("") : "<div class='sic-accion'>Sin oportunidades adicionales identificadas para este ciclo.</div>";
 
     // Historico real (mismo vendedor, todos los periodos reales disponibles)
     renderHistoricoReal();
@@ -541,7 +552,7 @@
       { label: "IEC del mes de desempeño y Factor IEC", valor: sinIec ? "Pendiente de carga" : (pct(r.iec_pct) + " → Factor " + pct(r.factor_iec)), nota: "Recalculado directo desde las transacciones del mismo mes calendario (ventas sobre piso / ventas elegibles)." },
       { label: "Excedente y Bono por Excedente", valor: sinPresupuesto ? "Pendiente de carga" : (fmt(r.excedente_mes) + " → Bono " + fmt(r.bono_excedente)), nota: "Excedente = max(0, venta neta del mes − presupuesto del mismo mes). Bono = Excedente × 2%, sin ponderar por Factor IEC (CHANGE REQUEST v1.6)." },
       { label: "Precio piso (informativo)", valor: sp + " sobre piso · " + bp + " bajo piso · " + ne + " no evaluable", nota: "Política V1.4: el precio piso ya no reduce ni anula la comisión por sí solo — es informativo y solo impacta a través del Factor IEC." },
-      { label: "Comisión definitiva del período", valor: "Pendiente de cálculo", nota: "Requiere fecha y monto real de cobranza por factura dentro del período de cobranza, que hoy no existe en ninguna fuente conectada del AV LATAM Board (ver bloque 'Estado del cálculo de comisiones')." }
+      { label: "Comisión definitiva del período", valor: r.venta_cobrada > 0 ? fmt(r.comision_final) : "Sin cobranza en este ciclo", nota: r.venta_cobrada > 0 ? "Calculada sobre " + fmt(r.venta_cobrada) + " cobrado en el período 26-25. Facturas PAGADA_ABONOS sin desglose individual no computan comisión hasta recibir montos por abono." : "No se encontraron pagos de este vendedor dentro del período de cobranza 26-25 con fecha y monto individuales confirmados." }
     ];
     document.getElementById("pasos-calculo").innerHTML = pasos.map(function (p, i) {
       return "<li><div class='num'>" + (i + 1) + "</div><div class='label'>" + p.label + "</div><div class='valor'><b>" + p.valor + "</b><br>" + p.nota + "</div></li>";
@@ -632,7 +643,32 @@
   }
 
   function descargarPDF() {
-    alert("El informe PDF con comisión definitiva estará disponible cuando se integre la cobranza real por factura. Mientras tanto, use 'Datos Reales (auditoría técnica)' para el detalle validado de presupuesto, venta neta e IEC del mes de desempeño.");
+    // CHANGE REQUEST SIC-AV v1.7 (Task #135): cobranza integrada → generar informe real
+    var r = window._RESULTADO_ACTUAL;
+    var vendedor = window._VENDEDOR_ACTUAL_OBJ;
+    if (!r || !vendedor || !CTX_PARAMS) {
+      alert("Seleccione un vendedor y período antes de generar el informe.");
+      return;
+    }
+    // Diferido trimestral: pendiente de implementación de lógica multi-ciclo
+    var diferidoStub = {
+      trimestre: "Trimestre en curso — diferido pendiente de implementación",
+      diferido_acumulado: 0,
+      cumplimiento_trimestral: r.cumplimiento_pct || 0,
+      iec_trimestral: r.iec_pct || 0,
+      pct_liberacion_final: 0,
+      monto_liberado: 0,
+      monto_pendiente: 0,
+      motivos_no_cumplidos: ["Cálculo de comisión diferida trimestral pendiente de implementación"]
+    };
+    SICPDF.generarInforme({
+      pais: PAIS,
+      vendedor: vendedor,
+      resultado: r,
+      diferido: diferidoStub,
+      acciones: [],
+      params: CTX_PARAMS
+    });
   }
 </script>
 </body>
