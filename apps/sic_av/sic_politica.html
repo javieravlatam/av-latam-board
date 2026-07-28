@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="sic_styles.css">
 </head>
 <body>
-<div class="sic-demo-banner">MODELO DEMOSTRATIVO — PENDIENTE DE APROBACION GERENCIAL (precio piso y bono de consistencia trimestral). Datos sinteticos. No conectado a AV LATAM Board.</div>
+<div class="sic-demo-banner">POLÍTICA OFICIAL SIC-AV — Aprobada por Gerencia General · Vigente desde <span id="hdr-banner-vigente">—</span> · Cambios requieren autorización: <strong>javier@agrovecalatam.com</strong></div>
 
 <div class="sic-header">
   <div class="brand">
@@ -23,6 +23,8 @@
     <div>Mes de desempeño aplicado: <span id="hdr-mes-desempeno">—</span></div>
     <div>Version de politica: <span id="hdr-version">—</span> · Estado: <span id="hdr-estado-politica">—</span></div>
     <div>Vigente desde: <span id="hdr-vigente-desde">—</span></div>
+    <div>Aprobada por: <span id="hdr-autor">—</span></div>
+    <div>Cambios autorizados por: <span id="hdr-autorizacion">—</span></div>
   </div>
 </div>
 
@@ -213,6 +215,9 @@
       document.getElementById("hdr-version").textContent = cicloInfo.policy_version || ctx.params.version_politica;
       document.getElementById("hdr-estado-politica").textContent = ctx.params.politica_estado || "—";
       document.getElementById("hdr-vigente-desde").textContent = fechaDDMMYYYY(ctx.params.politica_vigente_desde);
+      document.getElementById("hdr-banner-vigente").textContent = fechaDDMMYYYY(ctx.params.politica_vigente_desde);
+      document.getElementById("hdr-autor").textContent = ctx.params.version_autor || "—";
+      document.getElementById("hdr-autorizacion").textContent = ctx.params.cambios_requieren_autorizacion || "—";
 
       // 3. Factor de presupuesto -- tabla definitiva
       document.getElementById("tbody-presupuesto").innerHTML = ctx.params.factor_presupuesto_tramos.map(function (t) {

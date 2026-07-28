@@ -1,5 +1,9 @@
 {
-  "version_politica": "SIC-AV V1.4 (demostrativo -- Factor de Presupuesto, Tabla de Cartera Chile y Factor IEC definidos y aprobados por Gerencia General el 2026-07-13; el mismo dia se elimino el Factor de Precio Piso del calculo de comision -- toda venta facturada es una operacion valida, el precio piso solo impacta la comision de forma indirecta a traves del IEC; el mecanismo de bono de consistencia trimestral sigue ilustrativo)",
+  "version_politica": "SIC-AV V1.4",
+  "version_vigente_desde": "2026-07-28",
+  "version_autor": "javier@agrovecalatam.com",
+  "cambios_requieren_autorizacion": "javier@agrovecalatam.com",
+  "_nota_autorizacion": "Modificaciones a tasa_cartera, factor_presupuesto_tramos, factor_iec_tramos o cualquier parametro de calculo REQUIEREN autorizacion escrita del Gerente General (javier@agrovecalatam.com). Todo cambio debe registrarse en tasa_cartera_historial con version, vigente_desde, autor y nota.",
   "pais": "CL",
   "moneda": "CLP",
   "tasa_cartera": [
@@ -28,7 +32,23 @@
       "tasa": 0.5
     }
   ],
-  "_tasa_cartera_nota": "Politica V1.1 (2026-07-12, aprobada por Gerencia General): tabla unica para Chile, sin distincion Distribuidor/Cliente Final. Ver CHANGE REQUEST SIC-AV v1.1, seccion 3.",
+  "_tasa_cartera_nota": "Politica V1.4 (vigente desde 2026-07-28, aprobada por Gerencia General — javier@agrovecalatam.com): tabla unica Chile, sin distincion Distribuidor/Cliente Final. Para actualizar: agregar nueva entrada en tasa_cartera_historial con version, vigente_desde, autor y tabla; luego actualizar tasa_cartera con la nueva tabla activa.",
+  "tasa_cartera_historial": [
+    {
+      "version": "SIC-AV V1.4",
+      "vigente_desde": "2026-07-28",
+      "autor": "javier@agrovecalatam.com",
+      "nota": "Version inaugural oficial. Aprobada por Gerencia General. Elimina tag demostrativo. Tasas: Contado 8%, 1-30 dias 7.5%, 31-180 dias 6%, 181-210 dias 3%, 211-360 dias 2.5%, mas de 360 dias 0.5%.",
+      "tabla": [
+        { "max_dias": 0,   "tasa": 8   },
+        { "max_dias": 30,  "tasa": 7.5 },
+        { "max_dias": 180, "tasa": 6   },
+        { "max_dias": 210, "tasa": 3   },
+        { "max_dias": 360, "tasa": 2.5 },
+        { "max_dias": null,"tasa": 0.5 }
+      ]
+    }
+  ],
   "factor_presupuesto_tramos": [
     {
       "min_cumpl": 0,
@@ -73,7 +93,7 @@
       "sin_observaciones_financieras_graves"
     ]
   },
-  "advertencia": "MODELO DEMOSTRATIVO -- PENDIENTE DE APROBACION GERENCIAL. Ver docs/sic_av/SIC_AV_DECISIONES_GERENCIA.md",
+  "advertencia": "POLITICA OFICIAL — Aprobada por Gerencia General (javier@agrovecalatam.com) el 2026-07-28. Todo cambio futuro requiere autorizacion del Gerente General y registro en tasa_cartera_historial.",
   "_migracion_v1.6": "CHANGE REQUEST SIC-AV v1.6 (2026-07-13): se agrego 'mes_desempeno' a cada periodo de cobranza (el mes calendario inmediatamente anterior al mes de cierre del periodo -- ej. periodo '2026-07' cierra el 25/07, su mes de desempeno es '2026-06'). 'trimestres[].ciclos' se renombro a 'trimestres[].meses' y sus valores se recorrieron -1 mes (ahora son meses calendario de desempeno, no periodos 26-25) -- ver TEMPORAL_MODEL_AUDIT_v1.6.md y TEMPORAL_MODEL_v1.6.md.",
   "ciclos": [
     {
@@ -180,6 +200,6 @@
     }
   ],
   "_factor_iec_nota": "Politica V1.2 (2026-07-13, aprobada por Gerencia General): tramos fijos, reemplaza por completo la curva continua/interpolada anterior. Ver CHANGE REQUEST SIC-AV v1.3.",
-  "politica_vigente_desde": "2026-07-13",
-  "politica_estado": "Vigente"
+  "politica_vigente_desde": "2026-07-28",
+  "politica_estado": "Vigente — Aprobada por Gerencia General"
 }
