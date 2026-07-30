@@ -66,6 +66,39 @@
  * La edad de cartera NUNCA se cuenta dos veces: vive unicamente en la tasa
  * variable (SIC.tasaCartera), no existe un factor de cartera adicional.
  */
+
+/**
+ * ================================================================
+ * MODELO DE COMISIONES — FLUJO DE NEGOCIO (Politica v1.7)
+ * ================================================================
+ *
+ * CUENTA CORRIENTE COMERCIAL POR VENDEDOR
+ * ────────────────────────────────────────
+ *   Comision generada          (cobros × tasa × factor ppto × factor IEC)
+ *       ↓  + Bono por Excedente  (solo si cumplimiento = 100%)
+ *       ↓  − Notas de Credito del periodo
+ *       ↓  − Saldo pendiente arrastrado de ciclos anteriores
+ *       ↓
+ *   Resultado economico        (puede ser positivo o negativo)
+ *       ↓  si >= 0 → Comision pagable al vendedor
+ *       ↓  si <  0 → Nuevo saldo por compensar (se arrastra al ciclo siguiente)
+ *       ↓
+ *   Saldo por compensar        (nunca se pierde; fluye hasta ser absorbido)
+ *
+ * GARANTIAS DEL SISTEMA:
+ *   - Toda Nota de Credito queda registrada y nunca se descarta.
+ *   - El saldo se arrastra ciclo a ciclo via procesarCuentaCorriente().
+ *   - La Comision pagable nunca es negativa (REGLA C).
+ *   - Los ciclos cerrados y liquidados no se reescriben (REGLA F).
+ *
+ * EVOLUCION ARQUITECTONICA PREVISTA:
+ *   Este motor esta disenado para evolucionar hacia una Cuenta Corriente
+ *   Comercial completa por vendedor, con ledger de backend (saldos_nc_ledger)
+ *   que persista el saldo entre sesiones y entre ejercicios.
+ *   Hoy el arrastre es in-memory (dentro de procesarCuentaCorriente()).
+ *   La persistencia real requiere aprobacion e implementacion de backend.
+ * ================================================================
+ */
 (function (global) {
   "use strict";
 
@@ -156,10 +189,18 @@
   // < 90% -> 0% | 90% - 99,99% -> 80% | >= 100% -> 100%. NUNCA supera 100%.
   // ---------------------------------------------------------------------
   SIC.factorPresupuesto = function (params, cumplPct) {
+    // AUDITORIA SIC-AV 2026-07-30: truncar a 2 decimales (floor) antes de
+    // la busqueda en tramos para eliminar gaps de punto flotante. La politica
+    // usa limites con 2 decimales (89.99, 99.99); un valor como 99.9997 se
+    // trunca a 99.99 (tramo 80%) en lugar de caer en el retorno defensivo
+    // con factor 0% -- error silencioso que perjudica al vendedor.
+    // Math.floor evita que se "redondee hacia arriba" superando un umbral
+    // (ej. 99.996 no debe convertirse en 100.00 y obtener factor 100%).
+    var pct = Math.floor(cumplPct * 100) / 100;
     var tramos = params.factor_presupuesto_tramos;
     for (var i = 0; i < tramos.length; i++) {
       var t = tramos[i];
-      if (cumplPct >= t.min_cumpl && (t.max_cumpl === null || cumplPct <= t.max_cumpl)) {
+      if (pct >= t.min_cumpl && (t.max_cumpl === null || pct <= t.max_cumpl)) {
         return t.factor;
       }
     }
@@ -175,10 +216,16 @@
   // < 70% -> 20% | 70%-84,99% -> 70% | 85%-91,99% -> 80% | 92%-94,99% -> 90% | >= 95% -> 105%.
   // ---------------------------------------------------------------------
   SIC.factorIEC = function (params, iecPct) {
+    // AUDITORIA SIC-AV 2026-07-30: mismo patron de truncacion que
+    // factorPresupuesto. Los limites de tramo usan 2 decimales (69.99, 84.99,
+    // 91.99, 94.99); un valor como 84.9917 quedaria en la brecha entre el
+    // tramo 70% (max 84.99) y el tramo 80% (min 85) y retornaria 20% (el
+    // tramo defensivo de falla) -- error que perjudica al vendedor.
+    var pct = Math.floor(iecPct * 100) / 100;
     var tramos = params.factor_iec_tramos;
     for (var i = 0; i < tramos.length; i++) {
       var t = tramos[i];
-      if (iecPct >= t.min_iec && (t.max_iec === null || iecPct <= t.max_iec)) {
+      if (pct >= t.min_iec && (t.max_iec === null || pct <= t.max_iec)) {
         return t.factor;
       }
     }
@@ -409,7 +456,26 @@
   // liberada, pendiente, validada, pagada, bono de excedente, y detalle
   // completo por factura.
   // ---------------------------------------------------------------------
-  SIC.calcularVendedorCiclo = function (ctx, vendedorId, ciclo) {
+  // POLITICA SIC-AV v1.7 — MODELO DE COMISION PAGABLE + SALDO POR COMPENSAR
+  // (aprobado 2026-07-30)
+  //
+  // El tercer parametro opcional saldoAjustesAnterior permite al llamador
+  // encadenar ciclos: el saldo pendiente del ciclo N se pasa como entrada
+  // del ciclo N+1. En el prototipo estatico el llamador pasa 0 o lo omite;
+  // en produccion el sistema de liquidacion inyecta el valor real.
+  //
+  // Invariantes garantizados:
+  //   REGLA A  factorPpto=0 → comision_generada=0
+  //   REGLA B  factorPpto=0 → bono_excedente=0
+  //   REGLA C  comision_pagable >= 0  (nunca negativa)
+  //   REGLA D  Las NC no se pierden: si no caben en el ciclo, quedan como saldo
+  //   REGLA E  saldo_anterior se aplica antes de determinar comision_pagable
+  //   REGLA F  Los ciclos cerrados no se reescriben (solo lectura con el saldo
+  //            que el llamador inyecte — tipicamente 0 para ciclos historicos)
+  SIC.calcularVendedorCiclo = function (ctx, vendedorId, ciclo, saldoAjustesAnterior) {
+    // Saldo pendiente de NC de ciclos anteriores (trazable, no se pierde).
+    // Si se omite, el ciclo se evalua de forma independiente (sin arrastre).
+    saldoAjustesAnterior = saldoAjustesAnterior || 0;
     var hoy = SIC.hoyDemo();
     var cicloInfo = ctx.params.ciclos.filter(function (c) { return c.ciclo === ciclo; })[0];
 
@@ -465,7 +531,13 @@
     // calcula sobre cobranza ni sobre presupuesto prorrateado del periodo
     // 26-25.
     var excedenteMes = (presupuestoMes !== null) ? Math.max(0, ventaNetaMes - presupuestoMes) : 0;
-    var bonoExcedente = excedenteMes * (ctx.params.bono_excedente_pct / 100);
+    // AUDITORIA SIC-AV 2026-07-30 REGLA 3: Bono Excedente SOLO cuando
+    // factorPpto === 100 (cumplimiento 100% exacto del presupuesto).
+    // Matematicamente, excedenteMes > 0 implica cumplimiento >= 100 y por
+    // tanto factorPpto===100; pero la politica debe ser EXPLICITA en codigo
+    // para que sea auditable, testeable y resistente a futuros cambios de
+    // tramos sin que el invariante quede dependiendo de matematica implicita.
+    var bonoExcedente = (factorPpto === 100) ? excedenteMes * (ctx.params.bono_excedente_pct / 100) : 0;
 
     // Ajustes por notas de credito aplicadas EN ESTE periodo de cobranza
     // (sobre ventas de periodos anteriores) -- nunca se reescribe el
@@ -483,11 +555,31 @@
       ajustesNC += n.monto_nc * (tasaOriginal / 100);
     });
 
-    var comisionFinal = comisionLiberada + bonoExcedente - ajustesNC;
+    // POLITICA v1.7 — RESULTADO ECONOMICO Y COMISION PAGABLE
+    //
+    // resultado_economico puede ser negativo si (ajustesNC + saldoAnterior) >
+    // (comisionLiberada + bonoExcedente). En ese caso:
+    //   comision_pagable = 0       (REGLA C: nunca negativa)
+    //   saldo_ajustes_por_compensar = excedente de NC no absorbido en este ciclo
+    //
+    // El saldo pendiente se reporta explicitamente para que el sistema de
+    // liquidacion lo inyecte como saldoAjustesAnterior en el siguiente ciclo
+    // del mismo vendedor (REGLA D: los ajustes no se pierden, REGLA E).
+    //
+    // Nota: comision_generada es un alias de comision_liberada. Se expone
+    // con nombre propio para claridad en los informes y pruebas.
+    var comisionGenerada = comisionLiberada; // alias semántico (REGLA A/B ya garantizan = 0 si fPpto=0)
+    var resultadoEconomico = comisionGenerada + bonoExcedente - ajustesNC - saldoAjustesAnterior;
+    var comisionPagable   = Math.max(0, resultadoEconomico);
+    var saldoAjustesPorCompensar = Math.max(0, -resultadoEconomico);
 
     var estadoCiclo = cicloInfo.estado; // "cerrado" | "vigente"
-    var comisionValidada = estadoCiclo === "cerrado" ? comisionFinal : 0;
-    var comisionPagada = estadoCiclo === "cerrado" ? comisionFinal : 0;
+    // comision_final = comision_pagable (alias para compatibilidad backward)
+    // Cambio de comportamiento respecto a v1.6: antes comision_final podía ser
+    // negativa cuando NC > comision_liberada. Ahora siempre >= 0 (REGLA C).
+    var comisionFinal    = comisionPagable;
+    var comisionValidada = estadoCiclo === "cerrado" ? comisionPagable : 0;
+    var comisionPagada   = estadoCiclo === "cerrado" ? comisionPagable : 0;
 
     return {
       vendedor_id: vendedorId,
@@ -512,13 +604,32 @@
       venta_facturada_periodo: ventasDeVendedorCiclo(ctx, vendedorId, ciclo).reduce(function (s, v) { return s + v.venta_neta; }, 0),
       venta_cobrada: montoCobradoPeriodo,
       ajustes_nc: ajustesNC,
+      // --- CAMPOS POLITICA v1.7 — MODELO PAGABLE + SALDO ---
+      // Todos los campos nuevos mas los aliases backward-compat documentados.
+      // --- DISPONIBILIDAD DE DATOS (distinguir "dato ausente" de "incumplimiento real") ---
+      // OBJETIVO 4 — AUDITORIA SIC-AV 2026-07-30:
+      // Cuando presupuesto_disponible === false, cumplimiento_pct=0 y factor_presupuesto=0
+      // NO significan que el vendedor incumplió: significa que el dato aún no fue cargado.
+      // Los consumidores de estos campos DEBEN distinguir ambos casos antes de
+      // mostrar alertas o retener comisión (e.g. mostrar "Sin dato" en lugar de "0%").
+      presupuesto_disponible: presupuestoMes !== null, // false = "Pendiente de carga" (sin dato cargado)
+      // --- CAMPOS POLITICA v1.7 — MODELO PAGABLE + SALDO ---
+      // Todos los campos nuevos mas los aliases backward-compat documentados.
+      comision_generada: comisionGenerada,           // comision base del ciclo (= comision_liberada)
+      saldo_ajustes_anterior: saldoAjustesAnterior,  // NC pendientes de ciclos anteriores (input del llamador)
+      resultado_economico: resultadoEconomico,        // puede ser negativo; NO mostrar directamente al vendedor
+      comision_pagable: comisionPagable,              // REGLA C: siempre >= 0
+      saldo_ajustes_por_compensar: saldoAjustesPorCompensar, // saldo de NC a arrastrar al proximo ciclo (REGLA D)
+      // --- ALIASES BACKWARD-COMPAT ---
       comision_base_total: detalleFacturas.reduce(function (s, f) { return s + f.comision_base; }, 0),
       comision_potencial: comisionPotencial,
-      comision_liberada: comisionLiberada,
+      comision_liberada: comisionLiberada,            // alias de comision_generada (mantener para pantalla/PDF)
       comision_pendiente: comisionPendiente,
       comision_validada: comisionValidada,
       comision_pagada: comisionPagada,
-      comision_final: comisionFinal,
+      // @deprecated — usar comision_pagable. comision_final es alias backward-compat de comision_pagable.
+      // PENDIENTE ARQUITECTONICO: eliminar en v2.0 cuando todos los consumidores migren.
+      comision_final: comisionFinal,                  // alias de comision_pagable (v1.7: nunca negativa)
       detalle_facturas: detalleFacturas,
       // Clasificacion informativa (CHANGE REQUEST v1.4): ya no distingue
       // autorizada/no_autorizada -- esa distincion de aprobacion excepcional
@@ -642,6 +753,104 @@
       };
     });
   };
+
+  // ---------------------------------------------------------------------
+  // CUENTA CORRIENTE COMERCIAL — liquidacion encadenada por vendedor
+  // ---------------------------------------------------------------------
+  // AUDITORIA SIC-AV 2026-07-30, OBJETIVO 1 + OBJETIVO 2:
+  //
+  // SIC.calcularHistorico() es ESTATICO: calcula cada ciclo de forma
+  // independiente (saldo = 0). Util para auditar un ciclo aislado, pero
+  // no refleja el arrastre real de saldos entre liquidaciones.
+  //
+  // SIC.procesarCuentaCorriente() es el mecanismo de liquidacion real:
+  // - Ordena los ciclos cronologicamente.
+  // - Liquida cada ciclo pasando el saldo_ajustes_por_compensar de la
+  //   liquidacion anterior como saldo de entrada de la siguiente.
+  // - El saldo fluye automaticamente; el llamador NO inyecta nada.
+  //
+  // DECLARACION FORMAL DE ESTADO (2026-07-30):
+  //   SIC.calcularHistorico()        → estatico, saldo=0 por ciclo (prototipo)
+  //   SIC.procesarCuentaCorriente()  → liquidacion encadenada, arrastre real (v1.7)
+  //   Persistencia entre sesiones    → NO implementada (requiere ledger de backend)
+  //
+  // El saldo persiste dentro de una misma llamada a procesarCuentaCorriente().
+  // Si el usuario recarga la pagina, el saldo inicial arranca en 0.
+  // Para persistencia real entre sesiones/ejercicios se requiere el ledger
+  // de backend (ver esquema saldos_nc_ledger al final de esta seccion).
+  // ---------------------------------------------------------------------
+  SIC.procesarCuentaCorriente = function (ctx, vendedorId) {
+    // Ordenar liquidaciones cronologicamente (codigo de ciclo YYYY-MM es lexicograficamente comparable)
+    var ciclosOrdenados = ctx.params.ciclos.slice().sort(function (a, b) {
+      return a.ciclo < b.ciclo ? -1 : a.ciclo > b.ciclo ? 1 : 0;
+    });
+
+    var saldoPendiente = 0; // saldo arrastrado automaticamente de liquidacion en liquidacion
+
+    return ciclosOrdenados.map(function (c) {
+      var saldoEntrada = saldoPendiente;                                // saldo recibido de la liquidacion anterior
+      var r = SIC.calcularVendedorCiclo(ctx, vendedorId, c.ciclo, saldoEntrada);
+      saldoPendiente = r.saldo_ajustes_por_compensar;                  // saldo que se transfiere a la siguiente liquidacion
+
+      return {
+        // Identificacion de la liquidacion
+        ciclo: c.ciclo,
+        estado: c.estado,
+        fecha_cierre: c.cierre,
+        mes_desempeno: r.mes_desempeno,
+        // Desempeno comercial del periodo
+        presupuesto_disponible: r.presupuesto_disponible,
+        presupuesto_mes: r.presupuesto_mes,
+        venta_neta_mes: r.venta_neta_mes,
+        venta_cobrada: r.venta_cobrada,
+        cumplimiento_pct: r.cumplimiento_pct,
+        factor_presupuesto: r.factor_presupuesto,
+        iec_pct: r.iec_pct,
+        iec_disponible: r.iec_disponible,
+        factor_iec: r.factor_iec,
+        excedente_mes: r.excedente_mes,
+        bono_excedente: r.bono_excedente,
+        ajustes_nc: r.ajustes_nc,
+        // Cuenta corriente — trazabilidad completa de movimientos y saldo (Politica v1.7)
+        saldo_ajustes_anterior: saldoEntrada,                          // saldo recibido de ciclo anterior
+        comision_generada: r.comision_generada,
+        resultado_economico: r.resultado_economico,
+        comision_pagable: r.comision_pagable,
+        saldo_ajustes_por_compensar: r.saldo_ajustes_por_compensar,   // saldo transferido al ciclo siguiente
+        // Aliases backward-compat
+        comision_potencial: r.comision_potencial,
+        comision_liberada: r.comision_liberada,
+        comision_pagada: r.comision_pagada
+      };
+    });
+  };
+
+  // ---------------------------------------------------------------------
+  // ESQUEMA LEDGER DE PERSISTENCIA — saldos_nc_ledger (pendiente, v2.0)
+  // ---------------------------------------------------------------------
+  // Para que el saldo persista entre sesiones, recargas o ejercicios,
+  // se requiere un backend con un ledger de movimientos por vendedor/ciclo.
+  //
+  // Cada entrada del ledger representa un movimiento de saldo:
+  //
+  //   {
+  //     vendedor_id:       string,      // identificador del vendedor
+  //     pais:              string,      // "CL" | "PE"
+  //     ciclo_origen:      string,      // "2026-07" — liquidacion donde se genero el saldo
+  //     saldo_generado:    number,      // saldo_ajustes_por_compensar de la liquidacion origen
+  //     saldo_aplicado:    number,      // monto absorbido en la liquidacion de compensacion
+  //     saldo_restante:    number,      // saldo_generado - saldo_aplicado
+  //     ciclo_aplicacion:  string|null, // "2026-08" — liquidacion donde se aplico (null = pendiente)
+  //     estado:            "pendiente" | "parcial" | "cerrado",
+  //     fecha_calculo:     string,      // ISO 8601 — fecha de la liquidacion
+  //     version_politica:  string,      // "v1.7"
+  //     id_liquidacion:    string       // UUID de la liquidacion que genero este registro
+  //   }
+  //
+  // ESTADO ACTUAL: mientras este backend no exista, procesarCuentaCorriente()
+  // provee arrastre in-memory (dentro de la sesion). El motor es stateless
+  // entre sesiones distintas — el saldo inicial siempre arranca en 0.
+  // ---------------------------------------------------------------------
 
   // ---------------------------------------------------------------------
   // "Que puedo hacer para ganar mas" -- simulaciones de proyeccion,

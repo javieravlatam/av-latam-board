@@ -100,8 +100,12 @@
       "<td>Venta neta del mes de desempeño</td><td class='num'>" + fmt(pais, r.venta_neta_mes) + "</td></tr>" +
       "<tr><td>Cumplimiento del mes de desempeño</td><td class='num'>" + pct(r.cumplimiento_pct) + "</td>" +
       "<td>Factor de Presupuesto</td><td class='num'>" + pct(r.factor_presupuesto) + "</td></tr>" +
-      "<tr><td>IEC del mes de desempeño</td><td class='num'>" + pct(r.iec_pct) + "</td>" +
-      "<td>Factor IEC</td><td class='num'>" + pct(r.factor_iec) + "</td></tr>" +
+      // AUDITORIA SIC-AV 2026-07-30 OBJETIVO 1 — SSOT: verificar iec_disponible
+      // antes de mostrar valores. Cuando iec_disponible===false no hay ventas
+      // elegibles en el mes de desempeno y el IEC no fue calculado; mostrar
+      // "Pendiente de carga" exactamente igual que la pantalla principal.
+      "<tr><td>IEC del mes de desempeño</td><td class='num'>" + (r.iec_disponible === false ? "Pendiente de carga" : pct(r.iec_pct)) + "</td>" +
+      "<td>Factor IEC</td><td class='num'>" + (r.iec_disponible === false ? "Pendiente de carga" : pct(r.factor_iec)) + "</td></tr>" +
       "<tr><td>Excedente del mes de desempeño</td><td class='num'>" + fmt(pais, r.excedente_mes) + "</td>" +
       "<td>Bono por excedente</td><td class='num'>" + fmt(pais, r.bono_excedente) + "</td></tr>" +
       "</table></section>" +
@@ -125,13 +129,17 @@
       "<table class='tabla-resumen'>" +
       "<tr><td>Comision base (total del ciclo)</td><td class='num'>" + fmt(pais, r.comision_base_total) + "</td></tr>" +
       "<tr><td>Factor de Cumplimiento de Presupuesto</td><td class='num'>" + pct(r.factor_presupuesto) + "</td></tr>" +
-      "<tr><td>Factor IEC</td><td class='num'>" + pct(r.factor_iec) + "</td></tr>" +
-      "<tr><td>Bonificaciones (excedente)</td><td class='num'>" + fmt(pais, r.bono_excedente) + "</td></tr>" +
-      "<tr><td>Ajustes (notas de credito de ciclos anteriores)</td><td class='num'>-" + fmt(pais, r.ajustes_nc) + "</td></tr>" +
-      "<tr class='total'><td>Resultado final del ciclo</td><td class='num'>" + fmt(pais, r.comision_final) + "</td></tr>" +
+      "<tr><td>Factor IEC</td><td class='num'>" + (r.iec_disponible === false ? "Pendiente de carga" : pct(r.factor_iec)) + "</td></tr>" +
+      "<tr><td>Comision generada del periodo</td><td class='num'>" + fmt(pais, r.comision_generada) + "</td></tr>" +
+      "<tr><td>Bono por Excedente</td><td class='num'>+" + fmt(pais, r.bono_excedente) + "</td></tr>" +
+      "<tr><td>Notas de Credito del periodo</td><td class='num'>-" + fmt(pais, r.ajustes_nc) + "</td></tr>" +
+      // POLITICA v1.7: saldo anterior solo se muestra si es mayor que cero
+      (r.saldo_ajustes_anterior > 0 ? "<tr><td>Saldo anterior por compensar</td><td class='num'>-" + fmt(pais, r.saldo_ajustes_anterior) + "</td></tr>" : "") +
+      "<tr class='subtotal'><td>Resultado economico del ciclo</td><td class='num'>" + fmt(pais, r.resultado_economico) + "</td></tr>" +
+      "<tr class='total'><td>Comision pagable (nunca negativa)</td><td class='num'>" + fmt(pais, r.comision_pagable) + "</td></tr>" +
+      (r.saldo_ajustes_por_compensar > 0 ? "<tr class='alerta'><td>Nuevo saldo por compensar en ciclos futuros</td><td class='num'>" + fmt(pais, r.saldo_ajustes_por_compensar) + "</td></tr>" : "") +
       "</table>" +
-      "<p class='nota-formula'>Formula (CHANGE REQUEST SIC-AV v1.6): Cobros efectivos del período 26-25 &times; Tasa segun edad de cartera &times; Factor de Cumplimiento del mes de desempeño &times; Factor IEC del mismo mes de desempeño + Bono por Excedente del mes de desempeño - Notas de Credito - Devoluciones - Ajustes = Remuneracion Variable del período. " +
-      "La edad de cartera no se cuenta dos veces: vive unicamente en la tasa por tramo de dias. El precio piso ya no es un factor de la formula -- toda venta facturada entra al calculo normal; el precio piso solo impacta la comision de forma indirecta, a traves del Factor IEC. El presupuesto y el IEC se leen o calculan directamente sobre el mes calendario de desempeño -- nunca se prorratea presupuesto entre dos meses.</p>" +
+      "<p class='nota-formula'>Formula (POLITICA SIC-AV v1.7): Cobros efectivos del período 26-25 &times; Tasa segun edad de cartera &times; Factor Presupuesto &times; Factor IEC + Bono Excedente (solo si Factor Presupuesto=100%) - NC del periodo - Saldo anterior = Resultado Economico. Comision Pagable = max(0, Resultado Economico). Los ajustes NC no se pierden: si el resultado es negativo, el saldo queda pendiente para el siguiente ciclo con comision positiva. Reglas: (A) fPpto=0 implica comision_generada=0; (B) fPpto=0 implica bono=0; (C) comision_pagable siempre >= 0; (D) NC nunca se eliminan; (E) saldo anterior se aplica antes de calcular comision_pagable.</p>" +
       "</section>" +
 
       // DETALLE POR FACTURA

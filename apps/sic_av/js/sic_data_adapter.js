@@ -668,21 +668,34 @@
         if (v.piso_situacion === "cumple") sp += v.venta_neta; else bajoPiso += v.venta_neta;
       });
       var iecPct = denominador > 0 ? (numerador / denominador * 100) : 0;
-      if (denominador === 0) {
-        advertencias.push({ tipo: "vendedor_sin_iec", detalle: "Vendedor '" + clave + "' no tiene ventas elegibles (con precio piso y cantidad) en el mes de desempeño " + mesDesempeno + " -- IEC ponderado no calculable, se usa 0%" });
-      }
       var campoSobre  = pais === "CL" ? "ventas_sobre_piso_clp"    : "ventas_sobre_piso_usd";
       var campoBajo   = pais === "CL" ? "ventas_bajo_piso_clp"     : "ventas_bajo_piso_usd";
       var campoNoEval = pais === "CL" ? "ventas_no_evaluables_clp"  : "ventas_no_evaluables_usd";
       var campoNum    = pais === "CL" ? "venta_neta_elegible_clp"   : "venta_neta_elegible_usd";
       var campoDen    = pais === "CL" ? "valor_piso_teorico_clp"    : "valor_piso_teorico_usd";
-      var registro = { vendedor_id: clave, mes: mesDesempeno, iec_pct: Math.round(iecPct * 100) / 100 };
-      registro[campoSobre]  = sp;
-      registro[campoBajo]   = bajoPiso;
-      registro[campoNoEval] = noEvaluable;
-      registro[campoNum]    = numerador;   // numerador IEC ponderado (auditable)
-      registro[campoDen]    = denominador; // denominador IEC ponderado (auditable)
-      iec.push(registro);
+      if (denominador === 0) {
+        // AUDITORIA SIC-AV 2026-07-30 OBJETIVO 1 — SSOT: si no hay ventas
+        // elegibles, NO se empuja ningun registro a ctx.iec. De esta forma:
+        //   - iecInfo === null en calcularVendedorCiclo()
+        //   - iec_disponible = false en el resultado del ciclo
+        //   - pantalla principal: muestra "Pendiente de carga" (correcto)
+        //   - PDF: debe verificar iec_disponible === false y mostrar el mismo
+        //     literal (corregido en sic_pdf.js)
+        // Antes de este fix: se empujaba iec_pct=0 Y tambien se agregaba la
+        // advertencia vendedor_sin_iec; la pantalla leia la advertencia y
+        // mostraba "Pendiente de carga", pero el PDF leia iec_pct=0 y
+        // mostraba "0.0%" -- violacion SSOT que generaba confusion en directivos.
+        advertencias.push({ tipo: "vendedor_sin_iec", detalle: "Vendedor '" + clave + "' no tiene ventas elegibles (con precio piso y cantidad) en el mes de desempeño " + mesDesempeno + " -- IEC ponderado no calculable" });
+        // No se hace iec.push(...): iecInfo quedara null en sic_core.js
+      } else {
+        var registro = { vendedor_id: clave, mes: mesDesempeno, iec_pct: Math.round(iecPct * 100) / 100 };
+        registro[campoSobre]  = sp;
+        registro[campoBajo]   = bajoPiso;
+        registro[campoNoEval] = noEvaluable;
+        registro[campoNum]    = numerador;   // numerador IEC ponderado (auditable)
+        registro[campoDen]    = denominador; // denominador IEC ponderado (auditable)
+        iec.push(registro);
+      }
     });
 
     // -- Vendedores del ciclo (solo los que aparecen con ventas reales) --
