@@ -359,3 +359,20 @@ table.lineas input.in-objetivo{border-color:rgba(245,166,35,.4)}
   font-size:11px; color:var(--muted); margin-top:8px;
   border-top:1px solid var(--bdr); padding-top:8px;
 }
+/* v8 — dropdown búsqueda de producto ─────────────────────── */
+.prod-buscar-wrap{position:relative; width:100%}
+.prod-buscar-wrap input.input-prod-buscar{width:100%;min-width:120px;box-sizing:border-box}
+.prod-drop{
+  position:absolute; top:100%; left:0; right:0; z-index:300;
+  background:var(--bg); border:1px solid var(--bdr); border-radius:4px;
+  max-height:200px; overflow-y:auto;
+  box-shadow:0 4px 12px rgba(0,0,0,.14);
+}
+.prod-drop-item{
+  padding:6px 10px; cursor:pointer; font-size:13px;
+  border-bottom:1px solid var(--bdr); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.prod-drop-item:last-child{border-bottom:none}
+.prod-drop-item:hover,.prod-drop-item:focus{background:var(--primary-light,#EBF0F8)}
+/* v8 — btn-imprimir deshabilitado cuando IEC < 75% */
+button#btn-imprimir:disabled{opacity:.4; cursor:not-allowed}

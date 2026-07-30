@@ -130,7 +130,7 @@
           <thead><tr>
             <th style="width:18%">Producto</th><th style="width:10%">Presentación</th>
             <th class="num">Cant. envases</th>
-            <th class="num">Precio Prom. YTD <span class="info-ico" title="Precio promedio unitario de venta acumulado en el año (YTD). Valor histórico obtenido desde AV Board. Se muestra únicamente como referencia comercial y no corresponde a una lista oficial de precios.">ⓘ</span></th>
+            <th class="num" style="display:none">Precio Prom. YTD <span class="info-ico" title="Precio promedio unitario de venta acumulado en el año (YTD). Valor histórico obtenido desde AV Board. Se muestra únicamente como referencia comercial y no corresponde a una lista oficial de precios.">ⓘ</span></th>
             <th class="num">P. Objetivo unit.</th>
             <th class="num">P. Piso unit.</th>
             <th class="num">P. Venta unit.</th>
@@ -366,11 +366,45 @@
   }
   $('btn-agregar-linea').addEventListener('click', agregarLinea);
 
-  function opcionesProductos(seleccionSku){
-    return '<option value="">— seleccionar —</option>' + ctx.productos.map(function(p){
-      var sel = p.sku === seleccionSku ? ' selected' : '';
-      return '<option value="' + p.sku + '"' + sel + '>' + COTIZADOR.util.escapeHTML(p.producto + ' — ' + p.presentacion) + '</option>';
+  // v8 OBJ2 — Opciones de presentación para un producto seleccionado.
+  function opcionesPresentaciones(nombreProducto, skuActual) {
+    if (!nombreProducto) return '<option value="">— primero buscar producto —</option>';
+    var pres = COTIZADOR.Catalogo.presentacionesPara(ctx.productos, nombreProducto);
+    if (!pres.length) return '<option value="">— sin presentaciones —</option>';
+    return '<option value="">— presentación —</option>' + pres.map(function(p) {
+      var sel = p.sku === skuActual ? ' selected' : '';
+      return '<option value="' + COTIZADOR.util.escapeHTML(p.sku) + '"' + sel + '>' + COTIZADOR.util.escapeHTML(p.presentacion) + '</option>';
     }).join('');
+  }
+
+  // v8 OBJ1 — Mostrar/refrescar dropdown de búsqueda de productos.
+  function mostrarDropProducto(inp, drop, lineaIdx) {
+    var texto = inp.value;
+    var matches = COTIZADOR.Catalogo.filtrarProductos(ctx.productos, texto);
+    if (!matches.length) { drop.style.display = 'none'; return; }
+    drop.innerHTML = matches.map(function(nombre) {
+      return '<div class="prod-drop-item" data-nombre="' + COTIZADOR.util.escapeHTML(nombre) + '">' +
+             COTIZADOR.util.escapeHTML(nombre) + '</div>';
+    }).join('');
+    drop.style.display = 'block';
+    drop.querySelectorAll('.prod-drop-item').forEach(function(item) {
+      item.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        var nombre = this.dataset.nombre;
+        var l = quote.lineas[lineaIdx];
+        if (l.producto !== nombre) {
+          l.producto = nombre;
+          l.sku = null; l.presentacion = ''; l.unidad = null;
+          l.contenido_presentacion = null; l.precio_piso_unitario = null;
+          l.precio_lista_unitario = null; l.costo_referencial_unitario = null;
+          l.precio_lista_nota = null; l.precio_venta_unitario = 0;
+          l.precio_objetivo_unitario = null;
+        }
+        inp.value = nombre;
+        drop.style.display = 'none';
+        render();
+      });
+    });
   }
 
   // Corrección Final: sufijo junto al input de precio venta unitario, para
@@ -435,26 +469,41 @@
       var iecDisplay = (l.iec_linea === null || l.iec_linea === undefined) ? '—' : COTIZADOR.util.formatPct(l.iec_linea);
       var listaTitle = l.precio_lista_nota ? ' title="' + COTIZADOR.util.escapeHTML(l.precio_lista_nota) + '"' : '';
       tr.innerHTML =
-        '<td><select data-i="'+i+'" class="sel-producto">' + opcionesProductos(l.sku) + '</select></td>' +
-        '<td>' + COTIZADOR.util.escapeHTML(l.presentacion || '') + '</td>' +
-        '<td class="num"><input data-i="'+i+'" class="in-cantidad" type="number" min="0" step="1" value="'+ (l.cantidad_envases || 0) +'" style="width:56px"></td>' +
-        '<td class="num ref"'+listaTitle+'>' + (l.precio_lista_unitario !== null && l.precio_lista_unitario !== undefined ? COTIZADOR.util.formatMoney(l.precio_lista_unitario, quote.moneda) : '—') + '</td>' +
-        '<td class="num"><input data-i="'+i+'" class="in-objetivo" type="text" inputmode="decimal" value="'+ COTIZADOR.util.formatNumeroEdit(l.precio_objetivo_unitario, quote.moneda) +'" style="width:84px"></td>' +
+        '<td class="prod-buscar-wrap">' +
+          '<input type="text" data-i="'+i+'" class="input-prod-buscar" value="'+COTIZADOR.util.escapeHTML(l.producto||'')+'" placeholder="Buscar producto..." autocomplete="off">' +
+          '<div class="prod-drop" data-i="'+i+'" style="display:none"></div>' +
+        '</td>' +
+        '<td><select data-i="'+i+'" class="sel-presentacion" style="width:100%;min-width:80px">' + opcionesPresentaciones(l.producto, l.sku) + '</select></td>' +
+        '<td class="num"><input data-i="'+i+'" class="in-cantidad" type="number" min="0" step="1" value="'+(l.cantidad_envases||0)+'" style="width:56px"></td>' +
+        '<td class="num ref" style="display:none"'+listaTitle+'>' + (l.precio_lista_unitario !== null && l.precio_lista_unitario !== undefined ? COTIZADOR.util.formatMoney(l.precio_lista_unitario, quote.moneda) : '—') + '</td>' +
+        '<td class="num"><input data-i="'+i+'" class="in-objetivo" type="text" inputmode="decimal" value="'+COTIZADOR.util.formatNumeroEdit(l.precio_objetivo_unitario, quote.moneda)+'" style="width:84px"></td>' +
         '<td class="num mono">' + (l.precio_piso_unitario !== null && l.precio_piso_unitario !== undefined ? COTIZADOR.util.formatMoney(l.precio_piso_unitario, quote.moneda) : '—') + '</td>' +
-        '<td class="num"><input data-i="'+i+'" class="in-precio" type="text" inputmode="decimal" value="'+ COTIZADOR.util.formatNumeroEdit(l.precio_venta_unitario, quote.moneda) +'" style="width:76px" title="Precio '+sufijoPrecioUnitario(l)+'"><span class="hint" style="display:block">'+sufijoPrecioUnitario(l)+'</span></td>' +
-        '<td class="num mono">' + COTIZADOR.util.formatMoney(l.total_linea || 0, quote.moneda) + '</td>' +
+        '<td class="num"><input data-i="'+i+'" class="in-precio" type="text" inputmode="decimal" value="'+COTIZADOR.util.formatNumeroEdit(l.precio_venta_unitario, quote.moneda)+'" style="width:76px" title="Precio '+sufijoPrecioUnitario(l)+'"><span class="hint" style="display:block">'+sufijoPrecioUnitario(l)+'</span></td>' +
+        '<td class="num mono">' + COTIZADOR.util.formatMoney(l.total_linea||0, quote.moneda) + '</td>' +
         '<td class="num mono">' + iecDisplay + '</td>' +
         '<td><button class="btn-mini" data-i="'+i+'" data-accion="borrar">✕</button></td>';
       tbody.appendChild(tr);
     });
 
-    tbody.querySelectorAll('.sel-producto').forEach(function(sel){
-      sel.addEventListener('change', function(){
+    tbody.querySelectorAll('.input-prod-buscar').forEach(function(inp) {
+      var i = parseInt(inp.dataset.i, 10);
+      var drop = inp.parentElement.querySelector('.prod-drop');
+      inp.addEventListener('focus', function() { mostrarDropProducto(this, drop, i); });
+      inp.addEventListener('input', function() { mostrarDropProducto(this, drop, i); });
+      inp.addEventListener('blur', function() {
+        setTimeout(function() { drop.style.display = 'none'; }, 150);
+      });
+    });
+
+    tbody.querySelectorAll('.sel-presentacion').forEach(function(sel) {
+      sel.addEventListener('change', function() {
         var i = parseInt(this.dataset.i, 10);
-        var p = ctx.productos.find(function(pp){ return pp.sku === this.value; }.bind(this));
-        if (p){
+        var sku = this.value;
+        if (!sku) return;
+        var p = ctx.productos.find(function(pp) { return pp.sku === sku; });
+        if (p) {
           var l = quote.lineas[i];
-          l.sku = p.sku; l.producto = p.producto; l.presentacion = p.presentacion; l.unidad = p.unidad;
+          l.sku = p.sku; l.presentacion = p.presentacion; l.unidad = p.unidad;
           l.contenido_presentacion = p.contenido_presentacion;
           l.precio_piso_unitario = p.precio_piso_unitario;
           l.precio_lista_unitario = p.precio_lista_unitario;
@@ -466,6 +515,7 @@
         render();
       });
     });
+
     tbody.querySelectorAll('.in-cantidad').forEach(activarCampoCantidad);
     tbody.querySelectorAll('.in-precio').forEach(function(inp){ activarCampoNum(inp, 'precio_venta_unitario'); });
     tbody.querySelectorAll('.in-objetivo').forEach(function(inp){ activarCampoNum(inp, 'precio_objetivo_unitario'); });
@@ -622,6 +672,17 @@
     }
     $('k-iec').textContent = _iecDisplay === null ? '—' : COTIZADOR.util.formatPct(_iecDisplay);
     $('k-iec-label').textContent = _iecLabelTxt;
+
+    // OBJ3 — bloquear btn-imprimir en UI cuando IEC global < 75%
+    var _btnImprimir = $('btn-imprimir');
+    if (_iecDisplay === null || _iecDisplay < 0.75) {
+      _btnImprimir.disabled = true;
+      _btnImprimir.title = 'IEC global < 75% — esta cotización no puede emitirse como PDF comercial.';
+    } else {
+      _btnImprimir.disabled = false;
+      _btnImprimir.title = '';
+    }
+
     $('k-margen').textContent = t.margen_estimado === null ? '—' : COTIZADOR.util.formatMoney(t.margen_estimado, quote.moneda);
     $('k-ganado').textContent = COTIZADOR.util.formatMoney(t.valor_ganado, quote.moneda);
     $('k-cedido').textContent = COTIZADOR.util.formatMoney(t.valor_cedido, quote.moneda);

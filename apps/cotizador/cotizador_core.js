@@ -1053,15 +1053,16 @@ var COTIZADOR = (function () {
 
   // ────────────────────────────────────────────────────────────────
   // PDF CON CONTROL IEC — wrapper sobre PDF.imprimir que valida
-  // el estado IEC antes de abrir la ventana de impresión.
+  // el IEC ponderado global antes de abrir la ventana de impresión.
   //
-  // Estado A: IEC MIX >= 90% y todos los ítems >= 75% → PDF permitido.
-  // Estado B: IEC MIX < 90% y todos los ítems >= 75% → PDF bloqueado técnicamente.
-  // Estado C: algún ítem < 75% del piso → PDF bloqueado técnicamente.
+  // Política v8 (OBJ3):
+  //   IEC global < 75%  → PDF bloqueado (piso absoluto de la política comercial).
+  //   Estado C: algún ítem < 75% del piso → PDF bloqueado (guardrail por ítem).
+  //   Estado B: IEC MIX 75–89% y todos los ítems ≥ 75% → PDF PERMITIDO.
+  //   Estado A: IEC MIX ≥ 90% y todos los ítems ≥ 75% → PDF permitido.
   //
-  // El bloqueo en B y C es TÉCNICO (no existe backend seguro aún).
-  // GG/GD conserva la facultad de aprobar B y C cuando exista el backend.
-  // NINGUNA condición frontend puede desbloquear B o C (elimina fake security).
+  // Utiliza ÚNICAMENTE el IEC ponderado oficial del motor (iecMix), nunca
+  // el valor redondeado de pantalla ni un recálculo paralelo.
   // ────────────────────────────────────────────────────────────────
   PDF.imprimirConControl = function (quote, paisNombre, config) {
     var lineas = quote.lineas || [];
@@ -1074,10 +1075,25 @@ var COTIZADOR = (function () {
     } else {
       iecMix = (totales.iec_global !== undefined) ? totales.iec_global : null;
     }
+
+    // PISO ABSOLUTO (OBJ3): IEC ponderado global < 75% → bloqueo directo.
+    // Cubre también cotizaciones vacías (iecMix === null).
+    if (iecMix === null || iecMix < 0.75) {
+      alert(
+        'IEC GLOBAL INSUFICIENTE — PDF BLOQUEADO\n\n' +
+        'El IEC ponderado de esta cotización es ' +
+        (iecMix === null ? 'indefinido (sin líneas válidas)' : (Math.round(iecMix * 10000) / 100).toFixed(2) + '%') + '.\n\n' +
+        'Política comercial: se requiere un IEC global ≥ 75% para emitir el PDF.\n' +
+        'Ajusta los precios de venta y vuelve a intentarlo.'
+      );
+      return false;
+    }
+
     var estado = Calc.estadoIEC(lineas, iecMix, config);
 
     if (estado.estado === 'C') {
-      // EXCEPCIÓN CRÍTICA: algún ítem < 75% del piso. GG/GD puede aprobar con motivo
+      // EXCEPCIÓN CRÍTICA: algún ítem < 75% del piso. El IEC global puede ser ≥ 75%
+      // pero el guardrail por ítem también aplica. GG/GD puede aprobar con motivo
       // de excepción cuando exista backend. Técnicamente bloqueado hasta entonces.
       alert(
         'EXCEPCIÓN CRÍTICA · REQUIERE AUTORIZACIÓN GG/GD\n\n' +
@@ -1089,25 +1105,54 @@ var COTIZADOR = (function () {
       return false;
     }
 
-    if (estado.estado === 'B') {
-      // REQUIERE AUTORIZACIÓN: IEC MIX < 90% pero todos los ítems >= 75%.
-      // GG/GD puede aprobar cuando exista backend. Técnicamente bloqueado hasta entonces.
-      // NO hay condición frontend que pueda desbloquear este estado.
-      var fpActual = util.generarFingerprint(quote);
-      alert(
-        'REQUIERE AUTORIZACIÓN GG/GD\n\n' +
-        estado.descripcion + '\n\n' +
-        'Contacta al Gerente General o Gerencia de Dirección para aprobación.\n' +
-        'Fingerprint de esta versión: ' + fpActual + '\n\n' +
-        'El fingerprint identifica la cotización — no constituye autorización.\n' +
-        'PDF bloqueado técnicamente hasta que exista el backend de autorización segura.\n' +
-        'Ver: docs/ARQUITECTURA_SEGURA_ESTADO_B.md'
-      );
-      return false; // bloqueo técnico — sin bypass posible desde frontend
-    }
-
+    // Estado A o B (IEC global ≥ 75% y todos los ítems ≥ 75%) → PDF permitido.
     PDF.imprimir(quote, paisNombre);
     return true;
+  };
+
+  // ────────────────────────────────────────────────────────────────
+  // CATÁLOGO — helpers de búsqueda/resolución Producto → Presentación → SKU
+  // v8: Separa la selección de producto de la selección de presentación.
+  // El usuario escribe el nombre del producto (búsqueda parcial, case-insensitive);
+  // el sistema deriva las presentaciones disponibles y resuelve el SKU.
+  // NUNCA hardcodear nombres de producto, presentaciones ni SKUs aquí.
+  // ────────────────────────────────────────────────────────────────
+  var Catalogo = {
+    /** Nombres únicos de producto, ordenados alfabéticamente. */
+    productosUnicos: function (productos) {
+      var seen = {};
+      var result = [];
+      (productos || []).forEach(function (p) {
+        if (p.producto && !seen[p.producto]) { seen[p.producto] = true; result.push(p.producto); }
+      });
+      return result.sort();
+    },
+    /** Presentaciones disponibles para un producto: [{sku, presentacion}] */
+    presentacionesPara: function (productos, nombreProducto) {
+      return (productos || [])
+        .filter(function (p) { return p.producto === nombreProducto; })
+        .map(function (p) { return { sku: p.sku, presentacion: p.presentacion }; });
+    },
+    /** Resuelve el SKU a partir de nombre de producto + presentación exacta. */
+    resolverSKU: function (productos, nombreProducto, presentacion) {
+      var found = (productos || []).find(function (p) {
+        return p.producto === nombreProducto && p.presentacion === presentacion;
+      });
+      return found ? found.sku : null;
+    },
+    /** Filtra nombres únicos de producto por texto parcial (case-insensitive). */
+    filtrarProductos: function (productos, texto) {
+      var q = (texto || '').toLowerCase().trim();
+      var seen = {};
+      var result = [];
+      (productos || []).forEach(function (p) {
+        if (p.producto && !seen[p.producto] && p.producto.toLowerCase().indexOf(q) !== -1) {
+          seen[p.producto] = true;
+          result.push(p.producto);
+        }
+      });
+      return result.sort();
+    }
   };
 
   // ────────────────────────────────────────────────────────────────
@@ -1142,7 +1187,9 @@ var COTIZADOR = (function () {
     Recomendacion: Recomendacion,
     Pipeline: Pipeline,
     // Fase 3 — aditivo:
-    Logistica: Logistica
+    Logistica: Logistica,
+    // v8 — Catálogo: búsqueda y resolución Producto → Presentación → SKU
+    Catalogo: Catalogo
     // Fase 7 — IEC ponderado, política A/B/C, transporte incluido, interés, fingerprint.
     // Los nuevos métodos se exponen directamente en Calc y util (ya son parte de los objetos exportados).
     // Calc.estadoIEC(), Calc.prorratearTransporte(), Calc.calcularIECConTransporte(),

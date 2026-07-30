@@ -230,29 +230,31 @@ test('TC1: Estado C → imprimirConControl retorna false y no abre ventana', fun
   assertTrue(_openCalls.length === 0, 'TC1: no debería abrir ventana');
 });
 
-test('TC2: Estado B sin autorización → retorna false', function() {
+// [v8 — política actualizada OBJ3] Estado B (IEC 75–89%, todos los ítems ≥ 75%) → PERMITIDO.
+// Antes de v8: imprimirConControl bloqueaba B técnicamente (sin backend de autorización).
+// Desde v8: el piso absoluto es IEC global ≥ 75%. Estado B cumple ese umbral → PDF permitido.
+test('TC2: Estado B (IEC=88%, ítems ≥75%) → v8: PDF PERMITIDO (retorna true)', function() {
   _alertCalls = []; _openCalls = [];
-  // IEC=88%, ningún ítem < 75%
-  var lineas = [mkLinea(88, 100, 10)]; // 88% del piso → estado B (≥75% guardrail, <90% umbral)
-  var quote = { lineas: lineas, totales: { iec_global: 0.88 }, despacho: { incluido: false }, autorizacion: {}, meta: {} };
+  var lineas = [mkLinea(88, 100, 10)]; // 88% del piso → estado B (≥75% piso absoluto, <90% umbral)
+  var quote = { lineas: lineas, totales: { iec_global: 0.88 }, despacho: { incluido: false, costo_despacho: 0 }, autorizacion: {}, meta: {}, cliente: {}, moneda: 'CLP', observaciones: '', numero: 'TST-B', fecha: '2026-07-30', condicion_pago: '30d', validez_dias: 30, elaborado_por: 'Test' };
   var result = C.PDF.imprimirConControl(quote, 'Chile', CONFIG_BASE);
-  assertFalse(result, 'TC2: debería retornar false en estado B sin autorización');
-  assertTrue(_openCalls.length === 0, 'TC2: no debería abrir ventana');
+  assertTrue(result === true, 'TC2: Estado B con IEC>=75% debe retornar true en v8, got ' + result);
+  assertTrue(_openCalls.length > 0, 'TC2: debe abrir ventana PDF en estado B (v8)');
 });
 
-test('TC2b: Estado B con autorizacion fakeada → SIEMPRE retorna false (no bypass posible)', function() {
+test('TC2b: Estado B con ítems ≥75% → v8: PDF permitido (no hay fake-security overhead)', function() {
   _alertCalls = []; _openCalls = [];
   var lineas = [mkLinea(88, 100, 10)];
-  // Simulamos que alguien pone autorizacion.estado='aprobada' desde DevTools/localStorage
-  var fp = C.util.generarFingerprint({ lineas: lineas, totales: { iec_global: 0.88 }, numero: 'TST-FAKE' });
   var quote = {
     lineas: lineas, totales: { iec_global: 0.88 },
-    despacho: { incluido: false }, meta: {},
-    autorizacion: { estado: 'aprobada', fingerprint: fp }  // intento de bypass
+    despacho: { incluido: false, costo_despacho: 0 }, meta: {},
+    cliente: {}, moneda: 'CLP', observaciones: '', numero: 'TST-B2',
+    fecha: '2026-07-30', condicion_pago: '30d', validez_dias: 30, elaborado_por: 'Test',
+    autorizacion: {}
   };
   var result = C.PDF.imprimirConControl(quote, 'Chile', CONFIG_BASE);
-  assertFalse(result, 'TC2b: Estado B debe bloquear SIEMPRE aunque autorizacion.estado=aprobada');
-  assertTrue(_openCalls.length === 0, 'TC2b: no debe abrir ventana PDF bajo ninguna condicion');
+  assertTrue(result === true, 'TC2b: Estado B v8 debe retornar true, got ' + result);
+  assertTrue(_openCalls.length > 0, 'TC2b: debe abrir ventana en estado B v8');
 });
 
 test('TC3: Estado A → imprimirConControl genera PDF (retorna true)', function() {
