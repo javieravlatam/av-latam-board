@@ -11,32 +11,32 @@
  * Cortes:
  *   Chile ventas → 29/07/2026
  *   Chile CxC    → 21/07/2026 (2 entidades)
- *   Perú ventas  → 30/07/2026
+ *   Perú ventas  → 31/07/2026
  *   Perú CxC     → 10/05/2026
  *
- * Actualizado: 2026-07-30
+ * Actualizado: 2026-07-31
  */
 
 var AVBOARD = (function() {
 
   var meta = {
-    version:      '2026-07-30',
+    version:      '2026-07-31',
     tc_clp_usd:   950,
     meta_mn:      0.25,
     cortes: {
       chile_ventas: '29/07/2026',
       chile_cxc:    '21/07/2026',
-      peru_ventas:  '30/07/2026',
+      peru_ventas:  '31/07/2026',
       peru_cxc:     '10/05/2026'
     },
     meses: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
   };
 
   var grupo = {
-    ytd_usd:      832987,
-    ytd_clp:      791338097,
+    ytd_usd:      834987,
+    ytd_clp:      793238097,
     chile_ytd_usd: 412971,
-    peru_ytd_usd:  420016,
+    peru_ytd_usd:  422016,
     rtc_activos:  12,
     mn_chile:     0.179,
     mn_peru:      null,
@@ -52,14 +52,14 @@ var AVBOARD = (function() {
     ytd_5m:          392322897,
     ytd_4m:          269373745,
     mayo_parcial:    22306815,
-    ppto_anual:      792640368.0,
-    ppto_4m:         193244968,
-    ppto_5m:         355812668,
-    cumplimiento_4m: 1.3939,
-    cumplimiento_5m: 1.1026,
-    cumplimiento_t1: 1.1857,
+    ppto_anual:      728110400.0,
+    ppto_4m:         228338100,
+    ppto_5m:         405611000,
+    cumplimiento_4m: 1.1797,
+    cumplimiento_5m: 0.9672,
+    cumplimiento_t1: 0.9979,
     mensual_real:  [88231364, 35651978, 52370709, 93119694, 60181659, 40460678, 22306815, 0, 0, 0, 0, 0],
-    mensual_ppto:  [72303400.0, 36596500.0, 39746700.0, 44598368.0, 53734800.0, 71112400.0, 37720500.0, 82581300.0, 102341400.0, 93908900.0, 86921300.0, 71074800.0],
+    mensual_ppto:  [82144800.0, 46296700.0, 48185000.0, 51711600.0, 62175700.0, 59298800.0, 55798400.0, 46000700.0, 84000000.0, 82999900.0, 61497800.0, 48001000.0],
     rtc_real_t1:   {
       caroca: 53122658,
       encina: 27592522,
@@ -388,21 +388,21 @@ var AVBOARD = (function() {
   };
 
   var peru_ventas = {
-    ytd_5m:       420016,
+    ytd_5m:       422016,
     ytd_4m:       259813,
-    mayo_parcial: 29959,
+    mayo_parcial: 31959,
     ppto_anual:   1210600.0,
     ppto_4m:      287777.3,
     ppto_5m:      350134.3,
     cumplimiento_4m: 0.9028,
-    cumplimiento_5m: 0.7961,
-    mensual_real: [70232, 38180, 87967, 63434, 84159, 46084, 29959, 0, 0, 0, 0, 0],
+    cumplimiento_5m: 0.7999,
+    mensual_real: [70232, 38180, 87967, 63434, 84159, 46084, 31959, 0, 0, 0, 0, 0],
     mensual_ppto: [51668.700000000004, 60148.09999999999, 101803.8, 74156.7, 62357.0, 99465.7, 78000.0, 159000.0, 143000.0, 173000.0, 118000.0, 90000.0],
     por_vendedor: {
       aguirre: {
         nombre: "Lizbeth Aguirre",
-        ytd:    121486,
-        mayo:   4638
+        ytd:    123486,
+        mayo:   6638
       },
       atalaya: {
         nombre: "Omar Atalaya",
@@ -449,7 +449,7 @@ var AVBOARD = (function() {
       valladares: [0, 221, 5310, 4823, 5153, 10319, 10000, 10000, 10000, 15000, 10000, 10000]
     },
     rtc_mensual_real: {
-      aguirre: [0, 13884, 28681, 13447, 49431, 11404, 4638, 0, 0, 0, 0, 0],
+      aguirre: [0, 13884, 28681, 13447, 49431, 11404, 6638, 0, 0, 0, 0, 0],
       atalaya: [29881, 8108, 20000, 6600, 8400, 12600, 0, 0, 0, 0, 0, 0],
       diaz: [0, 0, 0, 6300, 2600, 8320, 240, 0, 0, 0, 0, 0],
       gonzales: [600, 0, 96, 0, 0, 6720, 8146, 0, 0, 0, 0, 0],
@@ -730,7 +730,7 @@ var AVBOARD = (function() {
     { pais:"PE", producto:"AV PLUS MAGNESIO", formato:"20 L (tier)", ventas:978.4, cantidad:168.0, precio_uni_prom:5.8238, costo_unidad:1.5, costo_total:252.0, margen_total:726.4, margen_pct:0.7424, piso:5.5, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"PE", producto:"AV PLUS MAGNESIO", formato:"1000 L (tier)", ventas:5557.4, cantidad:751.0, precio_uni_prom:7.4, costo_unidad:1.12, costo_total:841.12, margen_total:4716.28, margen_pct:0.8486, piso:4.0, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"PE", producto:"AV PLUS CALCIO", formato:"200 L (tier)", ventas:1126.4, cantidad:256.0, precio_uni_prom:4.4, costo_unidad:1.05, costo_total:268.8, margen_total:857.6, margen_pct:0.7614, piso:3.8, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"PE", producto:"AV ALGAP 30", formato:"200 L (tier)", ventas:6632.0, cantidad:628.0, precio_uni_prom:10.5605, costo_unidad:1.7, costo_total:1067.6, margen_total:5564.4, margen_pct:0.839, piso:8.0, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"PE", producto:"AV ALGAP 30", formato:"200 L (tier)", ventas:8632.0, cantidad:828.0, precio_uni_prom:10.4251, costo_unidad:1.7, costo_total:1407.6, margen_total:7224.4, margen_pct:0.8369, piso:8.0, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"PE", producto:"REGALIA MAXX", formato:"?", ventas:73731.64, cantidad:2135.0, precio_uni_prom:34.5347, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"PE", producto:"AV SILFORTE", formato:"20 L (tier)", ventas:2176.0, cantidad:206.0, precio_uni_prom:10.5631, costo_unidad:2.4, costo_total:494.4, margen_total:1681.6, margen_pct:0.7728, piso:13.0, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"PE", producto:"AV HUMIC ROOT", formato:"200 L (tier)", ventas:280.0, cantidad:80.0, precio_uni_prom:3.5, costo_unidad:1.25, costo_total:100.0, margen_total:180.0, margen_pct:0.6429, piso:3.0, clasif:"🟢 SOBRE PISO", estado:"OK" },

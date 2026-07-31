@@ -63,18 +63,38 @@
 </div>
 
 <div class="sic-user-bar">
-  <div>Pais activo: <span class="pais-activo">PERU</span></div>
+  <div>Pais activo: <span class="pais-activo">PERU</span> &nbsp;·&nbsp; <span id="usr-nombre" style="font-weight:700;"></span></div>
   <div>
     <button class="sic-btn-logout" onclick="window.location.href='../../index.html'">← Board</button>
     <button class="sic-btn-logout" onclick="irAPoliticaYFactores()">Politica y Factores</button>
     <button class="sic-btn-logout" onclick="irADatosRealesAuditoria()">Datos Reales (auditoria tecnica)</button>
+    <button class="sic-btn-logout" onclick="abrirCambiarClave()">Cambiar contraseña</button>
     <button class="sic-btn-logout" onclick="SICAuth.cerrarSesion()">Cerrar sesion</button>
+  </div>
+</div>
+
+<!-- Modal cambio de contraseña -->
+<div id="modal-cambio-clave" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:12px;padding:32px 30px;max-width:360px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.18);">
+    <h3 style="margin:0 0 6px;font-size:16px;color:#1b2027;">Cambiar contraseña</h3>
+    <p style="margin:0 0 20px;font-size:13px;color:#7a8898;">La nueva contraseña se guarda en este navegador.</p>
+    <label style="display:block;font-size:11.5px;font-weight:700;color:#4a5568;text-transform:uppercase;margin-bottom:4px;">Contraseña actual</label>
+    <input id="mc-actual" type="password" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1.5px solid #d1dae5;border-radius:7px;font-size:14px;margin-bottom:13px;" placeholder="Tu contraseña actual">
+    <label style="display:block;font-size:11.5px;font-weight:700;color:#4a5568;text-transform:uppercase;margin-bottom:4px;">Nueva contraseña</label>
+    <input id="mc-nueva" type="password" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1.5px solid #d1dae5;border-radius:7px;font-size:14px;margin-bottom:13px;" placeholder="Mínimo 6 caracteres">
+    <label style="display:block;font-size:11.5px;font-weight:700;color:#4a5568;text-transform:uppercase;margin-bottom:4px;">Confirmar nueva contraseña</label>
+    <input id="mc-confirma" type="password" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1.5px solid #d1dae5;border-radius:7px;font-size:14px;margin-bottom:6px;" placeholder="Repite la contraseña">
+    <div id="mc-error" style="color:#a83232;font-size:12px;min-height:18px;margin-bottom:10px;"></div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="cerrarCambiarClave()" style="flex:1;padding:10px;border:1.5px solid #d1dae5;border-radius:7px;background:#fff;font-size:14px;cursor:pointer;">Cancelar</button>
+      <button onclick="confirmarCambioClave()" style="flex:1;padding:10px;background:#1B4F8A;color:#fff;border:none;border-radius:7px;font-size:14px;font-weight:700;cursor:pointer;">Guardar</button>
+    </div>
   </div>
 </div>
 
 <div class="sic-wrap">
 
-  <div class="sic-selector-row">
+  <div class="sic-selector-row" id="selector-row">
     <label for="sel-vendedor">Vendedor:</label>
     <select id="sel-vendedor" onchange="cambiarVendedor()"></select>
     <label for="sel-ciclo">Período de cobranza (real, 26→25):</label>
@@ -216,7 +236,10 @@
   var FACTURAS_ORDEN = { campo: "fecha_factura", asc: false };
 
   var sesion = SICAuth.exigirSesion(PAIS);
-  if (sesion) { inicializar(); }
+  if (sesion) {
+    document.getElementById("usr-nombre").textContent = sesion.nombre;
+    inicializar();
+  }
 
   // Nombres de ciclo/mes legibles y fechas en formato DD/MM/YYYY -- solo para
   // presentacion; el codigo interno ("2026-07") no cambia. Sirve tanto para
@@ -299,10 +322,18 @@
     var sigueExistiendo = cicloReal.vendedores.some(function (v) { return v.id === vendedorPrevio; });
     VENDEDOR_ACTUAL = sigueExistiendo ? vendedorPrevio : cicloReal.vendedores[0].id;
     selVendedor.value = VENDEDOR_ACTUAL;
+
+    // Restriccion de rol: si el usuario es vendedor, forzar su propio ID y ocultar selector.
+    if (sesion && sesion.rol === "vendedor" && sesion.vendedor_id) {
+      VENDEDOR_ACTUAL = sesion.vendedor_id;
+      selVendedor.value = VENDEDOR_ACTUAL;
+      document.getElementById("selector-row").style.display = "none";
+    }
     return cicloReal;
   }
 
   function cambiarVendedor() {
+    if (sesion && sesion.rol === "vendedor") return; // vendedor no puede cambiar su selector
     VENDEDOR_ACTUAL = document.getElementById("sel-vendedor").value;
     renderTodo();
   }
@@ -319,6 +350,30 @@
 
   function irADatosRealesAuditoria() {
     window.location.href = "sic_datos_reales.html";
+  }
+
+  function abrirCambiarClave() {
+    document.getElementById("mc-actual").value = "";
+    document.getElementById("mc-nueva").value = "";
+    document.getElementById("mc-confirma").value = "";
+    document.getElementById("mc-error").textContent = "";
+    document.getElementById("modal-cambio-clave").style.display = "flex";
+  }
+  function cerrarCambiarClave() {
+    document.getElementById("modal-cambio-clave").style.display = "none";
+  }
+  function confirmarCambioClave() {
+    var actual   = document.getElementById("mc-actual").value;
+    var nueva    = document.getElementById("mc-nueva").value;
+    var confirma = document.getElementById("mc-confirma").value;
+    var errEl    = document.getElementById("mc-error");
+    errEl.textContent = "";
+    if (nueva.length < 6) { errEl.textContent = "La contraseña debe tener al menos 6 caracteres."; return; }
+    if (nueva !== confirma) { errEl.textContent = "Las contraseñas no coinciden."; return; }
+    if (nueva === "1234")  { errEl.textContent = "No puedes usar la clave inicial."; return; }
+    if (!SICAuth.cambiarClave(actual, nueva)) { errEl.textContent = "Contraseña actual incorrecta."; return; }
+    cerrarCambiarClave();
+    alert("Contraseña actualizada correctamente.");
   }
 
   function renderComisionResult(r, hayCobranzas, sinPresupuesto, sinIec) {
