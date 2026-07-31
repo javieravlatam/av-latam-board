@@ -1555,17 +1555,22 @@ function cerrarSesion() {
     // Header
     set('av-eb-header-corte', 'Chile '+sHV+' · Perú '+sPV+' · CxC '+sHC);
 
+    // Ppto dinámico Chile — suma los primeros nRealCL_EB meses del array mensual_ppto
+    var pptoCL_ytd = (cv.mensual_ppto || []).slice(0, nRealCL_EB).reduce(function(a,b){return a+(b||0);},0);
+    var mesFinCL   = mesesFullEB[nRealCL_EB - 1] || mesesFullEB[4];
+    var cumplCL_ytd = pptoCL_ytd > 0 ? D.chile_ytd() / pptoCL_ytd : cv.cumplimiento_4m;
+
     // KPI Grupo
     set('av-eb-grupo-ytd',   'USD '+K(D.grupo_ytd_usd())+'K');
     var chUsdK = K1(D.chile_ytd() / D.tc());
     var peUsdK = K1(D.peru_ytd());
     set('av-eb-grupo-sub',   'Chile USD '+chUsdK+'K + Perú USD '+K1(D.peru_ytd())+'K');
-    set('av-eb-grupo-badge', 'CHILE '+pct(cv.cumplimiento_4m)+' PPTO 4m 🚀');
+    set('av-eb-grupo-badge', 'CHILE '+pct(cumplCL_ytd)+' PPTO '+nRealCL_EB+'m 🚀');
 
     // KPI Chile
     set('av-eb-chile-ytd',   M(D.chile_ytd())+'M');
-    set('av-eb-chile-sub',   'Ppto Ene–Abr: CLP '+M(cv.ppto_4m)+'M');
-    set('av-eb-chile-badge', pct(cv.cumplimiento_4m)+' del Ppto 4m 🟢');
+    set('av-eb-chile-sub',   'Ppto Ene–'+mesFinCL+': CLP '+M(pptoCL_ytd)+'M');
+    set('av-eb-chile-badge', pct(cumplCL_ytd)+' del Ppto '+nRealCL_EB+'m 🟢');
 
     // KPI Perú
     set('av-eb-peru-ytd',    K(D.peru_ytd())+'K');
