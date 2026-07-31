@@ -1861,6 +1861,7 @@ def build_tx_cl(df_ventas, piso):
     df = df_ventas.copy()
     df['total_n'] = pd.to_numeric(df['Total'], errors='coerce').fillna(0)
     df['pv_n']    = pd.to_numeric(df['Precio Uni'], errors='coerce')
+    df['cant_n']  = pd.to_numeric(df.get('Cantidad', pd.Series(dtype=float)), errors='coerce')
     df['fecha_dt'] = pd.to_datetime(df['Fecha'], format='%d/%m/%Y', errors='coerce')
     df['prod_base'], df['fmt_parsed'] = zip(*df['Producto'].apply(parse_producto_formato))
 
@@ -1871,6 +1872,17 @@ def build_tx_cl(df_ventas, piso):
         entry = buscar_piso_chile(piso, row['prod_base'], row['fmt_parsed'])
         pp    = float(entry['pp']) if entry and entry['pp'] is not None else None
         mes   = str(row.get('MES', '')).strip().upper()
+
+        # Cantidad: usar columna directa si existe; derivar de Total/Precio Uni como fallback.
+        # El SIC necesita qty para calcular IEC ponderado (qty × pp = valor_piso_teórico).
+        # Verificado 2026-06-24: Cantidad × Precio Uni == Total exactamente en el Libro de Ventas.
+        raw_cant = row['cant_n'] if pd.notna(row['cant_n']) else None
+        if raw_cant is not None and raw_cant > 0:
+            qty = round(float(raw_cant), 4)
+        elif pv is not None and pv > 0 and total > 0:
+            qty = round(total / pv, 4)
+        else:
+            qty = None
 
         if pp is not None and total > 0:
             elegible = True
@@ -1897,6 +1909,7 @@ def build_tx_cl(df_ventas, piso):
             'total':        total,
             'pv':           pv,
             'pp':           pp,
+            'qty':          qty,
             'elegible':     elegible,
             'sp':           sp,
             'bp':           bp,
