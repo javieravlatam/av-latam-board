@@ -69,8 +69,8 @@ PPTO_ANUAL_PE_LEGACY: float = sum(PPTO_MENSUAL_PE_LEGACY)   # 1,137,034
 # VALORES ESPERADOS DESDE LIBRO_BASE (para validación)
 # ─────────────────────────────────────────────────────────────
 
-EXPECTED_CL_ANUAL:  float = 792_640_368.0
-EXPECTED_CL_PPTO5M: float = 246_979_768.0
+EXPECTED_CL_ANUAL:  float = 728_110_400.0   # nuevo libro base AV 2026 (actualizado Jul 2026)
+EXPECTED_CL_PPTO5M: float = 290_513_800.0   # Ene–May 2026 nuevo libro
 EXPECTED_PE_ANUAL:  float = 1_210_600.0
 EXPECTED_PE_PPTO5M: float = 350_134.3
 
