@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel Presupuesto · AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=202607231443"></script>
+<script src="avboard_data.js?v=20260731"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 // ── CONSTANTES DE COLOR (definidas aquí para que CH_RTC_DATA / PE_RTC_DATA las encuentren) ──
@@ -41,16 +41,19 @@ const CH_RTC_DATA = {
 };
 
 // CHILE: ppto mensual y real mensual por RTC
+// Los ppto se sobreescriben desde AVBOARD.chile.ventas.rtc_mensual_ppto al cargar
 const CH_MES_DATA = {
   equipo: {
     ppto: [83558,41602,42000,46431,51000,49730,62800,76500,110800,112700,97500,86700],
     real: [88231,35652,52371,14599,0,0,0,0,0,0,0,0],
   },
-  caroca:    { ppto:[12500,6000,14500,8831,12500,8730,6000,25500,10800,8700,5000,12500],    real:[14820,6389,31913,10171,0,0,0,0,0,0,0,0] },
-  laratro:   { ppto:[36000,10600,7500,16600,22500,10000,7800,21000,25000,20000,37500,19500], real:[37028,10379,5487,1701,0,0,0,0,0,0,0,0] },
-  encina:    { ppto:[14200,7500,7500,5000,5000,5000,5000,12000,21000,28000,31000,28700],     real:[13511,7263,6819,803,0,0,0,0,0,0,0,0] },
-  velasquez: { ppto:[14858,11502,6500,10000,5000,20000,38000,12000,48000,50000,18000,20000], real:[14491,9912,5197,1890,0,0,0,0,0,0,0,0] },
-  veverka:   { ppto:[6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000],           real:[6186,944,1680,0,0,0,0,0,0,0,0,0] },
+  caroca:      { ppto:[12500,6000,14500,8831,12500,8730,6000,25500,10800,8700,5000,12500],    real:[14820,6389,31913,10171,0,0,0,0,0,0,0,0] },
+  laratro:     { ppto:[36000,10600,7500,16600,22500,10000,7800,21000,25000,20000,37500,19500], real:[37028,10379,5487,1701,0,0,0,0,0,0,0,0] },
+  encina:      { ppto:[14200,7500,7500,5000,5000,5000,5000,12000,21000,28000,31000,28700],     real:[13511,7263,6819,803,0,0,0,0,0,0,0,0] },
+  velasquez:   { ppto:[14858,11502,6500,10000,5000,20000,38000,12000,48000,50000,18000,20000], real:[14491,9912,5197,1890,0,0,0,0,0,0,0,0] },
+  veverka:     { ppto:[6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000],           real:[6186,944,1680,0,0,0,0,0,0,0,0,0] },
+  munoz:       { ppto:[6025,5310,3978,3306,5661,8360,0,0,0,0,0,0],                            real:[2195,765,1274,0,0,0,0,0,0,0,0,0] },
+  franco_riffo:{ ppto:[1769,1490,4709,3836,3065,4175,0,0,0,0,0,0],                            real:[0,0,0,0,0,0,0,0,0,0,0,0] },
 };
 
 // PERÚ: ppto anual y real YTD por zona
@@ -194,12 +197,13 @@ function renderChileRvsPpto(periodoKey, btn) {
   var lblRange = (periodoKey === 'ytd') ? ('Ene–' + (MES[endIdx] || 'Jun')) : p.lbl;
 
   var vendors = [
-    {key:'caroca',    lbl:'J. Caroca',       clsS:'sg', bold:true},
-    {key:'laratro',   lbl:'P. Laratro',      clsS:'sa', bold:false},
-    {key:'encina',    lbl:'R. Encina',       clsS:'sa', bold:false},
-    {key:'velasquez', lbl:'F. Velásquez', clsS:'sr', bold:false},
-    {key:'veverka',   lbl:'I. Veverka',      clsS:'sr', bold:false},
-    {key:'munoz',     lbl:'V. Muñoz',   clsS:'sg', bold:false}
+    {key:'laratro',     lbl:'P. Laratro',     clsS:'sa', bold:false},
+    {key:'velasquez',   lbl:'F. Velásquez',   clsS:'sr', bold:false},
+    {key:'veverka',     lbl:'I. Veverka',     clsS:'sr', bold:false},
+    {key:'caroca',      lbl:'J. Caroca',      clsS:'sg', bold:true},
+    {key:'munoz',       lbl:'V. Muñoz',       clsS:'sg', bold:false},
+    {key:'encina',      lbl:'R. Encina',      clsS:'sa', bold:false},
+    {key:'franco_riffo',lbl:'F. Riffo',       clsS:'sa', bold:false}
   ];
 
   var fmtK   = function(n){ return Math.round(n/1000).toLocaleString('es-CL') + 'K'; };
@@ -556,7 +560,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 <div class="panel" style="margin-bottom:15px;">
   <div class="ptitle">PRESUPUESTO OFICIAL 2026 · CHILE <span class="ptag">CLP miles · por RTC · 12 meses aprobados</span></div>
   <div style="overflow-x:auto;">
-  <table class="bt">
+  <table class="bt" id="cl-ppto-mensual-tbl">
     <thead><tr>
       <th style="text-align:left;">RTC</th>
       <th>Ene</th><th>Feb</th><th>Mar</th><th style="color:var(--amber);">Abr</th>
@@ -564,51 +568,20 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
       <th>Sep</th><th>Oct</th><th>Nov</th><th>Dic</th>
       <th style="color:var(--green);">TOTAL</th>
     </tr></thead>
-    <tbody>
-      <tr><td><span class="s sa"></span>R. Encina</td>
-        <td class="cp">14.200</td><td class="cp">7.500</td><td class="cp">7.500</td><td class="cp">5.000</td>
-        <td class="cp">5.000</td><td class="cp">5.000</td><td class="cp">5.000</td><td class="cp">12.000</td>
-        <td class="cp">21.000</td><td class="cp">28.000</td><td class="cp">31.000</td><td class="cp">28.700</td>
-        <td class="cp" style="font-weight:700;color:var(--text);">169.900</td>
-      </tr>
-      <tr><td><span class="s sa"></span>P. Laratro</td>
-        <td class="cp">36.000</td><td class="cp">10.600</td><td class="cp">7.500</td><td class="cp">16.600</td>
-        <td class="cp">22.500</td><td class="cp">10.000</td><td class="cp">7.800</td><td class="cp">21.000</td>
-        <td class="cp">25.000</td><td class="cp">20.000</td><td class="cp">37.500</td><td class="cp">19.500</td>
-        <td class="cp" style="font-weight:700;color:var(--text);">234.000</td>
-      </tr>
-      <tr><td><span class="s sg"></span>J. Caroca</td>
-        <td class="cp">12.500</td><td class="cp">6.000</td><td class="cp">14.500</td><td class="cp">8.831</td>
-        <td class="cp">12.500</td><td class="cp">8.730</td><td class="cp">6.000</td><td class="cp">25.500</td>
-        <td class="cp">10.800</td><td class="cp">8.700</td><td class="cp">5.000</td><td class="cp">12.500</td>
-        <td class="cp" style="font-weight:700;color:var(--text);">131.561</td>
-      </tr>
-      <tr><td><span class="s sr"></span>I. Veverka</td>
-        <td class="cp">6.000</td><td class="cp">6.000</td><td class="cp">6.000</td><td class="cp">6.000</td>
-        <td class="cp">6.000</td><td class="cp">6.000</td><td class="cp">6.000</td><td class="cp">6.000</td>
-        <td class="cp">6.000</td><td class="cp">6.000</td><td class="cp">6.000</td><td class="cp">6.000</td>
-        <td class="cp" style="font-weight:700;color:var(--text);">72.000</td>
-      </tr>
-      <tr><td><span class="s sr"></span>F. Velásquez</td>
-        <td class="cp">14.858</td><td class="cp">11.502</td><td class="cp">6.500</td><td class="cp">10.000</td>
-        <td class="cp">5.000</td><td class="cp">20.000</td><td class="cp">38.000</td><td class="cp">12.000</td>
-        <td class="cp">48.000</td><td class="cp">50.000</td><td class="cp">18.000</td><td class="cp">20.000</td>
-        <td class="cp" style="font-weight:700;color:var(--text);">253.860</td>
-      </tr>
-    </tbody>
+    <tbody id="cl-ppto-tbody"><!-- populated from AVBOARD.chile.ventas.rtc_mensual_ppto --></tbody>
     <tfoot><tr>
       <td>TOTAL</td>
-      <td class="mono" style="text-align:right;">83.558</td><td class="mono" style="text-align:right;">41.602</td>
-      <td class="mono" style="text-align:right;">42.000</td><td class="mono" style="text-align:right;color:var(--amber);">46.431</td>
-      <td class="mono" style="text-align:right;">51.000</td><td class="mono" style="text-align:right;">49.730</td>
-      <td class="mono" style="text-align:right;">62.800</td><td class="mono" style="text-align:right;">76.500</td>
-      <td class="mono" style="text-align:right;">110.800</td><td class="mono" style="text-align:right;">112.700</td>
-      <td class="mono" style="text-align:right;">97.500</td><td class="mono" style="text-align:right;">86.700</td>
-      <td class="mono" style="text-align:right;color:var(--green);">861.321</td>
+      <td class="mono" style="text-align:right;">—</td><td class="mono" style="text-align:right;">—</td>
+      <td class="mono" style="text-align:right;">—</td><td class="mono" style="text-align:right;color:var(--amber);">—</td>
+      <td class="mono" style="text-align:right;">—</td><td class="mono" style="text-align:right;">—</td>
+      <td class="mono" style="text-align:right;">—</td><td class="mono" style="text-align:right;">—</td>
+      <td class="mono" style="text-align:right;">—</td><td class="mono" style="text-align:right;">—</td>
+      <td class="mono" style="text-align:right;">—</td><td class="mono" style="text-align:right;">—</td>
+      <td class="mono" style="text-align:right;color:var(--green);">—</td>
     </tr></tfoot>
   </table>
   </div>
-  <div style="margin-top:6px;font-size:8px;color:var(--muted);font-family:'DM Mono';">* Miles de CLP · V. Muñoz no incluida en ppto oficial registrado</div>
+  <div style="margin-top:6px;font-size:8px;color:var(--muted);font-family:'DM Mono';">* Miles de CLP · Fuente: Libro Base AV 2026 · 7 RTCs Chile</div>
 </div>
 
 <!-- Real vs Ppto Chile + Curvas -->
@@ -651,11 +624,13 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
     <div class="ptitle">CURVA ACUMULADA CHILE 2026 <span class="ptag">CLP millones · ppto vs real · 12 meses</span></div>
     <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;" id="selectorChileCurva">
       <button class="sel-btn active" onclick="setChileCurva('equipo',this)">Equipo completo</button>
-      <button class="sel-btn" onclick="setChileCurva('caroca',this)">J. Caroca</button>
       <button class="sel-btn" onclick="setChileCurva('laratro',this)">P. Laratro</button>
-      <button class="sel-btn" onclick="setChileCurva('encina',this)">R. Encina</button>
       <button class="sel-btn" onclick="setChileCurva('velasquez',this)">F. Velásquez</button>
       <button class="sel-btn" onclick="setChileCurva('veverka',this)">I. Veverka</button>
+      <button class="sel-btn" onclick="setChileCurva('caroca',this)">J. Caroca</button>
+      <button class="sel-btn" onclick="setChileCurva('munoz',this)">V. Muñoz</button>
+      <button class="sel-btn" onclick="setChileCurva('encina',this)">R. Encina</button>
+      <button class="sel-btn" onclick="setChileCurva('franco_riffo',this)">F. Riffo</button>
     </div>
     <div class="ch ch-xl"><canvas id="cChileCurva"></canvas></div>
   </div>
@@ -1329,15 +1304,52 @@ new Chart(document.getElementById('cGrupo'),{
     set('ppto-footer-txt','AV Latam BI Platform · Panel Presupuesto · Ppto oficial 2026 · Real: Chile '+cortesCL+' · Perú '+cortesPE+' · TC='+tc);
     // ── Actualizar CH_MES_DATA desde AVBOARD ──────────────────────────────────
     CH_MES_DATA.equipo.real=CH_REAL.slice();
-    if(cv.rtc_mensual_real){
-      var toKr=function(v){return v?Math.round(v/1000):0;};
-      var rmb=cv.rtc_mensual_real;
-      if(rmb.caroca&&CH_MES_DATA.caroca) CH_MES_DATA.caroca.real=rmb.caroca.slice(0,12).map(toKr);
-      if(rmb.laratro&&CH_MES_DATA.laratro) CH_MES_DATA.laratro.real=rmb.laratro.slice(0,12).map(toKr);
-      if(rmb.encina&&CH_MES_DATA.encina) CH_MES_DATA.encina.real=rmb.encina.slice(0,12).map(toKr);
-      if(rmb.velasquez&&CH_MES_DATA.velasquez) CH_MES_DATA.velasquez.real=rmb.velasquez.slice(0,12).map(toKr);
-      if(rmb.veverka&&CH_MES_DATA.veverka) CH_MES_DATA.veverka.real=rmb.veverka.slice(0,12).map(toKr);
+    var toKr=function(v){return v?Math.round(v/1000):0;};
+    if(cv.rtc_mensual_ppto){
+      var rmpCL=cv.rtc_mensual_ppto;
+      ['caroca','laratro','encina','velasquez','veverka','munoz','franco_riffo'].forEach(function(k){
+        if(rmpCL[k]&&CH_MES_DATA[k]) CH_MES_DATA[k].ppto=rmpCL[k].slice(0,12).map(toKr);
+      });
     }
+    if(cv.rtc_mensual_real){
+      var rmb=cv.rtc_mensual_real;
+      ['caroca','laratro','encina','velasquez','veverka','munoz','franco_riffo'].forEach(function(k){
+        if(rmb[k]&&CH_MES_DATA[k]) CH_MES_DATA[k].real=rmb[k].slice(0,12).map(toKr);
+      });
+    }
+    // ── Tabla PRESUPUESTO OFICIAL CHILE — rebuild desde AVBOARD ───────────────
+    (function(){
+      var tbody = document.getElementById('cl-ppto-tbody');
+      if (!tbody) return;
+      var rmp = cv.rtc_mensual_ppto || {};
+      var fmtK = function(n){ return Math.round(n/1000).toLocaleString('es-CL'); };
+      var vendors = [
+        {key:'laratro',     lbl:'P. Laratro',   cls:'sa'},
+        {key:'velasquez',   lbl:'F. Velásquez', cls:'sr'},
+        {key:'veverka',     lbl:'I. Veverka',   cls:'sr'},
+        {key:'caroca',      lbl:'J. Caroca',    cls:'sg'},
+        {key:'munoz',       lbl:'V. Muñoz',     cls:'sg'},
+        {key:'encina',      lbl:'R. Encina',    cls:'sa'},
+        {key:'franco_riffo',lbl:'F. Riffo',     cls:'sa'}
+      ];
+      var html = '';
+      vendors.forEach(function(v){
+        var arr = rmp[v.key] || Array(12).fill(0);
+        var anual = arr.reduce(function(a,b){return a+b;},0);
+        if (anual === 0) return;
+        html += '<tr><td><span class="s '+v.cls+'"></span>'+v.lbl+'</td>';
+        for (var m=0; m<12; m++) html += '<td class="cp">'+fmtK(arr[m]||0)+'</td>';
+        html += '<td class="cp" style="font-weight:700;color:var(--text);">'+fmtK(anual)+'</td></tr>';
+      });
+      tbody.innerHTML = html;
+      // Actualizar tfoot totales
+      var clTbl = document.getElementById('cl-ppto-mensual-tbl');
+      if (clTbl && cv.mensual_ppto) {
+        var tftds = clTbl.querySelectorAll('tfoot td');
+        for (var i=0; i<12; i++) { if(tftds[i+1]) tftds[i+1].textContent = fmtK(cv.mensual_ppto[i]||0); }
+        if (tftds[13]) tftds[13].textContent = fmtK(cv.ppto_anual||0);
+      }
+    })();
     // ── Actualizar PE_MES_DATA desde AVBOARD ──────────────────────────────────
     PE_MES_DATA.equipo.ppto=PE_PPTO.slice();   // sync ppto a libro base actual
     PE_MES_DATA.equipo.real=PE_REAL.slice();
