@@ -227,6 +227,61 @@
   }
 
   // -----------------------------------------------------------------------
+  // Estilos exclusivos del PDF de Politica Oficial (Format JAVIER)
+  // -----------------------------------------------------------------------
+  function estilosPoliticaPdf() {
+    return [
+      "*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}",
+      "body{font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;color:#1b2027;background:#F4F6F9;font-size:11px;}",
+      ".portada{background:#1B4F8A;color:#fff;padding:42px 32px;text-align:center;page-break-after:always;-webkit-print-color-adjust:exact;print-color-adjust:exact;display:flex;flex-direction:column;align-items:center;min-height:100vh;justify-content:center;}",
+      ".p-logo{display:inline-block;border:2px solid rgba(255,255,255,.6);color:#fff;padding:9px 18px;border-radius:8px;font-weight:800;font-size:12px;letter-spacing:.1em;margin-bottom:26px;}",
+      ".portada h1{font-size:22px;font-weight:900;letter-spacing:.05em;margin-bottom:8px;}",
+      ".portada h2{font-size:12px;font-weight:400;opacity:.85;margin-bottom:28px;}",
+      ".p-badge{display:inline-block;background:#27AE60;color:#fff;padding:5px 14px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.04em;margin-bottom:22px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}",
+      ".p-tabla{border-collapse:collapse;margin:0 auto;}",
+      ".p-tabla td{padding:7px 16px;text-align:left;border-bottom:1px solid rgba(255,255,255,.15);font-size:10.5px;}",
+      ".p-tabla td:first-child{color:rgba(255,255,255,.75);font-weight:600;padding-right:20px;white-space:nowrap;}",
+      "section{background:#fff;padding:18px 24px;margin-bottom:0;border-top:3px solid #1B4F8A;page-break-inside:avoid;}",
+      "h2.sec{font-size:12.5px;color:#1B4F8A;font-weight:800;border-bottom:2px solid #1B4F8A;padding-bottom:7px;margin-bottom:14px;letter-spacing:.04em;text-transform:uppercase;}",
+      "h3.sub{font-size:11px;color:#1B4F8A;font-weight:700;margin:14px 0 7px;border-left:3px solid #1B4F8A;padding-left:8px;}",
+      "p.txt{font-size:10.5px;color:#4A5568;line-height:1.6;margin-bottom:8px;}",
+      "code{background:#EBF2FB;color:#1B4F8A;padding:1px 5px;border-radius:3px;font-size:10px;font-family:monospace;}",
+      ".flow-diagram{padding:12px 0;}",
+      ".flow-row{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;margin-bottom:8px;}",
+      ".fbox{background:#EBF2FB;border:1.5px solid #1B4F8A;color:#1B4F8A;border-radius:6px;padding:8px 10px;font-size:9.5px;font-weight:700;text-align:center;line-height:1.4;min-width:68px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}",
+      ".fbox small{font-weight:400;font-size:8px;display:block;margin-top:2px;}",
+      ".fbox.grn{background:#E7F6EE;border-color:#1E7D4A;color:#1E7D4A;}",
+      ".fbox.amb{background:#FFF4E0;border-color:#B8791A;color:#B8791A;}",
+      ".fbox.res{background:#1B4F8A;color:#fff;border-color:#0d3060;font-size:10px;}",
+      ".fop{font-size:16px;font-weight:900;color:#9BA5B0;flex-shrink:0;}",
+      "table.pol{width:100%;border-collapse:collapse;font-size:10.5px;margin:8px 0;}",
+      "table.pol thead tr{background:#1B4F8A;-webkit-print-color-adjust:exact;print-color-adjust:exact;}",
+      "table.pol th{padding:7px 10px;text-align:left;color:#fff;font-size:9.5px;letter-spacing:.04em;font-weight:700;}",
+      "table.pol th.tc{text-align:right;}",
+      "table.pol td{padding:6px 10px;border-bottom:1px solid #E8ECF0;}",
+      "table.pol td.tc{text-align:right;font-weight:700;color:#1B4F8A;}",
+      ".ej{background:#F4F6F9;border:1px solid #D1D9E6;border-radius:8px;padding:12px 16px;margin:8px 0;}",
+      ".ej h4{font-size:10px;font-weight:800;color:#1B4F8A;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em;}",
+      ".ej-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #E0E6EF;font-size:10.5px;}",
+      ".ej-row:last-child{border-bottom:none;}",
+      ".ej-lbl{color:#5B6470;}",
+      ".ej-val{font-weight:700;color:#1b2027;}",
+      ".ej-row.tot{border-top:2px solid #1B4F8A;margin-top:4px;padding-top:8px;}",
+      ".ej-row.tot .ej-lbl{font-weight:700;color:#1B4F8A;}",
+      ".ej-row.tot .ej-val{color:#1B4F8A;font-size:12px;}",
+      ".faq-item{border-left:3px solid #1B4F8A;padding:9px 14px;margin-bottom:10px;background:#F7F9FC;border-radius:0 6px 6px 0;}",
+      ".faq-q{font-weight:700;color:#1B4F8A;font-size:11px;margin-bottom:4px;}",
+      ".faq-a{color:#4A5568;font-size:10.5px;line-height:1.5;}",
+      ".gov-block{background:#FFF8EC;border:1px solid #F0D9A8;border-radius:8px;padding:12px 16px;margin-bottom:10px;}",
+      ".gov-block h4{font-size:10.5px;font-weight:700;color:#B8791A;margin-bottom:5px;}",
+      ".gov-block p{font-size:10.5px;color:#5B6470;line-height:1.5;}",
+      ".legal{font-size:9px;color:#9BA5B0;margin-top:12px;line-height:1.4;border-top:1px solid #E8ECF0;padding-top:10px;}",
+      "@page{size:A4;margin:13mm 11mm;}",
+      "@media print{body{background:#fff;} section{page-break-inside:avoid;} }"
+    ].join("");
+  }
+
+  // -----------------------------------------------------------------------
   // Informe "Politica y Factores" (CHANGE REQUEST SIC-AV v1.3)
   // -----------------------------------------------------------------------
   function tablaCarteraPaisActivoPdf(params) {
@@ -244,100 +299,310 @@
 
   function construirHtmlPolitica(opts) {
     var pais = opts.pais, ciclo = opts.ciclo, params = opts.params;
+    var paisNombre = pais === "CL" ? "Chile" : "Perú";
+    var moneda     = pais === "CL" ? "CLP" : "USD";
+
     var cicloInfo = params.ciclos.filter(function (c) { return c.ciclo === ciclo; })[0] ||
       params.ciclos.filter(function (c) { return c.ciclo === params.ciclo_vigente; })[0];
-    var fechaGeneracion = new Date().toISOString().slice(0, 19).replace("T", " ");
-    var monedaEj = pais === "CL" ? "CLP" : "USD";
-    var ejPpto = 100000, ejVenta = 120000, ejExcedente = ejVenta - ejPpto;
-    var ejBono = ejExcedente * (params.bono_excedente_pct / 100);
+    var fechaGen = new Date().toISOString().slice(0, 19).replace("T", " ");
 
-    var filasPresupuesto = filas2Col(params.factor_presupuesto_tramos, function (t) {
-      return t.max_cumpl === null ? (t.min_cumpl + "% o mas") : (t.min_cumpl === 0 ? "Menos de " + (t.max_cumpl + 0.01).toFixed(0) + "%" : t.min_cumpl + "%-" + t.max_cumpl + "%");
-    }, function (t) { return t.factor + "%"; });
+    // ─── Tasa cartera ──────────────────────────────────────────────────────
+    var tablaC = Array.isArray(params.tasa_cartera)
+      ? params.tasa_cartera
+      : params.tasa_cartera["Distribuidor"];
 
-    var tablaCartera = tablaCarteraPaisActivoPdf(params);
-    var filasCartera = tablaCartera.map(function (t, idx) {
-      return "<tr><td>" + textoTramoDiasPdf(t, idx, tablaCartera) + "</td><td class='num'>" + t.tasa + "%</td></tr>";
-    }).join("");
+    function tasaDias(dias) {
+      for (var i = 0; i < tablaC.length; i++) {
+        var desde = i === 0 ? 0 : tablaC[i - 1].max_dias + 1;
+        var hasta = tablaC[i].max_dias;
+        if (dias >= desde && (hasta === null || dias <= hasta)) return tablaC[i].tasa;
+      }
+      return tablaC[tablaC.length - 1].tasa;
+    }
 
-    var filasIec = filas2Col(params.factor_iec_tramos, function (t) {
-      return t.max_iec === null ? (t.min_iec + "% o mas") : (t.min_iec === 0 ? "Menos de 70%" : t.min_iec + "%-" + t.max_iec + "%");
-    }, function (t) { return t.factor + "%"; });
+    function factorDe(tramos, minK, maxK, v) {
+      for (var i = 0; i < tramos.length; i++) {
+        if (v >= tramos[i][minK] && (tramos[i][maxK] === null || v <= tramos[i][maxK]))
+          return tramos[i].factor;
+      }
+      return tramos[tramos.length - 1].factor;
+    }
 
-    var filasDiferido = filas2Col(params.diferido_trimestral.liberacion, function (t) {
-      return t.max_cumpl === null ? (t.min_cumpl + "% o mas") : (t.min_cumpl + "%-" + t.max_cumpl + "%");
-    }, function (t) { return t.pct_liberacion + "%"; });
+    // ─── IEC política ──────────────────────────────────────────────────────
+    var iecPol    = params.iec_politica || {};
+    var iecMinAut = iecPol.iec_min_autorizado_pct || 90;
+    var iecDesv   = iecPol.desviacion_critica_max_item_pct || 25;
+    var umbralCrit = 100 - iecDesv;
 
-    return "" +
-      "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'>" +
-      "<title>Politica y Factores SIC-AV — " + (pais === "CL" ? "Chile" : "Peru") + "</title>" +
-      "<style>" + estilosPdf() + "</style></head><body>" +
+    // ─── Ejemplo integral ──────────────────────────────────────────────────
+    // Inputs ilustrativos — todos los factores se computan desde params.
+    var EJ_PPTO  = pais === "CL" ? 10000000 : 10000;
+    var EJ_DIAS  = 15;   // cae en tramo 1-30 d.
+    var EJ_CUMPL = 97;   // cae en tramo 90-99.99%
+    var EJ_IEC   = 98;   // cae en tramo >=95%
 
-      "<section class='portada'>" +
-      "<div class='logo-slot'>AV LATAM</div>" +
-      "<h1>POLITICA Y FACTORES DEL SIC-AV</h1>" +
-      "<p class='sistema'>Sistema Integral de Incentivos Comerciales — SIC-AV</p>" +
-      "<table class='tabla-portada'>" +
-      "<tr><td>Pais</td><td>" + (pais === "CL" ? "Chile" : "Peru") + "</td></tr>" +
-      "<tr><td>Período de cobranza consultado</td><td>" + fechaDDMMYYYYPdf(cicloInfo.inicio) + " a " + fechaDDMMYYYYPdf(cicloInfo.cierre) + " · " + esc(cicloInfo.estado === "vigente" ? "Vigente" : "Cerrado") + "</td></tr>" +
-      "<tr><td>Mes de desempeño aplicado</td><td>" + esc(nombreCicloPdf(global.SIC ? global.SIC.mesDesempenoDe(cicloInfo.ciclo) : cicloInfo.ciclo)) + "</td></tr>" +
-      "<tr><td>Version de politica</td><td>" + esc(cicloInfo.policy_version || params.version_politica) + "</td></tr>" +
+    var ejTasa    = tasaDias(EJ_DIAS);
+    var ejFPpto   = factorDe(params.factor_presupuesto_tramos, "min_cumpl", "max_cumpl", EJ_CUMPL);
+    var ejFIEC    = factorDe(params.factor_iec_tramos, "min_iec", "max_iec", EJ_IEC);
+    var ejCobrado = Math.round(EJ_PPTO * EJ_CUMPL / 100);
+    var ejComBase = Math.round(ejCobrado * ejTasa / 100);
+    var ejComGen  = Math.round(ejComBase * ejFPpto / 100 * ejFIEC / 100);
+    var ejExced   = Math.max(0, ejCobrado - EJ_PPTO);
+    var ejBono    = Math.round(ejExced * params.bono_excedente_pct / 100);
+    var ejPagable = Math.max(0, ejComGen + ejBono);
+
+    // Escenario B con sobrecumplimiento
+    var EJ2_CUMPL  = 112;
+    var ej2FPpto   = factorDe(params.factor_presupuesto_tramos, "min_cumpl", "max_cumpl", EJ2_CUMPL);
+    var ej2Cobrado = Math.round(EJ_PPTO * EJ2_CUMPL / 100);
+    var ej2ComBase = Math.round(ej2Cobrado * ejTasa / 100);
+    var ej2ComGen  = Math.round(ej2ComBase * ej2FPpto / 100 * ejFIEC / 100);
+    var ej2Exced   = Math.max(0, ej2Cobrado - EJ_PPTO);
+    var ej2Bono    = Math.round(ej2Exced * params.bono_excedente_pct / 100);
+    var ej2Pagable = ej2ComGen + ej2Bono;
+
+    // ─── Helpers ──────────────────────────────────────────────────────────
+    function fm(n)  { return moneda + " " + Math.round(n).toLocaleString("es-CL"); }
+    function fp(n)  { return n + "%"; }
+    function ex(s)  { return String(s == null ? "" : s).replace(/[<>&]/g, function (c) { return {"<":"&lt;",">":"&gt;","&":"&amp;"}[c]; }); }
+    function ejRow(lbl, val, cls) {
+      return "<div class='ej-row" + (cls ? " " + cls : "") + "'>" +
+        "<span class='ej-lbl'>" + lbl + "</span>" +
+        "<span class='ej-val'>" + val + "</span></div>";
+    }
+
+    // ─── Table builders ───────────────────────────────────────────────────
+    function tbCartera() {
+      return tablaC.map(function (t, i) {
+        var desde = i === 0 ? 0 : tablaC[i - 1].max_dias + 1;
+        var hasta = t.max_dias;
+        var rango = (i === 0 && t.max_dias === 0) ? "Contado (0 días)"
+          : (hasta === null ? "Más de " + tablaC[i - 1].max_dias + " días"
+          : desde + " – " + hasta + " días");
+        return "<tr><td>" + rango + "</td><td class='tc'>" + t.tasa + "%</td></tr>";
+      }).join("");
+    }
+
+    function tbPpto() {
+      return params.factor_presupuesto_tramos.map(function (t) {
+        var rango = t.max_cumpl === null ? t.min_cumpl + "% o más"
+          : (t.min_cumpl === 0 ? "Menos de 90%" : t.min_cumpl + "% – " + t.max_cumpl + "%");
+        return "<tr><td>" + rango + "</td><td class='tc'>" + t.factor + "%</td></tr>";
+      }).join("");
+    }
+
+    function tbIEC() {
+      return params.factor_iec_tramos.map(function (t) {
+        var rango = t.max_iec === null ? t.min_iec + "% o más"
+          : (t.min_iec === 0 ? "Menos de 70%" : t.min_iec + "% – " + t.max_iec + "%");
+        return "<tr><td>" + rango + "</td><td class='tc'>" + t.factor + "%</td></tr>";
+      }).join("");
+    }
+
+    function tbDiferido() {
+      return params.diferido_trimestral.liberacion.map(function (t) {
+        var rango = t.max_cumpl === null ? t.min_cumpl + "% o más"
+          : t.min_cumpl + "% – " + t.max_cumpl + "%";
+        return "<tr><td>" + rango + "</td><td class='tc'>" + t.pct_liberacion + "%</td></tr>";
+      }).join("");
+    }
+
+    // ─── Estados IEC ──────────────────────────────────────────────────────
+    var tbEstadosIEC = "<table class='pol'><thead><tr><th>Estado</th><th>Condición</th><th>Consecuencia</th></tr></thead><tbody>" +
+      "<tr><td><strong>A — Normal</strong></td><td>IEC_MIX ≥ " + iecMinAut + "% y ningún ítem bajo " + umbralCrit + "%</td><td>Comisión normal, sin bloqueos</td></tr>" +
+      "<tr><td><strong>B — Autorización</strong></td><td>IEC_MIX &lt; " + iecMinAut + "% y ningún ítem bajo " + umbralCrit + "%</td><td>Requiere autorización GG/GD antes de liquidación</td></tr>" +
+      "<tr><td><strong>C — Excepción crítica</strong></td><td>Algún ítem &lt; " + umbralCrit + "%</td><td>Excepción crítica · Requiere autorización GG/GD</td></tr>" +
+      "</tbody></table>";
+
+    var mesDesempeno = cicloInfo
+      ? nombreCicloPdf(cicloInfo.mes_desempeno || cicloInfo.ciclo)
+      : "—";
+
+    return "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'>" +
+      "<title>Política Oficial SIC-AV — " + paisNombre + "</title>" +
+      "<style>" + estilosPoliticaPdf() + "</style></head><body>" +
+
+      // ════ PORTADA ════
+      "<div class='portada'>" +
+      "<div class='p-logo'>AV LATAM</div>" +
+      "<h1>POLÍTICA OFICIAL</h1>" +
+      "<h2>Sistema Integral de Incentivos Comerciales — SIC-AV</h2>" +
+      "<div class='p-badge'>" + ex(params.politica_estado || "Vigente") + "</div>" +
+      "<table class='p-tabla'>" +
+      "<tr><td>País</td><td>" + paisNombre + "</td></tr>" +
+      "<tr><td>Versión de política</td><td>" + ex(params.version_politica) + "</td></tr>" +
       "<tr><td>Vigente desde</td><td>" + fechaDDMMYYYYPdf(params.politica_vigente_desde) + "</td></tr>" +
-      "<tr><td>Estado de la politica</td><td>" + esc(params.politica_estado || "—") + "</td></tr>" +
-      "<tr><td>Fecha de generacion</td><td>" + fechaGeneracion + "</td></tr>" +
-      "</table>" +
-      "<div class='banner-demo'>MODELO DEMOSTRATIVO — PRECIO PISO Y BONO DE CONSISTENCIA TRIMESTRAL PENDIENTES DE APROBACION GERENCIAL.</div>" +
+      (cicloInfo ? "<tr><td>Período consultado</td><td>" + fechaDDMMYYYYPdf(cicloInfo.inicio) + " al " + fechaDDMMYYYYPdf(cicloInfo.cierre) + "</td></tr>" : "") +
+      "<tr><td>Mes de desempeño</td><td>" + mesDesempeno + "</td></tr>" +
+      "<tr><td>Autoriza modificaciones</td><td>" + ex(params.cambios_requieren_autorizacion || "—") + "</td></tr>" +
+      "<tr><td>Fecha de generación</td><td>" + fechaGen + "</td></tr>" +
+      "</table></div>" +
+
+      // ════ CÓMO FUNCIONA ════
+      "<section><h2 class='sec'>¿Cómo funciona el SIC-AV?</h2>" +
+      "<p class='txt'>El SIC-AV calcula la comisión en dos etapas. Primero, la <strong>Comisión Base</strong>: cada cobro del período se multiplica por la tasa que corresponde a los días entre la factura y su pago. Segundo, la <strong>Comisión Final</strong>: el resultado se multiplica por los factores del mes de desempeño y se suman bonos.</p>" +
+      "<div class='flow-diagram'>" +
+      "<div class='flow-row'>" +
+      "<div class='fbox'>Cobros<br>del período<small>por factura</small></div>" +
+      "<div class='fop'>×</div>" +
+      "<div class='fbox'>Tasa Cartera<small>según días al cobro</small></div>" +
+      "<div class='fop'>=</div>" +
+      "<div class='fbox grn'>Comisión<br>Base<small>Σ todas las facturas</small></div>" +
+      "</div>" +
+      "<div class='flow-row' style='margin-top:10px'>" +
+      "<div class='fbox grn'>Comisión<br>Base</div>" +
+      "<div class='fop'>×</div>" +
+      "<div class='fbox'>Factor<br>Presupuesto</div>" +
+      "<div class='fop'>×</div>" +
+      "<div class='fbox'>Factor<br>IEC</div>" +
+      "<div class='fop'>+</div>" +
+      "<div class='fbox amb'>Bono<br>Excedente</div>" +
+      "<div class='fop'>−</div>" +
+      "<div class='fbox'>NC &amp;<br>Saldo ant.</div>" +
+      "<div class='fop'>=</div>" +
+      "<div class='fbox res'>Comisión<br>Pagable</div>" +
+      "</div></div>" +
+      "<p class='txt'>La <strong>Comisión Pagable</strong> es siempre ≥ 0. Los Factores de Presupuesto e IEC se calculan sobre el <em>mes de desempeño</em>, no sobre el período de cobranza.</p>" +
       "</section>" +
 
-      "<section class='bloque'>" +
-      "<h2>Factor de Cumplimiento de Presupuesto (mes de desempeño)</h2>" +
-      "<table class='tabla-resumen'><thead><tr><th>Cumplimiento del mes de desempeño</th><th class='num'>Factor</th></tr></thead><tbody>" + filasPresupuesto + "</tbody></table>" +
-      "<p class='nota-formula'>El factor de presupuesto nunca supera el 100%. El sobrecumplimiento se reconoce mediante el Bono por Excedente. CHANGE REQUEST v1.6: se calcula sobre venta neta del mes de desempeño / presupuesto del mismo mes calendario -- nunca sobre cobranza ni presupuesto de ciclo prorrateado.</p>" +
+      // ════ DEFINICIONES ════
+      "<section><h2 class='sec'>Definiciones Clave</h2>" +
+      "<table class='pol'><thead><tr><th>Término</th><th>Definición</th></tr></thead><tbody>" +
+      "<tr><td><strong>Período de cobranza</strong></td><td>Ventana de fechas (inicio – cierre) en que se acumulan los pagos recibidos. Genera la comisión base.</td></tr>" +
+      "<tr><td><strong>Mes de desempeño</strong></td><td>Mes calendario inmediatamente anterior al cierre del período. Base para presupuesto, IEC y bono.</td></tr>" +
+      "<tr><td><strong>Venta neta</strong></td><td>Facturación del comercial en el mes de desempeño, sin impuestos.</td></tr>" +
+      "<tr><td><strong>Cobro efectivo</strong></td><td>Pagos verificados recibidos dentro del período de cobranza.</td></tr>" +
+      "<tr><td><strong>IEC</strong></td><td>Índice de Eficiencia Comercial. Fórmula: IEC (%) = Σ venta_neta_elegible ÷ Σ (cantidad × precio_piso_unitario) × 100.</td></tr>" +
+      "<tr><td><strong>Precio piso</strong></td><td>Precio mínimo autorizado por producto/formato. Impacta comisión únicamente a través del Factor IEC.</td></tr>" +
+      "<tr><td><strong>Factor Presupuesto</strong></td><td>Multiplicador por tramos según % de cumplimiento del presupuesto del mes de desempeño. Máximo 100%.</td></tr>" +
+      "<tr><td><strong>Factor IEC</strong></td><td>Multiplicador por tramos según IEC del mes de desempeño.</td></tr>" +
+      "<tr><td><strong>Bono por excedente</strong></td><td>" + fp(params.bono_excedente_pct) + " sobre la venta neta que supere el presupuesto del mes. Requiere Factor Presupuesto = 100%.</td></tr>" +
+      "<tr><td><strong>Comisión diferida</strong></td><td>Porción retenida cuando Factor Presupuesto &lt; 100%. Se libera trimestralmente si se cumplen las condiciones.</td></tr>" +
+      "</tbody></table></section>" +
+
+      // ════ FACTORES ════
+      "<section><h2 class='sec'>Factores y Reglas de Cálculo</h2>" +
+
+      "<h3 class='sub'>1. Tasa de Cartera</h3>" +
+      "<p class='txt'><code>Comisión Base = Σ (cobro_factura × tasa_factura)</code> — la tasa depende de los días entre emisión y pago de cada factura.</p>" +
+      "<table class='pol'><thead><tr><th>Días al cobro</th><th class='tc'>Tasa</th></tr></thead><tbody>" + tbCartera() + "</tbody></table>" +
+
+      "<h3 class='sub'>2. Factor de Cumplimiento de Presupuesto</h3>" +
+      "<p class='txt'>Calculado sobre el <strong>mes de desempeño</strong>. No supera el 100%; el sobrecumplimiento se reconoce vía Bono por Excedente.</p>" +
+      "<table class='pol'><thead><tr><th>Cumplimiento del mes de desempeño</th><th class='tc'>Factor Presupuesto</th></tr></thead><tbody>" + tbPpto() + "</tbody></table>" +
+
+      "<h3 class='sub'>3. Factor IEC</h3>" +
+      "<p class='txt'><code>IEC (%) = Σ venta_neta_elegible ÷ Σ (cantidad × precio_piso_unitario) × 100</code><br>Es el único mecanismo por el que el precio piso afecta la comisión.</p>" +
+      "<table class='pol'><thead><tr><th>IEC del mes de desempeño</th><th class='tc'>Factor IEC</th></tr></thead><tbody>" + tbIEC() + "</tbody></table>" +
+      "<p class='txt'>Estados de la política IEC:</p>" + tbEstadosIEC +
+
+      "<h3 class='sub'>4. Bono por Excedente del Mes de Desempeño</h3>" +
+      "<p class='txt'><code>Bono = max(0, venta_neta_mes − presupuesto_mes) × " + fp(params.bono_excedente_pct) + "</code><br>" +
+      "Se incorpora en la liquidación del ciclo siguiente. <strong>Condición:</strong> cumplimiento ≥ 100%.</p>" +
+
+      "<h3 class='sub'>5. Precio Piso — Tratamiento Vigente (V1.4)</h3>" +
+      "<p class='txt'>Toda venta facturada es una operación válida y aprobada. Una venta bajo piso <strong>no produce reducción, bloqueo ni excepción adicional</strong>.</p>" +
+      "<table class='pol'><thead><tr><th>Situación</th><th class='tc'>Impacto directo en comisión</th></tr></thead><tbody>" +
+      "<tr><td>Venta ≥ precio piso</td><td class='tc' style='color:#1E7D4A'>Normal</td></tr>" +
+      "<tr><td>Venta &lt; precio piso</td><td class='tc'>Normal (impacta IEC — solo informativo)</td></tr>" +
+      "</tbody></table>" +
+
+      "<h3 class='sub'>6. Comisión Diferida Trimestral</h3>" +
+      "<p class='txt'>La porción retenida por Factor Presupuesto &lt; 100% se libera al cierre del trimestre según el cumplimiento trimestral del mes de desempeño.</p>" +
+      "<table class='pol'><thead><tr><th>Cumplimiento trimestral</th><th class='tc'>% de liberación</th></tr></thead><tbody>" + tbDiferido() + "</tbody></table>" +
+      "<p class='txt'>Condiciones adicionales: IEC trimestral mínimo " + fp(params.diferido_trimestral.iec_minimo) + ", cartera dentro de estándar, sin observaciones financieras graves.</p>" +
       "</section>" +
 
-      "<section class='bloque'>" +
-      "<h2>Bono por Excedente del Mes de Desempeño</h2>" +
-      "<p class='nota-formula'>2% sobre la venta neta del mes de desempeño que exceda el presupuesto del mismo mes calendario. Ya no se pondera por Factor IEC (CHANGE REQUEST v1.6) y se incorpora en la liquidación siguiente.</p>" +
-      "<table class='tabla-resumen'>" +
-      "<tr><td>Presupuesto (ejemplo)</td><td class='num'>" + monedaEj + " " + ejPpto.toLocaleString("es-CL") + "</td></tr>" +
-      "<tr><td>Venta cobrada (ejemplo)</td><td class='num'>" + monedaEj + " " + ejVenta.toLocaleString("es-CL") + "</td></tr>" +
-      "<tr><td>Excedente (ejemplo)</td><td class='num'>" + monedaEj + " " + ejExcedente.toLocaleString("es-CL") + "</td></tr>" +
-      "<tr class='total'><td>Bono por excedente (2%)</td><td class='num'>" + monedaEj + " " + ejBono.toLocaleString("es-CL") + "</td></tr>" +
-      "</table></section>" +
+      // ════ EJEMPLO INTEGRAL ════
+      "<section><h2 class='sec'>Ejemplo Integral Ilustrativo</h2>" +
+      "<p class='txt'>Factores y comisiones computados desde los parámetros vigentes. Montos base son ilustrativos y redondos.</p>" +
 
-      "<section class='bloque'>" +
-      "<h2>Edad de Cartera — " + (pais === "CL" ? "Chile" : "Peru") + "</h2>" +
-      "<table class='tabla-resumen'><thead><tr><th>Tramo de dias</th><th class='num'>Tasa</th></tr></thead><tbody>" + filasCartera + "</tbody></table>" +
+      "<h3 class='sub'>Escenario A — Cumplimiento " + EJ_CUMPL + "% (sin excedente)</h3>" +
+      "<div class='ej'><h4>Inputs del escenario (ilustrativos)</h4>" +
+      ejRow("Presupuesto del mes de desempeño", fm(EJ_PPTO)) +
+      ejRow("Venta cobrada del período", fm(ejCobrado) + " (" + EJ_CUMPL + "% del presupuesto)") +
+      ejRow("Días promedio al cobro", EJ_DIAS + " días") +
+      "</div>" +
+      "<div class='ej'><h4>Paso 1 — Comisión Base</h4>" +
+      ejRow("Tasa de cartera (" + EJ_DIAS + " días) → de tabla", fp(ejTasa)) +
+      ejRow("Comisión Base = " + fm(ejCobrado) + " × " + fp(ejTasa), fm(ejComBase)) +
+      "</div>" +
+      "<div class='ej'><h4>Paso 2 — Factores del mes de desempeño</h4>" +
+      ejRow("Cumplimiento de presupuesto", fp(EJ_CUMPL)) +
+      ejRow("Factor Presupuesto → de tabla", fp(ejFPpto)) +
+      ejRow("IEC del mes de desempeño (ilustrativo)", fp(EJ_IEC)) +
+      ejRow("Factor IEC → de tabla", fp(ejFIEC)) +
+      ejRow("Comisión Generada = " + fm(ejComBase) + " × " + fp(ejFPpto) + " × " + fp(ejFIEC), fm(ejComGen)) +
+      "</div>" +
+      "<div class='ej'><h4>Paso 3 — Resultado final</h4>" +
+      ejRow("Comisión Generada", fm(ejComGen)) +
+      ejRow("Excedente (venta − presupuesto)", fm(ejExced)) +
+      ejRow("Bono por excedente (" + fp(params.bono_excedente_pct) + ")", fm(ejBono)) +
+      ejRow("Notas de crédito / Saldo anterior", fm(0)) +
+      ejRow("Comisión Pagable = max(0, resultado)", fm(ejPagable), "tot") +
+      "</div>" +
+
+      "<h3 class='sub'>Escenario B — Cumplimiento " + EJ2_CUMPL + "% (con excedente)</h3>" +
+      "<div class='ej'><h4>Inputs del escenario (ilustrativos)</h4>" +
+      ejRow("Presupuesto del mes de desempeño", fm(EJ_PPTO)) +
+      ejRow("Venta cobrada del período", fm(ej2Cobrado) + " (" + EJ2_CUMPL + "% del presupuesto)") +
+      ejRow("Días promedio al cobro", EJ_DIAS + " días") +
+      "</div>" +
+      "<div class='ej'><h4>Cálculo completo</h4>" +
+      ejRow("Comisión Base = " + fm(ej2Cobrado) + " × " + fp(ejTasa), fm(ej2ComBase)) +
+      ejRow("Factor Presupuesto (" + fp(EJ2_CUMPL) + " → " + fp(ej2FPpto) + ")", fp(ej2FPpto)) +
+      ejRow("Factor IEC (" + fp(EJ_IEC) + " → " + fp(ejFIEC) + ")", fp(ejFIEC)) +
+      ejRow("Comisión Generada", fm(ej2ComGen)) +
+      ejRow("Excedente = " + fm(ej2Cobrado) + " − " + fm(EJ_PPTO), fm(ej2Exced)) +
+      ejRow("Bono por excedente (" + fp(params.bono_excedente_pct) + ")", fm(ej2Bono)) +
+      ejRow("Comisión Pagable = max(0, resultado)", fm(ej2Pagable), "tot") +
+      "</div></section>" +
+
+      // ════ FAQ ════
+      "<section><h2 class='sec'>Preguntas Frecuentes</h2>" +
+
+      "<div class='faq-item'><div class='faq-q'>¿Qué pasa si mi cumplimiento es menor al " + fp(params.factor_presupuesto_tramos[0].max_cumpl) + "?</div>" +
+      "<div class='faq-a'>El Factor Presupuesto es " + fp(params.factor_presupuesto_tramos[0].factor) + ": la comisión generada del período es cero. No cancela comisiones ya liquidadas en ciclos anteriores ni el diferido acumulado.</div></div>" +
+
+      "<div class='faq-item'><div class='faq-q'>¿Puede ser negativa mi comisión?</div>" +
+      "<div class='faq-a'>No. La Comisión Pagable es siempre max(0, resultado económico). Si las notas de crédito o el saldo anterior producen un resultado negativo, el saldo queda pendiente para el siguiente ciclo con comisión positiva.</div></div>" +
+
+      "<div class='faq-item'><div class='faq-q'>¿Cómo afecta el precio piso a mi comisión?</div>" +
+      "<div class='faq-a'>El precio piso no bloquea ni reduce directamente ninguna factura. Su único impacto es a través del Factor IEC: si el IEC del mes de desempeño cae bajo " + fp(params.factor_iec_tramos[params.factor_iec_tramos.length - 1].min_iec) + "%, el Factor IEC será menor al máximo posible (" + fp(params.factor_iec_tramos[params.factor_iec_tramos.length - 1].factor) + "%).</div></div>" +
+
+      "<div class='faq-item'><div class='faq-q'>¿Cuándo se libera la comisión diferida?</div>" +
+      "<div class='faq-a'>Al cierre de cada trimestre, si el cumplimiento trimestral ≥ " + fp(params.diferido_trimestral.liberacion[0].min_cumpl) + " y el IEC trimestral supera el mínimo de " + fp(params.diferido_trimestral.iec_minimo) + ". El porcentaje de liberación varía según la tabla de diferido.</div></div>" +
+
+      "<div class='faq-item'><div class='faq-q'>¿En qué ciclo se paga el Bono por Excedente?</div>" +
+      "<div class='faq-a'>El bono generado en el mes de desempeño se incorpora en la liquidación del ciclo siguiente. Es el " + fp(params.bono_excedente_pct) + " sobre la venta neta que supere el presupuesto del mes.</div></div>" +
+
+      "<div class='faq-item'><div class='faq-q'>¿Qué diferencia hay entre período de cobranza y mes de desempeño?</div>" +
+      "<div class='faq-a'>El período de cobranza define las fechas de inicio y cierre de la ventana de cobros. El mes de desempeño es el mes calendario inmediatamente anterior al cierre del período. Ejemplo: período que cierra el 25/07 usa Junio como mes de desempeño.</div></div>" +
+
       "</section>" +
 
-      "<section class='bloque'>" +
-      "<h2>Factor IEC (mes de desempeño)</h2>" +
-      "<table class='tabla-resumen'><thead><tr><th>IEC del mes de desempeño</th><th class='num'>Factor</th></tr></thead><tbody>" + filasIec + "</tbody></table>" +
-      "<p class='nota-formula'>El IEC mide la disciplina de gestion comercial del vendedor (principalmente el respeto del precio piso) — no la rentabilidad ni el margen del producto. CHANGE REQUEST v1.6: se calcula sobre el mismo mes calendario de desempeño que el Factor de Presupuesto.</p>" +
+      // ════ GOBERNANZA ════
+      "<section><h2 class='sec'>Gobernanza y Autorización</h2>" +
+
+      "<div class='gov-block'><h4>⚠ Quién puede modificar esta política</h4>" +
+      "<p>Toda modificación a factores, tasas, porcentajes, tablas o reglas <strong>requiere autorización escrita del Gerente General</strong> (" + ex(params.cambios_requieren_autorizacion || "—") + "). Todo cambio debe registrarse en el historial del archivo de parámetros con versión, fecha, autor y nota.</p></div>" +
+
+      "<div class='gov-block'><h4>Fuente única de verdad</h4>" +
+      "<p>Este documento se genera automáticamente desde <code>parametros_" + pais.toLowerCase() + ".json</code>. <strong>No existe versión manual de esta política.</strong> En caso de discrepancia, prevalece el archivo de parámetros activo en producción.</p></div>" +
+
+      (params.tasa_cartera_historial && params.tasa_cartera_historial.length > 0 ?
+        "<h3 class='sub'>Historial de versiones</h3>" +
+        "<table class='pol'><thead><tr><th>Versión</th><th>Vigente desde</th><th>Autor</th><th>Nota</th></tr></thead><tbody>" +
+        params.tasa_cartera_historial.map(function (h) {
+          return "<tr><td>" + ex(h.version || "—") + "</td><td>" + fechaDDMMYYYYPdf(h.vigente_desde) + "</td><td>" + ex(h.autor || "—") + "</td><td style='font-size:9.5px'>" + ex(h.nota || "—") + "</td></tr>";
+        }).join("") +
+        "</tbody></table>"
+      : "") +
+
+      "<p class='legal'>Documento generado automáticamente el " + fechaGen + " desde los parámetros vigentes de AV LATAM Board. Confidencial — uso interno. Versión: " + ex(params.version_politica) + " — " + ex(params.politica_estado || "Estado no especificado") + ". Sujeto a aprobación gerencial antes de constituir liquidación oficial de remuneraciones.</p>" +
       "</section>" +
 
-      "<section class='bloque'>" +
-      "<h2>Tratamiento de Precio Piso</h2>" +
-      "<p class='nota-formula'>CHANGE REQUEST SIC-AV v1.4 (aprobado por Gerencia General): toda venta facturada se considera una operacion valida y previamente aprobada por la compañia. El SIC ya NO aplica un factor de reduccion ni un veto de comision por precio piso -- una venta bajo piso, por si sola, nunca produce comision cero, reduccion adicional, bloqueo, retencion ni excepcion manual.</p>" +
-      "<table class='tabla-resumen'>" +
-      "<tr><td>Venta sobre o igual al piso</td><td class='num'>Comision normal</td></tr>" +
-      "<tr><td>Venta bajo piso</td><td class='num'>Comision normal (informativo, no reduce ni bloquea)</td></tr>" +
-      "</table>" +
-      "<p class='nota-formula'>El precio piso se mantiene como dato informativo por factura, como comparacion entre precio de venta y precio piso, y como insumo del Factor IEC -- el IEC es el UNICO mecanismo por el cual el precio piso puede impactar la comision.</p>" +
-      "</section>" +
-
-      "<section class='bloque'>" +
-      "<h2>Bono de Consistencia Trimestral</h2>" +
-      "<p class='nota-formula'>Aisla exclusivamente la porcion de comision retenida por no alcanzar el Factor de Presupuesto. Nunca recupera reducciones causadas por IEC, edad de cartera, notas de credito o devoluciones. CHANGE REQUEST v1.6: el trimestre se evalua sobre meses calendario de desempeño, no sobre períodos de cobranza 26-25.</p>" +
-      "<table class='tabla-resumen'><thead><tr><th>Cumplimiento trimestral</th><th class='num'>% de liberacion</th></tr></thead><tbody>" + filasDiferido + "</tbody></table>" +
-      "<p class='nota-formula'>Condiciones para liberar: IEC trimestral minimo " + params.diferido_trimestral.iec_minimo + "%, cartera dentro de estandar, sin observaciones financieras graves.</p>" +
-      "</section>" +
-
-      "<section class='bloque'>" +
-      "<p class='nota-legal'>Documento generado con datos y parametros demostrativos. No constituye politica oficial de remuneraciones hasta su aprobacion formal por Gerencia General.</p>" +
-      "</section>" +
-
-      "<script>window.onload = function(){ setTimeout(function(){ window.print(); }, 300); };<\/script>" +
+      "<script>window.onload = function(){ setTimeout(function(){ window.print(); }, 400); };<\/script>" +
       "</body></html>";
   }
 
