@@ -383,36 +383,107 @@
     }).join('');
   }
 
-  // v8 OBJ1 — Mostrar/refrescar dropdown de búsqueda de productos.
-  function mostrarDropProducto(inp, drop, lineaIdx) {
-    var texto = inp.value;
-    var matches = COTIZADOR.Catalogo.filtrarProductos(ctx.productos, texto);
-    if (!matches.length) { drop.style.display = 'none'; return; }
-    drop.innerHTML = matches.map(function(nombre) {
-      return '<div class="prod-drop-item" data-nombre="' + COTIZADOR.util.escapeHTML(nombre) + '">' +
-             COTIZADOR.util.escapeHTML(nombre) + '</div>';
-    }).join('');
-    drop.style.display = 'block';
-    drop.querySelectorAll('.prod-drop-item').forEach(function(item) {
-      item.addEventListener('mousedown', function(e) {
-        e.preventDefault(); // evitar blur antes del click
-        var nombre = this.dataset.nombre;
-        var l = quote.lineas[lineaIdx];
-        if (l.producto !== nombre) {
-          // Producto cambió: limpiar SKU/presentación/precios
-          l.producto = nombre;
-          l.sku = null; l.presentacion = ''; l.unidad = null;
-          l.contenido_presentacion = null; l.precio_piso_unitario = null;
-          l.precio_lista_unitario = null; l.costo_referencial_unitario = null;
-          l.precio_lista_nota = null; l.precio_venta_unitario = 0;
-          l.precio_objetivo_unitario = null;
-        }
-        inp.value = nombre;
-        drop.style.display = 'none';
-        render(); // repinta línea → el sel-presentacion se carga con las presentaciones del producto
+  // v8-fix — Combobox portal: dropdown adjunto a document.body (position:fixed).
+  // Resuelve el clipping por overflow-x:auto del contenedor de la tabla.
+  // Soporta: clic en flecha → listado completo; escritura → filtrado parcial;
+  // ArrowDown/Up → cursor; Enter → seleccionar; Escape → cerrar; clic fuera → cerrar.
+  var COMBO = (function(){
+    var _el = null, _inp = null, _lineaIdx = null, _items = [], _cursor = -1;
+
+    function _ocultar(){
+      if (_el) _el.style.display = 'none';
+      _inp = null; _cursor = -1;
+    }
+
+    function _getEl(){
+      if (!_el){
+        _el = document.createElement('div');
+        _el.id = 'prod-drop-global';
+        document.body.appendChild(_el);
+        document.addEventListener('mousedown', function(e){
+          if (!_el || _el.style.display === 'none') return;
+          var enDrop   = _el.contains(e.target);
+          var enInput  = _inp && (_inp === e.target || _inp.contains(e.target));
+          var enFlecha = e.target && e.target.classList.contains('prod-combo-arrow');
+          if (!enDrop && !enInput && !enFlecha) _ocultar();
+        });
+      }
+      return _el;
+    }
+
+    function _posicionar(){
+      if (!_inp) return;
+      var r = _inp.getBoundingClientRect();
+      _el.style.left  = r.left + 'px';
+      _el.style.top   = r.bottom + 'px';
+      _el.style.width = Math.max(r.width + 22, 190) + 'px'; // +22 para la flecha
+    }
+
+    function _actualizarCursor(){
+      if (!_el) return;
+      var items = _el.querySelectorAll('.prod-drop-item[data-idx]');
+      items.forEach(function(it, i){ it.classList.toggle('active', i === _cursor); });
+      if (_cursor >= 0 && items[_cursor]) items[_cursor].scrollIntoView({block:'nearest'});
+    }
+
+    function _seleccionarIdx(idx){
+      if (idx < 0 || idx >= _items.length) return;
+      var nombre = _items[idx];
+      var l = quote && quote.lineas && quote.lineas[_lineaIdx];
+      if (l){
+        l.producto = nombre;
+        l.sku = null; l.presentacion = ''; l.unidad = null;
+        l.contenido_presentacion = null; l.precio_piso_unitario = null;
+        l.precio_lista_unitario = null; l.costo_referencial_unitario = null;
+        l.precio_lista_nota = null; l.precio_venta_unitario = 0;
+        l.precio_objetivo_unitario = null;
+      }
+      _ocultar();
+      render();
+    }
+
+    function _renderizar(){
+      var el = _getEl();
+      if (!_items.length){
+        el.innerHTML = '<div class="prod-drop-item" style="color:var(--text-2);cursor:default;font-style:italic">— sin coincidencias —</div>';
+        return;
+      }
+      el.innerHTML = _items.map(function(n, idx){
+        return '<div class="prod-drop-item' + (idx === _cursor ? ' active' : '') +
+               '" data-idx="' + idx + '">' + COTIZADOR.util.escapeHTML(n) + '</div>';
+      }).join('');
+      el.querySelectorAll('.prod-drop-item[data-idx]').forEach(function(it){
+        it.addEventListener('mousedown', function(e){
+          e.preventDefault(); // evita blur antes de mousedown
+          _seleccionarIdx(parseInt(this.dataset.idx, 10));
+        });
       });
-    });
-  }
+    }
+
+    return {
+      mostrar: function(inp, lineaIdx, texto){
+        _inp = inp; _lineaIdx = lineaIdx; _cursor = -1;
+        _items = COTIZADOR.Catalogo.filtrarProductos(ctx && ctx.productos, texto || '');
+        var el = _getEl();
+        _renderizar();
+        _posicionar();
+        el.style.display = 'block';
+      },
+      ocultar: _ocultar,
+      moverCursor: function(dir){
+        if (!_items.length) return;
+        _cursor += dir;
+        if (_cursor < 0) _cursor = _items.length - 1;
+        if (_cursor >= _items.length) _cursor = 0;
+        _actualizarCursor();
+      },
+      seleccionarCursor: function(){
+        if (_cursor >= 0 && _cursor < _items.length) _seleccionarIdx(_cursor);
+        else if (_items.length === 1) _seleccionarIdx(0);
+      },
+      estaAbierto: function(inp){ return _el && _el.style.display !== 'none' && _inp === inp; }
+    };
+  })();
 
   // Corrección Final: sufijo junto al input de precio venta unitario, para
   // que el vendedor sepa si está escribiendo un precio por L/KG o directo
@@ -467,6 +538,7 @@
   }
 
   function pintarLineas(){
+    COMBO.ocultar(); // Cerrar dropdown al repintar la tabla (evita dropdown huérfano)
     var tbody = $('tbody-lineas');
     tbody.innerHTML = '';
     quote.lineas.forEach(function(l, i){
@@ -476,10 +548,12 @@
       var iecDisplay = (l.iec_linea === null || l.iec_linea === undefined) ? '—' : COTIZADOR.util.formatPct(l.iec_linea);
       var listaTitle = l.precio_lista_nota ? ' title="' + COTIZADOR.util.escapeHTML(l.precio_lista_nota) + '"' : '';
       tr.innerHTML =
-        // OBJ1 — input de búsqueda + dropdown (reemplaza el <select> combinado)
+        // Combobox portal: input + botón flecha. Sin div.prod-drop inline (portal en body).
         '<td class="prod-buscar-wrap">' +
-          '<input type="text" data-i="'+i+'" class="input-prod-buscar" value="'+COTIZADOR.util.escapeHTML(l.producto||'')+'" placeholder="Buscar producto..." autocomplete="off">' +
-          '<div class="prod-drop" data-i="'+i+'" style="display:none"></div>' +
+          '<div class="prod-combo">' +
+            '<input type="text" data-i="'+i+'" class="input-prod-buscar" value="'+COTIZADOR.util.escapeHTML(l.producto||'')+'" placeholder="Buscar producto..." autocomplete="off">' +
+            '<button type="button" class="prod-combo-arrow" data-i="'+i+'" tabindex="-1" title="Ver todos los productos">▾</button>' +
+          '</div>' +
         '</td>' +
         // OBJ2 — selector de presentación separado (value = SKU)
         '<td><select data-i="'+i+'" class="sel-presentacion" style="width:100%;min-width:80px">' + opcionesPresentaciones(l.producto, l.sku) + '</select></td>' +
@@ -495,14 +569,68 @@
       tbody.appendChild(tr);
     });
 
-    // OBJ1 — eventos del input de búsqueda
+    // Combobox portal — eventos del input de búsqueda + flecha
     tbody.querySelectorAll('.input-prod-buscar').forEach(function(inp) {
-      var i = parseInt(inp.dataset.i, 10);
-      var drop = inp.parentElement.querySelector('.prod-drop');
-      inp.addEventListener('focus', function() { mostrarDropProducto(this, drop, i); });
-      inp.addEventListener('input', function() { mostrarDropProducto(this, drop, i); });
+      var lineaIdx = parseInt(inp.dataset.i, 10);
+      // Clic / focus → abrir dropdown con listado (completo si vacío, filtrado si tiene texto)
+      inp.addEventListener('focus', function() {
+        COMBO.mostrar(this, lineaIdx, this.value);
+      });
+      // Escritura → filtrar en tiempo real
+      inp.addEventListener('input', function() {
+        COMBO.mostrar(this, lineaIdx, this.value);
+        // Campo vaciado: limpiar selección del modelo sin re-render completo
+        if (this.value.trim() === '') {
+          var l = quote.lineas[lineaIdx];
+          if (l && l.producto) {
+            l.producto = ''; l.sku = null; l.presentacion = ''; l.unidad = null;
+            l.contenido_presentacion = null; l.precio_piso_unitario = null;
+            l.precio_lista_unitario = null; l.costo_referencial_unitario = null;
+            l.precio_lista_nota = null; l.precio_venta_unitario = 0;
+            l.precio_objetivo_unitario = null;
+            // Actualizar solo el selector de presentación (sin re-render que destruiría el input)
+            var selPres = tbody.querySelector('.sel-presentacion[data-i="'+lineaIdx+'"]');
+            if (selPres) selPres.innerHTML = opcionesPresentaciones('', null);
+          }
+        }
+      });
+      // Blur: cierre de seguridad por si el foco se fue por tab u otro medio
       inp.addEventListener('blur', function() {
-        setTimeout(function() { drop.style.display = 'none'; }, 150);
+        var self = this;
+        setTimeout(function() { if (COMBO.estaAbierto(self)) COMBO.ocultar(); }, 200);
+      });
+      // Navegación por teclado
+      inp.addEventListener('keydown', function(e) {
+        var self = this;
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (!COMBO.estaAbierto(self)) COMBO.mostrar(self, lineaIdx, self.value);
+          COMBO.moverCursor(1);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (!COMBO.estaAbierto(self)) COMBO.mostrar(self, lineaIdx, self.value);
+          COMBO.moverCursor(-1);
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (COMBO.estaAbierto(self)) COMBO.seleccionarCursor();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          COMBO.ocultar();
+        }
+      });
+    });
+
+    // Flecha ▾ — abre/cierra listado completo sin escribir
+    tbody.querySelectorAll('.prod-combo-arrow').forEach(function(btn) {
+      var lineaIdx = parseInt(btn.dataset.i, 10);
+      btn.addEventListener('mousedown', function(e) {
+        e.preventDefault(); // evita blur en el input
+        var inp = btn.previousElementSibling;
+        if (COMBO.estaAbierto(inp)) {
+          COMBO.ocultar();
+        } else {
+          COMBO.mostrar(inp, lineaIdx, inp.value);
+        }
       });
     });
 

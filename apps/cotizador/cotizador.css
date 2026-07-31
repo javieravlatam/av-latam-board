@@ -359,20 +359,37 @@ table.lineas input.in-objetivo{border-color:rgba(245,166,35,.4)}
   font-size:11px; color:var(--muted); margin-top:8px;
   border-top:1px solid var(--bdr); padding-top:8px;
 }
-/* v8 — dropdown búsqueda de producto ─────────────────────── */
+/* v8-fix — Combobox Producto (portal adjunto a body, esquiva overflow:auto) ── */
+/* El wrapper .prod-buscar-wrap solo posiciona la celda.                        */
+/* El dropdown real es #prod-drop-global (position:fixed adjunto a document.body). */
 .prod-buscar-wrap{position:relative; width:100%}
-.prod-buscar-wrap input.input-prod-buscar{width:100%;min-width:120px;box-sizing:border-box}
-.prod-drop{
-  position:absolute; top:100%; left:0; right:0; z-index:300;
+.prod-combo{display:flex; align-items:stretch; width:100%}
+.prod-combo .input-prod-buscar{
+  flex:1; min-width:0; box-sizing:border-box;
+  border-radius:4px 0 0 4px; border-right:none;
+}
+.prod-combo-arrow{
+  flex:0 0 22px; padding:0; border:1px solid var(--bdr);
+  border-radius:0 4px 4px 0; background:var(--s1); cursor:pointer;
+  font-size:11px; color:var(--text-2);
+  display:flex; align-items:center; justify-content:center;
+  user-select:none; outline:none; line-height:1;
+}
+.prod-combo-arrow:hover{background:var(--primary-light,#EBF0F8); color:var(--primary)}
+/* Portal global — posicionado con position:fixed desde JS */
+#prod-drop-global{
+  position:fixed; z-index:99999;
   background:var(--bg); border:1px solid var(--bdr); border-radius:4px;
-  max-height:200px; overflow-y:auto;
-  box-shadow:0 4px 12px rgba(0,0,0,.14);
+  max-height:220px; overflow-y:auto;
+  box-shadow:0 4px 16px rgba(0,0,0,.18);
+  display:none;
 }
 .prod-drop-item{
-  padding:6px 10px; cursor:pointer; font-size:13px;
+  padding:7px 10px; cursor:pointer; font-size:13px;
   border-bottom:1px solid var(--bdr); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 .prod-drop-item:last-child{border-bottom:none}
-.prod-drop-item:hover,.prod-drop-item:focus{background:var(--primary-light,#EBF0F8)}
+.prod-drop-item:hover{background:var(--primary-light,#EBF0F8)}
+.prod-drop-item.active{background:var(--primary-light,#EBF0F8); font-weight:500}
 /* v8 — btn-imprimir deshabilitado cuando IEC < 75% */
 button#btn-imprimir:disabled{opacity:.4; cursor:not-allowed}
