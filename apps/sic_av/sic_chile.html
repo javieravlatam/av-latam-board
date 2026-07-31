@@ -25,6 +25,17 @@
   .estado-comision-texto + .estado-comision-texto { margin-top:10px; }
   .estado-comision-tecnico { margin-top:14px; padding-top:12px; border-top:1px dashed #e3cd8f; font-size:11.5px; color:#9a8a5a; }
   .real-advertencias-vendedor { font-size:11.5px; color:var(--av-grey-text); margin:10px 0 0 0; padding-left:18px; }
+  /* RESULTADO DE COMISIÓN — panel build-up */
+  .comision-flow { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:14px 0; }
+  .cf-box { background:#EBF2FB; border:1.5px solid var(--av-blue,#1B4F8A); color:var(--av-blue,#1B4F8A); border-radius:8px; padding:10px 12px; text-align:center; min-width:88px; flex-shrink:0; }
+  .cf-box .cf-lbl { font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px; opacity:.8; display:block; }
+  .cf-box .cf-val { font-size:13px; font-weight:800; display:block; }
+  .cf-box.grn { background:#E7F6EE; border-color:#1E7D4A; color:#1E7D4A; }
+  .cf-box.amb { background:#FFF4E0; border-color:#B8791A; color:#B8791A; }
+  .cf-box.neg { background:#FBE9E9; border-color:#A83232; color:#A83232; }
+  .cf-box.final { background:var(--av-blue,#1B4F8A); color:#fff; border-color:#0d3060; padding:14px 16px; }
+  .cf-box.final .cf-val { font-size:18px; }
+  .cf-op { font-size:18px; font-weight:900; color:#9BA5B0; flex-shrink:0; line-height:1; padding-top:6px; }
   /* CHANGE REQUEST SIC-AV v1.7: columna Vencimiento en tabla de facturas. */
   .sic-venc { font-size:11px; padding:2px 7px; border-radius:8px; display:inline-block; white-space:nowrap; }
   .venc-vencida  { background:#fbe9e9; color:#a83232; font-weight:700; }
@@ -123,8 +134,9 @@
 
   <!-- ============================= BLOQUE 3 — ESTADO DEL CALCULO DE COMISIONES ============================= -->
   <div class="sic-section">
-    <div class="bloque-titulo"><span class="bloque-numero">3</span><h2 style="margin:0;">Estado del cálculo de comisiones</h2></div>
-    <p class="bloque-subtitulo">No es un resultado comercial — es el estado de avance del cálculo definitivo.</p>
+    <div class="bloque-titulo"><span class="bloque-numero">3</span><h2 style="margin:0;">Resultado de comisiones</h2></div>
+    <p class="bloque-subtitulo">Construcción paso a paso de la comisión del período sobre cobranza real integrada.</p>
+    <div id="comision-buildup"></div>
     <div class="estado-comision-panel">
       <div class="estado-comision-titulo">✅ Cobranza real integrada — comisión calculable sobre facturas PAGADA.</div>
       <div class="estado-comision-texto">El motor SIC (<code>sic_core.js</code>) corre sin modificaciones sobre los datos reales de este período. Cobranza integrada: <b>274 facturas PAGADA</b> con fecha y monto confirmados (comisión calculable) · <b>9 facturas PAGADA_ABONOS</b> con monto total confirmado pero sin desglose por abono individual (comisión pendiente de detalle) · <b>2 facturas excluidas</b> por inconsistencia de datos en la fuente.</div>
@@ -361,6 +373,54 @@
     window.location.href = "sic_datos_reales.html";
   }
 
+  function renderComisionResult(r, hayCobranzas, sinPresupuesto, sinIec) {
+    var el = document.getElementById("comision-buildup");
+    if (!el) return;
+    var sinCobro = !hayCobranzas || !(r.venta_cobrada > 0);
+    function cfBox(lbl, val, cls) {
+      return "<div class='cf-box" + (cls ? " " + cls : "") + "'>" +
+        "<span class='cf-lbl'>" + lbl + "</span>" +
+        "<span class='cf-val'>" + val + "</span></div>";
+    }
+    var baseVal      = sinCobro      ? "—" : fmt(r.comision_base_total);
+    var fPptoVal     = sinPresupuesto ? "—" : pct(r.factor_presupuesto);
+    var fIECVal      = sinIec        ? "—" : pct(r.factor_iec);
+    var genVal       = (sinCobro || sinPresupuesto || sinIec) ? "—" : fmt(r.comision_generada);
+    var bonoAmt      = r.bono_excedente || 0;
+    var bonoVal      = sinPresupuesto ? "—" : fmt(bonoAmt);
+    var ajustesTotal = (r.ajustes_nc || 0) + (r.saldo_ajustes_anterior || 0);
+    var ajustesVal   = sinCobro ? "—" : fmt(ajustesTotal);
+    var pagableVal   = sinCobro ? "Sin cobranza" : fmt(r.comision_pagable);
+
+    el.innerHTML =
+      "<div class='comision-flow'>" +
+        cfBox("Comisión Base", baseVal) +
+        "<span class='cf-op'>×</span>" +
+        cfBox("F. Presupuesto", fPptoVal) +
+        "<span class='cf-op'>×</span>" +
+        cfBox("F. IEC", fIECVal) +
+        "<span class='cf-op'>=</span>" +
+        cfBox("Com. Generada", genVal, "grn") +
+        "<span class='cf-op'>+</span>" +
+        cfBox("Bono Excedente", bonoVal, bonoAmt > 0 ? "amb" : "") +
+        "<span class='cf-op'>−</span>" +
+        cfBox("NC / Saldo ant.", ajustesVal, ajustesTotal > 0 ? "neg" : "") +
+        "<span class='cf-op'>=</span>" +
+        cfBox("Comisión Pagable", pagableVal, "final") +
+      "</div>" +
+      "<div class='sic-cards' style='margin-top:8px'>" +
+        "<div class='sic-card'><div class='k'>Comisión Potencial</div><div class='v'>" +
+          (sinCobro ? "—" : fmt(r.comision_potencial)) +
+        "</div><div class='sub'>Σ cobros × tasa, antes de factores de ajuste</div></div>" +
+        "<div class='sic-card'><div class='k'>Comisión Liberada</div><div class='v' style='color:#1E7D4A'>" +
+          (sinCobro ? "—" : fmt(r.comision_liberada)) +
+        "</div><div class='sub'>Cobros dentro del período 26-25 que generaron comisión</div></div>" +
+        "<div class='sic-card'><div class='k'>Comisión Pendiente</div><div class='v' style='color:#B8791A'>" +
+          (sinCobro ? "—" : fmt(r.comision_pendiente || 0)) +
+        "</div><div class='sub'>Cartera no cobrada dentro del período — no liberada aún</div></div>" +
+      "</div>";
+  }
+
   function renderTodo() {
     if (!CTX_PARAMS || !FUENTES || !CICLO_ACTUAL) return;
     var cicloReal = SICAdapter.construirCicloReal(PAIS, CICLO_ACTUAL, FUENTES, CTX_PARAMS);
@@ -380,6 +440,7 @@
         document.getElementById(id).textContent = "—";
       });
       document.getElementById("pasos-calculo").innerHTML = "";
+      document.getElementById("comision-buildup").innerHTML = "";
       window._DETALLE_ACTUAL = [];
       renderTablaFacturas();
       document.getElementById("lista-acciones").innerHTML = "<div class='sic-accion'>Sin ventas de este vendedor en este período.</div>";
@@ -493,6 +554,9 @@
     // Nota tecnica Bloque 3
     document.getElementById("c-potencial-tecnico").textContent = fmt(r.comision_potencial);
     document.getElementById("c-liberada-tecnico").textContent = fmt(r.comision_liberada);
+
+    // Panel build-up de comision — Bloque 3
+    renderComisionResult(r, hayCobranzas, sinPresupuesto, sinIec);
 
     // Advertencias visibles para este vendedor (nunca se ocultan)
     var elAdv = document.getElementById("advertencias-vendedor");
