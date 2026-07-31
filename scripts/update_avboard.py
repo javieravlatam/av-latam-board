@@ -103,40 +103,39 @@ PPTO_SOURCE_PE  = _ppto["peru"]["source"]
 print(f"  Ppto Chile [{PPTO_SOURCE_CL}]: 5m={sum(PPTO_MENSUAL_CL[:5]):,.0f} / anual={PPTO_ANUAL_CL:,.0f} CLP")
 print(f"  Ppto Perú  [{PPTO_SOURCE_PE}]: 5m={sum(PPTO_MENSUAL_PE[:5]):,.1f} / anual={PPTO_ANUAL_PE:,.1f} USD")
 
-# Presupuesto Chile por RTC (CLP) — legacy operativo para distribución por RTC
-PPTO_RTC_CL = {
-    'caroca':    [12500000, 6000000, 14500000,  8831000, 12500000,  8730000,  6000000, 25500000, 10800000,  8700000,  5000000, 12500000],
-    'laratro':   [36000000,10600000,  7500000, 16600000, 22500000, 10000000,  7800000, 21000000, 25000000, 20000000, 37500000, 19500000],
-    'encina':    [14200000, 7500000,  7500000,  5000000,  5000000,  5000000,  5000000, 12000000, 21000000, 28000000, 31000000, 28700000],
-    'velasquez': [14858000,11502000,  6500000, 10000000,  5000000, 20000000, 38000000, 12000000, 48000000, 50000000, 18000000, 20000000],
-    'veverka':   [ 6000000, 6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000],
-}
+# Presupuesto por RTC — DINÁMICO desde Libro Base (get_ppto_rtc).
+# Ya no se hardcodean los valores individuales por vendedor: cualquier cambio
+# en inbox/nuevo libro base AV 2026.xlsx se refleja en el siguiente proceso.
+try:
+    from ppto_libro_base import get_ppto_rtc as _get_ppto_rtc
+    PPTO_RTC_CL = _get_ppto_rtc("CL")
+    PPTO_RTC_MENSUAL_PE = _get_ppto_rtc("PE")
+    if not PPTO_RTC_CL:
+        raise ValueError("get_ppto_rtc('CL') retornó vacío")
+    if not PPTO_RTC_MENSUAL_PE:
+        raise ValueError("get_ppto_rtc('PE') retornó vacío")
+    print(f"  RTCs Chile desde Libro Base: {sorted(PPTO_RTC_CL.keys())}")
+    print(f"  RTCs Perú  desde Libro Base: {sorted(PPTO_RTC_MENSUAL_PE.keys())}")
+except Exception as _rtc_err:
+    print(f"⚠️  No se pudo cargar RTCs desde Libro Base: {_rtc_err}. Usando LEGACY.")
+    PPTO_RTC_CL = {
+        'caroca':    [12500000, 6000000, 14500000,  8831000, 12500000,  8730000,  6000000, 25500000, 10800000,  8700000,  5000000, 12500000],
+        'laratro':   [36000000,10600000,  7500000, 16600000, 22500000, 10000000,  7800000, 21000000, 25000000, 20000000, 37500000, 19500000],
+        'encina':    [14200000, 7500000,  7500000,  5000000,  5000000,  5000000,  5000000, 12000000, 21000000, 28000000, 31000000, 28700000],
+        'velasquez': [14858000,11502000,  6500000, 10000000,  5000000, 20000000, 38000000, 12000000, 48000000, 50000000, 18000000, 20000000],
+        'veverka':   [ 6000000, 6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000],
+    }
+    PPTO_RTC_MENSUAL_PE = {
+        'infante':    [16260, 30164, 67708, 37358, 26733, 15346,     0,      0,     0,     0,     0,     0],
+        'aguirre':    [12025, 10573, 16149, 13129,  7644, 15021, 20000, 105000, 65000, 90000, 50000, 20000],
+        'atalaya':    [22123, 17722, 10139, 17028, 21307, 34049, 25000,  19000, 23000, 23000, 18000, 10000],
+        'gonzales':   [ 1261,  1469,  2498,  1820,  1521,  2431,  8000,      0,  5000,     0,  5000,     0],
+        'valladares': [    0,   221,  5310,  4823,  5153, 10319, 10000,  10000, 10000, 15000, 10000, 10000],
+        'diaz':       [    0,     0,     0,     0,     0, 22300, 15000,  15000, 30000, 30000, 20000, 35000],
+        'martha':     [    0,     0,     0,     0,     0,     0,     0,  10000, 10000, 15000, 15000, 15000],
+    }
 
-PPTO_RTC_ANUAL_PE = {
-    'infante':    193568,
-    'aguirre':    424540,   # Lizbeth Aguirre (RTC ICA 1: 329540 + RTC ICA 2: 95000)
-    'atalaya':    240366,
-    'gonzales':    29000,
-    'valladares':  90826,
-    'diaz':       167300,   # Susan Diaz (incorporada jun 2026)
-    'martha':      65000,   # Martha Hidalgo - KAM (incorporada ago 2026)
-}
-
-# Presupuesto Perú por RTC mensual (USD) — distribución real del Libro Base.
-# Actualizado 2026-07-23 con nuevo libro base AV 2026.xlsx.
-# Fuente: hoja "Presupuesto Pais " → secciones individuales por RTC.
-# Nota: aguirre = Lizbeth Aguirre (RTC ICA 1) + RTC ICA 2 / Lizbeth Aguirre
-#       diaz = Susan Diaz (nueva vendedora, incorporada jun 2026)
-#       infante = H2 todo cero (retiro de territorio)
-PPTO_RTC_MENSUAL_PE = {
-    'infante':    [16260, 30164, 67708, 37358, 26733, 15346,     0,      0,     0,     0,     0,     0],
-    'aguirre':    [12025, 10573, 16149, 13129,  7644, 15021, 20000, 105000, 65000, 90000, 50000, 20000],
-    'atalaya':    [22123, 17722, 10139, 17028, 21307, 34049, 25000,  19000, 23000, 23000, 18000, 10000],
-    'gonzales':   [ 1261,  1469,  2498,  1820,  1521,  2431,  8000,      0,  5000,     0,  5000,     0],
-    'valladares': [    0,   221,  5310,  4823,  5153, 10319, 10000,  10000, 10000, 15000, 10000, 10000],
-    'diaz':       [    0,     0,     0,     0,     0, 22300, 15000,  15000, 30000, 30000, 20000, 35000],
-    'martha':     [    0,     0,     0,     0,     0,     0,     0,  10000, 10000, 15000, 15000, 15000],
-}
+PPTO_RTC_ANUAL_PE = {k: sum(v) for k, v in PPTO_RTC_MENSUAL_PE.items()}
 
 # NOTA: la antigua tabla estática RENTABILIDAD (alertas hardcodeadas) fue
 # reemplazada 2026-06-24 por compute_productos(), que calcula rentabilidad

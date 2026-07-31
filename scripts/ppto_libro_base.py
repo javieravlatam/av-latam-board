@@ -285,10 +285,12 @@ ENTIDADES_NO_PERSONA = {"CAPEL", "RTC ICA 2 / LIZBETH AGUIRRE", "N/A"}
 # persona (mismo RTC, distinta ortografía en distintas fuentes).
 ALIASES_NOMBRES = {
     # Chile
-    "FRANCISCO VELASQUEZ": "FRANCISCO VELÁSQUEZ",   # sin acento en ventas
+    "FRANCISCO VELASQUEZ":         "FRANCISCO VELÁSQUEZ",   # sin acento en ventas
     # Perú
-    "LISBETH AGUIRRE":     "LIZBETH AGUIRRE",        # variante L (GG-002)
-    "ANTONIO GONZALES":    "ANTONIO GONZALEZ",        # variante S/Z ortográfica
+    "LISBETH AGUIRRE":             "LIZBETH AGUIRRE",        # variante L (GG-002)
+    "ANTONIO GONZALES":            "ANTONIO GONZALEZ",        # variante S/Z ortográfica
+    "RTC ICA 2 / LIZBETH AGUIRRE": "LIZBETH AGUIRRE",        # fusionar en aguirre (mismo vendedor, territorio 2)
+    "RTC ICA 2 / LISBETH AGUIRRE": "LIZBETH AGUIRRE",        # variante ortográfica del alias de territorio
 }
 
 
@@ -461,6 +463,7 @@ NOMBRE_A_CLAVE_SIC: Dict[str, Dict[str, str]] = {
         "VALENTINA MUÑOZ":     "munoz",
         "PABLO LARATRO":       "laratro",
         "JORGE CAROCA":        "caroca",
+        "IVAN VEVERKA":        "veverka",
     },
     "PE": {
         "OMAR ATALAYA":          "atalaya",
@@ -593,6 +596,117 @@ def es_en_universo_sic(pais: str, nombre_vendedor: str,
         "categoria":   "OTROS" if canon is None else canon,
         "alias_usado": alias_usado,
     }
+
+
+# ─────────────────────────────────────────────────────────────
+# PRESUPUESTO POR RTC — DINÁMICO DESDE LIBRO BASE
+# ─────────────────────────────────────────────────────────────
+
+def get_ppto_rtc(pais: str, libro_base_path: Optional[str] = None) -> Dict[str, List[float]]:
+    """
+    Lee el presupuesto mensual por RTC desde la hoja "Presupuesto Pais" del Libro Base.
+
+    Retorna dict {clave_sic: [12 valores mensuales]} listo para usar como
+    PPTO_RTC_CL o PPTO_RTC_MENSUAL_PE en update_avboard.py.
+
+    Para Perú, fusiona automáticamente "RTC ICA 2 / Lizbeth Aguirre" con
+    "Lizbeth Aguirre" bajo la clave "aguirre".
+
+    Si no puede leer el archivo, retorna dict vacío (el caller debe manejar fallback).
+    """
+    try:
+        import openpyxl
+    except ImportError:
+        return {}
+
+    path = libro_base_path or str(INBOX_EXCEL)
+    try:
+        wb = openpyxl.load_workbook(path, data_only=True, read_only=True)
+    except Exception:
+        return {}
+
+    sheet_name = _find_sheet(wb)
+    if not sheet_name:
+        wb.close()
+        return {}
+
+    try:
+        rows = list(wb[sheet_name].iter_rows(values_only=True))
+    except Exception:
+        wb.close()
+        return {}
+    wb.close()
+
+    pais_up = pais.upper()
+    mapa_sic = NOMBRE_A_CLAVE_SIC.get(pais_up, {})
+    # mapa: norm_rtc → clave_sic
+    mapa_norm: Dict[str, str] = {_norm_rtc(k): v for k, v in mapa_sic.items()}
+    # aliases (ej. LISBETH AGUIRRE → LIZBETH AGUIRRE → aguirre)
+    for alias, canon in ALIASES_NOMBRES.items():
+        canon_n = _norm_rtc(canon)
+        if canon_n in mapa_norm:
+            mapa_norm[_norm_rtc(alias)] = mapa_norm[canon_n]
+
+    # Palabras clave para localizar el bloque del país correcto
+    if pais_up == "CL":
+        pais_keywords = ["chile"]
+    else:
+        pais_keywords = ["peru", "perú", "per"]
+
+    # Encontrar fila de encabezado del bloque del país
+    header_row_idx: Optional[int] = None
+    month_map: Dict[int, int] = {}
+
+    for i, row in enumerate(rows):
+        row_text = " ".join(_norm(c) for c in row if c is not None)
+        if any(k in row_text for k in pais_keywords) and "presupuesto" in row_text:
+            if i + 1 < len(rows):
+                month_map = _parse_month_headers(rows[i + 1])
+                if len(month_map) >= 6:
+                    header_row_idx = i + 1
+            break
+
+    if header_row_idx is None or not month_map:
+        return {}
+
+    result: Dict[str, List[float]] = {}
+    EXCL = {"total", "total anual", "rtc", ""}
+
+    for row in rows[header_row_idx + 1:]:
+        # Celda vacía en col 0 = fila vacía o separador
+        if not any(c is not None for c in row):
+            continue
+        nombre_raw = str(row[0] or "").strip()
+        if not nombre_raw:
+            continue
+        nombre_n = _norm_rtc(nombre_raw)
+        if nombre_n in EXCL or "total" in _norm(nombre_raw):
+            break  # fin del bloque de este país
+
+        clave = mapa_norm.get(nombre_n)
+        if clave is None:
+            # Intentar auto-deriva — pero solo si el nombre parece un RTC real
+            if nombre_n in {_norm_rtc(e) for e in ENTIDADES_NO_PERSONA}:
+                continue
+            # Nombres de cabecera del siguiente bloque tienen "presupuesto" → parar
+            if "presupuesto" in _norm(nombre_raw):
+                break
+            clave = _auto_clave_sic(nombre_raw)
+
+        mensual = [0.0] * 12
+        for month_idx, col_idx in month_map.items():
+            if col_idx < len(row):
+                v = _safe_float(row[col_idx])
+                if v is not None:
+                    mensual[month_idx] = v
+
+        # Fusionar si la clave ya existe (ej. aguirre = RTC ICA 1 + RTC ICA 2)
+        if clave in result:
+            result[clave] = [a + b for a, b in zip(result[clave], mensual)]
+        else:
+            result[clave] = mensual
+
+    return result
 
 
 # ─────────────────────────────────────────────────────────────
