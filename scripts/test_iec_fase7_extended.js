@@ -1,4 +1,11 @@
 /**
+ * @deprecated 2026-07-31
+ * SUPERADO por: scripts/test_precios_iec.py (T01-T12, 36 pruebas, SSOT end-to-end)
+ * RAZÓN: pruebas extendidas de la fase de diseño; la arquitectura SSOT de julio-2026
+ *        centraliza la verificación en test_precios_iec.py.
+ * MANTENER como referencia histórica. NO usar como suite oficial.
+ * ──────────────────────────────────────────────────────────────────────────────
+ *
  * PRUEBAS EXTENDIDAS — IEC Fase 7 (SIC-AV v1.7)
  * Cubre: transporte INCLUIDO/SEPARADO, AVBOARD mensual/vendedor/YTD,
  *        Estado B/C blocking PDF, reconciliación, no regresión en

@@ -1,4 +1,11 @@
 /**
+ * @deprecated 2026-07-31
+ * SUPERADO por: scripts/test_precios_iec.py (T01-T12, 36 pruebas, SSOT end-to-end)
+ * RAZÓN: este suite verifica fórmulas matemáticas aisladas; test_precios_iec.py
+ *        verifica la arquitectura completa incluyendo pipeline y SSOT.
+ * MANTENER como referencia histórica. NO usar como suite oficial.
+ * ──────────────────────────────────────────────────────────────────────────────
+ *
  * TEST SUITE T1-T18 — IEC Ponderado Arquitectura Fase 7
  * CHANGE REQUEST SIC-AV v1.7
  *

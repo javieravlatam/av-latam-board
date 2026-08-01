@@ -1886,3 +1886,73 @@ ACCIONES:
   · Cache-busting ?v=202607311811 sincronizado en 0 paneles HTML
 VALIDACIÓN JS: ✅ OK
 ======================================================================
+
+================================================================================
+FECHA: 2026-07-31
+ACCIÓN: AUDITORÍA DE CERTIFICACIÓN FINAL — Precios Piso e IEC
+ARCHIVOS PROCESADOS:
+  - inbox/nuevo libro base AV 2026.xlsx (Pricing Piso Chile/Peru)
+  - inbox/precios piso CHile .xlsx
+  - scripts/update_avboard.py
+  - avboard_data.js
+  - Panel_IEC_Auditoria_2026.html (TX_CL 1617 + TX_PE 128)
+  - apps/cotizador/data/productos_chile.json
+ACCIONES REALIZADAS:
+  - FASE 1: Origen de datos auditado
+  - FASE 2: 74 diferencias precio piso Chile viejo vs libro base
+  - FASE 3: IEC inventariado — 2 fórmulas activas (binaria + Fase 7)
+  - FASE 4: Reconciliación matemática — brecha 19.4pp
+  - FASE 5: Productos sin piso Chile (41.9%) y Perú (26.6%)
+  - FASE 6: Perú IEC hardcodeado confirmado; TX_PE calculable
+  - FASE 7: SSOT — 4 NO en las 4 dimensiones (PP, IEC, Productos, Pres.)
+  - FASE 8: Suite 19 pruebas automáticas creada en scripts/test_precios_iec.py
+  - ENTREGABLE: Dictamen emitido → NO CERTIFICADO
+DICTAMEN: NO CERTIFICADO — 6 condiciones pendientes para certificar
+NINGÚN ARCHIVO DE CÓDIGO FUE MODIFICADO
+================================================================================
+
+======================================================================
+CORTE: 2026-07-31 20:26
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 29-07-2026 - AGLM.xlsx
+  - AGROVECA PERU -  VENTAS  AL 31.07.2026.xlsx
+  - Cuentas Cobrar  Agrocomercial 21-07.xlsx
+  - Cuentas Cobrar Agroveca 21-06.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 29/07/2026
+  · avboard_clientes.js regenerado · 159 clientes CL
+  · Panel_IEC TX_CL · 1617 transacciones
+  · Panel_IEC TX_PE · 128 transacciones
+  · IEC Chile 60.6% · BP CLP 107,374,019
+  · IEC Perú 108.2% (Fase 7)
+  · CxC Chile CLP 55,651,095 · +90d CLP 26,222,409
+  · Módulo Productos: 183 SKUs · 9 margen negativo · 47 sin costo
+  · Cache-busting ?v=202607312026 sincronizado en 1 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
+
+======================================================================
+CORTE: 2026-07-31 20:43
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 29-07-2026 - AGLM.xlsx
+  - AGROVECA PERU -  VENTAS  AL 31.07.2026.xlsx
+  - Cuentas Cobrar  Agrocomercial 21-07.xlsx
+  - Cuentas Cobrar Agroveca 21-06.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 29/07/2026
+  · avboard_clientes.js regenerado · 159 clientes CL
+  · Panel_IEC TX_CL · 1617 transacciones
+  · Panel_IEC TX_PE · 128 transacciones
+  · IEC Chile 100.8% · BP CLP 107,374,019
+  · IEC Perú 108.2% (Fase 7)
+  · CxC Chile CLP 55,651,095 · +90d CLP 26,222,409
+  · Módulo Productos: 183 SKUs · 9 margen negativo · 47 sin costo
+  · Cache-busting ?v=202607312043 sincronizado en 0 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================

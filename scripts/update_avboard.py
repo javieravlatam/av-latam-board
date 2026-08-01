@@ -202,15 +202,30 @@ def detect_inbox_files():
     if cxc_avch:
         files['cxc_avch'] = cxc_avch[0]
 
-    # Precio piso Chile
-    piso = list(INBOX.glob('precios piso CHile*.xlsx'))
-    if piso:
-        files['piso_chile'] = piso[0]
-
-    # Precio piso Perú
-    piso_pe = list(INBOX.glob('precio piso peru*.xlsx'))
-    if piso_pe:
-        files['piso_peru'] = piso_pe[0]
+    # ── SSOT: Libro Base (fuente canónica de precios piso Chile + Perú) ─────
+    libro_base = sorted(
+        list(INBOX.glob('nuevo libro base AV 2026*.xlsx')) +
+        list(INBOX.glob('Libro Base AV*.xlsx')),
+        key=lambda p: p.stat().st_mtime, reverse=True
+    )
+    if libro_base:
+        lb = libro_base[0]
+        files['libro_base'] = lb
+        files['piso_chile'] = lb   # load_piso_chile leerá sheet 'Pricing Piso Chile'
+        files['piso_peru']  = lb   # load_piso_peru  leerá sheet 'Pricing Piso Peru'
+        print(f"   📗 SSOT Libro Base: {lb.name}")
+    else:
+        # ── DEPRECATED: archivos separados (pre-julio-2026) ────────────────
+        # Mantener como fallback de emergencia ÚNICAMENTE.
+        # Migrar al Libro Base en cuanto sea posible.
+        piso_cl_dep = list(INBOX.glob('precios piso CHile*.xlsx'))
+        if piso_cl_dep:
+            print("   ⚠ DEPRECATED: usando 'precios piso CHile*.xlsx' — migrar al Libro Base")
+            files['piso_chile'] = piso_cl_dep[0]
+        piso_pe_dep = list(INBOX.glob('precio piso peru*.xlsx'))
+        if piso_pe_dep:
+            print("   ⚠ DEPRECATED: usando 'precio piso peru*.xlsx' — migrar al Libro Base")
+            files['piso_peru'] = piso_pe_dep[0]
 
     return files
 
@@ -872,8 +887,11 @@ def compute_iec_chile(df_ventas, piso):
     df['pp'] = df.apply(get_pp, axis=1)
 
     # valor_piso_teorico = Cantidad × precio_piso  (denominador IEC ponderado)
+    # FIX 2026-07-31: excluir filas con total_n=0 (muestras/demos) del VPT
+    # para alinear criterio con build_tx_cl() que exige total>0 para elegibilidad.
+    # Filas total=0 con cant_n>0 inflan el denominador sin aporte a VNE → IEC artificialmente bajo.
     df['valor_piso_teorico'] = df.apply(
-        lambda r: r['cant_n'] * r['pp'] if pd.notna(r['pp']) and r['cant_n'] > 0 else 0, axis=1
+        lambda r: r['cant_n'] * r['pp'] if pd.notna(r['pp']) and r['cant_n'] > 0 and r['total_n'] > 0 else 0, axis=1
     )
     # venta_neta_elegible = total de la transacción cuando tiene precio piso definido
     df['venta_neta_elegible'] = df.apply(
@@ -960,6 +978,77 @@ def compute_iec_chile(df_ventas, piso):
         # desglose mensual (Fase 7): país y por vendedor
         'iec_mensual': iec_mensual,
     }
+
+
+def compute_iec_peru(tx_pe):
+    """
+    IEC PONDERADO (Fase 7) para Perú — desde la lista TX_PE (build_tx_pe).
+    Fórmula idéntica a compute_iec_chile:
+        IEC = Σ venta_neta_elegible / Σ valor_piso_teorico
+        vne  = total de la transacción cuando elegible=True
+        vpt  = qty × precio_piso de la misma transacción
+
+    Retorna dict compatible con el bloque iec: { total, aguirre, ... }
+    que consume render_avboard_data_js().
+
+    REEMPLAZA el hardcode anterior:
+        # DEPRECATED — hardcode eliminado 2026-07-31
+        atalaya: 0.867, valladares: 0.167, ...
+    """
+    _vend_map = {
+        'OSCAR INFANTE':       'infante',
+        'NICOLL NAVARRO':      'navarro',
+        'OMAR ATALAYA':        'atalaya',
+        'ANTONIO GONZALES':    'gonzales',
+        'LISBETH AGUIRRE':     'aguirre',
+        'LIZBETH AGUIRRE':     'aguirre',  # alias DQ-002
+        'PATRICIA VALLADARES': 'valladares',
+        'SUSAN DIAZ':          'diaz',
+        'SUSAN DÍAZ':          'diaz',
+    }
+
+    agg = {}  # key → {'vne': float, 'vpt': float}
+    total_vne, total_vpt = 0.0, 0.0
+
+    for tx in tx_pe:
+        if not tx.get('elegible'):
+            continue
+        vne = float(tx.get('total', 0) or 0)
+        qty = float(tx.get('qty',   0) or 0)
+        pp  = float(tx.get('pp',    0) or 0)
+        vpt = qty * pp
+        total_vne += vne
+        total_vpt += vpt
+
+        key = _vend_map.get(str(tx.get('vendedor', '')).strip().upper())
+        if key:
+            if key not in agg:
+                agg[key] = {'vne': 0.0, 'vpt': 0.0}
+            agg[key]['vne'] += vne
+            agg[key]['vpt'] += vpt
+
+    def _ratio(num, den):
+        return round(num / den, 4) if den > 0 else None
+
+    result = {
+        'total':       _ratio(total_vne, total_vpt),
+        'aguirre':     _ratio(agg.get('aguirre',     {}).get('vne', 0), agg.get('aguirre',     {}).get('vpt', 0)),
+        'infante':     _ratio(agg.get('infante',     {}).get('vne', 0), agg.get('infante',     {}).get('vpt', 0)),
+        'atalaya':     _ratio(agg.get('atalaya',     {}).get('vne', 0), agg.get('atalaya',     {}).get('vpt', 0)),
+        'valladares':  _ratio(agg.get('valladares',  {}).get('vne', 0), agg.get('valladares',  {}).get('vpt', 0)),
+        'gonzales':    _ratio(agg.get('gonzales',    {}).get('vne', 0), agg.get('gonzales',    {}).get('vpt', 0)),
+        'navarro':     _ratio(agg.get('navarro',     {}).get('vne', 0), agg.get('navarro',     {}).get('vpt', 0)),
+        'diaz':        _ratio(agg.get('diaz',        {}).get('vne', 0), agg.get('diaz',        {}).get('vpt', 0)),
+        # Raw para agregación Grupo (Σnum/Σden — no promedio)
+        'vne_total':   round(total_vne, 2),
+        'vpt_total':   round(total_vpt, 2),
+        'impacto_potencial_usd': 4000,   # placeholder hasta tener cálculo real
+    }
+    # Limpiar claves con vne=0 y vpt=0 (vendedor sin elegibles) → None
+    for key in ['aguirre', 'infante', 'atalaya', 'valladares', 'gonzales', 'navarro', 'diaz']:
+        if result[key] is None and agg.get(key, {}).get('vne', 0) == 0:
+            result[key] = None
+    return result
 
 
 def iec_factor(pct):
@@ -1278,6 +1367,11 @@ def compute_productos(cl_df, piso_cl, pe_df_sku, piso_pe):
 #  4. GENERACIÓN avboard_data.js
 # ══════════════════════════════════════════════════════════════════════════════
 
+def _fn(v):
+    """Formatea float o None como literal JS (number o null)."""
+    return f"{v:.4f}" if v is not None else 'null'
+
+
 def _j(v, indent=0):
     """Serializa a JSON compacto."""
     return _jdumps(v)
@@ -1290,8 +1384,12 @@ def _arr(lst, per_row=12, indent=6):
     return '[\n' + ',\n'.join(pad + str(c) for c in chunks) + '\n' + ' '*(indent-2) + ']'
 
 
-def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, peru_cxc_static, productos_data):
-    """Genera el contenido completo de avboard_data.js."""
+def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, peru_cxc_static, productos_data, iec_pe=None):
+    """Genera el contenido completo de avboard_data.js.
+
+    iec_pe: resultado de compute_iec_peru(tx_pe) — dict con {total, aguirre, ...}
+            Si None, el IEC Perú se omite (queda null). Siempre debe pasarse.
+    """
 
     version = datetime.now().strftime('%Y-%m-%d')
     tc = TC_CLP_USD
@@ -1583,9 +1681,17 @@ var AVBOARD = (function() {{
     rtc_mensual_ppto: {js_rtc_ppto(PPTO_RTC_MENSUAL_PE)},
     rtc_mensual_real: {js_rtc_mensual(pe_v['rtc_mensual'])},
     iec: {{
-      total: null, aguirre: null, infante: null,
-      atalaya: 0.867, valladares: 0.167, gonzales: null,
-      impacto_potencial_usd: 4000
+      total:      {_fn(iec_pe.get('total'))      if iec_pe else 'null'},
+      aguirre:    {_fn(iec_pe.get('aguirre'))    if iec_pe else 'null'},
+      infante:    {_fn(iec_pe.get('infante'))    if iec_pe else 'null'},
+      atalaya:    {_fn(iec_pe.get('atalaya'))    if iec_pe else 'null'},
+      valladares: {_fn(iec_pe.get('valladares')) if iec_pe else 'null'},
+      gonzales:   {_fn(iec_pe.get('gonzales'))   if iec_pe else 'null'},
+      navarro:    {_fn(iec_pe.get('navarro'))    if iec_pe else 'null'},
+      diaz:       {_fn(iec_pe.get('diaz'))       if iec_pe else 'null'},
+      vne_total:  {iec_pe.get('vne_total', 0)   if iec_pe else 0},
+      vpt_total:  {iec_pe.get('vpt_total', 0)   if iec_pe else 0},
+      impacto_potencial_usd: {iec_pe.get('impacto_potencial_usd', 4000) if iec_pe else 4000}
     }},
     mn_real:  null,
     mn_meta:  0.250
@@ -2319,7 +2425,7 @@ def main():
     iec_cl    = compute_iec_chile(cl_v['df'], piso_dict)
     print(f"   → IEC global: {iec_cl['total']:.1%} | BP: CLP {iec_cl['bp_total']:,}")
 
-    # 4.5 Calcular módulo Productos (rentabilidad real por país×producto×formato)
+    # 4.5 Calcular módulo Productos + IEC Perú (Fase 7)
     print("\n💰 Calculando módulo Productos...")
     if 'piso_peru' in files:
         piso_pe_dict = load_piso_peru(files['piso_peru'])
@@ -2327,16 +2433,33 @@ def main():
     else:
         piso_pe_dict = {'entries': {}, 'tiers': {}}
         pe_sku_df    = pd.DataFrame(columns=['CONCEPTO', 'DOLARES'])
-        print("   ⚠ precio piso peru*.xlsx no encontrado en inbox — módulo Productos Perú omitido (best-effort)")
+        print("   ⚠ Libro Base no encontrado — módulo Productos Perú omitido (best-effort)")
     productos = compute_productos(cl_v['df'], piso_dict, pe_sku_df, piso_pe_dict)
     n_neg = len(productos['resumen']['alertas_nivel1'])
     n_sin_costo = productos['resumen']['skus_sin_costo_chile'] + productos['resumen']['skus_sin_costo_peru']
     print(f"   → {len(productos['detalle'])} SKUs · {n_neg} con margen negativo · {n_sin_costo} sin costo cargado")
 
+    # 4.6 Calcular IEC Perú (Fase 7) — requiere TX_PE construido desde ventas Perú
+    print("\n⚡ Calculando IEC Perú (Fase 7)...")
+    if 'peru_ventas' in files and piso_pe_dict.get('entries'):
+        _pe_sku_pre = extract_peru_ventas_sku(files['peru_ventas'])
+        _tx_pe_pre  = build_tx_pe(_pe_sku_pre, piso_pe_dict)
+        iec_pe_computed = compute_iec_peru(_tx_pe_pre)
+        print(f"   → IEC Perú total: {iec_pe_computed['total']:.1%}" if iec_pe_computed.get('total') else "   → IEC Perú: null (sin elegibles)")
+        for vk in ['aguirre', 'infante', 'atalaya', 'valladares', 'gonzales', 'navarro', 'diaz']:
+            vv = iec_pe_computed.get(vk)
+            if vv is not None:
+                print(f"   → {vk:15}: {vv:.1%}")
+    else:
+        _tx_pe_pre = []
+        iec_pe_computed = None
+        print("   ⚠ Sin datos Perú — IEC Perú será null")
+
     # 5. Generar avboard_data.js
     print("\n📝 Generando avboard_data.js...")
     peru_cxc_static = extract_peru_cxc_static()
-    js_data = render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, peru_cxc_static, productos)
+    js_data = render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, peru_cxc_static, productos,
+                                     iec_pe=iec_pe_computed)
     with open(AVBOARD_DATA, 'w', encoding='utf-8') as f:
         f.write(js_data)
     ok, err = validate_js(AVBOARD_DATA)
@@ -2365,22 +2488,20 @@ def main():
     ok2, err2 = validate_js(AVBOARD_CLI)
     print(f"   → {'✅ OK' if ok2 else '❌ ERROR: ' + err2}")
 
-    # 8. Actualizar Panel_IEC TX_CL
+    # 8. Actualizar Panel_IEC TX_CL + TX_PE
     print("\n🔬 Actualizando Panel_IEC TX_CL...")
     tx_cl = build_tx_cl(cl_v['df'], piso_dict)
     n_tx  = update_panel_iec(tx_cl, cortes['chile_ventas'])
     print(f"   → {n_tx} transacciones · corte {cortes['chile_ventas']}")
 
-    # 8.1 Actualizar Panel_IEC TX_PE (fix DQ-001 + DQ-002)
-    print("\n🔬 Actualizando Panel_IEC TX_PE (fix DQ-001/DQ-002)...")
-    if 'peru_ventas' in files:
-        _pe_sku_for_tx = extract_peru_ventas_sku(files['peru_ventas'])
-        tx_pe  = build_tx_pe(_pe_sku_for_tx, piso_pe_dict)
-        n_tx_pe = update_panel_iec_pe(tx_pe, cortes['peru_ventas'])
-        print(f"   → TX_PE actualizado · corte {cortes['peru_ventas']}")
+    # 8.1 TX_PE — reusar _tx_pe_pre calculado en paso 4.6 (evita doble extracción)
+    print("\n🔬 Actualizando Panel_IEC TX_PE...")
+    if _tx_pe_pre:
+        n_tx_pe = update_panel_iec_pe(_tx_pe_pre, cortes['peru_ventas'])
+        print(f"   → TX_PE actualizado · {n_tx_pe} transacciones · corte {cortes['peru_ventas']}")
     else:
         n_tx_pe = 0
-        print("   ⚠ peru_ventas no disponible — TX_PE no actualizado")
+        print("   ⚠ TX_PE no disponible — Panel IEC Perú no actualizado")
 
     # 8.5 Sincronizar cache-busting en todos los paneles
     print(f"\n🔄 Sincronizando cache-busting (?v={CACHE_V}) en paneles HTML...")
@@ -2394,8 +2515,9 @@ def main():
         f"avboard_data.js generado · corte {cortes['chile_ventas']}",
         f"avboard_clientes.js regenerado · {len(clientes_cl)} clientes CL",
         f"Panel_IEC TX_CL · {n_tx} transacciones",
-        f"Panel_IEC TX_PE · {n_tx_pe} transacciones · DQ-001/DQ-002 fix aplicado",
+        f"Panel_IEC TX_PE · {n_tx_pe} transacciones",
         f"IEC Chile {iec_cl['total']:.1%} · BP CLP {iec_cl['bp_total']:,}",
+        f"IEC Perú {iec_pe_computed['total']:.1%} (Fase 7)" if iec_pe_computed and iec_pe_computed.get('total') else "IEC Perú: sin datos",
         f"CxC Chile CLP {cl_cxc['total']:,} · +90d CLP {cl_cxc['tramos']['t90']:,}",
         f"Módulo Productos: {len(productos['detalle'])} SKUs · {n_neg} margen negativo · {n_sin_costo} sin costo",
         f"Cache-busting ?v={CACHE_V} sincronizado en {len(panels_synced)} paneles HTML",
