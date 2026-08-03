@@ -987,41 +987,55 @@ new Chart(document.getElementById('chartVentas'),{
   document.getElementById('tbody-ventas').innerHTML=html;
 })();
 
-// ── VENDEDORES DATA 2026 ──
-const vendedoresData=[
-  {nombre:'OSCAR INFANTE',     corto:'O. Infante',    real26:130.1, real25:219.5, ppto:485.1,
-   ppto4m:180.4,
-   meses26:[16.5,16.2,38.9,36.9,22.3,null,null,null,null,null,null,null],
-   pptoMes:[18.2,29.7,66.8,38.8,26.9,24.9,24.3,67.3,52.6,51.3,60.4,23.8]},
-  {nombre:'OMAR ATALAYA',      corto:'O. Atalaya',    real26:64.6, real25:20.3,  ppto:248.4,
-   ppto4m:94.7,
-   meses26:[30.1,9.0,20.0,7.8,null,null,null,null,null,null,null,null],
-   pptoMes:[22.2,19.3,12.1,18.3,22.8,27.6,25.8,28.8,23.1,18.5,16.4,13.5]},
-  {nombre:'LISBETH AGUIRRE',   corto:'L. Aguirre',    real26:97.1, real25:162.8, ppto:223.9,
-   ppto4m:51.6,
-   meses26:[0,6.5,31.6,14.3,48.5,null,null,null,null,null,null,null],
-   pptoMes:[11.2,9.2,15.0,9.2,7.0,9.2,15.5,37.6,29.8,60.3,15.8,4.3]},
-  {nombre:'NICOLL NAVARRO',    corto:'N. Navarro',    real26:30.9, real25:0, ppto:null,
-   ppto4m:null,
-   meses26:[26.3,7.7,0,0,null,null,null,null,null,null,null,null],
-   pptoMes:null},
-  {nombre:'PATRICIA VALLADARES',corto:'P. Valladares',real26:1.2,  real25:0, ppto:null,
-   ppto4m:null,
-   meses26:[0,0,1.0,0.2,null,null,null,null,null,null,null,null],
-   pptoMes:null},
-  {nombre:'ANTONIO GONZALES',  corto:'A. Gonzalez',   real26:0.7, real25:4.8,  ppto:37.3,
-   ppto4m:4.0,
-   meses26:[0.6,0,0.1,0,0.6,null,null,null,null,null,null,null],
-   pptoMes:[0,0,4.0,0,0,7.0,7.0,19.3,0,0,0,0]},
-  {nombre:'SUSAN DIAZ',       corto:'S. Diaz',       real26:6.3,  real25:0,    ppto:null,
-   ppto4m:null,
-   meses26:[0,0,0,6.3,null,null,null,null,null,null,null,null],
-   pptoMes:null},
-  {nombre:'JOSE GELDRES',      corto:'J. Geldres ★',  real26:0.0, real25:275.1, ppto:null,
-   ppto4m:null,
-   meses26:[0,0,0,0,2.6,null,null,null,null,null,null,null],
-   pptoMes:null, inactivo2026:true},
-];
+// ── VENDEDORES DATA 2026 ── (dinámico desde AVBOARD · actualizado automáticamente)
+const vendedoresData=(function(){
+  // Configuración de visualización: clave AVBOARD → datos de display
+  var CFG=[
+    {key:'infante',    nombre:'OSCAR INFANTE',        corto:'O. Infante',   real25:219.5},
+    {key:'atalaya',    nombre:'OMAR ATALAYA',          corto:'O. Atalaya',   real25:20.3},
+    {key:'aguirre',    nombre:'LISBETH AGUIRRE',       corto:'L. Aguirre',   real25:162.8},
+    {key:'valladares', nombre:'PATRICIA VALLADARES',   corto:'P. Valladares',real25:0},
+    {key:'gonzales',   nombre:'ANTONIO GONZALES',      corto:'A. Gonzalez',  real25:4.8},
+    {key:'diaz',       nombre:'SUSAN DIAZ',            corto:'S. Diaz',      real25:0},
+    {key:'martha',     nombre:'MARTHA HIDALGO · KAM',  corto:'M. Hidalgo',   real25:0},
+  ];
+  // Vendedores fuera del pipeline activo (datos históricos estáticos)
+  var ESTATICOS=[
+    {nombre:'NICOLL NAVARRO', corto:'N. Navarro', real26:30.9, real25:0,
+     ppto:null, ppto4m:null,
+     meses26:[26.3,7.7,0,0,0,0,0,null,null,null,null,null], pptoMes:null},
+    {nombre:'JOSE GELDRES',   corto:'J. Geldres ★', real26:0.0, real25:275.1,
+     ppto:null, ppto4m:null,
+     meses26:[0,0,0,0,2.6,0,0,null,null,null,null,null], pptoMes:null, inactivo2026:true},
+  ];
+  if(typeof AVBOARD==='undefined') return ESTATICOS;
+  var pv=AVBOARD.peru.ventas;
+  var rtcR=pv.rtc_mensual_real||{};
+  var rtcP=pv.rtc_mensual_ppto||{};
+  var pvnd=pv.por_vendedor||{};
+  var corteStr=(AVBOARD.meta&&AVBOARD.meta.cortes&&AVBOARD.meta.cortes.peru_ventas)||'31/07/2026';
+  var nM=parseInt(corteStr.split('/')[1],10);
+  var toK=function(v){return parseFloat((v/1000).toFixed(1));};
+  var dinamicos=CFG.map(function(cfg){
+    var mR=rtcR[cfg.key]||new Array(12).fill(0);
+    var mP=rtcP[cfg.key]||null;
+    var meses26=mR.map(function(v,i){return i<nM?toK(v):null;});
+    var ytdRaw=pvnd[cfg.key]?pvnd[cfg.key].ytd:mR.slice(0,nM).reduce(function(a,b){return a+b;},0);
+    var pptoMes=mP?mP.map(function(v){return parseFloat((v/1000).toFixed(3));}):null;
+    var hayPpto=pptoMes&&pptoMes.some(function(v){return v>0;});
+    var pptoAnual=hayPpto?parseFloat(pptoMes.reduce(function(a,b){return a+b;},0).toFixed(1)):null;
+    var pptoAcum=hayPpto?parseFloat(pptoMes.slice(0,nM).reduce(function(a,b){return a+b;},0).toFixed(1)):null;
+    return {
+      nombre:cfg.nombre, corto:cfg.corto,
+      real26:toK(ytdRaw), real25:cfg.real25,
+      ppto:pptoAnual,
+      ppto4m:(pptoAcum&&pptoAcum>0)?pptoAcum:null,
+      meses26:meses26,
+      pptoMes:hayPpto?pptoMes:null,
+    };
+  });
+  return dinamicos.concat(ESTATICOS);
+})();
 
 // ── TABLA VENDEDORES ──
 (function(){
@@ -1400,6 +1414,20 @@ function cerrarSesion() {
     if(chV){
       chV.data.datasets[1].data=real2026;
       chV.update('none');
+    }
+
+    // chartRTC — actualizar con datos actuales de por_vendedor (orden desc por YTD)
+    var chRTC=Chart.getChart(document.getElementById('chartRTC'));
+    if(chRTC&&pve){
+      var nomMapRTC={aguirre:'L. Aguirre',infante:'O. Infante',atalaya:'O. Atalaya',
+                     gonzales:'A. Gonzalez',valladares:'P. Valladares',diaz:'S. Diaz',martha:'M. Hidalgo'};
+      var coloresRTC=['rgba(27,79,138,0.85)','rgba(74,158,219,0.75)','rgba(74,158,219,0.6)',
+                      'rgba(74,158,219,0.45)','rgba(27,79,138,0.25)','rgba(27,79,138,0.18)','rgba(27,79,138,0.12)'];
+      var sortedRTC=Object.keys(pve).sort(function(a,b){return pve[b].ytd-pve[a].ytd;});
+      chRTC.data.labels=sortedRTC.map(function(k){return nomMapRTC[k]||k.toUpperCase();});
+      chRTC.data.datasets[0].data=sortedRTC.map(function(k){return Math.round(pve[k].ytd/100)/10;});
+      chRTC.data.datasets[0].backgroundColor=coloresRTC.slice(0,sortedRTC.length);
+      chRTC.update('none');
     }
   }catch(e){console.warn('[AVBOARD][JPE]',e);}
 })();
