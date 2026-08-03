@@ -14,13 +14,13 @@
  *   Perú ventas  → 31/07/2026
  *   Perú CxC     → 10/05/2026
  *
- * Actualizado: 2026-07-31
+ * Actualizado: 2026-08-03
  */
 
 var AVBOARD = (function() {
 
   var meta = {
-    version:      '2026-07-31',
+    version:      '2026-08-03',
     tc_clp_usd:   950,
     meta_mn:      0.25,
     cortes: {
