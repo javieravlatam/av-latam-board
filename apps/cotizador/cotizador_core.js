@@ -412,53 +412,68 @@ var COTIZADOR = (function () {
   // IEC ÓPTIMO = 100%. 90% = umbral aprobación automática (≠ óptimo). 75% = guardrail individual.
   //
   // A: IEC_MIX >= iec_min Y todos los ítems >= guardrail (75%) → APROBACIÓN AUTOMÁTICA
-  // B: IEC_MIX < iec_min Y todos los ítems >= guardrail       → REQUIERE AUTORIZACIÓN GG/GD
-  // C: algún ítem < guardrail (75%)                           → EXCEPCIÓN CRÍTICA · REQUIERE AUTORIZACIÓN GG/GD
-  //
-  // GG/GD conserva facultad de aprobar B y C — el bloqueo PDF es TÉCNICO hasta que exista backend.
-  // El marketing mix permite ítems bajo piso siempre que estén >= 75% y el IEC MIX >= 90%.
+  // ── Política IEC v2.0 (2026-08-03) ───────────────────────────────────────
+  // A: todos ítems ≥ 50% Y IEC_MIX ≥ 75%          → APROBACIÓN AUTOMÁTICA (PDF directo)
+  // B: todos ítems ≥ 50% Y 60% ≤ IEC_MIX < 75%    → REQUIERE APROBACIÓN GG (formulario → Make)
+  // C: algún ítem < 50%                            → BLOQUEADO ABSOLUTO (sin aprobación)
+  // D: todos ítems ≥ 50% Y IEC_MIX < 60%           → BLOQUEADO ABSOLUTO (sin aprobación)
   Calc.estadoIEC = function (lineasCalculadas, iecMix, config) {
-    var pol = (config && config.iec_politica) || {};
-    var iecMin    = pol.iec_min_autorizado    !== undefined ? pol.iec_min_autorizado    : 0.90;
-    var desviMax  = pol.desviacion_critica_max_item !== undefined ? pol.desviacion_critica_max_item : 0.25;
-    var guardrail = 1 - desviMax; // 0.75 — guardrail individual por ítem
+    var pol       = (config && config.iec_politica) || {};
+    var iecAuto   = pol.iec_min_autorizado          !== undefined ? pol.iec_min_autorizado          : 0.75; // ≥75% → auto
+    var iecGGMin  = pol.iec_gg_min                  !== undefined ? pol.iec_gg_min                  : 0.60; // ≥60% → GG
+    var desviMax  = pol.desviacion_critica_max_item !== undefined ? pol.desviacion_critica_max_item : 0.50;
+    var guardrail = 1 - desviMax; // 0.50 — bloqueo absoluto si algún ítem < 50%
 
     if (iecMix === null || iecMix === undefined) {
       return { estado: 'sin_datos', nombre: 'Sin datos', descripcion: 'No hay líneas elegibles con precio piso definido.' };
     }
 
-    // Estado C: algún ítem elegible con IEC_linea < guardrail (75%) → EXCEPCIÓN CRÍTICA
-    var itemsCriticos = (lineasCalculadas || []).filter(function (l) {
+    // Estado C: algún ítem elegible con IEC_linea < 50% → BLOQUEADO ABSOLUTO
+    var itemsBloqueados = (lineasCalculadas || []).filter(function (l) {
       return l.elegible_iec && l.iec_linea !== null && l.iec_linea !== undefined && l.iec_linea < guardrail;
     });
-    if (itemsCriticos.length > 0) {
+    if (itemsBloqueados.length > 0) {
       return {
         estado: 'C',
-        nombre: 'EXCEPCIÓN CRÍTICA',
-        descripcion: itemsCriticos.length + ' ítem(s) con precio < ' + Math.round(guardrail * 100) + '% del precio piso. Requiere autorización expresa GG/GD con motivo de excepción.',
-        items_criticos: itemsCriticos.map(function (l) {
+        nombre: 'BLOQUEADO ABSOLUTO',
+        descripcion: itemsBloqueados.length + ' ítem(s) con IEC < ' + Math.round(guardrail * 100) + '% del precio piso. Bloqueo absoluto — no se puede solicitar aprobación.',
+        items_criticos: itemsBloqueados.map(function (l) {
           return { producto: l.producto, presentacion: l.presentacion, iec_linea: l.iec_linea };
         }),
-        bloquea_pdf: true
+        bloquea_pdf: true,
+        aprobable: false
       };
     }
 
-    // Estado A: IEC_MIX >= umbral aprobación automática (90%) y todos los ítems >= guardrail
-    if (iecMix >= iecMin) {
+    // Estado A: todos ítems ≥ 50% Y IEC_MIX ≥ 75% → APROBACIÓN AUTOMÁTICA
+    if (iecMix >= iecAuto) {
       return {
         estado: 'A',
         nombre: 'APROBACIÓN AUTOMÁTICA',
-        descripcion: 'IEC Mix ' + (iecMix * 100).toFixed(1) + '% ≥ ' + Math.round(iecMin * 100) + '% y todos los ítems ≥ ' + Math.round(guardrail * 100) + '%. Marketing mix dentro de política.',
-        bloquea_pdf: false
+        descripcion: 'IEC Mix ' + (iecMix * 100).toFixed(1) + '% ≥ ' + Math.round(iecAuto * 100) + '% y todos los ítems ≥ ' + Math.round(guardrail * 100) + '%. Dentro de política comercial.',
+        bloquea_pdf: false,
+        aprobable: true
       };
     }
 
-    // Estado B: IEC_MIX < umbral (90%) pero todos los ítems >= guardrail (75%)
+    // Estado B: todos ítems ≥ 50% Y 60% ≤ IEC_MIX < 75% → REQUIERE APROBACIÓN GG
+    if (iecMix >= iecGGMin) {
+      return {
+        estado: 'B',
+        nombre: 'REQUIERE APROBACIÓN GG',
+        descripcion: 'IEC Mix ' + (iecMix * 100).toFixed(1) + '% — zona ' + Math.round(iecGGMin * 100) + '–' + Math.round(iecAuto * 100) + '%. Todos los ítems ≥ ' + Math.round(guardrail * 100) + '%. El GG debe aprobar antes de emitir el PDF.',
+        bloquea_pdf: true,
+        aprobable: true  // aprobable vía formulario GG → Make
+      };
+    }
+
+    // Estado D: todos ítems ≥ 50% Y IEC_MIX < 60% → BLOQUEADO ABSOLUTO
     return {
-      estado: 'B',
-      nombre: 'REQUIERE AUTORIZACIÓN',
-      descripcion: 'IEC Mix ' + (iecMix * 100).toFixed(1) + '% < ' + Math.round(iecMin * 100) + '% (umbral aprobación automática). Todos los ítems ≥ ' + Math.round(guardrail * 100) + '%. Requiere autorización GG/GD.',
-      bloquea_pdf: false // bloqueo técnico de PDF está en imprimirConControl(), no en estadoIEC()
+      estado: 'D',
+      nombre: 'BLOQUEADO · IEC INSUFICIENTE',
+      descripcion: 'IEC Mix ' + (iecMix * 100).toFixed(1) + '% < ' + Math.round(iecGGMin * 100) + '%. Incluso con todos los ítems ≥ ' + Math.round(guardrail * 100) + '%, el descuento global es demasiado alto. Ajusta los precios.',
+      bloquea_pdf: true,
+      aprobable: false
     };
   };
 
@@ -1064,10 +1079,14 @@ var COTIZADOR = (function () {
   // Utiliza ÚNICAMENTE el IEC ponderado oficial del motor (iecMix), nunca
   // el valor redondeado de pantalla ni un recálculo paralelo.
   // ────────────────────────────────────────────────────────────────
-  PDF.imprimirConControl = function (quote, paisNombre, config) {
+  // imprimirConControl — v2.0 (2026-08-03)
+  // onRequiereGG (opcional): callback(quote, estado) llamado cuando IEC está en zona B (60-75%).
+  // El callback abre el modal de solicitud GG desde el HTML — cotizador_core.js no manipula DOM.
+  PDF.imprimirConControl = function (quote, paisNombre, config, onRequiereGG) {
     var lineas = quote.lineas || [];
     var totales = quote.totales || {};
-    // Si el transporte está INCLUIDO, evaluar sobre IEC neto (excluyendo transporte).
+
+    // Resolver IEC efectivo (neto si transporte INCLUIDO, bruto si SEPARADO)
     var iecMix;
     var transpInfo = quote.iec_transporte_info;
     if (transpInfo && transpInfo.modo === 'INCLUIDO' && transpInfo.iec_neto !== null && transpInfo.iec_neto !== undefined) {
@@ -1076,36 +1095,54 @@ var COTIZADOR = (function () {
       iecMix = (totales.iec_global !== undefined) ? totales.iec_global : null;
     }
 
-    // PISO ABSOLUTO (OBJ3): IEC ponderado global < 75% → bloqueo directo.
-    // Cubre también cotizaciones vacías (iecMix === null).
-    if (iecMix === null || iecMix < 0.75) {
-      alert(
-        'IEC GLOBAL INSUFICIENTE — PDF BLOQUEADO\n\n' +
-        'El IEC ponderado de esta cotización es ' +
-        (iecMix === null ? 'indefinido (sin líneas válidas)' : (Math.round(iecMix * 10000) / 100).toFixed(2) + '%') + '.\n\n' +
-        'Política comercial: se requiere un IEC global ≥ 75% para emitir el PDF.\n' +
-        'Ajusta los precios de venta y vuelve a intentarlo.'
-      );
-      return false;
-    }
-
     var estado = Calc.estadoIEC(lineas, iecMix, config);
 
+    // Sin líneas válidas
+    if (estado.estado === 'sin_datos') {
+      alert('Sin líneas con precio piso definido — no se puede calcular el IEC.');
+      return false;
+    }
+
+    // Estado C — algún ítem < 50%: bloqueo absoluto, sin aprobación posible
     if (estado.estado === 'C') {
-      // EXCEPCIÓN CRÍTICA: algún ítem < 75% del piso. El IEC global puede ser ≥ 75%
-      // pero el guardrail por ítem también aplica. GG/GD puede aprobar con motivo
-      // de excepción cuando exista backend. Técnicamente bloqueado hasta entonces.
       alert(
-        'EXCEPCIÓN CRÍTICA · REQUIERE AUTORIZACIÓN GG/GD\n\n' +
+        'BLOQUEADO ABSOLUTO — ÍTEM(S) BAJO UMBRAL MÍNIMO\n\n' +
         estado.descripcion + '\n\n' +
-        'Uno o más ítems están cotizados por debajo del guardrail del 75% del precio piso.\n' +
-        'Requiere autorización expresa de GG/GD con motivo de excepción documentado.\n' +
-        'PDF bloqueado técnicamente hasta que exista el backend de autorización segura.'
+        'Uno o más ítems están cotizados por debajo del 50% del precio piso.\n' +
+        'Este bloqueo es definitivo: no se puede solicitar aprobación.\n' +
+        'Ajusta los precios y vuelve a intentarlo.'
       );
       return false;
     }
 
-    // Estado A o B (IEC global ≥ 75% y todos los ítems ≥ 75%) → PDF permitido.
+    // Estado D — IEC global < 60%: bloqueo absoluto, sin aprobación posible
+    if (estado.estado === 'D') {
+      alert(
+        'BLOQUEADO — IEC GLOBAL INSUFICIENTE\n\n' +
+        estado.descripcion + '\n\n' +
+        'El descuento global de la cotización es demasiado alto.\n' +
+        'Mínimo para solicitar aprobación GG: 60% del precio piso.\n' +
+        'Ajusta los precios y vuelve a intentarlo.'
+      );
+      return false;
+    }
+
+    // Estado B — IEC 60-75%: requiere aprobación GG
+    if (estado.estado === 'B') {
+      if (typeof onRequiereGG === 'function') {
+        onRequiereGG(quote, estado);
+      } else {
+        alert(
+          'REQUIERE APROBACIÓN GG\n\n' +
+          estado.descripcion + '\n\n' +
+          'Esta cotización requiere aprobación del GG antes de emitir el PDF.\n' +
+          'El formulario de solicitud no está disponible. Contacta al GG directamente.'
+        );
+      }
+      return false;
+    }
+
+    // Estado A — IEC ≥ 75% y todos ítems ≥ 50%: aprobación automática → imprimir
     PDF.imprimir(quote, paisNombre);
     return true;
   };

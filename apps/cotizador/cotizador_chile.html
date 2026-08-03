@@ -236,6 +236,27 @@
   </div>
 </div>
 
+<!-- ── MODAL APROBACIÓN GG ─────────────────────────────────────── -->
+<div class="modal-backdrop" id="modal-aprobacion-gg">
+  <div class="modal" style="max-width:560px">
+    <h3 style="display:flex;justify-content:space-between;align-items:center">
+      🟡 SOLICITAR APROBACIÓN GG
+      <button class="btn-mini" id="btn-cerrar-modal-gg">✕</button>
+    </h3>
+    <div id="gg-resumen" style="background:var(--surface2,#f4f6f8);border-radius:6px;padding:10px 14px;margin:10px 0;font-size:12px;font-family:'DM Mono',monospace;line-height:1.6"></div>
+    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:4px">
+      Justificación comercial <span style="color:#E74C3C">*</span>
+    </label>
+    <textarea id="gg-justificacion" rows="4" style="width:100%;box-sizing:border-box;padding:8px;font-size:12px;border:1.5px solid #ddd;border-radius:5px;resize:vertical;font-family:'DM Mono',monospace"
+      placeholder="Explica por qué se requiere este precio: cliente estratégico, volumen, competencia, negociación especial, etc."></textarea>
+    <div id="gg-msg" style="margin-top:8px;font-size:12px;min-height:18px"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+      <button class="btn secundario" id="btn-cancelar-gg">Cancelar</button>
+      <button class="btn" id="btn-enviar-gg" style="background:#E08A2B">Enviar solicitud al GG</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════ MODAL HISTORIAL ══════════════ -->
 <div class="modal-backdrop" id="modal-historial">
   <div class="modal">
@@ -813,15 +834,25 @@
     $('k-iec').textContent = _iecDisplay === null ? '—' : COTIZADOR.util.formatPct(_iecDisplay);
     $('k-iec-label').textContent = _iecLabelTxt;
 
-    // OBJ3 — bloquear btn-imprimir en UI cuando IEC global < 75% (nivel 1 de bloqueo).
-    // El nivel 2 (motor) está en PDF.imprimirConControl() en cotizador_core.js.
+    // OBJ3 — estado visual del botón según política IEC v2.0
     var _btnImprimir = $('btn-imprimir');
-    if (_iecDisplay === null || _iecDisplay < 0.75) {
-      _btnImprimir.disabled = true;
-      _btnImprimir.title = 'IEC global < 75% — esta cotización no puede emitirse como PDF comercial.';
-    } else {
+    var _estadoBtn = COTIZADOR.Calc.estadoIEC(quote.lineas, _iecDisplay, ctx.config);
+    var _eBtnClave = _estadoBtn ? _estadoBtn.estado : 'sin_datos';
+    if (_eBtnClave === 'A') {
       _btnImprimir.disabled = false;
-      _btnImprimir.title = '';
+      _btnImprimir.textContent = 'PDF Cliente';
+      _btnImprimir.style.background = '';
+      _btnImprimir.title = 'IEC ≥ 75% — aprobación automática.';
+    } else if (_eBtnClave === 'B') {
+      _btnImprimir.disabled = false;
+      _btnImprimir.textContent = 'Solicitar Aprobación GG';
+      _btnImprimir.style.background = '#E08A2B';
+      _btnImprimir.title = 'IEC 60–75% — el GG debe aprobar antes de emitir el PDF.';
+    } else {
+      _btnImprimir.disabled = true;
+      _btnImprimir.textContent = 'PDF Bloqueado';
+      _btnImprimir.style.background = '#c0392b';
+      _btnImprimir.title = _estadoBtn ? _estadoBtn.descripcion : 'Sin líneas válidas.';
     }
 
     $('k-margen').textContent = t.margen_estimado === null ? '—' : COTIZADOR.util.formatMoney(t.margen_estimado, quote.moneda);
@@ -864,8 +895,8 @@
       var fpEl   = $('estado-iec-fp');
       var nota   = $('estado-iec-nota');
 
-      // Limpiar clases de estado anteriores
       card.className = 'estado-iec-card';
+      fpEl.style.display = 'none';
 
       if (!estado || estado.estado === 'sin_datos') {
         panel.style.display = 'none';
@@ -876,40 +907,41 @@
       panel.style.display = '';
 
       if (estado.estado === 'A') {
-        card.classList.add('estado-a'); // display:none via CSS
+        card.classList.add('estado-a');
+        titulo.textContent = '✅ APROBACIÓN AUTOMÁTICA';
+        desc.innerHTML = '<p>' + estado.descripcion + '</p>';
+        nota.innerHTML = 'El PDF puede emitirse directamente. Sin restricciones.';
         return;
       }
 
       if (estado.estado === 'B') {
         card.classList.add('estado-b');
-        titulo.textContent = 'ESTADO B · REQUIERE AUTORIZACIÓN GG / GAF';
+        titulo.textContent = '🟡 REQUIERE APROBACIÓN GG';
         desc.innerHTML =
-          '<p>El IEC está bajo el mínimo autorizado (90%) pero ningún ítem supera la desviación crítica.<br>' +
-          'No se puede emitir el PDF comercial sin autorización explícita.</p>' +
-          '<p><strong>Contactar:</strong> javier@agrovecalatam.com · gaf@agrovecalatam.com</p>';
-        var fp = COTIZADOR.util.generarFingerprint(quote);
-        fpEl.textContent = 'Fingerprint cotización: ' + fp;
-        fpEl.style.display = 'inline-block';
-        nota.innerHTML =
-          '⚠ La autorización debe comunicarse por correo con este fingerprint. ' +
-          'No se almacena ni valida en esta aplicación frontend. ' +
-          'Para un flujo seguro se requiere backend o función serverless. ' +
-          'Ver <code>docs/ARQUITECTURA_SEGURA_ESTADO_B.md</code>';
+          '<p>' + estado.descripcion + '</p>' +
+          '<p>Haz clic en <strong>"Solicitar Aprobación GG"</strong> para enviar la justificación. ' +
+          'El GG recibirá notificación por WhatsApp y correo para aprobar o denegar.</p>';
+        nota.innerHTML = '⚠ El PDF quedará bloqueado hasta recibir aprobación del GG.';
         return;
       }
 
       if (estado.estado === 'C') {
         card.classList.add('estado-c');
-        titulo.textContent = 'EXCEPCIÓN CRÍTICA · ESTADO C — REQUIERE AUTORIZACIÓN GG/GD';
+        titulo.textContent = '🔴 BLOQUEADO ABSOLUTO — ÍTEM(S) BAJO 50%';
         desc.innerHTML =
-          '<p>Uno o más ítems están cotizados por debajo del guardrail del 75% del precio piso.<br>' +
-          '<strong>PDF bloqueado técnicamente.</strong><br>' +
-          'Requiere autorización expresa GG/GD con motivo de excepción documentado.</p>' +
-          '<p><strong>Ítems bajo guardrail:</strong> ' + (estado.items_criticos || 0) + ' línea(s)</p>';
-        fpEl.style.display = 'none';
-        nota.innerHTML =
-          '🔴 GG/GD puede aprobar esta excepción cuando exista el backend seguro. ' +
-          'Mientras tanto, PDF bloqueado técnicamente en <code>imprimirConControl()</code>.';
+          '<p>' + estado.descripcion + '</p>' +
+          '<p><strong>Ítems bajo umbral mínimo (50%):</strong> ' +
+          (estado.items_criticos ? estado.items_criticos.length : 0) + ' línea(s).<br>' +
+          'Este bloqueo no puede solicitarse aprobación. Ajusta los precios.</p>';
+        nota.innerHTML = '🔴 Bloqueo definitivo. No hay excepción posible para ítems bajo el 50% del precio piso.';
+        return;
+      }
+
+      if (estado.estado === 'D') {
+        card.classList.add('estado-c');
+        titulo.textContent = '🔴 BLOQUEADO — IEC GLOBAL INSUFICIENTE';
+        desc.innerHTML = '<p>' + estado.descripcion + '</p>';
+        nota.innerHTML = '🔴 Bloqueo definitivo. El IEC global debe ser ≥ 60% para poder solicitar aprobación GG.';
       }
     })();
 
@@ -1001,7 +1033,66 @@
   $('btn-exportar-json').addEventListener('click', function(){ COTIZADOR.Export.descargarJSON(quote); $('tools-menu').classList.remove('abierto'); });
   // Fase 7: imprimirConControl valida estados A/B/C antes de generar PDF.
   // Estado C → bloquea. Estado B sin autorización → alerta. Estado A → imprime.
-  $('btn-imprimir').addEventListener('click', function(){ COTIZADOR.PDF.imprimirConControl(quote, PAIS_NOMBRE, ctx.config); });
+  // ── Modal Aprobación GG ────────────────────────────────────────────────
+  function abrirModalAprobacionGG(q, estado) {
+    var resumen = $('gg-resumen');
+    resumen.innerHTML =
+      '<strong>Cotización:</strong> ' + (q.numero || 'Borrador') + ' · ' + (q.cliente && q.cliente.nombre ? q.cliente.nombre : 'Sin cliente') + '<br>' +
+      '<strong>Vendedor:</strong> ' + (q.elaborado_por || '—') + ' · <strong>País:</strong> Chile<br>' +
+      '<strong>IEC Global:</strong> ' + (q.totales && q.totales.iec_global !== null ? (q.totales.iec_global * 100).toFixed(1) + '%' : '—') +
+      ' — <strong>Estado:</strong> ' + estado.nombre + '<br>' +
+      '<strong>Motivo bloqueo:</strong> ' + estado.descripcion;
+    $('gg-justificacion').value = '';
+    $('gg-msg').textContent = '';
+    $('modal-aprobacion-gg').classList.add('abierto');
+  }
+
+  $('btn-cerrar-modal-gg').addEventListener('click', function(){ $('modal-aprobacion-gg').classList.remove('abierto'); });
+  $('btn-cancelar-gg').addEventListener('click', function(){ $('modal-aprobacion-gg').classList.remove('abierto'); });
+
+  $('btn-enviar-gg').addEventListener('click', function() {
+    var justif = ($('gg-justificacion').value || '').trim();
+    if (!justif) { $('gg-msg').textContent = '⚠ La justificación es obligatoria.'; $('gg-msg').style.color='#E74C3C'; return; }
+    var webhookUrl = ctx.config.aprobacion_gg && ctx.config.aprobacion_gg.webhook_url;
+    if (!webhookUrl) {
+      $('gg-msg').innerHTML = '⚠ Webhook de aprobación aún no configurado. Contacta al GG directamente:<br><strong>' + (ctx.config.aprobacion_gg && ctx.config.aprobacion_gg.email_gg || 'GG') + '</strong>';
+      $('gg-msg').style.color = '#E08A2B';
+      return;
+    }
+    var payload = {
+      tipo: 'solicitud_aprobacion_gg',
+      pais: 'Chile',
+      numero: quote.numero || 'Borrador',
+      cliente: quote.cliente && quote.cliente.nombre ? quote.cliente.nombre : '—',
+      elaborado_por: quote.elaborado_por || '—',
+      iec_global_pct: quote.totales && quote.totales.iec_global !== null ? (quote.totales.iec_global * 100).toFixed(2) : '—',
+      total_cotizacion: quote.totales ? quote.totales.total : 0,
+      moneda: quote.moneda || 'CLP',
+      justificacion: justif,
+      timestamp: new Date().toISOString(),
+      url_cotizador: window.location.href
+    };
+    $('btn-enviar-gg').disabled = true;
+    $('gg-msg').textContent = 'Enviando…';
+    $('gg-msg').style.color = '#888';
+    fetch(webhookUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) })
+      .then(function(r){ return r.ok || r.status === 200 || r.status === 204; })
+      .then(function(ok) {
+        $('btn-enviar-gg').disabled = false;
+        $('gg-msg').style.color = ok ? '#27ae60' : '#E74C3C';
+        $('gg-msg').textContent = ok
+          ? '✅ Solicitud enviada. El GG recibirá notificación y te confirmará la decisión.'
+          : '❌ Error al enviar. Intenta nuevamente o contacta al GG directamente.';
+      })
+      .catch(function() {
+        $('btn-enviar-gg').disabled = false;
+        $('gg-msg').style.color = '#E74C3C';
+        $('gg-msg').textContent = '❌ Error de conexión. Contacta al GG directamente.';
+      });
+  });
+
+  // Política IEC v2.0: A→PDF directo, B→modal GG, C/D→alerta bloqueado
+  $('btn-imprimir').addEventListener('click', function(){ COTIZADOR.PDF.imprimirConControl(quote, PAIS_NOMBRE, ctx.config, abrirModalAprobacionGG); });
 
   function nuevaCotizacion(){
     quote = COTIZADOR.Quote.nueva(PAIS, ctx.paisConfig, quote ? quote.elaborado_por : '');
