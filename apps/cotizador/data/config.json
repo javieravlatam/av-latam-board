@@ -61,7 +61,8 @@
   "aprobacion_gg": {
     "_nota": "Flujo de aprobación GG vía Make (make.com). Cuando IEC global 60-75% y todos los ítems≥50%, el cotizador abre un formulario de justificación y envía al webhook. Make envía email + WhatsApp al GG con links Aprobar/Denegar. El GG responde desde el link y el vendedor recibe confirmación.",
     "webhook_url": "https://hook.us2.make.com/mjpvvcwxb3sbopn0ai1fwmkr8scslm3a",
-    "_instruccion": "Completar webhook_url con la URL del webhook de Make tras configurar el escenario de aprobación.",
+    "respuesta_url": "https://hook.us2.make.com/t4yhxqf3bdao4new5dd8wmekytuf9fyd",
+    "_instruccion": "webhook_url = Scenario A (envío solicitud). respuesta_url = Scenario B (polling estado: ?accion=estado&id=NUMERO).",
     "email_gg": "javier@agrovecalatam.com",
     "whatsapp_gg": ""
   },

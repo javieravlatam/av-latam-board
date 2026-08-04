@@ -253,6 +253,19 @@
   </div>
 </div>
 
+<div class="modal-backdrop" id="overlay-espera-gg" style="display:none">
+  <div class="modal" style="max-width:420px;text-align:center;padding:32px 28px">
+    <div id="espera-icon" style="font-size:2.8rem;margin-bottom:10px">⏳</div>
+    <h3 style="margin:0 0 6px;font-size:16px">Esperando aprobación GG</h3>
+    <p id="espera-numero" style="font-size:12px;color:#888;margin:0 0 20px"></p>
+    <div id="espera-spinner" style="width:36px;height:36px;border:4px solid #eee;border-top-color:#E08A2B;border-radius:50%;animation:gg-spin 0.9s linear infinite;margin:0 auto 20px"></div>
+    <p id="espera-msg" style="font-size:13px;color:#555;line-height:1.5;margin:0 0 6px">El GG está revisando tu solicitud.<br>Recibirás notificación automática.</p>
+    <p id="espera-timer" style="font-size:11px;color:#bbb;margin:0 0 20px">0:00 transcurridos</p>
+    <button class="btn secundario" id="btn-cancelar-espera" style="font-size:12px;padding:6px 18px">Cancelar espera</button>
+  </div>
+</div>
+<style>@keyframes gg-spin{to{transform:rotate(360deg)}}</style>
+
 <div class="modal-backdrop" id="modal-historial">
   <div class="modal">
     <h3 style="display:flex;justify-content:space-between">HISTORIAL DE COTIZACIONES — PERÚ <button class="btn-mini" id="btn-cerrar-historial">✕</button></h3>
@@ -1062,16 +1075,88 @@
       .then(function(r){ return r.ok || r.status === 200 || r.status === 204; })
       .then(function(ok) {
         $('btn-enviar-gg').disabled = false;
-        $('gg-msg').style.color = ok ? '#27ae60' : '#E74C3C';
-        $('gg-msg').textContent = ok
-          ? '✅ Solicitud enviada. El GG recibirá notificación y te confirmará la decisión.'
-          : '❌ Error al enviar. Intenta nuevamente o contacta al GG directamente.';
+        if (ok) {
+          iniciarPollingAprobacion(payload.numero);
+        } else {
+          $('gg-msg').style.color = '#E74C3C';
+          $('gg-msg').textContent = '❌ Error al enviar. Intenta nuevamente o contacta al GG directamente.';
+        }
       })
       .catch(function() {
         $('btn-enviar-gg').disabled = false;
         $('gg-msg').style.color = '#E74C3C';
         $('gg-msg').textContent = '❌ Error de conexión. Contacta al GG directamente.';
       });
+  });
+
+  // ── Polling aprobación GG ─────────────────────────────────────────
+  var _ggPollingTimer = null;
+  var _ggElapsed = 0;
+  var GG_POLL_MAX = 10 * 60 * 1000;   // 10 min
+  var GG_POLL_INT = 5000;             // 5 seg
+
+  function iniciarPollingAprobacion(quoteNumero) {
+    var respuestaUrl = ctx.config.aprobacion_gg && ctx.config.aprobacion_gg.respuesta_url;
+    $('modal-aprobacion-gg').classList.remove('abierto');
+
+    if (!respuestaUrl) {
+      alert('Solicitud enviada. El GG te notificará directamente.');
+      return;
+    }
+
+    // Mostrar overlay espera
+    $('overlay-espera-gg').style.display = 'flex';
+    $('espera-icon').textContent = '⏳';
+    $('espera-numero').textContent = 'Cotización: ' + quoteNumero;
+    $('espera-msg').innerHTML = 'El GG está revisando tu solicitud.<br>Recibirás notificación automática.';
+    $('espera-msg').style.color = '#555';
+    $('espera-timer').textContent = '0:00 transcurridos';
+    $('espera-spinner').style.display = 'block';
+    $('espera-spinner').style.animation = 'gg-spin 0.9s linear infinite';
+    $('btn-cancelar-espera').textContent = 'Cancelar espera';
+    _ggElapsed = 0;
+
+    if (_ggPollingTimer) clearInterval(_ggPollingTimer);
+
+    _ggPollingTimer = setInterval(function() {
+      _ggElapsed += GG_POLL_INT;
+      var m = Math.floor(_ggElapsed / 60000), s = Math.floor((_ggElapsed % 60000) / 1000);
+      $('espera-timer').textContent = m + ':' + (s < 10 ? '0' : '') + s + ' transcurridos';
+
+      if (_ggElapsed >= GG_POLL_MAX) {
+        clearInterval(_ggPollingTimer);
+        $('espera-spinner').style.animation = 'none';
+        $('espera-icon').textContent = '⏱';
+        $('espera-msg').innerHTML = 'El GG no respondió en 10 minutos.<br>Contacta directamente para confirmar.';
+        $('espera-msg').style.color = '#E08A2B';
+        $('btn-cancelar-espera').textContent = 'Cerrar';
+        return;
+      }
+
+      fetch(respuestaUrl + '?accion=estado&id=' + encodeURIComponent(quoteNumero))
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.estado === 'APROBADA') {
+            clearInterval(_ggPollingTimer);
+            $('overlay-espera-gg').style.display = 'none';
+            COTIZADOR.PDF.imprimir(quote, PAIS_NOMBRE);
+          } else if (data.estado === 'DENEGADA') {
+            clearInterval(_ggPollingTimer);
+            $('espera-spinner').style.animation = 'none';
+            $('espera-icon').textContent = '❌';
+            $('espera-msg').textContent = 'El GG denegó esta cotización. Revisa los precios y vuelve a intentar.';
+            $('espera-msg').style.color = '#E74C3C';
+            $('btn-cancelar-espera').textContent = 'Cerrar';
+          }
+          // PENDIENTE → continúa polling
+        })
+        .catch(function() { /* red error → continúa silencioso */ });
+    }, GG_POLL_INT);
+  }
+
+  $('btn-cancelar-espera').addEventListener('click', function() {
+    if (_ggPollingTimer) clearInterval(_ggPollingTimer);
+    $('overlay-espera-gg').style.display = 'none';
   });
 
   // Política IEC v2.0: A→PDF directo, B→modal GG, C/D→alerta bloqueado
