@@ -849,6 +849,12 @@
 
     // OBJ3 — estado visual del botón según política IEC v2.0
     var _btnImprimir = $('btn-imprimir');
+    if (_ggAprobado) {
+      _btnImprimir.disabled = false;
+      _btnImprimir.textContent = 'PDF Cliente';
+      _btnImprimir.style.background = '';
+      _btnImprimir.title = '✅ Aprobado por GG — puede emitirse el PDF.';
+    } else {
     var _estadoBtn = COTIZADOR.Calc.estadoIEC(quote.lineas, _iecDisplay, ctx.config);
     var _eBtnClave = _estadoBtn ? _estadoBtn.estado : 'sin_datos';
     if (_eBtnClave === 'A') {
@@ -867,6 +873,7 @@
       _btnImprimir.style.background = '#c0392b';
       _btnImprimir.title = _estadoBtn ? _estadoBtn.descripcion : 'Sin líneas válidas.';
     }
+    } // fin else _ggAprobado
 
     $('k-margen').textContent = t.margen_estimado === null ? '—' : COTIZADOR.util.formatMoney(t.margen_estimado, quote.moneda);
     $('k-ganado').textContent = COTIZADOR.util.formatMoney(t.valor_ganado, quote.moneda);
@@ -899,8 +906,6 @@
 
     // Fase 7 — Tarjeta Estado IEC A/B/C (solo informativa, sin fake security)
     (function pintarEstadoAutorizacion() {
-      var _iec = _iecDisplay; // IEC ya calculado arriba (net si INCLUIDO, global si SEPARADO)
-      var estado = COTIZADOR.Calc.estadoIEC(quote.lineas, _iec, ctx.config);
       var panel  = $('panel-estado-autorizacion');
       var card   = $('estado-autorizacion-card');
       var titulo = $('estado-iec-titulo');
@@ -908,6 +913,19 @@
       var fpEl   = $('estado-iec-fp');
       var nota   = $('estado-iec-nota');
 
+      // Si GG ya aprobó, mostrar tarjeta verde fija sin recalcular IEC
+      if (_ggAprobado) {
+        panel.style.display = '';
+        card.className = 'estado-iec-card estado-a';
+        fpEl.style.display = 'none';
+        titulo.textContent = '✅ APROBADO POR GG';
+        desc.innerHTML = '<p>El GG aprobó esta cotización. El PDF puede emitirse directamente.</p>';
+        nota.textContent = 'Aprobación confirmada por el Gerente General.';
+        return;
+      }
+
+      var _iec = _iecDisplay; // IEC ya calculado arriba (net si INCLUIDO, global si SEPARADO)
+      var estado = COTIZADOR.Calc.estadoIEC(quote.lineas, _iec, ctx.config);
       card.className = 'estado-iec-card';
       fpEl.style.display = 'none';
 
@@ -1111,6 +1129,7 @@
   var _ggElapsed = 0;
   var GG_POLL_MAX = 10 * 60 * 1000;
   var GG_POLL_INT = 5000;
+  var _ggAprobado = false;            // true después de confirmación GG → fuerza botón PDF
 
   function iniciarPollingAprobacion(quoteNumero) {
     var respuestaUrl = ctx.config.aprobacion_gg && ctx.config.aprobacion_gg.respuesta_url;
@@ -1154,7 +1173,17 @@
         .then(function(data) {
           if (data.estado === 'APROBADA') {
             clearInterval(_ggPollingTimer);
+            _ggAprobado = true;
             $('overlay-espera-gg').style.display = 'none';
+            // Actualizar botón principal
+            var _bAp = $('btn-imprimir');
+            _bAp.disabled = false; _bAp.textContent = 'PDF Cliente'; _bAp.style.background = ''; _bAp.title = '✅ Aprobado por GG';
+            // Actualizar tarjeta de estado
+            $('panel-estado-autorizacion').style.display = '';
+            $('estado-autorizacion-card').className = 'estado-iec-card estado-a';
+            $('estado-iec-titulo').textContent = '✅ APROBADO POR GG';
+            $('estado-iec-desc').innerHTML = '<p>El GG aprobó esta cotización. El PDF puede emitirse directamente.</p>';
+            $('estado-iec-nota').textContent = 'Aprobación confirmada por el Gerente General.';
             COTIZADOR.PDF.imprimir(quote, PAIS_NOMBRE);
           } else if (data.estado === 'DENEGADA') {
             clearInterval(_ggPollingTimer);
@@ -1175,7 +1204,11 @@
   });
 
   // Política IEC v2.0: A→PDF directo, B→modal GG, C/D→alerta bloqueado
-  $('btn-imprimir').addEventListener('click', function(){ COTIZADOR.PDF.imprimirConControl(quote, PAIS_NOMBRE, ctx.config, abrirModalAprobacionGG); });
+  // Si GG ya aprobó (_ggAprobado=true), imprime directo sin re-chequear IEC
+  $('btn-imprimir').addEventListener('click', function(){
+    if (_ggAprobado) { COTIZADOR.PDF.imprimir(quote, PAIS_NOMBRE); }
+    else { COTIZADOR.PDF.imprimirConControl(quote, PAIS_NOMBRE, ctx.config, abrirModalAprobacionGG); }
+  });
 
   function nuevaCotizacion(){
     quote = COTIZADOR.Quote.nueva(PAIS, ctx.paisConfig, quote ? quote.elaborado_por : '');
