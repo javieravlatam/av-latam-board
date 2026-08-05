@@ -1102,6 +1102,11 @@
   $('btn-enviar-gg').addEventListener('click', function() {
     var justif = ($('gg-justificacion').value || '').trim();
     if (!justif) { $('gg-msg').textContent = '⚠ La justificación es obligatoria.'; $('gg-msg').style.color='#E74C3C'; return; }
+    if (!quote.numero) {
+      $('gg-msg').textContent = '⚠ Debes guardar la cotización (asignarle un número) antes de solicitar aprobación al GG.';
+      $('gg-msg').style.color = '#E74C3C';
+      return;
+    }
     var webhookUrl = ctx.config.aprobacion_gg && ctx.config.aprobacion_gg.webhook_url;
     if (!webhookUrl) {
       $('gg-msg').innerHTML = '⚠ Webhook de aprobación aún no configurado. Contacta al GG directamente:<br><strong>' + (ctx.config.aprobacion_gg && ctx.config.aprobacion_gg.email_gg || 'GG') + '</strong>';
@@ -1111,7 +1116,7 @@
     var payload = {
       tipo: 'solicitud_aprobacion_gg',
       pais: 'Perú',
-      numero: quote.numero || 'Borrador',
+      numero: quote.numero,
       cliente: quote.cliente && quote.cliente.nombre ? quote.cliente.nombre : '—',
       elaborado_por: quote.elaborado_por || '—',
       iec_global_pct: quote.totales && quote.totales.iec_global !== null ? (quote.totales.iec_global * 100).toFixed(2) : '—',
