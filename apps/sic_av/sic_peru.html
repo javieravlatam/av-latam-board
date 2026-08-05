@@ -263,12 +263,21 @@
   function pct(n) { return (Math.round((n || 0) * 10) / 10) + "%"; }
 
   function inicializar() {
+    // SECURITY v3.0: datos SIC obtenidos exclusivamente desde backend autenticado.
     Promise.all([
       SIC.cargarPais(PAIS).then(function (ctx) { return ctx.params; }),
-      SICAdapter.cargarFuentesReales()
+      SICAuth.getSICData(PAIS)
     ]).then(function (r) {
       CTX_PARAMS = r[0];
-      FUENTES = r[1];
+      var gasResp = r[1];
+      if (!gasResp || gasResp.error) {
+        document.querySelector(".sic-wrap").innerHTML = "<p style='color:#a83232'>Error de sesión: " + (gasResp && gasResp.error || "Sin datos") + ". <a href='index.html'>Volver al login</a></p>";
+        return;
+      }
+      var d = gasResp.data || {};
+      FUENTES = { tx: { TX_CL: [], TX_PE: d.tx || [] }, ppto: d.ppto || {} };
+      FUENTES.cobranzas_raw    = d.cobranzas_raw    || null;
+      FUENTES.universo_sic_raw = d.universo_sic_raw || null;
 
       var txArray = FUENTES.tx.TX_PE;
       var ciclosVistos = {};
@@ -300,7 +309,12 @@
       poblarVendedoresDelCiclo();
       renderTodo();
     }).catch(function (err) {
-      document.querySelector(".sic-wrap").innerHTML = "<p style='color:#a83232'>No se pudieron cargar los datos reales del Board (" + err.message + "). Verifique que Panel_IEC_Auditoria_2026.html y avboard_data.js existan en la raiz del repositorio y que el servidor local este levantado desde ahi (ver README, seccion 3b).</p>";
+      var msg = err.message || "Error desconocido";
+      if (msg.indexOf("Sin sesión") !== -1 || msg.indexOf("401") !== -1) {
+        window.location.href = "index.html";
+      } else {
+        document.querySelector(".sic-wrap").innerHTML = "<p style='color:#a83232'>No se pudieron cargar los datos SIC (" + msg + "). Verifica tu conexión o vuelve a <a href='index.html'>iniciar sesión</a>.</p>";
+      }
     });
   }
 

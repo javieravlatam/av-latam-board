@@ -85,20 +85,20 @@
     </div>
   </div>
 
-  <!-- PANEL CAMBIO DE CLAVE (primer ingreso) -->
+  <!-- PANEL CAMBIO DE PIN (primer ingreso) -->
   <div id="panel-cambio" class="cambio-clave-panel">
-    <p class="login-card-title">Bienvenido — configura tu contraseña</p>
-    <p class="login-card-sub">Es tu primer ingreso. Define una contraseña personal para acceder en el futuro.</p>
+    <p class="login-card-title">Bienvenido — configura tu PIN</p>
+    <p class="login-card-sub">Es tu primer ingreso. Define un PIN personal de 4 dígitos.</p>
     <div class="alert-primer-ingreso">
-      La contraseña se guarda en <b>este navegador y equipo</b>. Si usas otro equipo o limpias el caché, vuelves a la clave inicial <b>1234</b>.
+      Tu PIN se guarda de forma <b>centralizada y segura</b>. Funcionará desde cualquier dispositivo.
     </div>
     <div class="login-field">
-      <label>Nueva contraseña</label>
-      <input type="password" id="inp-nueva" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+      <label>Nuevo PIN (4 dígitos)</label>
+      <input type="password" id="inp-nueva" placeholder="4 dígitos numéricos" autocomplete="new-password" maxlength="4" inputmode="numeric">
     </div>
     <div class="login-field">
-      <label>Confirmar contraseña</label>
-      <input type="password" id="inp-confirma" placeholder="Repite la contraseña" autocomplete="new-password">
+      <label>Confirmar PIN</label>
+      <input type="password" id="inp-confirma" placeholder="Repite los 4 dígitos" autocomplete="new-password" maxlength="4" inputmode="numeric">
     </div>
     <button class="login-btn" onclick="guardarClave()">Guardar y continuar</button>
     <div class="login-error" id="cambio-error"></div>
@@ -111,63 +111,82 @@
 
 <script src="sic_auth.js"></script>
 <script>
-  var _sesionTemporal = null;
+  var _tokenTemp = null;  // token temporal usado solo durante cambio obligatorio de PIN
+  var PIN_RE = /^[0-9]{4}$/;
+
+  function _setLoading(loading) {
+    var btn = document.querySelector(".login-btn");
+    if (btn) btn.disabled = loading;
+  }
 
   function intentarLogin() {
-    var usuario = document.getElementById("inp-usuario").value.trim().toLowerCase();
-    var clave   = document.getElementById("inp-clave").value;
-    var error   = document.getElementById("login-error");
+    var usuario  = document.getElementById("inp-usuario").value.trim().toLowerCase();
+    var pin      = document.getElementById("inp-clave").value;
+    var errEl    = document.getElementById("login-error");
     var selector = document.getElementById("pais-selector");
 
-    error.textContent = "";
+    errEl.textContent = "";
     selector.classList.remove("visible");
 
-    if (!usuario || !clave) { error.textContent = "Ingresa tu usuario y contraseña."; return; }
+    if (!usuario || !pin) { errEl.textContent = "Ingresa tu usuario y PIN."; return; }
+    if (!PIN_RE.test(pin)) { errEl.textContent = "El PIN debe tener exactamente 4 dígitos numéricos."; return; }
 
-    var sesion = SICAuth.autenticar(usuario, clave);
-    if (!sesion) { error.textContent = "Usuario o contraseña incorrectos."; return; }
+    _setLoading(true);
+    SICAuth.autenticar(usuario, pin)
+      .then(function (resp) {
+        if (resp.error) { errEl.textContent = resp.error; return; }
 
-    _sesionTemporal = sesion;
+        if (resp.cambio_obligatorio) {
+          _tokenTemp = resp.token_temp;
+          document.getElementById("panel-login").style.display = "none";
+          document.getElementById("panel-cambio").classList.add("visible");
+          return;
+        }
 
-    if (sesion.primer_ingreso) {
-      // Forzar cambio de clave antes de continuar
-      document.getElementById("panel-login").style.display = "none";
-      document.getElementById("panel-cambio").classList.add("visible");
-      return;
-    }
-
-    redirigirSegunSesion(sesion);
+        // Login exitoso
+        SICAuth.guardarSesion(resp);
+        redirigirSegunSesion(resp);
+      })
+      .catch(function () { errEl.textContent = "Error de conexión. Intenta nuevamente."; })
+      .finally(function () { _setLoading(false); });
   }
 
   function guardarClave() {
-    var nueva    = document.getElementById("inp-nueva").value;
-    var confirma = document.getElementById("inp-confirma").value;
-    var error    = document.getElementById("cambio-error");
-    error.textContent = "";
+    var pinActual = document.getElementById("inp-clave").value;  // el PIN temporal (1234)
+    var pinNuevo  = document.getElementById("inp-nueva").value;
+    var confirma  = document.getElementById("inp-confirma").value;
+    var errEl     = document.getElementById("cambio-error");
+    errEl.textContent = "";
 
-    if (nueva.length < 6) { error.textContent = "La contraseña debe tener al menos 6 caracteres."; return; }
-    if (nueva !== confirma) { error.textContent = "Las contraseñas no coinciden."; return; }
-    if (nueva === "1234")   { error.textContent = "No puedes usar la clave inicial como contraseña personal."; return; }
+    if (!PIN_RE.test(pinNuevo))  { errEl.textContent = "El PIN debe tener exactamente 4 dígitos numéricos."; return; }
+    if (pinNuevo !== confirma)   { errEl.textContent = "Los PIN no coinciden."; return; }
+    if (pinNuevo === pinActual)  { errEl.textContent = "El nuevo PIN debe ser diferente al PIN temporal."; return; }
+    if (!_tokenTemp)             { errEl.textContent = "Sesión expirada. Vuelve a ingresar."; window.location.href = "index.html"; return; }
 
-    var ok = SICAuth.cambiarClave("1234", nueva);
-    if (!ok) { error.textContent = "Error al guardar. Intenta de nuevo."; return; }
-
-    var sesion = SICAuth.sesionActiva();
-    redirigirSegunSesion(sesion);
+    _setLoading(true);
+    SICAuth.cambiarClave(_tokenTemp, pinActual, pinNuevo)
+      .then(function (resp) {
+        if (resp.error) { errEl.textContent = resp.error; return; }
+        _tokenTemp = null;
+        SICAuth.guardarSesion(resp);
+        redirigirSegunSesion(resp);
+      })
+      .catch(function () { errEl.textContent = "Error de conexión. Intenta nuevamente."; })
+      .finally(function () { _setLoading(false); });
   }
 
   function redirigirSegunSesion(sesion) {
-    if (sesion.pais === "CL") { window.location.href = "sic_chile.html"; return; }
-    if (sesion.pais === "PE") { window.location.href = "sic_peru.html";  return; }
-    // AMBOS (gerencia / financiera) — mostrar selector de pais
-    document.getElementById("pais-selector").classList.add("visible");
+    if (sesion.pais === "CL")   { window.location.href = "sic_chile.html"; return; }
+    if (sesion.pais === "PE")   { window.location.href = "sic_peru.html";  return; }
+    if (sesion.pais === "AMBOS") { document.getElementById("pais-selector").classList.add("visible"); return; }
+    window.location.href = "index.html";
   }
 
   function irAPais(pais) {
     window.location.href = pais === "CL" ? "sic_chile.html" : "sic_peru.html";
   }
 
-  // Permite Enter para login
+  // Tecla Enter
   document.getElementById("inp-clave").addEventListener("keydown", function (e) {
     if (e.key === "Enter") intentarLogin();
   });
@@ -175,12 +194,12 @@
     if (e.key === "Enter") document.getElementById("inp-clave").focus();
   });
 
-  // Si ya hay sesion activa, redirigir directo (salvo sesion AMBOS sin elegir pais)
+  // Si ya hay sesión activa válida (misma pestaña), redirigir directo
   (function () {
-    var sesion = SICAuth.sesionActiva();
-    if (!sesion || sesion.primer_ingreso) return;
-    if (sesion.pais === "AMBOS") return; // Deja que el usuario elija pais desde el form
-    redirigirSegunSesion(sesion);
+    var s = SICAuth.sesionActiva();
+    if (!s) return;
+    if (s.pais === "AMBOS") return;  // usuario elige país
+    redirigirSegunSesion(s);
   })();
 </script>
 </body>

@@ -286,41 +286,29 @@
   }
 
   function inicializar() {
+    // SECURITY v3.0: datos SIC obtenidos exclusivamente desde backend autenticado.
+    // El backend valida el token, determina el vendedor_id desde la sesión
+    // y entrega ÚNICAMENTE los datos autorizados para ese usuario.
+    // El frontend NO decide qué vendedor consultar.
     Promise.all([
       SIC.cargarPais(PAIS).then(function (ctx) { return ctx.params; }),
-      SICAdapter.cargarFuentesReales(),
-      // CHANGE REQUEST SIC-AV v1.7: carga no bloqueante del JSON de vencimientos.
-      // Si el archivo no existe (primera ejecución sin parse_ventas_grupo_cl.py),
-      // se ignora silenciosamente y la columna Vencimiento muestra "—".
-      fetch("data/vencimientos_cl.json").then(function (r) {
-        return r.ok ? r.json() : null;
-      }).catch(function () { return null; }),
-      // CHANGE REQUEST SIC-AV v1.7 (Fase 2): carga no bloqueante del JSON de
-      // cobranzas reales (generado por scripts/reconciliar_ventas_cl.py).
-      // Si el archivo no existe, cobranzas queda vacío y el comportamiento es
-      // idéntico al anterior (c-cobrado = "Pendiente de integración").
-      fetch("data/cobranzas_cl.json").then(function (r) {
-        return r.ok ? r.json() : null;
-      }).catch(function () { return null; }),
-      // CHANGE REQUEST SIC-AV v1.7 (Fase 2 — UNIVERSO SIC): carga no bloqueante del
-      // JSON de universo presupuestado (generado por scripts/reconciliar_ventas_cl.py
-      // vía ppto_libro_base.generar_universo_sic). Define qué vendedores aparecen
-      // individualmente en SIC vs. van al bucket OTROS.
-      // Si no existe → SICAdapter.derivarUniversoPpto devuelve Set vacío → fallback:
-      // todos los vendedores son individuales (comportamiento pre-v1.7).
-      fetch("data/universo_sic_cl.json").then(function (r) {
-        return r.ok ? r.json() : null;
-      }).catch(function () { return null; })
+      SICAuth.getSICData(PAIS)
     ]).then(function (r) {
       CTX_PARAMS = r[0];
-      FUENTES = r[1];
-      // Inyectar cobranzas reales en FUENTES para que construirCicloReal()
-      // las use automáticamente (SICAdapter.construirCobranzasReales).
-      FUENTES.cobranzas_raw = r[3] || null;
-      // Inyectar universo SIC presupuestado en FUENTES.
-      FUENTES.universo_sic_raw = r[4] || null;
-      // Construir mapa folio → doc de enriquecimiento
-      VENCIMIENTOS_MAP = SICAdapter.construirMapaVencimientos(r[2] || {});
+      var gasResp = r[1];
+      if (!gasResp || gasResp.error) {
+        document.querySelector(".sic-wrap").innerHTML = "<p style='color:#a83232'>Error de sesión: " + (gasResp && gasResp.error || "Sin datos") + ". <a href='index.html'>Volver al login</a></p>";
+        return;
+      }
+      var d = gasResp.data || {};
+      // Reconstruir FUENTES en el formato que SICAdapter.construirCicloReal() espera.
+      // TX_CL llega filtrado por el backend (solo el vendedor autorizado o todos si admin).
+      FUENTES = { tx: { TX_CL: d.tx || [], TX_PE: [] }, ppto: d.ppto || {} };
+      FUENTES.cobranzas_raw   = d.cobranzas_raw   || null;
+      FUENTES.universo_sic_raw = d.universo_sic_raw || null;
+      VENCIMIENTOS_MAP = SICAdapter.construirMapaVencimientos(
+        d.vencimientos ? { documentos: d.vencimientos } : {}
+      );
 
       var txArray = FUENTES.tx.TX_CL;
       var ciclosVistos = {};
@@ -352,7 +340,12 @@
       poblarVendedoresDelCiclo();
       renderTodo();
     }).catch(function (err) {
-      document.querySelector(".sic-wrap").innerHTML = "<p style='color:#a83232'>No se pudieron cargar los datos reales del Board (" + err.message + "). Verifique que Panel_IEC_Auditoria_2026.html y avboard_data.js existan en la raiz del repositorio y que el servidor local este levantado desde ahi (ver README, seccion 3b).</p>";
+      var msg = err.message || "Error desconocido";
+      if (msg.indexOf("Sin sesión") !== -1 || msg.indexOf("401") !== -1) {
+        window.location.href = "index.html";
+      } else {
+        document.querySelector(".sic-wrap").innerHTML = "<p style='color:#a83232'>No se pudieron cargar los datos SIC (" + msg + "). Verifica tu conexión o vuelve a <a href='index.html'>iniciar sesión</a>.</p>";
+      }
     });
   }
 

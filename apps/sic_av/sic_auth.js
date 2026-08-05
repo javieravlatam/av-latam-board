@@ -1,165 +1,152 @@
 /**
- * SIC-AV — Autenticacion individual por usuario (v2.0)
- * =============================================================
- * Reemplaza el esquema de clave compartida por pais (Fase 4)
- * por autenticacion individual: cada vendedor tiene su propio
- * acceso y solo puede ver su informacion.
+ * SIC-AV — sic_auth.js  v3.0  (Central Auth Client)
+ * ═══════════════════════════════════════════════════════════════════
+ * Reemplaza v2.0. Diferencias críticas:
  *
- * Roles:
- *   vendedor   — accede a su pais, solo ve su propio selector
- *   gerencia   — accede a ambos paises, ve todos los vendedores
- *   financiera — accede a ambos paises, ve todos los vendedores
+ *  ✗ ELIMINADO  USUARIOS[] — ya no existe en este archivo
+ *  ✗ ELIMINADO  CLAVE_DEFAULT — ya no existe en este archivo
+ *  ✗ ELIMINADO  validación local de credenciales
+ *  ✗ ELIMINADO  localStorage para PINs o credenciales
+ *  ✓ NUEVO      toda autenticación ocurre en el backend GAS
+ *  ✓ NUEVO      token opaco UUID en sessionStorage (no credentials)
+ *  ✓ NUEVO      SICAuth.getSICData(pais) → datos filtrados por backend
+ *  ✓ NUEVO      migración automática: limpia sic_pw_* legacy de localStorage
  *
- * Contraseñas:
- *   - Clave inicial para todos: "1234"
- *   - El usuario cambia su clave en el primer ingreso (obligatorio)
- *   - La clave personalizada se guarda en localStorage del navegador
- *   - Si el usuario limpia el cache o usa otro equipo, vuelve a "1234"
- *   - Las claves NUNCA se transmiten ni se guardan en el servidor
- *
- * ADVERTENCIA: esto es seguridad perimetral para un sitio estatico.
- * No es autenticacion productiva con backend. Adecuado para uso
- * interno en GitHub Pages con acceso controlado por URL.
+ * CONFIGURAR ANTES DE USAR:
+ *   GAS_URL → URL de la webapp Google Apps Script desplegada.
+ * ═══════════════════════════════════════════════════════════════════
  */
 (function (global) {
   "use strict";
 
-  // ------------------------------------------------------------------
-  // Tabla de usuarios — agregar/quitar vendedores aqui.
-  // Las claves NO se guardan aqui: se guardan en localStorage.
-  // "pais": "CL" | "PE" | "AMBOS"
-  // ------------------------------------------------------------------
-  var USUARIOS = [
-    // Gerencia — acceso completo a ambos paises
-    { id: "gerencia",    nombre: "Gerencia General",    rol: "gerencia",   pais: "AMBOS", vendedor_id: null },
-    { id: "financiera",  nombre: "Gerencia Financiera", rol: "financiera", pais: "AMBOS", vendedor_id: null },
+  // URL del backend GAS. Reemplazar con la URL real del Web App desplegado.
+  var GAS_URL = "PENDIENTE_REEMPLAZAR_CON_URL_GAS_WEBAPP";
 
-    // Chile
-    { id: "laratro",     nombre: "Pablo Laratro",       rol: "vendedor", pais: "CL", vendedor_id: "laratro"    },
-    { id: "velasquez",   nombre: "Francisco Velasquez", rol: "vendedor", pais: "CL", vendedor_id: "velasquez"  },
-    { id: "encina",      nombre: "Rodrigo Encina",      rol: "vendedor", pais: "CL", vendedor_id: "encina"     },
-    { id: "munoz",       nombre: "Valentina Muñoz",     rol: "vendedor", pais: "CL", vendedor_id: "munoz"      },
-    { id: "caroca",      nombre: "Jorge Caroca",        rol: "vendedor", pais: "CL", vendedor_id: "caroca"     },
-    { id: "veverka",     nombre: "Ivan Veverka",        rol: "vendedor", pais: "CL", vendedor_id: "veverka"    },
-    { id: "franco_riffo",nombre: "Franco Riffo",        rol: "vendedor", pais: "CL", vendedor_id: "franco_riffo"},
+  var SK_SESSION = "sic_av_session";
+  var SK_TOKEN   = "sic_av_token";
 
-    // Peru
-    { id: "navarro",     nombre: "Nicoll Navarro",      rol: "vendedor", pais: "PE", vendedor_id: "navarro"    },
-    { id: "infante",     nombre: "Oscar Infante",       rol: "vendedor", pais: "PE", vendedor_id: "infante"    },
-    { id: "atalaya",     nombre: "Omar Atalaya",        rol: "vendedor", pais: "PE", vendedor_id: "atalaya"    },
-    { id: "diaz",        nombre: "Susan Diaz",          rol: "vendedor", pais: "PE", vendedor_id: "diaz"       },
-    { id: "gonzales",    nombre: "Antonio Gonzalez",    rol: "vendedor", pais: "PE", vendedor_id: "gonzales"   },
-    { id: "aguirre",     nombre: "Lisbeth Aguirre",     rol: "vendedor", pais: "PE", vendedor_id: "aguirre"    },
-    { id: "valladares",  nombre: "Patricia Valladares", rol: "vendedor", pais: "PE", vendedor_id: "valladares" },
-    { id: "martha",      nombre: "Martha Hidalgo",      rol: "vendedor", pais: "PE", vendedor_id: "martha"     }
-  ];
-
-  var CLAVE_DEFAULT  = "1234";
-  var STORAGE_PW     = "sic_pw_";      // localStorage: clave personalizada
-  var SESSION_KEY    = "sic_av_session";
-
-  // ------------------------------------------------------------------
-  // Helpers internos
-  // ------------------------------------------------------------------
-  function _buscarUsuario(id) {
-    for (var i = 0; i < USUARIOS.length; i++) {
-      if (USUARIOS[i].id === id) return USUARIOS[i];
-    }
-    return null;
+  function _token() {
+    try { return sessionStorage.getItem(SK_TOKEN) || null; } catch (e) { return null; }
   }
 
-  function _obtenerClave(id) {
-    try { return localStorage.getItem(STORAGE_PW + id) || CLAVE_DEFAULT; } catch (e) { return CLAVE_DEFAULT; }
+  function _post(body) {
+    return fetch(GAS_URL, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify(Object.assign({ user_agent: navigator.userAgent.slice(0, 200) }, body))
+    }).then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    });
   }
 
-  function _esClaveDefault(id) {
-    try { return !localStorage.getItem(STORAGE_PW + id); } catch (e) { return true; }
+  function _guardarSesion(data) {
+    try {
+      sessionStorage.setItem(SK_SESSION, JSON.stringify({
+        nombre:      data.nombre || "",
+        rol:         data.rol,
+        pais:        data.pais,
+        vendedor_id: data.vendedor_id || null,
+        expira:      data.expira
+      }));
+      sessionStorage.setItem(SK_TOKEN, data.token);
+    } catch (e) {}
   }
 
-  // ------------------------------------------------------------------
-  // API pública
-  // ------------------------------------------------------------------
+  function _limpiar() {
+    try { sessionStorage.removeItem(SK_SESSION); } catch (e) {}
+    try { sessionStorage.removeItem(SK_TOKEN);   } catch (e) {}
+    try {
+      // Migración: eliminar credenciales legacy (sic_pw_*) de localStorage
+      Object.keys(localStorage)
+        .filter(function (k) { return k.indexOf("sic_pw_") === 0 || k === "sic_av_session"; })
+        .forEach(function (k) { localStorage.removeItem(k); });
+    } catch (e) {}
+  }
+
   var SICAuth = {};
 
   /**
-   * Intenta autenticar. Retorna la sesion si es valida, o null.
-   * La sesion queda guardada en sessionStorage.
+   * Login: envía username + PIN al backend.
+   * Retorna Promise<{ ok, token, rol, pais, vendedor_id, nombre, expira }
+   *               | { cambio_obligatorio:true, token_temp, expira }
+   *               | { error }>
    */
-  SICAuth.autenticar = function (usuario, clave) {
-    var usr = _buscarUsuario((usuario || "").trim().toLowerCase());
-    if (!usr) return null;
-    if (clave !== _obtenerClave(usr.id)) return null;
-
-    var sesion = {
-      usuario:       usr.id,
-      nombre:        usr.nombre,
-      rol:           usr.rol,
-      pais:          usr.pais,
-      vendedor_id:   usr.vendedor_id,
-      primer_ingreso: _esClaveDefault(usr.id),
-      inicio:        new Date().toISOString()
-    };
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(sesion));
-    return sesion;
+  SICAuth.autenticar = function (usuario, pin) {
+    return _post({ action: "login", username: usuario, pin: pin });
   };
 
   /**
-   * Retorna la sesion activa o null.
+   * Cambio de PIN. token puede ser token_temp (primer acceso) o token normal.
+   * Retorna Promise<{ ok, token, rol, pais, vendedor_id, nombre, expira } | { error }>
    */
+  SICAuth.cambiarClave = function (token, pinActual, pinNuevo) {
+    return _post({ action: "change_pin", token: token, pin_actual: pinActual, pin_nuevo: pinNuevo });
+  };
+
+  /**
+   * Valida el token activo contra el backend.
+   * Retorna Promise<{ ok, rol, pais, vendedor_id, expira } | { ok:false, error }>
+   */
+  SICAuth.validarSesion = function () {
+    var tok = _token();
+    if (!tok) return Promise.resolve({ ok: false });
+    return _post({ action: "validate", token: tok }).then(function (r) {
+      if (!r.ok) _limpiar();
+      return r;
+    });
+  };
+
+  /**
+   * Obtiene datos SIC filtrados para el usuario autenticado.
+   * El backend decide qué datos corresponden — el frontend NO envía vendedor_id.
+   * Retorna Promise<{ ok, data:{ tx, ppto, cobranzas_raw, vencimientos, universo_sic_raw } } | { error }>
+   */
+  SICAuth.getSICData = function (pais) {
+    var tok = _token();
+    if (!tok) return Promise.reject(new Error("Sin sesión activa."));
+    return _post({ action: "get_sic_data", token: tok, pais: pais });
+  };
+
+  /** Guarda sesión desde respuesta del backend. Solo llamar con datos del servidor. */
+  SICAuth.guardarSesion = function (data) { _guardarSesion(data); };
+
+  /** Sesión en memoria (sin round-trip al backend). */
   SICAuth.sesionActiva = function () {
     try {
-      var raw = sessionStorage.getItem(SESSION_KEY);
+      var raw = sessionStorage.getItem(SK_SESSION);
       if (!raw) return null;
       var s = JSON.parse(raw);
-      if (!s || !s.usuario || !s.rol) return null;
+      if (!s || !s.rol || !s.expira) return null;
+      if (new Date(s.expira) < new Date()) { _limpiar(); return null; }
       return s;
     } catch (e) { return null; }
   };
 
-  /**
-   * Guard de acceso. Debe llamarse al inicio de sic_chile.html / sic_peru.html.
-   * Redirige a index.html si no hay sesion valida para el pais esperado.
-   * Gerencia y financiera tienen acceso a ambos paises.
-   */
+  /** Guard de acceso. Redirige a index.html si no hay sesión válida para el país. */
   SICAuth.exigirSesion = function (paisEsperado) {
-    var sesion = SICAuth.sesionActiva();
-    if (!sesion) { window.location.href = "index.html"; return null; }
-    var tieneAcceso = sesion.pais === "AMBOS" || sesion.pais === paisEsperado;
-    if (!tieneAcceso) { window.location.href = "index.html"; return null; }
-    return sesion;
+    var s = SICAuth.sesionActiva();
+    if (!s) { window.location.href = "index.html"; return null; }
+    if (s.pais !== "AMBOS" && s.pais !== paisEsperado) { window.location.href = "index.html"; return null; }
+    return s;
   };
 
-  /**
-   * Cambia la clave del usuario autenticado.
-   * Retorna true si OK, false si la clave actual no coincide.
-   */
-  SICAuth.cambiarClave = function (claveActual, claveNueva) {
-    var sesion = SICAuth.sesionActiva();
-    if (!sesion) return false;
-    if (claveActual !== _obtenerClave(sesion.usuario)) return false;
-    try {
-      localStorage.setItem(STORAGE_PW + sesion.usuario, claveNueva);
-      sesion.primer_ingreso = false;
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify(sesion));
-      return true;
-    } catch (e) { return false; }
-  };
-
+  /** Invalida token en backend + limpia sessionStorage + redirige. */
   SICAuth.cerrarSesion = function () {
-    sessionStorage.removeItem(SESSION_KEY);
+    var tok = _token();
+    if (tok) _post({ action: "logout", token: tok }).catch(function () {});
+    _limpiar();
     window.location.href = "index.html";
   };
 
-  SICAuth.paisActivo = function () {
+  SICAuth.esAdmin = function () {
     var s = SICAuth.sesionActiva();
-    return s ? s.pais : null;
+    return !!(s && (s.rol === "admin" || s.rol === "gerencia" || s.rol === "financiera"));
   };
 
-  /** Retorna true si la sesion activa tiene acceso a todos los vendedores. */
-  SICAuth.esGerencia = function () {
-    var s = SICAuth.sesionActiva();
-    return s && (s.rol === "gerencia" || s.rol === "financiera");
-  };
+  SICAuth.paisActivo = function () { var s = SICAuth.sesionActiva(); return s ? s.pais : null; };
+  SICAuth.getToken   = function () { return _token(); };
 
   global.SICAuth = SICAuth;
+
 })(typeof window !== "undefined" ? window : globalThis);
