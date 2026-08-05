@@ -69,7 +69,10 @@
             <datalist id="lista-clientes"></datalist>
           </div>
           <div class="field"><label>RUC / Documento</label><input id="f-cliente-rut" placeholder="20xxxxxxxxx"></div>
-          <div class="field"><label>RTC (vendedor / ruta)</label><input id="f-rtc" placeholder="Ej. J. Caroca"></div>
+          <div class="field"><label>RTC (vendedor / ruta)</label>
+            <input list="lista-rtc" id="f-rtc" placeholder="Seleccionar o escribir...">
+            <datalist id="lista-rtc"></datalist>
+          </div>
         </div>
         <div class="form-grid" style="margin-top:12px">
           <div class="field"><label>Dirección</label><input id="f-cliente-direccion" placeholder="Dirección"></div>
@@ -79,7 +82,10 @@
         <div class="form-grid" style="margin-top:12px">
           <div class="field"><label>Correo electrónico</label><input id="f-cliente-correo" type="email" placeholder="correo@cliente.pe"></div>
           <div class="field"><label>Teléfono</label><input id="f-cliente-telefono" placeholder="+51 9 ...."></div>
-          <div class="field"><label>Elaborado por</label><input id="f-elaborado-por" placeholder="Tu nombre"></div>
+          <div class="field"><label>Elaborado por</label>
+            <input list="lista-elaborado-por" id="f-elaborado-por" placeholder="Seleccionar o escribir...">
+            <datalist id="lista-elaborado-por"></datalist>
+          </div>
         </div>
 
         <div class="cliente-card" id="cliente-card" style="display:none"></div>
@@ -91,8 +97,12 @@
         </div>
         <!-- Plazo personalizado -->
         <div id="row-plazo-custom" class="form-grid" style="margin-top:8px;display:none">
-          <div class="field"><label>Días plazo (personalizado)</label>
-            <input id="f-plazo-custom" type="number" min="1" step="1" placeholder="ej. 120">
+          <div class="field"><label>Fecha de vencimiento</label>
+            <input id="f-vencimiento" type="date">
+          </div>
+          <div class="field">
+            <label>Días de plazo <span id="lbl-dias-calculados" style="font-size:11px;font-weight:normal;color:var(--muted)"></span></label>
+            <input id="f-plazo-custom" type="number" min="1" step="1" placeholder="o escribir días manualmente">
           </div>
         </div>
         <!-- Panel cargo financiero (plazo > 90 días) -->
@@ -339,6 +349,15 @@
     $('lista-clientes').innerHTML = ctx.clientes.map(function(c){
       return '<option value="' + COTIZADOR.util.escapeHTML(c.nombre) + '">';
     }).join('');
+    // Datalist vendedores: extraer únicos de clientes cargados
+    var rtcs = [];
+    ctx.clientes.forEach(function(c){
+      if (c.vendedor_rtc && rtcs.indexOf(c.vendedor_rtc) === -1) rtcs.push(c.vendedor_rtc);
+    });
+    rtcs.sort();
+    var optsRtc = rtcs.map(function(r){ return '<option value="' + COTIZADOR.util.escapeHTML(r) + '">'; }).join('');
+    $('lista-rtc').innerHTML = optsRtc;
+    $('lista-elaborado-por').innerHTML = optsRtc;
   }
 
   // ── Cliente: autocarga desde catálogo ────────────────────────────
@@ -1015,6 +1034,22 @@
     render();
   });
   $('f-plazo-custom').addEventListener('input', function(){
+    $('f-vencimiento').value = '';
+    $('lbl-dias-calculados').textContent = '';
+    actualizarPanelInteres();
+    render();
+  });
+  $('f-vencimiento').addEventListener('change', function(){
+    if (!this.value) return;
+    var hoy = new Date(); hoy.setHours(0,0,0,0);
+    var vto = new Date(this.value + 'T00:00:00');
+    var dias = Math.round((vto - hoy) / 86400000);
+    if (dias > 0) {
+      $('f-plazo-custom').value = dias;
+      $('lbl-dias-calculados').textContent = '(' + dias + ' días desde hoy)';
+    } else {
+      $('lbl-dias-calculados').textContent = '⚠ fecha inválida';
+    }
     actualizarPanelInteres();
     render();
   });
@@ -1202,6 +1237,10 @@
     pintarClienteCard(null);
     $('f-fecha').value = COTIZADOR.util.todayISO();
     $('f-condicion-pago').selectedIndex = 0;
+    $('f-vencimiento').value = '';
+    $('f-plazo-custom').value = '';
+    $('lbl-dias-calculados').textContent = '';
+    $('row-plazo-custom').style.display = 'none';
     $('f-validez').value = ctx.config.validez_dias_default;
     hidratarDespacho();
     render();
@@ -1243,7 +1282,22 @@
     $('f-elaborado-por').value = quote.elaborado_por || '';
     $('f-fecha').value = quote.fecha || COTIZADOR.util.todayISO();
     $('f-condicion-pago').value = quote.condicion_pago || '';
-    if (quote.condicion_pago === 'Personalizado') $('f-plazo-custom').value = quote.interes_dias || '';
+    if (quote.condicion_pago === 'Personalizado') {
+      var diasGuardados = quote.interes_dias || 0;
+      $('f-plazo-custom').value = diasGuardados || '';
+      if (diasGuardados > 0) {
+        var vtoDate = new Date(); vtoDate.setHours(0,0,0,0);
+        vtoDate.setDate(vtoDate.getDate() + diasGuardados);
+        $('f-vencimiento').value = vtoDate.toISOString().slice(0,10);
+        $('lbl-dias-calculados').textContent = '(' + diasGuardados + ' días desde hoy)';
+      } else {
+        $('f-vencimiento').value = '';
+        $('lbl-dias-calculados').textContent = '';
+      }
+    } else {
+      $('f-vencimiento').value = '';
+      $('lbl-dias-calculados').textContent = '';
+    }
     if ($('f-aplica-interes')) $('f-aplica-interes').value = (quote.aplica_interes) ? 'si' : 'no';
     actualizarPanelInteres();
     $('f-validez').value = quote.validez_dias || 15;

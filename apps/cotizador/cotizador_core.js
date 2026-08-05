@@ -941,8 +941,9 @@ var COTIZADOR = (function () {
   var PDF = {
     /** Devuelve SOLO los datos permitidos para el cliente — nunca piso/IEC/costo/margen/alertas. */
     vistaCliente: function (quote) {
-      // Fase 3: el despacho solo aparece en la vista cliente como un monto
-      // (si está incluido) — nunca distancia/costo por km/proveedor/estado.
+      // Fase 3: el despacho aparece en el PDF del cliente SOLO en modo SEPARADO (A).
+      // En modo INCLUIDO (B) el transporte va prorrateado en el precio de los productos
+      // y no se muestra como línea aparte. Nunca se expone distancia/costo por km/proveedor/estado.
       var conDespacho = Quote.totalConDespacho(quote);
       var despachoIncluido = !!(quote.despacho && quote.despacho.incluido);
       return {
@@ -972,7 +973,9 @@ var COTIZADOR = (function () {
         }),
         subtotal_productos: conDespacho.subtotal_productos,
         despacho_incluido: despachoIncluido,
-        despacho_monto: despachoIncluido ? conDespacho.costo_despacho : 0,
+        // SEPARADO (A): el monto se muestra como línea aparte en el PDF.
+        // INCLUIDO (B): el monto va dentro del precio del producto — no se muestra.
+        despacho_monto: !despachoIncluido ? conDespacho.costo_despacho : 0,
         total: conDespacho.total
       };
     },
@@ -1045,7 +1048,7 @@ var COTIZADOR = (function () {
         '</div>' +
         '<table><thead><tr><th>Producto</th><th>Presentación</th><th class="num">Cantidad</th><th class="num">Precio Unitario Comercial</th><th class="num">Subtotal</th></tr></thead>' +
         '<tbody>' + filas +
-        (v.despacho_incluido ?
+        (!v.despacho_incluido && v.despacho_monto > 0 ?
           '<tr><td colspan="4">Subtotal Productos</td><td class="num">' + util.formatMoney(v.subtotal_productos, v.moneda) + '</td></tr>' +
           '<tr><td colspan="4">Despacho / Entrega</td><td class="num">' + util.formatMoney(v.despacho_monto, v.moneda) + '</td></tr>'
           : '') +
