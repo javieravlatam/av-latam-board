@@ -20,3 +20,6 @@ __pycache__/
 versions/base/
 versions/data/
 versions/logs/
+
+# Pipeline — artefactos derivados (regenerables desde inbox)
+pipeline/raw_registry.json
