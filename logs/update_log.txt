@@ -2178,3 +2178,26 @@ VIGENTES DETECTADOS:
   LIBRO_BASE        → nuevo libro base AV 2026.xlsx
 
 NO MODIFICADO: dashboards, avboard_data.js, SIC, GAS backend
+
+======================================================================
+CORTE: 2026-08-13 16:49
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 12-08-2026 - AGLM.xlsx
+  - AGROVECA PERU -  VENTAS  AL 12.08.2026.xlsx
+  - Cuentas Cobrar  Agrocomercial 12-08.xlsx
+  - Cuentas Cobrar Agroveca 21-06.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 12/08/2026
+  · avboard_clientes.js regenerado · 161 clientes CL
+  · Panel_IEC TX_CL · 1707 transacciones
+  · Panel_IEC TX_PE · 140 transacciones
+  · IEC Chile 101.2% · BP CLP 110,802,333
+  · IEC Perú 107.6% (Fase 7)
+  · CxC Chile CLP 113,697,828 · +90d CLP 23,647,064
+  · Módulo Productos: 193 SKUs · 9 margen negativo · 54 sin costo
+  · Cache-busting ?v=202608131649 sincronizado en 0 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
