@@ -820,6 +820,81 @@ function cerrarSesion() {
       cPeruMini.update();
     }
 
+    // ── Alertas dinámicas Chile ──────────────────────────────────────────────
+    // Generadas desde AVBOARD en cada carga — nunca hardcodeadas
+    (function(){
+      var clAlerts = document.querySelector('.country-card.cl .cc-alerts');
+      if(!clAlerts) return;
+      var t90cl   = cc.tramos ? cc.tramos.t90 : 0;
+      var t3160cl = cc.tramos ? cc.tramos.t3160 : 0;
+      var mnReal  = cv.mn_real || 0;
+      var top = (cv.rtc_real_ytd && cv.rtc_real_ytd.laratro) ? cv.rtc_real_ytd.laratro : 0;
+      var topPct  = D.chile_ytd() > 0 ? Math.round(top/D.chile_ytd()*100) : 0;
+
+      var alerts = [];
+
+      // Alerta CxC
+      if(t90cl > 0){
+        alerts.push({cls:'rd', icon:'🚨', txt:'<b>CxC +90d: CLP '+fC(t90cl)+'</b> — mora crítica activa. Gestión urgente requerida.'});
+      } else if(t3160cl > 0){
+        alerts.push({cls:'am', icon:'⚠️', txt:'<b>CxC alerta: CLP '+fC(t3160cl)+'</b> (31–60d) — sin mora crítica. Seguimiento activo en cartera.'});
+      } else {
+        alerts.push({cls:'ok', icon:'✅', txt:'<b>CxC sin mora crítica.</b> Total pendiente CLP '+fC(cc.total)+'. Cartera bajo control.'});
+      }
+
+      // Alerta MN
+      if(mnReal < 0.20){
+        alerts.push({cls:'am', icon:'⚠️', txt:'<b>MN real '+pct1(mnReal)+'</b> (meta 25%) — brecha '+(25-mnReal*100).toFixed(1)+'pp. Foco en precio piso y mix de productos.'});
+      } else {
+        alerts.push({cls:'ok', icon:'✅', txt:'<b>MN real '+pct1(mnReal)+'</b> — dentro de rango aceptable.'});
+      }
+
+      // Alerta positiva: top vendedor
+      if(top > 0){
+        alerts.push({cls:'ok', icon:'⭐', txt:'<b>Laratro YTD CLP '+fC(top)+' ('+topPct+'% del total)</b> — lidera el equipo Chile. Referente del grupo.'});
+      }
+
+      clAlerts.innerHTML = alerts.map(function(a){
+        return '<div class="cc-alert '+a.cls+'"><span class="ca-icon">'+a.icon+'</span><div class="ca-text">'+a.txt+'</div></div>';
+      }).join('\n');
+    })();
+
+    // ── Alertas dinámicas Perú ───────────────────────────────────────────────
+    (function(){
+      var peAlerts = document.querySelector('.country-card.pe .cc-alerts');
+      if(!peAlerts) return;
+      var t90pe = (pc && pc.tramos) ? pc.tramos.t90 : 0;
+      var cumpl = pv.cumplimiento_5m || 0;
+      var iecPE = (D.peru && D.peru.iec) ? D.peru.iec.total : null;
+
+      var alerts = [];
+
+      // Alerta cumplimiento
+      if(cumpl < 0.80){
+        var gap = (pv.ppto_anual * (1 - cumpl * 5/12));
+        alerts.push({cls:'am', icon:'⚠️', txt:'<b>Perú '+pct1(cumpl)+' del ppto 5m</b> — brecha USD '+fK(pv.ppto_5m - D.peru_ytd())+'. Necesita aceleración H2.'});
+      } else {
+        alerts.push({cls:'ok', icon:'✅', txt:'<b>Perú '+pct1(cumpl)+' del ppto</b> — en línea con objetivo.'});
+      }
+
+      // Alerta CxC Perú
+      if(t90pe > 5000){
+        alerts.push({cls:'rd', icon:'🚨', txt:'<b>CxC +90d: USD '+fK(t90pe)+'</b> — mora crítica activa Perú. Gestión inmediata jefe país.'});
+      } else {
+        var cortePEc2 = D.meta.cortes.peru_cxc;
+        alerts.push({cls:'am', icon:'📋', txt:'<b>CxC Perú: corte '+cortePEc2+'</b> — datos congelados. Subir archivo actualizado al inbox.'});
+      }
+
+      // IEC Perú positivo
+      if(iecPE && iecPE >= 1.0){
+        alerts.push({cls:'ok', icon:'⭐', txt:'<b>IEC Perú '+pct1(iecPE)+'</b> — cobranza sobre objetivo. Disciplina comercial sólida.'});
+      }
+
+      peAlerts.innerHTML = alerts.map(function(a){
+        return '<div class="cc-alert '+a.cls+'"><span class="ca-icon">'+a.icon+'</span><div class="ca-text">'+a.txt+'</div></div>';
+      }).join('\n');
+    })();
+
     console.log('[AVBOARD] ✅ Panel_Jefes_Index actualizado · Chile '+sCLv+' · Perú '+sPEv);
   }catch(e){console.warn('[Jefes_Index] populate error:', e);}
 })();

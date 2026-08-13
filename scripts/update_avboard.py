@@ -2023,8 +2023,52 @@ def build_tx_cl(df_ventas, piso):
     return tx_list
 
 
+_MESES_ES = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO',
+             'JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE']
+_MESES_LABEL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+
+def _build_mes_options(meses_presentes, indent='      '):
+    """Construye las <option> de mes para los selectores del Panel IEC.
+    Solo incluye meses que tienen datos en TX_CL/TX_PE."""
+    lines = []
+    for cod, lbl in zip(_MESES_ES, _MESES_LABEL):
+        if cod in meses_presentes:
+            lines.append(f'{indent}<option value="{cod}">{lbl}</option>')
+    return '\n'.join(lines)
+
+def _sync_mes_selectors(content, meses_presentes):
+    """Actualiza los <select id="fMes"> e <select id="ic-mes"> con los meses
+    reales presentes en TX_CL. Evita que el selector quede desactualizado."""
+
+    # ── fMes (filtro principal tabla tx) ──────────────────────────────────
+    opts_fmes = _build_mes_options(meses_presentes, indent='      ')
+    content = re.sub(
+        r'(<select id="fMes"[^>]*>)\s*<option value="TODOS">.*?</option>.*?(</select>)',
+        lambda m: (
+            m.group(1) + '\n      <option value="TODOS">Todos (YTD)</option>\n'
+            + opts_fmes + '\n    ' + m.group(2)
+        ),
+        content, flags=re.DOTALL
+    )
+
+    # ── ic-mes (selector IEC comparativo) ────────────────────────────────
+    opts_icmes = _build_mes_options(meses_presentes, indent='          ')
+    content = re.sub(
+        r'(<select id="ic-mes"[^>]*>)\s*<option value="TODOS">.*?</option>.*?(</select>)',
+        lambda m: (
+            m.group(1) + '\n          <option value="TODOS">YTD 2026</option>\n'
+            + opts_icmes + '\n        ' + m.group(2)
+        ),
+        content, flags=re.DOTALL
+    )
+
+    return content
+
+
 def update_panel_iec(tx_cl, corte_date):
-    """Reemplaza TX_CL en Panel_IEC y actualiza fechas de corte."""
+    """Reemplaza TX_CL en Panel_IEC, actualiza fechas de corte y sincroniza
+    selectores de mes con los meses reales presentes en los datos."""
     with open(PANEL_IEC, 'r', encoding='utf-8') as f:
         content = f.read()
 
@@ -2034,9 +2078,13 @@ def update_panel_iec(tx_cl, corte_date):
     content = re.sub(r'const TX_CL = \[.*?\];', new_tx, content, flags=re.DOTALL)
 
     # Update corte dates
-    old_dates = re.findall(r'corte \d{2}/\d{2}/\d{4}', content)
     content = re.sub(r'corte \d{2}/\d{2}/\d{4}', f'corte {corte_date}', content)
     content = re.sub(r'Datos corte \d{2}/\d{2}/\d{4}', f'Datos corte {corte_date}', content)
+
+    # Sync month selectors from real data
+    meses_en_datos = {t.get('mes','').upper() for t in tx_cl if t.get('mes')}
+    meses_ordenados = [m for m in _MESES_ES if m in meses_en_datos]
+    content = _sync_mes_selectors(content, meses_ordenados)
 
     with open(PANEL_IEC, 'w', encoding='utf-8') as f:
         f.write(content)
