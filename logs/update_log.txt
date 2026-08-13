@@ -2048,3 +2048,133 @@ ACCIONES:
   · Cache-busting ?v=202608051401 sincronizado en 0 paneles HTML
 VALIDACIÓN JS: ✅ OK
 ======================================================================
+
+======================================================================
+CORTE: 2026-08-11 — SIC-AV FASE 5.3: CARGA INICIAL BACKEND GAS
+TIPO: Carga de datos reales ciclo 2026-07 en SIC-AV Backend Producción (GAS)
+
+ARCHIVOS PROCESADOS (en GAS, no en repo local):
+  1. sic_setup.gs — funciones _crearUsuariosLote() y _cargarDatosSICLote() agregadas
+  2. sic_setup.gs — wrapper exec_lote() agregado (puede removerse en próximo commit)
+
+ACCIONES REALIZADAS:
+  - Auditoría de fuentes AVBOARD: TX_CL, TX_PE, ppto CL, ppto PE ciclo 2026-07
+  - Construcción de payloads JSON para 15 vendedores (7 CL + 8 PE)
+  - Carga vía cargarDatosSIC() — upsert idempotente, activo=true
+  - Verificación: 15/15 [CARGADO], 0 errores (GAS Execution Log 23:38:47Z)
+
+RESULTADOS:
+  sic_data_cl: 7 filas activas (laratro, velasquez, encina, munoz, caroca, veverka, franco_riffo)
+  sic_data_pe: 8 filas activas (navarro, infante, atalaya, diaz, gonzales, aguirre, valladares, martha)
+
+ALERTAS HEREDADAS (no bloquean sistema):
+  - franco_riffo: tx=0 en pipeline (sin historial ciclo 07)
+  - encina, munoz: pv=0 en varios productos (precios no en master_prices.json)
+  - caroca: ppto_jul=0 (Libro Base sin ppto julio)
+  - navarro: ppto=0 y tx=0 (ausente de avboard_data.js)
+  - atalaya, martha: tx=0 ciclo 07 (sin ventas en periodo)
+  - cobranza CL: stub; cobranza PE: provisional hasta 2026-06-30
+
+DEUDA TÉCNICA PRE-COMMIT (NO commit/push por prohibición vigente):
+  - sic_setup.gs desincronizado del repo (contiene _crearUsuariosLote + _cargarDatosSICLote)
+  - cargar_datos_v2.gs en /outputs como referencia local
+
+SPREADSHEET: 1T0gar0AG1ZK71-UkPoHBrL6w6C6SZcfTT3nilgg2eIo
+GAS PROJECT:  1H4yPvdhQlexzehSD91JUu2KA5pxQgFw76sGLGGa6gjpkmxG-i7zAymbc
+======================================================================
+
+======================================================================
+CORTE: 2026-08-11 21:32
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 29-07-2026 - AGLM.xlsx
+  - AGROVECA PERU -  VENTAS  AL 11.08.2026.xlsx
+  - Cuentas Cobrar  Agrocomercial 21-07.xlsx
+  - Cuentas Cobrar Agroveca 21-06.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 29/07/2026
+  · avboard_clientes.js regenerado · 159 clientes CL
+  · Panel_IEC TX_CL · 1617 transacciones
+  · Panel_IEC TX_PE · 137 transacciones
+  · IEC Chile 100.8% · BP CLP 107,374,019
+  · IEC Perú 107.7% (Fase 7)
+  · CxC Chile CLP 55,651,095 · +90d CLP 26,222,409
+  · Módulo Productos: 183 SKUs · 9 margen negativo · 47 sin costo
+  · Cache-busting ?v=202608112132 sincronizado en 0 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
+
+======================================================================
+CORTE: 2026-08-13 00:20
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 12-08-2026 - AGLM.xlsx
+  - AGROVECA PERU -  VENTAS  AL 12.08.2026.xlsx
+  - Cuentas Cobrar  Agrocomercial 12-08.xlsx
+  - Cuentas Cobrar Agroveca 21-06.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 12/08/2026
+  · avboard_clientes.js regenerado · 161 clientes CL
+  · Panel_IEC TX_CL · 1707 transacciones
+  · Panel_IEC TX_PE · 140 transacciones
+  · IEC Chile 101.2% · BP CLP 110,802,333
+  · IEC Perú 107.6% (Fase 7)
+  · CxC Chile CLP 113,697,828 · +90d CLP 23,647,064
+  · Módulo Productos: 193 SKUs · 9 margen negativo · 54 sin costo
+  · Cache-busting ?v=202608130020 sincronizado en 0 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
+
+======================================================================
+CORTE: 2026-08-13 — VERIFICACIÓN PRE-SPRINT 1 SSOT AV LATAM
+TIPO: Análisis y diseño — sin modificación de código ni dashboards
+
+ARCHIVOS CREADOS:
+  1. logs/VERIFICACION_PRE_SPRINT1_2026-08-13.md — documento completo de verificación
+
+ACCIONES REALIZADAS:
+  - Análisis estrutura corporativa: 2 entidades Chile confirmadas (Grupo AV LATAM SpA + AGLM)
+  - Clasificación 10 nombres adicionales encontrados en CxC/Libro Ventas Chile
+  - Auditoría presupuesto H2 2026: Chile (7 vendedores) y Perú (8 vendedores) clasificados
+  - Diseño tabla FX canónica versionada (fx_rates)
+  - Formalización consolidación CxC Chile = AGROVECA_CL + AGROCOMERCIAL_CL
+  - Identificación 6 enmiendas al SSOT_AV_LATAM_v1.0
+
+NO MODIFICADO: dashboards, scripts, datos, SIC, GAS backend, avboard_data.js
+
+VEREDICTO: SSOT_AV_LATAM_v1.0 APROBADO PARA IMPLEMENTACIÓN
+  Sin bloqueos materiales. Pendiente menor: confirmar RUT emisor AGROVECA_CL.
+
+======================================================================
+CORTE: 2026-08-13 — SPRINT 1 · STAGE 1: DETECTOR + CLASIFICADOR
+TIPO: Implementación pipeline SSOT — scripts/inbox_detector.py
+
+ARCHIVOS CREADOS:
+  1. scripts/inbox_detector.py — Detector + Clasificador (v1.0.0)
+  2. pipeline/raw_registry.json — Registro completo del inbox
+  3. pipeline/canonical/ — Directorio para datasets canónicos (vacío, Sprint 1+)
+
+RESULTADOS (ejecución 2026-08-13):
+  Total archivos inbox:    86
+  Procesables:             82
+  Ignorados:                4 (.DS_Store, .eml, .rtf, ~$ temp)
+  Vigentes:                 8 (7 por tipo+empresa + LIBRO_BASE)
+  Superseded:              69
+  Duplicados exactos:       2 (ya documentados en FORENSE_CXC_CHILE)
+  Conflictos genuinos:      0
+
+VIGENTES DETECTADOS:
+  VENTAS_PE         → AGROVECA PERU - VENTAS AL 12.08.2026.xlsx
+  VENTAS_CL         → Libro de Ventas 12-08-2026 - AGLM.xlsx
+  CXC_CL_AGROVECA   → Cuentas Cobrar Agroveca 21-06.xlsx
+  CXC_CL_AGROCOMERCIAL → Cuentas Cobrar Agrocomercial 12-08.xlsx
+  CXC_PE            → AGROVECA - CUENTAS POR COBRAR AL 13..07.2026.xlsx
+  COBRADAS_PE       → AGROVECA PERU - REPORTE DE VENTAS COBRADAS 2026.xlsx
+  COMISIONES_PE     → AGROVECA PERU - COMISIONES TRABAJADORES 2026.xlsx
+  LIBRO_BASE        → nuevo libro base AV 2026.xlsx
+
+NO MODIFICADO: dashboards, avboard_data.js, SIC, GAS backend
