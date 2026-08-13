@@ -1978,3 +1978,22 @@ Impacto estimado: CLP -2,622,151. SKUs sin costo cargado (no evaluables): 48 CL 
 
 CxC +90d total: CLP 23,647,064
 ---
+
+---
+**ACTUALIZACIÓN 2026-08-13 19:08**
+
+## CxC PERÚ — Corte 10/08/2026 ✅ ACTUALIZADO (era 10/05/2026)
+
+| Métrica | Valor |
+|---------|-------|
+| Total CxC regular | USD 86,287 |
+| +90d CRÍTICO | USD 28,712 |
+| Factoring (RVR AGRO + DROKASA) | USD 196,841 |
+
+### Cuentas críticas Perú:
+- 🔴 **AGROFER MJ** (Atalaya) — USD 9,493 · 306 días
+- 🔴 **PAODISA S.A.** (Geldres) — USD 10,874 · 4 facturas (583-743d) · proceso legal pendiente
+- 🔴 **SERVICIOS BIOINSUMOS PERU** (sin asignar) — USD 5,995 · 114-174d
+- 🟡 **LUNA QUINTANILLA** (Infante) — USD 2,349 · 192-247d
+
+**JOSE GELDRES** tiene USD 10,874 completamente vencido >90d.

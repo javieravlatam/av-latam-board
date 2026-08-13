@@ -2270,3 +2270,15 @@ ACCIONES:
   · Cache-busting ?v=202608131736 sincronizado en 0 paneles HTML
 VALIDACIÓN JS: ✅ OK
 ======================================================================
+
+================================================================================
+FECHA: 2026-08-13 19:08
+ARCHIVOS PROCESADOS:
+  - AGROVECA - CUENTAS POR COBRAR AL 10..08.2026.xlsx (Peru CxC corte 10/08/2026)
+ACCIONES:
+  - avboard_data.js: var peru_cxc actualizado (corte 10/08/2026)
+    · Total CxC: USD 86,287 (excl. factoring USD 196,841)
+    · +90d CRÍTICO: USD 28,712 (AGROFER/ATALAYA, PAODISA/GELDRES, BIOINSUMOS)
+    · Por vendedor: aguirre, geldres, atalaya, valladares, gonzales, infante, diaz, otros
+  - Panel_CxC: sync_cxc_panel actualizado (alerta banner + chileData)
+================================================================================

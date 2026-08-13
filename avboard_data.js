@@ -436,102 +436,94 @@ var AVBOARD = (function() {
   };
 
   var peru_cxc = {
-    "corte": "10/05/2026",
-    "total": 117964,
+    "corte": "10/08/2026",
+    "total": 86287,
     "supra": 196841,
     "tramos": {
-      "no_vencida": 79300,
-      "t030": 10534,
-      "t3160": 3149,
-      "t6190": 1360,
-      "t90": 23621
+      "no_vencida": 49733,
+      "t030": 6520,
+      "t3160": 1322,
+      "t6190": 0,
+      "t90": 28712
     },
     "tramos_pct": {
-      "no_vencida": 0.672,
-      "t030": 0.089,
-      "t3160": 0.027,
-      "t6190": 0.012,
-      "t90": 0.2
+      "no_vencida": 0.576,
+      "t030": 0.076,
+      "t3160": 0.015,
+      "t6190": 0.000,
+      "t90": 0.333
     },
-    "vencida": 38664,
+    "vencida": 30034,
+    "cuentas_criticas": [
+      {"cliente":"AGROFER MJ E.I.R.L.","rtc":"OMAR ATALAYA","dias":306,"monto":9493,"estado":"CRÍTICO","alerta":"URGENTE"},
+      {"cliente":"PAODISA S.A.","rtc":"JOSE GELDRES","dias":743,"monto":1478,"estado":"CRÍTICO","alerta":"URGENTE"},
+      {"cliente":"PAODISA S.A.","rtc":"JOSE GELDRES","dias":647,"monto":1773,"estado":"CRÍTICO","alerta":"URGENTE"},
+      {"cliente":"PAODISA S.A.","rtc":"JOSE GELDRES","dias":626,"monto":3546,"estado":"CRÍTICO","alerta":"URGENTE"},
+      {"cliente":"PAODISA S.A.","rtc":"JOSE GELDRES","dias":583,"monto":4078,"estado":"CRÍTICO","alerta":"URGENTE"},
+      {"cliente":"SERVICIOS BIOINSUMOS PERU SAC","rtc":"SIN ASIGNAR","dias":174,"monto":15,"estado":"CRÍTICO","alerta":"URGENTE"},
+      {"cliente":"SERVICIOS BIOINSUMOS PERU SAC","rtc":"SIN ASIGNAR","dias":120,"monto":3780,"estado":"CRÍTICO","alerta":"URGENTE"},
+      {"cliente":"SERVICIOS BIOINSUMOS PERU SAC","rtc":"SIN ASIGNAR","dias":114,"monto":2200,"estado":"CRÍTICO","alerta":"URGENTE"},
+      {"cliente":"LUNA QUINTANILLA BRYAN ALEXANDER","rtc":"OSCAR INFANTE","dias":247,"monto":1005,"estado":"CRÍTICO","alerta":"URGENTE"},
+      {"cliente":"LUNA QUINTANILLA BRYAN ALEXANDER","rtc":"OSCAR INFANTE","dias":192,"monto":1344,"estado":"CRÍTICO","alerta":"URGENTE"}
+    ],
     "por_vendedor": {
-      "infante": {
-        "total": 28153,
-        "pct": 0.239,
-        "vencida": 15881,
-        "t90": 4598,
-        "riesgo": "CRÍTICO"
+      "aguirre": {
+        "total": 38551,
+        "pct": 0.447,
+        "vencida": 2000,
+        "t90": 0,
+        "riesgo": "MONITOREO"
       },
       "geldres": {
         "total": 10874,
-        "pct": 0.092,
+        "pct": 0.126,
         "vencida": 10874,
         "t90": 10874,
         "riesgo": "CRÍTICO"
       },
+      "valladares": {
+        "total": 9975,
+        "pct": 0.116,
+        "vencida": 0,
+        "t90": 0,
+        "riesgo": "OK"
+      },
       "atalaya": {
-        "total": 15343,
-        "pct": 0.13,
-        "vencida": 15343,
-        "t90": 15343,
+        "total": 9493,
+        "pct": 0.110,
+        "vencida": 9493,
+        "t90": 9493,
         "riesgo": "CRÍTICO"
       },
-      "aguirre_navarro": {
-        "total": 58942,
-        "pct": 0.499,
-        "vencida": 1432,
+      "gonzales": {
+        "total": 6720,
+        "pct": 0.078,
+        "vencida": 0,
         "t90": 0,
+        "riesgo": "OK"
+      },
+      "infante": {
+        "total": 4418,
+        "pct": 0.051,
+        "vencida": 3191,
+        "t90": 2349,
         "riesgo": "RIESGO"
       },
-      "gonzales_valladares": {
-        "total": 1600,
-        "pct": 0.014,
-        "vencida": 800,
+      "diaz": {
+        "total": 260,
+        "pct": 0.003,
+        "vencida": 0,
         "t90": 0,
-        "riesgo": "NORMAL"
+        "riesgo": "OK"
       },
-      "pradenas_sin_asignar": {
-        "total": 7030,
-        "pct": 0.06,
-        "vencida": 4830,
-        "t90": 0,
-        "riesgo": "NORMAL"
+      "otros": {
+        "total": 5996,
+        "pct": 0.069,
+        "vencida": 5996,
+        "t90": 5996,
+        "riesgo": "CRÍTICO"
       }
-    },
-    "cuentas_criticas": [
-      {
-        "cliente": "PAODISA S.A.",
-        "vendedor": "J. Geldres",
-        "dias": "468-648d",
-        "monto": 10874.4,
-        "estado": "CRÍTICO",
-        "nota": "4 facturas 2024 · proceso legal pendiente"
-      },
-      {
-        "cliente": "AGROFER MJ E.I.R.L.",
-        "vendedor": "O. Atalaya",
-        "dias": 211,
-        "monto": 9493.0,
-        "estado": "CRÍTICO",
-        "nota": "acuerdo de pago urgente"
-      },
-      {
-        "cliente": "LUNA QUINTANILLA BRYAN ALEXANDER",
-        "vendedor": "O. Infante",
-        "dias": "97-143d",
-        "monto": 2349.05,
-        "estado": "CRÍTICO",
-        "nota": "2 folios"
-      },
-      {
-        "cliente": "EPIC FARMS S.A.C.",
-        "vendedor": "A. Gonzalez",
-        "dias": 107,
-        "monto": 600.0,
-        "estado": "CRÍTICO",
-        "nota": "escaló desde 61-90d"
-      }
-    ]
+    }
   };
 
   var productos = [
