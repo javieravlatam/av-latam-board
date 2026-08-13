@@ -784,7 +784,7 @@
       </div>
       <div class="kpi-mini amber">
         <div class="kpi-mini-label">📊 IEC</div>
-        <div class="kpi-mini-val v-amber" id="kpIec">43.1%</div>
+        <div class="kpi-mini-val v-amber" id="kpIec">101.2%</div>
         <div class="kpi-mini-sub" id="kpIecSub">Ventas sobre piso / con piso · 2026</div>
       </div>
       <div class="kpi-mini green">
@@ -847,7 +847,7 @@
         <div class="section-h amber">PRODUCTOS SIN PRECIO PISO DEFINIDO <span style="font-size:12px;font-weight:400;color:var(--text-muted)">2026 YTD · Excluidos del cálculo IEC</span></div>
         <div class="alert-box amber" style="margin-bottom:14px">
           <div class="alert-title amber">⚠️ IEC distorsionado por productos externos sin piso — J. Caroca</div>
-          <div class="alert-body">64.5M CLP en 94 transacciones de productos de terceros (CRYOPHILE, PROTECT PRADERAS, FOLIBAC, SOLUFOS, BODENPRO) quedan excluidos del cálculo de IEC. El IEC de Caroca (67.7%) está sobreestimado. Requiere definir política de precio piso para productos externos o marcas de terceros.</div>
+          <div class="alert-body">64.5M CLP en 94 transacciones de productos de terceros (CRYOPHILE, PROTECT PRADERAS, FOLIBAC, SOLUFOS, BODENPRO) quedan excluidos del cálculo de IEC. El IEC de Caroca (101.2%) está sobreestimado. Requiere definir política de precio piso para productos externos o marcas de terceros.</div>
         </div>
         <div class="panel">
           <div class="panel-title amber-title">PRODUCTOS SIN PRECIO PISO — 2026 YTD <span class="tag">CLP · VENTAS SIN PISO DEFINIDO</span></div>
@@ -910,7 +910,7 @@
           <table class="data-table">
             <tr><th>KPI</th><th class="r">Valor</th><th class="r">Estado</th></tr>
             <tr><td>🗂️ Cobertura pricing (revenue)</td><td class="right mono" style="color:#e67e22"><strong>66.6%</strong></td><td class="right"><span class="badge badge-a">🟠 BAJA</span></td></tr>
-            <tr><td>📊 IEC 2026 YTD</td><td class="right mono amber"><strong>43.1%</strong></td><td class="right"><span class="badge badge-a">REVISAR</span></td></tr>
+            <tr><td>📊 IEC 2026 YTD</td><td class="right mono amber"><strong>101.2%</strong></td><td class="right"><span class="badge badge-a">REVISAR</span></td></tr>
             <tr><td>💰 Ventas 2026 YTD</td><td class="right mono green">CLP 366.8M</td><td class="right"><span class="badge badge-g">Ene–May</span></td></tr>
             <tr><td>📉 Ventas bajo piso</td><td class="right mono red">CLP 73.2M</td><td class="right"><span class="badge badge-r">37.9% con piso</span></td></tr>
             <tr><td>💸 Impacto estimado</td><td class="right mono amber">CLP 16.3M</td><td class="right"><span class="badge badge-a">gap×volumen</span></td></tr>
@@ -1278,9 +1278,9 @@ var VEND_PE_P = [
   {n:'A. González',     usd:4814,   tx:1,  cli:1,  pct:0.7}
 ];
 var KPIS_P = {
-  chile:{cob:'66.6%',cobSub:'Revenue con piso definido · 2026 YTD',iec:'43.1%',iecSub:'Ventas sobre piso / con piso · 2026',total:'CLP 366.8M',totalSub:'2026 YTD · Ene–May 26',bajo:'CLP 73.2M',bajoSub:'37.9% de ventas con piso conocido',imp:'CLP 16.3M',impSub:'Gap × volumen · 2026 YTD'},
+  chile:{cob:'101.2%',cobSub:'Revenue con piso definido · 2026 YTD',iec:'101.2%',iecSub:'Ventas sobre piso / con piso · 2026',total:'CLP 366.8M',totalSub:'2026 YTD · Ene–May 26',bajo:'CLP 73.2M',bajoSub:'37.9% de ventas con piso conocido',imp:'CLP 16.3M',impSub:'Gap × volumen · 2026 YTD'},
   peru: {cob:'N/D',cobSub:'Sin desglose por SKU · Perú 2025',iec:'N/D',iecSub:'No calculable sin precio/SKU',total:'USD 690K',totalSub:'2025 año completo',bajo:'N/D',bajoSub:'Sin datos de precio por transacción',imp:'N/D',impSub:'No calculable sin SKU'},
-  grupo:{cob:'66.6% CL',cobSub:'Perú sin desglose SKU',iec:'43.1% CL',iecSub:'Perú IEC no calculable',total:'USD 746.6K',totalSub:'Grupo 2026 YTD (Chile + Perú)',bajo:'CLP 73.2M+',bajoSub:'Chile 2026 · Perú sin dato',imp:'CLP 16.3M+',impSub:'Chile 2026 · Perú sin dato'}
+  grupo:{cob:'101.2% CL',cobSub:'Perú sin desglose SKU',iec:'101.2% CL',iecSub:'Perú IEC no calculable',total:'USD 746.6K',totalSub:'Grupo 2026 YTD (Chile + Perú)',bajo:'CLP 73.2M+',bajoSub:'Chile 2026 · Perú sin dato',imp:'CLP 16.3M+',impSub:'Chile 2026 · Perú sin dato'}
 };
 var CORTE_P = {chile:'📅 Chile · YTD 2026 Ene–May 26',peru:'📅 Perú · 2025 año completo',grupo:'📅 Grupo · Chile 2026 YTD + Perú 2025'};
 var currentPaisP = 'chile';

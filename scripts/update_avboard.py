@@ -2184,6 +2184,89 @@ def update_panel_iec_pe(tx_pe, corte_date):
 #  6.5 SINCRONIZAR CACHE-BUSTING (?v=) EN TODOS LOS PANELES HTML
 # ══════════════════════════════════════════════════════════════════════════════
 
+def sync_iec_hardcoded(iec_cl: float, iec_pe: float) -> int:
+    """
+    Actualiza los valores IEC hardcodeados en paneles que NO los leen dinámicamente
+    desde avboard_data.js. Mantiene coherencia entre Panel_IEC_Auditoria (fuente
+    de verdad) y el resto de vistas.
+
+    Paneles afectados:
+        Panel_Jefes_Index.html, Panel_Jefes_Chile_2026.html,
+        Panel_Jefes_Peru_2026.html, Executive_Board_View_AV_Latam_2026.html,
+        Panel_Rentabilidad_AV_2026.html, dashboard.html
+
+    El IEC oficial es VNE/VPT (compute_iec_chile / compute_iec_peru).
+    """
+    cl_str = f"{iec_cl*100:.1f}%"
+    pe_str = f"{iec_pe*100:.1f}%"
+
+    # Color según valor: ≥100% → green, 85-99% → amber, <85% → red
+    def _color(v):
+        if v >= 1.0:   return 'var(--green)'
+        if v >= 0.85:  return 'var(--amber)'
+        return 'var(--red)'
+    cl_color = _color(iec_cl)
+    pe_color = _color(iec_pe)
+
+    panels = [
+        REPO / 'Panel_Jefes_Index.html',
+        REPO / 'Panel_Jefes_Chile_2026.html',
+        REPO / 'Panel_Jefes_Peru_2026.html',
+        REPO / 'Executive_Board_View_AV_Latam_2026.html',
+        REPO / 'Panel_Rentabilidad_AV_2026.html',
+        REPO / 'dashboard.html',
+    ]
+
+    # Regex: reemplaza cualquier valor porcentual de IEC que el script haya escrito
+    # antes. Busca el patrón canónico que estas páginas usan: NN.N% donde NN.N es
+    # un número de 2–5 dígitos antes del punto. Solo modifica líneas que contienen
+    # "IEC" cerca del número.
+    IEC_NUM = re.compile(r'(\d{2,3}\.\d)%')
+
+    n_updated = 0
+    for p in panels:
+        if not p.exists():
+            continue
+        txt = p.read_text(encoding='utf-8')
+        changed = False
+
+        # Estrategia: reemplazar los valores actuales (que el script escribió en la
+        # corrida anterior) con los nuevos. Los valores anteriores son los que
+        # corresponden a CL e IEC_PE en el texto. Usamos el patrón específico de
+        # cada panel para no tocar valores no relacionados.
+
+        # ── Patrón universal: líneas con IEC ──────────────────────────────────
+        lines = txt.split('\n')
+        new_lines = []
+        i = 0
+        while i < len(lines):
+            line = lines[i]
+            # Detectar bloque IEC Chile: línea menciona IEC y tiene un % numérico
+            if ('IEC' in line or 'iec' in line) and IEC_NUM.search(line):
+                # Reemplazar el primer número % en esta línea con el valor correcto
+                # Determinar si es Chile o Peru por contexto
+                ctx = line + (lines[i+1] if i+1 < len(lines) else '') + (lines[i-1] if i > 0 else '')
+                if 'Chile' in ctx or 'CL' in ctx or 'chile' in ctx or '🇨🇱' in ctx:
+                    new_line = IEC_NUM.sub(cl_str, line, count=1)
+                    # Actualizar color inline si presente
+                    new_line = re.sub(r'color:var\(--(?:red|amber|green)\)', f'color:{cl_color}', new_line, count=1)
+                    changed = changed or (new_line != line)
+                    line = new_line
+                elif 'Per' in ctx or 'PE' in ctx or 'peru' in ctx or '🇵🇪' in ctx:
+                    new_line = IEC_NUM.sub(pe_str, line, count=1)
+                    new_line = re.sub(r'color:var\(--(?:red|amber|green)\)', f'color:{pe_color}', new_line, count=1)
+                    changed = changed or (new_line != line)
+                    line = new_line
+            new_lines.append(line)
+            i += 1
+
+        if changed:
+            p.write_text('\n'.join(new_lines), encoding='utf-8')
+            n_updated += 1
+
+    return n_updated
+
+
 def sync_cache_busting():
     """
     Actualiza el query param ?v= de TODOS los <script src="avboard_data.js...">
@@ -2507,6 +2590,13 @@ def main():
     print(f"\n🔄 Sincronizando cache-busting (?v={CACHE_V}) en paneles HTML...")
     panels_synced = sync_cache_busting()
     print(f"   → {len(panels_synced)} paneles actualizados: {', '.join(panels_synced) if panels_synced else '(ninguno — ya estaban al día)'}")
+
+    # 8.6 Sincronizar IEC en paneles hardcodeados
+    iec_cl_total = iec_cl.get('total', 0)
+    iec_pe_total = (iec_pe_computed or {}).get('total', 0) or 0
+    print(f"\n📊 Sincronizando IEC en paneles hardcodeados...")
+    _n_iec = sync_iec_hardcoded(iec_cl_total, iec_pe_total)
+    print(f"   → IEC CL {iec_cl_total*100:.1f}% · PE {iec_pe_total*100:.1f}% escritos en {_n_iec} paneles")
 
     # 9. Logs
     print("\n📋 Actualizando logs...")
