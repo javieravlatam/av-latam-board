@@ -2315,6 +2315,81 @@ def sync_iec_hardcoded(iec_cl: float, iec_pe: float) -> int:
     return n_updated
 
 
+def sync_cxc_panel(cl_cxc: dict, pe_cxc: dict | None = None) -> bool:
+    """
+    Actualiza Panel_CxC_AV_Latam_2026.html en cada pipeline run:
+    1. Regenera el array chileData (fallback HTML) desde cl_cxc.cuentas_criticas
+    2. Actualiza el texto estático del alerta banner como fallback (JS lo sobreescribe
+       al cargar, pero este fallback debe ser coherente con los datos actuales)
+
+    Returns True si el archivo fue modificado.
+    """
+    cxc_file = REPO / 'Panel_CxC_AV_Latam_2026.html'
+    if not cxc_file.exists():
+        return False
+
+    txt = cxc_file.read_text(encoding='utf-8')
+    original = txt
+
+    # ── 1. Regenerar chileData ────────────────────────────────────────────────
+    criticos = cl_cxc.get('cuentas_criticas', [])
+    corte    = cl_cxc.get('corte', '—')
+    rows = []
+    for c in criticos:
+        dias   = c.get('dias') or 0
+        tramo  = '+90d' if dias > 90 else '61-90d' if dias > 60 else '31-60d' if dias > 30 else '0-30d'
+        estado = c.get('estado', 'CRÍTICO')
+        est_s  = 'Crítico' if estado == 'CRÍTICO' else 'Alerta' if estado == 'ALERTA' else 'Monitoreo'
+        rtc    = (c.get('rtc', '') or '').replace("'", r"\'")
+        cli    = (c.get('cliente', '') or '').replace("'", r"\'")
+        monto  = c.get('monto', 0)
+        rows.append(
+            f"  {{rtc:'{rtc}',cliente:'{cli}',folio:'',emision:'',vencimiento:'',"
+            f"dias:{dias},tramo:'{tramo}',monto:{monto},estado:'{est_s}',condicion:'Crédito'}}"
+        )
+    body = (',\n'.join(rows)) if rows else '  // Sin cuentas críticas'
+    new_data = f"const chileData = [\n  // Corte {corte} · generado por update_avboard.py\n{body}\n]"
+    txt = re.sub(r'const chileData\s*=\s*\[.*?\]', new_data, txt, flags=re.DOTALL)
+
+    # ── 2. Actualizar alerta banner (fallback) ────────────────────────────────
+    t90   = cl_cxc.get('tramos', {}).get('t90', 0)
+    total = cl_cxc.get('total', 0)
+    pe_t90 = (pe_cxc or {}).get('tramos', {}).get('t90', 0)
+    n_crit = len([c for c in criticos if (c.get('estado') or '') == 'CRÍTICO'])
+    top    = criticos[0] if criticos else None
+
+    if t90 > 0:
+        icon = '🚨'
+        alert = f'<strong>ALERTA — MORA +90 DÍAS ACTIVA.</strong> Chile +90d: <strong>CLP {t90/1e6:.1f}M CRÍTICO</strong>'
+        if top:
+            alert += f' — {top.get("cliente","?")} <strong style="color:var(--red)">CLP {top.get("monto",0)/1e6:.1f}M ({top.get("dias","?")}d)</strong>'
+        if n_crit > 1:
+            alert += f' y {n_crit-1} cuentas más.'
+    else:
+        icon  = '✅'
+        alert = '<strong>✅ SIN MORA CRÍTICA (+90d) en Agrocomercial.</strong>'
+    alert += f' Cartera total Chile (2 entidades): <strong>CLP {total/1e6:.1f}M</strong>.'
+    if pe_t90 > 0:
+        alert += f' Perú +90d: <strong>USD {pe_t90/1000:.1f}K vencidos</strong>.'
+
+    txt = re.sub(
+        r'(<div class="alerta-icon" id="av-cxc-alerta-icon">)[^<]*(</div>)',
+        rf'\g<1>{icon}\g<2>',
+        txt,
+    )
+    txt = re.sub(
+        r'(<div class="alerta-text" id="av-cxc-alerta-text">).*?(</div>)',
+        f'\\g<1>\n      {alert}\n    \\g<2>',
+        txt,
+        flags=re.DOTALL,
+    )
+
+    if txt != original:
+        cxc_file.write_text(txt, encoding='utf-8')
+        return True
+    return False
+
+
 def sync_cache_busting():
     """
     Actualiza el query param ?v= de TODOS los <script src="avboard_data.js...">
@@ -2645,6 +2720,11 @@ def main():
     print(f"\n📊 Sincronizando IEC en paneles hardcodeados...")
     _n_iec = sync_iec_hardcoded(iec_cl_total, iec_pe_total)
     print(f"   → IEC CL {iec_cl_total*100:.1f}% · PE {iec_pe_total*100:.1f}% escritos en {_n_iec} paneles")
+
+    # 8.7 Sincronizar Panel_CxC (chileData + alerta banner)
+    print(f"\n💳 Sincronizando Panel_CxC (chileData + alerta banner)...")
+    _cxc_ok = sync_cxc_panel(cl_cxc)
+    print(f"   → {'Actualizado' if _cxc_ok else 'Sin cambios (ya al día)'}")
 
     # 9. Logs
     print("\n📋 Actualizando logs...")

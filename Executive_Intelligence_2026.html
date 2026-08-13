@@ -806,8 +806,8 @@ tbody td { padding: 12px 16px; font-size: 12px; }
         </div>
         <div class="alert-card green">
           <div class="alert-tag" style="color:var(--green)">✅ Perú</div>
-          <div class="alert-title">IEC 97.9% · Precio piso respetado</div>
-          <div class="alert-body">Perú mantiene disciplina de precios con IEC de 97.9% en el período. Este nivel genera factor de comisión 105%. Modelo a exportar.</div>
+          <div class="alert-title">IEC 107.6% · Precio piso superado</div>
+          <div class="alert-body">Perú mantiene disciplina de precios con IEC de 107.6% en el período (VNE > VPT). Este nivel genera factor de comisión 105%. Modelo a exportar.</div>
         </div>
       </div>
     </div>
@@ -1158,6 +1158,8 @@ function initDashboard() {
   set('s-rtc',         (D.grupo.rtc_activos || 12) + '');
   set('s-iec-cl',      fPct(cv.iec.total));
   set('s-iec-cl-sub',  'CLP ' + M(cv.iec.impacto_potencial_clp) + ' bajo piso YTD');
+  var peIecVal = (D.peru && D.peru.ventas && D.peru.ventas.iec) ? D.peru.ventas.iec.total : null;
+  if(peIecVal !== null) set('s-iec-pe', fPct(peIecVal));
 
   set('s-dist-corte',  'al ' + D.meta.cortes.chile_ventas);
 
@@ -1230,13 +1232,16 @@ function initDashboard() {
     });
     rtcPe.sort(function(a,b){ return b.ytd - a.ytd; });
   }
+  var peIecBadge = (peIecVal !== null) ?
+    '<span class="badge badge-green">'+fPct(peIecVal)+'</span>' :
+    '<span class="badge badge-green">—</span>';
   var htmlPE = rtcPe.map(function(r,i) {
     return '<tr>' +
       '<td class="td-center td-mono">' + (i+1) + '</td>' +
       '<td>' + r.nombre + '</td>' +
       '<td class="td-mono" style="color:var(--blue)">USD ' + fN(r.ytd) + '</td>' +
       '<td class="td-mono">USD ' + fN(r.mayo) + '</td>' +
-      '<td><span class="badge badge-green">97.9%</span></td>' +
+      '<td>' + peIecBadge + '</td>' +
       '<td><span class="badge badge-green">SALUDABLE</span></td>' +
     '</tr>';
   }).join('');
@@ -1550,9 +1555,9 @@ function initDashboard() {
     {
       prioridad: 'media',
       num: '05',
-      titulo: 'Perú: modelo exportable — IEC 97.9% con crecimiento 93.8% ppto',
-      tags: ['IEC Perú', 'USD 360.5K YTD', 'Modelo'],
-      cuerpo: 'Perú combina disciplina de precios (IEC 97.9%) con crecimiento sólido (93.8% ppto 5m). Aguirre logró USD 97K sin presupuesto asignado formal. El modelo operativo Perú — lista de precios respetada, proceso de despacho limpio — debe documentarse y servir de referencia para Chile.',
+      titulo: 'Perú: modelo exportable — IEC 107.6% con VNE sobre piso',
+      tags: ['IEC Perú', 'USD 471K YTD', 'Modelo'],
+      cuerpo: 'Perú combina disciplina de precios (IEC 107.6% — VNE supera VPT) con crecimiento sostenido. Aguirre y Infante lideran con IEC sobre 107%. El modelo operativo Perú — lista de precios respetada, proceso de despacho limpio — debe documentarse y servir de referencia para Chile.',
       accion: 'Documentar proceso Perú · Establecer IEC mínimo Chile · Benchmark mensual'
     },
     {

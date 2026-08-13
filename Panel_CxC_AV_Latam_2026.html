@@ -214,13 +214,10 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
 <div class="page">
 
   <!-- ALERTA BANNER -->
-  <div class="alerta-banner">
-    <div class="alerta-icon">🚨</div>
-    <div class="alerta-text">
-      <strong>ALERTA CRÍTICA — LOMA LARGA NO RESUELTA.</strong>
-      Chile +90d: <strong>CLP 15.9M CRÍTICO</strong> — Loma Larga <strong style="color:var(--red)">CLP 12.4M en 2 entidades (92-114d)</strong> · Kullin CLP 1.5M · Ribera CLP 1.5M.
-      Perú acumula <strong>USD 23.6K vencidos</strong> en cuentas +90 días. Cartera total Chile (2 entidades): CLP 162.2M.
-      Se requiere acción inmediata por parte de los Jefes de País y RTCs responsables.
+  <div class="alerta-banner" id="av-cxc-alerta-banner">
+    <div class="alerta-icon" id="av-cxc-alerta-icon">🚨</div>
+    <div class="alerta-text" id="av-cxc-alerta-text">
+      <strong>ALERTA — MORA +90 DÍAS ACTIVA (Agroveca Chile).</strong> Chile +90d: <strong>CLP 23.6M CRÍTICO</strong> — NIVALDO FLORES <strong style="color:var(--red)">CLP 5.3M (597d)</strong> y 14 cuentas más. Cartera total Chile (2 entidades): <strong>CLP 113.7M</strong>.
     </div>
   </div>
 
@@ -228,7 +225,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
   <div class="kpi-strip">
     <div class="kpi">
       <div class="kpi-lbl">Total Chile CxC</div>
-      <div class="kpi-val" id="av-kpi-ch-total">162.2M</div>
+      <div class="kpi-val" id="av-kpi-ch-total">113.7M</div>
       <div class="kpi-sub" id="av-kpi-ch-sub">CLP · 2 entidades · 08/05</div>
     </div>
     <div class="kpi amber">
@@ -852,59 +849,23 @@ new Chart(document.getElementById('cPE'), {
 
 // ── DATOS CHILE
 const chileData = [
-  // +90d CRÍTICO — corte 29/04/2026
-  {rtc:'Jorge Caroca',cliente:'AGRICOLA RIBERA LIMITADA',folio:'425',emision:'13/01/2026',vencimiento:'15/01/2026',dias:104,tramo:'+90d',monto:1473696,estado:'Crítico',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROINSUMOS KULLIN',folio:'416',emision:'12/01/2026',vencimiento:'22/01/2026',dias:97,tramo:'+90d',monto:499300,estado:'Crítico',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROINSUMOS KULLIN',folio:'415',emision:'12/01/2026',vencimiento:'22/01/2026',dias:97,tramo:'+90d',monto:111206,estado:'Crítico',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGROINSUMOS KULLIN',folio:'414',emision:'12/01/2026',vencimiento:'22/01/2026',dias:97,tramo:'+90d',monto:310709,estado:'Crítico',condicion:'Crédito'},
-  // 61-90d RIESGO
-  {rtc:'Jorge Caroca',cliente:'MAGALY DEL CARMEN ORELLANA PINO',folio:'272',emision:'17/10/2025',vencimiento:'15/02/2026',dias:73,tramo:'61-90d',monto:182047,estado:'Riesgo',condicion:'Crédito'},
-  // 31-60d ALERTA
-  {rtc:'Pablo Laratro',cliente:'AGRICOLA FRANCISCA MONTES E.I.R.L',folio:'483',emision:'02/02/2026',vencimiento:'04/03/2026',dias:56,tramo:'31-60d',monto:711620,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Francisco Velásquez',cliente:'AGRICOLA GOMEZ SPA',folio:'347',emision:'12/12/2025',vencimiento:'08/03/2026',dias:52,tramo:'31-60d',monto:1190000,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Jorge Caroca',cliente:'AGRICOLA QUINQUILHUE SPA',folio:'552',emision:'11/03/2026',vencimiento:'11/03/2026',dias:49,tramo:'31-60d',monto:93689,estado:'Alerta',condicion:'Contado'},
-  {rtc:'Pablo Laratro',cliente:'AGRICOLA LOS ALAMOS LTDA',folio:'501',emision:'10/02/2026',vencimiento:'12/03/2026',dias:48,tramo:'31-60d',monto:446250,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'JOSE CRISTOBAL GONZALEZ CORREA',folio:'494',emision:'10/02/2026',vencimiento:'12/03/2026',dias:48,tramo:'31-60d',monto:170789,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGRICOLA LUIS ANTONIO HERRERA AVENDANO E.I.R.L.',folio:'555',emision:'13/03/2026',vencimiento:'13/03/2026',dias:47,tramo:'31-60d',monto:357000,estado:'Alerta',condicion:'Contado'},
-  {rtc:'Jorge Caroca',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'439',emision:'05/01/2026',vencimiento:'17/03/2026',dias:43,tramo:'31-60d',monto:2915500,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'CARLOS HUMBERTO CASTRO VALENZUELA',folio:'565',emision:'17/03/2026',vencimiento:'17/03/2026',dias:43,tramo:'31-60d',monto:198730,estado:'Alerta',condicion:'Crédito'},
-  // 0-30d NORMAL
-  {rtc:'Rodrigo Encina',cliente:'AGRICOLA TUNICHE LIMITADA',folio:'545',emision:'05/03/2026',vencimiento:'20/03/2026',dias:40,tramo:'31-60d',monto:162316,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Oficina',cliente:'JUAN FRANCISCO VARGAS MANCILLA',folio:'453',emision:'20/01/2026',vencimiento:'21/03/2026',dias:39,tramo:'31-60d',monto:170259,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Francisco Velásquez',cliente:'LEONARDO ENRIQUE OYARCE GENERAL',folio:'525',emision:'24/02/2026',vencimiento:'27/03/2026',dias:33,tramo:'31-60d',monto:314160,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'440',emision:'05/01/2026',vencimiento:'29/03/2026',dias:31,tramo:'31-60d',monto:2707250,estado:'Alerta',condicion:'Crédito'},
-  {rtc:'Javier Almeida',cliente:'BRIGITTE ELENA PARDO CONTRERAS',folio:'559',emision:'16/03/2026',vencimiento:'30/03/2026',dias:30,tramo:'0-30d',monto:368757,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Javier Almeida',cliente:'BRIGITTE ELENA PARDO CONTRERAS',folio:'558',emision:'16/03/2026',vencimiento:'30/03/2026',dias:30,tramo:'0-30d',monto:420001,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Javier Almeida',cliente:'BRIGITTE ELENA PARDO CONTRERAS',folio:'557',emision:'16/03/2026',vencimiento:'30/03/2026',dias:30,tramo:'0-30d',monto:358285,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA COMERCIAL SIEMBRA SPA',folio:'480',emision:'29/01/2026',vencimiento:'30/03/2026',dias:30,tramo:'0-30d',monto:72055,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'438',emision:'06/01/2026',vencimiento:'06/04/2026',dias:23,tramo:'0-30d',monto:2290750,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'437',emision:'08/01/2026',vencimiento:'08/04/2026',dias:21,tramo:'0-30d',monto:1041250,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Jorge Caroca',cliente:'SOCIEDAD AGRICOLA TIERRA DE BACO LIMITADA',folio:'436',emision:'12/01/2026',vencimiento:'09/04/2026',dias:20,tramo:'0-30d',monto:1874250,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'CARLOS HUMBERTO CASTRO VALENZUELA',folio:'595',emision:'10/04/2026',vencimiento:'10/04/2026',dias:19,tramo:'0-30d',monto:97580,estado:'Normal',condicion:'Contado'},
-  {rtc:'Rayen Bernazar',cliente:'CRR SERVICIOS SPA',folio:'596',emision:'10/04/2026',vencimiento:'10/04/2026',dias:19,tramo:'0-30d',monto:39826,estado:'Normal',condicion:'Contado'},
-  {rtc:'Francisco Velásquez',cliente:'JUAN ENRIQUE VARGAS ALZAMORA',folio:'602',emision:'12/04/2026',vencimiento:'11/04/2026',dias:18,tramo:'0-30d',monto:1071000,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'AGRICOLA TUNICHE LIMITADA',folio:'571',emision:'19/03/2026',vencimiento:'13/04/2026',dias:16,tramo:'0-30d',monto:533775,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'AGRICOLA TUNICHE LIMITADA',folio:'570',emision:'19/03/2026',vencimiento:'13/04/2026',dias:16,tramo:'0-30d',monto:228175,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Jorge Caroca',cliente:'VILLEGAS Y BERRIOS Y CIA LTDA',folio:'433',emision:'14/01/2026',vencimiento:'14/04/2026',dias:15,tramo:'0-30d',monto:1496776,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Jorge Caroca',cliente:'VILLEGAS Y BERRIOS Y CIA LTDA',folio:'432',emision:'14/01/2026',vencimiento:'14/04/2026',dias:15,tramo:'0-30d',monto:727709,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGRICOLA GEOAGRO LTDA',folio:'442',emision:'15/01/2026',vencimiento:'15/04/2026',dias:14,tramo:'0-30d',monto:1785000,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGRICOLA GEOAGRO LTDA',folio:'441',emision:'15/01/2026',vencimiento:'15/04/2026',dias:14,tramo:'0-30d',monto:410550,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Francisco Velásquez',cliente:'PONTIFICIA UNIVERSIDAD CATOLICA DE VALPARAISO',folio:'564',emision:'17/03/2026',vencimiento:'16/04/2026',dias:13,tramo:'0-30d',monto:2305625,estado:'Normal',condicion:'Crédito'},
-  // Al día / por vencer
-  {rtc:'Pablo Laratro',cliente:'AGRICOLA DON PEDRO SPA',folio:'451',emision:'20/01/2026',vencimiento:'20/04/2026',dias:9,tramo:'0-30d',monto:1990870,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Valentina Muñoz',cliente:'COMERCIAL COPELEC SA',folio:'574',emision:'23/03/2026',vencimiento:'20/04/2026',dias:9,tramo:'0-30d',monto:755326,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'AGRICOLA FRANCISCA MONTES E.I.R.L',folio:'577',emision:'25/03/2026',vencimiento:'24/04/2026',dias:5,tramo:'0-30d',monto:1361360,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'RAUL JOFRE Y COMPAQIA LIMITADA',folio:'475',emision:'27/01/2026',vencimiento:'26/04/2026',dias:3,tramo:'0-30d',monto:451238,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Francisco Velásquez',cliente:'LEONARDO ENRIQUE OYARCE GENERAL',folio:'525',emision:'24/02/2026',vencimiento:'27/04/2026',dias:2,tramo:'0-30d',monto:314160,estado:'Normal',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'599',emision:'12/04/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:618800,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'598',emision:'12/04/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:773500,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'395',emision:'02/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:1547000,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'523',emision:'23/02/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:569379,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Pablo Laratro',cliente:'FRUTICOLA RIO BLANCO SPA',folio:'465',emision:'23/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:618800,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA SAN FRANCISCO LTDA',folio:'457',emision:'21/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:2812833,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA SAN FRANCISCO LTDA',folio:'458',emision:'21/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:1373528,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA SAN FRANCISCO LTDA',folio:'459',emision:'21/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:364551,estado:'Al día',condicion:'Crédito'},
-  {rtc:'Rodrigo Encina',cliente:'SOCIEDAD AGRICOLA COMERCIAL SIEMBRA SPA',folio:'479',emision:'29/01/2026',vencimiento:'30/04/2026',dias:-1,tramo:'Al día',monto:495944,estado:'Al día',condicion:'Crédito'},
+  // Corte 12/08/2026 · generado por update_avboard.py
+  {rtc:'CAPEL',cliente:'NIVALDO ANTONIO FLORES EGAÑA',folio:'',emision:'',vencimiento:'',dias:597,tramo:'+90d',monto:5318824,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'JOSÉ LORENZONI',cliente:'TRANSACCIONES AGRICOLAS SPA',folio:'',emision:'',vencimiento:'',dias:193,tramo:'+90d',monto:3856957,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'GUILLERMO PRADENAS',cliente:'AGRICOLA LOS QUILLAYES SPA',folio:'',emision:'',vencimiento:'',dias:367,tramo:'+90d',monto:2813517,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'CAPEL',cliente:'AGRIC LOS SAUSALES LTDA',folio:'',emision:'',vencimiento:'',dias:395,tramo:'+90d',monto:2523276,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'PABLO LARATRO',cliente:'AGROINSUMOS KULLIN SPA',folio:'',emision:'',vencimiento:'',dias:176,tramo:'+90d',monto:1936809,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'CAPEL',cliente:'LOS PARRONALES DE CAMARICO S A',folio:'',emision:'',vencimiento:'',dias:387,tramo:'+90d',monto:1877820,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'VALENTINA MUÑOZ',cliente:'COMERCIAL COPELEC S.A.',folio:'',emision:'',vencimiento:'',dias:135,tramo:'+90d',monto:1307077,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'IVÁN VEVERKA',cliente:'SOC AGRICOLA VIENTO NORTE LTDA',folio:'',emision:'',vencimiento:'',dias:326,tramo:'+90d',monto:961996,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'GUILLERMO PRADENAS',cliente:'AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA',folio:'',emision:'',vencimiento:'',dias:408,tramo:'+90d',monto:948192,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'GUILLERMO PRADENAS',cliente:'VICENTE ADAN LAGOS SALDANA',folio:'',emision:'',vencimiento:'',dias:524,tramo:'+90d',monto:742655,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'JORGE CAROCA',cliente:'MAGALY DEL CARMEN ORELLANA PINO',folio:'',emision:'',vencimiento:'',dias:143,tramo:'+90d',monto:518087,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'IVÁN VEVERKA',cliente:'PEDRO JUAN BUGUENO TELLO',folio:'',emision:'',vencimiento:'',dias:668,tramo:'+90d',monto:304640,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'GUILLERMO PRADENAS',cliente:'ROMERO Y RIQUELME SPA',folio:'',emision:'',vencimiento:'',dias:493,tramo:'+90d',monto:240975,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'JOSELIN MUÑOZ',cliente:'NEWEN BOTANICUM SPA',folio:'',emision:'',vencimiento:'',dias:698,tramo:'+90d',monto:150289,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'JOSELIN MUÑOZ',cliente:'GERALDINE MORILLO',folio:'',emision:'',vencimiento:'',dias:698,tramo:'+90d',monto:145950,estado:'Crítico',condicion:'Crédito'},
+  {rtc:'Jorge Caroca',cliente:'GOYASERVICE SPA',folio:'',emision:'',vencimiento:'',dias:0,tramo:'0-30d',monto:4194750,estado:'Monitoreo',condicion:'Crédito'}
 ];
 
 // Perú data
@@ -1210,6 +1171,29 @@ function cerrarSesion() {
     set('av-cxc-corte-sub', 'TC = 950 CLP/USD · '+cc.corte+' · Agrocomercial + Agroveca Chile');
     set('av-cxc-alerta-corte', cc.corte);
     set('av-cxc-footer-txt', 'AV Latam BI Platform · Panel CxC · Chile '+cc.corte+' · Perú '+pc.corte+' · 2 entidades CHL');
+
+    // ── Alerta banner dinámica ───────────────────────────────────────────────
+    (function(){
+      var t90cl = (cc.tramos && cc.tramos.t90) || 0;
+      var totCL = cc.total || 0;
+      var peT90 = (pc.tramos && pc.tramos.t90) || 0;
+      var criticos = cc.cuentas_criticas ? cc.cuentas_criticas.filter(function(c){ return c.estado==='CRÍTICO'; }) : [];
+      var top = criticos[0];
+      var icon = t90cl > 0 ? '🚨' : '✅';
+      var txt;
+      if(t90cl > 0){
+        txt = '<strong>ALERTA — MORA +90 DÍAS ACTIVA.</strong> Chile +90d: <strong>CLP '+(t90cl/1e6).toFixed(1)+'M CRÍTICO</strong>';
+        if(top) txt += ' — '+top.cliente+' <strong style="color:var(--red)">CLP '+(top.monto/1e6).toFixed(1)+'M ('+top.dias+'d)</strong>';
+        if(criticos.length > 1) txt += ' y '+(criticos.length-1)+' cuentas más.';
+      } else {
+        txt = '<strong>✅ SIN MORA CRÍTICA (+90d) en Agrocomercial.</strong>';
+      }
+      txt += ' Cartera total Chile (2 entidades): <strong>CLP '+(totCL/1e6).toFixed(1)+'M</strong>.';
+      if(peT90 > 0) txt += ' Perú +90d: <strong>USD '+(peT90/1000).toFixed(1)+'K vencidos</strong>.';
+      var iconEl = document.getElementById('av-cxc-alerta-icon');
+      if(iconEl) iconEl.textContent = icon;
+      set('av-cxc-alerta-text', txt);
+    })();
 
     // ── Tabla Chile desde AVBOARD.cuentas_criticas ────────────────────────────
     if(cc.cuentas_criticas && cc.cuentas_criticas.length>0){
