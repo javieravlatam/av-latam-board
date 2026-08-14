@@ -785,7 +785,30 @@
   }
 
   function descargarPDF() {
-    alert("El informe PDF con comisión definitiva estará disponible cuando se integre la cobranza real por factura. Mientras tanto, use 'Datos Reales (auditoría técnica)' para el detalle validado de presupuesto, venta neta e IEC del mes de desempeño.");
+    var r = window._RESULTADO_ACTUAL;
+    var vendedor = window._VENDEDOR_ACTUAL_OBJ;
+    if (!r || !vendedor || !CTX_PARAMS) {
+      alert("Seleccione un vendedor y período antes de generar el informe.");
+      return;
+    }
+    var diferidoStub = {
+      trimestre: "Trimestre en curso — diferido pendiente de implementación",
+      diferido_acumulado: 0,
+      cumplimiento_trimestral: r.cumplimiento_pct || 0,
+      iec_trimestral: r.iec_pct || 0,
+      pct_liberacion_final: 0,
+      monto_liberado: 0,
+      monto_pendiente: 0,
+      motivos_no_cumplidos: ["Cálculo de comisión diferida trimestral pendiente de implementación"]
+    };
+    SICPDF.generarInforme({
+      pais: PAIS,
+      vendedor: vendedor,
+      resultado: r,
+      diferido: diferidoStub,
+      acciones: [],
+      params: CTX_PARAMS
+    });
   }
 </script>
 </body>
