@@ -121,6 +121,18 @@
     </div>
   </div>
 
+  <!-- ============================= GRÁFICO PRESUPUESTO VS CUMPLIMIENTO ============================= -->
+  <div class="sic-section" id="sec-grafico-ppto" style="padding:20px 24px;">
+    <div class="bloque-titulo" style="margin-bottom:8px;">
+      <span class="bloque-numero">◎</span>
+      <h2 style="margin:0;">Presupuesto vs Cumplimiento — Mes de desempeño</h2>
+    </div>
+    <p class="bloque-subtitulo" style="margin-bottom:16px;">Comparación de presupuesto mensual contra venta neta real por vendedor en el mes de desempeño del ciclo seleccionado. Las barras rojas indican cumplimiento &lt;80%.</p>
+    <div style="position:relative;height:260px;max-width:860px;margin:0 auto;">
+      <canvas id="chart-ppto-vs-real"></canvas>
+    </div>
+  </div>
+
   <!-- ============================= BLOQUE 1 — INDICADORES DEL MES DE DESEMPEÑO ============================= -->
   <div class="sic-section">
     <div class="bloque-titulo"><span class="bloque-numero">1</span><h2 style="margin:0;">C. Indicadores del mes de desempeño</h2></div>
@@ -231,9 +243,11 @@
 
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="sic_auth.js"></script>
 <script src="sic_core.js"></script>
 <script src="js/sic_data_adapter.js"></script>
+<script src="sic_tx_cl.js"></script>
 <script src="sic_pdf.js"></script>
 <script>
   var PAIS = "CL";
@@ -286,38 +300,35 @@
   }
 
   function inicializar() {
-    // SECURITY v3.0: datos SIC obtenidos exclusivamente desde backend autenticado.
-    // El backend valida el token, determina el vendedor_id desde la sesión
-    // y entrega ÚNICAMENTE los datos autorizados para ese usuario.
-    // El frontend NO decide qué vendedor consultar.
-    Promise.all([
-      SIC.cargarPais(PAIS).then(function (ctx) { return ctx.params; }),
-      SICAuth.getSICData(PAIS)
-    ]).then(function (r) {
-      CTX_PARAMS = r[0];
-      var gasResp = r[1];
-      if (!gasResp || gasResp.error) {
-        document.querySelector(".sic-wrap").innerHTML = "<p style='color:#a83232'>Error de sesión: " + (gasResp && gasResp.error || "Sin datos") + ". <a href='index.html'>Volver al login</a></p>";
-        return;
+    // v3.1: Auth via GAS (token en sessionStorage). Datos desde sic_tx_cl.js
+    // (datos históricos completos, generados por update_avboard.py).
+    // GAS ya no entrega datos — solo valida la sesión activa.
+    SIC.cargarPais(PAIS).then(function (ctx) {
+      CTX_PARAMS = ctx.params;
+      var sesion = SICAuth.sesionActiva();
+
+      // Cargar TX histórico completo desde sic_tx_cl.js
+      var txCompleto = (window.SIC_TX_CL || []).slice();
+
+      // Filtrar por vendedor si el usuario no es admin/gerencia/financiera
+      if (sesion && sesion.rol === "vendedor" && sesion.vendedor_id) {
+        var vid = sesion.vendedor_id.toLowerCase();
+        txCompleto = txCompleto.filter(function(t) {
+          return (t.vendedor || "").toLowerCase().indexOf(vid) !== -1 ||
+                 (t.vendedor_id || "").toLowerCase() === vid;
+        });
       }
-      var d = gasResp.data || {};
-      // Reconstruir FUENTES en el formato que SICAdapter.construirCicloReal() espera.
-      // TX_CL llega filtrado por el backend (solo el vendedor autorizado o todos si admin).
-      // d.ppto viene del backend como { rtc_mensual_ppto: {...} } (plano, solo CL).
-      // SICAdapter._presupuestoDelMes espera presupuestoReal.CL.rtc_mensual_ppto
-      // → envolvemos en la estructura canónica { CL: {...}, PE: {...} }.
-      // d.ppto viene del backend plano (solo CL). SICAdapter.construirCicloReal
-      // lee fuentes.presupuesto.CL.rtc_mensual_ppto → envolvemos correctamente.
-      var pptoPlano = d.ppto || {};
+
       FUENTES = {
-        tx: { TX_CL: d.tx || [], TX_PE: [] },
-        presupuesto: { CL: pptoPlano, PE: { rtc_mensual_ppto: {}, rtc_ppto_anual: {} } }
+        tx: { TX_CL: txCompleto, TX_PE: [] },
+        presupuesto: {
+          CL: window.SIC_PPTO_CL || { rtc_mensual_ppto: {} },
+          PE: { rtc_mensual_ppto: {}, rtc_ppto_anual: {} }
+        }
       };
-      FUENTES.cobranzas_raw   = d.cobranzas_raw   || null;
-      FUENTES.universo_sic_raw = d.universo_sic_raw || null;
-      VENCIMIENTOS_MAP = SICAdapter.construirMapaVencimientos(
-        d.vencimientos ? { documentos: d.vencimientos } : {}
-      );
+      FUENTES.cobranzas_raw    = null;
+      FUENTES.universo_sic_raw = null;
+      VENCIMIENTOS_MAP = {};
 
       var txArray = FUENTES.tx.TX_CL;
       var ciclosVistos = {};
@@ -478,10 +489,92 @@
       "</div>";
   }
 
+  var _chartPpto = null;
+  function renderGraficoPpto(cicloReal) {
+    var canvas = document.getElementById("chart-ppto-vs-real");
+    if (!canvas || typeof Chart === "undefined") return;
+
+    // Recopilar datos de todos los vendedores del ciclo
+    var vendedores = cicloReal.vendedores || [];
+    var labels = [], dataReal = [], dataPpto = [], colores = [];
+
+    vendedores.forEach(function(v) {
+      var nombre = (v.nombre || v.id).split(" ")[0]; // primer nombre
+      var real   = v.venta_neta_mes  || 0;
+      var ppto   = v.presupuesto_mes || 0;
+      var cumpl  = ppto > 0 ? real / ppto : 0;
+      labels.push(nombre);
+      dataReal.push(Math.round(real));
+      dataPpto.push(Math.round(ppto));
+      colores.push(cumpl >= 0.8 ? "rgba(27,79,138,0.85)" : "rgba(180,40,40,0.85)");
+    });
+
+    if (_chartPpto) { _chartPpto.destroy(); _chartPpto = null; }
+
+    _chartPpto = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Presupuesto",
+            data: dataPpto,
+            backgroundColor: "rgba(160,160,160,0.4)",
+            borderColor: "rgba(120,120,120,0.8)",
+            borderWidth: 1,
+            borderRadius: 4
+          },
+          {
+            label: "Venta real",
+            data: dataReal,
+            backgroundColor: colores,
+            borderColor: colores.map(function(c){ return c.replace("0.85","1"); }),
+            borderWidth: 1,
+            borderRadius: 4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: "top", labels: { font: { size: 12 } } },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                var v = ctx.raw;
+                return ctx.dataset.label + ": " + (v >= 1000000
+                  ? "CLP " + (v/1000000).toFixed(1) + "M"
+                  : "CLP " + v.toLocaleString("es-CL"));
+              },
+              afterBody: function(items) {
+                var i = items[0].dataIndex;
+                var r = dataReal[i], p = dataPpto[i];
+                if (!p) return [];
+                return ["Cumplimiento: " + Math.round(r/p*100) + "%"];
+              }
+            }
+          }
+        },
+        scales: {
+          x: { grid: { display: false } },
+          y: {
+            ticks: {
+              callback: function(v) {
+                return v >= 1000000 ? (v/1000000).toFixed(0)+"M" : v.toLocaleString("es-CL");
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
   function renderTodo() {
     if (!CTX_PARAMS || !FUENTES || !CICLO_ACTUAL) return;
     var cicloReal = SICAdapter.construirCicloReal(PAIS, CICLO_ACTUAL, FUENTES, CTX_PARAMS);
     window._CICLO_REAL_ACTUAL = cicloReal;
+    renderGraficoPpto(cicloReal);
     var vendedor = cicloReal.vendedores.filter(function (v) { return v.id === VENDEDOR_ACTUAL; })[0];
 
     // Banner "dos periodos" -- siempre visible, aunque no haya vendedor seleccionado.

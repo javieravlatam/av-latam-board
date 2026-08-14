@@ -227,6 +227,7 @@
 <script src="sic_auth.js"></script>
 <script src="sic_core.js"></script>
 <script src="js/sic_data_adapter.js"></script>
+<script src="sic_tx_pe.js"></script>
 <script src="sic_pdf.js"></script>
 <script>
   var PAIS = "PE";
@@ -263,30 +264,31 @@
   function pct(n) { return (Math.round((n || 0) * 10) / 10) + "%"; }
 
   function inicializar() {
-    // SECURITY v3.0: datos SIC obtenidos exclusivamente desde backend autenticado.
-    Promise.all([
-      SIC.cargarPais(PAIS).then(function (ctx) { return ctx.params; }),
-      SICAuth.getSICData(PAIS)
-    ]).then(function (r) {
-      CTX_PARAMS = r[0];
-      var gasResp = r[1];
-      if (!gasResp || gasResp.error) {
-        document.querySelector(".sic-wrap").innerHTML = "<p style='color:#a83232'>Error de sesión: " + (gasResp && gasResp.error || "Sin datos") + ". <a href='index.html'>Volver al login</a></p>";
-        return;
+    // v3.1: Auth via GAS (token sessionStorage). Datos desde sic_tx_pe.js (histórico completo).
+    SIC.cargarPais(PAIS).then(function (ctx) {
+      CTX_PARAMS = ctx.params;
+      var sesion = SICAuth.sesionActiva();
+
+      var txCompleto = (window.SIC_TX_PE || []).slice();
+
+      // Filtrar por vendedor si rol = vendedor
+      if (sesion && sesion.rol === "vendedor" && sesion.vendedor_id) {
+        var vid = sesion.vendedor_id.toLowerCase();
+        txCompleto = txCompleto.filter(function(t) {
+          return (t.vendedor || "").toLowerCase().indexOf(vid) !== -1 ||
+                 (t.vendedor_id || "").toLowerCase() === vid;
+        });
       }
-      var d = gasResp.data || {};
-      // d.ppto viene del backend como { rtc_mensual_ppto: {...} } (plano, solo PE).
-      // SICAdapter._presupuestoDelMes espera presupuestoReal.PE.rtc_mensual_ppto
-      // → envolvemos en la estructura canónica { CL: {...}, PE: {...} }.
-      // d.ppto viene del backend plano (solo PE). SICAdapter.construirCicloReal
-      // lee fuentes.presupuesto.PE.rtc_mensual_ppto → envolvemos correctamente.
-      var pptoPlano = d.ppto || {};
+
       FUENTES = {
-        tx: { TX_CL: [], TX_PE: d.tx || [] },
-        presupuesto: { CL: { rtc_mensual_ppto: {}, rtc_ppto_anual: {} }, PE: pptoPlano }
+        tx: { TX_CL: [], TX_PE: txCompleto },
+        presupuesto: {
+          CL: { rtc_mensual_ppto: {}, rtc_ppto_anual: {} },
+          PE: window.SIC_PPTO_PE || { rtc_mensual_ppto: {} }
+        }
       };
-      FUENTES.cobranzas_raw    = d.cobranzas_raw    || null;
-      FUENTES.universo_sic_raw = d.universo_sic_raw || null;
+      FUENTES.cobranzas_raw    = null;
+      FUENTES.universo_sic_raw = null;
 
       var txArray = FUENTES.tx.TX_PE;
       var ciclosVistos = {};
