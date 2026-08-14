@@ -20,7 +20,7 @@
   "use strict";
 
   // URL del backend GAS. Reemplazar con la URL real del Web App desplegado.
-  var GAS_URL = "PENDIENTE_REEMPLAZAR_CON_URL_GAS_WEBAPP";
+  var GAS_URL = "https://script.google.com/macros/s/AKfycbynr3WDkK3ovgXhaREKab4lk3n-Q-tPuAmKJMEPoFmio1jBhktLILZEQv_ccmyJIpsAbA/exec";
 
   var SK_SESSION = "sic_av_session";
   var SK_TOKEN   = "sic_av_token";
