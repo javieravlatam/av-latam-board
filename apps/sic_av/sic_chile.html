@@ -74,6 +74,7 @@
     <button class="sic-btn-logout" onclick="window.location.href='../../index.html'">← Board</button>
     <button class="sic-btn-logout" onclick="irAPoliticaYFactores()">Politica y Factores</button>
     <button class="sic-btn-logout" id="btn-datos-reales" onclick="irADatosRealesAuditoria()" style="display:none;">Datos Reales (auditoria tecnica)</button>
+    <button class="sic-btn-logout" id="btn-cambiar-pais" onclick="window.location.href='sic_peru.html'" style="display:none;">→ Perú</button>
     <button class="sic-btn-logout" onclick="abrirCambiarClave()">Cambiar contraseña</button>
     <button class="sic-btn-logout" onclick="SICAuth.cerrarSesion()">Cerrar sesion</button>
   </div>
@@ -265,6 +266,7 @@
     document.getElementById("usr-nombre").textContent = sesion.nombre;
     if (SICAuth.esAdmin()) {
       document.getElementById("btn-datos-reales").style.display = "";
+      document.getElementById("btn-cambiar-pais").style.display = "";
     }
     inicializar();
   }
