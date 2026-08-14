@@ -385,6 +385,31 @@
     var foliosVistos = {};
     var monedaEsperada = pais === "CL" ? "CLP" : "USD";
 
+    // CHANGE REQUEST v1.8 — COBRANZA DE FACTURAS ANTIGUAS:
+    // Una factura emitida en un ciclo previo (ej. Febrero) puede ser cobrada
+    // en el ciclo actual. El filtro periodo+mes_desempeño no la carga porque
+    // su fecha_factura queda fuera de ambas ventanas, haciendo invisibles esos
+    // cobros al motor de comisión (venta_cobrada = 0 incorrecto).
+    // Solución: pre-scan de cobranzas para identificar folios con pago en el
+    // período actual → incluir esas facturas aunque sean "antiguas".
+    var cicloPartes = cicloCode.split("-");
+    var cicloAnio = parseInt(cicloPartes[0]);
+    var cicloMes  = parseInt(cicloPartes[1]);
+    var mesPrevAnio = cicloMes === 1 ? cicloAnio - 1 : cicloAnio;
+    var mesPrev     = cicloMes === 1 ? 12 : cicloMes - 1;
+    var periodoInicio = mesPrevAnio + "-" + String(mesPrev).padStart(2, "0") + "-26";
+    var periodoCierre = cicloAnio   + "-" + String(cicloMes).padStart(2, "0") + "-25";
+    var foliosConCobroEnPeriodo = {};
+    (fuentes.cobranzas || []).forEach(function (c) {
+      if (c.fecha_pago >= periodoInicio && c.fecha_pago <= periodoCierre) {
+        var parts = c.factura.split("-"); // "REAL-CL-731.0" o "REAL-PE-907"
+        if (parts.length >= 3) {
+          var folioInt = parseInt(parts.slice(2).join("-"));
+          if (!isNaN(folioInt)) foliosConCobroEnPeriodo[String(folioInt)] = true;
+        }
+      }
+    });
+
     var fechasInvalidas = 0;
     (txArray || []).forEach(function (t, idx) {
       // Validacion: fecha ausente/invalida (ej. NaN -- bug real detectado en
@@ -397,12 +422,15 @@
       var cInfo = SICAdapter.asignarCiclo(t.fecha);
       var perteneceAlPeriodo = cInfo.ciclo === cicloCode;
       var perteneceAlMesDesempeno = String(t.fecha) >= rangoMesDesempeno.inicio && String(t.fecha) <= rangoMesDesempeno.cierre;
+      // CHANGE REQUEST v1.8: tambien se incluyen facturas antiguas cobradas en este periodo.
+      // Normalizar folio a entero (CL tiene "731.0", PE tiene "907") para que el lookup sea consistente.
+      var tienePagoEnPeriodo = foliosConCobroEnPeriodo[String(parseInt(t.folio))] === true;
       // CHANGE REQUEST v1.6: ya no se descarta todo lo que este fuera del
       // periodo 26-25 -- tambien se conserva lo que caiga dentro del mes
       // calendario de desempeño (aunque quede fuera de la ventana 26-25),
       // porque venta_neta_mes/presupuesto/IEC del mes de desempeño lo
-      // necesitan. Fuera de ambas ventanas, se descarta igual que antes.
-      if (!perteneceAlPeriodo && !perteneceAlMesDesempeno) return;
+      // necesitan. Fuera de las tres ventanas, se descarta.
+      if (!perteneceAlPeriodo && !perteneceAlMesDesempeno && !tienePagoEnPeriodo) return;
       if (perteneceAlPeriodo && !cicloInfo) cicloInfo = cInfo;
 
       // Validacion: factura sin vendedor (campo vacio/ausente en la fuente).

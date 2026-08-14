@@ -153,7 +153,6 @@
       <div class="sic-card"><div class="k">Venta facturada (período)</div><div class="v" id="c-facturada">—</div><div class="sub">Suma de transacciones reales del período 26-25 para este vendedor</div></div>
       <div class="sic-card"><div class="k"># Facturas del período</div><div class="v" id="c-n-facturas">—</div><div class="sub">Facturas reales atribuidas a este vendedor en este período</div></div>
       <div class="sic-card"><div class="k">Monto cobrado del período</div><div class="v" id="c-cobrado">—</div><div class="sub">Pendiente de integración — ninguna fuente conectada trae fecha de cobro real</div></div>
-      <div class="sic-card"><div class="k">Precio piso</div><div class="v" id="c-piso">—</div><div class="sub" id="c-piso-sub">Clasificación informativa, no afecta la comisión</div></div>
       <div class="sic-card"><div class="k">Conciliación con la fuente</div><div class="v" id="c-conciliacion">—</div><div class="sub">Suma independiente de la fuente vs. lo reconstruido para el motor SIC</div></div>
       <div class="sic-card"><div class="k">Fecha de actualización</div><div class="v" id="c-fecha-actualizacion" style="font-size:15px;">—</div><div class="sub">Momento en que se leyeron las fuentes reales del Board</div></div>
     </div>
@@ -240,7 +239,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="sic_auth.js"></script>
 <script src="sic_core.js"></script>
-<script src="js/sic_data_adapter.js?v=1.9"></script>
+<script src="js/sic_data_adapter.js?v=2.0"></script>
 <script src="sic_tx_pe.js"></script>
 <script src="sic_cobranzas_pe.js"></script>
 <script src="sic_pdf.js"></script>
@@ -437,7 +436,7 @@
     var bonoVal      = sinPresupuesto ? "—" : fmt(bonoAmt);
     var ajustesTotal = (r.ajustes_nc || 0) + (r.saldo_ajustes_anterior || 0);
     var ajustesVal   = sinCobro ? "—" : fmt(ajustesTotal);
-    var pagableVal   = sinCobro ? "Pendiente cobranza" : fmt(r.comision_pagable);
+    var pagableVal   = (sinCobro && bonoAmt <= 0) ? "Pendiente cobranza" : fmt(r.comision_pagable);
 
     el.innerHTML =
       "<div class='comision-flow'>" +
