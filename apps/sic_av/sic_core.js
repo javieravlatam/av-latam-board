@@ -268,7 +268,9 @@
     };
     var keys = Object.keys(archivos);
     return Promise.all(keys.map(function (k) {
-      return fetch(archivos[k]).then(function (r) {
+      // parametros es el archivo de política — siempre fresco, sin caché del navegador
+      var opts = k === "parametros" ? { cache: "no-cache" } : {};
+      return fetch(archivos[k], opts).then(function (r) {
         if (!r.ok) throw new Error("No se pudo cargar " + archivos[k]);
         return r.json();
       });
