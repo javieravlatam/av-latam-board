@@ -613,7 +613,31 @@
     var ventasVendedor = cicloReal.ventas.filter(function (v) { return v.vendedor_id === VENDEDOR_ACTUAL && v._pertenece_periodo; });
     document.getElementById("c-facturada").textContent = fmt(r.venta_facturada_periodo);
     document.getElementById("c-n-facturas").textContent = ventasVendedor.length;
-    document.getElementById("c-cobrado").textContent = "Pendiente de integración";
+
+    // Cobrado asignable al período (misma lógica que Chile)
+    var hayCobranzasPE = cicloReal.cobranzas && cicloReal.cobranzas.length > 0;
+    var _abonoPendVendedorPE = 0;
+    var _mapaAbonosPE = (cicloReal.abonos_por_factura) || {};
+    Object.keys(_mapaAbonosPE).forEach(function (fKey) {
+      var _ab = _mapaAbonosPE[fKey];
+      if ((_ab._vendedor_clave || "") !== VENDEDOR_ACTUAL) return;
+      _abonoPendVendedorPE += (Number(_ab.monto_total_confirmado) || 0);
+    });
+    var _elCobradoPE = document.getElementById("c-cobrado");
+    var _subCobradoPE = _elCobradoPE.parentElement.querySelector(".sub");
+    if (hayCobranzasPE || _abonoPendVendedorPE > 0) {
+      _elCobradoPE.textContent = hayCobranzasPE ? fmt(r.venta_cobrada) : "—";
+      if (_subCobradoPE) {
+        var _partesPE = [];
+        if (hayCobranzasPE) _partesPE.push("Asignable al período: " + fmt(r.venta_cobrada));
+        if (_abonoPendVendedorPE > 0) {
+          _partesPE.push("No asignable a ciclo (YTD): " + fmt(_abonoPendVendedorPE) + " PAGADA_ABONOS sin desglose");
+        }
+        _subCobradoPE.textContent = _partesPE.join(" · ");
+      }
+    } else {
+      _elCobradoPE.textContent = "Sin cobranza registrada en este período";
+    }
 
     var sp = 0, bp = 0, ne = 0;
     ventasVendedor.forEach(function (v) {
