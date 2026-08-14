@@ -123,17 +123,11 @@
 
   <!-- ============================= GRÁFICO PRESUPUESTO VS CUMPLIMIENTO ============================= -->
   <div class="sic-section" id="sec-grafico-ppto" style="padding:20px 24px;">
-    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:8px;">
-      <div class="bloque-titulo" style="margin-bottom:0;flex:1;min-width:200px;">
-        <span class="bloque-numero">◎</span>
-        <h2 style="margin:0;">Presupuesto vs Cumplimiento — 2026</h2>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <label style="font-size:13px;font-weight:600;color:#555;" for="sel-vendedor-chart">Vendedor:</label>
-        <select id="sel-vendedor-chart" style="padding:5px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px;color:#333;background:#fff;cursor:pointer;"></select>
-      </div>
+    <div class="bloque-titulo" style="margin-bottom:8px;">
+      <span class="bloque-numero">◎</span>
+      <h2 style="margin:0;">Presupuesto vs Cumplimiento — 2026</h2>
     </div>
-    <p class="bloque-subtitulo" style="margin-bottom:16px;">Evolución mensual (ene–ago) por vendedor. Barras azules = cumplimiento ≥80%; rojas = &lt;80%.</p>
+    <p class="bloque-subtitulo" style="margin-bottom:16px;">Evolución mensual (ene–ago) para el vendedor seleccionado arriba. Barras azules = cumplimiento ≥80%; rojas = &lt;80%.</p>
     <div style="position:relative;height:280px;max-width:860px;margin:0 auto;">
       <canvas id="chart-ppto-vs-real"></canvas>
     </div>
@@ -512,46 +506,6 @@
     return VEND_TO_PPTO_CL[apellido] || apellido;
   }
 
-  function _poblarSelectVendedores() {
-    var sel = document.getElementById("sel-vendedor-chart");
-    if (!sel || !window.SIC_PPTO_CL) return;
-    var pptoData = SIC_PPTO_CL.rtc_mensual_ppto || {};
-    var pptoKeys = Object.keys(pptoData);
-    // Mapear TX vendedores a clave PPTO
-    var mapa = {}; // pptoKey → display name
-    (window.SIC_TX_CL || []).forEach(function(t) {
-      if (!t.vendedor) return;
-      var key = _pptoKeyCL(t.vendedor);
-      if (pptoKeys.indexOf(key) !== -1 && !mapa[key]) mapa[key] = t.vendedor;
-    });
-    // Incluir keys de PPTO sin TX
-    pptoKeys.forEach(function(k) {
-      if (!mapa[k]) mapa[k] = k.replace(/_/g, " ").toUpperCase();
-    });
-    sel.innerHTML = "";
-    Object.keys(mapa).sort().forEach(function(key) {
-      var opt = document.createElement("option");
-      opt.value = key;
-      opt.textContent = mapa[key].split(" ").map(function(w) {
-        return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
-      }).join(" ");
-      sel.appendChild(opt);
-    });
-    // Preseleccionar vendedor logueado
-    var ses = SICAuth.sesionActiva();
-    if (ses && ses.rol === "vendedor" && ses.vendedor_id) {
-      var kid = _pptoKeyCL(ses.vendedor_id);
-      if (sel.querySelector('[value="' + kid + '"]')) sel.value = kid;
-    }
-    sel.removeEventListener("change", _onSelChange);
-    sel.addEventListener("change", _onSelChange);
-    renderGraficoPptoMensual(sel.value);
-  }
-
-  function _onSelChange() {
-    renderGraficoPptoMensual(document.getElementById("sel-vendedor-chart").value);
-  }
-
   function renderGraficoPptoMensual(pptoKey) {
     var canvas = document.getElementById("chart-ppto-vs-real");
     if (!canvas || typeof Chart === "undefined") return;
@@ -630,7 +584,7 @@
     if (!CTX_PARAMS || !FUENTES || !CICLO_ACTUAL) return;
     var cicloReal = SICAdapter.construirCicloReal(PAIS, CICLO_ACTUAL, FUENTES, CTX_PARAMS);
     window._CICLO_REAL_ACTUAL = cicloReal;
-    _poblarSelectVendedores();
+    renderGraficoPptoMensual(VENDEDOR_ACTUAL);
     var vendedor = cicloReal.vendedores.filter(function (v) { return v.id === VENDEDOR_ACTUAL; })[0];
 
     // Banner "dos periodos" -- siempre visible, aunque no haya vendedor seleccionado.
