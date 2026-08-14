@@ -32,7 +32,7 @@
   function _post(body) {
     return fetch(GAS_URL, {
       method:  "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "text/plain" },
       body:    JSON.stringify(Object.assign({ user_agent: navigator.userAgent.slice(0, 200) }, body))
     }).then(function (r) {
       if (!r.ok) throw new Error("HTTP " + r.status);
