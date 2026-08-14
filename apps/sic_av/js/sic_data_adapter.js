@@ -926,10 +926,13 @@
         return c.factura && String(c.factura).indexOf(prefijo) === 0 && c.fecha_pago;
       })
       .map(function (c) {
-        var folioRaw = String(c.factura).slice(prefijo.length); // "731"
+        var folioRaw = String(c.factura).slice(prefijo.length); // "731" o "907"
         var folioN = parseInt(folioRaw, 10);
-        // Reconstruir con formato TX_CL: "REAL-CL-731.0"
-        var facturaKey = isFinite(folioN) ? (prefijo + folioN + ".0") : c.factura;
+        // CL: TX_CL serializa folios como float desde Excel ("731.0") → se añade ".0"
+        // PE: TX_PE almacena folios como entero limpio ("907") → se mantiene sin ".0"
+        var facturaKey = (p === "CL" && isFinite(folioN))
+          ? (prefijo + folioN + ".0")
+          : (isFinite(folioN) ? (prefijo + folioN) : c.factura);
         return {
           factura:    facturaKey,
           fecha_pago: c.fecha_pago,
