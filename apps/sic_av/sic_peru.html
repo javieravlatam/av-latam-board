@@ -278,10 +278,12 @@
       // d.ppto viene del backend como { rtc_mensual_ppto: {...} } (plano, solo PE).
       // SICAdapter._presupuestoDelMes espera presupuestoReal.PE.rtc_mensual_ppto
       // → envolvemos en la estructura canónica { CL: {...}, PE: {...} }.
+      // d.ppto viene del backend plano (solo PE). SICAdapter.construirCicloReal
+      // lee fuentes.presupuesto.PE.rtc_mensual_ppto → envolvemos correctamente.
       var pptoPlano = d.ppto || {};
       FUENTES = {
         tx: { TX_CL: [], TX_PE: d.tx || [] },
-        ppto: { CL: { rtc_mensual_ppto: {}, rtc_ppto_anual: {} }, PE: pptoPlano }
+        presupuesto: { CL: { rtc_mensual_ppto: {}, rtc_ppto_anual: {} }, PE: pptoPlano }
       };
       FUENTES.cobranzas_raw    = d.cobranzas_raw    || null;
       FUENTES.universo_sic_raw = d.universo_sic_raw || null;
