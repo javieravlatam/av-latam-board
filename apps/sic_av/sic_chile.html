@@ -123,12 +123,18 @@
 
   <!-- ============================= GRÁFICO PRESUPUESTO VS CUMPLIMIENTO ============================= -->
   <div class="sic-section" id="sec-grafico-ppto" style="padding:20px 24px;">
-    <div class="bloque-titulo" style="margin-bottom:8px;">
-      <span class="bloque-numero">◎</span>
-      <h2 style="margin:0;">Presupuesto vs Cumplimiento — Mes de desempeño</h2>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:8px;">
+      <div class="bloque-titulo" style="margin-bottom:0;flex:1;min-width:200px;">
+        <span class="bloque-numero">◎</span>
+        <h2 style="margin:0;">Presupuesto vs Cumplimiento — 2026</h2>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <label style="font-size:13px;font-weight:600;color:#555;" for="sel-vendedor-chart">Vendedor:</label>
+        <select id="sel-vendedor-chart" style="padding:5px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px;color:#333;background:#fff;cursor:pointer;"></select>
+      </div>
     </div>
-    <p class="bloque-subtitulo" style="margin-bottom:16px;">Comparación de presupuesto mensual contra venta neta real por vendedor en el mes de desempeño del ciclo seleccionado. Las barras rojas indican cumplimiento &lt;80%.</p>
-    <div style="position:relative;height:260px;max-width:860px;margin:0 auto;">
+    <p class="bloque-subtitulo" style="margin-bottom:16px;">Evolución mensual (ene–ago) por vendedor. Barras azules = cumplimiento ≥80%; rojas = &lt;80%.</p>
+    <div style="position:relative;height:280px;max-width:860px;margin:0 auto;">
       <canvas id="chart-ppto-vs-real"></canvas>
     </div>
   </div>
@@ -143,7 +149,7 @@
       <div class="sic-card"><div class="k">Cumplimiento del mes de desempeño</div><div class="v" id="c-cumpl-mes">—</div><div class="sub">Venta neta / presupuesto del mismo mes calendario</div></div>
       <div class="sic-card"><div class="k">Factor de Presupuesto</div><div class="v" id="c-factor-ppto">—</div><div class="sub">Tramos vigentes: &lt;90%=0% · 90-99,99%=80% · ≥100%=100%</div></div>
       <div class="sic-card"><div class="k">IEC del mes de desempeño</div><div class="v" id="c-iec-mes">—</div><div class="sub">Recalculado directo de transacciones del mes (SP / Elegible)</div></div>
-      <div class="sic-card"><div class="k">Factor IEC</div><div class="v" id="c-factor-iec">—</div><div class="sub">Tramos vigentes: &lt;70%=20% · 70-84,99%=70% · 85-91,99%=80% · 92-94,99%=90% · ≥95%=105%</div></div>
+      <div class="sic-card"><div class="k">Factor IEC</div><div class="v" id="c-factor-iec">—</div><div class="sub">Tramos vigentes: &lt;70%=20% · 70-84,99%=70% · 85-91,99%=80% · 92-94,99%=90% · 95-104,99%=100% · ≥105%=102%</div></div>
       <div class="sic-card"><div class="k">Excedente del mes de desempeño</div><div class="v" id="c-excedente-mes">—</div><div class="sub">max(0, venta neta del mes − presupuesto del mismo mes)</div></div>
       <div class="sic-card"><div class="k">Bono por Excedente del mes de desempeño</div><div class="v" id="c-bono-excedente">—</div><div class="sub">Excedente × 2% (sin ponderar por Factor IEC, se incorpora en la liquidación siguiente)</div></div>
     </div>
@@ -248,6 +254,7 @@
 <script src="sic_core.js"></script>
 <script src="js/sic_data_adapter.js"></script>
 <script src="sic_tx_cl.js"></script>
+<script src="sic_cobranzas_cl.js"></script>
 <script src="sic_pdf.js"></script>
 <script>
   var PAIS = "CL";
@@ -326,7 +333,7 @@
           PE: { rtc_mensual_ppto: {}, rtc_ppto_anual: {} }
         }
       };
-      FUENTES.cobranzas_raw    = null;
+      FUENTES.cobranzas_raw    = window.SIC_COBRANZAS_CL || null;
       FUENTES.universo_sic_raw = null;
       VENCIMIENTOS_MAP = {};
 
@@ -490,62 +497,115 @@
   }
 
   var _chartPpto = null;
-  function renderGraficoPpto(cicloReal) {
+
+  // Mapeo apellido normalizado → clave PPTO
+  var VEND_TO_PPTO_CL = {
+    caroca: "caroca", encina: "encina", laratro: "laratro",
+    munoz: "munoz", velasquez: "velasquez",
+    franco: "franco_riffo", riffo: "franco_riffo"
+  };
+
+  function _pptoKeyCL(nombre) {
+    var partes = (nombre || "").trim().toLowerCase().split(/\s+/);
+    var apellido = partes[partes.length - 1]
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return VEND_TO_PPTO_CL[apellido] || apellido;
+  }
+
+  function _poblarSelectVendedores() {
+    var sel = document.getElementById("sel-vendedor-chart");
+    if (!sel || !window.SIC_PPTO_CL) return;
+    var pptoData = SIC_PPTO_CL.rtc_mensual_ppto || {};
+    var pptoKeys = Object.keys(pptoData);
+    // Mapear TX vendedores a clave PPTO
+    var mapa = {}; // pptoKey → display name
+    (window.SIC_TX_CL || []).forEach(function(t) {
+      if (!t.vendedor) return;
+      var key = _pptoKeyCL(t.vendedor);
+      if (pptoKeys.indexOf(key) !== -1 && !mapa[key]) mapa[key] = t.vendedor;
+    });
+    // Incluir keys de PPTO sin TX
+    pptoKeys.forEach(function(k) {
+      if (!mapa[k]) mapa[k] = k.replace(/_/g, " ").toUpperCase();
+    });
+    sel.innerHTML = "";
+    Object.keys(mapa).sort().forEach(function(key) {
+      var opt = document.createElement("option");
+      opt.value = key;
+      opt.textContent = mapa[key].split(" ").map(function(w) {
+        return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+      }).join(" ");
+      sel.appendChild(opt);
+    });
+    // Preseleccionar vendedor logueado
+    var ses = SICAuth.sesionActiva();
+    if (ses && ses.rol === "vendedor" && ses.vendedor_id) {
+      var kid = _pptoKeyCL(ses.vendedor_id);
+      if (sel.querySelector('[value="' + kid + '"]')) sel.value = kid;
+    }
+    sel.removeEventListener("change", _onSelChange);
+    sel.addEventListener("change", _onSelChange);
+    renderGraficoPptoMensual(sel.value);
+  }
+
+  function _onSelChange() {
+    renderGraficoPptoMensual(document.getElementById("sel-vendedor-chart").value);
+  }
+
+  function renderGraficoPptoMensual(pptoKey) {
     var canvas = document.getElementById("chart-ppto-vs-real");
     if (!canvas || typeof Chart === "undefined") return;
+    var LABELS = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago"];
+    var MESES  = ["ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO"];
 
-    // Recopilar datos de todos los vendedores del ciclo
-    var vendedores = cicloReal.vendedores || [];
-    var labels = [], dataReal = [], dataPpto = [], colores = [];
+    var pptoArr = (window.SIC_PPTO_CL && SIC_PPTO_CL.rtc_mensual_ppto &&
+                   SIC_PPTO_CL.rtc_mensual_ppto[pptoKey]) || [];
 
-    vendedores.forEach(function(v) {
-      var nombre = (v.nombre || v.id).split(" ")[0]; // primer nombre
-      var real   = v.venta_neta_mes  || 0;
-      var ppto   = v.presupuesto_mes || 0;
-      var cumpl  = ppto > 0 ? real / ppto : 0;
-      labels.push(nombre);
-      dataReal.push(Math.round(real));
-      dataPpto.push(Math.round(ppto));
-      colores.push(cumpl >= 0.8 ? "rgba(27,79,138,0.85)" : "rgba(180,40,40,0.85)");
+    var realPorMes = {};
+    MESES.forEach(function(m) { realPorMes[m] = 0; });
+    (window.SIC_TX_CL || []).forEach(function(t) {
+      if (!t.vendedor || !t.mes) return;
+      if (_pptoKeyCL(t.vendedor) !== pptoKey) return;
+      var mu = String(t.mes).toUpperCase();
+      if (realPorMes.hasOwnProperty(mu)) realPorMes[mu] += (Number(t.total) || 0);
+    });
+
+    var dataPpto = [], dataReal = [], colores = [], colBorder = [];
+    MESES.forEach(function(m, i) {
+      var p = pptoArr[i] || 0;
+      var r = realPorMes[m];
+      var ok = p > 0 ? (r / p >= 0.8) : (r > 0);
+      dataPpto.push(Math.round(p));
+      dataReal.push(Math.round(r));
+      colores.push(ok ? "rgba(27,79,138,0.8)" : "rgba(180,40,40,0.8)");
+      colBorder.push(ok ? "rgba(27,79,138,1)" : "rgba(180,40,40,1)");
     });
 
     if (_chartPpto) { _chartPpto.destroy(); _chartPpto = null; }
-
     _chartPpto = new Chart(canvas, {
       type: "bar",
       data: {
-        labels: labels,
+        labels: LABELS,
         datasets: [
-          {
-            label: "Presupuesto",
-            data: dataPpto,
-            backgroundColor: "rgba(160,160,160,0.4)",
-            borderColor: "rgba(120,120,120,0.8)",
-            borderWidth: 1,
-            borderRadius: 4
-          },
-          {
-            label: "Venta real",
-            data: dataReal,
-            backgroundColor: colores,
-            borderColor: colores.map(function(c){ return c.replace("0.85","1"); }),
-            borderWidth: 1,
-            borderRadius: 4
-          }
+          { label: "Presupuesto", data: dataPpto,
+            backgroundColor: "rgba(160,160,160,0.35)", borderColor: "rgba(120,120,120,0.7)",
+            borderWidth: 1, borderRadius: 4 },
+          { label: "Venta real", data: dataReal,
+            backgroundColor: colores, borderColor: colBorder,
+            borderWidth: 1, borderRadius: 4 }
         ]
       },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
+        responsive: true, maintainAspectRatio: false,
         plugins: {
           legend: { position: "top", labels: { font: { size: 12 } } },
           tooltip: {
             callbacks: {
               label: function(ctx) {
                 var v = ctx.raw;
-                return ctx.dataset.label + ": " + (v >= 1000000
-                  ? "CLP " + (v/1000000).toFixed(1) + "M"
-                  : "CLP " + v.toLocaleString("es-CL"));
+                return ctx.dataset.label + ": " +
+                  (v >= 1000000 ? "CLP " + (v/1000000).toFixed(1) + "M"
+                                : "CLP " + v.toLocaleString("es-CL"));
               },
               afterBody: function(items) {
                 var i = items[0].dataIndex;
@@ -558,13 +618,9 @@
         },
         scales: {
           x: { grid: { display: false } },
-          y: {
-            ticks: {
-              callback: function(v) {
-                return v >= 1000000 ? (v/1000000).toFixed(0)+"M" : v.toLocaleString("es-CL");
-              }
-            }
-          }
+          y: { ticks: { callback: function(v) {
+            return v >= 1000000 ? (v/1000000).toFixed(0)+"M" : v.toLocaleString("es-CL");
+          }}}
         }
       }
     });
@@ -574,7 +630,7 @@
     if (!CTX_PARAMS || !FUENTES || !CICLO_ACTUAL) return;
     var cicloReal = SICAdapter.construirCicloReal(PAIS, CICLO_ACTUAL, FUENTES, CTX_PARAMS);
     window._CICLO_REAL_ACTUAL = cicloReal;
-    renderGraficoPpto(cicloReal);
+    _poblarSelectVendedores();
     var vendedor = cicloReal.vendedores.filter(function (v) { return v.id === VENDEDOR_ACTUAL; })[0];
 
     // Banner "dos periodos" -- siempre visible, aunque no haya vendedor seleccionado.

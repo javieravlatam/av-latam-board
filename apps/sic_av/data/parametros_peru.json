@@ -1,5 +1,5 @@
 {
-  "version_politica": "SIC-AV V1.4 (demostrativo -- Factor de Presupuesto, Tabla de Cartera Chile y Factor IEC definidos y aprobados por Gerencia General el 2026-07-13; el mismo dia se elimino el Factor de Precio Piso del calculo de comision -- toda venta facturada es una operacion valida, el precio piso solo impacta la comision de forma indirecta a traves del IEC; el mecanismo de bono de consistencia trimestral sigue ilustrativo)",
+  "version_politica": "SIC-AV V1.5",
   "pais": "PE",
   "moneda": "USD",
   "tasa_cartera": {
@@ -202,12 +202,17 @@
     },
     {
       "min_iec": 95,
+      "max_iec": 104.99,
+      "factor": 100
+    },
+    {
+      "min_iec": 105,
       "max_iec": null,
-      "factor": 105
+      "factor": 102
     }
   ],
-  "_factor_iec_nota": "Politica V1.2 (2026-07-13, aprobada por Gerencia General): tramos fijos, reemplaza por completo la curva continua/interpolada anterior. Ver CHANGE REQUEST SIC-AV v1.3.",
-  "politica_vigente_desde": "2026-07-13",
+  "_factor_iec_nota": "Politica V1.5 (2026-08-14, aprobada por Gerencia General): se divide el tramo IEC >= 95% en dos: 95-104.99% → factor 100 (sin bono), 105%+ → techo 102% (previene bono sobre bono insostenible). Ver CHANGE REQUEST SIC-AV v1.5.",
+  "politica_vigente_desde": "2026-08-14",
   "politica_estado": "Vigente",
   "iec_politica": {
     "_nota": "Política IEC ponderado (Fase 7, 2026-07-28). Mismos parámetros que Chile por alineación de política Grupo. IEC_MIX = Σ venta_neta_elegible / Σ valor_piso_teorico.",

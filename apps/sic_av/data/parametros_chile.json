@@ -1,6 +1,6 @@
 {
-  "version_politica": "SIC-AV V1.4",
-  "version_vigente_desde": "2026-07-28",
+  "version_politica": "SIC-AV V1.5",
+  "version_vigente_desde": "2026-08-14",
   "version_autor": "javier@agrovecalatam.com",
   "cambios_requieren_autorizacion": "javier@agrovecalatam.com",
   "_nota_autorizacion": "Modificaciones a tasa_cartera, factor_presupuesto_tramos, factor_iec_tramos o cualquier parametro de calculo REQUIEREN autorizacion escrita del Gerente General (javier@agrovecalatam.com). Todo cambio debe registrarse en tasa_cartera_historial con version, vigente_desde, autor y nota.",
@@ -195,12 +195,17 @@
     },
     {
       "min_iec": 95,
+      "max_iec": 104.99,
+      "factor": 100
+    },
+    {
+      "min_iec": 105,
       "max_iec": null,
-      "factor": 105
+      "factor": 102
     }
   ],
-  "_factor_iec_nota": "Politica V1.2 (2026-07-13, aprobada por Gerencia General): tramos fijos, reemplaza por completo la curva continua/interpolada anterior. Ver CHANGE REQUEST SIC-AV v1.3.",
-  "politica_vigente_desde": "2026-07-28",
+  "_factor_iec_nota": "Politica V1.5 (2026-08-14, aprobada por Gerencia General): se divide el tramo IEC >= 95% en dos: 95-104.99% → factor 100 (sin bono), 105%+ → techo 102% (previene bono sobre bono insostenible). Ver CHANGE REQUEST SIC-AV v1.5.",
+  "politica_vigente_desde": "2026-08-14",
   "politica_estado": "Vigente — Aprobada por Gerencia General",
   "iec_politica": {
     "_nota": "Política IEC ponderado (Fase 7, 2026-07-28). IEC_MIX = Σ venta_neta_elegible / Σ valor_piso_teorico. Parámetros configurables — nunca hardcodeados en el código. Estado A: IEC_MIX >= iec_min_autorizado_pct Y todos los ítems >= (100 - desviacion_critica_max_item_pct). Estado B: IEC_MIX < iec_min_autorizado Y ningún ítem crítico → REQUIERE AUTORIZACIÓN GG/GD. Estado C: cualquier ítem < umbral → EXCEPCIÓN CRÍTICA · REQUIERE AUTORIZACIÓN GG/GD. GG/GD conserva facultad de aprobar B y C.",
