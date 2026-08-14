@@ -220,9 +220,9 @@
   <!-- ============================= COMISION DIFERIDA TRIMESTRAL ============================= -->
   <div class="sic-section">
     <h2>Comision diferida trimestral</h2>
-    <p class="hint">Se evalúa sobre meses calendario (CHANGE REQUEST v1.6), no sobre períodos 26-25.</p>
+    <p class="hint">Comisión retenida en ciclos donde el Factor Presupuesto fue inferior al 100%, liberable al cierre del trimestre si se cumplen las condiciones de cumplimiento e IEC. Se evalúa sobre meses calendario, no sobre períodos 26-25.</p>
     <div class="sic-diferido-box">
-      <div class="estado-comision-texto">El cálculo de comisión diferida trimestral requiere acumular la comisión liberada de los tres ciclos del trimestre. La cobranza real ya está integrada — el diferido trimestral quedará operativo cuando se implemente la lógica de acumulación entre ciclos.</div>
+      <div id="diferido-contenido"><p class="hint">Calculando...</p></div>
     </div>
   </div>
 
@@ -762,11 +762,70 @@
     }
     document.getElementById("lista-acciones").innerHTML = _accionesHtml.length ? _accionesHtml.join("") : "<div class='sic-accion'>Sin oportunidades adicionales identificadas para este ciclo.</div>";
 
+    // Diferido trimestral
+    window._DIFERIDO_ACTUAL = renderDiferido(cicloReal.mes_desempeno, VENDEDOR_ACTUAL);
+
     // Historico real (mismo vendedor, todos los periodos reales disponibles)
     renderHistoricoReal();
 
     window._RESULTADO_ACTUAL = r;
     window._VENDEDOR_ACTUAL_OBJ = vendedor;
+  }
+
+  function calcularCtxTrimestre(mesDesempeno, vendedorId) {
+    var trimestre = (CTX_PARAMS.trimestres || []).filter(function (t) {
+      return t.meses.indexOf(mesDesempeno) !== -1;
+    })[0];
+    if (!trimestre) return null;
+    var ventasMerged = [], cobranzasMerged = [];
+    var facturasVistas = {}, cobrosVistos = {};
+    var lastCtx = null;
+    trimestre.meses.forEach(function (mes) {
+      var cicloDelMes = SIC.periodoQueLiquidaMes(mes);
+      try {
+        var ctx = SICAdapter.construirCicloReal(PAIS, cicloDelMes, FUENTES, CTX_PARAMS);
+        lastCtx = ctx;
+        (ctx.ventas || []).forEach(function (v) {
+          if (!facturasVistas[v.factura]) { ventasMerged.push(v); facturasVistas[v.factura] = true; }
+        });
+        (ctx.cobranzas || []).forEach(function (c) {
+          var k = c.factura + "_" + c.fecha_pago;
+          if (!cobrosVistos[k]) { cobranzasMerged.push(c); cobrosVistos[k] = true; }
+        });
+      } catch (e) { /* ciclo sin datos aún */ }
+    });
+    if (!lastCtx) return null;
+    return {
+      trimestre: trimestre,
+      ctx: { params: CTX_PARAMS, ventas: ventasMerged, cobranzas: cobranzasMerged,
+             presupuestos: lastCtx.presupuestos, iec: lastCtx.iec, notas_credito: lastCtx.notas_credito || [] }
+    };
+  }
+
+  function renderDiferido(mesDesempeno, vendedorId) {
+    var box = document.getElementById("diferido-contenido");
+    var data = calcularCtxTrimestre(mesDesempeno, vendedorId);
+    if (!data) {
+      box.innerHTML = "<p class='hint'>No hay trimestre configurado para el mes " + mesDesempeno + ".</p>";
+      return null;
+    }
+    var d = SIC.calcularDiferidoTrimestral(data.ctx, vendedorId, data.trimestre.trimestre);
+    var esCerrado = data.trimestre.estado === "cerrado";
+    var html = "<table class='sic-auditoria-tabla' style='width:100%'>" +
+      "<tr><td>Trimestre</td><td><strong>" + data.trimestre.trimestre + "</strong> — " + (esCerrado ? "Cerrado" : "En curso") + "</td></tr>" +
+      "<tr><td>Meses</td><td>" + data.trimestre.meses.join(" · ") + "</td></tr>" +
+      "<tr><td>Diferido acumulado</td><td><strong>" + fmt(d.diferido_acumulado) + "</strong></td></tr>" +
+      "<tr><td>Cumplimiento trimestral</td><td>" + pct(d.cumplimiento_trimestral) + "</td></tr>" +
+      "<tr><td>IEC trimestral (promedio)</td><td>" + pct(d.iec_trimestral) + "</td></tr>" +
+      "<tr><td>% Liberación por cumplimiento</td><td>" + d.pct_liberacion_por_cumplimiento + "%</td></tr>" +
+      "<tr><td>Condiciones</td><td>" + (d.condiciones_cumplidas ? "✓ Cumplidas" : "✗ " + d.motivos_no_cumplidos.join("; ")) + "</td></tr>" +
+      "<tr><td>% Liberación final</td><td><strong>" + d.pct_liberacion_final + "%</strong></td></tr>" +
+      "<tr><td><strong>Monto liberado</strong></td><td><strong>" + fmt(d.monto_liberado) + "</strong></td></tr>" +
+      "<tr><td>Pendiente próximo trimestre</td><td>" + fmt(d.monto_pendiente) + "</td></tr>" +
+      "</table>";
+    if (!esCerrado) html += "<p class='hint' style='margin-top:6px'>⚠ Trimestre en curso — cifras parciales hasta el último mes con datos disponibles.</p>";
+    box.innerHTML = html;
+    return d;
   }
 
   function renderPasos(r, sinPresupuesto, sinIec, sp, bp, ne) {
@@ -880,22 +939,16 @@
       alert("Seleccione un vendedor y período antes de generar el informe.");
       return;
     }
-    // Diferido trimestral: pendiente de implementación de lógica multi-ciclo
-    var diferidoStub = {
-      trimestre: "Trimestre en curso — diferido pendiente de implementación",
-      diferido_acumulado: 0,
-      cumplimiento_trimestral: r.cumplimiento_pct || 0,
-      iec_trimestral: r.iec_pct || 0,
-      pct_liberacion_final: 0,
-      monto_liberado: 0,
-      monto_pendiente: 0,
-      motivos_no_cumplidos: ["Cálculo de comisión diferida trimestral pendiente de implementación"]
-    };
+    var diferidoData = calcularCtxTrimestre(r.mes_desempeno, vendedor.id);
+    var diferido = diferidoData
+      ? SIC.calcularDiferidoTrimestral(diferidoData.ctx, vendedor.id, diferidoData.trimestre.trimestre)
+      : { trimestre: "Sin trimestre configurado", diferido_acumulado: 0, cumplimiento_trimestral: 0,
+          iec_trimestral: 0, pct_liberacion_final: 0, monto_liberado: 0, monto_pendiente: 0, motivos_no_cumplidos: [] };
     SICPDF.generarInforme({
       pais: PAIS,
       vendedor: vendedor,
       resultado: r,
-      diferido: diferidoStub,
+      diferido: diferido,
       acciones: [],
       params: CTX_PARAMS
     });
