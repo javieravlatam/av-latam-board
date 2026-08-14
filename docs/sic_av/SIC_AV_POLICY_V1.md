@@ -149,17 +149,70 @@ Ver desarrollo completo de las dos alternativas (A: mantener 2% flat, B: multipl
 - Una nota de crédito posterior reduce el excedente reconocido y genera un ajuste negativo, con el mismo tratamiento del caso general de NC (sección 9).
 - Un pago parcial de una factura que genera excedente aplica el bono en proporción a lo efectivamente cobrado de esa porción.
 
-## 11. Roles Comerciales
+## 11. Diferido Trimestral y Segunda Oportunidad Semestral
+
+**Vigente desde:** 2026-08-14 · **Versión:** CHANGE REQUEST SIC-AV v1.7 · **Aprobada por:** Gerencia General
+
+### 11.1 Qué es el diferido trimestral
+
+Cuando el Factor de Cumplimiento de Presupuesto de un ciclo es inferior al 100%, el vendedor percibe una comisión liberada menor a la que habría ganado con cumplimiento pleno. La diferencia entre la comisión calculada (con Factor IEC aplicado, sin Factor Ppto) y la comisión efectivamente liberada es el **diferido del ciclo**. Al cierre del trimestre, se acumula el diferido de los tres ciclos del trimestre y se evalúa si se libera.
+
+La liberación del diferido trimestral requiere cumplir dos condiciones simultáneamente:
+
+1. **Cumplimiento trimestral** (venta neta del trimestre / presupuesto trimestral) dentro de los tramos de liberación:
+
+| Cumplimiento trimestral | % Diferido liberado |
+|---|---|
+| 100–104.99% | 50% |
+| 105–109.99% | 75% |
+| ≥ 110% | 100% |
+| < 100% | 0% |
+
+2. **IEC trimestral promedio** ≥ 95% (promedio de los IEC de los tres meses del trimestre).
+
+Si alguna condición no se cumple, el diferido del trimestre **no se libera** — pero no necesariamente se pierde. Ver segunda oportunidad semestral (11.2).
+
+### 11.2 Segunda oportunidad semestral
+
+**Principio:** un trimestre débil no debe penalizar definitivamente al vendedor si recupera en el mismo semestre. El diferido no liberado en el primer trimestre (Q1 o Q3) se traslada al segundo trimestre del semestre (Q2 o Q4) y se evalúa de manera consolidada.
+
+**Regla aprobada:**
+
+| Evento | Resultado |
+|---|---|
+| Q1 libera (cumple umbrales) | Diferido Q1 liberado. No hay carry. |
+| Q1 no libera | `monto_pendiente` de Q1 pasa a Q2 (carry semestral). |
+| Q2 libera (cumple umbrales) | Libera su diferido propio + carry de Q1. |
+| Q2 no libera | Diferido H1 **se pierde** (carry + diferido Q2). |
+| Q3 libera | Diferido Q3 liberado. No hay carry. |
+| Q3 no libera | `monto_pendiente` de Q3 pasa a Q4 (carry semestral). |
+| Q4 libera | Libera su diferido propio + carry de Q3. |
+| Q4 no libera | Diferido H2 **se pierde**. Fin de año: todo reset a cero. |
+
+**Límites del mecanismo:**
+- El diferido activo nunca supera 2 trimestres consecutivos (no acumula entre semestres ni entre años).
+- El carry no se acumula de H1 a H2, ni de un año al siguiente.
+- Al cierre del año calendario, todo saldo diferido pendiente queda en cero.
+
+**Rationale financiero:** el impacto máximo para la empresa es absorber el diferido no liberado de Q1 dentro de la evaluación de Q2. Si el vendedor tampoco cumple en Q2, la empresa no libera en todo el semestre — el costo de la segunda oportunidad está acotado a 1 trimestre de diferido por semestre por vendedor.
+
+**Rationale comercial:** el vendedor tiene visibilidad de su carry en tiempo real desde el portal. Sabe exactamente cuánto necesita cumplir en Q2 (o Q4) para recuperar el diferido pendiente, lo que convierte el mecanismo en un incentivo activo de recuperación en lugar de una penalidad sin salida.
+
+### 11.3 Implementación técnica
+
+El carry se calcula en `sic_core.js` → `SIC.calcularDiferidoTrimestral()` vía el parámetro `saldoDiferidoAnterior`. El portal calcula automáticamente el `monto_pendiente` del primer trimestre del semestre (cuando está cerrado) y lo pasa como carry al calcular el segundo. La configuración de semestres vive en `semestres[]` en `parametros_chile.json` y `parametros_peru.json`.
+
+## 12. Roles Comerciales
 
 Ver desarrollo completo de opciones en `SIC_AV_MODELOS_COMPARADOS.md`, sección 6. **No se fija ningún porcentaje distinto por cargo en este documento.** La arquitectura permite configurar RTC, KAM y Jefe de Ventas con reglas propias, pero las decisiones de fondo (¿todos usan la misma tasa base?, ¿KAM tiene componente corporativo?, ¿Jefe de Ventas tiene cartera propia y/o bono de equipo?) quedan explícitamente pendientes de Gerencia General en `SIC_AV_DECISIONES_GERENCIA.md`.
 
-## 12. Gobernanza
+## 13. Gobernanza
 
 - **Motor de Factores:** todo valor de esta política (tasas, factores, umbrales) vive en tablas configurables versionadas, nunca hardcodeadas — mismo principio ya establecido en `SIC_AV_MASTER_ARCHITECTURE.md`, sección 5.B.
 - **Cambios de política:** requieren aprobación de Gerencia General, con fecha de vigencia y responsable registrados. Un cambio de política nunca aplica retroactivamente a un ciclo ya cerrado, salvo reapertura formal (sección 9).
 - **Versionado:** cada versión de esta política tiene un número (esta es V1) y una fecha de vigencia. Los cálculos de un ciclo siempre usan la versión de política vigente al momento del ciclo, registrada junto con el cálculo.
 
-## 13. Procedimiento de Reclamo
+## 14. Procedimiento de Reclamo
 
 1. El comercial señala la línea/factura o el factor específico en disputa desde el detalle por factura del Portal del Vendedor (`SIC_AV_MASTER_ARCHITECTURE.md`, sección 7.3).
 2. El reclamo se registra con fecha, motivo y evidencia aportada por el comercial.
@@ -168,13 +221,13 @@ Ver desarrollo completo de opciones en `SIC_AV_MODELOS_COMPARADOS.md`, sección 
 5. Toda resolución (aceptada o rechazada) queda registrada con motivo — nunca se descarta un reclamo sin dejar traza.
 6. Si el reclamo afecta un ciclo ya cerrado, sigue el tratamiento de "reapertura de ciclo cerrado" (sección 9).
 
-## 14. Vigencia
+## 15. Vigencia
 
-Esta es la versión V1, borrador para discusión. No entra en vigencia hasta aprobación explícita de Gerencia General de cada decisión pendiente listada en `SIC_AV_DECISIONES_GERENCIA.md`. Ninguna comisión real debe calcularse con esta política hasta que ese documento quede cerrado.
+Esta es la versión V1, borrador para discusión. La sección 11 (Diferido Trimestral y Segunda Oportunidad Semestral) fue aprobada por Gerencia General el 2026-08-14 e implementada en producción desde esa fecha. Las demás secciones no entran en vigencia hasta aprobación explícita de Gerencia General de cada decisión pendiente listada en `SIC_AV_DECISIONES_GERENCIA.md`. Ninguna comisión real debe calcularse con esta política hasta que ese documento quede cerrado.
 
-## 15. Decisiones Pendientes
+## 16. Decisiones Pendientes
 
-Ver `SIC_AV_DECISIONES_GERENCIA.md` para el detalle completo. Resumen de las áreas abiertas: modelo de factor de presupuesto (A/B/C), modelo de factor IEC (A/B/C), valor del Factor de Precio Piso autorizado, confirmación del supuesto de tabla combinada de cartera (sección 5), alternativa de bono por excedente (flat vs. multiplicador), y arquitectura de roles comerciales (sección 11).
+Ver `SIC_AV_DECISIONES_GERENCIA.md` para el detalle completo. Resumen de las áreas abiertas: modelo de factor de presupuesto (A/B/C), modelo de factor IEC (A/B/C), valor del Factor de Precio Piso autorizado, confirmación del supuesto de tabla combinada de cartera (sección 5), alternativa de bono por excedente (flat vs. multiplicador), y arquitectura de roles comerciales (sección 12).
 
 ---
 

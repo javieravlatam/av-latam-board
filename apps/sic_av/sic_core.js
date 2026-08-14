@@ -646,7 +646,14 @@
   // ---------------------------------------------------------------------
   // G. Comision Diferida Trimestral
   // ---------------------------------------------------------------------
-  SIC.calcularDiferidoTrimestral = function (ctx, vendedorId, trimestreCode, condicionesDemo) {
+  // CHANGE REQUEST SIC-AV v1.7 (2026-08-14): segunda oportunidad semestral.
+  // Si el trimestre no libera (cumplimiento insuficiente), su monto_pendiente
+  // pasa al siguiente trimestre del mismo semestre (Q1→Q2, Q3→Q4). Si el
+  // segundo trimestre del semestre tampoco libera, el diferido se pierde.
+  // El saldo carry se recibe via saldoDiferidoAnterior (calculado externamente
+  // por el HTML a partir del monto_pendiente del trimestre anterior cerrado).
+  // La liberacion se aplica sobre diferido_total = diferido_propio + saldo_anterior.
+  SIC.calcularDiferidoTrimestral = function (ctx, vendedorId, trimestreCode, condicionesDemo, saldoDiferidoAnterior) {
     var trimInfo = ctx.params.trimestres.filter(function (t) { return t.trimestre === trimestreCode; })[0];
     var diferidoAcumulado = 0;
     var presupuestoTrimestral = 0;
@@ -707,13 +714,19 @@
     }
 
     var pctLiberacionFinal = condicionesOk ? pctLiberacion : 0;
-    var montoLiberado = diferidoAcumulado * (pctLiberacionFinal / 100);
-    var montoPendiente = diferidoAcumulado - montoLiberado;
+    // Segunda oportunidad semestral: aplicar liberacion sobre el total
+    // (diferido propio + saldo carry del trimestre anterior).
+    var saldoAnterior = saldoDiferidoAnterior || 0;
+    var diferidoTotal = diferidoAcumulado + saldoAnterior;
+    var montoLiberado = diferidoTotal * (pctLiberacionFinal / 100);
+    var montoPendiente = diferidoTotal - montoLiberado;
 
     return {
       trimestre: trimestreCode,
       estado: trimInfo.estado,
-      diferido_acumulado: diferidoAcumulado,
+      diferido_acumulado: diferidoAcumulado,   // diferido propio de este trimestre
+      saldo_anterior: saldoAnterior,            // carry recibido del trimestre anterior
+      diferido_total: diferidoTotal,            // total sujeto a liberacion
       cumplimiento_trimestral: cumplimientoTrimestral,
       iec_trimestral: iecTrimestral,
       pct_liberacion_por_cumplimiento: pctLiberacion,

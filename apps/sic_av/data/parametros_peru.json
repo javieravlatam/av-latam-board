@@ -178,6 +178,19 @@
       "estado": "en_curso"
     }
   ],
+  "semestres": [
+    {
+      "semestre": "2026-H1",
+      "trimestres": ["2026-Q1", "2026-Q2"],
+      "nota": "Q1 no libera → monto_pendiente pasa a Q2. Q2 no libera → diferido H1 se pierde."
+    },
+    {
+      "semestre": "2026-H2",
+      "trimestres": ["2026-Q3", "2026-Q4"],
+      "nota": "Q3 no libera → monto_pendiente pasa a Q4. Q4 no libera → diferido H2 se pierde."
+    }
+  ],
+  "_semestres_nota": "CHANGE REQUEST SIC-AV v1.7 (2026-08-14): segunda oportunidad semestral aprobada por Gerencia General. El diferido trimestral no liberado en Q1 (o Q3) se evalua de nuevo en Q2 (o Q4) consolidado con el diferido propio del segundo trimestre. Si Q2 (o Q4) tampoco libera, el saldo semestral se pierde. Maximo diferido activo: 2 trimestres consecutivos. Año cerrado: todo reset.",
   "ciclo_vigente": "2026-07",
   "factor_iec_tramos": [
     {

@@ -772,9 +772,11 @@
     window._VENDEDOR_ACTUAL_OBJ = vendedor;
   }
 
-  function calcularCtxTrimestre(mesDesempeno, vendedorId) {
+  // Construye ctx mergeado para un trimestre a partir del codigo del trimestre.
+  // CHANGE REQUEST SIC-AV v1.7: función auxiliar para calcular carry semestral.
+  function calcularCtxTrimestrePorCodigo(trimestreCode) {
     var trimestre = (CTX_PARAMS.trimestres || []).filter(function (t) {
-      return t.meses.indexOf(mesDesempeno) !== -1;
+      return t.trimestre === trimestreCode;
     })[0];
     if (!trimestre) return null;
     var ventasMerged = [], cobranzasMerged = [];
@@ -802,6 +804,14 @@
     };
   }
 
+  function calcularCtxTrimestre(mesDesempeno, vendedorId) {
+    var trimestre = (CTX_PARAMS.trimestres || []).filter(function (t) {
+      return t.meses.indexOf(mesDesempeno) !== -1;
+    })[0];
+    if (!trimestre) return null;
+    return calcularCtxTrimestrePorCodigo(trimestre.trimestre);
+  }
+
   function renderDiferido(mesDesempeno, vendedorId) {
     var box = document.getElementById("diferido-contenido");
     var data = calcularCtxTrimestre(mesDesempeno, vendedorId);
@@ -809,21 +819,65 @@
       box.innerHTML = "<p class='hint'>No hay trimestre configurado para el mes " + mesDesempeno + ".</p>";
       return null;
     }
-    var d = SIC.calcularDiferidoTrimestral(data.ctx, vendedorId, data.trimestre.trimestre);
+
+    // CHANGE REQUEST SIC-AV v1.7: segunda oportunidad semestral.
+    // Si este trimestre es el segundo de su semestre (Q2 o Q4), buscar el
+    // monto_pendiente del primer trimestre (Q1 o Q3) cerrado para incluirlo.
+    var saldoAnterior = 0;
+    var trimestreAnteriorCode = null;
+    var esPrimerDeSmestre = true;
+    var semestres = CTX_PARAMS.semestres || [];
+    var semestre = semestres.filter(function (s) {
+      return s.trimestres.indexOf(data.trimestre.trimestre) !== -1;
+    })[0];
+    if (semestre) {
+      var posEnSemestre = semestre.trimestres.indexOf(data.trimestre.trimestre);
+      if (posEnSemestre === 1) {
+        esPrimerDeSmestre = false;
+        trimestreAnteriorCode = semestre.trimestres[0];
+        var dataAnterior = calcularCtxTrimestrePorCodigo(trimestreAnteriorCode);
+        if (dataAnterior && dataAnterior.trimestre.estado === "cerrado") {
+          var dAnterior = SIC.calcularDiferidoTrimestral(dataAnterior.ctx, vendedorId, trimestreAnteriorCode);
+          saldoAnterior = dAnterior.monto_pendiente;
+        }
+      }
+    }
+
+    var d = SIC.calcularDiferidoTrimestral(data.ctx, vendedorId, data.trimestre.trimestre, null, saldoAnterior);
     var esCerrado = data.trimestre.estado === "cerrado";
+
+    // Etiqueta de estado del pendiente según posición en semestre
+    var labelPendiente, valorPendiente;
+    if (d.monto_pendiente <= 0) {
+      labelPendiente = "Pendiente";
+      valorPendiente = fmt(0);
+    } else if (esPrimerDeSmestre) {
+      labelPendiente = "Carry → evalúa en " + (semestre ? semestre.trimestres[1] : "siguiente trimestre");
+      valorPendiente = fmt(d.monto_pendiente);
+    } else {
+      labelPendiente = "⚠ Diferido semestral perdido";
+      valorPendiente = fmt(d.monto_pendiente);
+    }
+
     var html = "<table class='sic-auditoria-tabla' style='width:100%'>" +
-      "<tr><td>Trimestre</td><td><strong>" + data.trimestre.trimestre + "</strong> — " + (esCerrado ? "Cerrado" : "En curso") + "</td></tr>" +
+      "<tr><td>Trimestre</td><td><strong>" + data.trimestre.trimestre + "</strong> — " + (esCerrado ? "Cerrado" : "En curso") + (semestre ? " (" + semestre.semestre + ")" : "") + "</td></tr>" +
       "<tr><td>Meses</td><td>" + data.trimestre.meses.join(" · ") + "</td></tr>" +
-      "<tr><td>Diferido acumulado</td><td><strong>" + fmt(d.diferido_acumulado) + "</strong></td></tr>" +
+      "<tr><td>Diferido propio del trimestre</td><td>" + fmt(d.diferido_acumulado) + "</td></tr>";
+    if (saldoAnterior > 0) {
+      html += "<tr><td>Carry de " + trimestreAnteriorCode + "</td><td>" + fmt(d.saldo_anterior) + "</td></tr>";
+    }
+    html +=
+      "<tr><td><strong>Total a evaluar</strong></td><td><strong>" + fmt(d.diferido_total) + "</strong></td></tr>" +
       "<tr><td>Cumplimiento trimestral</td><td>" + pct(d.cumplimiento_trimestral) + "</td></tr>" +
       "<tr><td>IEC trimestral (promedio)</td><td>" + pct(d.iec_trimestral) + "</td></tr>" +
       "<tr><td>% Liberación por cumplimiento</td><td>" + d.pct_liberacion_por_cumplimiento + "%</td></tr>" +
       "<tr><td>Condiciones</td><td>" + (d.condiciones_cumplidas ? "✓ Cumplidas" : "✗ " + d.motivos_no_cumplidos.join("; ")) + "</td></tr>" +
       "<tr><td>% Liberación final</td><td><strong>" + d.pct_liberacion_final + "%</strong></td></tr>" +
       "<tr><td><strong>Monto liberado</strong></td><td><strong>" + fmt(d.monto_liberado) + "</strong></td></tr>" +
-      "<tr><td>Pendiente próximo trimestre</td><td>" + fmt(d.monto_pendiente) + "</td></tr>" +
+      "<tr><td>" + labelPendiente + "</td><td>" + valorPendiente + "</td></tr>" +
       "</table>";
     if (!esCerrado) html += "<p class='hint' style='margin-top:6px'>⚠ Trimestre en curso — cifras parciales hasta el último mes con datos disponibles.</p>";
+    if (!esPrimerDeSmestre && saldoAnterior > 0) html += "<p class='hint' style='margin-top:6px'>ℹ Segunda oportunidad semestral activa: incluye carry de " + trimestreAnteriorCode + ". Si no se libera en este trimestre, el saldo se pierde al cierre del semestre.</p>";
     box.innerHTML = html;
     return d;
   }
