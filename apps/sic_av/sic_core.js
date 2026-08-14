@@ -446,6 +446,7 @@
       factor_presupuesto: factorPpto,
       factor_iec: factorIec,
       comision_base: comisionBaseLiberada + comisionBaseProyectada,
+      comision_base_cobros: comisionBaseLiberada, // solo cobros reales, sin proyeccion sobre saldo pendiente
       comision_liberada: comisionAjustadaLiberada,
       comision_potencial: comisionPotencialTotal,
       nota_credito_aplicada: montoNC,
@@ -624,6 +625,7 @@
       saldo_ajustes_por_compensar: saldoAjustesPorCompensar, // saldo de NC a arrastrar al proximo ciclo (REGLA D)
       // --- ALIASES BACKWARD-COMPAT ---
       comision_base_total: detalleFacturas.reduce(function (s, f) { return s + f.comision_base; }, 0),
+      comision_base_cobros: detalleFacturas.reduce(function (s, f) { return s + f.comision_base_cobros; }, 0), // solo cobros reales (sin proyeccion) -- usar este en la formula de pantalla
       comision_potencial: comisionPotencial,
       comision_liberada: comisionLiberada,            // alias de comision_generada (mantener para pantalla/PDF)
       comision_pendiente: comisionPendiente,

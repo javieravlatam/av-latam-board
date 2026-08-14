@@ -429,7 +429,7 @@
         "<span class='cf-lbl'>" + lbl + "</span>" +
         "<span class='cf-val'>" + val + "</span></div>";
     }
-    var baseVal      = sinCobro      ? "—" : fmt(r.comision_base_total);
+    var baseVal      = sinCobro      ? "—" : fmt(r.comision_base_cobros);
     var fPptoVal     = sinPresupuesto ? "—" : pct(r.factor_presupuesto);
     var fIECVal      = sinIec        ? "—" : pct(r.factor_iec);
     var genVal       = (sinCobro || sinPresupuesto || sinIec) ? "—" : fmt(r.comision_generada);
@@ -441,7 +441,7 @@
 
     el.innerHTML =
       "<div class='comision-flow'>" +
-        cfBox("Comisión Base", baseVal) +
+        cfBox("Base Cobros", baseVal) +
         "<span class='cf-op'>×</span>" +
         cfBox("F. Presupuesto", fPptoVal) +
         "<span class='cf-op'>×</span>" +
