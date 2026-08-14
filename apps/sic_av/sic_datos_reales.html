@@ -202,10 +202,15 @@
 <script src="js/sic_data_adapter.js"></script>
 <script>
   var sesion = SICAuth.sesionActiva();
-  if (!sesion) {
-    window.location.href = "index.html";
-  }
-  var PAIS = sesion ? sesion.pais : null;
+  if (!sesion) { window.location.href = "index.html"; }
+  if (sesion && !SICAuth.esAdmin()) { window.location.href = "index.html"; }
+
+  // El país se pasa como ?pais=CL o ?pais=PE desde sic_chile.html/sic_peru.html.
+  // Fallback: sesion.pais si no es "AMBOS", o "CL" por defecto.
+  var _urlPais = new URLSearchParams(window.location.search).get("pais");
+  var PAIS = (_urlPais === "CL" || _urlPais === "PE")
+    ? _urlPais
+    : (sesion && sesion.pais !== "AMBOS" ? sesion.pais : "CL");
 
   var CTX_PARAMS = null;
   var FUENTES = null;

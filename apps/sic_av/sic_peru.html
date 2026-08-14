@@ -67,7 +67,7 @@
   <div>
     <button class="sic-btn-logout" onclick="window.location.href='../../index.html'">← Board</button>
     <button class="sic-btn-logout" onclick="irAPoliticaYFactores()">Politica y Factores</button>
-    <button class="sic-btn-logout" onclick="irADatosRealesAuditoria()">Datos Reales (auditoria tecnica)</button>
+    <button class="sic-btn-logout" id="btn-datos-reales" onclick="irADatosRealesAuditoria()" style="display:none;">Datos Reales (auditoria tecnica)</button>
     <button class="sic-btn-logout" onclick="abrirCambiarClave()">Cambiar contraseña</button>
     <button class="sic-btn-logout" onclick="SICAuth.cerrarSesion()">Cerrar sesion</button>
   </div>
@@ -253,6 +253,9 @@
   var sesion = SICAuth.exigirSesion(PAIS);
   if (sesion) {
     document.getElementById("usr-nombre").textContent = sesion.nombre;
+    if (SICAuth.esAdmin()) {
+      document.getElementById("btn-datos-reales").style.display = "";
+    }
     inicializar();
   }
 
@@ -388,7 +391,7 @@
   }
 
   function irADatosRealesAuditoria() {
-    window.location.href = "sic_datos_reales.html";
+    window.location.href = "sic_datos_reales.html?pais=PE";
   }
 
   function abrirCambiarClave() {
