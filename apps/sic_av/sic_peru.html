@@ -275,7 +275,14 @@
         return;
       }
       var d = gasResp.data || {};
-      FUENTES = { tx: { TX_CL: [], TX_PE: d.tx || [] }, ppto: d.ppto || {} };
+      // d.ppto viene del backend como { rtc_mensual_ppto: {...} } (plano, solo PE).
+      // SICAdapter._presupuestoDelMes espera presupuestoReal.PE.rtc_mensual_ppto
+      // → envolvemos en la estructura canónica { CL: {...}, PE: {...} }.
+      var pptoPlano = d.ppto || {};
+      FUENTES = {
+        tx: { TX_CL: [], TX_PE: d.tx || [] },
+        ppto: { CL: { rtc_mensual_ppto: {}, rtc_ppto_anual: {} }, PE: pptoPlano }
+      };
       FUENTES.cobranzas_raw    = d.cobranzas_raw    || null;
       FUENTES.universo_sic_raw = d.universo_sic_raw || null;
 
