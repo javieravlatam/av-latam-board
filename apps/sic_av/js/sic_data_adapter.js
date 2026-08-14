@@ -812,6 +812,8 @@
       return (valPE === undefined || valPE === null) ? null : valPE;
     }
     // Fallback: presupuesto anual / 12 (aproximación gruesa, solo si no hay mensual).
+    // Guard: rtc_ppto_anual puede no existir en versiones de sic_tx_pe.js sin ese campo.
+    if (!presupuestoReal.PE.rtc_ppto_anual) return null;
     var anual = presupuestoReal.PE.rtc_ppto_anual[vendedorClave];
     if (anual === undefined) return null;
     return Math.round((anual / 12) * 100) / 100;
