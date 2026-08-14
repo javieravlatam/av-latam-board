@@ -600,7 +600,7 @@
       document.getElementById("hdr-vendedor").textContent = "Sin ventas en este período";
       document.getElementById("hdr-cargo").textContent = "—";
       ["c-presupuesto-mes", "c-venta-neta-mes", "c-cumpl-mes", "c-factor-ppto", "c-iec-mes", "c-factor-iec", "c-excedente-mes", "c-bono-excedente",
-       "c-facturada", "c-n-facturas", "c-cobrado", "c-piso", "c-conciliacion", "c-fecha-actualizacion"].forEach(function (id) {
+       "c-facturada", "c-n-facturas", "c-cobrado", "c-conciliacion", "c-fecha-actualizacion"].forEach(function (id) {
         document.getElementById(id).textContent = "—";
       });
       document.getElementById("pasos-calculo").innerHTML = "";
@@ -693,8 +693,7 @@
       if (c === "sobre_piso") sp++; else if (c === "bajo_piso") bp++; else ne++;
     });
     var totalPiso = sp + bp + ne;
-    document.getElementById("c-piso").textContent = totalPiso > 0 ? pct(sp / totalPiso * 100) + " sobre piso" : "—";
-    document.getElementById("c-piso-sub").textContent = sp + " sobre piso · " + bp + " bajo piso (informativo) · " + ne + " no evaluable";
+    // c-piso eliminado del HTML (card removido — info sigue disponible en tabla de facturas)
     document.getElementById("c-fecha-actualizacion").textContent = new Date().toLocaleString("es-CL");
 
     // Conciliacion con la fuente (solo para este vendedor y este periodo de cobranza)

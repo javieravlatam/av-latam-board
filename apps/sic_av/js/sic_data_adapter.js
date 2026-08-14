@@ -400,9 +400,12 @@
     var periodoInicio = mesPrevAnio + "-" + String(mesPrev).padStart(2, "0") + "-26";
     var periodoCierre = cicloAnio   + "-" + String(cicloMes).padStart(2, "0") + "-25";
     var foliosConCobroEnPeriodo = {};
-    (fuentes.cobranzas || []).forEach(function (c) {
+    var cobranzasRawArr = (fuentes.cobranzas_raw && Array.isArray(fuentes.cobranzas_raw.cobranzas))
+      ? fuentes.cobranzas_raw.cobranzas : [];
+    cobranzasRawArr.forEach(function (c) {
       if (c.fecha_pago >= periodoInicio && c.fecha_pago <= periodoCierre) {
-        var parts = c.factura.split("-"); // "REAL-CL-731.0" o "REAL-PE-907"
+        // c.factura en cobranzas_raw es siempre "REAL-XX-<folio_entero>" (normalizado)
+        var parts = c.factura.split("-");
         if (parts.length >= 3) {
           var folioInt = parseInt(parts.slice(2).join("-"));
           if (!isNaN(folioInt)) foliosConCobroEnPeriodo[String(folioInt)] = true;
