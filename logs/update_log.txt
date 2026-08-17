@@ -2301,3 +2301,17 @@ VALIDACIÓN:
   · Pipeline ppto_libro_base.get_ppto_rtc("PE") coincide con sic_tx_pe.js
   · Total aguirre: 424,540 USD | Total infante: 193,568 USD
 ================================================================================
+
+================================================================================
+FECHA: 2026-08-17
+ARCHIVOS PROCESADOS: apps/sic_av/js/sic_data_adapter.js
+COMMIT: ea26b0d
+================================================================================
+ACCIONES REALIZADAS:
+- fix(sic-pe): agregados "diaz", "gonzales", "infante" a VENDEDORES_SEMILLA.PE
+- Root cause: vendedores sin transacciones dentro de la ventana 26-25 del ciclo
+  activo desaparecían del selector SIC. Ciclo 2026-08 (periodo 26-jul al 25-ago):
+    · Susan Diaz     → última TX 2026-07-20 (fuera de ventana)
+    · Oscar Infante  → última TX 2026-07-13 (fuera de ventana)
+    · Antonio Gonzales → última TX 2026-07-08 (fuera de ventana)
+- Con la semilla, aparecen si tienen presupuesto > 0 en el mes de desempeño.
