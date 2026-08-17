@@ -59,16 +59,17 @@ const CH_MES_DATA = {
 // PERÚ: ppto anual y real YTD por zona
 const PE_RTC_DATA = {
   equipo: {
-    labels: ['O. Infante','Aguirre/Nav.','O. Atalaya','A. Gonzales','P. Valladares','M. Hidalgo'],
-    ppto:   [485058, 223930, 248424, 37250, 142372, 65000],
-    real:   [94144,  74347,  59072,  696,   1000,   0],
-    colors: [A, G, G, R, R, R]
+    labels: ['O. Infante','Aguirre/Nav.','O. Atalaya','A. Gonzales','P. Valladares','S. Diaz','M. Hidalgo'],
+    ppto:   [485058, 223930, 248424, 37250, 142372, 167300, 65000],
+    real:   [94144,  74347,  59072,  696,   1000,   17460,  0],
+    colors: [A, G, G, R, R, R, R]
   },
   infante:    { labels:['O. Infante'],    ppto:[485058], real:[94144], colors:[A] },
   aguirre:    { labels:['L. Aguirre'],    ppto:[223930], real:[74347], colors:[G] },
   atalaya:    { labels:['O. Atalaya'],    ppto:[248424], real:[59072], colors:[G] },
   gonzales:   { labels:['A. Gonzales'],   ppto:[37250],  real:[696],   colors:[R] },
   valladares: { labels:['P. Valladares'], ppto:[142372], real:[1000],  colors:[R] },
+  diaz:       { labels:['S. Diaz'],       ppto:[167300], real:[17460], colors:[R] },
   martha:     { labels:['M. Hidalgo'],    ppto:[65000],  real:[0],     colors:[R] },
 };
 
@@ -787,6 +788,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
       <button class="sel-btn pe-btn" onclick="setPeruRTC('atalaya',this)">O. Atalaya</button>
       <button class="sel-btn pe-btn" onclick="setPeruRTC('gonzales',this)">A. Gonzales</button>
       <button class="sel-btn pe-btn" onclick="setPeruRTC('valladares',this)">P. Valladares</button>
+      <button class="sel-btn pe-btn" onclick="setPeruRTC('diaz',this)">S. Diaz</button>
       <button class="sel-btn pe-btn" onclick="setPeruRTC('martha',this)">M. Hidalgo</button>
     </div>
     <div class="ch ch-lg"><canvas id="cPeruRTC"></canvas></div>
@@ -804,6 +806,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
       <button class="sel-btn pe-btn" onclick="setPeruCurva('atalaya',this)">O. Atalaya</button>
       <button class="sel-btn pe-btn" onclick="setPeruCurva('gonzales',this)">A. Gonzales</button>
       <button class="sel-btn pe-btn" onclick="setPeruCurva('valladares',this)">P. Valladares</button>
+      <button class="sel-btn pe-btn" onclick="setPeruCurva('diaz',this)">S. Diaz</button>
       <button class="sel-btn pe-btn" onclick="setPeruCurva('martha',this)">M. Hidalgo</button>
     </div>
     <div class="ch ch-xl"><canvas id="cPeruCurva"></canvas></div>
@@ -824,6 +827,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
     <button class="sel-btn pe-btn" onclick="setPeruMesVendor('atalaya',this)" style="font-size:11px;padding:4px 10px;">O. Atalaya</button>
     <button class="sel-btn pe-btn" onclick="setPeruMesVendor('gonzales',this)" style="font-size:11px;padding:4px 10px;">A. Gonzales</button>
     <button class="sel-btn pe-btn" onclick="setPeruMesVendor('valladares',this)" style="font-size:11px;padding:4px 10px;">P. Valladares</button>
+    <button class="sel-btn pe-btn" onclick="setPeruMesVendor('diaz',this)" style="font-size:11px;padding:4px 10px;">S. Diaz</button>
     <button class="sel-btn pe-btn" onclick="setPeruMesVendor('martha',this)" style="font-size:11px;padding:4px 10px;">M. Hidalgo</button>
   </div>
   <div style="overflow-x:auto;">
@@ -1154,10 +1158,10 @@ new Chart(document.getElementById('cChileMes'),{
 // PE zona barras
 peRTCChart = new Chart(document.getElementById('cPeruRTC'),{
   type:'bar', data:{
-    labels:['O. Infante','L. Aguirre','O. Atalaya','A. Gonzales','P. Valladares','M. Hidalgo'],
+    labels:['O. Infante','L. Aguirre','O. Atalaya','A. Gonzales','P. Valladares','S. Diaz','M. Hidalgo'],
     datasets:[
-      {label:'Ppto Anual',data:[485058,223930,248424,37250,142372,65000],backgroundColor:'rgba(27,79,138,0.07)',borderColor:'rgba(27,79,138,0.20)',borderWidth:1,borderRadius:3},
-      {label:'Real YTD',data:(typeof AVBOARD!=='undefined'?[AVBOARD.peru.ventas.por_vendedor.infante.ytd,(AVBOARD.peru.ventas.por_vendedor.aguirre.ytd||0)+((AVBOARD.peru.ventas.por_vendedor.navarro&&AVBOARD.peru.ventas.por_vendedor.navarro.ytd)||0),AVBOARD.peru.ventas.por_vendedor.atalaya.ytd,AVBOARD.peru.ventas.por_vendedor.gonzales.ytd,AVBOARD.peru.ventas.por_vendedor.valladares.ytd,(AVBOARD.peru.ventas.por_vendedor.martha&&AVBOARD.peru.ventas.por_vendedor.martha.ytd)||0]:[130104,128047,64589,696,1800,0]),backgroundColor:[A,G,G,R,R,R],borderRadius:3}
+      {label:'Ppto Anual',data:[485058,223930,248424,37250,142372,167300,65000],backgroundColor:'rgba(27,79,138,0.07)',borderColor:'rgba(27,79,138,0.20)',borderWidth:1,borderRadius:3},
+      {label:'Real YTD',data:(typeof AVBOARD!=='undefined'?[AVBOARD.peru.ventas.por_vendedor.infante.ytd,(AVBOARD.peru.ventas.por_vendedor.aguirre.ytd||0)+((AVBOARD.peru.ventas.por_vendedor.navarro&&AVBOARD.peru.ventas.por_vendedor.navarro.ytd)||0),AVBOARD.peru.ventas.por_vendedor.atalaya.ytd,AVBOARD.peru.ventas.por_vendedor.gonzales.ytd,AVBOARD.peru.ventas.por_vendedor.valladares.ytd,(AVBOARD.peru.ventas.por_vendedor.diaz&&AVBOARD.peru.ventas.por_vendedor.diaz.ytd)||0,(AVBOARD.peru.ventas.por_vendedor.martha&&AVBOARD.peru.ventas.por_vendedor.martha.ytd)||0]:[130104,128047,64589,696,1800,17460,0]),backgroundColor:[A,G,G,R,R,R,R],borderRadius:3}
     ]
   },
   options:{responsive:true,maintainAspectRatio:false,
