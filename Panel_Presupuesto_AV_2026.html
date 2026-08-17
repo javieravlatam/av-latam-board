@@ -83,6 +83,7 @@ const PE_MES_DATA = {
   atalaya:    { ppto:[22236,19322,12076,18346,22790,27596,25818,28780,23122,18458,16418,13462],  real:[30071,9000,20000,0,0,0,0,0,0,0,0,0] },
   gonzales:   { ppto:[0,0,4000,0,0,7000,7000,19250,0,0,0,0],                                    real:[600,0,96,0,0,0,0,0,0,0,0,0] },
   valladares: { ppto:[0,240,5406,4950,5280,9950,28086,25222,20100,35834,5904,1400],              real:[0,0,1000,0,0,0,0,0,0,0,0,0] },
+  diaz:       { ppto:[0,0,0,0,0,22300,15000,15000,30000,30000,20000,35000],                    real:[0,0,0,6300,2600,8320,240,0,0,0,0,0] },
   martha:     { ppto:[0,0,0,0,0,0,0,10000,10000,15000,15000,15000],                             real:[0,0,0,0,0,0,0,0,0,0,0,0] },
 };
 
@@ -281,6 +282,7 @@ function renderPeruRvsPpto(periodoKey, btn) {
     {key:'infante',    lbl:'O. Infante',      clsS:'sa', bold:false, note:''},
     {key:'gonzales',   lbl:'A. Gonzales',     clsS:'sr', bold:false, note:''},
     {key:'valladares', lbl:'P. Valladares',   clsS:'sr', bold:false, note:''},
+    {key:'diaz',       lbl:'S. Diaz',         clsS:'sr', bold:false, note:''},
     {key:'martha',     lbl:'M. Hidalgo',      clsS:'sr', bold:false, note:'(KAM)'}
   ];
 
@@ -1361,6 +1363,7 @@ new Chart(document.getElementById('cGrupo'),{
       if(rmp.atalaya&&PE_MES_DATA.atalaya) PE_MES_DATA.atalaya.real=rmp.atalaya.slice(0,12);
       if(rmp.gonzales&&PE_MES_DATA.gonzales) PE_MES_DATA.gonzales.real=rmp.gonzales.slice(0,12);
       if(rmp.valladares&&PE_MES_DATA.valladares) PE_MES_DATA.valladares.real=rmp.valladares.slice(0,12);
+      if(rmp.diaz&&PE_MES_DATA.diaz) PE_MES_DATA.diaz.real=rmp.diaz.slice(0,12);
       if(rmp.martha&&PE_MES_DATA.martha) PE_MES_DATA.martha.real=rmp.martha.slice(0,12);
     }
     // ── Tabla PRESUPUESTO OFICIAL PERÚ — rebuild desde AVBOARD ──────────────────
