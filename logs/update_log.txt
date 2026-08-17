@@ -2315,3 +2315,15 @@ ACCIONES REALIZADAS:
     · Oscar Infante  → última TX 2026-07-13 (fuera de ventana)
     · Antonio Gonzales → última TX 2026-07-08 (fuera de ventana)
 - Con la semilla, aparecen si tienen presupuesto > 0 en el mes de desempeño.
+
+================================================================================
+FECHA: 2026-08-17 (segundo bloque)
+ARCHIVOS PROCESADOS: Panel_Presupuesto_AV_2026.html
+COMMIT: 486a78e
+================================================================================
+ACCIONES REALIZADAS:
+- fix: Susan Diaz ausente en Panel Presupuesto — 3 omisiones corregidas:
+  1. PE_MES_DATA sin entrada 'diaz' (datos estáticos ppto+real)
+  2. renderPeruRvsPpto vendors[] no incluía 'diaz' → ausente en tabla Real vs Ppto
+  3. Bloque de sync AVBOARD→PE_MES_DATA no actualizaba real de 'diaz'
+- Causa raíz: diaz fue incorporada después del último deploy de este panel
