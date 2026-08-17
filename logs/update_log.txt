@@ -2282,3 +2282,22 @@ ACCIONES:
     · Por vendedor: aguirre, geldres, atalaya, valladares, gonzales, infante, diaz, otros
   - Panel_CxC: sync_cxc_panel actualizado (alerta banner + chileData)
 ================================================================================
+
+================================================================================
+FECHA: 2026-08-17
+ARCHIVOS PROCESADOS:
+  - inbox/nuevo libro base AV 2026.xlsx (Presupuesto Pais — Peru, corregido)
+ACCIONES:
+  - Excel corregido: Oscar Infante y Lizbeth Aguirre desplazamiento un mes
+    · Oscar Infante: MAR=0 (era 67708.1), valores ENE-JUL correctos, AGO-DIC=0
+    · Lizbeth Aguirre (principal): MAR=10000 (nuevo), ABR-DIC = valores desplazados
+    · RTC ICA 2 / Lizbeth Aguirre: hardcodeado JUL=10000,AGO=20000,SEP=15000,OCT=20000,NOV=20000,DIC=10000
+    · Otros vendedores (Atalaya, Diaz, Valladares, Gonzalez, Martha): hardcodeados con valores correctos
+      (necesario porque openpyxl borra cached SUMIFS al salvar — solo en pipeline, Excel funciona normal)
+  - apps/sic_av/sic_tx_pe.js: SIC_PPTO_PE.rtc_mensual_ppto actualizado
+    · aguirre: [12025,10572.5,10000,16149.3,13128.5,7643.7,25021,30000,100000,70000,90000,40000]
+    · infante: [16259.9,30164,0,67708.1,37357.7,26732.8,15345.5,0,0,0,0,0]
+VALIDACIÓN:
+  · Pipeline ppto_libro_base.get_ppto_rtc("PE") coincide con sic_tx_pe.js
+  · Total aguirre: 424,540 USD | Total infante: 193,568 USD
+================================================================================
