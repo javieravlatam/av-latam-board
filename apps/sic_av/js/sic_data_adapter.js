@@ -98,7 +98,10 @@
   SICAdapter.VENDEDORES_SEMILLA = {
     CL: {},
     PE: {
-      "martha": "MARTHA HIDALGO"   // KAM incorporada ago 2026 — sin ventas hasta jul 2026
+      "martha":   "MARTHA HIDALGO",   // KAM incorporada ago 2026 — sin ventas hasta jul 2026
+      "diaz":     "SUSAN DIAZ",       // incorporada abr 2026 — desaparece en ciclos sin TX en ventana 26-25
+      "gonzales": "ANTONIO GONZALES", // ventas esporádicas — puede no tener TX en la ventana del ciclo
+      "infante":  "OSCAR INFANTE"     // sin TX H2 en ventana 26-25 en algunos ciclos
     }
   };
 
