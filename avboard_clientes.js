@@ -1,6 +1,6 @@
 /* avboard_clientes.js
  * Motor de datos consolidado · Panel Clientes AV Latam 2026
- * Generado: 2026-08-13 | Corte: Chile 12/08/2026 · CxC 12/08/2026
+ * Generado: 2026-08-24 | Corte: Chile 12/08/2026 · CxC 12/08/2026
  * GENERADO AUTOMÁTICAMENTE — scripts/update_avboard.py
  *
  * Clientes Chile: 161 · YTD CLP 414,135,939

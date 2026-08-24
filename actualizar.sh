@@ -1,51 +1,81 @@
 #!/bin/bash
 # ============================================================
-#  AVBOARD — Actualización automática de datos
-#  Uso: ./actualizar.sh
+#  AVBOARD — Actualizar AV Board
+#  Uso: doble clic en la app Automator, o ./actualizar.sh
 #  Coloca los archivos nuevos en /inbox antes de ejecutar.
 # ============================================================
 
-set -e
-cd "$(dirname "$0")"
+# ── PATH explícito (necesario cuando se lanza desde GUI/Automator) ──
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+
+# ── Ir al repo ──
+REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$REPO_DIR"
 
 echo ""
 echo "=================================================="
 echo "  AVBOARD — Actualizando datos..."
+echo "  $(date '+%d/%m/%Y %H:%M')"
 echo "=================================================="
 echo ""
 
-# 1. Correr pipeline
-echo "▶ Ejecutando pipeline..."
+# ── Verificar dependencias ──
+if ! command -v python3 &>/dev/null; then
+  echo "❌ ERROR: python3 no encontrado. Instala Homebrew y Python."
+  exit 1
+fi
+if ! command -v git &>/dev/null; then
+  echo "❌ ERROR: git no encontrado."
+  exit 1
+fi
+
+echo "🐍 Python: $(python3 --version)"
+echo "📁 Repo:   $REPO_DIR"
+echo ""
+
+# ── 1. Pipeline principal ──
+echo "▶ Ejecutando pipeline AVBOARD..."
 python3 scripts/update_avboard.py
 echo ""
 
-# 2. Ver qué cambió
+# ── 2. Pipeline SIC Perú (sic_tx_pe.js) — si existe el script ──
+if [ -f "scripts/build_master_dataset.py" ]; then
+  echo "▶ Actualizando SIC Perú (sic_tx_pe.js)..."
+  python3 scripts/build_master_dataset.py 2>/dev/null && echo "   → OK" || echo "   ⚠ Sin cambios en SIC PE"
+  echo ""
+fi
+
+# ── 3. Archivos modificados ──
 echo "▶ Archivos modificados:"
 git --no-optional-locks status --short
 echo ""
 
-# 3. Agregar todo al staging
+# ── 4. Staging ──
 git --no-optional-locks add \
   avboard_data.js \
   avboard_clientes.js \
   Panel_*.html \
-  Panel_IEC_Auditoria_2026.html \
+  apps/sic_av/sic_tx_pe.js \
+  apps/sic_av/sic_tx_cl.js \
+  apps/sic_av/js/sic_data_adapter.js \
   logs/update_log.txt \
   logs/resumen_actualizacion.md \
   logs/alertas.md \
-  scripts/ppto_libro_base.py
+  scripts/ppto_libro_base.py 2>/dev/null || true
 
-# Force-add cualquier xlsx nuevo en inbox
-git --no-optional-locks add -f inbox/*.xlsx 2>/dev/null || true
-
-# 4. Commit con fecha automática
+# ── 5. Commit ──
 FECHA=$(date '+%d/%m/%Y %H:%M')
-git --no-optional-locks commit -m "data: actualización AVBOARD $FECHA [skip ci]" || {
+git --no-optional-locks commit -m "data: actualización AVBOARD $FECHA" 2>/dev/null || {
   echo "ℹ️  Sin cambios nuevos para commitear."
+  echo ""
+  echo "=================================================="
+  echo "  ✅ Pipeline OK — datos ya estaban al día"
+  echo "=================================================="
+  echo ""
   exit 0
 }
 
-# 5. Push
+# ── 6. Push ──
 echo ""
 echo "▶ Subiendo a GitHub..."
 git --no-optional-locks push origin main
