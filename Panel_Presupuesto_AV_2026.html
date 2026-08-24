@@ -59,16 +59,16 @@ const CH_MES_DATA = {
 // PERÚ: ppto anual y real YTD por zona
 const PE_RTC_DATA = {
   equipo: {
-    labels: ['O. Infante','Aguirre/Nav.','O. Atalaya','A. Gonzales','P. Valladares','S. Diaz','M. Hidalgo'],
-    ppto:   [485058, 223930, 248424, 37250, 142372, 167300, 65000],
+    labels: ['O. Infante','L. Aguirre','O. Atalaya','A. Gonzales','P. Valladares','S. Diaz','M. Hidalgo'],
+    ppto:   [193568, 424540, 240366, 29000, 90826, 167300, 65000],
     real:   [94144,  74347,  59072,  696,   1000,   17460,  0],
     colors: [A, G, G, R, R, R, R]
   },
-  infante:    { labels:['O. Infante'],    ppto:[485058], real:[94144], colors:[A] },
-  aguirre:    { labels:['L. Aguirre'],    ppto:[223930], real:[74347], colors:[G] },
-  atalaya:    { labels:['O. Atalaya'],    ppto:[248424], real:[59072], colors:[G] },
-  gonzales:   { labels:['A. Gonzales'],   ppto:[37250],  real:[696],   colors:[R] },
-  valladares: { labels:['P. Valladares'], ppto:[142372], real:[1000],  colors:[R] },
+  infante:    { labels:['O. Infante'],    ppto:[193568], real:[94144], colors:[A] },
+  aguirre:    { labels:['L. Aguirre'],    ppto:[424540], real:[74347], colors:[G] },
+  atalaya:    { labels:['O. Atalaya'],    ppto:[240366], real:[59072], colors:[G] },
+  gonzales:   { labels:['A. Gonzales'],   ppto:[29000],  real:[696],   colors:[R] },
+  valladares: { labels:['P. Valladares'], ppto:[90826],  real:[1000],  colors:[R] },
   diaz:       { labels:['S. Diaz'],       ppto:[167300], real:[17460], colors:[R] },
   martha:     { labels:['M. Hidalgo'],    ppto:[65000],  real:[0],     colors:[R] },
 };
@@ -76,16 +76,16 @@ const PE_RTC_DATA = {
 // PERÚ: ppto mensual y real mensual por zona
 const PE_MES_DATA = {
   equipo: {
-    ppto: [54018.4,60698.8,103228,74732,65722,104999,127929,208900,211628,182802,108220,77137.6],
+    ppto: [51669,60148,27946,107528,78467,103476,98366,84000,178000,153000,158000,110000],
     real: [73511,39409,91616,24722,0,0,0,0,0,0,0,0],
   },
-  infante:    { ppto:[18238,29737,66760,38833,26906,24924,24281,67338,52582,51270,60359,23830], real:[16526,16188,38881,22550,0,0,0,0,0,0,0,0] },
-  aguirre:    { ppto:[11200,9190,14980,9170,6970,9240,15490,37590,29760,60280,15800,4260],       real:[26314,14221,31640,2172,0,0,0,0,0,0,0,0] },
-  atalaya:    { ppto:[22236,19322,12076,18346,22790,27596,25818,28780,23122,18458,16418,13462],  real:[30071,9000,20000,0,0,0,0,0,0,0,0,0] },
-  gonzales:   { ppto:[0,0,4000,0,0,7000,7000,19250,0,0,0,0],                                    real:[600,0,96,0,0,0,0,0,0,0,0,0] },
-  valladares: { ppto:[0,240,5406,4950,5280,9950,28086,25222,20100,35834,5904,1400],              real:[0,0,1000,0,0,0,0,0,0,0,0,0] },
-  diaz:       { ppto:[0,0,0,0,0,22300,15000,15000,30000,30000,20000,35000],                    real:[0,0,0,6300,2600,8320,240,0,0,0,0,0] },
-  martha:     { ppto:[0,0,0,0,0,0,0,10000,10000,15000,15000,15000],                             real:[0,0,0,0,0,0,0,0,0,0,0,0] },
+  infante:    { ppto:[16260,30164,0,67708,37358,26733,15346,0,0,0,0,0],                          real:[16526,16188,38881,22550,0,0,0,0,0,0,0,0] },
+  aguirre:    { ppto:[12025,10572,10000,16149,13128,7644,25021,30000,100000,70000,90000,40000],   real:[26314,14221,31640,2172,0,0,0,0,0,0,0,0] },
+  atalaya:    { ppto:[22123,17722,10139,17028,21306,34049,25000,19000,23000,23000,18000,10000],   real:[30071,9000,20000,0,0,0,0,0,0,0,0,0] },
+  gonzales:   { ppto:[1261,1469,2498,1820,1521,2431,8000,0,5000,0,5000,0],                       real:[600,0,96,0,0,0,0,0,0,0,0,0] },
+  valladares: { ppto:[0,221,5310,4823,5153,10319,10000,10000,10000,15000,10000,10000],            real:[0,0,1000,0,0,0,0,0,0,0,0,0] },
+  diaz:       { ppto:[0,0,0,0,0,22300,15000,15000,30000,30000,20000,35000],                      real:[0,0,0,6300,2600,8320,240,0,0,0,0,0] },
+  martha:     { ppto:[0,0,0,0,0,0,0,10000,10000,15000,15000,15000],                              real:[0,0,0,0,0,0,0,0,0,0,0,0] },
 };
 
 // ── REFERENCIAS A CHARTS ──
@@ -1160,7 +1160,7 @@ peRTCChart = new Chart(document.getElementById('cPeruRTC'),{
   type:'bar', data:{
     labels:['O. Infante','L. Aguirre','O. Atalaya','A. Gonzales','P. Valladares','S. Diaz','M. Hidalgo'],
     datasets:[
-      {label:'Ppto Anual',data:[485058,223930,248424,37250,142372,167300,65000],backgroundColor:'rgba(27,79,138,0.07)',borderColor:'rgba(27,79,138,0.20)',borderWidth:1,borderRadius:3},
+      {label:'Ppto Anual',data:[193568,424540,240366,29000,90826,167300,65000],backgroundColor:'rgba(27,79,138,0.07)',borderColor:'rgba(27,79,138,0.20)',borderWidth:1,borderRadius:3},
       {label:'Real YTD',data:(typeof AVBOARD!=='undefined'?[AVBOARD.peru.ventas.por_vendedor.infante.ytd,(AVBOARD.peru.ventas.por_vendedor.aguirre.ytd||0)+((AVBOARD.peru.ventas.por_vendedor.navarro&&AVBOARD.peru.ventas.por_vendedor.navarro.ytd)||0),AVBOARD.peru.ventas.por_vendedor.atalaya.ytd,AVBOARD.peru.ventas.por_vendedor.gonzales.ytd,AVBOARD.peru.ventas.por_vendedor.valladares.ytd,(AVBOARD.peru.ventas.por_vendedor.diaz&&AVBOARD.peru.ventas.por_vendedor.diaz.ytd)||0,(AVBOARD.peru.ventas.por_vendedor.martha&&AVBOARD.peru.ventas.por_vendedor.martha.ytd)||0]:[130104,128047,64589,696,1800,17460,0]),backgroundColor:[A,G,G,R,R,R,R],borderRadius:3}
     ]
   },

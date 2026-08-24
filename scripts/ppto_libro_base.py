@@ -50,20 +50,20 @@ PPTO_ANUAL_CL_LEGACY: float = sum(PPTO_MENSUAL_CL_LEGACY)   # 861,321,350
 # ─────────────────────────────────────────────────────────────
 
 PPTO_MENSUAL_PE_LEGACY: List[float] = [
-     51_674,   # Ene
-     58_489,   # Feb
-    103_222,   # Mar
-     71_299,   # Abr
-     61_946,   # May
-     78_710,   # Jun
-    100_675,   # Jul
-    178_180,   # Ago
-    125_564,   # Sep
-    165_842,   # Oct
-     98_481,   # Nov
-     42_952,   # Dic
+     51_669,   # Ene
+     60_148,   # Feb
+     27_946,   # Mar
+    107_528,   # Abr
+     78_467,   # May
+    103_476,   # Jun
+     98_366,   # Jul
+     84_000,   # Ago
+    178_000,   # Sep
+    153_000,   # Oct
+    158_000,   # Nov
+    110_000,   # Dic
 ]
-PPTO_ANUAL_PE_LEGACY: float = sum(PPTO_MENSUAL_PE_LEGACY)   # 1,137,034
+PPTO_ANUAL_PE_LEGACY: float = sum(PPTO_MENSUAL_PE_LEGACY)   # 1,210,600
 
 # ─────────────────────────────────────────────────────────────
 # VALORES ESPERADOS DESDE LIBRO_BASE (para validación)
@@ -72,7 +72,7 @@ PPTO_ANUAL_PE_LEGACY: float = sum(PPTO_MENSUAL_PE_LEGACY)   # 1,137,034
 EXPECTED_CL_ANUAL:  float = 728_110_400.0   # nuevo libro base AV 2026 (actualizado Jul 2026)
 EXPECTED_CL_PPTO5M: float = 290_513_800.0   # Ene–May 2026 nuevo libro
 EXPECTED_PE_ANUAL:  float = 1_210_600.0
-EXPECTED_PE_PPTO5M: float = 350_134.3
+EXPECTED_PE_PPTO5M: float = 325_758.0
 
 # ─────────────────────────────────────────────────────────────
 # CONFIGURACIÓN
