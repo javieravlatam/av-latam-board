@@ -335,7 +335,7 @@ function renderPeruRvsPpto(periodoKey, btn) {
   var tag = document.getElementById('pe-t1-tag');
   if (tag) tag.textContent = 'USD · ' + lblRange + ' 2026 · al ' + cortesPE;
   var note = document.getElementById('pe-rvsp-note');
-  if (note) note.innerHTML = '⚠️ Período <strong>' + periodoKey.toUpperCase() + '</strong> (' + lblRange + ') · Cumplimiento: <span style="color:' + (totRatio>=1?'var(--green)':'var(--amber)') + '">' + pctFmt(totRatio) + '</span> · Infante ppto anual más alto: USD ' + fmtU(rtcPA.infante||0);
+  if (note) note.innerHTML = '⚠️ Período <strong>' + periodoKey.toUpperCase() + '</strong> (' + lblRange + ') · Cumplimiento: <span style="color:' + (totRatio>=1?'var(--green)':'var(--amber)') + '">' + pctFmt(totRatio) + '</span> · Aguirre ppto anual: USD ' + fmtU(rtcPA.aguirre||0) + ' · Infante ppto anual: USD ' + fmtU(rtcPA.infante||0);
 }
 
 // ── Chile Seguimiento mes a mes — selector de vendor ─────────────────────────
