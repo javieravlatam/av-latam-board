@@ -321,7 +321,7 @@
     <!-- KPI IEC Perú -->
     <div class="kpi-card green" id="av-eb-iec-peru-card">
       <div class="kpi-label">IEC · Perú</div>
-      <div id="av-eb-iec-peru" class="kpi-value green">107.6%</div>
+      <div id="av-eb-iec-peru" class="kpi-value green">107.3%</div>
       <div id="av-eb-iec-peru-sub" class="kpi-sub">Eficiencia vs precio piso</div>
       <div id="av-eb-iec-peru-badge" class="kpi-badge badge-green">✅ Saludable</div>
     </div>
@@ -667,25 +667,8 @@
     <!-- Diagnóstico CEO Perú -->
     <div class="panel" style="grid-column: span 2;">
       <div class="panel-title">DIAGNÓSTICO CEO · PERÚ</div>
-      <div class="alert-box green">
-        <div class="alert-title" style="color:var(--green);">✅ AGUIRRE / NAVARRO — ZONA ESTRELLA (204.1% del Ppto T1)</div>
-        <div class="alert-body">YTD USD 77,747 con Ppto T1 de USD 38,092. Zona unificada operando al doble de presupuesto. Ppto anual USD 223,930 — ritmo actual supera proyección. Formalizar plan Q2 con cuota adicional. Modelo de expansión para otras zonas.</div>
-      </div>
-      <div class="alert-box green">
-        <div class="alert-title" style="color:var(--green);">✅ O. ATALAYA — EN META (110.1% del Ppto T1)</div>
-        <div class="alert-body">YTD USD 59,072 sobre Ppto T1 de USD 53,654. Cumplimiento estable. Sin alertas de cartera. Zona controlada y con margen de crecimiento en Q2.</div>
-      </div>
-      <div class="alert-box amber">
-        <div class="alert-title" style="color:var(--amber);">⚠️ O. INFANTE — MAYOR VOLUMEN BAJO META (74.5% del Ppto T1)</div>
-        <div class="alert-body">YTD USD 94,144 — líder en volumen absoluto pero al 74.5% del Ppto T1 (USD 126,400). Abril parcial USD 22,550. Mayor exposición CxC: USD 28,153. Revisar plan comercial Mayo-Junio. Concentración en pocos clientes: riesgo si uno entra en mora.</div>
-      </div>
-      <div class="alert-box red">
-        <div class="alert-title" style="color:var(--red);">🔴 A. GONZALES — ZONA CRÍTICA (17.4% del Ppto T1)</div>
-        <div class="alert-body">YTD USD 696. Ppto T1 implícito USD 4,000. Zona prácticamente inactiva en lo que va del año. Sin ventas en Febrero-Marzo-Abril. Requiere evaluación de continuidad y posible reasignación de territorio en Q2.</div>
-      </div>
-      <div class="alert-box red">
-        <div class="alert-title" style="color:var(--red);">🔴 P. VALLADARES — ZONA CRÍTICA (17.5% del Ppto T1)</div>
-        <div class="alert-body">YTD USD 1,000. Ppto T1 implícito USD 5,714. Actividad mínima. Sin registro de ventas en meses recientes. Evaluar si la zona está activa y con qué cartera de clientes opera. Decisión sobre fusión o cierre antes de Q3.</div>
+      <div id="eb-diagnostico-pe-body">
+        <div class="alert-body" style="color:var(--text-dim);font-size:11px;">Cargando datos actualizados…</div>
       </div>
     </div>
   </div>
@@ -852,7 +835,7 @@
 </div>
 
 <!-- ── KPI PERÚ ── -->
-<div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:10px;">🇵🇪 PERÚ · IEC 2026 YTD <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;">Base 58 tx · cobertura revenue 107.6%</span></div>
+<div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:10px;">🇵🇪 PERÚ · IEC 2026 YTD <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;">Base 58 tx · cobertura revenue 107.3%</span></div>
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;">
   <div class="kpi-card" style="border-color:var(--border);">
     <div class="kpi-label">IEC Perú</div>
@@ -1329,7 +1312,7 @@
   </div>
 </div>
 
-<script src="avboard_data.js?v=20260731b"></script>
+<script src="avboard_data.js?v=20260824"></script>
 <script>
 Chart.defaults.color = '#7A90AA';
 Chart.defaults.font.family = "'DM Mono', monospace";
@@ -1606,6 +1589,46 @@ function cerrarSesion() {
       var badgePE = document.getElementById('av-eb-iec-peru-badge');
       if (badgePE) { badgePE.textContent = iecPEbadge; badgePE.className = 'kpi-badge badge-'+iecPEcls; }
     }
+
+    // ── DIAGNÓSTICO CEO PERÚ — generado dinámicamente desde AVBOARD ──
+    (function(){
+      var el = document.getElementById('eb-diagnostico-pe-body');
+      if (!el) return;
+      var pvv = pv.por_vendedor || {};
+      var rmp = pv.rtc_mensual_ppto || {};
+      var rpa = pv.rtc_ppto_anual || {};
+      var VEND = [
+        {key:'infante',    lbl:'O. Infante'},
+        {key:'aguirre',    lbl:'L. Aguirre'},
+        {key:'atalaya',    lbl:'O. Atalaya'},
+        {key:'diaz',       lbl:'S. Diaz'},
+        {key:'valladares', lbl:'P. Valladares'},
+        {key:'gonzales',   lbl:'A. Gonzales'},
+        {key:'martha',     lbl:'M. Hidalgo'},
+      ];
+      function fK(n){ return (n/1000).toFixed(0)+'K'; }
+      function pct(r){ return r!=null?(r*100).toFixed(1)+'%':'—'; }
+      var html = '';
+      VEND.forEach(function(v){
+        var vd = pvv[v.key];
+        if (!vd) return;
+        var ytd = vd.ytd || 0;
+        var t1arr = rmp[v.key] || [];
+        var t1ppto = t1arr.slice(0,3).reduce(function(a,b){return a+b;},0);
+        var anualPpto = rpa[v.key] || 0;
+        var cumpl = t1ppto > 0 ? ytd / t1ppto : null;
+        var cls = cumpl == null ? 'amber' : (cumpl >= 0.90 ? 'green' : (cumpl >= 0.60 ? 'amber' : 'red'));
+        var icon = cls === 'green' ? '✅' : (cls === 'amber' ? '⚠️' : '🔴');
+        var cumplLbl = cumpl != null ? ' ('+pct(cumpl)+' del Ppto T1)' : '';
+        html += '<div class="alert-box '+cls+'">';
+        html += '<div class="alert-title" style="color:var(--'+cls+');">'+icon+' '+v.lbl+cumplLbl+'</div>';
+        html += '<div class="alert-body">YTD USD '+fK(ytd);
+        if (t1ppto > 0) html += ' · Ppto T1 USD '+fK(t1ppto);
+        if (anualPpto > 0) html += ' · Ppto anual USD '+fK(anualPpto);
+        html += '</div></div>';
+      });
+      el.innerHTML = html || '<div class="alert-body">Sin datos de vendedores disponibles.</div>';
+    })();
 
     // TC label
     set('av-eb-tc-label', 'TC = '+D.tc()+' CLP/USD');

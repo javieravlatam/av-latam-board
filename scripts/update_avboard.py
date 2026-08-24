@@ -110,29 +110,31 @@ try:
     from ppto_libro_base import get_ppto_rtc as _get_ppto_rtc
     PPTO_RTC_CL = _get_ppto_rtc("CL")
     PPTO_RTC_MENSUAL_PE = _get_ppto_rtc("PE")
-    if not PPTO_RTC_CL:
-        raise ValueError("get_ppto_rtc('CL') retornó vacío")
-    if not PPTO_RTC_MENSUAL_PE:
-        raise ValueError("get_ppto_rtc('PE') retornó vacío")
+    if not PPTO_RTC_CL or all(sum(v) == 0 for v in PPTO_RTC_CL.values()):
+        raise ValueError("get_ppto_rtc('CL') retornó vacío o todos ceros — usando LEGACY")
+    if not PPTO_RTC_MENSUAL_PE or all(sum(v) == 0 for v in PPTO_RTC_MENSUAL_PE.values()):
+        raise ValueError("get_ppto_rtc('PE') retornó vacío o todos ceros — usando LEGACY")
     print(f"  RTCs Chile desde Libro Base: {sorted(PPTO_RTC_CL.keys())}")
     print(f"  RTCs Perú  desde Libro Base: {sorted(PPTO_RTC_MENSUAL_PE.keys())}")
 except Exception as _rtc_err:
     print(f"⚠️  No se pudo cargar RTCs desde Libro Base: {_rtc_err}. Usando LEGACY.")
     PPTO_RTC_CL = {
-        'caroca':    [12500000, 6000000, 14500000,  8831000, 12500000,  8730000,  6000000, 25500000, 10800000,  8700000,  5000000, 12500000],
-        'laratro':   [36000000,10600000,  7500000, 16600000, 22500000, 10000000,  7800000, 21000000, 25000000, 20000000, 37500000, 19500000],
-        'encina':    [14200000, 7500000,  7500000,  5000000,  5000000,  5000000,  5000000, 12000000, 21000000, 28000000, 31000000, 28700000],
-        'velasquez': [14858000,11502000,  6500000, 10000000,  5000000, 20000000, 38000000, 12000000, 48000000, 50000000, 18000000, 20000000],
-        'veverka':   [ 6000000, 6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000],
+        'caroca':      [12500000,  6000000, 14500000,  8831000, 12500000,  8730000,  6000000, 25500000, 10800000,  8700000,  5000000, 12500000],
+        'laratro':     [36000000, 10600000,  7500000, 16600000, 22500000, 10000000,  7800000, 21000000, 25000000, 20000000, 37500000, 19500000],
+        'encina':      [14200000,  7500000,  7500000,  5000000,  5000000,  5000000,  5000000, 12000000, 21000000, 28000000, 31000000, 28700000],
+        'velasquez':   [14858000, 11502000,  6500000, 10000000,  5000000, 20000000, 38000000, 12000000, 48000000, 50000000, 18000000, 20000000],
+        'veverka':     [ 6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000,  6000000],
+        'munoz':       [ 6025000,  5310000,  3978000,  3306000,  5661000,  8360000,         0,        0,        0,        0,        0,        0],
+        'franco_riffo':[ 1769000,  1490000,  4709000,  3836000,  3065000,  4175000,         0,        0,        0,        0,        0,        0],
     }
     PPTO_RTC_MENSUAL_PE = {
-        'infante':    [16260, 30164, 67708, 37358, 26733, 15346,     0,      0,     0,     0,     0,     0],
-        'aguirre':    [12025, 10573, 16149, 13129,  7644, 15021, 20000, 105000, 65000, 90000, 50000, 20000],
-        'atalaya':    [22123, 17722, 10139, 17028, 21307, 34049, 25000,  19000, 23000, 23000, 18000, 10000],
-        'gonzales':   [ 1261,  1469,  2498,  1820,  1521,  2431,  8000,      0,  5000,     0,  5000,     0],
-        'valladares': [    0,   221,  5310,  4823,  5153, 10319, 10000,  10000, 10000, 15000, 10000, 10000],
-        'diaz':       [    0,     0,     0,     0,     0, 22300, 15000,  15000, 30000, 30000, 20000, 35000],
-        'martha':     [    0,     0,     0,     0,     0,     0,     0,  10000, 10000, 15000, 15000, 15000],
+        'infante':    [16260, 30164,     0, 67708, 37358, 26733, 15346,      0,      0,      0,      0,      0],
+        'aguirre':    [12025, 10572, 10000, 16149, 13128,  7644, 25021,  30000, 100000,  70000,  90000,  40000],
+        'atalaya':    [22123, 17722, 10139, 17028, 21306, 34049, 25000,  19000,  23000,  23000,  18000,  10000],
+        'gonzales':   [ 1261,  1469,  2498,  1820,  1521,  2431,  8000,      0,   5000,      0,   5000,      0],
+        'valladares': [    0,   221,  5310,  4823,  5153, 10319, 10000,  10000,  10000,  15000,  10000,  10000],
+        'diaz':       [    0,     0,     0,     0,     0, 22300, 15000,  15000,  30000,  30000,  20000,  35000],
+        'martha':     [    0,     0,     0,     0,     0,     0,     0,  10000,  10000,  15000,  15000,  15000],
     }
 
 PPTO_RTC_ANUAL_PE = {k: sum(v) for k, v in PPTO_RTC_MENSUAL_PE.items()}
@@ -2232,6 +2234,56 @@ def update_panel_iec_pe(tx_pe, corte_date):
     return len(tx_pe)
 
 
+def write_sic_tx_pe(tx_pe, ppto_rmp, corte_date):
+    """Genera apps/sic_av/sic_tx_pe.js desde el mismo pipeline que avboard_data.js.
+
+    C-04: Una corrida válida genera juntos avboard_data.js + sic_tx_pe.js.
+
+    Args:
+        tx_pe       — lista de dicts producida por build_tx_pe()
+        ppto_rmp    — dict {vendedor_key: [12 valores mensuales]} (PPTO_RTC_MENSUAL_PE)
+        corte_date  — string 'DD/MM/YYYY'
+    """
+    from datetime import datetime as _dt
+    import json as _json
+
+    SIC_TX_PE_PATH = REPO / 'apps' / 'sic_av' / 'sic_tx_pe.js'
+    now_str = _dt.now().strftime('%Y-%m-%d %H:%M')
+
+    # Serializar transacciones
+    tx_json = _jdumps(tx_pe, separators=(',', ':'))
+
+    # Serializar ppto mensual — orden canónico
+    VEND_ORDER = ['aguirre', 'atalaya', 'diaz', 'gonzales', 'infante', 'martha', 'valladares']
+    ppto_lines = []
+    for k in VEND_ORDER:
+        vals = ppto_rmp.get(k, [0]*12)
+        vals_str = '[' + ','.join(str(round(v, 1)) for v in vals) + ']'
+        ppto_lines.append(f'      {k}: {vals_str}')
+    ppto_block = ',\n'.join(ppto_lines)
+
+    content = (
+        f'/**\n'
+        f' * SIC-AV — sic_tx_pe.js  (datos históricos Perú)\n'
+        f' * Auto-generado — {now_str} | NO EDITAR MANUALMENTE\n'
+        f' * Fuente: update_avboard.py | corte {corte_date}\n'
+        f' */\n'
+        f'(function(global){{\n'
+        f'  "use strict";\n'
+        f'  global.SIC_TX_PE = {tx_json};\n'
+        f'  global.SIC_PPTO_PE = {{ rtc_mensual_ppto: {{\n'
+        f'{ppto_block}\n'
+        f'    }} }};\n'
+        f'}})(typeof window !== "undefined" ? window : globalThis);\n'
+    )
+
+    with open(SIC_TX_PE_PATH, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+    print(f"   → sic_tx_pe.js escrito · {len(tx_pe)} tx · {SIC_TX_PE_PATH}")
+    return len(tx_pe)
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 #  6.5 SINCRONIZAR CACHE-BUSTING (?v=) EN TODOS LOS PANELES HTML
 # ══════════════════════════════════════════════════════════════════════════════
@@ -2410,8 +2462,8 @@ def sync_cache_busting():
     Solo reemplaza el query string del script tag — NO toca diseño ni estructura.
     """
     patterns = [
-        (re.compile(r'(src=["\'])avboard_data\.js(?:\?v=\d{8})?(["\'])'), 'avboard_data.js'),
-        (re.compile(r'(src=["\'])avboard_clientes\.js(?:\?v=\d{8})?(["\'])'), 'avboard_clientes.js'),
+        (re.compile(r'(src=["\'])avboard_data\.js(?:\?v=[\w\d]+)?(["\'])'), 'avboard_data.js'),
+        (re.compile(r'(src=["\'])avboard_clientes\.js(?:\?v=[\w\d]+)?(["\'])'), 'avboard_clientes.js'),
     ]
     changed = []
     for path in sorted(REPO.glob('*.html')):
@@ -2713,6 +2765,13 @@ def main():
         n_tx_pe = 0
         print("   ⚠ TX_PE no disponible — Panel IEC Perú no actualizado")
 
+    # 8.2 Generar sic_tx_pe.js (C-04): mismo pipeline que avboard_data.js
+    print("\n📦 Generando sic_tx_pe.js...")
+    if _tx_pe_pre:
+        write_sic_tx_pe(_tx_pe_pre, PPTO_RTC_MENSUAL_PE, cortes.get('peru_ventas', ''))
+    else:
+        print("   ⚠ TX_PE vacío — sic_tx_pe.js no actualizado")
+
     # 8.5 Sincronizar cache-busting en todos los paneles
     print(f"\n🔄 Sincronizando cache-busting (?v={CACHE_V}) en paneles HTML...")
     panels_synced = sync_cache_busting()
@@ -2738,6 +2797,7 @@ def main():
         f"avboard_clientes.js regenerado · {len(clientes_cl)} clientes CL",
         f"Panel_IEC TX_CL · {n_tx} transacciones",
         f"Panel_IEC TX_PE · {n_tx_pe} transacciones",
+        f"sic_tx_pe.js generado · {n_tx_pe} tx · corte {cortes.get('peru_ventas','')}",
         f"IEC Chile {iec_cl['total']:.1%} · BP CLP {iec_cl['bp_total']:,}",
         f"IEC Perú {iec_pe_computed['total']:.1%} (Fase 7)" if iec_pe_computed and iec_pe_computed.get('total') else "IEC Perú: sin datos",
         f"CxC Chile CLP {cl_cxc['total']:,} · +90d CLP {cl_cxc['tramos']['t90']:,}",
