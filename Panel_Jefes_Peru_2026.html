@@ -250,11 +250,11 @@ table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
     <span style="font-size:18px">ℹ️</span>
     <div>
       <div style="font-size:11px;font-weight:700;color:var(--blue)">Equipo Perú 2026: nuevo roster · Geldres sin actividad · 2 vendedores nuevos (Navarro, Valladares)</div>
-      <div style="font-size:10px;color:var(--muted);margin-top:2px">Family Farms y POB (ex-Geldres) ya fueron reasignados. Lisbeth Aguirre y Omar Atalaya lideran cumplimiento vs ppto 4 meses. Oscar Infante lidera en volumen absoluto.</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">Family Farms y POB (ex-Geldres) ya fueron reasignados. Lisbeth Aguirre y Omar Atalaya lideran cumplimiento vs ppto. Oscar Infante lidera en volumen absoluto.</div>
     </div>
   </div>
 
-  <div class="sec">Ranking Real 2026 (Ene–May) <span>vs Presupuesto Anual 2026 · Ref. Real 2025</span></div>
+  <div class="sec" id="jpe-sec-ranking">Ranking Real 2026 YTD <span>vs Presupuesto Anual 2026 · Ref. Real 2025</span></div>
   <div class="tbl-wrap" style="margin-bottom:20px">
     <table class="tbl">
       <thead>
@@ -263,7 +263,7 @@ table.tbl tr:hover td{background:rgba(27,79,138,0.04)}
           <th>Vendedor</th>
           <th class="r">Real 2026 YTD</th>
           <th class="r">Ppto Anual 2026</th>
-          <th class="c">Cumpl 4m vs Ppto 4m</th>
+          <th class="c" id="jpe-th-cumpl">Cumpl YTD vs Ppto YTD</th>
           <th class="r">Real 2025 Ref.</th>
           <th class="c">Estado</th>
         </tr>
@@ -1317,6 +1317,8 @@ function cerrarSesion() {
     // Header
     var h=document.getElementById('jpe-corte-hdr');
     if(h) h.textContent='Real: Ene–'+mesRango+' 20'+anio+' (al '+corte+')';
+    var secR=document.getElementById('jpe-sec-ranking');
+    if(secR) secR.childNodes[0].textContent='Ranking Real 2026 Ene–'+mesRango+' ';
     var s=document.getElementById('jpe-corte-sub');
     if(s) s.textContent='Ppto Anual 2026 · Ref. 2025 · corte '+corte;
 

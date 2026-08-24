@@ -145,7 +145,22 @@ function setPeruRTC(key, btn) {
   const d = PE_RTC_DATA[key];
   peRTCChart.data.labels = d.labels;
   peRTCChart.data.datasets[0].data = d.ppto;
-  peRTCChart.data.datasets[1].data = d.real;
+  // Real siempre desde AVBOARD (fuente única); fallback estático solo si AVBOARD no cargó
+  var realData;
+  if (typeof AVBOARD !== 'undefined') {
+    var pvv = (AVBOARD.peru && AVBOARD.peru.ventas && AVBOARD.peru.ventas.por_vendedor) || {};
+    function _ytd(k){ return (pvv[k] && pvv[k].ytd) || 0; }
+    if (key === 'equipo') {
+      realData = [_ytd('infante'), _ytd('aguirre')+_ytd('navarro'), _ytd('atalaya'), _ytd('gonzales'), _ytd('valladares'), _ytd('diaz'), _ytd('martha')];
+    } else if (key === 'aguirre') {
+      realData = [_ytd('aguirre') + _ytd('navarro')];
+    } else {
+      realData = [_ytd(key)];
+    }
+  } else {
+    realData = d.real; // fallback snapshot — se mostrará "Cargando…" en etiqueta
+  }
+  peRTCChart.data.datasets[1].data = realData;
   peRTCChart.data.datasets[1].backgroundColor = d.colors;
   peRTCChart.update();
 }
@@ -178,7 +193,12 @@ var PERIODOS = {
   t4:  {s:9,  e:11, lbl:'Oct–Dic'},
   s1:  {s:0,  e:5,  lbl:'Ene–Jun'},
   s2:  {s:6,  e:11, lbl:'Jul–Dic'},
-  ytd: {s:0,  e:-1, lbl:'YTD'}
+  ytd: {s:0,  e:-1, lbl:'YTD'},
+  // Meses individuales
+  m0:{s:0,e:0,lbl:'Ene'}, m1:{s:1,e:1,lbl:'Feb'}, m2:{s:2,e:2,lbl:'Mar'},
+  m3:{s:3,e:3,lbl:'Abr'}, m4:{s:4,e:4,lbl:'May'}, m5:{s:5,e:5,lbl:'Jun'},
+  m6:{s:6,e:6,lbl:'Jul'}, m7:{s:7,e:7,lbl:'Ago'}, m8:{s:8,e:8,lbl:'Sep'},
+  m9:{s:9,e:9,lbl:'Oct'}, m10:{s:10,e:10,lbl:'Nov'}, m11:{s:11,e:11,lbl:'Dic'}
 };
 
 // ── Chile "Real vs Ppto" por período ──────────────────────────────────────────
@@ -592,13 +612,13 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
   <div class="panel">
     <div class="ptitle">REAL vs PPTO · POR RTC <span class="ptag" id="ch-rvsp-tag">CLP · Ene–Mar 2026</span></div>
     <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;" id="selectorChilePeriodo">
-      <button class="sel-btn active" onclick="renderChileRvsPpto('t1',this)">T1</button>
+      <button class="sel-btn" onclick="renderChileRvsPpto('t1',this)">T1</button>
       <button class="sel-btn" onclick="renderChileRvsPpto('t2',this)">T2</button>
       <button class="sel-btn" onclick="renderChileRvsPpto('t3',this)">T3</button>
       <button class="sel-btn" onclick="renderChileRvsPpto('t4',this)">T4</button>
       <button class="sel-btn" onclick="renderChileRvsPpto('s1',this)">S1</button>
       <button class="sel-btn" onclick="renderChileRvsPpto('s2',this)">S2</button>
-      <button class="sel-btn" onclick="renderChileRvsPpto('ytd',this)">YTD</button>
+      <button class="sel-btn active" onclick="renderChileRvsPpto('ytd',this)">YTD</button>
     </div>
     <table class="bt" id="ch-rvsp-tbl">
       <thead><tr><th style="text-align:left;">RTC</th><th>Ppto</th><th>Real</th><th>Gap</th><th style="text-align:center;">%</th><th>Ppto Anual</th></tr></thead>
@@ -764,13 +784,13 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
   <div class="panel pe">
     <div class="ptitle pe">REAL vs PPTO · POR ZONA <span class="ptag" id="pe-t1-tag">USD · Ene–Mar 2026</span></div>
     <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;" id="selectorPeruPeriodo">
-      <button class="sel-btn pe-btn active" onclick="renderPeruRvsPpto('t1',this)">T1</button>
+      <button class="sel-btn pe-btn" onclick="renderPeruRvsPpto('t1',this)">T1</button>
       <button class="sel-btn pe-btn" onclick="renderPeruRvsPpto('t2',this)">T2</button>
       <button class="sel-btn pe-btn" onclick="renderPeruRvsPpto('t3',this)">T3</button>
       <button class="sel-btn pe-btn" onclick="renderPeruRvsPpto('t4',this)">T4</button>
       <button class="sel-btn pe-btn" onclick="renderPeruRvsPpto('s1',this)">S1</button>
       <button class="sel-btn pe-btn" onclick="renderPeruRvsPpto('s2',this)">S2</button>
-      <button class="sel-btn pe-btn" onclick="renderPeruRvsPpto('ytd',this)">YTD</button>
+      <button class="sel-btn pe-btn active" onclick="renderPeruRvsPpto('ytd',this)">YTD</button>
     </div>
     <table class="bt" id="pe-t1-tbl">
       <thead><tr><th style="text-align:left;">Zona</th><th>Ppto</th><th>Real</th><th>Gap</th><th style="text-align:center;">%</th><th>Ppto Anual</th></tr></thead>
@@ -1242,7 +1262,7 @@ new Chart(document.getElementById('cGrupo'),{
       ? cv.cumplimiento_4m
       : (cv.ppto_4m > 0 ? cv.ytd_4m / cv.ppto_4m : null);
     set('av-ppto-cl-ytd-hero','CLP '+Mm(clYTD));
-    set('av-ppto-cl-cumpl-hero',(clCumpl5m!=null?Pc(clCumpl5m):'N/D')+' Ppto 5m · T1 '+Pc(t1CL/t1CLppto));
+    set('av-ppto-cl-cumpl-hero',(clCumpl5m!=null?Pc(clCumpl5m):'N/D')+' Ppto YTD');
     set('av-ppto-cl-ytd-val',Mm(clYTD));
     set('av-ppto-cl-ytd-sub','CLP · al '+cortesCL);
     set('av-ppto-cl-ppto5m',Mm(clPpto5m));
@@ -1286,7 +1306,8 @@ new Chart(document.getElementById('cGrupo'),{
     set('av-ppto-pe-ppto5m',Kk(pePpto5m));
     if(pv.ppto_mes_label){set('av-ppto-pe-ppto5m-sub','USD Ene–'+pv.ppto_mes_label+' acumulado');}
     set('av-ppto-pe-cumpl-val',peCumpl5m!=null?Pc(peCumpl5m):'N/D');
-    set('av-ppto-pe-cumpl-sub','T1 '+Pc(t1PE/t1PEppto)+' · May '+Pc(may5PE/mayPEppto));
+    var _peM=mesActualDeCorte(cortesPE);
+    set('av-ppto-pe-cumpl-sub','YTD Ene–'+(MESES_LARGO[_peM]||'')+'  · '+cortesPE);
     set('av-ppto-pe-pend',Kk(pePptoA-peYTD));
     // ── Perú tabla mes a mes (todos los meses, dinámico) ────────────────────────
     var peMesActual = mesActualDeCorte(cortesPE);
@@ -1315,7 +1336,10 @@ new Chart(document.getElementById('cGrupo'),{
     if(cv.rtc_mensual_ppto){
       var rmpCL=cv.rtc_mensual_ppto;
       ['caroca','laratro','encina','velasquez','veverka','munoz','franco_riffo'].forEach(function(k){
-        if(rmpCL[k]&&CH_MES_DATA[k]) CH_MES_DATA[k].ppto=rmpCL[k].slice(0,12).map(toKr);
+        // Solo sobreescribir si el pipeline tiene datos reales (no ceros): cero = SIN_DATO
+        var arr=rmpCL[k];
+        if(arr && arr.some(function(v){return v>0;}) && CH_MES_DATA[k])
+          CH_MES_DATA[k].ppto=arr.slice(0,12).map(toKr);
       });
     }
     if(cv.rtc_mensual_real){
@@ -1413,9 +1437,38 @@ new Chart(document.getElementById('cGrupo'),{
         if(tftds[13]) tftds[13].textContent=fmt(pv.ppto_anual);
       }
     })();
-    // ── Renderizar tablas "Real vs Ppto" con selector de período ─────────────────
-    renderChileRvsPpto('t1');
-    renderPeruRvsPpto('t1');
+    // ── Renderizar tablas "Real vs Ppto" — default YTD ───────────────────────────
+    renderChileRvsPpto('ytd');
+    renderPeruRvsPpto('ytd');
+    // Agregar botones de mes individual (dinámico según meses con data disponible)
+    (function(){
+      var MES_CORTO=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+      var sepStyle='display:inline-block;width:1px;height:18px;background:var(--bdr);margin:0 4px;vertical-align:middle;';
+      // Chile
+      var clSel=document.getElementById('selectorChilePeriodo');
+      var clN=cv.mensual_real.filter(function(v){return v>0;}).length;
+      if(clSel&&clN>0&&!clSel.querySelector('[data-mk]')){
+        var sp=document.createElement('span'); sp.style.cssText=sepStyle; clSel.appendChild(sp);
+        for(var m=0;m<clN;m++){
+          var mb=document.createElement('button');
+          mb.className='sel-btn'; mb.textContent=MES_CORTO[m]; mb.setAttribute('data-mk','m'+m);
+          (function(key,el){el.onclick=function(){renderChileRvsPpto(key,el);};}('m'+m,mb));
+          clSel.appendChild(mb);
+        }
+      }
+      // Perú
+      var peSel=document.getElementById('selectorPeruPeriodo');
+      var peN=pv.mensual_real.filter(function(v){return v>0;}).length;
+      if(peSel&&peN>0&&!peSel.querySelector('[data-mk]')){
+        var sp2=document.createElement('span'); sp2.style.cssText=sepStyle; peSel.appendChild(sp2);
+        for(var m2=0;m2<peN;m2++){
+          var mb2=document.createElement('button');
+          mb2.className='sel-btn pe-btn'; mb2.textContent=MES_CORTO[m2]; mb2.setAttribute('data-mk','m'+m2);
+          (function(key,el){el.onclick=function(){renderPeruRvsPpto(key,el);};}('m'+m2,mb2));
+          peSel.appendChild(mb2);
+        }
+      }
+    })();
     // Re-render curvas activas
     var actBtn=document.querySelector('#selectorChileCurva .sel-btn.active');
     if(actBtn){var actKey=actBtn.getAttribute('onclick').match(/'([^']+)'/)[1];setChileCurva(actKey,actBtn);}
