@@ -356,6 +356,7 @@ var AVBOARD = (function() {
     ppto_anual:   1137034,
     ppto_4m:      284684,
     ppto_5m:      704195,
+    ppto_mes_label: 'Ago',
     cumplimiento_4m: 0.9126,
     cumplimiento_5m: 0.6756,
     mensual_real: [70232, 38180, 87967, 63434, 84159, 46084, 31959, 53716, 0, 0, 0, 0],

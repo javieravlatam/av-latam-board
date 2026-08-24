@@ -726,7 +726,7 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 <div class="krow" style="margin-bottom:16px;">
   <div class="kpi pe"><div class="klbl">Ppto Anual</div><div class="kval" id="av-ppto-pe-anual-val">1.210M</div><div class="ksub">USD total oficial 2026</div></div>
   <div class="kpi pe"><div class="klbl">Real YTD 5m</div><div class="kval pe" id="av-ppto-pe-ytd-val">334.1K</div><div class="ksub" id="av-ppto-pe-ytd-sub">USD · al 15/05/2026</div></div>
-  <div class="kpi pe"><div class="klbl">Ppto YTD 5m</div><div class="kval" id="av-ppto-pe-ppto5m">346.6K</div><div class="ksub">USD Ene–May acumulado</div></div>
+  <div class="kpi pe"><div class="klbl">Ppto YTD 5m</div><div class="kval" id="av-ppto-pe-ppto5m">346.6K</div><div class="ksub" id="av-ppto-pe-ppto5m-sub">USD Ene–May acumulado</div></div>
   <div class="kpi am"><div class="klbl">Cumplimiento YTD</div><div class="kval am" id="av-ppto-pe-cumpl-val">96.4%</div><div class="ksub" id="av-ppto-pe-cumpl-sub">T1 92.0% · May 119.5%</div></div>
   <div class="kpi rd"><div class="klbl">Pendiente Anual</div><div class="kval rd" id="av-ppto-pe-pend">802.9K</div><div class="ksub">USD · ppto restante por ejecutar</div></div>
 </div>
@@ -1284,6 +1284,7 @@ new Chart(document.getElementById('cGrupo'),{
     set('av-ppto-pe-ytd-val',Kk(peYTD));
     set('av-ppto-pe-ytd-sub','USD · al '+cortesPE);
     set('av-ppto-pe-ppto5m',Kk(pePpto5m));
+    if(pv.ppto_mes_label){set('av-ppto-pe-ppto5m-sub','USD Ene–'+pv.ppto_mes_label+' acumulado');}
     set('av-ppto-pe-cumpl-val',peCumpl5m!=null?Pc(peCumpl5m):'N/D');
     set('av-ppto-pe-cumpl-sub','T1 '+Pc(t1PE/t1PEppto)+' · May '+Pc(may5PE/mayPEppto));
     set('av-ppto-pe-pend',Kk(pePptoA-peYTD));
