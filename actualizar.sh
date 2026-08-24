@@ -12,6 +12,9 @@ export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PAT
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$REPO_DIR"
 
+# ── Limpiar locks de git (evita fallos silenciosos en commit) ──
+rm -f .git/HEAD.lock .git/index.lock 2>/dev/null || true
+
 echo ""
 echo "=================================================="
 echo "  AVBOARD — Actualizando datos..."
@@ -65,7 +68,7 @@ git --no-optional-locks add \
 
 # ── 5. Commit ──
 FECHA=$(date '+%d/%m/%Y %H:%M')
-git --no-optional-locks commit -m "data: actualización AVBOARD $FECHA" 2>/dev/null || {
+git --no-optional-locks commit -m "data: actualización AVBOARD $FECHA" || {
   echo "ℹ️  Sin cambios nuevos para commitear."
   echo ""
   echo "=================================================="
