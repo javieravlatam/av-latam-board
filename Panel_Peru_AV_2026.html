@@ -240,61 +240,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
     <div class="panel">
       <div class="ptitle">SEMÁFORO RTC · PERÚ <span class="ptag" id="av-pe-sema-corte">CORTE 11/05</span></div>
-      <div class="sema-list">
-
-        <div class="sema-row">
-          <span class="sema-star">⭐</span>
-          <div class="sema-info">
-            <div class="sema-name">Aguirre / Navarro <span style="font-size:9px;color:var(--muted);font-weight:400;">zona unificada</span></div>
-            <div class="sema-sub" id="av-sema-sub-aguirre">YTD USD 97,107 · Mayo USD 48,495 · Aguirre lidera grupo 🚀</div>
-          </div>
-          <div class="sema-pct pct-ok">204.1%</div>
-          <div class="sema-dot sd-ok"></div>
-        </div>
-
-        <div class="sema-row">
-          <span class="sema-star" style="color:var(--green)">✅</span>
-          <div class="sema-info">
-            <div class="sema-name">O. Atalaya</div>
-            <div class="sema-sub" id="av-sema-sub-atalaya">YTD USD 64,589 · Referente constante · sin venta Mayo</div>
-          </div>
-          <div class="sema-pct pct-ok">110.1%</div>
-          <div class="sema-dot sd-ok"></div>
-        </div>
-
-        <div class="sema-row">
-          <span class="sema-star" style="color:var(--amber)">⚠️</span>
-          <div class="sema-info">
-            <div class="sema-name">O. Infante</div>
-            <div class="sema-sub" id="av-sema-sub-infante">YTD USD 121,072 · Ppto anual USD 485K · Mayo USD 13,296</div>
-          </div>
-          <div class="sema-pct pct-am">62.4%</div>
-          <div class="sema-dot sd-am"></div>
-        </div>
-
-        <div class="sema-row">
-          <span class="sema-star" style="color:var(--red)">🔴</span>
-          <div class="sema-info">
-            <div class="sema-name">A. Gonzales</div>
-            <div class="sema-sub" id="av-sema-sub-gonzales">YTD USD 696 · Mar solo USD 96 · Ppto H2 activa desde Jun</div>
-          </div>
-          <div class="sema-pct pct-rd">17.4%</div>
-          <div class="sema-dot sd-rd"></div>
-        </div>
-
-        <div class="sema-row">
-          <span class="sema-star" style="color:var(--red)">🔴</span>
-          <div class="sema-info">
-            <div class="sema-name">P. Valladares</div>
-            <div class="sema-sub" id="av-sema-sub-valladares">YTD USD 1,000 · Mar primera venta · Ppto Oct USD 35.8K</div>
-          </div>
-          <div class="sema-pct pct-rd">17.7%</div>
-          <div class="sema-dot sd-rd"></div>
-        </div>
-
+      <div class="sema-list" id="av-pe-sema-list">
+        <div class="sema-row" style="justify-content:center;padding:20px;color:var(--muted);font-size:11px;">Cargando…</div>
       </div>
 
-      <div class="novedad">
+      <div class="novedad" id="av-pe-sema-novedad">
         <b>⚡ Zona Aguirre:</b> L. Aguirre lidera Mayo con USD 48,495 · YTD USD 97,107 · N. Navarro YTD USD 30,940 · Zona combinada supera USD 128K · Plan Q2 en ejecución ✅
       </div>
     </div>
@@ -611,6 +561,73 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 })();
 /* ── FIN GUARD ──────────────────────────────────────────────────────────── */
 
+
+
+/* ── SEMÁFORO DINÁMICO ────────────────────────────────────────────────────── */
+(function(){
+  if(typeof AVBOARD==='undefined') return;
+  var pv=AVBOARD.peru.ventas;
+  var rtcP=pv.rtc_mensual_ppto||{};
+  var pve=pv.por_vendedor||{};
+  var corteStr=(AVBOARD.meta&&AVBOARD.meta.cortes&&AVBOARD.meta.cortes.peru_ventas)||'';
+  var nM=corteStr?parseInt(corteStr.split('/')[1],10):5;
+  var dd=corteStr.split('/');
+  var corteLbl=dd.length>1?(dd[0]+'/'+dd[1]):corteStr;
+  var meses=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var mesNm=dd.length>1?meses[parseInt(dd[1])]:'?';
+
+  // Actualizar tag corte
+  var ct=document.getElementById('av-pe-sema-corte');
+  if(ct) ct.textContent='CORTE '+corteLbl;
+
+  function acum(k){
+    var arr=rtcP[k];
+    return arr?arr.slice(0,nM).reduce(function(a,b){return a+b;},0):0;
+  }
+  function fmtUSD(v){return parseInt(v).toLocaleString('en-US');}
+
+  var aguReal=pve.aguirre?pve.aguirre.ytd:0;
+  var navReal=pve.navarro?pve.navarro.ytd:0;
+  var aguNavReal=aguReal+navReal;
+  var aguNavPpto=acum('aguirre'); // Navarro sin ppto formal
+
+  var VEND=[
+    {star:'⭐',nombre:'Aguirre / Navarro',extra:' <span style="font-size:9px;color:var(--muted);font-weight:400">zona unificada</span>',real:aguNavReal,ppto:aguNavPpto},
+    {star:'✅',nombre:'O. Atalaya',   real:pve.atalaya?pve.atalaya.ytd:0,     ppto:acum('atalaya')},
+    {star:'⚠️',nombre:'O. Infante',   real:pve.infante?pve.infante.ytd:0,     ppto:acum('infante')},
+    {star:'🔴',nombre:'A. Gonzales',  real:pve.gonzales?pve.gonzales.ytd:0,   ppto:acum('gonzales')},
+    {star:'🔴',nombre:'P. Valladares',real:pve.valladares?pve.valladares.ytd:0,ppto:acum('valladares')},
+  ];
+
+  var html='';
+  VEND.forEach(function(v){
+    var cumpl=v.ppto>0?(v.real/v.ppto*100):null;
+    var pctCls,dotCls;
+    if(cumpl===null){pctCls='pct-nt';dotCls='sd-am';}
+    else if(cumpl>=100){pctCls='pct-ok';dotCls='sd-ok';}
+    else if(cumpl>=80){pctCls='pct-am';dotCls='sd-am';}
+    else{pctCls='pct-rd';dotCls='sd-rd';}
+    var pctStr=cumpl!==null?cumpl.toFixed(1)+'%':'Sin ppto';
+    var sub='YTD USD '+fmtUSD(v.real)+' · Ppto '+nM+'m: USD '+fmtUSD(v.ppto);
+    html+='<div class="sema-row">'+
+      '<span class="sema-star">'+v.star+'</span>'+
+      '<div class="sema-info">'+
+        '<div class="sema-name">'+(v.nombre)+(v.extra||'')+'</div>'+
+        '<div class="sema-sub">'+sub+'</div>'+
+      '</div>'+
+      '<div class="sema-pct '+pctCls+'">'+pctStr+'</div>'+
+      '<div class="sema-dot '+dotCls+'"></div>'+
+    '</div>';
+  });
+
+  var list=document.getElementById('av-pe-sema-list');
+  if(list) list.innerHTML=html;
+
+  // Novedad
+  var nov=document.getElementById('av-pe-sema-novedad');
+  if(nov) nov.innerHTML='<b>⚡ Zona Aguirre/Navarro:</b> Real YTD USD '+fmtUSD(aguNavReal)+' · Corte '+corteStr+' · '+nM+' meses';
+})();
+/* ── FIN SEMÁFORO DINÁMICO ──────────────────────────────────────────────── */
 
 Chart.defaults.color = '#7A90AA'; /* light mode axis labels */
 Chart.defaults.font.family = "'DM Mono', monospace";
