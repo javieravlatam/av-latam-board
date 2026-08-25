@@ -22,6 +22,13 @@ from datetime import datetime, date
 from pathlib import Path
 from collections import defaultdict
 
+# Openpyxl — solo para la sonda de estructura (detección por contenido, no por nombre)
+try:
+    import openpyxl
+    _HAS_OPENPYXL = True
+except ImportError:
+    _HAS_OPENPYXL = False
+
 # ---------------------------------------------------------------------------
 # CONSTANTES
 # ---------------------------------------------------------------------------
@@ -288,6 +295,101 @@ def clasificar(filename: str) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# SONDA DE ESTRUCTURA — clasificación por contenido, no solo por nombre (V-01)
+# ---------------------------------------------------------------------------
+
+# Ruta al catálogo de schemas (pipeline/schema_defs.json)
+_SCHEMA_PATH = REPO_ROOT / "pipeline" / "schema_defs.json"
+_schema_cache = None
+
+
+def _load_schema_defs() -> dict:
+    global _schema_cache
+    if _schema_cache is not None:
+        return _schema_cache
+    if _SCHEMA_PATH.exists():
+        with open(_SCHEMA_PATH, encoding="utf-8") as f:
+            _schema_cache = json.load(f).get("types", {})
+    else:
+        _schema_cache = {}
+    return _schema_cache
+
+
+def classify_by_structure(filepath: Path) -> dict:
+    """
+    Intenta clasificar un archivo .xlsx leyendo su estructura interna
+    (sheet names + columnas de la primera fila) cuando la clasificación
+    por nombre devolvió SIN_CLASIFICAR.
+
+    Retorna dict con keys: tipo_archivo (str), confianza ('alta'|'media'|'baja'|None).
+    Si no puede clasificar: retorna {'tipo_archivo': None, 'confianza': None}.
+
+    IMPORTANTE: solo se invoca para archivos .xlsx SIN_CLASIFICAR.
+    Requiere openpyxl — si no está disponible, retorna sin clasificar.
+    """
+    if not _HAS_OPENPYXL:
+        return {"tipo_archivo": None, "confianza": None}
+
+    try:
+        wb = openpyxl.load_workbook(str(filepath), read_only=True, data_only=True)
+        sheet_names_upper = [s.upper() for s in wb.sheetnames]
+
+        schema_defs = _load_schema_defs()
+
+        # ── VENTAS_CL: sheet 'VENTAS' + columnas MES / Vendedor / Total ──────
+        if "VENTAS" in sheet_names_upper:
+            ws = wb["VENTAS"] if "VENTAS" in wb.sheetnames else None
+            if ws is None:
+                # buscar case-insensitive
+                for s in wb.sheetnames:
+                    if s.upper() == "VENTAS":
+                        ws = wb[s]
+                        break
+            if ws:
+                # Leer fila de header (row_index=2 porque header_row=1 en pandas = fila 2 Excel)
+                headers = []
+                for row in ws.iter_rows(min_row=2, max_row=2, values_only=True):
+                    headers = [str(c).strip().upper() if c else "" for c in row]
+                    break
+                fp = schema_defs.get("VENTAS_CL", {}).get("structure_fingerprint", [])
+                hits = sum(1 for col in fp if col.upper() in headers)
+                if hits >= 2:
+                    wb.close()
+                    return {
+                        "tipo_archivo": "VENTAS_CL",
+                        "confianza": "alta" if hits >= 3 else "media",
+                    }
+
+        # ── VENTAS_PE: sheet 'RESUMEN' + fila con VENDEDOR + ENERO ──────────
+        if "RESUMEN" in sheet_names_upper:
+            ws = None
+            for s in wb.sheetnames:
+                if s.upper() == "RESUMEN":
+                    ws = wb[s]
+                    break
+            if ws:
+                # Buscar en las primeras 10 filas una que tenga VENDEDOR + un mes
+                for row in ws.iter_rows(min_row=1, max_row=10, values_only=True):
+                    cells = [str(c).strip().upper() for c in row if c]
+                    has_vend = any("VENDEDOR" in c for c in cells)
+                    has_mes  = any("ENERO" in c or "FEBRERO" in c or "MARZO" in c for c in cells)
+                    if has_vend and has_mes:
+                        wb.close()
+                        return {"tipo_archivo": "VENTAS_PE", "confianza": "alta"}
+
+        # ── LIBRO_BASE: sheets 'Pricing Piso Chile' ───────────────────────────
+        if any("PRICING PISO CHILE" in s.upper() for s in wb.sheetnames):
+            wb.close()
+            return {"tipo_archivo": "LIBRO_BASE", "confianza": "alta"}
+
+        wb.close()
+    except Exception:
+        pass
+
+    return {"tipo_archivo": None, "confianza": None}
+
+
+# ---------------------------------------------------------------------------
 # HELPERS
 # ---------------------------------------------------------------------------
 
@@ -481,6 +583,23 @@ def run():
     # ------------------------------------------------------------------
     # ASIGNAR ESTADO FINAL A CADA REGISTRO
     # ------------------------------------------------------------------
+    # LIBRO_BASE y PRECIO_PISO_* se excluyen del grupos loop pero deben aparecer
+    # en vigentes para que load_files_from_registry() pueda ubicarlos.
+    TIPOS_ESPECIALES = ("LIBRO_BASE", "PRECIO_PISO_CL", "PRECIO_PISO_PE")
+    for tipo_esp in TIPOS_ESPECIALES:
+        candidatos = [
+            r for r in registros
+            if r["tipo_archivo"] == tipo_esp and r.get("es_procesable")
+        ]
+        if candidatos:
+            # Seleccionar el más reciente por fecha_corte o mtime
+            mejor = max(candidatos, key=lambda r: (r.get("fecha_corte") or "0000-00-00",
+                                                    r.get("file_size_bytes", 0)))
+            empresa = mejor.get("empresa_id")
+            clave = (tipo_esp, empresa)
+            if clave not in vigentes:
+                vigentes[clave] = mejor["filename"]
+
     vigentes_set = set(vigentes.values())
 
     for r in registros:
@@ -522,13 +641,57 @@ def run():
             "descripcion": f"Archivos con contenido idéntico (hash {hash_val[:8]}…)",
         })
 
-    # Alerta por archivos SIN_CLASIFICAR
+    # ── SONDA DE ESTRUCTURA: segunda oportunidad para SIN_CLASIFICAR ─────────
+    # Si el nombre no fue suficiente, intentar clasificar por estructura interna.
+    # Esto protege contra archivos renombrados que mantengan la estructura correcta.
+    estructura_detectada = []
+    for r in registros:
+        if r["estado"] != "SIN_CLASIFICAR" or not r["filename"].lower().endswith(".xlsx"):
+            continue
+        filepath = Path(r["filepath"])
+        if not filepath.exists():
+            continue
+        probe = classify_by_structure(filepath)
+        if probe["tipo_archivo"]:
+            tipo_detected = probe["tipo_archivo"]
+            r["tipo_archivo"]       = tipo_detected
+            r["variante"]           = "ESTRUCTURA_DETECTADA"
+            r["empresa_id"]         = TIPOS.get(tipo_detected, {}).get("empresa_id")
+            r["pais_id"]            = TIPOS.get(tipo_detected, {}).get("pais_id")
+            r["moneda"]             = TIPOS.get(tipo_detected, {}).get("moneda")
+            # Re-insertar en el grupo correspondiente para selección de vigente
+            clave = (tipo_detected, r["empresa_id"])
+            grupos[clave].append(r)
+            vigente_fn = seleccionar_vigente(grupos[clave])
+            vigentes[clave] = vigente_fn
+            vigentes_set.add(vigente_fn)
+            if r["filename"] in vigentes_set:
+                r["estado"] = "VIGENTE"
+            else:
+                r["estado"] = "SUPERSEDED"
+            estructura_detectada.append({
+                "filename": r["filename"],
+                "tipo_detectado": tipo_detected,
+                "confianza": probe["confianza"],
+            })
+            alertas.append({
+                "tipo": "ESTRUCTURA_DETECTADA",
+                "archivo": r["filename"],
+                "tipo_detectado": tipo_detected,
+                "confianza": probe["confianza"],
+                "descripcion": (
+                    f"Archivo clasificado por estructura (no por nombre) como {tipo_detected}. "
+                    f"Confianza: {probe['confianza']}. Considerar renombrar al formato canónico."
+                ),
+            })
+
+    # Alerta por archivos SIN_CLASIFICAR (los que quedaron sin resolver)
     sin_clasi = [r["filename"] for r in registros if r["estado"] == "SIN_CLASIFICAR"]
     if sin_clasi:
         alertas.append({
             "tipo": "SIN_CLASIFICAR",
             "archivos": sin_clasi,
-            "descripcion": "Archivos en inbox que no pudieron clasificarse automáticamente",
+            "descripcion": "Archivos en inbox que no pudieron clasificarse (ni por nombre ni por estructura)",
         })
 
     # ------------------------------------------------------------------

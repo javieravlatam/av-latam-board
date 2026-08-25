@@ -1,0 +1,258 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-08-24",
+  "note": "Catálogo canónico de vendedores AV LATAM. Editar aquí para agregar/retirar vendedores sin modificar código fuente. Los aliases deben estar en MAYÚSCULAS para comparación case-insensitive.",
+  "vendors": [
+    {
+      "vendor_id": "laratro",
+      "nombre_canonico": "Pablo Laratro",
+      "aliases": [
+        "PABLO LARATRO"
+      ],
+      "pais": "CL",
+      "empresa": "AGROCOMERCIAL_CL",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 1,
+      "en_ppto_cl": true,
+      "en_rtc_ventas": true
+    },
+    {
+      "vendor_id": "velasquez",
+      "nombre_canonico": "Francisco Velásquez",
+      "aliases": [
+        "FRANCISCO VELASQUEZ",
+        "FRANCISCO VELÁSQUEZ"
+      ],
+      "pais": "CL",
+      "empresa": "AGROCOMERCIAL_CL",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 2,
+      "en_ppto_cl": true,
+      "en_rtc_ventas": true
+    },
+    {
+      "vendor_id": "caroca",
+      "nombre_canonico": "Jorge Caroca",
+      "aliases": [
+        "JORGE CAROCA"
+      ],
+      "pais": "CL",
+      "empresa": "AGROCOMERCIAL_CL",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 3,
+      "en_ppto_cl": true,
+      "en_rtc_ventas": true
+    },
+    {
+      "vendor_id": "encina",
+      "nombre_canonico": "Rodrigo Encina",
+      "aliases": [
+        "RODRIGO ENCINA"
+      ],
+      "pais": "CL",
+      "empresa": "AGROCOMERCIAL_CL",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 4,
+      "en_ppto_cl": true,
+      "en_rtc_ventas": true
+    },
+    {
+      "vendor_id": "veverka",
+      "nombre_canonico": "Ivan Veverka",
+      "aliases": [
+        "IVAN VEVERKA"
+      ],
+      "pais": "CL",
+      "empresa": "AGROCOMERCIAL_CL",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 5,
+      "en_ppto_cl": true,
+      "en_rtc_ventas": true
+    },
+    {
+      "vendor_id": "munoz",
+      "nombre_canonico": "Valentina Muñoz",
+      "aliases": [
+        "VALENTINA MUÑOZ",
+        "VALENTINA MUNOZ"
+      ],
+      "pais": "CL",
+      "empresa": "AGROCOMERCIAL_CL",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 6,
+      "en_ppto_cl": true,
+      "en_rtc_ventas": true
+    },
+    {
+      "vendor_id": "franco_riffo",
+      "nombre_canonico": "Franco Riffo",
+      "aliases": [
+        "FRANCO RIFFO"
+      ],
+      "pais": "CL",
+      "empresa": "AGROCOMERCIAL_CL",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 7,
+      "en_ppto_cl": true,
+      "en_rtc_ventas": false,
+      "nota": "Tiene ppto CL pero ventas aún no se detectan con alias actual. Confirmar nombre exacto en Excel."
+    },
+    {
+      "vendor_id": "bernazar",
+      "nombre_canonico": "Rayen Bernazar",
+      "aliases": [
+        "RAYEN BERNAZAR"
+      ],
+      "pais": "CL",
+      "empresa": "AGROCOMERCIAL_CL",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 8,
+      "en_ppto_cl": false,
+      "en_rtc_ventas": true,
+      "nota": "Tiene ventas CL pero sin ppto formal asignado aún."
+    },
+    {
+      "vendor_id": "almeida",
+      "nombre_canonico": "Javier Almeida",
+      "aliases": [
+        "JAVIER ALMEIDA"
+      ],
+      "pais": "CL",
+      "empresa": "AGROCOMERCIAL_CL",
+      "estado": "activo",
+      "rol_comercial": "KAM",
+      "orden_visual": 9,
+      "en_ppto_cl": false,
+      "en_rtc_ventas": true,
+      "nota": "KAM — aparece en ventas reales CL, sin ppto individual."
+    },
+    {
+      "vendor_id": "infante",
+      "nombre_canonico": "Oscar Infante",
+      "aliases": [
+        "OSCAR INFANTE"
+      ],
+      "pais": "PE",
+      "empresa": "AGROVECA_PE",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 1,
+      "en_ppto_pe": true,
+      "en_rtc_ventas": true
+    },
+    {
+      "vendor_id": "aguirre",
+      "nombre_canonico": "Lizbeth Aguirre",
+      "aliases": [
+        "LISBETH AGUIRRE",
+        "LIZBETH AGUIRRE"
+      ],
+      "pais": "PE",
+      "empresa": "AGROVECA_PE",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 2,
+      "en_ppto_pe": true,
+      "en_rtc_ventas": true
+    },
+    {
+      "vendor_id": "navarro",
+      "nombre_canonico": "Nicoll Navarro",
+      "aliases": [
+        "NICOLL NAVARRO"
+      ],
+      "pais": "PE",
+      "empresa": "AGROVECA_PE",
+      "estado": "fusionado",
+      "rol_comercial": "RTC",
+      "orden_visual": null,
+      "fused_into": "aguirre",
+      "fusion_reason": "GG-002 — NICOLL NAVARRO = LIZBETH AGUIRRE (decisión Gerencia 2026)",
+      "en_ppto_pe": false,
+      "en_rtc_ventas": false,
+      "nota": "Las ventas de navarro se reasignan a aguirre por _apply_peru_vendor_gg_decisions(). No remover de aliases — el nombre sigue apareciendo en Excel."
+    },
+    {
+      "vendor_id": "atalaya",
+      "nombre_canonico": "Omar Atalaya",
+      "aliases": [
+        "OMAR ATALAYA"
+      ],
+      "pais": "PE",
+      "empresa": "AGROVECA_PE",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 3,
+      "en_ppto_pe": true,
+      "en_rtc_ventas": true
+    },
+    {
+      "vendor_id": "gonzales",
+      "nombre_canonico": "Antonio Gonzales",
+      "aliases": [
+        "ANTONIO GONZALES",
+        "ANTONIO GONZÁLEZ"
+      ],
+      "pais": "PE",
+      "empresa": "AGROVECA_PE",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 4,
+      "en_ppto_pe": true,
+      "en_rtc_ventas": true
+    },
+    {
+      "vendor_id": "valladares",
+      "nombre_canonico": "Patricia Valladares",
+      "aliases": [
+        "PATRICIA VALLADARES"
+      ],
+      "pais": "PE",
+      "empresa": "AGROVECA_PE",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 5,
+      "en_ppto_pe": true,
+      "en_rtc_ventas": true
+    },
+    {
+      "vendor_id": "diaz",
+      "nombre_canonico": "Susan Díaz",
+      "aliases": [
+        "SUSAN DIAZ",
+        "SUSAN DÍAZ"
+      ],
+      "pais": "PE",
+      "empresa": "AGROVECA_PE",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 6,
+      "en_ppto_pe": true,
+      "en_rtc_ventas": true
+    },
+    {
+      "vendor_id": "martha",
+      "nombre_canonico": "Martha Hidalgo",
+      "aliases": [
+        "MARTHA HIDALGO",
+        "MARTHA HIDALGO - KAM"
+      ],
+      "pais": "PE",
+      "empresa": "AGROVECA_PE",
+      "estado": "activo",
+      "rol_comercial": "KAM",
+      "orden_visual": 7,
+      "en_ppto_pe": true,
+      "en_rtc_ventas": true,
+      "nota": "Incorporada agosto 2026."
+    }
+  ]
+}

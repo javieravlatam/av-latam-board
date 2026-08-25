@@ -1,0 +1,64 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-08-24",
+  "note": "Definiciones de schema por source_type. Usadas para: (a) validación antes de procesar, (b) detección por estructura cuando el nombre del archivo no coincide.",
+  "types": {
+    "VENTAS_CL": {
+      "sheet": "VENTAS",
+      "header_row": 1,
+      "required_columns": ["Fecha", "Total", "Vendedor", "MES"],
+      "column_aliases": {
+        "Fecha":    ["FECHA", "Fecha Emision", "FECHA EMISION", "Fecha Emisión"],
+        "Total":    ["Total CLP", "TOTAL", "Monto", "MONTO", "TOTAL CLP"],
+        "Vendedor": ["VENDEDOR", "Vend.", "Vendedor/a", "VENDEDOR/A"],
+        "MES":      ["Mes", "MES REAL", "MES FACTURA", "Mes Real"]
+      },
+      "optional_columns": ["Precio Uni"],
+      "structure_fingerprint": ["MES", "Vendedor", "Total"],
+      "min_rows": 5
+    },
+    "VENTAS_PE": {
+      "sheet": "RESUMEN",
+      "header_row": "dynamic",
+      "required_columns": ["VENDEDOR"],
+      "column_aliases": {
+        "VENDEDOR": ["Vendedor", "VENDEDOR/A", "NOMBRE"]
+      },
+      "required_month_columns": ["ENERO"],
+      "month_aliases": {
+        "ENERO": ["ENE", "January", "JANUARY"],
+        "FEBRERO": ["FEB", "February", "FEBRUARY"],
+        "MARZO": ["MAR", "March", "MARCH"]
+      },
+      "structure_fingerprint": ["RESUMEN", "VENDEDOR", "ENERO"],
+      "min_rows": 3
+    },
+    "CXC_CL_AGROCOMERCIAL": {
+      "sheet": null,
+      "header_row": 0,
+      "required_columns": [],
+      "structure_fingerprint": [],
+      "note": "Validación mínima — estructura interna variable por versión del proveedor."
+    },
+    "CXC_CL_AGROVECA": {
+      "sheet": null,
+      "header_row": 0,
+      "required_columns": [],
+      "structure_fingerprint": [],
+      "note": "Validación mínima — estructura interna variable."
+    },
+    "CXC_PE": {
+      "sheet": null,
+      "header_row": 0,
+      "required_columns": [],
+      "structure_fingerprint": [],
+      "note": "Pendiente — integrar en Task #29."
+    },
+    "LIBRO_BASE": {
+      "required_sheets": ["Pricing Piso Chile", "Pricing Piso Peru"],
+      "optional_sheets": ["Presupuesto CL", "Presupuesto PE", "Ppto CL", "Ppto PE"],
+      "structure_fingerprint": ["Pricing Piso Chile"],
+      "note": "Validación por sheet names — contenido validado internamente por ppto_libro_base.py."
+    }
+  }
+}

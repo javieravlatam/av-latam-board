@@ -28,6 +28,17 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
+# P0 Sprint: catálogo canónico de vendedores (reemplaza rtc_map/vend_map_pe/VEND_ORDER hardcoded)
+_scripts_dir = Path(__file__).parent
+if str(_scripts_dir) not in sys.path:
+    sys.path.insert(0, str(_scripts_dir))
+try:
+    import vendors_catalog as _vc
+    _VC_AVAILABLE = True
+except ImportError:
+    _VC_AVAILABLE = False
+    print("⚠ vendors_catalog.py no encontrado — usando maps LEGACY")
+
 # ── JSON encoder robusto (maneja numpy types) ──────────────────────────────────
 class _NpEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -174,60 +185,68 @@ def _parse_date_from_name(path):
 
 
 def detect_inbox_files():
-    """Detecta los archivos más recientes de cada tipo en /inbox (orden por fecha real)."""
+    """
+    [P0 Sprint] Clasificador unificado: delega al inbox_detector (SSOT) y lee raw_registry.json.
+    Ya no hace globs independientes — elimina la duplicación de lógica (V-02).
+    """
+    return load_files_from_registry()
+
+
+def load_files_from_registry() -> dict:
+    """
+    Lee pipeline/raw_registry.json (generado por inbox_detector.py) y traduce
+    los vigentes a las claves que el pipeline espera internamente.
+
+    Tabla de traducción (registry_key → pipeline_key):
+      VENTAS_CL|AGROCOMERCIAL_CL      → chile_ventas
+      VENTAS_PE|AGROVECA_PE            → peru_ventas
+      CXC_CL_AGROCOMERCIAL|AGROCOMERCIAL_CL → cxc_agro
+      CXC_CL_AGROVECA|AGROVECA_CL     → cxc_avch
+      LIBRO_BASE|GRUPO_AV_LATAM        → libro_base + piso_chile + piso_peru
+
+    Si raw_registry.json no existe o es inválido: aborta con mensaje claro.
+    """
+    REGISTRY = REPO / "pipeline" / "raw_registry.json"
+    if not REGISTRY.exists():
+        print("❌ pipeline/raw_registry.json no encontrado.")
+        print("   Ejecuta primero: python3 scripts/inbox_detector.py")
+        sys.exit(1)
+
+    with open(REGISTRY, encoding="utf-8") as f:
+        reg = json.load(f)
+
+    vigentes = reg.get("vigentes", {})
+    if not vigentes:
+        print("❌ raw_registry.json no tiene vigentes. Revisa el inbox.")
+        sys.exit(1)
+
+    # Tabla de traducción: clave del registry → clave(s) del pipeline
+    REGISTRY_TO_PIPELINE = {
+        "VENTAS_CL|AGROCOMERCIAL_CL":             ["chile_ventas"],
+        "VENTAS_PE|AGROVECA_PE":                   ["peru_ventas"],
+        "CXC_CL_AGROCOMERCIAL|AGROCOMERCIAL_CL":  ["cxc_agro"],
+        "CXC_CL_AGROVECA|AGROVECA_CL":            ["cxc_avch"],
+        "LIBRO_BASE|GRUPO_AV_LATAM":               ["libro_base", "piso_chile", "piso_peru"],
+    }
+
     files = {}
+    for reg_key, pipeline_keys in REGISTRY_TO_PIPELINE.items():
+        filename = vigentes.get(reg_key)
+        if filename:
+            path = INBOX / filename
+            if path.exists():
+                for pk in pipeline_keys:
+                    files[pk] = path
+                if "libro_base" in pipeline_keys:
+                    print(f"   📗 SSOT Libro Base: {filename}")
+            else:
+                print(f"   ⚠ Vigente registrado pero archivo no existe en inbox: {filename}")
 
-    # Chile ventas — "Libro de Ventas DD-MM-YYYY.xlsx"
-    cl_ventas = sorted(INBOX.glob('Libro de Ventas *.xlsx'),
-                       key=_parse_date_from_name, reverse=True)
-    if cl_ventas:
-        files['chile_ventas'] = cl_ventas[0]
-
-    # Peru ventas — "AGROVECA PERU - VENTAS AL DD.MM.YYYY.xlsx"
-    pe_ventas = sorted(INBOX.glob('AGROVECA PERU*VENTAS*.xlsx'),
-                       key=_parse_date_from_name, reverse=True)
-    if pe_ventas:
-        files['peru_ventas'] = pe_ventas[0]
-
-    # CxC Agrocomercial (acepta ambas grafías: "AGrocomercial" y "Agrocomercial")
-    cxc_agro = sorted(list(INBOX.glob('Cuentas Cobrar  AGrocomercial*.xlsx')) +
-                      list(INBOX.glob('Cuentas Cobrar AGrocomercial*.xlsx')) +
-                      list(INBOX.glob('Cuentas Cobrar  Agrocomercial*.xlsx')) +
-                      list(INBOX.glob('Cuentas Cobrar Agrocomercial*.xlsx')),
-                      key=_parse_date_from_name, reverse=True)
-    if cxc_agro:
-        files['cxc_agro'] = cxc_agro[0]
-
-    # CxC Agroveca Chile
-    cxc_avch = sorted(INBOX.glob('Cuentas Cobrar Agroveca *.xlsx'),
-                      key=_parse_date_from_name, reverse=True)
-    if cxc_avch:
-        files['cxc_avch'] = cxc_avch[0]
-
-    # ── SSOT: Libro Base (fuente canónica de precios piso Chile + Perú) ─────
-    libro_base = sorted(
-        list(INBOX.glob('nuevo libro base AV 2026*.xlsx')) +
-        list(INBOX.glob('Libro Base AV*.xlsx')),
-        key=lambda p: p.stat().st_mtime, reverse=True
-    )
-    if libro_base:
-        lb = libro_base[0]
-        files['libro_base'] = lb
-        files['piso_chile'] = lb   # load_piso_chile leerá sheet 'Pricing Piso Chile'
-        files['piso_peru']  = lb   # load_piso_peru  leerá sheet 'Pricing Piso Peru'
-        print(f"   📗 SSOT Libro Base: {lb.name}")
-    else:
-        # ── DEPRECATED: archivos separados (pre-julio-2026) ────────────────
-        # Mantener como fallback de emergencia ÚNICAMENTE.
-        # Migrar al Libro Base en cuanto sea posible.
-        piso_cl_dep = list(INBOX.glob('precios piso CHile*.xlsx'))
-        if piso_cl_dep:
-            print("   ⚠ DEPRECATED: usando 'precios piso CHile*.xlsx' — migrar al Libro Base")
-            files['piso_chile'] = piso_cl_dep[0]
-        piso_pe_dep = list(INBOX.glob('precio piso peru*.xlsx'))
-        if piso_pe_dep:
-            print("   ⚠ DEPRECATED: usando 'precio piso peru*.xlsx' — migrar al Libro Base")
-            files['piso_peru'] = piso_pe_dep[0]
+    # Reporte de lo que se cargó vs lo que faltó
+    for reg_key in REGISTRY_TO_PIPELINE:
+        if reg_key not in vigentes:
+            tipo = reg_key.split("|")[0]
+            print(f"   ℹ No hay vigente para {tipo} en registry")
 
     return files
 
@@ -260,26 +279,46 @@ def extract_chile_ventas(path):
         v = df[df['MES'] == mes]['total_n'].sum()
         mensual[mes] = int(v)
 
-    # Por RTC mensual (nombre → clave)
-    rtc_map = {
-        'PABLO LARATRO': 'laratro',
-        'FRANCISCO VELASQUEZ': 'velasquez',
-        'JORGE CAROCA': 'caroca',
-        'RODRIGO ENCINA': 'encina',
-        'IVAN VEVERKA': 'veverka',
-        'VALENTINA MUÑOZ': 'munoz',
-        'RAYEN BERNAZAR': 'bernazar',
-        'JAVIER ALMEIDA': 'almeida',
-    }
+    # Por RTC mensual (nombre → clave) — cargado desde catálogo canónico (V-03)
+    if _VC_AVAILABLE:
+        rtc_map, _src = _vc.get_rtc_map_safe("CL")
+        if _src == "legacy":
+            print("   ⚠ extract_chile_ventas: rtc_map cargado desde LEGACY")
+    else:
+        rtc_map = {
+            'PABLO LARATRO': 'laratro', 'FRANCISCO VELASQUEZ': 'velasquez',
+            'JORGE CAROCA': 'caroca', 'RODRIGO ENCINA': 'encina',
+            'IVAN VEVERKA': 'veverka', 'VALENTINA MUÑOZ': 'munoz',
+            'RAYEN BERNAZAR': 'bernazar', 'JAVIER ALMEIDA': 'almeida',
+        }
+    # Normalizar a UPPER para comparación robusta
+    rtc_map = {k.upper(): v for k, v in rtc_map.items()}
+
+    # Normalizar columna Vendedor a UPPER para comparación robusta con rtc_map
+    df['_vend_upper'] = df['Vendedor'].astype(str).str.strip().str.upper()
 
     rtc_mensual = {}
-    for vend, key in rtc_map.items():
+    for vend_upper, key in rtc_map.items():
         meses_vals = []
         for mes in MESES_FULL:
-            v = df[(df['MES'] == mes) & (df['Vendedor'] == vend)]['total_n'].sum()
+            v = df[(df['MES'] == mes) & (df['_vend_upper'] == vend_upper)]['total_n'].sum()
             meses_vals.append(int(v))
         if any(v > 0 for v in meses_vals):
             rtc_mensual[key] = meses_vals
+
+    # VENDEDOR_NO_HOMOLOGADO: detectar vendedores en Excel que no están en el catálogo (V-03)
+    _all_vendors_cl = df['_vend_upper'].dropna().unique()
+    _known_upper = set(rtc_map.keys())
+    _unknown_cl = [v for v in _all_vendors_cl if v and v not in _known_upper
+                   and v not in ('NAN', '', 'TOTAL', 'TOTAL GENERAL')]
+    if _unknown_cl:
+        _totales_desconocidos = {
+            v: int(df[df['_vend_upper'] == v]['total_n'].sum())
+            for v in _unknown_cl
+        }
+        print(f"   ⚠ VENDEDOR_NO_HOMOLOGADO CL: {_unknown_cl}")
+        print(f"     Montos: {_totales_desconocidos}")
+        print(f"     Agregar aliases en pipeline/vendors.json si son vendedores reales.")
 
     # YTD (sum of all months with data)
     months_with_data = [m for m in MESES_FULL if mensual.get(m, 0) > 0]
@@ -349,20 +388,22 @@ def extract_peru_ventas(path):
     df = pd.read_excel(path, sheet_name='RESUMEN', header=header_row)
     df.columns = [str(c).strip() for c in df.columns]
 
-    # Find rows with vendor data (before "Total general")
-    vend_map_pe = {
-        'OSCAR INFANTE':         'infante',
-        'NICOLL NAVARRO':        'navarro',    # → se fusiona con aguirre en _apply_peru_vendor_gg_decisions()
-        'OMAR ATALAYA':          'atalaya',
-        'ANTONIO GONZALES':      'gonzales',
-        'LISBETH AGUIRRE':       'aguirre',
-        'LIZBETH AGUIRRE':       'aguirre',    # variante ortográfica — GG decision 2026-07-21
-        'PATRICIA VALLADARES':   'valladares',
-        'SUSAN DIAZ':            'diaz',
-        'SUSAN DÍAZ':            'diaz',
-        'MARTHA HIDALGO':        'martha',     # Martha Hidalgo - KAM (incorporada ago 2026)
-        'MARTHA HIDALGO - KAM':  'martha',     # variante con cargo
-    }
+    # Find rows with vendor data — mapa cargado desde catálogo canónico (V-03)
+    if _VC_AVAILABLE:
+        vend_map_pe, _src_pe = _vc.get_rtc_map_safe("PE")
+        if _src_pe == "legacy":
+            print("   ⚠ extract_peru_ventas: vend_map_pe cargado desde LEGACY")
+    else:
+        vend_map_pe = {
+            'OSCAR INFANTE': 'infante', 'NICOLL NAVARRO': 'navarro',
+            'OMAR ATALAYA': 'atalaya', 'ANTONIO GONZALES': 'gonzales',
+            'LISBETH AGUIRRE': 'aguirre', 'LIZBETH AGUIRRE': 'aguirre',
+            'PATRICIA VALLADARES': 'valladares', 'SUSAN DIAZ': 'diaz',
+            'SUSAN DÍAZ': 'diaz', 'MARTHA HIDALGO': 'martha',
+            'MARTHA HIDALGO - KAM': 'martha',
+        }
+    # Normalizar a UPPER (catálogo ya los entrega en UPPER, pero doble-check)
+    vend_map_pe = {k.upper(): v for k, v in vend_map_pe.items()}
 
     # Detectar dinámicamente TODAS las columnas de mes presentes en el archivo
     # (antes esto estaba fijo a 5 meses Ene-May vía mes_cols_pe/range(5) — cuando
@@ -398,6 +439,18 @@ def extract_peru_ventas(path):
                 break
 
         if matched_key is None:
+            # VENDEDOR_NO_HOMOLOGADO PE: nombre con ventas no está en el catálogo
+            _SKIP_NAMES = {'', 'NAN', 'NONE', 'TOTAL', 'TOTAL GENERAL', 'GRAN TOTAL', 'SUBTOTAL'}
+            if vend_name and vend_name not in _SKIP_NAMES and not vend_name.startswith('TOTAL'):
+                # Verificar si tiene al menos un mes con valor > 0
+                _has_data = any(
+                    available_cols.get(i) and pd.to_numeric(
+                        row.get(available_cols[i], 0), errors='coerce') > 0
+                    for i in range(12)
+                )
+                if _has_data:
+                    print(f"   ⚠ VENDEDOR_NO_HOMOLOGADO PE: '{vend_name}' "
+                          f"— agregar alias en pipeline/vendors.json")
             continue
 
         monthly = []
@@ -2253,8 +2306,13 @@ def write_sic_tx_pe(tx_pe, ppto_rmp, corte_date):
     # Serializar transacciones
     tx_json = _jdumps(tx_pe, separators=(',', ':'))
 
-    # Serializar ppto mensual — orden canónico
-    VEND_ORDER = ['aguirre', 'atalaya', 'diaz', 'gonzales', 'infante', 'martha', 'valladares']
+    # Serializar ppto mensual — orden canónico desde catálogo (V-08)
+    if _VC_AVAILABLE:
+        VEND_ORDER, _src_vo = _vc.get_vendor_order_safe("PE")
+        if _src_vo == "legacy":
+            print("   ⚠ write_sic_tx_pe: VEND_ORDER cargado desde LEGACY")
+    else:
+        VEND_ORDER = ['aguirre', 'atalaya', 'diaz', 'gonzales', 'infante', 'martha', 'valladares']
     ppto_lines = []
     for k in VEND_ORDER:
         vals = ppto_rmp.get(k, [0]*12)
@@ -2633,6 +2691,98 @@ def extract_peru_cxc_static():
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+#  SCHEMA VALIDATION — V-04: errores explícitos si columnas críticas faltan
+# ══════════════════════════════════════════════════════════════════════════════
+
+_SCHEMA_DEFS_PATH = REPO / "pipeline" / "schema_defs.json"
+_schema_defs_cache = None
+
+
+def _load_schema_defs():
+    global _schema_defs_cache
+    if _schema_defs_cache is not None:
+        return _schema_defs_cache
+    if _SCHEMA_DEFS_PATH.exists():
+        with open(_SCHEMA_DEFS_PATH, encoding="utf-8") as f:
+            _schema_defs_cache = json.load(f).get("types", {})
+    else:
+        _schema_defs_cache = {}
+    return _schema_defs_cache
+
+
+def validate_schema_before_parse(filepath: Path, tipo: str) -> bool:
+    """
+    Valida que el archivo Excel tenga las sheets y columnas requeridas para el tipo.
+    Retorna True si pasa. Si falla, imprime ERROR_SCHEMA detallado y retorna False.
+    NO sustituye columnas faltantes por 0 silenciosamente (V-04).
+    """
+    schema = _load_schema_defs().get(tipo)
+    if not schema:
+        return True  # sin schema definido → pasar sin validar
+
+    import openpyxl as _oxl
+    try:
+        wb = _oxl.load_workbook(str(filepath), read_only=True, data_only=True)
+    except Exception as e:
+        print(f"   ❌ ERROR_SCHEMA [{tipo}] No se pudo abrir {filepath.name}: {e}")
+        return False
+
+    sheet_names = wb.sheetnames
+
+    # Validar sheet requerida
+    required_sheet = schema.get("sheet")
+    if required_sheet:
+        match = next((s for s in sheet_names if s.upper() == required_sheet.upper()), None)
+        if not match:
+            print(f"   ❌ ERROR_SCHEMA [{tipo}] {filepath.name}")
+            print(f"      Sheet requerida: '{required_sheet}'")
+            print(f"      Sheets encontradas: {sheet_names}")
+            wb.close()
+            return False
+
+        # Validar columnas requeridas (leer header row)
+        required_cols = schema.get("required_columns", [])
+        if required_cols and schema.get("header_row") != "dynamic":
+            ws = wb[match]
+            hrow = schema.get("header_row", 0)
+            headers = []
+            for row in ws.iter_rows(min_row=hrow + 1, max_row=hrow + 1, values_only=True):
+                headers = [str(c).strip() if c else "" for c in row]
+                break
+
+            aliases = schema.get("column_aliases", {})
+            found = set()
+            missing = []
+            for req in required_cols:
+                # Buscar col exacta o alias
+                all_names = [req] + aliases.get(req, [])
+                if any(n in headers for n in all_names):
+                    found.add(req)
+                else:
+                    missing.append(req)
+
+            if missing:
+                print(f"   ❌ ERROR_SCHEMA [{tipo}] {filepath.name}")
+                print(f"      Columnas faltantes: {missing}")
+                print(f"      Columnas encontradas: {[h for h in headers if h][:20]}")
+                print(f"      → Revisar que el archivo tenga el formato correcto.")
+                wb.close()
+                return False
+
+    # Validar sheets requeridas (LIBRO_BASE)
+    required_sheets = schema.get("required_sheets", [])
+    for rs in required_sheets:
+        if not any(s.upper() == rs.upper() for s in sheet_names):
+            print(f"   ❌ ERROR_SCHEMA [{tipo}] {filepath.name}")
+            print(f"      Sheet requerida '{rs}' no encontrada en {sheet_names}")
+            wb.close()
+            return False
+
+    wb.close()
+    return True
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 #  10. MAIN
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -2641,9 +2791,17 @@ def main():
     print(f"  AVBOARD UPDATE · {NOW}")
     print(f"{'='*60}\n")
 
-    # 1. Detectar archivos
-    print("📂 Detectando archivos inbox...")
-    files = detect_inbox_files()
+    # 1. Ejecutar inbox_detector (SSOT) → genera raw_registry.json fresco
+    print("📂 Ejecutando inbox_detector (SSOT)...")
+    try:
+        import inbox_detector as _inbox_det
+        _inbox_det.run()
+    except Exception as _det_err:
+        print(f"   ⚠ inbox_detector falló: {_det_err} — intentando con registry existente")
+
+    # 1b. Cargar archivos desde registry (única fuente de verdad — V-02)
+    print("📂 Cargando vigentes desde raw_registry.json...")
+    files = load_files_from_registry()
     for k, v in files.items():
         print(f"   {k}: {v.name}")
 
@@ -2661,6 +2819,30 @@ def main():
         'peru_cxc':     '10/05/2026',  # static until new Peru CxC arrives
     }
     print(f"\n📅 Cortes detectados: {cortes}")
+
+    # 2.5 Validar schema antes de procesar (V-04)
+    print("\n🔍 Validando schemas antes de extraer...")
+    _schema_checks = [
+        ('chile_ventas',  'VENTAS_CL'),
+        ('peru_ventas',   'VENTAS_PE'),
+        ('libro_base',    'LIBRO_BASE'),
+    ]
+    _schema_errors = []
+    for _fkey, _tipo in _schema_checks:
+        if _fkey in files:
+            _ok = validate_schema_before_parse(files[_fkey], _tipo)
+            if _ok:
+                print(f"   ✅ Schema OK — {_tipo} ({files[_fkey].name})")
+            else:
+                _schema_errors.append(_fkey)
+    if _schema_errors:
+        _required_with_error = [e for e in _schema_errors if e in ['chile_ventas', 'peru_ventas']]
+        if _required_with_error:
+            print(f"\n❌ ERROR_SCHEMA en archivos requeridos: {_required_with_error}")
+            print("   Corregir los archivos antes de continuar.")
+            sys.exit(1)
+        else:
+            print(f"   ⚠ Schema inválido en archivos opcionales: {_schema_errors} — continuando con best-effort")
 
     # 3. Extraer datos
     print("\n📊 Extrayendo datos...")
