@@ -235,7 +235,7 @@
       </div>
     </div>
 
-    <div class="section-h">Resumen Ejecutivo · Corte 11/05/2026</div>
+    <div class="section-h">Resumen Ejecutivo · Corte <span id="dc-corte-hdr">--/--/----</span></div>
     <div class="grid-3">
       <div style="background:rgba(27,79,138,0.05);border:1px solid var(--border);border-radius:10px;padding:14px;">
         <div style="font-size:10px;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">✅ DESTACADO</div>
@@ -742,6 +742,7 @@ function dcSumArr(arrs) {
 
 // --- HEADER / FOOTER ---
 dcSet('dc-corte', 'Chile ' + cHV + ' · Perú ' + pHV + ' · CxC ' + cHC);
+dcSet('dc-corte-hdr', pHV);
 dcSet('dc-footer-corte', 'Agroveca Grupo Latam · Dashboard Comercial · Corte: Chile ' + cHV + ' · Perú ' + pHV + ' · CxC ' + cHC);
 dcSet('dc-pe-tabletag', 'YTD USD + ' + curMesPE);
 

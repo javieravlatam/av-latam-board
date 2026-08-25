@@ -273,7 +273,7 @@ function cerrarSesion() {
   <!-- Corte info -->
   <div class="corte-banner">
     <div id="av-corte-info" class="corte-info">
-      Último corte: <strong>Chile 11/05/2026</strong> · <strong>Perú 11/05/2026</strong> · <strong>CxC 08/05/2026</strong>
+      Último corte: <strong id="dash-corte-cl">Chile --/--/----</strong> · <strong id="dash-corte-pe">Perú --/--/----</strong> · <strong id="dash-corte-cxc">CxC --/--/----</strong>
     </div>
     <div id="av-corte-badge" class="corte-badge">TC = 950 CLP/USD · Meta MN 25%</div>
   </div>
@@ -693,6 +693,14 @@ function cerrarSesion() {
 })();
 </script>
 <script src="assets_logo.js"></script>
-<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
+<script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()
+  // Actualizar IDs de corte en header
+  (function(){
+    function ds(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+    ds('dash-corte-cl', D.meta.cortes.chile_ventas||'');
+    ds('dash-corte-pe', D.meta.cortes.peru_ventas||'');
+    ds('dash-corte-cxc', D.meta.cortes.chile_cxc||'');
+  })();
+</script>
 </body>
 </html>

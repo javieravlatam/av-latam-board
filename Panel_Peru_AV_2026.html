@@ -193,7 +193,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     <a href="Panel_Ecuador_AV_2026.html">🇪🇨 Ecuador</a>
   </div>
   <div class="hcorte">
-    <div>Corte <b>15/05/2026</b> · CxC <b>10/05/2026</b></div>
+    <div>Corte <b id="av-pe-hcorte-date">--/--/----</b> · CxC <b id="av-pe-hcxc-date">10/05/2026</b></div>
     <div style="font-size:8px;margin-top:1px;">Aguirre/Navarro = zona unificada · Ppto anual USD 1,137,034</div>
   </div>
   <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
@@ -290,7 +290,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
               <div class="mes-pct" style="color:var(--amber);font-weight:700;">95.9%</div>
             </div>
           </div>
-          <div style="font-size:9px;color:var(--muted);margin-top:6px;">* Mayo parcial al 15/05/2026</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:6px;" id="av-pe-donut-nota">* Mes parcial al corte</div>
         </div>
       </div>
 
@@ -313,7 +313,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   </div>
 
   <!-- DETALLE POR ZONA + CHART -->
-  <div class="sec">Desempeño por Zona <span>YTD vs Ppto · <span id="av-pe-zona-corte">corte 15/05/2026</span></span></div>
+  <div class="sec">Desempeño por Zona <span>YTD vs Ppto · <span id="av-pe-zona-corte">cargando…</span></span></div>
 
   <div class="g2" style="margin-bottom:15px;align-items:start;">
     <div class="panel">
@@ -635,91 +635,130 @@ Chart.defaults.font.size = 10;
 const G='#7AB648', A='#F5A623', R='#E74C3C', B='#4A9EDB', O='#E67E22';
 const GD='rgba(74,158,219,0.1)';
 
-// Donut YTD
-new Chart(document.getElementById('cDonut'),{
-  type:'doughnut',
-  data:{
-    labels:['Ejecutado','Pendiente'],
-    datasets:[{
-      data:[95.9,4.1],
-      backgroundColor:['rgba(245,166,35,0.85)','rgba(26,44,64,0.8)'],
-      borderColor:'#ffffff',borderWidth:3
-    }]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,cutout:'72%',
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.parsed+'%'}}}
-  }
-});
+// ── CHARTS DINÁMICOS DESDE AVBOARD ──────────────────────────────────────────
+(function(){
+  var MESES_LBL=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var MESES_FULL=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Sep','Oct','Nov','Dic'];
+  var pv_d=typeof AVBOARD!=='undefined'?AVBOARD.peru.ventas:null;
+  var rtcR_d=pv_d?pv_d.rtc_mensual_real||{}:{};
+  var rtcP_d=pv_d?pv_d.rtc_mensual_ppto||{}:{};
+  var pve_d=pv_d?pv_d.por_vendedor||{}:{};
+  var nMpe_d=pv_d?(parseInt((AVBOARD.meta.cortes.peru_ventas||'01/05/2026').split('/')[1],10)):5;
+  var ytd5m=pv_d?pv_d.ytd_5m:0;
+  var ppto5m=pv_d?pv_d.ppto_5m:1;
+  var ytdPct=ppto5m>0?Math.round(ytd5m/ppto5m*1000)/10:0;
+  var pendPct=Math.max(0,100-ytdPct);
 
-// Stacked mensual por zona
-new Chart(document.getElementById('cStack'),{
-  type:'bar',
-  data:{
-    labels:['Enero','Febrero','Marzo','Abril (parc.)'],
-    datasets:[
-      {label:'O. Infante',    data:[16526,16188,38881,22550], backgroundColor:A, borderRadius:2},
-      {label:'Aguirre/Nav.',  data:[26314,14221,31640,5572],  backgroundColor:B, borderRadius:2},
-      {label:'O. Atalaya',    data:[30071,9000,20000,0],      backgroundColor:G, borderRadius:2},
-      {label:'Otros',         data:[600,0,1096,0],            backgroundColor:'#3a5a6a', borderRadius:2},
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{position:'top',labels:{boxWidth:10,padding:8}}},
-    scales:{
-      x:{stacked:true,grid:{color:GD},border:{color:GD}},
-      y:{stacked:true,grid:{color:GD},border:{color:GD},ticks:{callback:v=>'USD '+(v/1000).toFixed(0)+'K'}}
+  // Donut YTD — sectores coherentes con el % central
+  new Chart(document.getElementById('cDonut'),{
+    type:'doughnut',
+    data:{
+      labels:['Ejecutado','Pendiente'],
+      datasets:[{
+        data:[ytdPct,pendPct],
+        backgroundColor:['rgba(245,166,35,0.85)','rgba(26,44,64,0.8)'],
+        borderColor:'#ffffff',borderWidth:3
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,cutout:'72%',
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.parsed.toFixed(1)+'%'}}}
     }
-  }
-});
+  });
 
-// Barras ppto anual vs real YTD
-new Chart(document.getElementById('cBarras'),{
-  type:'bar',
-  data:{
-    labels:['O. Infante','Aguirre/Nav.','O. Atalaya','P. Valladares','A. Gonzales'],
-    datasets:[
-      {label:'Ppto Anual', data:[485058,223930,248424,142372,37250], backgroundColor:'rgba(74,158,219,0.15)', borderColor:'rgba(74,158,219,0.3)',borderWidth:1,borderRadius:3},
-      {label:'Real YTD',   data:[94144,77747,59072,1000,696],        backgroundColor:[A,G,G,R,R], borderRadius:3}
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},
-    scales:{
-      x:{grid:{color:GD},border:{color:GD}},
-      y:{grid:{color:GD},border:{color:GD},ticks:{callback:v=>'USD '+(v/1000).toFixed(0)+'K'}}
+  // Stack mensual por zona — nMpe_d meses desde AVBOARD
+  var labsStack=MESES_FULL.slice(0,nMpe_d);
+  var infMes=(rtcR_d.infante||new Array(12).fill(0)).slice(0,nMpe_d);
+  var aguMes=(rtcR_d.aguirre||new Array(12).fill(0)).slice(0,nMpe_d);
+  var atlMes=(rtcR_d.atalaya||new Array(12).fill(0)).slice(0,nMpe_d);
+  var otrMes=new Array(nMpe_d).fill(0);
+  ['gonzales','valladares','diaz'].forEach(function(k){
+    var arr=rtcR_d[k]||new Array(12).fill(0);
+    for(var i=0;i<nMpe_d;i++) otrMes[i]+=arr[i]||0;
+  });
+
+  new Chart(document.getElementById('cStack'),{
+    type:'bar',
+    data:{
+      labels:labsStack,
+      datasets:[
+        {label:'O. Infante',    data:infMes, backgroundColor:A, borderRadius:2},
+        {label:'Aguirre/Nav.',  data:aguMes, backgroundColor:B, borderRadius:2},
+        {label:'O. Atalaya',    data:atlMes, backgroundColor:G, borderRadius:2},
+        {label:'Otros',         data:otrMes, backgroundColor:'#3a5a6a', borderRadius:2},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:10,padding:8}}},
+      scales:{
+        x:{stacked:true,grid:{color:GD},border:{color:GD}},
+        y:{stacked:true,grid:{color:GD},border:{color:GD},ticks:{callback:function(v){return'USD '+(v/1000).toFixed(0)+'K';}}}
+      }
     }
-  }
-});
+  });
 
-// Curva acumulada 12 meses
-const PPTO=[51674,58489,103222,71299,61946,78710,100675,178180,125564,165842,98481,42952];
-const REAL=[73511,39409,91616,28122,0,0,0,0,0,0,0,0];
-const acum=arr=>arr.reduce((a,v,i)=>{a.push((a[i-1]||0)+(v||0));return a;},[]);
-const pptoAc=acum(PPTO);
-const realAc=[73511,112920,204537,269970,null,null,null,null,null,null,null,null];
+  // Barras ppto anual vs real YTD — desde AVBOARD
+  var VEND_B=[
+    {k:'infante',n:'O. Infante'},{k:'aguirre',n:'Aguirre/Nav.'},{k:'atalaya',n:'O. Atalaya'},
+    {k:'valladares',n:'P. Valladares'},{k:'gonzales',n:'A. Gonzales'}
+  ];
+  var labsB=VEND_B.map(function(v){return v.n;});
+  var pptoAnArr=VEND_B.map(function(v){return(rtcP_d[v.k]||new Array(12).fill(0)).reduce(function(a,b){return a+b;},0);});
+  var realYtdArr=VEND_B.map(function(v){return pve_d[v.k]?pve_d[v.k].ytd:0;});
+  var barClr=realYtdArr.map(function(r,i){var cum=pptoAnArr[i]>0?r/pptoAnArr[i]:0;return cum>=0.75?G:(cum>=0.5?A:R);});
 
-new Chart(document.getElementById('cCurva'),{
-  type:'line',
-  data:{
-    labels:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-    datasets:[
-      {label:'Ppto Acumulado',data:pptoAc,borderColor:'rgba(74,158,219,0.4)',borderDash:[6,4],borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(74,158,219,0.5)',tension:0.3,fill:false},
-      {label:'Real Acumulado',data:realAc,borderColor:A,backgroundColor:'rgba(245,166,35,0.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:A,tension:0.3,fill:true},
-      {type:'bar',label:'Ppto Mensual',data:PPTO,backgroundColor:'rgba(74,158,219,0.08)',borderColor:'rgba(74,158,219,0.15)',borderWidth:1,borderRadius:2}
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},
-    scales:{
-      x:{grid:{color:GD},border:{color:GD}},
-      y:{grid:{color:GD},border:{color:GD},ticks:{callback:v=>'USD '+(v/1000).toFixed(0)+'K'}}
+  new Chart(document.getElementById('cBarras'),{
+    type:'bar',
+    data:{
+      labels:labsB,
+      datasets:[
+        {label:'Ppto Anual',data:pptoAnArr,backgroundColor:'rgba(74,158,219,0.15)',borderColor:'rgba(74,158,219,0.3)',borderWidth:1,borderRadius:3},
+        {label:'Real YTD',  data:realYtdArr,backgroundColor:barClr,borderRadius:3}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},
+      scales:{
+        x:{grid:{color:GD},border:{color:GD}},
+        y:{grid:{color:GD},border:{color:GD},ticks:{callback:function(v){return'USD '+(v/1000).toFixed(0)+'K';}}}
+      }
     }
-  }
-});
+  });
+
+  // Curva acumulada — PPTO y REAL del equipo completo desde AVBOARD
+  var PPTO_T=new Array(12).fill(0);
+  var REAL_T=new Array(12).fill(0);
+  Object.keys(rtcP_d).forEach(function(k){var arr=rtcP_d[k]||[];for(var i=0;i<12;i++)PPTO_T[i]+=(arr[i]||0);});
+  Object.keys(rtcR_d).forEach(function(k){var arr=rtcR_d[k]||[];for(var i=0;i<nMpe_d;i++)REAL_T[i]+=(arr[i]||0);});
+  var pptoAcD=PPTO_T.reduce(function(a,v,i){a.push((a[i-1]||0)+v);return a;},[]);
+  var realAcD=REAL_T.map(function(v,i){return i<nMpe_d?((i===0?0:realAcD_prev)+v):null;});
+  // Acumular real correctamente
+  var realAcD2=[];var s=0;
+  for(var i=0;i<12;i++){if(i<nMpe_d){s+=REAL_T[i];realAcD2.push(s);}else{realAcD2.push(null);}}
+
+  new Chart(document.getElementById('cCurva'),{
+    type:'line',
+    data:{
+      labels:MESES_LBL,
+      datasets:[
+        {label:'Ppto Acumulado',data:pptoAcD,borderColor:'rgba(74,158,219,0.4)',borderDash:[6,4],borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(74,158,219,0.5)',tension:0.3,fill:false},
+        {label:'Real Acumulado',data:realAcD2,borderColor:A,backgroundColor:'rgba(245,166,35,0.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:A,tension:0.3,fill:true},
+        {type:'bar',label:'Ppto Mensual',data:PPTO_T,backgroundColor:'rgba(74,158,219,0.08)',borderColor:'rgba(74,158,219,0.15)',borderWidth:1,borderRadius:2}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},
+      scales:{
+        x:{grid:{color:GD},border:{color:GD}},
+        y:{grid:{color:GD},border:{color:GD},ticks:{callback:function(v){return'USD '+(v/1000).toFixed(0)+'K';}}}
+      }
+    }
+  });
+})();
+// ── FIN CHARTS DINÁMICOS ─────────────────────────────────────────────────────
 
 // CxC donut tramos
 new Chart(document.getElementById('cCxC'),{
@@ -775,7 +814,7 @@ new Chart(document.getElementById('cCxC'),{
 
     // ── Donut center ──────────────────────────────────────────────────────────
     set('av-pe-donut-pct',pct(ytdR));
-    set('av-pe-donut-lbl','YTD 5m');
+    set('av-pe-donut-lbl','YTD '+nPE+'m');
 
     // ── Margen strip — expandir a N meses reales ──────────────────────────────
     var ms=document.getElementById('av-pe-margen-strip');
@@ -929,8 +968,10 @@ new Chart(document.getElementById('cCxC'),{
 
     // ── Tabla Detalle YTD por Zona ──────────────────────────────────────────
     var fN3=function(v){return v>0?v.toLocaleString('en-US'):'–';};
-    var corteVtas=D.meta.cortes.peru_ventas||'15/05/2026';
+    var corteVtas=D.meta.cortes.peru_ventas||'';
     set('av-pe-zona-corte','corte '+corteVtas);
+    set('av-pe-hcorte-date', corteVtas);
+    set('av-pe-donut-nota','* '+corteVtas+' · parcial');
     // Cabecera columna último mes
     var thMes=document.getElementById('pe-th-ultmes');
     var mesNms=['','Ene','Feb','Mar','Abr','Mayo','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
