@@ -287,7 +287,7 @@
   <!-- ══════════════════════════════════════════
        BLOQUE 1: KPIs CORPORATIVOS
   ══════════════════════════════════════════ -->
-  <div class="section-title">Resumen Corporativo <span>YTD Grupo Latam · corte 11/05/2026</span></div>
+  <div class="section-title">Resumen Corporativo <span>YTD Grupo Latam · corte YTD 2026</span></div>
 
   <div class="kpi-hero">
     <!-- KPI Grupo -->
@@ -553,7 +553,7 @@
   <!-- ══════════════════════════════════════════
        BLOQUE 4: PERÚ – ANÁLISIS RTC
   ══════════════════════════════════════════ -->
-  <div class="section-title">Perú · Desempeño por Vendedor <span>corte 11/05/2026 · USD</span></div>
+  <div class="section-title">Perú · Desempeño por Vendedor <span>corte actualizado · USD</span></div>
 
   <div class="grid-2" style="margin-bottom:16px;">
     <div class="panel">
@@ -623,7 +623,7 @@
   <!-- CEO P&L Perú + Diagnóstico -->
   <div class="grid-3" style="margin-bottom:16px;">
     <div class="panel" style="grid-column: span 1;">
-      <div class="panel-title">CEO P&L · PERÚ CONSOLIDADO <span class="tag">Ene–May 2026 · USD</span></div>
+      <div class="panel-title">CEO P&L · PERÚ CONSOLIDADO <span class="tag">YTD 2026 · USD</span></div>
       <div class="pl-section-head">Ingresos</div>
       <div class="pl-row highlight">
         <div class="pl-label">Venta Neta Perú YTD 5m</div>
@@ -803,7 +803,7 @@
 <!-- FASE 3 · MÓDULO IEC · EFICIENCIA COMERCIAL GRUPO LATAM       -->
 <!-- ══════════════════════════════════════════════════════════════ -->
 
-<div class="section-title">EFICIENCIA COMERCIAL (IEC) · GRUPO LATAM <span>Real 2026 Ene–Abr · vs precio piso propuesto</span></div>
+<div class="section-title">EFICIENCIA COMERCIAL (IEC) · GRUPO LATAM <span>Real 2026 YTD · vs precio piso propuesto</span></div>
 
 <!-- ── KPI CHILE ── -->
 <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:10px;">🇨🇱 CHILE · IEC 2026 YTD <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;">Base 428 tx · cobertura revenue 101.2%</span></div>
@@ -835,7 +835,7 @@
 </div>
 
 <!-- ── KPI PERÚ ── -->
-<div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:10px;">🇵🇪 PERÚ · IEC 2026 YTD <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;">Base 58 tx · cobertura revenue 107.3%</span></div>
+<div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:10px;">🇵🇪 PERÚ · IEC 2026 YTD <span id="eb-iec-pe-base-tag">YTD</span></div>
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;">
   <div class="kpi-card" style="border-color:var(--border);">
     <div class="kpi-label">IEC Perú</div>
@@ -852,7 +852,7 @@
   <div class="kpi-card amber">
     <div class="kpi-label">% Transacciones bajo piso</div>
     <div class="kpi-value amber">22.4%</div>
-    <div class="kpi-sub">58 tx auditadas · Ene–Abr 2026</div>
+    <div class="kpi-sub">58 tx auditadas · YTD 2026</div>
     <span class="kpi-badge badge-amber">Cobertura 71.1%</span>
   </div>
   <div class="kpi-card" style="border-color:var(--border);">
@@ -868,7 +868,7 @@
 
   <!-- Chile -->
   <div class="panel">
-    <div class="panel-title">IEC POR VENDEDOR · 🇨🇱 CHILE <span class="tag">CLP · Ene–Abr 2026</span></div>
+    <div class="panel-title">IEC POR VENDEDOR · 🇨🇱 CHILE <span class="tag">CLP · YTD 2026</span></div>
     <table class="rtc-table">
       <thead>
         <tr>
@@ -935,7 +935,7 @@
 
   <!-- Perú -->
   <div class="panel">
-    <div class="panel-title">IEC POR VENDEDOR · 🇵🇪 PERÚ <span class="tag">USD · Ene–Abr 2026</span></div>
+    <div class="panel-title">IEC POR VENDEDOR · 🇵🇪 PERÚ <span class="tag">USD · YTD 2026</span></div>
     <table class="rtc-table">
       <thead>
         <tr>
@@ -1291,7 +1291,7 @@
   </table>
 
   <div style="margin-top:10px;font-size:10px;color:var(--text-muted);">
-    Chile: 1.617 tx auditadas (Ene–Jul 2026) · Perú: 128 tx auditadas · IEC = VNE/VPT (Venta Neta Efectiva / Venta a Precio Piso) · ✅ ≥100% · ⚠️ 85–99% · 🔴 &lt;85%
+    Chile: tx auditadas YTD 2026 · Perú: 128 tx auditadas · IEC = VNE/VPT (Venta Neta Efectiva / Venta a Precio Piso) · ✅ ≥100% · ⚠️ 85–99% · 🔴 &lt;85%
   </div>
 </div>
 
@@ -1528,9 +1528,9 @@ function cerrarSesion() {
     function pct(v) { return (v * 100).toFixed(1) + '%'; }
     function fUsd(n){ return n.toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:0}); }
 
-    var cHV = D.meta.cortes.chile_ventas;   // '11/05/2026'
+    var cHV = D.meta.cortes.chile_ventas;   // 'YTD 2026'
     var cHC = D.meta.cortes.chile_cxc;      // '08/05/2026'
-    var cPV = D.meta.cortes.peru_ventas;    // '11/05/2026'
+    var cPV = D.meta.cortes.peru_ventas;    // 'YTD 2026'
     var cPC = D.meta.cortes.peru_cxc;       // '10/05/2026'
     var sHV = cHV.slice(0,5), sPV = cPV.slice(0,5);
     var sHC = cHC.slice(0,5), sPC = cPC.slice(0,5);
