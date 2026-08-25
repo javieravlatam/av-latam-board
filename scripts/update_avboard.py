@@ -2829,6 +2829,18 @@ def main():
     print(f"  IEC Chile: {iec_cl['total']:.1%}")
     print(f"{'='*60}\n")
 
+    # 10. Certificación automática (bloquea commit si hay errores críticos)
+    print("\n🔐 Ejecutando certificación automática (certify_avboard.py)...")
+    import subprocess as _sp
+    cert_result = _sp.run(
+        ['python3', str(REPO / 'scripts' / 'certify_avboard.py')],
+        capture_output=False
+    )
+    if cert_result.returncode != 0:
+        print("\n❌ CERTIFICACIÓN FALLÓ — revisar errores arriba antes de hacer push.")
+    else:
+        print("✅ Certificación PASS — seguro para commit y push.")
+
 
 if __name__ == '__main__':
     main()

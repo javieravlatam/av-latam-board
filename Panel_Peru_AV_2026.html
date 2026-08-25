@@ -464,29 +464,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   <div class="sec">Insights Q2 · Acciones Requeridas <span>basado en ritmo actual vs ppto oficial</span></div>
 
   <div class="g2" style="margin-bottom:15px;">
-    <div>
-      <div class="alerta ok">
-        <div class="alerta-t" style="color:var(--green);">✅ AGUIRRE/NAVARRO — REFERENTE GRUPO (204.1%)</div>
-        <div class="alerta-b" id="av-pe-alerta-aguirre">Aguirre lidera Mayo con USD 48,495 — zona más dinámica del grupo. YTD USD 97,107 (+122% del ppto). <strong style="color:var(--green);">Infante consolida YTD USD 130.1K (26.8% del ppto anual)</strong>. Atalaya sin venta en Mayo — verificar cartera activa. Grupo Perú YTD 5m: USD 334.1K.</div>
-      </div>
-      <div class="alerta ok" style="margin-top:10px;">
-        <div class="alerta-t" style="color:var(--green);">✅ O. ATALAYA — CUMPLIENDO (110.1%)</div>
-        <div class="alerta-b">Constante y por encima del objetivo. Enero fue su peak (142%). H2 tiene presupuesto fuerte: Jul 25.8K + Ago 28.8K. Mantener ritmo y preparar Agosto. YTD USD 59,072 sobre ppto de 53,634.</div>
-      </div>
-      <div class="alerta am" style="margin-top:10px;">
-        <div class="alerta-t" style="color:var(--amber);">⚠️ O. INFANTE — ACELERACIÓN URGENTE (62.4% T1)</div>
-        <div class="alerta-b">Mayor presupuesto anual del grupo: <strong style="color:var(--amber);">USD 485,058</strong>. T1 ejecutó solo USD 71,594 (brecha –43,141). Abril mejora con USD 22,550 — señal positiva. Pero necesita <strong style="color:var(--amber);">USD 390,914 en May–Dic</strong> para cumplir el anual. Meses críticos: Mar USD 66.8K (pasó), próximo pico Ago USD 67.3K.</div>
-      </div>
+    <!-- Alertas col1 — generadas dinámicamente desde AVBOARD -->
+    <div id="av-pe-alertas-col1">
+      <div class="alerta-b" style="color:var(--dim);font-size:10px;">Cargando diagnóstico…</div>
     </div>
-    <div>
-      <div class="alerta rd">
-        <div class="alerta-t" style="color:var(--red);">🔴 A. GONZALES — ACTIVACIÓN INMEDIATA (17.4%)</div>
-        <div class="alerta-b">YTD USD 696. Su presupuesto está concentrado en H2: Jun USD 7K, Jul USD 7K, Ago USD 19.25K. <strong style="color:var(--red);">Sin actividad de prospección ahora, no hay cierres en Agosto.</strong> Requiere plan de activación comercial esta semana.</div>
-      </div>
-      <div class="alerta rd" style="margin-top:10px;">
-        <div class="alerta-t" style="color:var(--red);">🔴 P. VALLADARES — CONSTRUIR CARTERA AHORA (17.7%)</div>
-        <div class="alerta-b">YTD USD 1,000. Su pico más fuerte es <strong style="color:var(--red);">Octubre (USD 35,834)</strong>. Para llegar a ese cierre necesita cartera activa hoy. Abr-Jun son meses de siembra críticos. Sin acción en Q2, el presupuesto de USD 142K anual se pierde completamente.</div>
-      </div>
+    <!-- Alertas col2 — generadas dinámicamente desde AVBOARD -->
+    <div id="av-pe-alertas-col2">
+      <div class="alerta-b" style="color:var(--dim);font-size:10px;">&nbsp;</div>
       <div style="background:rgba(74,158,219,0.07);border:1px solid var(--bdr);border-radius:8px;padding:14px;margin-top:10px;">
         <div style="font-family:'Bebas Neue';font-size:12px;letter-spacing:2px;color:var(--blue);margin-bottom:8px;">📅 HITOS CLAVE H2 · PERÚ</div>
         <div style="font-family:'DM Mono';font-size:10px;color:var(--dim);line-height:2;">
@@ -955,15 +939,36 @@ new Chart(document.getElementById('cCxC'),{
     set('pe-tfoot-cumpl', (t4m/pptoT1*100).toFixed(1)+'%');
     set('pe-tfoot-may', mayTotal.toLocaleString('en-US'));
     set('pe-tfoot-ytd', pv.ytd_5m.toLocaleString('en-US'));
-    // Alerta dinámica Aguirre/Infante
-    var infYtdK=(pve.infante?(pve.infante.ytd/1000).toFixed(1):0);
-    var infPct=(pve.infante?Math.round(pve.infante.ytd/pptoA*100):0);
-    var grupoYtdK=(pv.ytd_5m/1000).toFixed(1);
-    set('av-pe-alerta-aguirre','Aguirre lidera '+curMesNm+' con USD '+fN3(pve.aguirre?pve.aguirre.mayo:0)+
-      ' — zona más dinámica del grupo. YTD USD '+fN3(pve.aguirre?pve.aguirre.ytd:0)+' (+122% del ppto). '+
-      '<strong style="color:var(--green);">Infante consolida YTD USD '+infYtdK+'K ('+infPct+'% del ppto anual)</strong>. '+
-      'Atalaya sin venta en '+curMesNm+' — verificar cartera activa. '+
-      'Grupo Perú YTD 5m: USD '+grupoYtdK+'K.');
+    // ── Alertas vendedor dinámicas — col1 y col2 ────────────────────────────
+    (function(){
+      var rtcP=pv.rtc_mensual_ppto||{};
+      var toK=function(v){return parseFloat((v/1000).toFixed(1));};
+      var VEND=[
+        {k:'aguirre',  n:'L. AGUIRRE'},
+        {k:'infante',  n:'O. INFANTE'},
+        {k:'atalaya',  n:'O. ATALAYA'},
+        {k:'gonzales', n:'A. GONZALES'},
+        {k:'valladares',n:'P. VALLADARES'},
+      ];
+      var alertas=VEND.map(function(v){
+        var real=pve[v.k]?pve[v.k].ytd:0;
+        var mP=rtcP[v.k];
+        var pptoAcum=mP?mP.slice(0,nRealPE).reduce(function(a,b){return a+b;},0):0;
+        var cumpl=pptoAcum>0?(real/pptoAcum*100):null;
+        var cls=cumpl===null?'b-nd':cumpl>=100?'ok':cumpl>=80?'am':'rd';
+        var icon=cumpl===null?'–':cumpl>=100?'✅':cumpl>=80?'⚠️':'🔴';
+        var label=cumpl===null?'Sin ppto':(cumpl.toFixed(1)+'% vs Ppto YTD');
+        var body='Real Ene–'+curMesNm+': USD '+toK(real)+'K'+(pptoAcum>0?' · Ppto acum: USD '+toK(pptoAcum)+'K':'');
+        return '<div class="alerta '+cls+'" style="margin-top:6px;">'+
+          '<div class="alerta-t" style="color:var(--'+(cls==='ok'?'green':cls==='am'?'amber':'red')+');">'+
+          icon+' '+v.n+' — '+label+'</div>'+
+          '<div class="alerta-b">'+body+'</div></div>';
+      });
+      var c1=document.getElementById('av-pe-alertas-col1');
+      var c2=document.getElementById('av-pe-alertas-col2');
+      if(c1) c1.innerHTML=alertas.slice(0,3).join('');
+      if(c2) c2.innerHTML=alertas.slice(3).join('');
+    })();
     // Footer
     set('av-pe-footer-txt','AV Latam BI Platform · Panel Perú · Corte ventas '+corteVtas+
       ' · CxC '+D.meta.cortes.peru_cxc+' · Ppto oficial USD '+pptoA.toLocaleString('en-US'));
