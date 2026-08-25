@@ -1,0 +1,47 @@
+{
+  "version": "1.0",
+  "entity": "gg_decisions",
+  "description": "Decisiones de Gerencia General que afectan atribución de transacciones y vendedores — única fuente de verdad",
+  "updated_at": "2026-08-24",
+  "updated_by": "Master Data Tier 0",
+  "decisiones": [
+    {
+      "id": "GG-001",
+      "fecha": "2026-07-21",
+      "tipo": "reasignacion_transaccion",
+      "descripcion": "Folio 926 · REGALIA MAX · ENERO 2026 · USD 16,320 — registrado bajo NICOLL NAVARRO en fuente, reasignado a OSCAR INFANTE por decisión GG",
+      "criterio": {
+        "campo": "folio",
+        "operador": "eq",
+        "valor": "926"
+      },
+      "accion": {
+        "vendor_id_override": "infante",
+        "vendor_display_override": "OSCAR INFANTE",
+        "source_vendor_id": "navarro",
+        "mes_idx": 0,
+        "monto_usd": 16320
+      },
+      "autorizado_por": "Gerencia General",
+      "active": true,
+      "modulos_afectados": ["peru_ventas_agregado", "sic_tx_pe_transaccion"]
+    },
+    {
+      "id": "GG-002",
+      "fecha": "2026-07-21",
+      "tipo": "fusion_vendedor",
+      "descripcion": "NICOLL NAVARRO fusionada en LISBETH AGUIRRE — son la misma persona comercial. Ver también vendors.json estado=fusionado",
+      "criterio": {
+        "vendor_id": "navarro"
+      },
+      "accion": {
+        "fused_into": "aguirre",
+        "nombre_display": "Lizbeth Aguirre"
+      },
+      "autorizado_por": "Gerencia General",
+      "active": true,
+      "modulos_afectados": ["peru_ventas_agregado", "clientes_cotizador"],
+      "nota": "6 registros en clientes_peru.json migrados a vendedor_rtc=LISBETH AGUIRRE en Tier 0 (2026-08-24)"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "version": "1.0",
+  "entity": "fx_rates",
+  "description": "Tipos de cambio canónicos para consolidación LATAM — única fuente de verdad",
+  "updated_at": "2026-08-24",
+  "updated_by": "Master Data Tier 0",
+  "rates": [
+    {
+      "id": "CLP_USD_2026",
+      "moneda_origen": "CLP",
+      "moneda_destino": "USD",
+      "valor": 950,
+      "periodo": "2026",
+      "fuente": "Banco Central de Chile — promedio referencial",
+      "tipo": "promedio_anual",
+      "vigente_desde": "2026-01-01",
+      "vigente_hasta": null,
+      "active": true,
+      "aplicacion": ["consolidacion_latam", "panel_rentabilidad"],
+      "nota": "Actualizar valor y vigente_desde al cierre de cada período. Agregar nueva entrada con active=false para el anterior."
+    }
+  ],
+  "_historial": []
+}

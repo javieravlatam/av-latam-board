@@ -66,8 +66,43 @@ TODAY = date.today().strftime('%d/%m/%Y')
 NOW   = datetime.now().strftime('%Y-%m-%d %H:%M')
 CACHE_V = datetime.now().strftime('%Y%m%d%H%M')  # cache-busting ?v= — incluye hora+minuto para forzar re-descarga en cada corrida
 
-# ── Constantes de negocio (estáticas — solo cambian si cambia el presupuesto) ─
-TC_CLP_USD = 950
+# ── Master Data Layer — Tier 0 ────────────────────────────────────────────────
+_MD_DIR = Path(__file__).parent.parent / "pipeline" / "master_data"
+
+def _load_fx_rate(moneda_origen: str, moneda_destino: str, fallback: float = 950.0) -> float:
+    """Lee tipo de cambio desde fx_rates.json (Master Data canónico).
+    Fallback solo si el archivo no existe o no contiene el par activo."""
+    _path = _MD_DIR / "fx_rates.json"
+    try:
+        data = json.loads(_path.read_text())
+        for rate in data.get("rates", []):
+            if (rate.get("moneda_origen") == moneda_origen
+                    and rate.get("moneda_destino") == moneda_destino
+                    and rate.get("active", False)):
+                val = float(rate["valor"])
+                print(f"   💱 TC {moneda_origen}/{moneda_destino} = {val:,.0f} [fuente: fx_rates.json · {rate.get('periodo','?')}]")
+                return val
+        print(f"   ⚠ TC {moneda_origen}/{moneda_destino} no encontrado en fx_rates.json — usando fallback {fallback}")
+    except Exception as _e:
+        print(f"   ⚠ fx_rates.json no accesible ({_e}) — usando fallback {fallback}")
+    return fallback
+
+def _load_gg_decisions() -> list:
+    """Lee decisiones GG activas desde gg_decisions.json (Master Data canónico).
+    Retorna lista vacía si el archivo no existe (backward compatible)."""
+    _path = _MD_DIR / "gg_decisions.json"
+    try:
+        data = json.loads(_path.read_text())
+        active = [d for d in data.get("decisiones", []) if d.get("active", False)]
+        print(f"   📋 GG Decisions cargadas: {len(active)} activas desde gg_decisions.json")
+        return active
+    except Exception as _e:
+        print(f"   ⚠ gg_decisions.json no accesible ({_e}) — sin decisiones GG activas")
+        return []
+
+# ── Constantes de negocio desde Master Data ───────────────────────────────────
+TC_CLP_USD   = _load_fx_rate("CLP", "USD")   # fuente canónica: pipeline/master_data/fx_rates.json
+_GG_DECISIONS = _load_gg_decisions()          # reemplaza GG-001/GG-002 hardcodeados
 
 # Presupuesto Chile y Perú desde Libro Base, con fallback LEGACY
 import sys as _sys_pb
@@ -509,68 +544,99 @@ def _apply_peru_vendor_gg_decisions(pe_data):
     Se ejecuta DESPUÉS de extract_peru_ventas() como capa de normalización.
     NO modifica la fuente original.
 
-    GG-001 (2026-07-21): Folio 926 · REGALIA MAX · ENERO · USD 16,320 → OSCAR INFANTE
-        La fuente (VENTAS ACUMULADAS) lo registra bajo NICOLL NAVARRO, pero GG
-        determina que corresponde a Oscar Infante. Se traslada el monto exacto
-        de navarro.enero a infante.enero en las series agregadas.
+    Interpreta y aplica decisiones activas desde gg_decisions.json (Master Data Tier 0).
+    Se ejecuta DESPUÉS de extract_peru_ventas() como capa de normalización.
+    NO modifica la fuente original.
 
-    GG-002 (2026-07-21): NICOLL NAVARRO + LISBETH AGUIRRE + LIZBETH AGUIRRE
-        → Master name: LIZBETH AGUIRRE (key 'aguirre').
-        Cualquier data residual de 'navarro' tras GG-001 se fusiona en 'aguirre'.
+    Tipos soportados:
+      - reasignacion_transaccion: mueve monto entre vendedores en mes específico (nivel agregado)
+      - fusion_vendedor: fusiona source_vendor en target_vendor (suma series y elimina source)
+
+    Para agregar GG-003+: editar gg_decisions.json únicamente — cero cambios en Python.
     """
-    FOLIO_926_AMOUNT = 16320   # USD — monto exacto, no redondear
-    ENE_IDX = 0                # enero = índice 0
-
     pv = pe_data.get('por_vendedor', {})
     rm = pe_data.get('rtc_mensual',  {})
     ms = pe_data.get('mensual',      [0] * 12)
 
-    # ── GG-001: Reasignar folio 926 de navarro.enero → infante.enero ──────────
-    if 'navarro' in pv and 'infante' in pv:
-        navarro_m  = list(rm.get('navarro', [0] * 12))
-        infante_m  = list(rm.get('infante', [0] * 12))
-        navarro_ene = navarro_m[ENE_IDX]
-        adj = min(FOLIO_926_AMOUNT, max(0, navarro_ene))
-        if adj > 0:
-            navarro_m[ENE_IDX] = round(navarro_ene - adj)
-            infante_m[ENE_IDX] = round(infante_m[ENE_IDX] + adj)
-            rm['navarro'] = navarro_m
-            rm['infante'] = infante_m
-            pv['navarro']['ytd'] = max(0, round(pv['navarro'].get('ytd', 0) - adj))
-            pv['infante']['ytd'] = round(pv['infante'].get('ytd', 0) + adj)
-            print(f"   GG-001 ✓ Folio 926 (USD {adj:,}) navarro.enero → infante.enero | "
-                  f"Infante enero={infante_m[ENE_IDX]:,}")
-        else:
-            print(f"   GG-001 ⚠ navarro.enero={navarro_ene} — sin ajuste (adj=0)")
-    elif 'navarro' not in pv:
-        print("   GG-001 ℹ 'navarro' no encontrado en por_vendedor — sin ajuste folio 926")
+    for dec in _GG_DECISIONS:
+        dec_id  = dec.get('id', '?')
+        tipo    = dec.get('tipo', '')
+        criterio = dec.get('criterio', {})
+        accion   = dec.get('accion', {})
 
-    # ── GG-002: Fusionar navarro → aguirre (NICOLL NAVARRO = LIZBETH AGUIRRE) ─
-    if 'navarro' in pv:
-        nav_ytd = pv['navarro'].get('ytd', 0)
-        nav_m   = list(rm.get('navarro', [0] * 12))
-        if 'aguirre' not in pv:
-            pv['aguirre'] = {'nombre': 'Lizbeth Aguirre', 'ytd': 0}
-            rm['aguirre'] = [0] * 12
-        aguirre_m = list(rm.get('aguirre', [0] * 12))
-        rm['aguirre'] = [round(aguirre_m[i] + nav_m[i]) for i in range(12)]
-        pv['aguirre']['ytd']    = round(pv['aguirre'].get('ytd', 0) + nav_ytd)
-        pv['aguirre']['nombre'] = 'Lizbeth Aguirre'
-        del pv['navarro']
-        if 'navarro' in rm:
-            del rm['navarro']
-        # recalcular mensual consolidado (ms suma todos los vendedores por mes)
-        ms_new = [0] * 12
-        for key, arr in rm.items():
-            for i, v in enumerate(arr):
-                ms_new[i] += round(v)
-        ms = ms_new
-        print(f"   GG-002 ✓ NICOLL NAVARRO fusionada en LIZBETH AGUIRRE | aguirre.ytd={pv['aguirre']['ytd']:,}")
+        if tipo == 'reasignacion_transaccion':
+            # ── Nivel agregado: mover monto_usd de source.mes_idx → target.mes_idx ──
+            src = accion.get('source_vendor_id')
+            tgt = accion.get('vendor_id_override')
+            mes_idx = int(accion.get('mes_idx', 0))
+            monto   = float(accion.get('monto_usd', 0))
+            if src and tgt and src in pv and tgt in pv:
+                src_m = list(rm.get(src, [0] * 12))
+                tgt_m = list(rm.get(tgt, [0] * 12))
+                adj = min(monto, max(0.0, src_m[mes_idx]))
+                if adj > 0:
+                    src_m[mes_idx] = round(src_m[mes_idx] - adj)
+                    tgt_m[mes_idx] = round(tgt_m[mes_idx] + adj)
+                    rm[src] = src_m
+                    rm[tgt] = tgt_m
+                    pv[src]['ytd'] = max(0, round(pv[src].get('ytd', 0) - adj))
+                    pv[tgt]['ytd'] = round(pv[tgt].get('ytd', 0) + adj)
+                    print(f"   {dec_id} ✓ USD {adj:,} {src}.mes[{mes_idx}] → {tgt}.mes[{mes_idx}]"
+                          f" | {tgt}.ytd={pv[tgt]['ytd']:,}")
+                else:
+                    print(f"   {dec_id} ⚠ {src}.mes[{mes_idx}]={src_m[mes_idx]} — sin ajuste (adj=0)")
+            elif src and src not in pv:
+                print(f"   {dec_id} ℹ vendor '{src}' no encontrado en por_vendedor — sin ajuste")
+
+        elif tipo == 'fusion_vendedor':
+            # ── Fusionar source → target: suma series, elimina source ──────────
+            src   = criterio.get('vendor_id')
+            tgt   = accion.get('fused_into')
+            nombre_display = accion.get('nombre_display', tgt)
+            if src and tgt and src in pv:
+                # Guard: si tgt no tiene datos activos, verificar que sea un vendor_id
+                # registrado en el catálogo canónico — previene creación de vendedores fantasma
+                if tgt not in pv:
+                    _vcat_path = ROOT / "pipeline" / "vendors.json"
+                    _known_ids: set = set()
+                    try:
+                        _vcat = json.loads(_vcat_path.read_text())
+                        _known_ids = {v['vendor_id'] for v in _vcat.get('vendors', [])}
+                    except Exception:
+                        pass
+                    if _known_ids and tgt not in _known_ids:
+                        print(f"   {dec_id} ⚠ SKIP — vendor_to '{tgt}' no está en catálogo canónico"
+                              f" — decisión ignorada (guard seguridad)")
+                        continue
+                nav_ytd = pv[src].get('ytd', 0)
+                nav_m   = list(rm.get(src, [0] * 12))
+                if tgt not in pv:
+                    pv[tgt] = {'nombre': nombre_display, 'ytd': 0}
+                    rm[tgt] = [0] * 12
+                tgt_m = list(rm.get(tgt, [0] * 12))
+                rm[tgt] = [round(tgt_m[i] + nav_m[i]) for i in range(12)]
+                pv[tgt]['ytd']    = round(pv[tgt].get('ytd', 0) + nav_ytd)
+                pv[tgt]['nombre'] = nombre_display
+                del pv[src]
+                if src in rm:
+                    del rm[src]
+                # recalcular mensual consolidado
+                ms_new = [0] * 12
+                for arr in rm.values():
+                    for i, v in enumerate(arr):
+                        ms_new[i] += round(v)
+                ms = ms_new
+                print(f"   {dec_id} ✓ {src} fusionado en {tgt} | {tgt}.ytd={pv[tgt]['ytd']:,}")
+            elif src and src not in pv:
+                print(f"   {dec_id} ℹ vendor '{src}' no encontrado — fusión no aplicable")
+
+        else:
+            # tipo desconocido — warning explícito, nunca silencioso
+            print(f"   {dec_id} ⚠ tipo desconocido '{tipo}' — decisión ignorada")
 
     pe_data['por_vendedor'] = pv
     pe_data['rtc_mensual']  = rm
     pe_data['mensual']      = ms
-    # recalcular ytd_5m
     pe_data['ytd_5m'] = sum(v.get('ytd', 0) for v in pv.values())
     return pe_data
 
@@ -2221,9 +2287,12 @@ def build_tx_pe(df_sku, piso_pe):
         concepto = str(row.get('CONCEPTO', '')).strip()
         mes      = row['mes_str']
 
-        # GG-001 (2026-07-21): Folio 926 → OSCAR INFANTE (override de NICOLL NAVARRO)
-        if folio == '926':
-            vendedor = 'OSCAR INFANTE'
+        # Decisiones GG nivel transacción — leídas desde gg_decisions.json (Master Data Tier 0)
+        for _gg in _GG_DECISIONS:
+            if (_gg.get('tipo') == 'reasignacion_transaccion'
+                    and _gg.get('criterio', {}).get('campo') == 'folio'
+                    and folio == _gg['criterio'].get('valor', '')):
+                vendedor = _gg['accion'].get('vendor_display_override', vendedor)
 
         parsed = parse_concepto_pe(concepto)
         if parsed:
