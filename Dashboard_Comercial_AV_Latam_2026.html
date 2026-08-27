@@ -164,7 +164,7 @@
   .btn-logout:hover { background:rgba(231,76,60,0.10); }
 .logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
-  <script src="avboard_data.js?v=20260824"></script>
+  <script src="avboard_data.js?v=202608250017"></script>
 </head>
 <body>
 
@@ -472,12 +472,12 @@
               <td class="mono right muted">–</td>
               <td class="right">✅</td>
             </tr>
-            <tr data-vendor="aguirre_navarro">
-              <td><span class="sema sg"></span><strong>Aguirre / Navarro</strong><br><span style="font-size:9px;color:var(--text-muted);">Zona unificada · Aguirre activa</span></td>
+            <tr data-vendor="aguirre">
+              <td><span class="sema sg"></span><strong>L. Aguirre</strong></td>
               <td class="mono right">77,747</td>
               <td class="mono right muted">223,930</td>
               <td><span class="green mono">204.1%</span><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
-              <td class="mono right green">5,572</td>
+              <td class="mono right green">–</td>
               <td class="right">✅</td>
             </tr>
             <tr data-vendor="gonzales">
@@ -723,6 +723,7 @@ var cHV = D.meta.cortes.chile_ventas, cHC = D.meta.cortes.chile_cxc;
 var pHV = D.meta.cortes.peru_ventas, pHC = D.meta.cortes.peru_cxc;
 var curMesCL = mesesLong[nCL-1], prevMesCL = mesesLong[Math.max(nCL-2,0)];
 var curMesPE = mesesLong[nPE-1];
+// dc-corte se actualiza más abajo con dcSet('dc-corte', ...)
 
 function dcSet(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
 function dcSetHtml(id, val) { var el = document.getElementById(id); if (el) el.innerHTML = val; }
@@ -818,9 +819,11 @@ dcSet('dc-pe-best-val', dcK(realPE[bestIdxPE]) + 'K');
 var curIdxPE = nPE - 1;
 dcSet('dc-pe-cur-label', curMesPE + ' al ' + pHV);
 dcSet('dc-pe-cur-val', dcK(pv.mensual_real[curIdxPE]) + 'K');
+var _rtcRealDC = pv.rtc_mensual_real || {};
 var vendList = Object.keys(pv.por_vendedor).map(function(k){
   var v = pv.por_vendedor[k];
-  return { nombre: v.nombre, mes: v.mayo || 0 };
+  var rtcArr = _rtcRealDC[k];
+  return { nombre: v.nombre, mes: rtcArr ? (rtcArr[curIdxPE] || 0) : 0 };
 }).sort(function(a,b){ return b.mes - a.mes; });
 var top2 = vendList.filter(function(v){ return v.mes > 0; }).slice(0,2);
 dcSet('dc-pe-cur-sub', top2.length
@@ -841,17 +844,20 @@ var pvByKey = pv.por_vendedor;
 function pveSum(keys, field) {
   return keys.reduce(function(s,k){ return s + ((pvByKey[k] && pvByKey[k][field]) || 0); }, 0);
 }
+function pveSumMes(keys) {
+  return keys.reduce(function(s,k){ var a=_rtcRealDC[k]; return s+(a?(a[curIdxPE]||0):0); }, 0);
+}
 [
   { sel: 'infante', keys: ['infante'] },
   { sel: 'atalaya', keys: ['atalaya'] },
-  { sel: 'aguirre_navarro', keys: ['aguirre','navarro'] },
+  { sel: 'aguirre', keys: ['aguirre','navarro'] },
   { sel: 'gonzales', keys: ['gonzales'] },
   { sel: 'valladares', keys: ['valladares'] }
 ].forEach(function(g){
   var row = document.querySelector('tr[data-vendor="' + g.sel + '"]');
   if (!row) return;
   row.children[1].textContent = D.fmt_usd(pveSum(g.keys, 'ytd'));
-  row.children[4].textContent = pveSum(g.keys, 'mayo') ? D.fmt_usd(pveSum(g.keys, 'mayo')) : '–';
+  row.children[4].textContent = pveSumMes(g.keys) ? D.fmt_usd(pveSumMes(g.keys)) : '–';
 });
 var totRowPE = document.querySelector('tr[data-vendor="total"]');
 if (totRowPE) {
@@ -898,8 +904,8 @@ dcSet('dc-cxc-cl-tag', 'CLP · ' + cHC + ' · ' + cc.entidades + ' entidades');
 // CxC Perú · regenerar tabla completa por vendedor
 (function(){
   var nombresPE = { infante:'O. Infante', geldres:'J. Geldres', atalaya:'O. Atalaya',
-                     aguirre_navarro:'Aguirre / Navarro', gonzales_valladares:'Gonzales / Valladares',
-                     pradenas_sin_asignar:'Pradenas (sin asignar)' };
+                     aguirre:'L. Aguirre', gonzales:'A. Gonzales', valladares:'P. Valladares',
+                     diaz:'S. Díaz', sin_asignar:'Sin asignar' };
   var rows = Object.keys(pcx.por_vendedor).map(function(k){
     var r = pcx.por_vendedor[k];
     return { nombre: nombresPE[k] || k, total: r.total, pct: r.pct };
@@ -1057,8 +1063,8 @@ new Chart(document.getElementById('cCxCChile'), {
 
 // CxC Perú horizontal
 var nombresCxCPE = { infante:'O. Infante', geldres:'J. Geldres', atalaya:'O. Atalaya',
-                      aguirre_navarro:'Aguirre/Navarro', gonzales_valladares:'Gonzales/Valladares',
-                      pradenas_sin_asignar:'Pradenas' };
+                      aguirre:'L. Aguirre', gonzales:'A. Gonzales', valladares:'P. Valladares',
+                      diaz:'S. Díaz', sin_asignar:'Sin asignar' };
 var cxcPeRows = Object.keys(pcx.por_vendedor).map(function(k){
   return { nombre: nombresCxCPE[k] || k, total: pcx.por_vendedor[k].total };
 }).sort(function(a,b){ return b.total - a.total; });

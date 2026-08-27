@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel Comercial · Perú · AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=20260824"></script>
+<script src="avboard_data.js?v=202608250017"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -571,6 +571,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   var pve=pv.por_vendedor||{};
   var corteStr=(AVBOARD.meta&&AVBOARD.meta.cortes&&AVBOARD.meta.cortes.peru_ventas)||'';
   var nM=corteStr?parseInt(corteStr.split('/')[1],10):5;
+  var _rtcR=pv.rtc_mensual_real||{};
+  function _mR(k){var a=_rtcR[k];return a?(a[nM-1]||0):0;}
   var dd=corteStr.split('/');
   var corteLbl=dd.length>1?(dd[0]+'/'+dd[1]):corteStr;
   var meses=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
@@ -592,7 +594,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   var aguNavPpto=acum('aguirre'); // Navarro sin ppto formal
 
   var VEND=[
-    {star:'⭐',nombre:'Aguirre / Navarro',extra:' <span style="font-size:9px;color:var(--muted);font-weight:400">zona unificada</span>',real:aguNavReal,ppto:aguNavPpto},
+    {star:'⭐',nombre:'L. Aguirre',extra:'',real:aguNavReal,ppto:aguNavPpto},
     {star:'✅',nombre:'O. Atalaya',   real:pve.atalaya?pve.atalaya.ytd:0,     ppto:acum('atalaya')},
     {star:'⚠️',nombre:'O. Infante',   real:pve.infante?pve.infante.ytd:0,     ppto:acum('infante')},
     {star:'🔴',nombre:'A. Gonzales',  real:pve.gonzales?pve.gonzales.ytd:0,   ppto:acum('gonzales')},
@@ -832,8 +834,8 @@ new Chart(document.getElementById('cCxC'),{
     // ── CxC sección — fecha ───────────────────────────────────────────────────
     set('av-pe-cxc-sec','corte '+pc.corte+' · cartera activa');
 
-    // ── CxC tabla — Aguirre/Navarro ───────────────────────────────────────────
-    var an=pc.por_vendedor.aguirre_navarro;
+    // ── CxC tabla — Aguirre (clave canónica; aguirre_navarro eliminado) ──────
+    var an=pc.por_vendedor.aguirre||{total:0,pct:0,vencida:0,t90:0,riesgo:'NORMAL'};
     set('av-pe-cxc-an-monto',fN(an.total));
     set('av-pe-cxc-an-pct',
       '<div style="text-align:right;font-family:\'DM Mono\';font-size:10px;color:var(--amber);">'+(an.pct*100).toFixed(1)+'%</div>'+
@@ -948,16 +950,17 @@ new Chart(document.getElementById('cCxC'),{
     if(brBd){brBd.className='kbadge '+(t1Pct>=1?'kb-ok':t1Pct>=0.85?'kb-am':'kb-rd');brBd.innerHTML=(t1Pct*100).toFixed(1)+'% cumplimiento T1';}
     // Semáforo corte tag
     set('av-pe-sema-corte','CORTE '+corteStr.substring(0,5));
-    // Semáforo sema-sub por vendedor
-    if(pve.aguirre&&pve.navarro){
-      set('av-sema-sub-aguirre','YTD USD '+fN2(pve.aguirre.ytd)+' · Mayo USD '+fN2(pve.aguirre.mayo)+' · Aguirre lidera grupo 🚀');
+    // Semáforo sema-sub por vendedor — usa rtc_mensual_real[nM-1] (no .mayo)
+    if(pve.aguirre){
+      set('av-sema-sub-aguirre','YTD USD '+fN2(pve.aguirre.ytd)+' · '+mesNm+' USD '+fN2(_mR('aguirre'))+' · Aguirre lidera grupo 🚀');
     }
     if(pve.atalaya){
-      var atSub='YTD USD '+fN2(pve.atalaya.ytd)+' · Referente constante · '+(pve.atalaya.mayo>0?'Mayo USD '+fN2(pve.atalaya.mayo):'sin venta Mayo');
+      var atMes=_mR('atalaya');
+      var atSub='YTD USD '+fN2(pve.atalaya.ytd)+' · Referente constante · '+(atMes>0?mesNm+' USD '+fN2(atMes):'sin venta '+mesNm);
       set('av-sema-sub-atalaya',atSub);
     }
     if(pve.infante){
-      set('av-sema-sub-infante','YTD USD '+fN2(pve.infante.ytd)+' · Ppto anual USD 485K · Mayo USD '+fN2(pve.infante.mayo));
+      set('av-sema-sub-infante','YTD USD '+fN2(pve.infante.ytd)+' · Ppto anual USD 485K · '+mesNm+' USD '+fN2(_mR('infante')));
     }
     if(pve.gonzales){
       set('av-sema-sub-gonzales','YTD USD '+fN2(pve.gonzales.ytd)+' · Ppto H2 activa desde Jun');
@@ -977,14 +980,14 @@ new Chart(document.getElementById('cCxC'),{
     var mesNms=['','Ene','Feb','Mar','Abr','Mayo','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
     var dd=corteVtas.split('/');
     if(thMes&&dd.length>1) thMes.textContent=mesNms[parseInt(dd[1])]||'Mayo'+' Real';
-    // Filas por vendedor
-    var vendMap={aguirre:'aguirre',infante:'infante',atalaya:'atalaya',
-                 navarro:'navarro',gonzales:'gonzales',valladares:'valladares'};
-    Object.keys(vendMap).forEach(function(k){
+    // Filas por vendedor — navarro removido (fusionado en aguirre); mayo→rtc_mensual_real
+    var _rtcRealPE=pv.rtc_mensual_real||{};
+    ['aguirre','infante','atalaya','gonzales','valladares'].forEach(function(k){
       var v=pve[k];
       if(!v) return;
+      var mesVal=(_rtcRealPE[k]&&_rtcRealPE[k][nRealPE-1])||0;
       var el=document.getElementById('pe-td-'+k+'-may');
-      if(el) el.textContent=fN3(v.mayo);
+      if(el) el.textContent=fN3(mesVal);
       var el2=document.getElementById('pe-td-'+k+'-ytd');
       if(el2) el2.textContent=fN3(v.ytd);
     });
