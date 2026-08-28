@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel Comercial · Perú · AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=202608250017"></script>
+<script src="avboard_data.js?v=202608280001"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -355,28 +355,39 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     </div>
   </div>
 
-  <!-- INSIGHTS Y ALERTAS -->
-  <div class="sec">Insights Q2 · Acciones Requeridas <span>basado en ritmo actual vs ppto oficial</span></div>
+  <!-- DIAGNÓSTICO AI + ALERTAS VENDEDORES -->
+  <div class="sec">Diagnóstico AI · Acciones Requeridas <span>elaborado por AI a petición de la GG · 8m Ene–Ago 2026</span></div>
+
+  <!-- AI Insights CEO — posición principal -->
+  <div id="ai-insight-pe" style="display:none;margin:0 0 15px;background:linear-gradient(135deg,rgba(27,79,138,.04),rgba(90,143,53,.04));border:1px solid rgba(27,79,138,.18);border-left:3px solid #1B4F8A;border-radius:10px;padding:18px 20px;">
+    <div style="font-size:10px;font-weight:700;color:#1B4F8A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;">🤖 Diagnóstico elaborado por AI a petición de la GG</div>
+    <div id="ai-insight-pe-diag" style="font-size:12px;color:#1A2332;line-height:1.75;white-space:pre-wrap;margin-bottom:12px;"></div>
+    <div style="font-size:10px;font-weight:700;color:#5a8f35;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;">▶ Acciones Propuestas</div>
+    <ul id="ai-insight-pe-acc" style="margin:0 0 10px 18px;padding:0;font-size:12px;color:#1A2332;line-height:1.7;"></ul>
+    <div id="ai-insight-pe-ts" style="font-size:10px;color:#7A90AA;text-align:right;"></div>
+  </div>
+  <script>
+  (function(){
+    if(typeof AVBOARD==='undefined'||!AVBOARD.insights||!AVBOARD.insights.peru) return;
+    var ins=AVBOARD.insights.peru;
+    var el=document.getElementById('ai-insight-pe'); if(!el) return;
+    el.style.display='';
+    var d=document.getElementById('ai-insight-pe-diag'); if(d) d.textContent=ins.diagnostico||'';
+    var a=document.getElementById('ai-insight-pe-acc');
+    if(a&&ins.acciones) a.innerHTML=ins.acciones.map(function(x){return'<li>'+x+'</li>';}).join('');
+    var t=document.getElementById('ai-insight-pe-ts');
+    if(t) t.textContent='Generado por Claude · '+(AVBOARD.insights.generated_at||'—');
+  })();
+  </script>
 
   <div class="g2" style="margin-bottom:15px;">
     <!-- Alertas col1 — generadas dinámicamente desde AVBOARD -->
     <div id="av-pe-alertas-col1">
-      <div class="alerta-b" style="color:var(--dim);font-size:10px;">Cargando diagnóstico…</div>
+      <div class="alerta-b" style="color:var(--dim);font-size:10px;">Cargando alertas…</div>
     </div>
     <!-- Alertas col2 — generadas dinámicamente desde AVBOARD -->
     <div id="av-pe-alertas-col2">
       <div class="alerta-b" style="color:var(--dim);font-size:10px;">&nbsp;</div>
-      <div style="background:rgba(74,158,219,0.07);border:1px solid var(--bdr);border-radius:8px;padding:14px;margin-top:10px;">
-        <div style="font-family:'Bebas Neue';font-size:12px;letter-spacing:2px;color:var(--blue);margin-bottom:8px;">📅 HITOS CLAVE H2 · PERÚ</div>
-        <div style="font-family:'DM Mono';font-size:10px;color:var(--dim);line-height:2;">
-          Mayo:  USD 61,946 ppto · Infante 26.9K + Atalaya 22.8K<br>
-          Junio: USD 78,710 ppto · Gonzales activa con 7K<br>
-          Julio: USD 100,675 ppto · primer pico H2<br>
-          <span style="color:var(--amber);">Agosto: USD 178,180 ppto ← MAYOR MES DEL AÑO</span><br>
-          Octubre: USD 165,842 ppto · segundo peak<br>
-          <span style="color:var(--red);">Pendiente May–Dic: USD 907,775 · 79.8% del ppto anual</span>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -465,27 +476,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
 </div>
 
-<!-- ── AI INSIGHTS CEO ──────────────────────────────────────────────────── -->
-<div id="ai-insight-pe" style="display:none;margin:0 16px 20px;background:linear-gradient(135deg,rgba(27,79,138,.04),rgba(90,143,53,.04));border:1px solid rgba(27,79,138,.18);border-left:3px solid #1B4F8A;border-radius:10px;padding:18px 20px;">
-  <div style="font-size:10px;font-weight:700;color:#1B4F8A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;">🤖 Diagnóstico Ejecutivo · Visión CEO — Perú</div>
-  <div id="ai-insight-pe-diag" style="font-size:12px;color:#1A2332;line-height:1.75;white-space:pre-wrap;margin-bottom:12px;"></div>
-  <div style="font-size:10px;font-weight:700;color:#5a8f35;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;">▶ Acciones Propuestas</div>
-  <ul id="ai-insight-pe-acc" style="margin:0 0 10px 18px;padding:0;font-size:12px;color:#1A2332;line-height:1.7;"></ul>
-  <div id="ai-insight-pe-ts" style="font-size:10px;color:#7A90AA;text-align:right;"></div>
-</div>
-<script>
-(function(){
-  if(typeof AVBOARD==='undefined'||!AVBOARD.insights||!AVBOARD.insights.peru) return;
-  var ins=AVBOARD.insights.peru;
-  var el=document.getElementById('ai-insight-pe'); if(!el) return;
-  el.style.display='';
-  var d=document.getElementById('ai-insight-pe-diag'); if(d) d.textContent=ins.diagnostico||'';
-  var a=document.getElementById('ai-insight-pe-acc');
-  if(a&&ins.acciones) a.innerHTML=ins.acciones.map(function(x){return'<li>'+x+'</li>';}).join('');
-  var t=document.getElementById('ai-insight-pe-ts');
-  if(t) t.textContent='Generado por Claude · '+(AVBOARD.insights.generated_at||'—');
-})();
-</script>
+<!-- AI insights movido a sección principal de Diagnóstico AI arriba -->
 
 <div class="ftr">
   <div id="av-pe-footer-txt">AV Latam BI Platform · Panel Perú · Corte ventas 15/05 · CxC 10/05/2026 · Ppto oficial USD 1,137,034</div>
