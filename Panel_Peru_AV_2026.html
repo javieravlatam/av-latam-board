@@ -1029,7 +1029,7 @@ new Chart(document.getElementById('cCxC'),{
     set('av-pe-footer-txt','AV Latam BI Platform · Panel Perú · Corte ventas '+corteVtas+
       ' · CxC '+D.meta.cortes.peru_cxc+' · Ppto oficial USD '+pptoA.toLocaleString('en-US'));
 
-  }catch(e){}
+  }catch(e){console.error('[PE] CRASH en try block:',e.message,'|',e.stack);}
 })();
 
 function cerrarSesion() {
