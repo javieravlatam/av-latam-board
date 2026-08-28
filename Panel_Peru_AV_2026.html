@@ -693,7 +693,6 @@ const GD='rgba(74,158,219,0.1)';
   Object.keys(rtcP_d).forEach(function(k){var arr=rtcP_d[k]||[];for(var i=0;i<12;i++)PPTO_T[i]+=(arr[i]||0);});
   Object.keys(rtcR_d).forEach(function(k){var arr=rtcR_d[k]||[];for(var i=0;i<nMpe_d;i++)REAL_T[i]+=(arr[i]||0);});
   var pptoAcD=PPTO_T.reduce(function(a,v,i){a.push((a[i-1]||0)+v);return a;},[]);
-  var realAcD=REAL_T.map(function(v,i){return i<nMpe_d?((i===0?0:realAcD_prev)+v):null;});
   // Acumular real correctamente
   var realAcD2=[];var s=0;
   for(var i=0;i<12;i++){if(i<nMpe_d){s+=REAL_T[i];realAcD2.push(s);}else{realAcD2.push(null);}}
@@ -1029,7 +1028,7 @@ new Chart(document.getElementById('cCxC'),{
     set('av-pe-footer-txt','AV Latam BI Platform · Panel Perú · Corte ventas '+corteVtas+
       ' · CxC '+D.meta.cortes.peru_cxc+' · Ppto oficial USD '+pptoA.toLocaleString('en-US'));
 
-  }catch(e){console.error('[PE] CRASH en try block:',e.message,'|',e.stack);}
+  }catch(e){}
 })();
 
 function cerrarSesion() {
