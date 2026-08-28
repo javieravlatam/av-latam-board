@@ -394,7 +394,7 @@
   <!-- ══════════════════════════════════════════
        BLOQUE 3: CHILE – ANÁLISIS RTC
   ══════════════════════════════════════════ -->
-  <div class="section-title">Chile · Desempeño por RTC <span>Análisis CEO · Margen Neto Real</span></div>
+  <div class="section-title">Chile · Desempeño por RTC <span>Análisis CEO · IEC YTD · Eficiencia Comercial</span></div>
 
   <div class="grid-2" style="margin-bottom:16px;">
     <!-- Tabla RTC Chile -->
@@ -405,8 +405,8 @@
           <tr>
             <th>RTC</th>
             <th class="right">YTD CLP</th>
-            <th class="right">vs Ppto T1</th>
-            <th class="right">Margen</th>
+            <th class="right">vs Ppto YTD</th>
+            <th class="right">IEC YTD</th>
             <th class="right">Estado</th>
           </tr>
         </thead>
@@ -464,7 +464,7 @@
 
     <!-- Gráfico barras Chile -->
     <div class="panel">
-      <div class="panel-title">VENTA YTD vs PPTO T1 · CHILE <span class="tag">CLP millones</span></div>
+      <div class="panel-title">VENTA YTD vs PPTO YTD · CHILE <span class="tag">CLP millones</span></div>
       <div class="chart-wrap">
         <canvas id="chartChileRTC"></canvas>
       </div>
@@ -492,8 +492,8 @@
           <tr>
             <th>Vendedor</th>
             <th class="right">YTD USD</th>
-            <th class="right">vs Ppto</th>
-            <th class="right" id="eb-pe-th-mes">Mayo</th>
+            <th class="right">vs Ppto YTD</th>
+            <th class="right" id="eb-pe-th-mes">IEC YTD</th>
             <th class="right">Estado</th>
           </tr>
         </thead>
@@ -1239,7 +1239,7 @@ new Chart(document.getElementById('chartChileRTC'), {
         borderRadius: 4,
       },
       {
-        label: 'Ppto T1',
+        label: 'Ppto YTD',
         data: [33.0, 54.1, 29.2, 32.9, 18.0, 3.6],
         backgroundColor: 'rgba(27,79,138,0.07)',
         borderColor: 'rgba(27,79,138,0.20)',
@@ -1609,7 +1609,7 @@ function cerrarSesion() {
     var curIdxPE_EB = nRealPE_EB - 1;
     var curMesPE_EB = mesesFullEBLong[curIdxPE_EB];
     set('eb-pe-rtc-tag', 'USD · incl. '+curMesPE_EB+' parcial al '+sPV);
-    set('eb-pe-th-mes', mesesFullEB[curIdxPE_EB]);
+    // eb-pe-th-mes ahora dice "IEC YTD" — no sobreescribir con mes (IEC Peru por vendedor pendiente)
     var ebVendNames = {infante:'O. Infante',aguirre:'L. Aguirre',atalaya:'O. Atalaya',gonzales:'A. Gonzales'};
     var ebTopVend = null, ebTopVal = -1;
     var ebRtcR = pv.rtc_mensual_real || {};
@@ -1634,7 +1634,8 @@ function cerrarSesion() {
           if (pctEl)  { pctEl.textContent = (cumpl*100).toFixed(1)+'%'; pctEl.style.color = clrC; }
           if (fillEl) { fillEl.style.width = Math.min(100,cumpl*100).toFixed(1)+'%'; fillEl.style.background = clrC; }
         }
-        row.children[3].textContent = mesVal > 0 ? fUsd(mesVal) : '–';
+        // IEC YTD Peru por vendedor — pendiente de datos por transacción. Mostrar '–' hasta disponibilidad.
+        row.children[3].textContent = '–';
       }
       if (mesVal > ebTopVal) { ebTopVal = mesVal; ebTopVend = k; }
     });
@@ -1695,10 +1696,16 @@ function cerrarSesion() {
       if (semaEl) semaEl.className = 'sema ' + (cumpl === null ? 'sema-amber' : (cumpl >= 1 ? 'sema-green' : (cumpl >= 0.8 ? 'sema-amber' : 'sema-red')));
       if (pctEl)  { pctEl.textContent = cumpl !== null ? (cumpl*100).toFixed(1)+'%' : '–'; pctEl.style.color = clrC; }
       if (fillEl) { fillEl.style.width = cumpl !== null ? Math.min(100, cumpl*100).toFixed(1)+'%' : '0%'; fillEl.style.background = clrC; }
+      // IEC YTD desde AVBOARD.chile.ventas.iec (por vendedor)
+      var iecVal = cv.iec && cv.iec[k] ? cv.iec[k] : null;
+      if (row.children[3]) {
+        row.children[3].textContent = iecVal !== null ? (iecVal*100).toFixed(1)+'%' : '–';
+        row.children[3].style.color = iecVal === null ? '' : (iecVal >= 1 ? 'var(--green)' : (iecVal >= 0.85 ? 'var(--amber)' : 'var(--red)'));
+      }
       if (row.children[4]) row.children[4].textContent = cumpl === null ? '⚪' : (cumpl >= 1 ? '✅' : (cumpl >= 0.8 ? '⚠️' : '🔴'));
     });
 
-    // ── Chart 2: Chile RTC venta YTD vs Ppto T1 (mismo dato que la tabla, ya no hardcode separado) ──
+    // ── Chart 2: Chile RTC venta YTD vs Ppto YTD acumulado ──
     var cChileRTC = Chart.getChart(document.getElementById('chartChileRTC'));
     if (cChileRTC) {
       var rtcKeysEB = ['caroca','laratro','encina','velasquez','veverka','munoz'];
@@ -1707,17 +1714,15 @@ function cerrarSesion() {
         var ytd = arr ? arr.slice(0,nRealCL_EB).reduce(function(a,b){return a+b;},0) : 0;
         return parseFloat(M(ytd));
       });
-      cChileRTC.data.datasets[1].data = rtcKeysEB.map(function(k, idx){
-        var t1p = cv.rtc_ppto_t1 && cv.rtc_ppto_t1[k];
-        // sin dato de ppto T1 para este RTC (caso Muñoz): se deja el valor estático ya cargado, no se sobreescribe con 0
-        if (!t1p) return cChileRTC.data.datasets[1].data[idx];
-        return parseFloat(M(t1p));
+      cChileRTC.data.datasets[1].data = rtcKeysEB.map(function(k){
+        // Ppto YTD acumulado (suma mensual real — misma metodología que tabla)
+        var arrP = cv.rtc_mensual_ppto && cv.rtc_mensual_ppto[k];
+        var pptoYtd = arrP ? arrP.slice(0,nRealCL_EB).reduce(function(a,b){return a+(b||0);},0) : 0;
+        return pptoYtd > 0 ? parseFloat(M(pptoYtd)) : 0;
       });
       cChileRTC.update();
     }
-    // Nota: chartMNChile (Margen Neto Real % por RTC) se deja estático — AVBOARD no
-    // tiene margen por RTC individual (sólo cv.mn_real agregado de Chile). Igual que
-    // la columna "Margen" de esta misma tabla. Ver alertas.md.
+    // Nota: IEC YTD por vendedor se alimenta de cv.iec[k] (AVBOARD.chile.ventas.iec)
 
     // ── Diagnóstico AI Chile ──────────────────────────────────────
     (function() {
