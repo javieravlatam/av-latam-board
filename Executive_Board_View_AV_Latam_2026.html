@@ -590,13 +590,6 @@
             <td class="rtc-val" style="color:var(--text-muted);">–</td>
             <td style="text-align:right;">✅</td>
           </tr>
-          <tr data-vendor="navarro">
-            <td><span class="sema sema-amber"></span><span class="rtc-name">N. Navarro</span></td>
-            <td class="rtc-val">30,940</td>
-            <td><div class="rtc-pct" style="color:var(--amber);">–</div><div class="prog-wrap"><div class="prog-fill" style="width:60%;background:var(--amber);"></div></div></td>
-            <td class="rtc-val" style="color:var(--text-muted);">–</td>
-            <td style="text-align:right;">⚠️</td>
-          </tr>
           <tr data-vendor="gonzales">
             <td><span class="sema sema-red"></span><span class="rtc-name">A. Gonzales</span></td>
             <td class="rtc-val">696</td>
@@ -1682,7 +1675,7 @@ function cerrarSesion() {
       cPeru.data.datasets[0].data = [
         pvd.infante.ytd,
         pvd.atalaya.ytd,
-        pvd.aguirre.ytd + (pvd.navarro ? pvd.navarro.ytd : 0),
+        pvd.aguirre.ytd,
         pvd.gonzales.ytd,
         pvd.valladares.ytd
       ];
@@ -1742,17 +1735,32 @@ function cerrarSesion() {
     var curMesPE_EB = mesesFullEBLong[curIdxPE_EB];
     set('eb-pe-rtc-tag', 'USD · incl. '+curMesPE_EB+' parcial al '+sPV);
     set('eb-pe-th-mes', mesesFullEB[curIdxPE_EB]);
-    var ebVendNames = {infante:'O. Infante',aguirre:'L. Aguirre',atalaya:'O. Atalaya',navarro:'N. Navarro',gonzales:'A. Gonzales'};
+    var ebVendNames = {infante:'O. Infante',aguirre:'L. Aguirre',atalaya:'O. Atalaya',gonzales:'A. Gonzales'};
     var ebTopVend = null, ebTopVal = -1;
+    var ebRtcR = pv.rtc_mensual_real || {};
+    var ebPptoA = pv.rtc_ppto_anual || {};
     Object.keys(ebVendNames).forEach(function(k){
       var row = document.querySelector('tr[data-vendor="'+k+'"]');
       var v = pv.por_vendedor && pv.por_vendedor[k];
       if (!v) return;
+      var mesVal = ebRtcR[k] ? (ebRtcR[k][curIdxPE_EB] || 0) : 0;
+      var pptoA  = ebPptoA[k] || 0;
+      var ytdPpto = pptoA > 0 ? pptoA * nRealPE_EB / 12 : 0;
+      var cumpl   = ytdPpto > 0 ? v.ytd / ytdPpto : null;
       if (row) {
         row.children[1].textContent = fUsd(v.ytd);
-        row.children[3].textContent = v.mayo ? fUsd(v.mayo) : '–';
+        var semaEl = row.querySelector('.sema');
+        var pctEl  = row.querySelector('.rtc-pct');
+        var fillEl = row.querySelector('.prog-fill');
+        if (cumpl !== null) {
+          var clrC = cumpl >= 1 ? 'var(--green)' : (cumpl >= 0.8 ? 'var(--amber)' : 'var(--red)');
+          if (semaEl) semaEl.className = 'sema ' + (cumpl >= 1 ? 'sema-green' : (cumpl >= 0.8 ? 'sema-amber' : 'sema-red'));
+          if (pctEl)  { pctEl.textContent = (cumpl*100).toFixed(1)+'%'; pctEl.style.color = clrC; }
+          if (fillEl) { fillEl.style.width = Math.min(100,cumpl*100).toFixed(1)+'%'; fillEl.style.background = clrC; }
+        }
+        row.children[3].textContent = mesVal > 0 ? fUsd(mesVal) : '–';
       }
-      if (v.mayo > ebTopVal) { ebTopVal = v.mayo; ebTopVend = k; }
+      if (mesVal > ebTopVal) { ebTopVal = mesVal; ebTopVend = k; }
     });
     if (ebTopVend && ebTopVal > 0) {
       set('eb-pe-mesbox', '🚀 <strong style="color:var(--green);">'+ebVendNames[ebTopVend]+'</strong> lidera '+curMesPE_EB+' con USD '+K1(ebTopVal)+'K · '+curMesPE_EB+' total al '+sPV+': USD '+K1(pv.mensual_real[curIdxPE_EB]||0)+'K · YTD Perú '+nRealPE_EB+'m: USD '+fUsd(D.peru_ytd()));
