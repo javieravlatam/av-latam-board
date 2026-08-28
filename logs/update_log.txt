@@ -3296,3 +3296,20 @@ Acciones:
   - Panel_Presupuesto: verificado — 100% dinámico (todos los vendors sincronizados desde AVBOARD)
   - Panel_Jefes_Chile: verificado — 100% dinámico, sin issues
 PENDIENTE: Javier debe eliminar git locks y hacer commit (ver instrucciones en resumen)
+
+=== 28/08/2026 — SESIÓN DE FIX INTEGRAL ===
+ARCHIVOS PROCESADOS: Panel_Peru_AV_2026.html, Executive_Board_View_AV_Latam_2026.html, Panel_Jefes_Index.html, Panel_Jefes_Chile_2026.html, avboard_data.js
+
+ACCIONES:
+1. CAUSA RAÍZ Panel_Peru (4 paneles en blanco): dead code `realAcD_prev` en línea 696 — ReferenceError no capturado mataba TODO el script antes del bloque AVBOARD populate
+2. Fix scope: `_mR` y `mesNm` redefinidos como `_mRLocal`/`curMesNm` en bloque update (eran out-of-scope del IIFE semáforo)
+3. Fix nPE → nRealPE en línea 786 (crash anterior parcialmente enmascarado por bug 1)
+4. AI Insights Peru: movido a sección principal de Diagnóstico AI — cuadro antiguo eliminado
+5. EBV: CEO P&L Chile y Perú eliminados (sin datos de costos) — reemplazados por Diagnóstico AI ancho completo
+6. EBV columnas RTC: T1→YTD, Margen→IEC YTD; Chile con valores dinámicos cv.iec[k]; Perú muestra "–"
+7. Panel_Jefes_Index: instrucciones hardcodeadas mayo 2026 → AI desde AVBOARD.insights
+8. Panel_Jefes_Chile: sección Alertas Comerciales AI agregada (alinea estructura con Peru)
+9. avboard_data.js: AVBOARD.insights añadido con diagnósticos PE y CL 8m Ene–Ago 2026
+
+COMMITS: b90ef55, 0ad5cee, 6034afc, 8d73258, ecf6b93, 1505f25, 6e38066
+STATUS: ✅ Todos los paneles operativos — verificado por usuario
