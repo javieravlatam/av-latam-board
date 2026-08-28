@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="design-system/formato-javier-motion.css">
 <link rel="stylesheet" href="design-system/formato-javier-utilities.css">
 <link rel="stylesheet" href="design-system/domains/formato-javier-board.css">
-<script src="avboard_data.js?v=202608250017"></script>
+<script src="avboard_data.js?v=202608280001"></script>
 <script src="js/av-chart-colors.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -440,6 +440,29 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(27,79,138,0.35);
       </tbody>
     </table>
   </div>
+
+  <!-- ALERTAS COMERCIALES · CHILE — AI a petición de la GG -->
+  <div class="sec" style="margin-top:22px">Alertas Comerciales · Chile 2026 <span>Diagnóstico elaborado por AI a petición de la GG</span></div>
+
+  <div id="jch-alertas-ai" style="margin-bottom:20px;background:linear-gradient(135deg,rgba(27,79,138,.04),rgba(90,143,53,.04));border:1px solid rgba(27,79,138,.18);border-left:3px solid #1B4F8A;border-radius:10px;padding:16px 18px;">
+    <div style="font-size:10px;font-weight:700;color:#1B4F8A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;">🤖 Instrucciones · Chile · A petición de la GG</div>
+    <div id="jch-alertas-diag" style="font-size:12px;color:#1A2332;line-height:1.75;white-space:pre-wrap;margin-bottom:12px;color:var(--text-muted);">Cargando diagnóstico…</div>
+    <div style="font-size:10px;font-weight:700;color:#5a8f35;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;">▶ Acciones Propuestas</div>
+    <ul id="jch-alertas-acc" style="margin:0 0 8px 18px;padding:0;font-size:12px;color:#1A2332;line-height:1.7;"></ul>
+    <div id="jch-alertas-ts" style="font-size:10px;color:#7A90AA;text-align:right;"></div>
+  </div>
+  <script>
+  (function(){
+    if(typeof AVBOARD==='undefined'||!AVBOARD.insights||!AVBOARD.insights.chile) return;
+    var ins=AVBOARD.insights.chile;
+    var d=document.getElementById('jch-alertas-diag');
+    if(d){d.textContent=ins.diagnostico||'';d.style.color='';}
+    var a=document.getElementById('jch-alertas-acc');
+    if(a&&ins.acciones) a.innerHTML=ins.acciones.map(function(x){return'<li>'+x+'</li>';}).join('');
+    var t=document.getElementById('jch-alertas-ts');
+    if(t) t.textContent='Generado por Claude · '+(AVBOARD.insights.generated_at||'—');
+  })();
+  </script>
 
   <div class="sec">Eficiencia Comercial (IEC) · Chile · Real 2026 YTD <span id="jcl-iec-periodo">YTD · vs precio piso propuesto · sin revelar costos ni márgenes</span></div>
 

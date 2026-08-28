@@ -201,7 +201,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   .btn-logout:hover { background:rgba(231,76,60,0.10); }
 .logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
-  <script src="avboard_data.js?v=202608250017"></script>
+  <script src="avboard_data.js?v=202608280001"></script>
 </head>
 <body>
 
@@ -612,64 +612,51 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
   </div>
 
-  <!-- INSTRUCCIONES JEFES PAÍS -->
-  <div class="sec">Instrucciones Jefe País · Semana 20 <span>acciones concretas al 25/05</span></div>
-  <div class="inst-grid">
+  <!-- INSTRUCCIONES JEFES PAÍS — AI · A petición de la GG -->
+  <div class="sec">Instrucciones Jefe País <span id="idx-instr-periodo">elaboradas por AI a petición de la GG · 8m Ene–Ago 2026</span></div>
 
-    <div class="inst-panel">
-      <div class="inst-head" style="color:var(--green);">🇨🇱 JEFE PAÍS CHILE</div>
-      <div class="inst-item">
-        <div class="inst-num" style="color:var(--red);">1</div>
-        <div class="inst-text"><b style="color:var(--red);">URGENTE — CxC +90d CLP 15.9M.</b> Gestión directa con Neira/Laratro (Loma Larga CLP 12.4M), Ribera (CLP 1.5M) y Kullin (CLP 1.5M · 2 entidades). Compromiso de pago o acciones formales. Goyaservice ✅ PAGADO.</div>
-      </div>
-      <div class="inst-item">
-        <div class="inst-num" style="color:var(--red);">2</div>
-        <div class="inst-text"><b style="color:var(--red);">Velásquez — ultimátum activo.</b> Revisar cierre semana y confirmar actividad. Mayo es el mes de evaluación formal. Si MN no alcanza 25% → fusión de zona.</div>
-      </div>
-      <div class="inst-item">
-        <div class="inst-num" style="color:var(--red);">3</div>
-        <div class="inst-text"><b style="color:var(--red);">Veverka — zona en evaluación cierre.</b> Confirmar actividad Abril. Sin recovery → cierre formal Junio. Preparar plan de absorción de zona.</div>
-      </div>
-      <div class="inst-item">
-        <div class="inst-num" style="color:var(--amber);">4</div>
-        <div class="inst-text"><b>Encina — camioneta entra en Mayo.</b> Confirmar meta: CLP 10.2M/mes desde Mayo. Ppto Mayo: CLP 5M (bajo). Necesita pipeline sólido para superar objetivo.</div>
-      </div>
-      <div class="inst-item">
-        <div class="inst-num" style="color:var(--green);">5</div>
-        <div class="inst-text"><b>Caroca — ampliar zona.</b> Explorar expansión territorial Q3. Modelo de éxito a replicar. Ppto H2 fuerte: Sep 21M + Oct 8.7M.</div>
-      </div>
+  <!-- Contenedor dinámico — poblado por JS desde AVBOARD.insights -->
+  <div class="inst-grid" id="idx-instr-grid">
+
+    <!-- Chile — AI -->
+    <div class="inst-panel" id="idx-instr-cl">
+      <div class="inst-head" style="color:var(--green);">🇨🇱 JEFE PAÍS CHILE <span style="font-size:9px;color:#7A90AA;font-family:'DM Mono';letter-spacing:0;font-weight:400;">🤖 AI</span></div>
+      <div class="inst-item"><div class="inst-text" style="color:var(--muted);">Cargando instrucciones…</div></div>
     </div>
 
-    <div class="inst-panel">
-      <div class="inst-head" style="color:var(--blue);">🇵🇪 JEFE PAÍS PERÚ</div>
-      <div class="inst-item">
-        <div class="inst-num" style="color:var(--red);">1</div>
-        <div class="inst-text"><b style="color:var(--red);">URGENTE — CxC +90d USD 23.6K.</b> Geldres/PAODISA (USD 10.9K) requiere proceso formal de cobranza. Atalaya gestiona Agrofer (USD 9.5K) + Luna Quintanilla (USD 2.3K). Corp.Olmos + Amfresh en SUPRA. Reporte GG esta semana.</div>
-      </div>
-      <div class="inst-item">
-        <div class="inst-num" style="color:var(--amber);">2</div>
-        <div class="inst-text"><b>Infante — aceleración urgente.</b> YTD USD 94K vs ppto anual USD 485K. Necesita USD 390K en May–Dic. Abril mejora con 22.5K. Plan de actividad semanal para Mayo.</div>
-      </div>
-      <div class="inst-item">
-        <div class="inst-num" style="color:var(--amber);">3</div>
-        <div class="inst-text"><b>Aguirre/Navarro — asignar ppto Q2.</b> Zona más eficiente del grupo. Ver cumplimiento YTD actualizado en Panel Jefes Perú. Incorporar formalmente al plan de proyección.</div>
-      </div>
-      <div class="inst-item">
-        <div class="inst-num" style="color:var(--red);">4</div>
-        <div class="inst-text"><b style="color:var(--red);">Gonzales y Valladares — activación.</b> Sin actividad ahora, no hay cierres en Agosto (pico USD 178K). Plan de prospección esta semana. Ppto H2 fuerte para ambos.</div>
-      </div>
-      <div class="inst-item">
-        <div class="inst-num" style="color:var(--green);">5</div>
-        <div class="inst-text"><b>Preparar para Agosto.</b> Mayor mes del año: USD 178K. La cartera para ese cierre se construye en Mayo, Junio y Julio. Coordinación con Infante, Atalaya y Aguirre.</div>
-      </div>
+    <!-- Perú — AI -->
+    <div class="inst-panel" id="idx-instr-pe">
+      <div class="inst-head" style="color:var(--blue);">🇵🇪 JEFE PAÍS PERÚ <span style="font-size:9px;color:#7A90AA;font-family:'DM Mono';letter-spacing:0;font-weight:400;">🤖 AI</span></div>
+      <div class="inst-item"><div class="inst-text" style="color:var(--muted);">Cargando instrucciones…</div></div>
     </div>
 
   </div>
+  <script>
+  (function(){
+    if(typeof AVBOARD==='undefined'||!AVBOARD.insights) return;
+    var ins=AVBOARD.insights;
+    var colors=['var(--red)','var(--red)','var(--amber)','var(--amber)','var(--green)'];
+    function buildPanel(elId, accs){
+      var el=document.getElementById(elId); if(!el) return;
+      var items=el.querySelectorAll('.inst-item'); if(items.length) items[0].remove(); // remove "Cargando"
+      if(!accs||!accs.length) return;
+      accs.forEach(function(txt,i){
+        var d=document.createElement('div'); d.className='inst-item';
+        d.innerHTML='<div class="inst-num" style="color:'+colors[Math.min(i,colors.length-1)]+';">'+(i+1)+'</div><div class="inst-text">'+txt+'</div>';
+        el.appendChild(d);
+      });
+    }
+    if(ins.chile) buildPanel('idx-instr-cl', ins.chile.acciones);
+    if(ins.peru)  buildPanel('idx-instr-pe',  ins.peru.acciones);
+    var p=document.getElementById('idx-instr-periodo');
+    if(p&&ins.generated_at) p.textContent='Generado por AI a petición de la GG · '+ins.label;
+  })();
+  </script>
 
 </div>
 
 <div class="ftr">
-  <div id="idx-footer-txt">AV Latam BI Platform · Panel Jefes Comerciales · Semana 20 · Chile 18/05 · Perú 15/05 · CxC CL 17/05 PE 10/05/2026</div>
+  <div id="idx-footer-txt">AV Latam BI Platform · Panel Jefes Comerciales · 8m Ene–Ago 2026</div>
   <div class="npills">
     <a href="index.html" class="np">🏠 Inicio</a>
     <a href="Panel_Jefes_Grupo_AV_2026.html" class="np">🌎 Grupo AV</a>
