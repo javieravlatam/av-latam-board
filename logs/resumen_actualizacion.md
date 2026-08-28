@@ -686,3 +686,1289 @@ validar con Javier antes de tomar decisiones de pricing basadas solo en esos
 números (ver nota en update_avboard.py / compute_productos).
 
 ---
+
+## Actualización 2026-08-24 22:25 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 22:27 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 22:33 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:15 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:17 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:19 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:19 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:19 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:19 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:20 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:20 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:20 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:20 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:25 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:29 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:30 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:33 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:33 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:33 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:33 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:34 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-24 23:34 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-25 00:10 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-25 00:12 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-25 00:17 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-25 00:17 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-25 00:17 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-25 00:17 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-25 00:17 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-08-25 00:17 — Corte 12/08/2026
+
+**Chile ventas:** CLP 414,135,939 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 475,732 YTD · Cumpl 5m: 77.8%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 101.2% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 137 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+---
+
+## Sprint CxC Canónico — 2026-08-25
+
+### KPIs actualizados
+| Indicador | Valor |
+|-----------|-------|
+| CxC PE total (excl. supra) | USD 125,038 · corte 24/08/2026 |
+| CxC PE supra (cartera sin vendedor) | USD 202,820 |
+| CxC PE +90d | USD 31,587 |
+| CxC CL +90d | CLP 23,647,064 · corte 12/08/2026 |
+| Tests certificados | P0 12/12 · Tier0 10/10 · Certify 7/7 · CxC 19/19 |
+
+### Cambios arquitectónicos
+- **CxC Perú es ahora dinámico**: el pipeline lee el vigente desde raw_registry.json, parsea el Excel, y produce datos canónicos.
+- **Claves legacy eliminadas**: `aguirre_navarro`, `gonzales_valladares`, `pradenas_sin_asignar` reemplazadas por `aguirre`, `gonzales`+`valladares`+`diaz`, `sin_asignar`.
+- **Nuevo vendor**: geldres (JOSE GELDRES) agregado a vendors.json.
+- **Nuevo archivo**: companies.json — catálogo canónico de empresas.
+- **Schemas reales**: schema_defs.json tiene CXC_CL y CXC_PE con columnas verificadas.
+
+### Decisiones sugeridas
+- **Commit y push**: sprint certificado, ejecutar desde terminal del usuario.
+- **Supra USD 202K**: cartera sin vendedor asignado — revisar con dirección si requiere gestión especial.
+- **PAODISA S.A.**: USD 10,874 a +90d · 4 facturas 2024 · proceso legal pendiente.
+- **AGROFER MJ E.I.R.L.**: USD 9,493 a +90d · acuerdo de pago urgente.

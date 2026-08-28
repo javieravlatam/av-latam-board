@@ -553,6 +553,28 @@
 
 </div>
 
+<!-- ── AI INSIGHT CEO ────────────────────────────────────────────────────── -->
+<div id="ai-insight-cl" style="display:none;margin:0 16px 20px;background:linear-gradient(135deg,rgba(27,79,138,.04),rgba(90,143,53,.04));border:1px solid rgba(27,79,138,.18);border-left:3px solid #1B4F8A;border-radius:10px;padding:18px 20px;">
+  <div style="font-size:10px;font-weight:700;color:#1B4F8A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;">🤖 Diagnóstico Ejecutivo · Visión CEO — Chile</div>
+  <div id="ai-cl-diag" style="font-size:12px;color:#1A2332;line-height:1.75;white-space:pre-wrap;margin-bottom:12px;"></div>
+  <div style="font-size:10px;font-weight:700;color:#5a8f35;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;">▶ Acciones Propuestas</div>
+  <ul id="ai-cl-acc" style="margin:0 0 10px 18px;padding:0;font-size:12px;color:#1A2332;line-height:1.7;"></ul>
+  <div id="ai-cl-ts" style="font-size:10px;color:#7A90AA;text-align:right;"></div>
+</div>
+<script>
+(function(){
+  if(typeof AVBOARD==='undefined'||!AVBOARD.insights||!AVBOARD.insights.chile) return;
+  var ins=AVBOARD.insights.chile;
+  var el=document.getElementById('ai-insight-cl'); if(!el) return;
+  el.style.display='';
+  var d=document.getElementById('ai-cl-diag'); if(d) d.textContent=ins.diagnostico||'';
+  var a=document.getElementById('ai-cl-acc');
+  if(a&&ins.acciones) a.innerHTML=ins.acciones.map(function(x){return'<li>'+x+'</li>';}).join('');
+  var t=document.getElementById('ai-cl-ts');
+  if(t) t.textContent='Generado por Claude · '+(AVBOARD.insights.generated_at||'—');
+})();
+</script>
+
 <div class="ftr">
   <div id="av-cl-footer-txt">AV Latam BI Platform · Panel Chile · Corte ventas 11/05 · CxC 08/05/2026 · TC 950 CLP/USD · Ppto anual CLP 861,321,350</div>
   <div class="npills">
@@ -564,7 +586,7 @@
   </div>
 </div>
 
-<script src="avboard_data.js?v=20260824"></script>
+<script src="avboard_data.js?v=202608250017"></script>
 <script>
 
 /* ── AV_CHART_COLORS — FORMATO JAVIER v1.1 ─────────────────────────────── */

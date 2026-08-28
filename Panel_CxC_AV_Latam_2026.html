@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel CxC · Cobranza AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=20260824"></script>
+<script src="avboard_data.js?v=202608250017"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -217,7 +217,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
   <div class="alerta-banner" id="av-cxc-alerta-banner">
     <div class="alerta-icon" id="av-cxc-alerta-icon">🚨</div>
     <div class="alerta-text" id="av-cxc-alerta-text">
-      <strong>ALERTA — MORA +90 DÍAS ACTIVA.</strong> Chile +90d: <strong>CLP 23.6M CRÍTICO</strong> — NIVALDO ANTONIO FLORES EGAÑA <strong style="color:var(--red)">CLP 5.3M (597d)</strong> y 14 cuentas más. Cartera total Chile (2 entidades): <strong>CLP 113.7M</strong>.
+      <strong>ALERTA — MORA +90 DÍAS ACTIVA.</strong> Chile +90d: <strong>CLP 23.6M CRÍTICO</strong> — NIVALDO ANTONIO FLORES EGAÑA <strong style="color:var(--red)">CLP 5.3M (597d)</strong> y 14 cuentas más. Cartera total Chile (2 entidades): <strong>CLP 113.7M</strong>. Perú +90d: <strong>USD 31.6K vencidos</strong>.
     </div>
   </div>
 
@@ -870,52 +870,80 @@ const chileData = [
 
 // Perú data
 const peruData = [
-  {vendedor:'JOSE GELDRES',cliente:'PAODISA S.A.',folio:'453',emision:'01/07/2024',vencimiento:'31/07/2024',dias:628,tramo:'+90d',monto:1477.5,estado:'Crítico'},
-  {vendedor:'JOSE GELDRES',cliente:'PAODISA S.A.',folio:'509',emision:'05/09/2024',vencimiento:'04/11/2024',dias:532,tramo:'+90d',monto:1773,estado:'Crítico'},
-  {vendedor:'JOSE GELDRES',cliente:'PAODISA S.A.',folio:'538',emision:'26/09/2024',vencimiento:'25/11/2024',dias:511,tramo:'+90d',monto:3546,estado:'Crítico'},
-  {vendedor:'JOSE GELDRES',cliente:'PAODISA S.A.',folio:'579',emision:'08/11/2024',vencimiento:'07/01/2025',dias:468,tramo:'+90d',monto:4077.9,estado:'Crítico'},
-  {vendedor:'OSCAR INFANTE',cliente:'AMFRESH PERU AGRISIL S.R.L.',folio:'918',emision:'23/01/2025',vencimiento:'23/04/2025',dias:362,tramo:'+90d',monto:2624,estado:'Crítico'},
-  {vendedor:'OSCAR INFANTE',cliente:'AMFRESH PERU AGRISIL S.R.L.',folio:'958',emision:'26/02/2026',vencimiento:'27/05/2025',dias:328,tramo:'+90d',monto:665,estado:'Crítico'},
-  {vendedor:'OMAR ATALAYA',cliente:'CORPORACION AGRICOLA OLMOS S.A',folio:'960',emision:'26/02/2026',vencimiento:'27/05/2025',dias:328,tramo:'+90d',monto:5850.44,estado:'Crítico'},
-  {vendedor:'OSCAR INFANTE',cliente:'INVERSIONES AJS S.A.C.',folio:'941',emision:'12/02/2025',vencimiento:'12/06/2025',dias:312,tramo:'+90d',monto:304,estado:'Crítico'},
-  {vendedor:'OMAR ATALAYA',cliente:'AGROFER MJ E.I.R.L.',folio:'671',emision:'13/06/2025',vencimiento:'11/10/2025',dias:191,tramo:'+90d',monto:9493,estado:'Crítico'},
-  {vendedor:'OSCAR INFANTE',cliente:'LUNA QUINTANILLA BRYAN ALEXANDER',folio:'743',emision:'10/09/2025',vencimiento:'09/12/2025',dias:132,tramo:'+90d',monto:1005.05,estado:'Crítico'},
-  {vendedor:'ANTONIO GONZALEZ',cliente:'EPIC FARMS S.A.C.',folio:'917',emision:'23/01/2026',vencimiento:'23/01/2026',dias:87,tramo:'61-90d',monto:600,estado:'Riesgo'},
-  {vendedor:'OSCAR INFANTE',cliente:'LUNA QUINTANILLA BRYAN ALEXANDER',folio:'841',emision:'04/11/2025',vencimiento:'02/02/2026',dias:77,tramo:'61-90d',monto:1344,estado:'Riesgo'},
-  {vendedor:'NICOLL NAVARRO',cliente:'SOCIEDAD AGRICOLA 3P S.A.C.',folio:'847',emision:'11/11/2025',vencimiento:'09/02/2026',dias:70,tramo:'61-90d',monto:448.4,estado:'Riesgo'},
-  {vendedor:'GUILLERMO PRADENAS',cliente:'SERVICIOS BIOINSUMOS PERU SOCIEDAD ANONIMA CERRADA.',folio:'817',emision:'23/10/2025',vencimiento:'20/02/2026',dias:59,tramo:'31-60d',monto:1050,estado:'Alerta'},
-  {vendedor:'NICOLL NAVARRO',cliente:'SOCIEDAD AGRICOLA 3P S.A.C.',folio:'908',emision:'13/01/2026',vencimiento:'27/02/2026',dias:52,tramo:'31-60d',monto:896.8,estado:'Alerta'},
-  {vendedor:'OSCAR INFANTE',cliente:'PROCESOS AGROINDUSTRIALES SOCIEDAD ANONIMA',folio:'907',emision:'13/01/2026',vencimiento:'14/03/2026',dias:37,tramo:'31-60d',monto:3149,estado:'Alerta'},
-  {vendedor:'PATRICIA VALLADARES',cliente:'SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA',folio:'972',emision:'05/03/2026',vencimiento:'04/04/2026',dias:16,tramo:'0-30d',monto:200,estado:'Normal'},
-  {vendedor:'OSCAR INFANTE',cliente:'POB S.A.C.',folio:'939',emision:'12/02/2026',vencimiento:'13/04/2026',dias:7,tramo:'0-30d',monto:3640,estado:'Normal'},
-  {vendedor:'Sin asignar',cliente:'SERVICIOS BIOINSUMOS PERU SOCIEDAD ANONIMA CERRADA.',folio:'887',emision:'16/12/2025',vencimiento:'15/04/2026',dias:5,tramo:'0-30d',monto:3780,estado:'Normal'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'948',emision:'18/02/2026',vencimiento:'19/04/2026',dias:1,tramo:'0-30d',monto:87,estado:'Normal'},
-  {vendedor:'OSCAR INFANTE',cliente:'MANUELITA FYH S.A.C.',folio:'983',emision:'20/03/2026',vencimiento:'19/04/2026',dias:1,tramo:'0-30d',monto:3150,estado:'Normal'},
-  {vendedor:'Sin asignar',cliente:'SERVICIOS BIOINSUMOS PERU SOCIEDAD ANONIMA CERRADA.',folio:'891',emision:'22/12/2025',vencimiento:'21/04/2026',dias:-1,tramo:'Al día',monto:2200,estado:'Al día'},
-  {vendedor:'NICOLL NAVARRO',cliente:'CORPORACION AGROLATINA S.A.C',folio:'916',emision:'22/01/2026',vencimiento:'22/04/2026',dias:-2,tramo:'Al día',monto:400,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA',folio:'930',emision:'05/02/2026',vencimiento:'06/05/2026',dias:-16,tramo:'Al día',monto:1404,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'977',emision:'12/03/2026',vencimiento:'11/05/2026',dias:-21,tramo:'Al día',monto:2646,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'CORPORACION AGROLATINA S.A.C',folio:'936',emision:'11/02/2026',vencimiento:'12/05/2026',dias:-22,tramo:'Al día',monto:400,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'937',emision:'12/02/2026',vencimiento:'13/05/2026',dias:-23,tramo:'Al día',monto:2208.96,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'982',emision:'19/03/2026',vencimiento:'18/05/2026',dias:-28,tramo:'Al día',monto:280,estado:'Al día'},
-  {vendedor:'PATRICIA VALLADARES',cliente:'SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA',folio:'984',emision:'20/03/2026',vencimiento:'19/05/2026',dias:-29,tramo:'Al día',monto:400,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'989',emision:'26/03/2026',vencimiento:'25/05/2026',dias:-35,tramo:'Al día',monto:250,estado:'Al día'},
-  {vendedor:'PATRICIA VALLADARES',cliente:'SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA',folio:'998',emision:'31/03/2026',vencimiento:'30/05/2026',dias:-40,tramo:'Al día',monto:400,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'CORPORACION ESAN E & F SOCIEDAD ANONIMA CERRADA',folio:'965',emision:'02/03/2026',vencimiento:'31/05/2026',dias:-41,tramo:'Al día',monto:6112.4,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA',folio:'969',emision:'04/03/2026',vencimiento:'02/06/2026',dias:-43,tramo:'Al día',monto:2761.2,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'CORPORACION ESAN E & F SOCIEDAD ANONIMA CERRADA',folio:'970',emision:'04/03/2026',vencimiento:'02/06/2026',dias:-43,tramo:'Al día',monto:10522.06,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'1006',emision:'08/04/2026',vencimiento:'07/06/2026',dias:-48,tramo:'Al día',monto:300,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1010',emision:'16/04/2026',vencimiento:'15/06/2026',dias:-56,tramo:'Al día',monto:300,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'1011',emision:'16/04/2026',vencimiento:'15/06/2026',dias:-56,tramo:'Al día',monto:300,estado:'Al día'},
-  {vendedor:'OSCAR INFANTE',cliente:'LUNA QUINTANILLA BRYAN ALEXANDER',folio:'981',emision:'18/03/2026',vencimiento:'16/06/2026',dias:-57,tramo:'Al día',monto:522,estado:'Al día'},
-  {vendedor:'OSCAR INFANTE',cliente:'INVERSIONES AJS S.A.C.',folio:'952',emision:'23/02/2026',vencimiento:'23/06/2026',dias:-64,tramo:'Al día',monto:222,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'CORPORACION AGROLATINA S.A.C.',folio:'992',emision:'30/03/2026',vencimiento:'28/06/2026',dias:-69,tramo:'Al día',monto:2000,estado:'Al día'},
-  {vendedor:'OSCAR INFANTE',cliente:'AMFRESH PERU AGRISIL S.R.L.',folio:'993',emision:'31/03/2026',vencimiento:'29/06/2026',dias:-70,tramo:'Al día',monto:11248,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA',folio:'967',emision:'03/03/2026',vencimiento:'30/06/2026',dias:-71,tramo:'Al día',monto:936,estado:'Al día'},
-  {vendedor:'OSCAR INFANTE',cliente:'INVERSIONES AJS S.A.C.',folio:'986',emision:'23/03/2026',vencimiento:'27/07/2026',dias:-98,tramo:'Al día',monto:280,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1003',emision:'07/04/2026',vencimiento:'05/08/2026',dias:-107,tramo:'Al día',monto:936,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1004',emision:'07/04/2026',vencimiento:'05/08/2026',dias:-107,tramo:'Al día',monto:936,estado:'Al día'},
-  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1009',emision:'15/04/2026',vencimiento:'13/08/2026',dias:-115,tramo:'Al día',monto:2800,estado:'Al día'},
+  // Corte 24/08/2026 · generado por update_avboard.py
+  {vendedor:'JOSE GELDRES',cliente:'PAODISA S.A.',folio:'509.0',emision:'09/05/2024',vencimiento:'11/04/2024',dias:865,tramo:'+90d',monto:1773.0,estado:'Crítico'},
+  {vendedor:'JOSE GELDRES',cliente:'PAODISA S.A.',folio:'453.0',emision:'07/01/2024',vencimiento:'31/07/2024',dias:754,tramo:'+90d',monto:1477.5,estado:'Crítico'},
+  {vendedor:'JOSE GELDRES',cliente:'PAODISA S.A.',folio:'538.0',emision:'26/09/2024',vencimiento:'25/11/2024',dias:637,tramo:'+90d',monto:3546.0,estado:'Crítico'},
+  {vendedor:'JOSE GELDRES',cliente:'PAODISA S.A.',folio:'579.0',emision:'11/08/2024',vencimiento:'01/07/2025',dias:419,tramo:'+90d',monto:4077.9,estado:'Crítico'},
+  {vendedor:'OMAR ATALAYA',cliente:'AGROFER MJ E.I.R.L.',folio:'671.0',emision:'13/06/2025',vencimiento:'11/10/2025',dias:317,tramo:'+90d',monto:9493.0,estado:'Crítico'},
+  {vendedor:'OSCAR INFANTE',cliente:'LUNA QUINTANILLA BRYAN ALEXANDER',folio:'743.0',emision:'10/09/2025',vencimiento:'09/12/2025',dias:258,tramo:'+90d',monto:1005.05,estado:'Crítico'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1078.0',emision:'06/03/2026',vencimiento:'10/01/2026',dias:226,tramo:'+90d',monto:936.0,estado:'Crítico'},
+  {vendedor:'OSCAR INFANTE',cliente:'LUNA QUINTANILLA BRYAN ALEXANDER',folio:'841.0',emision:'04/11/2025',vencimiento:'02/02/2026',dias:203,tramo:'+90d',monto:1344.0,estado:'Crítico'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA RIACHUELO S.A.C',folio:'1142.0',emision:'08/03/2026',vencimiento:'10/02/2026',dias:195,tramo:'+90d',monto:908.6,estado:'Crítico'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'1141.0',emision:'08/03/2026',vencimiento:'10/02/2026',dias:195,tramo:'+90d',monto:810.0,estado:'Crítico'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA SAFCO PERU S.A.',folio:'1143.0',emision:'08/04/2026',vencimiento:'11/02/2026',dias:194,tramo:'+90d',monto:140.0,estado:'Crítico'},
+  {vendedor:'GUILLERMO PRADENAS',cliente:'SERVICIOS BIOINSUMOS PERU SOCIEDAD ANONIMA CERRADA.',folio:'817.0',emision:'23/10/2025',vencimiento:'20/02/2026',dias:185,tramo:'+90d',monto:15.25,estado:'Crítico'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'1146.0',emision:'08/04/2026',vencimiento:'10/03/2026',dias:167,tramo:'+90d',monto:3780.0,estado:'Crítico'},
+  {vendedor:'SUSAN DIAZ',cliente:'AGRICOLA CAMPO NOBLE S.A.C',folio:'1080.0',emision:'05/06/2026',vencimiento:'10/03/2026',dias:167,tramo:'+90d',monto:234.0,estado:'Crítico'},
+  {vendedor:'SUSAN DIAZ',cliente:'AGRICOLA CAMPO NOBLE S.A.C',folio:'1079.0',emision:'05/06/2026',vencimiento:'10/03/2026',dias:167,tramo:'+90d',monto:26.0,estado:'Crítico'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1043.0',emision:'05/07/2026',vencimiento:'09/04/2026',dias:137,tramo:'+90d',monto:1380.6,estado:'Crítico'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRO DIRECT S.A.C.',folio:'1148.0',emision:'08/05/2026',vencimiento:'09/04/2026',dias:137,tramo:'+90d',monto:440.0,estado:'Crítico'},
+  {vendedor:'PATRICIA VALLADARES',cliente:'SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA',folio:'1109.0',emision:'07/06/2026',vencimiento:'10/04/2026',dias:136,tramo:'+90d',monto:200.0,estado:'Crítico'},
+  {vendedor:'nan',cliente:'SERVICIOS BIOINSUMOS PERU SOCIEDAD ANONIMA CERRADA.',folio:'887.0',emision:'16/12/2025',vencimiento:'15/04/2026',dias:131,tramo:'+90d',monto:3780.0,estado:'Crítico'},
+  {vendedor:'nan',cliente:'SERVICIOS BIOINSUMOS PERU SOCIEDAD ANONIMA CERRADA.',folio:'891.0',emision:'22/12/2025',vencimiento:'21/04/2026',dias:125,tramo:'+90d',monto:2200.0,estado:'Crítico'},
+  {vendedor:'OSCAR INFANTE',cliente:'LUNA QUINTANILLA BRYAN ALEXANDER',folio:'981.0',emision:'18/03/2026',vencimiento:'16/06/2026',dias:69,tramo:'61-90d',monto:522.0,estado:'Riesgo'},
+  {vendedor:'PATRICIA VALLADARES',cliente:'SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA',folio:'1053.0',emision:'18/05/2026',vencimiento:'17/06/2026',dias:68,tramo:'61-90d',monto:800.0,estado:'Riesgo'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'CORPORACION AGROLATINA S.A.C',folio:'1025.0',emision:'28/04/2026',vencimiento:'27/07/2026',dias:28,tramo:'0-30d',monto:2000.0,estado:'Normal'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA PAMPA BAJA S.A.C.',folio:'1150.0',emision:'08/10/2026',vencimiento:'12/08/2026',dias:12,tramo:'0-30d',monto:26845.0,estado:'Normal'},
+  {vendedor:'PATRICIA VALLADARES',cliente:'VIVEROS EL TAMBO S.A.C.',folio:'1115.0',emision:'13/07/2026',vencimiento:'12/08/2026',dias:12,tramo:'0-30d',monto:1400.0,estado:'Normal'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1151.0',emision:'08/10/2026',vencimiento:'12/08/2026',dias:12,tramo:'0-30d',monto:936.0,estado:'Normal'},
+  {vendedor:'PATRICIA VALLADARES',cliente:'VIVEROS EL TAMBO S.A.C.',folio:'1134.0',emision:'21/07/2026',vencimiento:'20/08/2026',dias:4,tramo:'0-30d',monto:375.0,estado:'Normal'},
+  {vendedor:'nan',cliente:'RVR AGRO S.R.L.',folio:'536.0',emision:'23/09/2024',vencimiento:'',dias:0,tramo:'Al día',monto:35370.0,estado:'Al día'},
+  {vendedor:'nan',cliente:'RVR AGRO S.R.L.',folio:'476.0',emision:'08/02/2024',vencimiento:'',dias:0,tramo:'Al día',monto:27451.5,estado:'Al día'},
+  {vendedor:'nan',cliente:'RVR AGRO S.R.L.',folio:'494.0',emision:'23/08/2024',vencimiento:'',dias:0,tramo:'Al día',monto:23224.0,estado:'Al día'},
+  {vendedor:'nan',cliente:'RVR AGRO S.R.L.',folio:'492.0',emision:'20/08/2024',vencimiento:'',dias:0,tramo:'Al día',monto:19714.5,estado:'Al día'},
+  {vendedor:'nan',cliente:'RVR AGRO S.R.L.',folio:'459.0',emision:'07/05/2024',vencimiento:'',dias:0,tramo:'Al día',monto:14657.0,estado:'Al día'},
+  {vendedor:'nan',cliente:'RVR AGRO S.R.L.',folio:'505.0',emision:'09/03/2024',vencimiento:'',dias:0,tramo:'Al día',monto:14424.0,estado:'Al día'},
+  {vendedor:'nan',cliente:'SOCIEDAD AGRICOLA DROKASA S.A',folio:'475.0',emision:'08/01/2024',vencimiento:'',dias:0,tramo:'Al día',monto:11760.0,estado:'Al día'},
+  {vendedor:'nan',cliente:'RVR AGRO S.R.L.',folio:'550.0',emision:'10/07/2024',vencimiento:'',dias:0,tramo:'Al día',monto:11700.0,estado:'Al día'},
+  {vendedor:'nan',cliente:'RVR AGRO S.R.L.',folio:'558.0',emision:'14/10/2024',vencimiento:'',dias:0,tramo:'Al día',monto:8834.0,estado:'Al día'},
+  {vendedor:'nan',cliente:'RVR AGRO S.R.L.',folio:'557.0',emision:'14/10/2024',vencimiento:'',dias:0,tramo:'Al día',monto:8400.0,estado:'Al día'},
+  {vendedor:'nan',cliente:'RVR AGRO S.R.L.',folio:'552.0',emision:'10/07/2024',vencimiento:'',dias:0,tramo:'Al día',monto:6048.0,estado:'Al día'},
+  {vendedor:'nan',cliente:'RVR AGRO S.R.L.',folio:'553.0',emision:'10/11/2024',vencimiento:'',dias:0,tramo:'Al día',monto:4335.0,estado:'Al día'},
+  {vendedor:'nan',cliente:'RVR AGRO S.R.L.',folio:'508.0',emision:'09/04/2024',vencimiento:'',dias:0,tramo:'Al día',monto:4200.0,estado:'Al día'},
+  {vendedor:'nan',cliente:'RVR AGRO S.R.L.',folio:'556.0',emision:'14/10/2024',vencimiento:'',dias:0,tramo:'Al día',monto:4074.0,estado:'Al día'},
+  {vendedor:'nan',cliente:'RVR AGRO S.R.L.',folio:'565.0',emision:'18/10/2024',vencimiento:'',dias:0,tramo:'Al día',monto:2044.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'1099.0',emision:'25/06/2026',vencimiento:'24/08/2026',dias:0,tramo:'Al día',monto:1350.0,estado:'Al día'},
+  {vendedor:'nan',cliente:'RVR AGRO S.R.L.',folio:'555.0',emision:'10/11/2024',vencimiento:'',dias:0,tramo:'Al día',monto:604.5,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1027.0',emision:'28/04/2026',vencimiento:'26/08/2026',dias:-2,tramo:'Al día',monto:3736.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1028.0',emision:'28/04/2026',vencimiento:'26/08/2026',dias:-2,tramo:'Al día',monto:1380.6,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1026.0',emision:'28/04/2026',vencimiento:'26/08/2026',dias:-2,tramo:'Al día',monto:936.0,estado:'Al día'},
+  {vendedor:'ANTONIO GONZALES',cliente:'SUREXPORT PERU BERRIES S.A.C',folio:'1103.0',emision:'30/06/2026',vencimiento:'29/08/2026',dias:-5,tramo:'Al día',monto:3600.0,estado:'Al día'},
+  {vendedor:'ANTONIO GONZALES',cliente:'POB S.A.C.',folio:'1102.0',emision:'30/06/2026',vencimiento:'29/08/2026',dias:-5,tramo:'Al día',monto:3120.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'CORPORACION ESAN E & F S.A.C',folio:'1077.0',emision:'01/06/2026',vencimiento:'30/08/2026',dias:-6,tramo:'Al día',monto:7160.24,estado:'Al día'},
+  {vendedor:'PATRICIA VALLADARES',cliente:'SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA',folio:'1076.0',emision:'01/06/2026',vencimiento:'30/08/2026',dias:-6,tramo:'Al día',monto:2400.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1152.0',emision:'08/11/2026',vencimiento:'12/09/2026',dias:-19,tramo:'Al día',monto:10000.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'1121.0',emision:'14/07/2026',vencimiento:'12/09/2026',dias:-19,tramo:'Al día',monto:1350.0,estado:'Al día'},
+  {vendedor:'PATRICIA VALLADARES',cliente:'SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA',folio:'1089.0',emision:'15/06/2026',vencimiento:'13/09/2026',dias:-20,tramo:'Al día',monto:2800.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'1132.0',emision:'20/07/2026',vencimiento:'18/09/2026',dias:-25,tramo:'Al día',monto:2025.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1058.0',emision:'22/05/2026',vencimiento:'19/09/2026',dias:-26,tramo:'Al día',monto:936.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'CORPORACION AGROLATINA S.A.C',folio:'1094.0',emision:'22/06/2026',vencimiento:'20/09/2026',dias:-27,tramo:'Al día',monto:2200.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRO DIRECT S.A.C.',folio:'1176.0',emision:'24/08/2026',vencimiento:'23/09/2026',dias:-30,tramo:'Al día',monto:440.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRO DIRECT S.A.C.',folio:'1177.0',emision:'24/08/2026',vencimiento:'23/09/2026',dias:-30,tramo:'Al día',monto:220.0,estado:'Al día'},
+  {vendedor:'PATRICIA VALLADARES',cliente:'SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA',folio:'1101.0',emision:'30/06/2026',vencimiento:'28/09/2026',dias:-35,tramo:'Al día',monto:1600.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1084.0',emision:'06/11/2026',vencimiento:'09/10/2026',dias:-46,tramo:'Al día',monto:850.0,estado:'Al día'},
+  {vendedor:'PATRICIA VALLADARES',cliente:'AGRICOLA LIMONES CORONADO S.R.L.',folio:'1155.0',emision:'12/08/2026',vencimiento:'11/10/2026',dias:-48,tramo:'Al día',monto:1200.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'AGRICOLA CARMEN LUISA S.A.C.',folio:'1161.0',emision:'14/08/2026',vencimiento:'13/10/2026',dias:-50,tramo:'Al día',monto:1080.0,estado:'Al día'},
+  {vendedor:'PATRICIA VALLADARES',cliente:'AGRICOLA LIMONES CORONADO S.R.L.',folio:'1172.0',emision:'19/08/2026',vencimiento:'18/10/2026',dias:-55,tramo:'Al día',monto:500.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'CORPORACION AGROLATINA S.A.C',folio:'1139.0',emision:'30/07/2026',vencimiento:'28/10/2026',dias:-65,tramo:'Al día',monto:2000.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'MANUELITA FYH S.A.C.',folio:'1156.0',emision:'12/08/2026',vencimiento:'09/11/2026',dias:-77,tramo:'Al día',monto:2250.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'CORPORACION AGROLATINA S.A.C',folio:'1157.0',emision:'12/08/2026',vencimiento:'10/11/2026',dias:-78,tramo:'Al día',monto:2200.0,estado:'Al día'},
+  {vendedor:'OSCAR INFANTE',cliente:'INVERSIONES AJS S.A.C.',folio:'1117.0',emision:'13/07/2026',vencimiento:'10/11/2026',dias:-78,tramo:'Al día',monto:1227.2,estado:'Al día'},
+  {vendedor:'PATRICIA VALLADARES',cliente:'SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA',folio:'1114.0',emision:'13/07/2026',vencimiento:'10/11/2026',dias:-78,tramo:'Al día',monto:400.0,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1123.0',emision:'15/07/2026',vencimiento:'12/11/2026',dias:-80,tramo:'Al día',monto:1104.48,estado:'Al día'},
+  {vendedor:'LISBETH AGUIRRE',cliente:'UVICA S.A.C.',folio:'1122.0',emision:'15/07/2026',vencimiento:'12/11/2026',dias:-80,tramo:'Al día',monto:187.2,estado:'Al día'},
+  {vendedor:'SUSAN DIAZ',cliente:'BLUEWAY ALLIANCE CORP PERU S.A.C.',folio:'1166.0',emision:'17/08/2026',vencimiento:'15/11/2026',dias:-83,tramo:'Al día',monto:2000.0,estado:'Al día'},
+  {vendedor:'OSCAR INFANTE',cliente:'I Q F DEL PERU SA',folio:'1049.0',emision:'14/05/2026',vencimiento:'08/12/2026',dias:-106,tramo:'Al día',monto:320.0,estado:'Al día'}
 ];
 
 function tramoClass(t){
@@ -1084,28 +1112,39 @@ function cerrarSesion() {
     set('av-ch-aldía-pct',     pct(cc.tramos_pct.t030)+' al día');
 
     // ── Perú vendedor: porcentajes y totales ──────────────────────────────────
+    // T1c: claves canónicas — aguirre_navarro/gonzales_valladares/pradenas_sin_asignar eliminadas
     var pv=pc.por_vendedor;
-    set('av-pe-inf-pct',  pct(pv.infante.pct));           setW('av-pe-inf-bar',  pct(pv.infante.pct));
-    set('av-pe-gel-pct',  pct(pv.geldres.pct));           setW('av-pe-gel-bar',  pct(pv.geldres.pct));
-    set('av-pe-ata-pct',  pct(pv.atalaya.pct));           setW('av-pe-ata-bar',  pct(pv.atalaya.pct));
-    set('av-pe-an-pct',   pct(pv.aguirre_navarro.pct));   setW('av-pe-an-bar',   pct(pv.aguirre_navarro.pct));
-    set('av-pe-gv-pct',   pct(pv.gonzales_valladares.pct));
-    set('av-pe-pr-pct',   pct(pv.pradenas_sin_asignar.pct));
-    set('av-pe-inf-total',   fN(pv.infante.total));
-    set('av-pe-gel-total',   fN(pv.geldres.total));
-    set('av-pe-ata-total',   fN(pv.atalaya.total));
-    set('av-pe-an-total',    fN(pv.aguirre_navarro.total));
-    set('av-pe-gv-total',    fN(pv.gonzales_valladares.total));
-    set('av-pe-pr-total',    fN(pv.pradenas_sin_asignar.total));
-    set('av-pe-inf-vencida', fN(pv.infante.vencida));
-    set('av-pe-gel-vencida', fN(pv.geldres.vencida));
-    set('av-pe-ata-vencida', fN(pv.atalaya.vencida));
-    set('av-pe-an-vencida',  fN(pv.aguirre_navarro.vencida));
-    set('av-pe-gv-vencida',  fN(pv.gonzales_valladares.vencida));
-    set('av-pe-pr-vencida',  fN(pv.pradenas_sin_asignar.vencida));
-    set('av-pe-inf-t90',     fN(pv.infante.t90));
-    set('av-pe-gel-t90',     fN(pv.geldres.t90));
-    set('av-pe-ata-t90',     fN(pv.atalaya.t90));
+    var _pvZ={total:0,pct:0,vencida:0,t90:0,riesgo:'NORMAL'};
+    function _pvG(k){return pv[k]||_pvZ;}
+    var _pvAN = _pvG('aguirre');
+    var _pvGV = {
+      total:   _pvG('gonzales').total   + _pvG('valladares').total + _pvG('diaz').total,
+      pct:     _pvG('gonzales').pct     + _pvG('valladares').pct   + _pvG('diaz').pct,
+      vencida: _pvG('gonzales').vencida + _pvG('valladares').vencida + _pvG('diaz').vencida,
+      t90:     _pvG('gonzales').t90     + _pvG('valladares').t90   + _pvG('diaz').t90
+    };
+    var _pvPR = _pvG('sin_asignar');
+    set('av-pe-inf-pct',  pct(_pvG('infante').pct));  setW('av-pe-inf-bar',  pct(_pvG('infante').pct));
+    set('av-pe-gel-pct',  pct(_pvG('geldres').pct));  setW('av-pe-gel-bar',  pct(_pvG('geldres').pct));
+    set('av-pe-ata-pct',  pct(_pvG('atalaya').pct));  setW('av-pe-ata-bar',  pct(_pvG('atalaya').pct));
+    set('av-pe-an-pct',   pct(_pvAN.pct));            setW('av-pe-an-bar',   pct(_pvAN.pct));
+    set('av-pe-gv-pct',   pct(_pvGV.pct));
+    set('av-pe-pr-pct',   pct(_pvPR.pct));
+    set('av-pe-inf-total',   fN(_pvG('infante').total));
+    set('av-pe-gel-total',   fN(_pvG('geldres').total));
+    set('av-pe-ata-total',   fN(_pvG('atalaya').total));
+    set('av-pe-an-total',    fN(_pvAN.total));
+    set('av-pe-gv-total',    fN(_pvGV.total));
+    set('av-pe-pr-total',    fN(_pvPR.total));
+    set('av-pe-inf-vencida', fN(_pvG('infante').vencida));
+    set('av-pe-gel-vencida', fN(_pvG('geldres').vencida));
+    set('av-pe-ata-vencida', fN(_pvG('atalaya').vencida));
+    set('av-pe-an-vencida',  fN(_pvAN.vencida));
+    set('av-pe-gv-vencida',  fN(_pvGV.vencida));
+    set('av-pe-pr-vencida',  fN(_pvPR.vencida));
+    set('av-pe-inf-t90',     fN(_pvG('infante').t90));
+    set('av-pe-gel-t90',     fN(_pvG('geldres').t90));
+    set('av-pe-ata-t90',     fN(_pvG('atalaya').t90));
 
     // ── Perú total row ────────────────────────────────────────────────────────
     set('av-pe-total-monto',   fN(pc.total));

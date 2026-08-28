@@ -520,6 +520,28 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
 </div>
 
+<!-- ── AI INSIGHTS CEO ──────────────────────────────────────────────────── -->
+<div id="ai-insight-pe" style="display:none;margin:0 16px 20px;background:linear-gradient(135deg,rgba(27,79,138,.04),rgba(90,143,53,.04));border:1px solid rgba(27,79,138,.18);border-left:3px solid #1B4F8A;border-radius:10px;padding:18px 20px;">
+  <div style="font-size:10px;font-weight:700;color:#1B4F8A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;">🤖 Diagnóstico Ejecutivo · Visión CEO — Perú</div>
+  <div id="ai-insight-pe-diag" style="font-size:12px;color:#1A2332;line-height:1.75;white-space:pre-wrap;margin-bottom:12px;"></div>
+  <div style="font-size:10px;font-weight:700;color:#5a8f35;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;">▶ Acciones Propuestas</div>
+  <ul id="ai-insight-pe-acc" style="margin:0 0 10px 18px;padding:0;font-size:12px;color:#1A2332;line-height:1.7;"></ul>
+  <div id="ai-insight-pe-ts" style="font-size:10px;color:#7A90AA;text-align:right;"></div>
+</div>
+<script>
+(function(){
+  if(typeof AVBOARD==='undefined'||!AVBOARD.insights||!AVBOARD.insights.peru) return;
+  var ins=AVBOARD.insights.peru;
+  var el=document.getElementById('ai-insight-pe'); if(!el) return;
+  el.style.display='';
+  var d=document.getElementById('ai-insight-pe-diag'); if(d) d.textContent=ins.diagnostico||'';
+  var a=document.getElementById('ai-insight-pe-acc');
+  if(a&&ins.acciones) a.innerHTML=ins.acciones.map(function(x){return'<li>'+x+'</li>';}).join('');
+  var t=document.getElementById('ai-insight-pe-ts');
+  if(t) t.textContent='Generado por Claude · '+(AVBOARD.insights.generated_at||'—');
+})();
+</script>
+
 <div class="ftr">
   <div id="av-pe-footer-txt">AV Latam BI Platform · Panel Perú · Corte ventas 15/05 · CxC 10/05/2026 · Ppto oficial USD 1,137,034</div>
   <div class="npills">

@@ -12,22 +12,22 @@
  *   Chile ventas → 12/08/2026
  *   Chile CxC    → 12/08/2026 (2 entidades)
  *   Perú ventas  → 24/08/2026
- *   Perú CxC     → 10/05/2026
+ *   Perú CxC     → 24/08/2026
  *
- * Actualizado: 2026-08-24
+ * Actualizado: 2026-08-25
  */
 
 var AVBOARD = (function() {
 
   var meta = {
-    version:      '2026-08-24',
-    tc_clp_usd:   950,
+    version:      '2026-08-25',
+    tc_clp_usd:   950.0,
     meta_mn:      0.25,
     cortes: {
       chile_ventas: '12/08/2026',
       chile_cxc:    '12/08/2026',
       peru_ventas:  '24/08/2026',
-      peru_cxc:     '10/05/2026'
+      peru_cxc:     '24/08/2026'
     },
     meses: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
   };
@@ -437,100 +437,1053 @@ var AVBOARD = (function() {
   };
 
   var peru_cxc = {
-    "corte": "10/05/2026",
-    "total": 117964,
-    "supra": 196841,
+    "corte": "24/08/2026",
+    "total": 125038,
+    "supra": 202820,
+    "n_documentos": 55,
     "tramos": {
-      "no_vencida": 79300,
-      "t030": 10534,
-      "t3160": 3149,
-      "t6190": 1360,
-      "t90": 23621
+      "no_vencida": 60573,
+      "t030": 31556,
+      "t3160": 0,
+      "t6190": 1322,
+      "t90": 31587
     },
     "tramos_pct": {
-      "no_vencida": 0.672,
-      "t030": 0.089,
-      "t3160": 0.027,
-      "t6190": 0.012,
-      "t90": 0.2
+      "no_vencida": 0.484,
+      "t030": 0.252,
+      "t3160": 0.0,
+      "t6190": 0.011,
+      "t90": 0.253
     },
-    "vencida": 38664,
+    "vencida": 64465,
     "por_vendedor": {
-      "infante": {
-        "total": 28153,
-        "pct": 0.239,
-        "vencida": 15881,
-        "t90": 4598,
-        "riesgo": "CRÍTICO"
-      },
       "geldres": {
         "total": 10874,
-        "pct": 0.092,
+        "pct": 0.087,
         "vencida": 10874,
         "t90": 10874,
         "riesgo": "CRÍTICO"
       },
       "atalaya": {
-        "total": 15343,
-        "pct": 0.13,
-        "vencida": 15343,
-        "t90": 15343,
+        "total": 9493,
+        "pct": 0.0759,
+        "vencida": 9493,
+        "t90": 9493,
         "riesgo": "CRÍTICO"
       },
-      "aguirre_navarro": {
-        "total": 58942,
-        "pct": 0.499,
-        "vencida": 1432,
-        "t90": 0,
-        "riesgo": "RIESGO"
+      "infante": {
+        "total": 4418,
+        "pct": 0.0353,
+        "vencida": 2871,
+        "t90": 2349,
+        "riesgo": "CRÍTICO"
       },
-      "gonzales_valladares": {
-        "total": 1600,
-        "pct": 0.014,
-        "vencida": 800,
+      "sin_asignar": {
+        "total": 15,
+        "pct": 0.0001,
+        "vencida": 15,
+        "t90": 15,
+        "riesgo": "CRÍTICO"
+      },
+      "valladares": {
+        "total": 11675,
+        "pct": 0.0934,
+        "vencida": 2775,
+        "t90": 200,
+        "riesgo": "CRÍTICO"
+      },
+      "aguirre": {
+        "total": 79582,
+        "pct": 0.6365,
+        "vencida": 38176,
+        "t90": 8395,
+        "riesgo": "CRÍTICO"
+      },
+      "gonzales": {
+        "total": 6720,
+        "pct": 0.0537,
+        "vencida": 0,
         "t90": 0,
         "riesgo": "NORMAL"
       },
-      "pradenas_sin_asignar": {
-        "total": 7030,
-        "pct": 0.06,
-        "vencida": 4830,
-        "t90": 0,
-        "riesgo": "NORMAL"
+      "diaz": {
+        "total": 2260,
+        "pct": 0.0181,
+        "vencida": 260,
+        "t90": 260,
+        "riesgo": "CRÍTICO"
       }
     },
     "cuentas_criticas": [
       {
-        "cliente": "PAODISA S.A.",
-        "vendedor": "J. Geldres",
-        "dias": "468-648d",
-        "monto": 10874.4,
-        "estado": "CRÍTICO",
-        "nota": "4 facturas 2024 · proceso legal pendiente"
-      },
-      {
+        "vendedor": "OMAR ATALAYA",
         "cliente": "AGROFER MJ E.I.R.L.",
-        "vendedor": "O. Atalaya",
-        "dias": 211,
+        "folio": "671.0",
+        "emision": "13/06/2025",
+        "vencimiento": "11/10/2025",
+        "dias": 317,
+        "tramo": "+90d",
         "monto": 9493.0,
-        "estado": "CRÍTICO",
-        "nota": "acuerdo de pago urgente"
+        "estado": "Crítico"
       },
       {
+        "vendedor": "JOSE GELDRES",
+        "cliente": "PAODISA S.A.",
+        "folio": "579.0",
+        "emision": "11/08/2024",
+        "vencimiento": "01/07/2025",
+        "dias": 419,
+        "tramo": "+90d",
+        "monto": 4077.9,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRICOLA CARMEN LUISA S.A.C.",
+        "folio": "1146.0",
+        "emision": "08/04/2026",
+        "vencimiento": "10/03/2026",
+        "dias": 167,
+        "tramo": "+90d",
+        "monto": 3780.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "JOSE GELDRES",
+        "cliente": "PAODISA S.A.",
+        "folio": "538.0",
+        "emision": "26/09/2024",
+        "vencimiento": "25/11/2024",
+        "dias": 637,
+        "tramo": "+90d",
+        "monto": 3546.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "JOSE GELDRES",
+        "cliente": "PAODISA S.A.",
+        "folio": "509.0",
+        "emision": "09/05/2024",
+        "vencimiento": "11/04/2024",
+        "dias": 865,
+        "tramo": "+90d",
+        "monto": 1773.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "JOSE GELDRES",
+        "cliente": "PAODISA S.A.",
+        "folio": "453.0",
+        "emision": "07/01/2024",
+        "vencimiento": "31/07/2024",
+        "dias": 754,
+        "tramo": "+90d",
+        "monto": 1477.5,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "UVICA S.A.C.",
+        "folio": "1043.0",
+        "emision": "05/07/2026",
+        "vencimiento": "09/04/2026",
+        "dias": 137,
+        "tramo": "+90d",
+        "monto": 1380.6,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "OSCAR INFANTE",
         "cliente": "LUNA QUINTANILLA BRYAN ALEXANDER",
-        "vendedor": "O. Infante",
-        "dias": "97-143d",
-        "monto": 2349.05,
-        "estado": "CRÍTICO",
-        "nota": "2 folios"
+        "folio": "841.0",
+        "emision": "04/11/2025",
+        "vencimiento": "02/02/2026",
+        "dias": 203,
+        "tramo": "+90d",
+        "monto": 1344.0,
+        "estado": "Crítico"
       },
       {
-        "cliente": "EPIC FARMS S.A.C.",
-        "vendedor": "A. Gonzalez",
-        "dias": 107,
-        "monto": 600.0,
-        "estado": "CRÍTICO",
-        "nota": "escaló desde 61-90d"
+        "vendedor": "OSCAR INFANTE",
+        "cliente": "LUNA QUINTANILLA BRYAN ALEXANDER",
+        "folio": "743.0",
+        "emision": "10/09/2025",
+        "vencimiento": "09/12/2025",
+        "dias": 258,
+        "tramo": "+90d",
+        "monto": 1005.05,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "UVICA S.A.C.",
+        "folio": "1078.0",
+        "emision": "06/03/2026",
+        "vencimiento": "10/01/2026",
+        "dias": 226,
+        "tramo": "+90d",
+        "monto": 936.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRICOLA RIACHUELO S.A.C",
+        "folio": "1142.0",
+        "emision": "08/03/2026",
+        "vencimiento": "10/02/2026",
+        "dias": 195,
+        "tramo": "+90d",
+        "monto": 908.6,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRICOLA CARMEN LUISA S.A.C.",
+        "folio": "1141.0",
+        "emision": "08/03/2026",
+        "vencimiento": "10/02/2026",
+        "dias": 195,
+        "tramo": "+90d",
+        "monto": 810.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "PATRICIA VALLADARES",
+        "cliente": "SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA",
+        "folio": "1053.0",
+        "emision": "18/05/2026",
+        "vencimiento": "17/06/2026",
+        "dias": 68,
+        "tramo": "61-90d",
+        "monto": 800.0,
+        "estado": "Riesgo"
+      },
+      {
+        "vendedor": "OSCAR INFANTE",
+        "cliente": "LUNA QUINTANILLA BRYAN ALEXANDER",
+        "folio": "981.0",
+        "emision": "18/03/2026",
+        "vencimiento": "16/06/2026",
+        "dias": 69,
+        "tramo": "61-90d",
+        "monto": 522.0,
+        "estado": "Riesgo"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRO DIRECT S.A.C.",
+        "folio": "1148.0",
+        "emision": "08/05/2026",
+        "vencimiento": "09/04/2026",
+        "dias": 137,
+        "tramo": "+90d",
+        "monto": 440.0,
+        "estado": "Crítico"
+      }
+    ],
+    "all_documentos": [
+      {
+        "vendedor": "JOSE GELDRES",
+        "cliente": "PAODISA S.A.",
+        "folio": "509.0",
+        "emision": "09/05/2024",
+        "vencimiento": "11/04/2024",
+        "dias": 865,
+        "tramo": "+90d",
+        "monto": 1773.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "JOSE GELDRES",
+        "cliente": "PAODISA S.A.",
+        "folio": "453.0",
+        "emision": "07/01/2024",
+        "vencimiento": "31/07/2024",
+        "dias": 754,
+        "tramo": "+90d",
+        "monto": 1477.5,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "JOSE GELDRES",
+        "cliente": "PAODISA S.A.",
+        "folio": "538.0",
+        "emision": "26/09/2024",
+        "vencimiento": "25/11/2024",
+        "dias": 637,
+        "tramo": "+90d",
+        "monto": 3546.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "JOSE GELDRES",
+        "cliente": "PAODISA S.A.",
+        "folio": "579.0",
+        "emision": "11/08/2024",
+        "vencimiento": "01/07/2025",
+        "dias": 419,
+        "tramo": "+90d",
+        "monto": 4077.9,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "OMAR ATALAYA",
+        "cliente": "AGROFER MJ E.I.R.L.",
+        "folio": "671.0",
+        "emision": "13/06/2025",
+        "vencimiento": "11/10/2025",
+        "dias": 317,
+        "tramo": "+90d",
+        "monto": 9493.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "OSCAR INFANTE",
+        "cliente": "LUNA QUINTANILLA BRYAN ALEXANDER",
+        "folio": "743.0",
+        "emision": "10/09/2025",
+        "vencimiento": "09/12/2025",
+        "dias": 258,
+        "tramo": "+90d",
+        "monto": 1005.05,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "UVICA S.A.C.",
+        "folio": "1078.0",
+        "emision": "06/03/2026",
+        "vencimiento": "10/01/2026",
+        "dias": 226,
+        "tramo": "+90d",
+        "monto": 936.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "OSCAR INFANTE",
+        "cliente": "LUNA QUINTANILLA BRYAN ALEXANDER",
+        "folio": "841.0",
+        "emision": "04/11/2025",
+        "vencimiento": "02/02/2026",
+        "dias": 203,
+        "tramo": "+90d",
+        "monto": 1344.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRICOLA RIACHUELO S.A.C",
+        "folio": "1142.0",
+        "emision": "08/03/2026",
+        "vencimiento": "10/02/2026",
+        "dias": 195,
+        "tramo": "+90d",
+        "monto": 908.6,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRICOLA CARMEN LUISA S.A.C.",
+        "folio": "1141.0",
+        "emision": "08/03/2026",
+        "vencimiento": "10/02/2026",
+        "dias": 195,
+        "tramo": "+90d",
+        "monto": 810.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRICOLA SAFCO PERU S.A.",
+        "folio": "1143.0",
+        "emision": "08/04/2026",
+        "vencimiento": "11/02/2026",
+        "dias": 194,
+        "tramo": "+90d",
+        "monto": 140.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "GUILLERMO PRADENAS",
+        "cliente": "SERVICIOS BIOINSUMOS PERU SOCIEDAD ANONIMA CERRADA.",
+        "folio": "817.0",
+        "emision": "23/10/2025",
+        "vencimiento": "20/02/2026",
+        "dias": 185,
+        "tramo": "+90d",
+        "monto": 15.25,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRICOLA CARMEN LUISA S.A.C.",
+        "folio": "1146.0",
+        "emision": "08/04/2026",
+        "vencimiento": "10/03/2026",
+        "dias": 167,
+        "tramo": "+90d",
+        "monto": 3780.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "SUSAN DIAZ",
+        "cliente": "AGRICOLA CAMPO NOBLE S.A.C",
+        "folio": "1080.0",
+        "emision": "05/06/2026",
+        "vencimiento": "10/03/2026",
+        "dias": 167,
+        "tramo": "+90d",
+        "monto": 234.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "SUSAN DIAZ",
+        "cliente": "AGRICOLA CAMPO NOBLE S.A.C",
+        "folio": "1079.0",
+        "emision": "05/06/2026",
+        "vencimiento": "10/03/2026",
+        "dias": 167,
+        "tramo": "+90d",
+        "monto": 26.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "UVICA S.A.C.",
+        "folio": "1043.0",
+        "emision": "05/07/2026",
+        "vencimiento": "09/04/2026",
+        "dias": 137,
+        "tramo": "+90d",
+        "monto": 1380.6,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRO DIRECT S.A.C.",
+        "folio": "1148.0",
+        "emision": "08/05/2026",
+        "vencimiento": "09/04/2026",
+        "dias": 137,
+        "tramo": "+90d",
+        "monto": 440.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "PATRICIA VALLADARES",
+        "cliente": "SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA",
+        "folio": "1109.0",
+        "emision": "07/06/2026",
+        "vencimiento": "10/04/2026",
+        "dias": 136,
+        "tramo": "+90d",
+        "monto": 200.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "SERVICIOS BIOINSUMOS PERU SOCIEDAD ANONIMA CERRADA.",
+        "folio": "887.0",
+        "emision": "16/12/2025",
+        "vencimiento": "15/04/2026",
+        "dias": 131,
+        "tramo": "+90d",
+        "monto": 3780.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "SERVICIOS BIOINSUMOS PERU SOCIEDAD ANONIMA CERRADA.",
+        "folio": "891.0",
+        "emision": "22/12/2025",
+        "vencimiento": "21/04/2026",
+        "dias": 125,
+        "tramo": "+90d",
+        "monto": 2200.0,
+        "estado": "Crítico"
+      },
+      {
+        "vendedor": "OSCAR INFANTE",
+        "cliente": "LUNA QUINTANILLA BRYAN ALEXANDER",
+        "folio": "981.0",
+        "emision": "18/03/2026",
+        "vencimiento": "16/06/2026",
+        "dias": 69,
+        "tramo": "61-90d",
+        "monto": 522.0,
+        "estado": "Riesgo"
+      },
+      {
+        "vendedor": "PATRICIA VALLADARES",
+        "cliente": "SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA",
+        "folio": "1053.0",
+        "emision": "18/05/2026",
+        "vencimiento": "17/06/2026",
+        "dias": 68,
+        "tramo": "61-90d",
+        "monto": 800.0,
+        "estado": "Riesgo"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "CORPORACION AGROLATINA S.A.C",
+        "folio": "1025.0",
+        "emision": "28/04/2026",
+        "vencimiento": "27/07/2026",
+        "dias": 28,
+        "tramo": "0-30d",
+        "monto": 2000.0,
+        "estado": "Normal"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRICOLA PAMPA BAJA S.A.C.",
+        "folio": "1150.0",
+        "emision": "08/10/2026",
+        "vencimiento": "12/08/2026",
+        "dias": 12,
+        "tramo": "0-30d",
+        "monto": 26845.0,
+        "estado": "Normal"
+      },
+      {
+        "vendedor": "PATRICIA VALLADARES",
+        "cliente": "VIVEROS EL TAMBO S.A.C.",
+        "folio": "1115.0",
+        "emision": "13/07/2026",
+        "vencimiento": "12/08/2026",
+        "dias": 12,
+        "tramo": "0-30d",
+        "monto": 1400.0,
+        "estado": "Normal"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "UVICA S.A.C.",
+        "folio": "1151.0",
+        "emision": "08/10/2026",
+        "vencimiento": "12/08/2026",
+        "dias": 12,
+        "tramo": "0-30d",
+        "monto": 936.0,
+        "estado": "Normal"
+      },
+      {
+        "vendedor": "PATRICIA VALLADARES",
+        "cliente": "VIVEROS EL TAMBO S.A.C.",
+        "folio": "1134.0",
+        "emision": "21/07/2026",
+        "vencimiento": "20/08/2026",
+        "dias": 4,
+        "tramo": "0-30d",
+        "monto": 375.0,
+        "estado": "Normal"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "RVR AGRO S.R.L.",
+        "folio": "536.0",
+        "emision": "23/09/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 35370.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "RVR AGRO S.R.L.",
+        "folio": "476.0",
+        "emision": "08/02/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 27451.5,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "RVR AGRO S.R.L.",
+        "folio": "494.0",
+        "emision": "23/08/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 23224.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "RVR AGRO S.R.L.",
+        "folio": "492.0",
+        "emision": "20/08/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 19714.5,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "RVR AGRO S.R.L.",
+        "folio": "459.0",
+        "emision": "07/05/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 14657.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "RVR AGRO S.R.L.",
+        "folio": "505.0",
+        "emision": "09/03/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 14424.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "SOCIEDAD AGRICOLA DROKASA S.A",
+        "folio": "475.0",
+        "emision": "08/01/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 11760.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "RVR AGRO S.R.L.",
+        "folio": "550.0",
+        "emision": "10/07/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 11700.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "RVR AGRO S.R.L.",
+        "folio": "558.0",
+        "emision": "14/10/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 8834.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "RVR AGRO S.R.L.",
+        "folio": "557.0",
+        "emision": "14/10/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 8400.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "RVR AGRO S.R.L.",
+        "folio": "552.0",
+        "emision": "10/07/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 6048.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "RVR AGRO S.R.L.",
+        "folio": "553.0",
+        "emision": "10/11/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 4335.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "RVR AGRO S.R.L.",
+        "folio": "508.0",
+        "emision": "09/04/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 4200.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "RVR AGRO S.R.L.",
+        "folio": "556.0",
+        "emision": "14/10/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 4074.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "RVR AGRO S.R.L.",
+        "folio": "565.0",
+        "emision": "18/10/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 2044.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRICOLA CARMEN LUISA S.A.C.",
+        "folio": "1099.0",
+        "emision": "25/06/2026",
+        "vencimiento": "24/08/2026",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 1350.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "nan",
+        "cliente": "RVR AGRO S.R.L.",
+        "folio": "555.0",
+        "emision": "10/11/2024",
+        "vencimiento": "",
+        "dias": 0,
+        "tramo": "Al día",
+        "monto": 604.5,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "UVICA S.A.C.",
+        "folio": "1027.0",
+        "emision": "28/04/2026",
+        "vencimiento": "26/08/2026",
+        "dias": -2,
+        "tramo": "Al día",
+        "monto": 3736.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "UVICA S.A.C.",
+        "folio": "1028.0",
+        "emision": "28/04/2026",
+        "vencimiento": "26/08/2026",
+        "dias": -2,
+        "tramo": "Al día",
+        "monto": 1380.6,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "UVICA S.A.C.",
+        "folio": "1026.0",
+        "emision": "28/04/2026",
+        "vencimiento": "26/08/2026",
+        "dias": -2,
+        "tramo": "Al día",
+        "monto": 936.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "ANTONIO GONZALES",
+        "cliente": "SUREXPORT PERU BERRIES S.A.C",
+        "folio": "1103.0",
+        "emision": "30/06/2026",
+        "vencimiento": "29/08/2026",
+        "dias": -5,
+        "tramo": "Al día",
+        "monto": 3600.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "ANTONIO GONZALES",
+        "cliente": "POB S.A.C.",
+        "folio": "1102.0",
+        "emision": "30/06/2026",
+        "vencimiento": "29/08/2026",
+        "dias": -5,
+        "tramo": "Al día",
+        "monto": 3120.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "CORPORACION ESAN E & F S.A.C",
+        "folio": "1077.0",
+        "emision": "01/06/2026",
+        "vencimiento": "30/08/2026",
+        "dias": -6,
+        "tramo": "Al día",
+        "monto": 7160.24,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "PATRICIA VALLADARES",
+        "cliente": "SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA",
+        "folio": "1076.0",
+        "emision": "01/06/2026",
+        "vencimiento": "30/08/2026",
+        "dias": -6,
+        "tramo": "Al día",
+        "monto": 2400.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "UVICA S.A.C.",
+        "folio": "1152.0",
+        "emision": "08/11/2026",
+        "vencimiento": "12/09/2026",
+        "dias": -19,
+        "tramo": "Al día",
+        "monto": 10000.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRICOLA CARMEN LUISA S.A.C.",
+        "folio": "1121.0",
+        "emision": "14/07/2026",
+        "vencimiento": "12/09/2026",
+        "dias": -19,
+        "tramo": "Al día",
+        "monto": 1350.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "PATRICIA VALLADARES",
+        "cliente": "SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA",
+        "folio": "1089.0",
+        "emision": "15/06/2026",
+        "vencimiento": "13/09/2026",
+        "dias": -20,
+        "tramo": "Al día",
+        "monto": 2800.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRICOLA CARMEN LUISA S.A.C.",
+        "folio": "1132.0",
+        "emision": "20/07/2026",
+        "vencimiento": "18/09/2026",
+        "dias": -25,
+        "tramo": "Al día",
+        "monto": 2025.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "UVICA S.A.C.",
+        "folio": "1058.0",
+        "emision": "22/05/2026",
+        "vencimiento": "19/09/2026",
+        "dias": -26,
+        "tramo": "Al día",
+        "monto": 936.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "CORPORACION AGROLATINA S.A.C",
+        "folio": "1094.0",
+        "emision": "22/06/2026",
+        "vencimiento": "20/09/2026",
+        "dias": -27,
+        "tramo": "Al día",
+        "monto": 2200.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRO DIRECT S.A.C.",
+        "folio": "1176.0",
+        "emision": "24/08/2026",
+        "vencimiento": "23/09/2026",
+        "dias": -30,
+        "tramo": "Al día",
+        "monto": 440.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRO DIRECT S.A.C.",
+        "folio": "1177.0",
+        "emision": "24/08/2026",
+        "vencimiento": "23/09/2026",
+        "dias": -30,
+        "tramo": "Al día",
+        "monto": 220.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "PATRICIA VALLADARES",
+        "cliente": "SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA",
+        "folio": "1101.0",
+        "emision": "30/06/2026",
+        "vencimiento": "28/09/2026",
+        "dias": -35,
+        "tramo": "Al día",
+        "monto": 1600.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "UVICA S.A.C.",
+        "folio": "1084.0",
+        "emision": "06/11/2026",
+        "vencimiento": "09/10/2026",
+        "dias": -46,
+        "tramo": "Al día",
+        "monto": 850.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "PATRICIA VALLADARES",
+        "cliente": "AGRICOLA LIMONES CORONADO S.R.L.",
+        "folio": "1155.0",
+        "emision": "12/08/2026",
+        "vencimiento": "11/10/2026",
+        "dias": -48,
+        "tramo": "Al día",
+        "monto": 1200.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "AGRICOLA CARMEN LUISA S.A.C.",
+        "folio": "1161.0",
+        "emision": "14/08/2026",
+        "vencimiento": "13/10/2026",
+        "dias": -50,
+        "tramo": "Al día",
+        "monto": 1080.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "PATRICIA VALLADARES",
+        "cliente": "AGRICOLA LIMONES CORONADO S.R.L.",
+        "folio": "1172.0",
+        "emision": "19/08/2026",
+        "vencimiento": "18/10/2026",
+        "dias": -55,
+        "tramo": "Al día",
+        "monto": 500.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "CORPORACION AGROLATINA S.A.C",
+        "folio": "1139.0",
+        "emision": "30/07/2026",
+        "vencimiento": "28/10/2026",
+        "dias": -65,
+        "tramo": "Al día",
+        "monto": 2000.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "MANUELITA FYH S.A.C.",
+        "folio": "1156.0",
+        "emision": "12/08/2026",
+        "vencimiento": "09/11/2026",
+        "dias": -77,
+        "tramo": "Al día",
+        "monto": 2250.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "CORPORACION AGROLATINA S.A.C",
+        "folio": "1157.0",
+        "emision": "12/08/2026",
+        "vencimiento": "10/11/2026",
+        "dias": -78,
+        "tramo": "Al día",
+        "monto": 2200.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "OSCAR INFANTE",
+        "cliente": "INVERSIONES AJS S.A.C.",
+        "folio": "1117.0",
+        "emision": "13/07/2026",
+        "vencimiento": "10/11/2026",
+        "dias": -78,
+        "tramo": "Al día",
+        "monto": 1227.2,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "PATRICIA VALLADARES",
+        "cliente": "SOCIEDAD EXPORTADORA VERFRUT SOCIEDAD ANONIMA CERRADA",
+        "folio": "1114.0",
+        "emision": "13/07/2026",
+        "vencimiento": "10/11/2026",
+        "dias": -78,
+        "tramo": "Al día",
+        "monto": 400.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "UVICA S.A.C.",
+        "folio": "1123.0",
+        "emision": "15/07/2026",
+        "vencimiento": "12/11/2026",
+        "dias": -80,
+        "tramo": "Al día",
+        "monto": 1104.48,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "LISBETH AGUIRRE",
+        "cliente": "UVICA S.A.C.",
+        "folio": "1122.0",
+        "emision": "15/07/2026",
+        "vencimiento": "12/11/2026",
+        "dias": -80,
+        "tramo": "Al día",
+        "monto": 187.2,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "SUSAN DIAZ",
+        "cliente": "BLUEWAY ALLIANCE CORP PERU S.A.C.",
+        "folio": "1166.0",
+        "emision": "17/08/2026",
+        "vencimiento": "15/11/2026",
+        "dias": -83,
+        "tramo": "Al día",
+        "monto": 2000.0,
+        "estado": "Al día"
+      },
+      {
+        "vendedor": "OSCAR INFANTE",
+        "cliente": "I Q F DEL PERU SA",
+        "folio": "1049.0",
+        "emision": "14/05/2026",
+        "vencimiento": "08/12/2026",
+        "dias": -106,
+        "tramo": "Al día",
+        "monto": 320.0,
+        "estado": "Al día"
       }
     ]
   };

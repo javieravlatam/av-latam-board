@@ -253,6 +253,24 @@
       "en_ppto_pe": true,
       "en_rtc_ventas": true,
       "nota": "Incorporada agosto 2026."
+    },
+    {
+      "vendor_id": "geldres",
+      "nombre_canonico": "José Geldres",
+      "aliases": [
+        "JOSE GELDRES",
+        "JOSÉ GELDRES",
+        "J. GELDRES",
+        "JOSE GELDRES FLORES"
+      ],
+      "pais": "PE",
+      "empresa": "AGROVECA_PE",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 8,
+      "en_ppto_pe": false,
+      "en_rtc_ventas": true,
+      "nota": "Agregado 2026-08-25 — aparece en CxC PE corte 24/08/2026."
     }
   ]
 }

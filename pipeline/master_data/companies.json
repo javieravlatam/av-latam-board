@@ -1,0 +1,37 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-08-25",
+  "note": "Catálogo canónico de empresas AV LATAM. SSOT para mapear empresa_id → atributos. Usado por pipeline para validar contexto de archivos del inbox.",
+  "companies": [
+    {
+      "company_id": "agrocomercial_cl",
+      "nombre": "Agrocomercial AV LATAM S.A.",
+      "empresa_id": "AGROCOMERCIAL_CL",
+      "pais": "CL",
+      "moneda": "CLP",
+      "cxc_registry_key": "CXC_CL_AGROCOMERCIAL|AGROCOMERCIAL_CL",
+      "ventas_registry_key": "VENTAS_CL|AGROCOMERCIAL_CL",
+      "estado": "activo"
+    },
+    {
+      "company_id": "agroveca_cl",
+      "nombre": "Agroveca AV LATAM Chile S.A.",
+      "empresa_id": "AGROVECA_CL",
+      "pais": "CL",
+      "moneda": "CLP",
+      "cxc_registry_key": "CXC_CL_AGROVECA|AGROVECA_CL",
+      "ventas_registry_key": null,
+      "estado": "activo"
+    },
+    {
+      "company_id": "agroveca_pe",
+      "nombre": "Agroveca LATAM Perú S.A.C.",
+      "empresa_id": "AGROVECA_PE",
+      "pais": "PE",
+      "moneda": "USD",
+      "cxc_registry_key": "CXC_PE|AGROVECA_PE",
+      "ventas_registry_key": "VENTAS_PE|AGROVECA_PE",
+      "estado": "activo"
+    }
+  ]
+}

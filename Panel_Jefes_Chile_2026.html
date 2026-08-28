@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="design-system/formato-javier-motion.css">
 <link rel="stylesheet" href="design-system/formato-javier-utilities.css">
 <link rel="stylesheet" href="design-system/domains/formato-javier-board.css">
-<script src="avboard_data.js?v=20260824"></script>
+<script src="avboard_data.js?v=202608250017"></script>
 <script src="js/av-chart-colors.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -814,6 +814,28 @@ table.tbl-exec td.td-acum{border-left:2px solid rgba(27,79,138,0.35);
 </div><!-- /tab-cxc -->
 
 </div><!-- /page -->
+
+<!-- ── AI INSIGHT CEO ────────────────────────────────────────────────────── -->
+<div id="ai-insight-jch" style="display:none;margin:0 20px 20px;background:linear-gradient(135deg,rgba(27,79,138,.04),rgba(90,143,53,.04));border:1px solid rgba(27,79,138,.18);border-left:3px solid #1B4F8A;border-radius:10px;padding:18px 20px;">
+  <div style="font-size:10px;font-weight:700;color:#1B4F8A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;">🤖 Diagnóstico Ejecutivo · Visión CEO — Chile</div>
+  <div id="ai-jch-diag" style="font-size:12px;color:#1A2332;line-height:1.75;white-space:pre-wrap;margin-bottom:12px;"></div>
+  <div style="font-size:10px;font-weight:700;color:#5a8f35;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;">▶ Acciones Propuestas</div>
+  <ul id="ai-jch-acc" style="margin:0 0 10px 18px;padding:0;font-size:12px;color:#1A2332;line-height:1.7;"></ul>
+  <div id="ai-jch-ts" style="font-size:10px;color:#7A90AA;text-align:right;"></div>
+</div>
+<script>
+(function(){
+  if(typeof AVBOARD==='undefined'||!AVBOARD.insights||!AVBOARD.insights.chile) return;
+  var ins=AVBOARD.insights.chile;
+  var el=document.getElementById('ai-insight-jch'); if(!el) return;
+  el.style.display='';
+  var d=document.getElementById('ai-jch-diag'); if(d) d.textContent=ins.diagnostico||'';
+  var a=document.getElementById('ai-jch-acc');
+  if(a&&ins.acciones) a.innerHTML=ins.acciones.map(function(x){return'<li>'+x+'</li>';}).join('');
+  var t=document.getElementById('ai-jch-ts');
+  if(t) t.textContent='Generado por Claude · '+(AVBOARD.insights.generated_at||'—');
+})();
+</script>
 
 <div class="footer">
   <div id="jch-footer-txt">AV Latam BI Platform · Jefes País · Chile</div>

@@ -34,25 +34,53 @@
       "min_rows": 3
     },
     "CXC_CL_AGROCOMERCIAL": {
-      "sheet": null,
-      "header_row": 0,
-      "required_columns": [],
-      "structure_fingerprint": [],
-      "note": "Validación mínima — estructura interna variable por versión del proveedor."
+      "sheet": "Detalle Mora",
+      "header_row": 1,
+      "required_columns": ["Rut", "Razón Social", "Vendedor", "Días Mora", "Tramo", "Total Doc"],
+      "column_aliases": {
+        "Rut":         ["RUT", "Rut.", "rut"],
+        "Razón Social":["Razon Social", "RAZON SOCIAL", "Razón social"],
+        "Vendedor":    ["VENDEDOR", "vendedor"],
+        "Días Mora":   ["Dias Mora", "DIAS MORA", "Días mora"],
+        "Tramo":       ["TRAMO", "tramo"],
+        "Total Doc":   ["Total", "TOTAL DOC", "Total Documento"]
+      },
+      "optional_columns": ["Documento", "Número", "Emisión", "Vencimiento", "Mes", "Estado", "Condición"],
+      "structure_fingerprint": ["Tramo", "Total Doc", "Días Mora"],
+      "min_rows": 1
     },
     "CXC_CL_AGROVECA": {
-      "sheet": null,
-      "header_row": 0,
-      "required_columns": [],
-      "structure_fingerprint": [],
-      "note": "Validación mínima — estructura interna variable."
+      "sheet": "Detalle Mora",
+      "header_row": 1,
+      "required_columns": ["Rut", "Razón Social", "Vendedor", "Días Mora", "Tramo", "Total Doc"],
+      "column_aliases": {
+        "Rut":         ["RUT", "Rut.", "rut"],
+        "Razón Social":["Razon Social", "RAZON SOCIAL", "Razón social"],
+        "Vendedor":    ["VENDEDOR", "vendedor"],
+        "Días Mora":   ["Dias Mora", "DIAS MORA", "Días mora"],
+        "Tramo":       ["TRAMO", "tramo"],
+        "Total Doc":   ["Total", "TOTAL DOC", "Total Documento"]
+      },
+      "optional_columns": ["Documento", "Número", "Emisión", "Vencimiento", "Mes", "Estado", "Condición"],
+      "structure_fingerprint": ["Tramo", "Total Doc", "Días Mora"],
+      "min_rows": 1
     },
     "CXC_PE": {
-      "sheet": null,
-      "header_row": 0,
-      "required_columns": [],
-      "structure_fingerprint": [],
-      "note": "Pendiente — integrar en Task #29."
+      "sheet": "AGROVECA",
+      "header_row": 5,
+      "required_columns": ["CODIGO", "NOMBRE", "NUMERO", "FECHA", "VENCIM", "SALDO", "VENDEDOR"],
+      "column_aliases": {
+        "CODIGO":   ["Codigo", "codigo", "COD"],
+        "NOMBRE":   ["Nombre", "nombre", "CLIENTE"],
+        "NUMERO":   ["Numero", "numero", "NRO"],
+        "FECHA":    ["Fecha", "fecha", "FECHA EMISION"],
+        "VENCIM":   ["Vencim.", "VENCIMIENTO", "Vencimiento"],
+        "SALDO":    ["Saldo", "saldo", "MONTO"],
+        "VENDEDOR": ["Vendedor", "vendedor", "VEND"]
+      },
+      "optional_columns": ["TD", "SER.", "VENCIM(mes)", "GLOSA"],
+      "structure_fingerprint": ["CODIGO", "SALDO", "VENDEDOR"],
+      "min_rows": 1
     },
     "LIBRO_BASE": {
       "required_sheets": ["Pricing Piso Chile", "Pricing Piso Peru"],

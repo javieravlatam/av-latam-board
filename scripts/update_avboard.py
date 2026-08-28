@@ -261,6 +261,7 @@ def load_files_from_registry() -> dict:
         "VENTAS_PE|AGROVECA_PE":                   ["peru_ventas"],
         "CXC_CL_AGROCOMERCIAL|AGROCOMERCIAL_CL":  ["cxc_agro"],
         "CXC_CL_AGROVECA|AGROVECA_CL":            ["cxc_avch"],
+        "CXC_PE|AGROVECA_PE":                     ["cxc_pe"],
         "LIBRO_BASE|GRUPO_AV_LATAM":               ["libro_base", "piso_chile", "piso_peru"],
     }
 
@@ -1508,7 +1509,7 @@ def _arr(lst, per_row=12, indent=6):
     return '[\n' + ',\n'.join(pad + str(c) for c in chunks) + '\n' + ' '*(indent-2) + ']'
 
 
-def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, peru_cxc_static, productos_data, iec_pe=None):
+def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, pe_cxc, productos_data, iec_pe=None, insights=None):
     """Genera el contenido completo de avboard_data.js.
 
     iec_pe: resultado de compute_iec_peru(tx_pe) — dict con {total, aguirre, ...}
@@ -1822,7 +1823,7 @@ var AVBOARD = (function() {{
     mn_meta:  0.250
   }};
 
-  var peru_cxc = {_jdumps(peru_cxc_static, indent=2).replace(chr(10), chr(10)+'  ')};
+  var peru_cxc = {_jdumps({k: v for k, v in pe_cxc.items() if k != 'documentos'}, indent=2).replace(chr(10), chr(10)+'  ')};
 
   var productos = {js_productos(productos_data['detalle'])};
 
@@ -1880,6 +1881,10 @@ var AVBOARD = (function() {{
   }}
 }})();
 """
+    # ── AI Insights ───────────────────────────────────────────────────────────
+    import json as _jins
+    _ins_js = _jins.dumps(insights, ensure_ascii=False) if insights else 'null'
+    js += f'\nAVBOARD.insights = {_ins_js};\n'
     return js
 
 
@@ -2567,6 +2572,33 @@ def sync_cxc_panel(cl_cxc: dict, pe_cxc: dict | None = None) -> bool:
         flags=re.DOTALL,
     )
 
+    # ── 3. Regenerar peruData (si pe_cxc tiene documentos) ───────────────────
+    pe_docs = (pe_cxc or {}).get('all_documentos') or (pe_cxc or {}).get('documentos')
+    if pe_docs is not None:
+        corte_pe = (pe_cxc or {}).get('corte', '—')
+
+        def _pe_row(d: dict) -> str:
+            vend  = (d.get('vendedor') or 'Sin asignar').replace("'", r"\'")
+            cli   = (d.get('cliente')  or '').replace("'", r"\'")
+            folio = str(d.get('folio', '')      or '').replace("'", r"\'")
+            emis  = str(d.get('emision', '')    or '').replace("'", r"\'")
+            vcto  = str(d.get('vencimiento', '') or '').replace("'", r"\'")
+            dias  = d.get('dias', 0)
+            tramo = d.get('tramo', '')
+            monto = d.get('monto', 0)
+            est   = d.get('estado', 'Normal')
+            return (f"  {{vendedor:'{vend}',cliente:'{cli}',folio:'{folio}',"
+                    f"emision:'{emis}',vencimiento:'{vcto}',"
+                    f"dias:{dias},tramo:'{tramo}',monto:{monto},estado:'{est}'}}")
+
+        pe_rows  = [_pe_row(d) for d in pe_docs]
+        pe_body  = ',\n'.join(pe_rows) if pe_rows else '  // Sin documentos'
+        new_peru = (f"const peruData = [\n"
+                    f"  // Corte {corte_pe} · generado por update_avboard.py\n"
+                    f"{pe_body}\n"
+                    f"]")
+        txt = re.sub(r'const peruData\s*=\s*\[.*?\]', new_peru, txt, flags=re.DOTALL)
+
     if txt != original:
         cxc_file.write_text(txt, encoding='utf-8')
         return True
@@ -2732,6 +2764,217 @@ def extract_existing_clientes_pe():
     return '[]'
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+#  CxC PERÚ — PARSER CANÓNICO (T1b)
+#  Lee el vigente desde raw_registry.json, parsea Excel, normaliza vendedores
+#  via vendors.json, aplica fusiones GG, retorna objeto estructurado.
+# ══════════════════════════════════════════════════════════════════════════════
+
+_vendors_pe_lookup_cache = None
+
+def _load_vendors_pe_lookup() -> dict:
+    """Builds UPPERCASE_ALIAS → vendor_id lookup for PE vendors from vendors.json."""
+    global _vendors_pe_lookup_cache
+    if _vendors_pe_lookup_cache is not None:
+        return _vendors_pe_lookup_cache
+    vendors_path = ROOT / "pipeline" / "vendors.json"
+    lookup: dict = {}
+    if vendors_path.exists():
+        data = json.loads(vendors_path.read_text(encoding="utf-8"))
+        for v in data.get("vendors", []):
+            if v.get("pais") == "PE":
+                vid = v["vendor_id"]
+                for alias in v.get("aliases", []):
+                    lookup[alias.strip().upper()] = vid
+                lookup[vid.upper()] = vid  # self-map
+    _vendors_pe_lookup_cache = lookup
+    return lookup
+
+
+def _normalize_rtc_pe(name: str):
+    """Maps raw VENDEDOR string → canonical vendor_id.
+    Returns None for empty (supra), 'sin_asignar' for unmapped names."""
+    if not name or not str(name).strip() or str(name).strip().upper() == 'NAN':
+        return None  # caller handles as supra
+    normalized = str(name).strip().upper()
+    lookup = _load_vendors_pe_lookup()
+    return lookup.get(normalized, "sin_asignar")
+
+
+def _apply_cxc_gg_fusions(vendor_id: str) -> str:
+    """Applies GG fusion decisions to a CxC vendor_id at parse time.
+    Reads gg_decisions.json (same SSOT as ventas pipeline)."""
+    for dec in _GG_DECISIONS:
+        if dec.get("tipo") == "fusion_vendedor":
+            src = dec.get("criterio", {}).get("vendor_id")
+            tgt = dec.get("accion", {}).get("fused_into")
+            if vendor_id == src and tgt:
+                return tgt
+    return vendor_id
+
+
+def parse_cxc_pe(path: Path, fecha_corte: str) -> dict:
+    """
+    Parsea CxC Perú desde Excel.
+    Sheet: "AGROVECA" · header row 6 (index 5)
+    Columns: CODIGO, NOMBRE, TD, SER., NUMERO, FECHA, VENCIM, VENCIM(mes), SALDO, GLOSA, VENDEDOR
+
+    Retorna objeto estructurado compatible con peru_cxc JS shape + clave 'documentos'
+    (lista completa para regenerar peruData en Panel_CxC).
+
+    Si falla la lectura, hace fallback a extract_peru_cxc_static() con advertencia.
+    """
+    try:
+        df = pd.read_excel(path, sheet_name="AGROVECA", header=5)
+    except Exception as e:
+        print(f"   ❌ parse_cxc_pe: no se pudo leer {path.name}: {e}")
+        print(f"   ⚠ Usando datos estáticos como fallback")
+        return extract_peru_cxc_static()
+
+    # Parse fecha_corte DD/MM/YYYY → date
+    try:
+        fc_date = datetime.strptime(fecha_corte, "%d/%m/%Y").date()
+    except Exception:
+        from datetime import date as _date
+        fc_date = _date.today()
+
+    # ── Filtrar registros válidos ─────────────────────────────────────────────
+    df = df[df['SALDO'].notna() & (pd.to_numeric(df['SALDO'], errors='coerce') > 0)].copy()
+    df = df[df['CODIGO'].notna()].copy()
+    df = df[~df['CODIGO'].astype(str).str.strip().str.startswith('INGRESOS')].copy()
+    df = df[df['CODIGO'].astype(str).str.strip().str.upper() != 'NAN'].copy()
+    df = df.reset_index(drop=True)
+
+    documentos  = []
+    supra_docs  = []
+    por_vendedor: dict = {}
+    supra_total = 0.0
+
+    for _, row in df.iterrows():
+        saldo = float(row.get('SALDO', 0) or 0)
+        if saldo <= 0:
+            continue
+
+        nombre_cliente = str(row.get('NOMBRE', '') or '').strip()
+        numero         = str(row.get('NUMERO', '') or '').strip()
+        vendedor_raw   = str(row.get('VENDEDOR', '') or '').strip()
+
+        # Normalizar fechas
+        try:
+            fecha_emision = pd.to_datetime(row.get('FECHA')).date()
+            emision_str   = fecha_emision.strftime('%d/%m/%Y')
+        except Exception:
+            emision_str   = ''
+
+        try:
+            fecha_vencim  = pd.to_datetime(row.get('VENCIM')).date()
+            vencim_str    = fecha_vencim.strftime('%d/%m/%Y')
+            dias_mora     = (fc_date - fecha_vencim).days
+        except Exception:
+            vencim_str    = ''
+            dias_mora     = 0
+
+        # Clasificar tramo
+        if dias_mora > 90:
+            tramo, estado = '+90d', 'Crítico'
+        elif dias_mora > 60:
+            tramo, estado = '61-90d', 'Riesgo'
+        elif dias_mora > 30:
+            tramo, estado = '31-60d', 'Alerta'
+        elif dias_mora > 0:
+            tramo, estado = '0-30d', 'Normal'
+        else:
+            tramo, estado = 'Al día', 'Al día'
+
+        # Normalizar vendedor → vendor_id canónico
+        vid_raw = _normalize_rtc_pe(vendedor_raw)
+        if vid_raw is not None:
+            vid = _apply_cxc_gg_fusions(vid_raw)  # aplica fusiones GG (p.ej. navarro→aguirre)
+        else:
+            vid = None  # supra
+
+        doc = {
+            "vendedor":    vendedor_raw if vendedor_raw else "Sin asignar",
+            "cliente":     nombre_cliente,
+            "folio":       numero,
+            "emision":     emision_str,
+            "vencimiento": vencim_str,
+            "dias":        dias_mora,
+            "tramo":       tramo,
+            "monto":       round(saldo, 2),
+            "estado":      estado,
+        }
+
+        if vid is None:
+            # Supra: VENDEDOR vacío — cartera no asignada a vendedor
+            supra_total += saldo
+            supra_docs.append(doc)
+        else:
+            documentos.append(doc)
+            if vid not in por_vendedor:
+                por_vendedor[vid] = {"total": 0.0, "vencida": 0.0, "t90": 0.0}
+            por_vendedor[vid]["total"]   += saldo
+            por_vendedor[vid]["vencida"] += saldo if dias_mora > 0 else 0.0
+            por_vendedor[vid]["t90"]     += saldo if dias_mora > 90 else 0.0
+
+    # ── Totales ───────────────────────────────────────────────────────────────
+    total         = sum(v["total"]   for v in por_vendedor.values())
+    total_vencida = sum(v["vencida"] for v in por_vendedor.values())
+
+    # ── Tramos desde documentos (excl. supra) ────────────────────────────────
+    t_acc = {"no_vencida": 0.0, "t030": 0.0, "t3160": 0.0, "t6190": 0.0, "t90": 0.0}
+    for d in documentos:
+        m, dd = d["monto"], d["dias"]
+        if dd > 90:   t_acc["t90"]       += m
+        elif dd > 60: t_acc["t6190"]     += m
+        elif dd > 30: t_acc["t3160"]     += m
+        elif dd > 0:  t_acc["t030"]      += m
+        else:         t_acc["no_vencida"] += m
+
+    tramos     = {k: round(v) for k, v in t_acc.items()}
+    tramos_pct = {k: round(v / total, 3) if total > 0 else 0 for k, v in t_acc.items()}
+
+    # ── Por vendedor: calcular pct y riesgo ───────────────────────────────────
+    por_vendedor_out = {}
+    for vid, agg in por_vendedor.items():
+        t  = round(agg["total"])
+        v  = round(agg["vencida"])
+        t9 = round(agg["t90"])
+        por_vendedor_out[vid] = {
+            "total":   t,
+            "pct":     round(agg["total"] / total, 4) if total > 0 else 0,
+            "vencida": v,
+            "t90":     t9,
+            "riesgo":  "CRÍTICO" if t9 > 0 else ("RIESGO" if v > t * 0.3 else "NORMAL"),
+        }
+
+    # ── Cuentas críticas: docs con dias > 60, top 15 por monto ───────────────
+    cuentas_criticas = sorted(
+        [d for d in documentos if d["dias"] > 60],
+        key=lambda x: -x["monto"]
+    )[:15]
+
+    # ── Todos los docs ordenados para tabla (dias desc, monto desc) ───────────
+    all_docs_sorted = sorted(
+        documentos + supra_docs,
+        key=lambda x: (-x["dias"], -x["monto"])
+    )
+
+    return {
+        "corte":            fecha_corte,
+        "total":            round(total),
+        "supra":            round(supra_total),
+        "n_documentos":     len(documentos),
+        "tramos":           tramos,
+        "tramos_pct":       tramos_pct,
+        "vencida":          round(total_vencida),
+        "por_vendedor":     por_vendedor_out,
+        "cuentas_criticas": cuentas_criticas,
+        "documentos":       documentos,          # excl. supra (alineado con tramos/por_vendedor)
+        "all_documentos":   all_docs_sorted,     # incl. supra (para tabla Panel_CxC)
+    }
+
+
 def extract_peru_cxc_static():
     """Lee el objeto peru_cxc del avboard_data.js actual para preservarlo."""
     # Default static value (unchanged between cortes unless new Peru CxC arrives)
@@ -2852,7 +3095,110 @@ def validate_schema_before_parse(filepath: Path, tipo: str) -> bool:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-#  10. MAIN
+#  10. AI INSIGHTS CEO
+# ══════════════════════════════════════════════════════════════════════════════
+
+def generate_ai_insights(cl_v: dict, pe_v: dict, cl_cxc: dict,
+                         pe_cxc: dict | None, cortes: dict) -> dict | None:
+    """Genera diagnóstico ejecutivo con visión CEO via Anthropic API.
+    Retorna dict {peru, chile, grupo, generated_at} o None si no hay API key."""
+    import os, json as _json
+    api_key = os.environ.get('ANTHROPIC_API_KEY')
+    if not api_key:
+        print("   [AI insights] ⚠  ANTHROPIC_API_KEY no encontrada — skipping")
+        return None
+    try:
+        import anthropic as _ant
+    except ImportError:
+        print("   [AI insights] ⚠  pip install anthropic --break-system-packages  — skipping")
+        return None
+
+    # ── Construcción del contexto de datos ────────────────────────────────────
+    pe_ytd   = pe_v.get('ytd_5m', 0)
+    pe_ppto  = pe_v.get('ppto_5m', 0)
+    pe_cumpl = pe_v.get('cumplimiento_5m', 0)
+    pe_nM    = len([v for v in pe_v.get('mensual_real', []) if v > 0])
+    pe_corte = cortes.get('peru_ventas', '—')
+    pe_pv    = pe_v.get('por_vendedor', {})
+    rtcR_pe  = pe_v.get('rtc_mensual_real', {})
+    pe_lines = []
+    for k, v in sorted(pe_pv.items(), key=lambda x: -x[1].get('ytd', 0)):
+        ytd = v.get('ytd', 0)
+        arr = rtcR_pe.get(k, [])
+        mes = arr[pe_nM - 1] if arr and pe_nM <= len(arr) else 0
+        pe_lines.append(f"  · {v.get('nombre', k)}: YTD USD {ytd:,.0f} · {pe_corte[:5]} USD {mes:,.0f}")
+    pe_cxc_tot = (pe_cxc or {}).get('total', 0)
+    pe_cxc_t90 = (pe_cxc or {}).get('tramos', {}).get('t90', 0)
+    pe_cxc_cte = (pe_cxc or {}).get('corte', '—')
+
+    cl_ytd   = cl_v.get('ytd_5m', 0)
+    cl_ppto  = cl_v.get('ppto_5m', 0)
+    cl_cumpl = cl_v.get('cumplimiento_5m', 0)
+    cl_nM    = len([v for v in cl_v.get('mensual_real', []) if v > 0])
+    cl_corte = cortes.get('chile_ventas', '—')
+    rtcR_cl  = cl_v.get('rtc_mensual_real', {})
+    cl_lines = []
+    for k, arr in sorted(rtcR_cl.items(), key=lambda x: -sum(x[1][:cl_nM] if x[1] else [])):
+        ytd_cl = sum((arr or [])[:cl_nM])
+        mes_cl = (arr or [])[cl_nM - 1] if arr and cl_nM <= len(arr) else 0
+        cl_lines.append(f"  · {k}: YTD CLP {ytd_cl/1e6:.1f}M · {cl_corte[:5]} CLP {mes_cl/1e6:.1f}M")
+    cl_cxc_tot = cl_cxc.get('total', 0)
+    cl_cxc_t90 = cl_cxc.get('tramos', {}).get('t90', 0)
+
+    prompt = f"""Eres el Gerente General de AV LATAM, empresa de agroinsumos con operaciones en Chile (AGROCOMERCIAL) y Perú (AGROVECA). Analiza los datos comerciales del período más reciente y entrega un diagnóstico ejecutivo accionable.
+
+PERÚ — Corte {pe_corte}:
+• YTD USD {pe_ytd:,.0f} vs Ppto USD {pe_ppto:,.0f} → Cumplimiento {pe_cumpl*100:.1f}%  ({pe_nM} meses)
+• Por vendedor (YTD · último mes):
+{chr(10).join(pe_lines)}
+• CxC total USD {pe_cxc_tot:,.0f} · Mora +90d USD {pe_cxc_t90:,.0f} · Corte CxC {pe_cxc_cte}
+
+CHILE — Corte {cl_corte}:
+• YTD CLP {cl_ytd/1e6:.1f}M vs Ppto CLP {cl_ppto/1e6:.1f}M → Cumplimiento {cl_cumpl*100:.1f}%  ({cl_nM} meses)
+• Por RTC (YTD · último mes):
+{chr(10).join(cl_lines[:6])}
+• CxC total CLP {cl_cxc_tot/1e6:.1f}M · Mora +90d CLP {cl_cxc_t90/1e6:.1f}M
+
+Responde ÚNICAMENTE con JSON válido, sin texto adicional ni markdown:
+{{
+  "peru": {{
+    "diagnostico": "2-3 párrafos ejecutivos: situación general, performance por vendedor, riesgos de cartera y oportunidades clave",
+    "acciones": ["Acción concreta 1", "Acción concreta 2", "Acción concreta 3", "Acción concreta 4"]
+  }},
+  "chile": {{
+    "diagnostico": "2-3 párrafos ejecutivos: situación general, performance por RTC, riesgos de cartera y oportunidades clave",
+    "acciones": ["Acción concreta 1", "Acción concreta 2", "Acción concreta 3", "Acción concreta 4"]
+  }},
+  "grupo": {{
+    "diagnostico": "1-2 párrafos: perspectiva consolidada LATAM, prioridades estratégicas del trimestre",
+    "acciones": ["Prioridad estratégica 1", "Prioridad estratégica 2", "Prioridad estratégica 3"]
+  }}
+}}"""
+
+    try:
+        client = _ant.Anthropic(api_key=api_key)
+        msg = client.messages.create(
+            model='claude-haiku-4-5-20251001',
+            max_tokens=2500,
+            messages=[{'role': 'user', 'content': prompt}]
+        )
+        raw = msg.content[0].text.strip()
+        # Limpiar posible markdown code fence
+        if raw.startswith('```'):
+            raw = raw.split('\n', 1)[-1].rsplit('```', 1)[0].strip()
+        data = _json.loads(raw)
+        from datetime import datetime
+        data['generated_at'] = datetime.now().strftime('%d/%m/%Y %H:%M')
+        data['cortes'] = {'peru': pe_corte, 'chile': cl_corte}
+        print(f"   [AI insights] ✅  Diagnóstico generado · {len(raw)} chars · model haiku-4-5")
+        return data
+    except Exception as e:
+        print(f"   [AI insights] ❌  Error: {e}")
+        return None
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  11. MAIN
 # ══════════════════════════════════════════════════════════════════════════════
 
 def main():
@@ -2881,11 +3227,32 @@ def main():
         sys.exit(1)
 
     # 2. Extraer cortes
+    # Lee fecha_corte canónica desde raw_registry.archivos (authoritative SSOT)
+    # para evitar fallos con nombres de archivo con caracteres dobles (p.ej. "24..08.2026")
+    _rdata = json.loads((REPO / "pipeline" / "raw_registry.json").read_text(encoding="utf-8"))
+    _rarch_raw = _rdata.get("archivos", [])
+    # archivos puede ser lista o dict según versión del registry
+    _rarch_list = _rarch_raw if isinstance(_rarch_raw, list) else list(_rarch_raw.values())
+    _reg_fc: dict = {}
+    for _ae in _rarch_list:
+        if _ae.get("estado") == "VIGENTE":
+            _tk = f"{_ae.get('tipo_archivo','')}|{_ae.get('empresa_id','')}"
+            _iso = _ae.get("fecha_corte", "")
+            if _iso:
+                try:
+                    _reg_fc[_tk] = datetime.strptime(_iso, "%Y-%m-%d").strftime("%d/%m/%Y")
+                except Exception:
+                    pass
+
+    def _corte(pipeline_key: str, registry_type_key: str) -> str:
+        """Returns fecha_corte: registry SSOT first, filename fallback second."""
+        return _reg_fc.get(registry_type_key) or extract_date_from_filename(files[pipeline_key])
+
     cortes = {
-        'chile_ventas': extract_date_from_filename(files['chile_ventas']),
-        'chile_cxc':    extract_date_from_filename(files['cxc_agro']),
-        'peru_ventas':  extract_date_from_filename(files['peru_ventas']),
-        'peru_cxc':     '10/05/2026',  # static until new Peru CxC arrives
+        'chile_ventas': _corte('chile_ventas', 'VENTAS_CL|AGROCOMERCIAL_CL'),
+        'chile_cxc':    _corte('cxc_agro',     'CXC_CL_AGROCOMERCIAL|AGROCOMERCIAL_CL'),
+        'peru_ventas':  _corte('peru_ventas',   'VENTAS_PE|AGROVECA_PE'),
+        'peru_cxc':     _reg_fc.get('CXC_PE|AGROVECA_PE', '—') if 'cxc_pe' in files else '—',
     }
     print(f"\n📅 Cortes detectados: {cortes}")
 
@@ -2895,7 +3262,11 @@ def main():
         ('chile_ventas',  'VENTAS_CL'),
         ('peru_ventas',   'VENTAS_PE'),
         ('libro_base',    'LIBRO_BASE'),
+        ('cxc_agro',      'CXC_CL_AGROCOMERCIAL'),
+        ('cxc_avch',      'CXC_CL_AGROVECA'),
     ]
+    if 'cxc_pe' in files:
+        _schema_checks.append(('cxc_pe', 'CXC_PE'))
     _schema_errors = []
     for _fkey, _tipo in _schema_checks:
         if _fkey in files:
@@ -2968,11 +3339,22 @@ def main():
         iec_pe_computed = None
         print("   ⚠ Sin datos Perú — IEC Perú será null")
 
-    # 5. Generar avboard_data.js
+    # 5. Parsear CxC Perú y generar avboard_data.js
+    print("\n📝 Parseando CxC Perú...")
+    if 'cxc_pe' in files:
+        pe_cxc = parse_cxc_pe(files['cxc_pe'], cortes['peru_cxc'])
+        print(f"   → {pe_cxc['n_documentos']} docs · USD {pe_cxc['total']:,} · supra {pe_cxc['supra']:,} · corte {pe_cxc['corte']}")
+        print(f"   → por_vendedor keys: {list(pe_cxc['por_vendedor'].keys())}")
+    else:
+        pe_cxc = extract_peru_cxc_static()
+        print("   ⚠ Sin CxC PE en registry — usando datos estáticos (corte congelado)")
+
+    print("\n🤖 Generando AI insights (visión CEO/GM)...")
+    ai_insights = generate_ai_insights(cl_v, pe_v, cl_cxc, pe_cxc, cortes)
+
     print("\n📝 Generando avboard_data.js...")
-    peru_cxc_static = extract_peru_cxc_static()
-    js_data = render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, peru_cxc_static, productos,
-                                     iec_pe=iec_pe_computed)
+    js_data = render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, pe_cxc, productos,
+                                     iec_pe=iec_pe_computed, insights=ai_insights)
     with open(AVBOARD_DATA, 'w', encoding='utf-8') as f:
         f.write(js_data)
     ok, err = validate_js(AVBOARD_DATA)
@@ -3037,7 +3419,7 @@ def main():
 
     # 8.7 Sincronizar Panel_CxC (chileData + alerta banner)
     print(f"\n💳 Sincronizando Panel_CxC (chileData + alerta banner)...")
-    _cxc_ok = sync_cxc_panel(cl_cxc)
+    _cxc_ok = sync_cxc_panel(cl_cxc, pe_cxc)
     print(f"   → {'Actualizado' if _cxc_ok else 'Sin cambios (ya al día)'}")
 
     # 9. Logs

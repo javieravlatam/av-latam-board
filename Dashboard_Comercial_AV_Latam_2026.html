@@ -267,6 +267,15 @@
     </div>
   </div>
 
+  <!-- AI insight grupo -->
+  <div id="ai-insight-dc-grupo" style="display:none;margin:16px 0;background:linear-gradient(135deg,rgba(27,79,138,.04),rgba(90,143,53,.04));border:1px solid rgba(27,79,138,.18);border-left:3px solid #1B4F8A;border-radius:10px;padding:16px 18px;">
+    <div style="font-size:10px;font-weight:700;color:#1B4F8A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">🤖 Diagnóstico Ejecutivo · Grupo LATAM</div>
+    <div id="ai-dc-grupo-diag" style="font-size:12px;color:#1A2332;line-height:1.75;white-space:pre-wrap;margin-bottom:10px;"></div>
+    <div style="font-size:10px;font-weight:700;color:#5a8f35;text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;">▶ Prioridades Estratégicas</div>
+    <ul id="ai-dc-grupo-acc" style="margin:0 0 8px 18px;padding:0;font-size:12px;color:#1A2332;line-height:1.7;"></ul>
+    <div id="ai-dc-grupo-ts" style="font-size:10px;color:#7A90AA;text-align:right;"></div>
+  </div>
+
   <!-- ══════════════════════════════════════
        TAB: CHILE
   ══════════════════════════════════════ -->
@@ -412,6 +421,15 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- AI insight chile -->
+  <div id="ai-insight-dc-chile" style="display:none;margin:16px 0;background:linear-gradient(135deg,rgba(27,79,138,.04),rgba(90,143,53,.04));border:1px solid rgba(27,79,138,.18);border-left:3px solid #1B4F8A;border-radius:10px;padding:16px 18px;">
+    <div style="font-size:10px;font-weight:700;color:#1B4F8A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">🤖 Diagnóstico Ejecutivo · Visión CEO — Chile</div>
+    <div id="ai-dc-chile-diag" style="font-size:12px;color:#1A2332;line-height:1.75;white-space:pre-wrap;margin-bottom:10px;"></div>
+    <div style="font-size:10px;font-weight:700;color:#5a8f35;text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;">▶ Acciones Propuestas</div>
+    <ul id="ai-dc-chile-acc" style="margin:0 0 8px 18px;padding:0;font-size:12px;color:#1A2332;line-height:1.7;"></ul>
+    <div id="ai-dc-chile-ts" style="font-size:10px;color:#7A90AA;text-align:right;"></div>
   </div>
 
   <!-- ══════════════════════════════════════
@@ -676,6 +694,14 @@
           <canvas id="cCxCPeru"></canvas>
         </div>
       </div>
+    <!-- AI insight peru -->
+    <div id="ai-insight-dc-peru" style="display:none;margin:16px 0;background:linear-gradient(135deg,rgba(27,79,138,.04),rgba(90,143,53,.04));border:1px solid rgba(27,79,138,.18);border-left:3px solid #1B4F8A;border-radius:10px;padding:16px 18px;">
+      <div style="font-size:10px;font-weight:700;color:#1B4F8A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">🤖 Diagnóstico Ejecutivo · Visión CEO — Perú</div>
+      <div id="ai-dc-peru-diag" style="font-size:12px;color:#1A2332;line-height:1.75;white-space:pre-wrap;margin-bottom:10px;"></div>
+      <div style="font-size:10px;font-weight:700;color:#5a8f35;text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;">▶ Acciones Propuestas</div>
+      <ul id="ai-dc-peru-acc" style="margin:0 0 8px 18px;padding:0;font-size:12px;color:#1A2332;line-height:1.7;"></ul>
+      <div id="ai-dc-peru-ts" style="font-size:10px;color:#7A90AA;text-align:right;"></div>
+    </div>
     </div>
   </div>
 
@@ -1098,5 +1124,25 @@ function cerrarSesion() {
 </script>
 <script src="assets_logo.js"></script>
 <script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
+<script>
+// ── AI Insights CEO — Dashboard Comercial ────────────────────────────────────
+(function(){
+  if(typeof AVBOARD==='undefined'||!AVBOARD.insights) return;
+  var ins=AVBOARD.insights;
+  var ts='Generado por Claude · '+(ins.generated_at||'—');
+  function fill(elId,diagId,accId,tsId,data){
+    if(!data) return;
+    var el=document.getElementById(elId); if(!el) return;
+    el.style.display='';
+    var d=document.getElementById(diagId); if(d) d.textContent=data.diagnostico||'';
+    var a=document.getElementById(accId);
+    if(a&&data.acciones) a.innerHTML=data.acciones.map(function(x){return'<li>'+x+'</li>';}).join('');
+    var t=document.getElementById(tsId); if(t) t.textContent=ts;
+  }
+  fill('ai-insight-dc-grupo','ai-dc-grupo-diag','ai-dc-grupo-acc','ai-dc-grupo-ts',ins.grupo);
+  fill('ai-insight-dc-chile','ai-dc-chile-diag','ai-dc-chile-acc','ai-dc-chile-ts',ins.chile);
+  fill('ai-insight-dc-peru','ai-dc-peru-diag','ai-dc-peru-acc','ai-dc-peru-ts',ins.peru);
+})();
+</script>
 </body>
 </html>
