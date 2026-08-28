@@ -255,63 +255,63 @@
       <div class="av-panel__header">SEMÁFORO RTC · CHILE <span id="av-cl-sema-tag" class="av-badge">MN REAL</span></div>
       <div class="sema-list">
 
-        <div class="sema-row">
+        <div class="sema-row" data-vendor="caroca">
           <span style="font-size:15px;">⭐</span>
           <div class="sema-info">
             <div class="sema-name">J. Caroca <span style="font-size:10px;color:var(--positive);font-weight:400;">MN 39.2%</span></div>
-            <div class="sema-sub">YTD CLP 63.3M · T1 161% ppto · Abr +10.2M · Referente del grupo</div>
+            <div class="sema-sub">—</div>
           </div>
-          <div class="sema-pct av-text-positive">161.0%</div>
+          <div class="sema-pct av-text-positive">—</div>
           <div class="sema-dot sd-ok"></div>
         </div>
 
-        <div class="sema-row">
+        <div class="sema-row" data-vendor="laratro">
           <span style="font-size:15px;"><i class="ph-warning" style="color:var(--warning)" aria-hidden="true"></i></span>
           <div class="sema-info">
             <div class="sema-name">P. Laratro <span style="font-size:10px;color:var(--warning);font-weight:400;">MN 19.6%</span></div>
-            <div class="sema-sub">YTD CLP 61.2M · T1 97.8% · Abr +8.3M · Estructura alta</div>
+            <div class="sema-sub">—</div>
           </div>
-          <div class="sema-pct av-text-warning">97.8%</div>
+          <div class="sema-pct av-text-warning">—</div>
           <div class="sema-dot sd-am"></div>
         </div>
 
-        <div class="sema-row">
+        <div class="sema-row" data-vendor="encina">
           <span style="font-size:15px;"><i class="ph-warning" style="color:var(--warning)" aria-hidden="true"></i></span>
           <div class="sema-info">
             <div class="sema-name">R. Encina <span style="font-size:10px;color:var(--warning);font-weight:400;">MN 21.9%</span></div>
-            <div class="sema-sub">YTD CLP 29.4M · T1 94.5% · Abr +1.8M · Camioneta desde Mayo</div>
+            <div class="sema-sub">—</div>
           </div>
-          <div class="sema-pct av-text-warning">94.5%</div>
+          <div class="sema-pct av-text-warning">—</div>
           <div class="sema-dot sd-am"></div>
         </div>
 
-        <div class="sema-row">
+        <div class="sema-row" data-vendor="velasquez">
           <span style="font-size:15px;"><i class="ph-circle ph-fill" style="color:var(--danger);font-size:10px" aria-hidden="true"></i></span>
           <div class="sema-info">
             <div class="sema-name">F. Velásquez <span style="font-size:10px;color:var(--danger);font-weight:400;">MN 2.8% · ULTIMÁTUM</span></div>
-            <div class="sema-sub">YTD CLP 32.7M · T1 90.1% · Abr +3.1M · Ppto anual CLP 253.9M</div>
+            <div class="sema-sub">—</div>
           </div>
-          <div class="sema-pct av-text-danger">90.1%</div>
+          <div class="sema-pct av-text-danger">—</div>
           <div class="sema-dot sd-rd"></div>
         </div>
 
-        <div class="sema-row">
+        <div class="sema-row" data-vendor="veverka">
           <span style="font-size:15px;"><i class="ph-x-circle" style="color:var(--danger)" aria-hidden="true"></i></span>
           <div class="sema-info">
             <div class="sema-name">I. Veverka <span style="font-size:10px;color:var(--red2);font-weight:400;">MN –28.7% · INVIABLE</span></div>
-            <div class="sema-sub">YTD CLP 8.8M · T1 48.9% · Zona en evaluación cierre Q3</div>
+            <div class="sema-sub">—</div>
           </div>
-          <div class="sema-pct av-text-danger">48.9%</div>
+          <div class="sema-pct av-text-danger">—</div>
           <div class="sema-dot sd-rd2"></div>
         </div>
 
-        <div class="sema-row">
+        <div class="sema-row" data-vendor="munoz">
           <span style="font-size:15px;"><i class="ph-check-circle" style="color:var(--positive)" aria-hidden="true"></i></span>
           <div class="sema-info">
             <div class="sema-name">V. Muñoz</div>
-            <div class="sema-sub">YTD CLP 4.2M · T1 117.7% · Por encima de objetivo</div>
+            <div class="sema-sub">—</div>
           </div>
-          <div class="sema-pct av-text-positive">117.7%</div>
+          <div class="sema-pct av-text-positive">—</div>
           <div class="sema-dot sd-ok"></div>
         </div>
 
@@ -774,6 +774,32 @@ function cerrarSesion() {
 
     // ── Semáforo tag ─────────────────────────────────────────────
     set('av-cl-sema-tag', 'CORTE ' + sHV + ' · MN REAL');
+
+    // ── Semáforos vendedores Chile — actualización dinámica ──────
+    var clSemaVends = {
+      caroca:'J. Caroca', laratro:'P. Laratro', encina:'R. Encina',
+      velasquez:'F. Velásquez', veverka:'I. Veverka', munoz:'V. Muñoz'
+    };
+    var clSemaRtcR = cv.rtc_mensual_real || {};
+    var clSemaMPP  = cv.rtc_mensual_ppto || {};
+    Object.keys(clSemaVends).forEach(function(k) {
+      var row = document.querySelector('.sema-row[data-vendor="'+k+'"]');
+      if (!row) return;
+      var arrR    = clSemaRtcR[k];
+      var arrP    = clSemaMPP[k];
+      var realYtd = arrR ? arrR.slice(0, nRealCL).reduce(function(s,v){return s+(v||0);},0) : 0;
+      var pptoYtd = arrP ? arrP.slice(0, nRealCL).reduce(function(s,v){return s+(v||0);},0) : 0;
+      var cumpl   = pptoYtd > 0 ? realYtd / pptoYtd : null;
+      var pctStr  = cumpl !== null ? (cumpl*100).toFixed(1)+'%' : '–';
+      var clsCss  = cumpl === null ? 'av-text-warning' : (cumpl >= 1 ? 'av-text-positive' : (cumpl >= 0.8 ? 'av-text-warning' : 'av-text-danger'));
+      var dotCss  = cumpl === null ? 'sd-am' : (cumpl >= 1 ? 'sd-ok' : (cumpl >= 0.8 ? 'sd-am' : 'sd-rd'));
+      var pctEl   = row.querySelector('.sema-pct');
+      var subEl   = row.querySelector('.sema-sub');
+      var dotEl   = row.querySelector('.sema-dot');
+      if (pctEl) { pctEl.textContent = pctStr; pctEl.className = 'sema-pct ' + clsCss; }
+      if (subEl) subEl.textContent = 'YTD CLP ' + M(realYtd) + 'M · ' + nRealCL + 'm: ' + pctStr + ' ppto';
+      if (dotEl) dotEl.className = 'sema-dot ' + dotCss;
+    });
 
     // ── Barras mensuales (N meses + YTD Nm) ─────────────────────
     var meses = mesesFullCL.slice(0, nRealCL);

@@ -3279,3 +3279,20 @@ PENDIENTE (sin commit/push — Javier ejecuta desde terminal):
   git commit -m "fix: panel comercial peru + dashboard — crash aguirre_navarro, .mayo, label maps canonicos"
   git push origin main
 ════════════════════════════════════════════════════════════════
+
+---
+Fecha: 2026-08-28
+Archivos procesados: Executive_Board_View_AV_Latam_2026.html, Panel_Chile_AV_2026.html
+Acciones:
+  - AUDITORÍA INTEGRAL — revisión de todos los paneles (PE y CL)
+  - EBV Peru: fix cumplimiento — cambio de pro-rata a suma de ppto mensual (match Panel_Presupuesto)
+  - EBV Chile tabla vendedores: agregado bloque JS completo — antes 100% hardcodeado
+    Valores corregidos: Caroca 112.8%, Laratro 116.2%, Encina 69.3%, Velásquez 83.0%, Veverka 19.0%, Muñoz 13.0%
+    Valores anteriores: Caroca 191.8%, Laratro 100.9%, Encina 97.2%, Velásquez 95.8%, Veverka 48.9%, Muñoz 117.7%
+  - Panel_Chile semáforos: agregado data-vendor + JS update block — antes hardcodeados con datos mayo 2026
+  - Panel_Peru (sesión anterior): tabla tbody 100% dinámica
+  - Dashboard_Comercial (sesión anterior): navarro eliminado
+  - Panel_Jefes_Peru (sesión anterior): nomMap + referencias navarro eliminadas
+  - Panel_Presupuesto: verificado — 100% dinámico (todos los vendors sincronizados desde AVBOARD)
+  - Panel_Jefes_Chile: verificado — 100% dinámico, sin issues
+PENDIENTE: Javier debe eliminar git locks y hacer commit (ver instrucciones en resumen)

@@ -524,28 +524,11 @@
       </div>
     </div>
 
-    <!-- Alertas CEO -->
+    <!-- Alertas CEO Chile — AI insights -->
     <div class="panel" style="grid-column: span 2;">
-      <div class="panel-title">DIAGNÓSTICO CEO · ACCIONES CRÍTICAS</div>
-      <div class="alert-box green">
-        <div class="alert-title" style="color:var(--green);">✅ J. CAROCA — REFERENTE DE ZONA (MN 39.2%)</div>
-        <div class="alert-body">Genera el 55% de la utilidad real de Chile. Venta YTD CLP 63.3M (192% del ppto T1). Abril sólido +10.2M. Modelo a replicar en otras zonas. Considera incorporación estructural en Q3.</div>
-      </div>
-      <div class="alert-box amber">
-        <div class="alert-title" style="color:var(--amber);">⚠️ P. LARATRO — AJUSTE DE ESTRUCTURA (MN 19.6%)</div>
-        <div class="alert-body">Venta YTD 54.6M sólida pero margen neto bajo meta por peso de estructura. Necesita CLP 9.5M adicional/mes para alcanzar 25%. Agosto crítico: camioneta entra al stack. Revisión costos Q2.</div>
-      </div>
-      <div class="alert-box amber">
-        <div class="alert-title" style="color:var(--amber);">⚠️ R. ENCINA — META MAYO CON CAMIONETA (MN 21.9%)</div>
-        <div class="alert-body">MN 21.9% borderline. Camioneta entra en Mayo (+CLP 550K/mes). Meta mínima desde Mayo: CLP 10.2M/mes. Si no alcanza en Mayo-Junio → revisión de zona.</div>
-      </div>
-      <div class="alert-box red">
-        <div class="alert-title" style="color:var(--red);">🔴 F. VELÁSQUEZ — ULTIMÁTUM 60 DÍAS (MN 2.8%)</div>
-        <div class="alert-body">MN real 2.8% operacionalmente crítico. Requiere doblar venta mensual para viabilidad. Plazo: 60 días a partir de Abril. Si no alcanza 25% → fusión de zona con RTC colindante.</div>
-      </div>
-      <div class="alert-box red">
-        <div class="alert-title" style="color:var(--red-dark);">❌ I. VEVERKA — ZONA INVIABLE (MN –28.7%)</div>
-        <div class="alert-body">MN negativo –28.7%. La empresa subsidia cada venta. YTD 8.8M (48.9% del ppto). Sin recuperación en T2 → cierre/absorción de zona en Junio 2026. En evaluación formal.</div>
+      <div class="panel-title">DIAGNÓSTICO CEO · CHILE <span class="tag" style="background:rgba(27,79,138,.12);color:#1B4F8A;">🤖 AI · A petición de la GG</span></div>
+      <div id="eb-diagnostico-cl-body">
+        <div class="alert-body" style="color:var(--text-dim);font-size:11px;">Cargando diagnóstico…</div>
       </div>
     </div>
   </div>
@@ -960,13 +943,6 @@
           <td class="rtc-val" style="color:var(--amber);">20.4%</td>
           <td class="rtc-val" style="color:var(--amber);">291</td>
           <td style="text-align:right;"><span class="kpi-badge badge-amber">Parcial</span></td>
-        </tr>
-        <tr>
-          <td class="rtc-name">N. Navarro</td>
-          <td class="rtc-pct" style="color:var(--green);">97.4%</td>
-          <td class="rtc-val" style="color:var(--text-dim);">2.6%</td>
-          <td class="rtc-val" style="color:var(--text-dim);">40</td>
-          <td style="text-align:right;"><span class="kpi-badge badge-green">Sobre piso</span></td>
         </tr>
         <tr>
           <td class="rtc-name" style="color:var(--red);">P. Valladares</td>
@@ -1386,7 +1362,7 @@ new Chart(document.getElementById('chartChileRTC'), {
 new Chart(document.getElementById('chartPeruRTC'), {
   type: 'bar',
   data: {
-    labels: ['O. Infante', 'O. Atalaya', 'Aguirre/Navarro', 'A. Gonzales', 'P. Valladares'],
+    labels: ['O. Infante', 'O. Atalaya', 'L. Aguirre', 'A. Gonzales', 'P. Valladares'],
     datasets: [{
       label: 'YTD USD',
       data: [108481, 66860, 86433, 696, 1200],
@@ -1671,7 +1647,7 @@ function cerrarSesion() {
     var cPeru = Chart.getChart(document.getElementById('chartPeruRTC'));
     if (cPeru) {
       var pvd = pv.por_vendedor;
-      cPeru.data.labels = ['O. Infante','O. Atalaya','Aguirre/Navarro','A. Gonzales','P. Valladares'];
+      cPeru.data.labels = ['O. Infante','O. Atalaya','L. Aguirre','A. Gonzales','P. Valladares'];
       cPeru.data.datasets[0].data = [
         pvd.infante.ytd,
         pvd.atalaya.ytd,
@@ -1738,14 +1714,15 @@ function cerrarSesion() {
     var ebVendNames = {infante:'O. Infante',aguirre:'L. Aguirre',atalaya:'O. Atalaya',gonzales:'A. Gonzales'};
     var ebTopVend = null, ebTopVal = -1;
     var ebRtcR = pv.rtc_mensual_real || {};
-    var ebPptoA = pv.rtc_ppto_anual || {};
+    var ebMPP  = pv.rtc_mensual_ppto || {};
     Object.keys(ebVendNames).forEach(function(k){
       var row = document.querySelector('tr[data-vendor="'+k+'"]');
       var v = pv.por_vendedor && pv.por_vendedor[k];
       if (!v) return;
       var mesVal = ebRtcR[k] ? (ebRtcR[k][curIdxPE_EB] || 0) : 0;
-      var pptoA  = ebPptoA[k] || 0;
-      var ytdPpto = pptoA > 0 ? pptoA * nRealPE_EB / 12 : 0;
+      // Ppto YTD = suma de targets mensuales reales (igual que Panel_Presupuesto)
+      var _mpp = ebMPP[k];
+      var ytdPpto = _mpp ? _mpp.slice(0, nRealPE_EB).reduce(function(s,v){return s+(v||0);},0) : 0;
       var cumpl   = ytdPpto > 0 ? v.ytd / ytdPpto : null;
       if (row) {
         row.children[1].textContent = fUsd(v.ytd);
@@ -1796,6 +1773,32 @@ function cerrarSesion() {
       ebBarUsd('eb-cxc-pe-bar-90','eb-cxc-pe-t90', pc.tramos.t90, pc.tramos_pct.t90);
     }
 
+    // ── Tabla vendedores Chile — actualización dinámica desde AVBOARD ──
+    var ebClVendNames = {
+      caroca:'J. Caroca', laratro:'P. Laratro', encina:'R. Encina',
+      velasquez:'F. Velásquez', veverka:'I. Veverka', munoz:'V. Muñoz'
+    };
+    var ebClRtcR = cv.rtc_mensual_real || {};
+    var ebClMPP  = cv.rtc_mensual_ppto || {};
+    Object.keys(ebClVendNames).forEach(function(k) {
+      var row = document.querySelector('tr[data-rtc="'+k+'"]');
+      if (!row) return;
+      var arrR    = ebClRtcR[k];
+      var arrP    = ebClMPP[k];
+      var realYtd = arrR ? arrR.slice(0, nRealCL_EB).reduce(function(s,v){return s+(v||0);},0) : 0;
+      var pptoYtd = arrP ? arrP.slice(0, nRealCL_EB).reduce(function(s,v){return s+(v||0);},0) : 0;
+      var cumpl   = pptoYtd > 0 ? realYtd / pptoYtd : null;
+      var clrC    = cumpl === null ? 'var(--text-dim)' : (cumpl >= 1 ? 'var(--green)' : (cumpl >= 0.8 ? 'var(--amber)' : 'var(--red)'));
+      var semaEl  = row.querySelector('.sema');
+      var pctEl   = row.querySelector('.rtc-pct');
+      var fillEl  = row.querySelector('.prog-fill');
+      row.children[1].textContent = M(realYtd)+'M';
+      if (semaEl) semaEl.className = 'sema ' + (cumpl === null ? 'sema-amber' : (cumpl >= 1 ? 'sema-green' : (cumpl >= 0.8 ? 'sema-amber' : 'sema-red')));
+      if (pctEl)  { pctEl.textContent = cumpl !== null ? (cumpl*100).toFixed(1)+'%' : '–'; pctEl.style.color = clrC; }
+      if (fillEl) { fillEl.style.width = cumpl !== null ? Math.min(100, cumpl*100).toFixed(1)+'%' : '0%'; fillEl.style.background = clrC; }
+      if (row.children[4]) row.children[4].textContent = cumpl === null ? '⚪' : (cumpl >= 1 ? '✅' : (cumpl >= 0.8 ? '⚠️' : '🔴'));
+    });
+
     // ── Chart 2: Chile RTC venta YTD vs Ppto T1 (mismo dato que la tabla, ya no hardcode separado) ──
     var cChileRTC = Chart.getChart(document.getElementById('chartChileRTC'));
     if (cChileRTC) {
@@ -1816,6 +1819,41 @@ function cerrarSesion() {
     // Nota: chartMNChile (Margen Neto Real % por RTC) se deja estático — AVBOARD no
     // tiene margen por RTC individual (sólo cv.mn_real agregado de Chile). Igual que
     // la columna "Margen" de esta misma tabla. Ver alertas.md.
+
+    // ── Diagnóstico AI Chile ──────────────────────────────────────
+    (function() {
+      var elCl = document.getElementById('eb-diagnostico-cl-body');
+      if (!elCl) return;
+      var ins = AVBOARD.insights && AVBOARD.insights.chile;
+      if (ins) {
+        var html = '<div style="font-size:11px;color:var(--text-dim);line-height:1.7;margin-bottom:12px;padding:10px 12px;background:rgba(27,79,138,.04);border-radius:6px;border-left:3px solid #1B4F8A;">' + ins.diagnostico + '</div>';
+        if (ins.acciones && ins.acciones.length) {
+          html += '<div style="font-size:10px;font-weight:700;color:#5a8f35;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;">▶ Acciones Propuestas</div>';
+          html += '<ul style="margin:0 0 10px 18px;padding:0;font-size:11px;color:var(--text-dim);line-height:1.8;">';
+          ins.acciones.forEach(function(a){ html += '<li>'+a+'</li>'; });
+          html += '</ul>';
+        }
+        html += '<div style="font-size:10px;color:#7A90AA;text-align:right;margin-top:4px;">'+AVBOARD.insights.label+' · '+AVBOARD.insights.generated_at+'</div>';
+        elCl.innerHTML = html;
+      }
+    })();
+
+    // ── Diagnóstico AI Perú — complemento AI sobre el diagnóstico dinámico ──
+    (function() {
+      var ins = AVBOARD.insights && AVBOARD.insights.peru;
+      if (!ins) return;
+      var elPe = document.getElementById('eb-diagnostico-pe-body');
+      if (!elPe) return;
+      // Agregar bloque AI después del diagnóstico dinámico de vendedores
+      var aiDiv = document.createElement('div');
+      aiDiv.style.cssText = 'margin-top:10px;font-size:11px;color:var(--text-dim);line-height:1.7;padding:10px 12px;background:rgba(27,79,138,.04);border-radius:6px;border-left:3px solid #1B4F8A;';
+      aiDiv.textContent = ins.diagnostico;
+      elPe.appendChild(aiDiv);
+      var tsDiv = document.createElement('div');
+      tsDiv.style.cssText = 'font-size:10px;color:#7A90AA;text-align:right;margin-top:4px;';
+      tsDiv.textContent = AVBOARD.insights.label + ' · ' + AVBOARD.insights.generated_at;
+      elPe.appendChild(tsDiv);
+    })();
 
     console.log('[AVBOARD] ✅ Executive_Board actualizado · '+D.meta.version);
   } catch(e) {

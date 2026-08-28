@@ -1744,3 +1744,30 @@ var AVBOARD = (function() {
     errores.forEach(function(e){ console.warn('  · ' + e); });
   }
 })();
+
+// ── INSIGHTS AI · Diagnóstico elaborado por AI a petición de la GG ──────────
+// Generado: 28/08/2026 | Corte PE: 24/08/2026 | Corte CL: 12/08/2026
+AVBOARD.insights = {
+  generated_at: "28/08/2026",
+  label: "Diagnóstico elaborado por AI a petición de la GG · 8m Ene–Ago 2026",
+  peru: {
+    diagnostico: "Perú acumula USD 475,731 en 8 meses — cumplimiento grupal del 77.8% sobre ppto. L. Aguirre es el único vendedor sobre meta con 135.9% (USD 169,301), compensando parcialmente las brechas del resto del equipo. O. Infante lleva 82.2% con meses clave ya consumidos. O. Atalaya cae a 54.0% (USD 89,789 vs ppto 166,367) — brecha de USD 76,578. Los tres vendedores H2 (Díaz 37.2%, Valladares 49.0%, Martha Hidalgo 0%) representan el mayor riesgo para el cierre del año. El presupuesto H2 concentra el 63% del año — Agosto tiene el mayor ppto mensual histórico (USD 84,000). Para alcanzar meta anual se requieren USD 661,869 en los 4 meses restantes.",
+    acciones: [
+      "L. Aguirre: proteger posición — revisar cartera Sep-Dic y gestionar riesgo de concentración en un solo vendedor",
+      "O. Atalaya: reunión de revisión urgente — 54% en 8m requiere plan de recuperación formal con KPIs semanales",
+      "S. Díaz y P. Valladares: evaluación de viabilidad H2 — si no alcanzan 70% a Sep → protocolo de absorción de zona",
+      "M. Hidalgo: cero ventas en 8 meses — revisar onboarding, asignación de cartera y condiciones de campo",
+      "O. Infante: seguimiento mensual — con Ago-Dic sin ppto asignado, riesgo de caída libre en H2"
+    ]
+  },
+  chile: {
+    diagnostico: "Chile acumula CLP 413.6M en 8 meses — cumplimiento grupal del 85.1% sobre ppto. J. Caroca (112.8%) y P. Laratro (116.2%) son los referentes del equipo, generando CLP 260.1M (63% del total). R. Encina cae a 69.3% — brecha CLP 18.8M en 8m, con riesgo de no recuperar en H2 dado que su ppto de Sep-Dic es de CLP 97M. F. Velásquez en 83.0% pero con margen neto crítico. I. Veverka confirma inviabilidad: 19.0% en 8 meses (CLP 9.1M vs ppto CLP 48M) — subsidio sostenido empresa. V. Muñoz sin actividad desde Marzo — zona efectivamente inactiva. Para cerrar el año en meta se requieren CLP 451M en Sep-Dic.",
+    acciones: [
+      "I. Veverka: ejecutar resolución de zona inmediatamente — absorción por Laratro o Caroca. No continuar inversión en zona",
+      "V. Muñoz: zona inactiva desde Marzo — definir cierre o reasignación de cartera antes de Sep",
+      "R. Encina: establecer meta mínima CLP 12M/mes Sep-Dic. Si no cumple Oct → revisión estructural de zona",
+      "F. Velásquez: monitoreo semanal de margen — cualquier operación bajo piso de MN debe ser rechazada por Jefe Zona",
+      "Caroca y Laratro: analizar expansión de cartera en Q4 — absorber clientes de zonas en liquidación"
+    ]
+  }
+};

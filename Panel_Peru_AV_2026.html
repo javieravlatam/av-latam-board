@@ -194,7 +194,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   </div>
   <div class="hcorte">
     <div>Corte <b id="av-pe-hcorte-date">--/--/----</b> · CxC <b id="av-pe-hcxc-date">10/05/2026</b></div>
-    <div style="font-size:8px;margin-top:1px;">Aguirre/Navarro = zona unificada · Ppto anual USD 1,137,034</div>
+    <div style="font-size:8px;margin-top:1px;">L. Aguirre (zona unificada, incl. fusión Navarro) · Ppto anual <span id="av-pe-hppto">—</span></div>
   </div>
   <button class="btn-logout" onclick="cerrarSesion()">🔐 Cambiar acceso</button>
 </header>
@@ -245,7 +245,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       </div>
 
       <div class="novedad" id="av-pe-sema-novedad">
-        <b>⚡ Zona Aguirre:</b> L. Aguirre lidera Mayo con USD 48,495 · YTD USD 97,107 · N. Navarro YTD USD 30,940 · Zona combinada supera USD 128K · Plan Q2 en ejecución ✅
+        Cargando novedad…
       </div>
     </div>
 
@@ -321,73 +321,18 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <table class="tbl">
         <thead><tr>
           <th style="text-align:left;">Zona</th>
-          <th>Real T1</th><th>Ppto T1</th><th style="text-align:center;">% T1</th>
-          <th id="pe-th-ultmes">Mayo Real</th><th>YTD 5m</th><th>Ppto Anual</th>
+          <th>Real YTD</th><th>Ppto YTD</th><th style="text-align:center;">% YTD</th>
+          <th id="pe-th-ultmes">Mes Real</th><th>YTD</th><th>Ppto Anual</th>
         </tr></thead>
-        <tbody>
-          <tr>
-            <td>⭐ <strong style="color:var(--green);">L. Aguirre</strong></td>
-            <td class="mono r" style="color:var(--green);">48,866</td>
-            <td class="mono r">35,370</td>
-            <td class="c"><span class="pb pb-ok">138.2%</span><div class="mb"><div class="mbf" style="width:100%;background:var(--green);"></div></div></td>
-            <td class="mono r" style="color:var(--green);" id="pe-td-aguirre-may">48,495</td>
-            <td class="mono r" style="color:var(--green);" id="pe-td-aguirre-ytd">97,107</td>
-            <td class="mono r">223,930</td>
-          </tr>
-          <tr>
-            <td>✅ <strong style="color:var(--green);">O. Infante</strong></td>
-            <td class="mono r" style="color:var(--green);">107,776</td>
-            <td class="mono r">114,735</td>
-            <td class="c"><span class="pb pb-ok">93.9%</span><div class="mb"><div class="mbf" style="width:93.9%;background:var(--green);"></div></div></td>
-            <td class="mono r" style="color:var(--green);" id="pe-td-infante-may">—</td>
-            <td class="mono r" style="color:var(--green);" id="pe-td-infante-ytd">—</td>
-            <td class="mono r">485,058</td>
-          </tr>
-          <tr>
-            <td>✅ <strong style="color:var(--green);">O. Atalaya</strong></td>
-            <td class="mono r" style="color:var(--green);">64,589</td>
-            <td class="mono r">53,634</td>
-            <td class="c"><span class="pb pb-ok">120.4%</span><div class="mb"><div class="mbf" style="width:100%;background:var(--green);"></div></div></td>
-            <td class="mono r" id="pe-td-atalaya-may">—</td>
-            <td class="mono r" style="color:var(--green);" id="pe-td-atalaya-ytd">—</td>
-            <td class="mono r">248,424</td>
-          </tr>
-          <tr>
-            <td>⚠️ N. Navarro</td>
-            <td class="mono r" style="color:var(--amber);">30,940</td>
-            <td class="mono r">–</td>
-            <td class="c"><span class="pb pb-am">–</span><div class="mb"><div class="mbf" style="width:60%;background:var(--amber);"></div></div></td>
-            <td class="mono r" id="pe-td-navarro-may">—</td>
-            <td class="mono r" style="color:var(--amber);" id="pe-td-navarro-ytd">—</td>
-            <td class="mono r">–</td>
-          </tr>
-          <tr>
-            <td>🔴 A. Gonzales</td>
-            <td class="mono r" style="color:var(--red);">696</td>
-            <td class="mono r">4,000</td>
-            <td class="c"><span class="pb pb-rd">17.4%</span><div class="mb"><div class="mbf" style="width:17.4%;background:var(--red);"></div></div></td>
-            <td class="mono r" id="pe-td-gonzales-may">—</td>
-            <td class="mono r" style="color:var(--red);" id="pe-td-gonzales-ytd">—</td>
-            <td class="mono r">37,250</td>
-          </tr>
-          <tr>
-            <td>🔴 P. Valladares</td>
-            <td class="mono r" style="color:var(--red);">1,200</td>
-            <td class="mono r">5,646</td>
-            <td class="c"><span class="pb pb-rd">21.3%</span><div class="mb"><div class="mbf" style="width:21.3%;background:var(--red);"></div></div></td>
-            <td class="mono r" id="pe-td-valladares-may">—</td>
-            <td class="mono r" style="color:var(--red);" id="pe-td-valladares-ytd">—</td>
-            <td class="mono r">142,372</td>
-          </tr>
-        </tbody>
+        <tbody id="pe-vt-body"></tbody>
         <tfoot><tr>
           <td>TOTAL</td>
           <td class="mono r" style="color:var(--blue);" id="pe-tfoot-t1">—</td>
-          <td class="mono r">213,385</td>
+          <td class="mono r" id="pe-tfoot-pptoytd">—</td>
           <td class="c"><span class="pb pb-ok" id="pe-tfoot-cumpl">—</span></td>
           <td class="mono r" style="color:var(--blue);" id="pe-tfoot-may">—</td>
           <td class="mono r" style="color:var(--blue);" id="pe-tfoot-ytd">—</td>
-          <td class="mono r">1,137,034</td>
+          <td class="mono r" id="pe-tfoot-pptoa">—</td>
         </tr></tfoot>
       </table>
     </div>
@@ -445,7 +390,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
         <thead><tr><th style="text-align:left;">Zona</th><th>Saldo USD</th><th>% Cartera</th><th style="text-align:center;">Estado</th></tr></thead>
         <tbody>
           <tr>
-            <td><strong>Aguirre/Navarro</strong></td>
+            <td><strong>L. Aguirre</strong></td>
             <td class="mono r amber" id="av-pe-cxc-an-monto">36,925</td>
             <td id="av-pe-cxc-an-pct"><div style="text-align:right;font-family:'DM Mono';font-size:10px;color:var(--amber);">36.9%</div><div class="mb"><div class="mbf" style="width:36.9%;background:var(--amber);"></div></div></td>
             <td class="c"><span class="pb pb-am">ALERTA</span></td>
@@ -649,7 +594,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
   // Novedad
   var nov=document.getElementById('av-pe-sema-novedad');
-  if(nov) nov.innerHTML='<b>⚡ Zona Aguirre/Navarro:</b> Real YTD USD '+fmtUSD(aguNavReal)+' · Corte '+corteStr+' · '+nM+' meses';
+  if(nov) nov.innerHTML='<b>⚡ L. Aguirre:</b> Real YTD USD '+fmtUSD(aguNavReal)+' · Corte '+corteStr+' · '+nM+' meses';
 })();
 /* ── FIN SEMÁFORO DINÁMICO ──────────────────────────────────────────────── */
 
@@ -707,7 +652,7 @@ const GD='rgba(74,158,219,0.1)';
       labels:labsStack,
       datasets:[
         {label:'O. Infante',    data:infMes, backgroundColor:A, borderRadius:2},
-        {label:'Aguirre/Nav.',  data:aguMes, backgroundColor:B, borderRadius:2},
+        {label:'L. Aguirre',  data:aguMes, backgroundColor:B, borderRadius:2},
         {label:'O. Atalaya',    data:atlMes, backgroundColor:G, borderRadius:2},
         {label:'Otros',         data:otrMes, backgroundColor:'#3a5a6a', borderRadius:2},
       ]
@@ -724,7 +669,7 @@ const GD='rgba(74,158,219,0.1)';
 
   // Barras ppto anual vs real YTD — desde AVBOARD
   var VEND_B=[
-    {k:'infante',n:'O. Infante'},{k:'aguirre',n:'Aguirre/Nav.'},{k:'atalaya',n:'O. Atalaya'},
+    {k:'infante',n:'O. Infante'},{k:'aguirre',n:'L. Aguirre'},{k:'atalaya',n:'O. Atalaya'},
     {k:'valladares',n:'P. Valladares'},{k:'gonzales',n:'A. Gonzales'}
   ];
   var labsB=VEND_B.map(function(v){return v.n;});
@@ -830,7 +775,7 @@ new Chart(document.getElementById('cCxC'),{
     });
     var ytdR=pv.cumplimiento_5m, ytdC=bc(ytdR);
     bh+='<div class="mes-row">'+
-      '<div class="mes-lbl" style="font-weight:700;">YTD 5m</div>'+
+      '<div class="mes-lbl" style="font-weight:700;">YTD '+nRealPE+'m</div>'+
       '<div class="mes-bar-wrap"><div class="mes-bar-fill" style="width:'+Math.min(ytdR*100,100).toFixed(1)+'%;background:'+ytdC+';"></div></div>'+
       '<div class="mes-pct" style="color:'+ytdC+';font-weight:700;">'+pct(ytdR)+'</div>'+
     '</div>';
@@ -838,7 +783,7 @@ new Chart(document.getElementById('cCxC'),{
 
     // ── Donut center ──────────────────────────────────────────────────────────
     set('av-pe-donut-pct',pct(ytdR));
-    set('av-pe-donut-lbl','YTD '+nPE+'m');
+    set('av-pe-donut-lbl','YTD '+nRealPE+'m');
 
     // ── Margen strip — expandir a N meses reales ──────────────────────────────
     var ms=document.getElementById('av-pe-margen-strip');
@@ -997,31 +942,66 @@ new Chart(document.getElementById('cCxC'),{
     set('av-pe-zona-corte','corte '+corteVtas);
     set('av-pe-hcorte-date', corteVtas);
     set('av-pe-donut-nota','* '+corteVtas+' · parcial');
+    var _pptoA=pv.ppto_anual||0;
+    if(_pptoA>0) set('av-pe-hppto','USD '+_pptoA.toLocaleString('en-US'));
     // Cabecera columna último mes
     var thMes=document.getElementById('pe-th-ultmes');
     var mesNms=['','Ene','Feb','Mar','Abr','Mayo','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
     var dd=corteVtas.split('/');
     if(thMes&&dd.length>1) thMes.textContent=mesNms[parseInt(dd[1])]||'Mayo'+' Real';
     // Filas por vendedor — navarro removido (fusionado en aguirre); mayo→rtc_mensual_real
+    // ── Tabla vendedores — 100% dinámica desde AVBOARD (sin Navarro, fusionado en Aguirre) ──
     var _rtcRealPE=pv.rtc_mensual_real||{};
-    ['aguirre','infante','atalaya','gonzales','valladares'].forEach(function(k){
-      var v=pve[k];
-      if(!v) return;
-      var mesVal=(_rtcRealPE[k]&&_rtcRealPE[k][nRealPE-1])||0;
-      var el=document.getElementById('pe-td-'+k+'-may');
-      if(el) el.textContent=fN3(mesVal);
-      var el2=document.getElementById('pe-td-'+k+'-ytd');
-      if(el2) el2.textContent=fN3(v.ytd);
-    });
+    var _rtcMPP=pv.rtc_mensual_ppto||{};
+    var _rtcPA_PE=pv.rtc_ppto_anual||{};
+    function _acumYtd(k){var a=_rtcMPP[k];return a?a.slice(0,nRealPE).reduce(function(s,v){return s+(v||0);},0):0;}
+    var peVBody=document.getElementById('pe-vt-body');
+    if(peVBody){
+      var peVRows=[
+        {k:'aguirre',   n:'L. Aguirre'},
+        {k:'infante',   n:'O. Infante'},
+        {k:'atalaya',   n:'O. Atalaya'},
+        {k:'gonzales',  n:'A. Gonzales'},
+        {k:'valladares',n:'P. Valladares'},
+        {k:'diaz',      n:'S. Díaz'},
+        {k:'martha',    n:'M. Hidalgo'},
+      ];
+      var peVHtml='',totPptoYtd=0,totPptoA=0;
+      peVRows.forEach(function(vr){
+        var v=pve[vr.k]; if(!v) return;
+        var realYtd=v.ytd||0;
+        var pptoYtd=_acumYtd(vr.k);
+        var pptoA=_rtcPA_PE[vr.k]||0;
+        var mesVal=(_rtcRealPE[vr.k]&&_rtcRealPE[vr.k][nRealPE-1])||0;
+        var ratio=pptoYtd>0?realYtd/pptoYtd:null;
+        var clr=ratio===null?'var(--text-dim)':(ratio>=1?'var(--green)':(ratio>=0.8?'var(--amber)':'var(--red)'));
+        var icon=ratio===null?'⚪':(ratio>=1?'✅':(ratio>=0.8?'⚠️':'🔴'));
+        var pctStr=ratio!==null?(ratio*100).toFixed(1)+'%':'–';
+        var pbCls=ratio===null?'pb-am':(ratio>=1?'pb-ok':(ratio>=0.8?'pb-am':'pb-rd'));
+        var barW=ratio!==null?Math.min(100,ratio*100).toFixed(1):'0';
+        totPptoYtd+=pptoYtd; totPptoA+=pptoA;
+        peVHtml+='<tr>'+
+          '<td>'+icon+' <strong style="color:'+clr+';">'+vr.n+'</strong></td>'+
+          '<td class="mono r" style="color:'+clr+';">'+fN3(realYtd)+'</td>'+
+          '<td class="mono r">'+fN3(pptoYtd)+'</td>'+
+          '<td class="c"><span class="pb '+pbCls+'">'+pctStr+'</span><div class="mb"><div class="mbf" style="width:'+barW+'%;background:'+clr+';"></div></div></td>'+
+          '<td class="mono r" id="pe-td-'+vr.k+'-may">'+fN3(mesVal)+'</td>'+
+          '<td class="mono r" style="color:'+clr+';" id="pe-td-'+vr.k+'-ytd">'+fN3(realYtd)+'</td>'+
+          '<td class="mono r">'+(pptoA>0?fN3(pptoA):'–')+'</td>'+
+        '</tr>';
+      });
+      peVBody.innerHTML=peVHtml;
+    }
     // Tfoot totales
-    var t4m=pv.mensual_real.slice(0,4).reduce(function(a,b){return a+b;},0);
     var mayTotal=pv.mensual_real[nRealPE-1]||0;
-    var pptoT1=pv.mensual_ppto.slice(0,3).reduce(function(a,b){return a+b;},0)||213385;
-    var pptoA=pv.ppto_anual||1210600;
-    set('pe-tfoot-t1', t4m.toLocaleString('en-US'));
-    set('pe-tfoot-cumpl', (t4m/pptoT1*100).toFixed(1)+'%');
+    var ytdTotal=pv.ytd_5m||0;
+    var cumplTotal=totPptoYtd>0?(ytdTotal/totPptoYtd*100).toFixed(1)+'%':'–';
+    set('pe-tfoot-t1', fN3(ytdTotal));
+    set('pe-tfoot-pptoytd', fN3(totPptoYtd));
+    set('pe-tfoot-cumpl', cumplTotal);
     set('pe-tfoot-may', mayTotal.toLocaleString('en-US'));
-    set('pe-tfoot-ytd', pv.ytd_5m.toLocaleString('en-US'));
+    set('pe-tfoot-ytd', fN3(ytdTotal));
+    set('pe-tfoot-pptoa', fN3(totPptoA));
     // ── Alertas vendedor dinámicas — col1 y col2 ────────────────────────────
     (function(){
       var rtcP=pv.rtc_mensual_ppto||{};

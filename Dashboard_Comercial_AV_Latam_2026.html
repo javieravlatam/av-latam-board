@@ -876,7 +876,7 @@ function pveSumMes(keys) {
 [
   { sel: 'infante', keys: ['infante'] },
   { sel: 'atalaya', keys: ['atalaya'] },
-  { sel: 'aguirre', keys: ['aguirre','navarro'] },
+  { sel: 'aguirre', keys: ['aguirre'] },
   { sel: 'gonzales', keys: ['gonzales'] },
   { sel: 'valladares', keys: ['valladares'] }
 ].forEach(function(g){
@@ -1048,7 +1048,7 @@ new Chart(document.getElementById('cPeruVend'), {
     datasets: [
       { label: 'Infante', data: rmrPE.infante.slice(0, nPE), backgroundColor: A, borderRadius: 2 },
       { label: 'Atalaya', data: rmrPE.atalaya.slice(0, nPE), backgroundColor: G, borderRadius: 2 },
-      { label: 'Aguirre/Nav.', data: dcSumArr([rmrPE.aguirre, rmrPE.navarro]).slice(0, nPE), backgroundColor: '#1B4F8A', borderRadius: 2 },
+      { label: 'L. Aguirre', data: (rmrPE.aguirre||[]).slice(0, nPE), backgroundColor: '#1B4F8A', borderRadius: 2 },
       { label: 'Otros', data: arrOtrosPE.slice(0, nPE), backgroundColor: '#4a6a4a', borderRadius: 2 },
     ]
   },
