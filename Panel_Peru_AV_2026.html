@@ -908,17 +908,19 @@ new Chart(document.getElementById('cCxC'),{
     if(brBd){brBd.className='kbadge '+(t1Pct>=1?'kb-ok':t1Pct>=0.85?'kb-am':'kb-rd');brBd.innerHTML=(t1Pct*100).toFixed(1)+'% cumplimiento T1';}
     // Semáforo corte tag
     set('av-pe-sema-corte','CORTE '+corteStr.substring(0,5));
-    // Semáforo sema-sub por vendedor — usa rtc_mensual_real[nM-1] (no .mayo)
+    // Semáforo sema-sub por vendedor — _mR y mesNm eran del IIFE externo (out of scope); redefinidos aquí
+    var _rtcRSub=pv.rtc_mensual_real||{};
+    var _mRLocal=function(k){var a=_rtcRSub[k];return a?(a[nRealPE-1]||0):0;};
     if(pve.aguirre){
-      set('av-sema-sub-aguirre','YTD USD '+fN2(pve.aguirre.ytd)+' · '+mesNm+' USD '+fN2(_mR('aguirre'))+' · Aguirre lidera grupo 🚀');
+      set('av-sema-sub-aguirre','YTD USD '+fN2(pve.aguirre.ytd)+' · '+curMesNm+' USD '+fN2(_mRLocal('aguirre'))+' · Aguirre lidera grupo 🚀');
     }
     if(pve.atalaya){
-      var atMes=_mR('atalaya');
-      var atSub='YTD USD '+fN2(pve.atalaya.ytd)+' · Referente constante · '+(atMes>0?mesNm+' USD '+fN2(atMes):'sin venta '+mesNm);
+      var atMes=_mRLocal('atalaya');
+      var atSub='YTD USD '+fN2(pve.atalaya.ytd)+' · Referente constante · '+(atMes>0?curMesNm+' USD '+fN2(atMes):'sin venta '+curMesNm);
       set('av-sema-sub-atalaya',atSub);
     }
     if(pve.infante){
-      set('av-sema-sub-infante','YTD USD '+fN2(pve.infante.ytd)+' · Ppto anual USD 485K · '+mesNm+' USD '+fN2(_mR('infante')));
+      set('av-sema-sub-infante','YTD USD '+fN2(pve.infante.ytd)+' · Ppto anual USD 485K · '+curMesNm+' USD '+fN2(_mRLocal('infante')));
     }
     if(pve.gonzales){
       set('av-sema-sub-gonzales','YTD USD '+fN2(pve.gonzales.ytd)+' · Ppto H2 activa desde Jun');
