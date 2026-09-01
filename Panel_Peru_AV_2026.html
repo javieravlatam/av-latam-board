@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel Comercial · Perú · AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=202609011244"></script>
+<script src="avboard_data.js?v=202609011339"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -338,8 +338,16 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     </div>
 
     <div class="panel">
-      <div class="ptitle">VENTA MENSUAL POR ZONA <span class="ptag">USD · apilado</span></div>
+      <div class="ptitle">VENTA MENSUAL POR ZONA <span class="ptag">USD · apilado</span>
+        <span id="pe-vsel" style="float:right;display:inline-flex;gap:3px;flex-wrap:wrap;margin-top:-2px;"></span>
+      </div>
       <div class="ch ch-lg"><canvas id="cStack"></canvas></div>
+    </div>
+
+    <!-- Curva acumulada filtrable por vendedor -->
+    <div class="panel" style="margin-top:12px;">
+      <div class="ptitle">CURVA ACUMULADA POR ZONA <span class="ptag">USD · ppto vs real 2026 vs real 2025</span></div>
+      <div class="ch ch-lg"><canvas id="cAcum"></canvas></div>
     </div>
   </div>
 
@@ -716,6 +724,125 @@ const GD='rgba(74,158,219,0.1)';
       }
     }
   });
+
+  // ── Vendor Selector + cAcum ─────────────────────────────────────────────────
+  var PE_VENDORS=[
+    {k:'all',n:'Todo el equipo'},
+    {k:'infante',n:'O. Infante'},
+    {k:'aguirre',n:'L. Aguirre'},
+    {k:'atalaya',n:'O. Atalaya'},
+    {k:'valladares',n:'P. Valladares'},
+    {k:'gonzales',n:'A. Gonzales'}
+  ];
+  // Shared state (on window so AVBOARD populate block puede actualizarlo)
+  window._peSel='all';
+  window._peData={nMes:nMpe_d, rtcR:rtcR_d, rtcP:rtcP_d, acumPpto:pptoAcD.slice(), acumReal26:realAcD2.slice()};
+
+  // Render buttons
+  var vselEl=document.getElementById('pe-vsel');
+  if(vselEl){
+    vselEl.innerHTML=PE_VENDORS.map(function(v){
+      var sel=v.k==='all';
+      return '<button id="pe-vbtn-'+v.k+'" onclick="peSelectVend(\''+v.k+'\')" style="'+
+        'padding:2px 8px;font-size:9px;border-radius:3px;cursor:pointer;font-family:\'DM Mono\',monospace;'+
+        'border:1px solid rgba(74,158,219,'+(sel?'0.5':'0.2')+');'+
+        'background:'+(sel?'rgba(74,158,219,0.2)':'rgba(74,158,219,0.05)')+';'+
+        'color:'+(sel?'#4A9EDB':'#7A90AA')+';font-weight:'+(sel?'700':'400')+';'+
+        'transition:all .15s;">'+v.n+'</button>';
+    }).join('');
+  }
+
+  // cAcum init
+  new Chart(document.getElementById('cAcum'),{
+    type:'line',
+    data:{
+      labels:MESES_LBL,
+      datasets:[
+        {label:'Ppto Acum',data:pptoAcD.slice(),borderColor:'rgba(74,158,219,0.5)',borderDash:[6,4],borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(74,158,219,0.5)',tension:0.3,fill:false},
+        {label:'Real 2026 Acum',data:realAcD2.slice(),borderColor:A,backgroundColor:'rgba(245,166,35,0.07)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:A,tension:0.3,fill:true},
+        {label:'Real 2025 Acum',data:new Array(12).fill(null),borderColor:'rgba(160,160,160,0.55)',borderDash:[3,3],borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(160,160,160,0.55)',tension:0.3,fill:false}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},
+      scales:{
+        x:{grid:{color:GD},border:{color:GD}},
+        y:{grid:{color:GD},border:{color:GD},ticks:{callback:function(v){return'USD '+(v/1000).toFixed(0)+'K';}}}
+      }
+    }
+  });
+
+  // Global selector function (accesible desde buttons + AVBOARD populate)
+  window.peSelectVend=function(key){
+    window._peSel=key;
+    var d=window._peData;
+    // Botones
+    PE_VENDORS.forEach(function(v){
+      var btn=document.getElementById('pe-vbtn-'+v.k);
+      if(!btn) return;
+      var sel=v.k===key;
+      btn.style.background=sel?'rgba(74,158,219,0.2)':'rgba(74,158,219,0.05)';
+      btn.style.borderColor=sel?'rgba(74,158,219,0.5)':'rgba(74,158,219,0.2)';
+      btn.style.color=sel?'#4A9EDB':'#7A90AA';
+      btn.style.fontWeight=sel?'700':'400';
+    });
+    // cStack
+    var cSt=Chart.getChart(document.getElementById('cStack'));
+    if(cSt){
+      if(key==='all'){
+        var infD=(d.rtcR.infante||new Array(12).fill(0)).slice(0,d.nMes);
+        var aguD=(d.rtcR.aguirre||new Array(12).fill(0)).slice(0,d.nMes);
+        var atlD=(d.rtcR.atalaya||new Array(12).fill(0)).slice(0,d.nMes);
+        var otrD=new Array(d.nMes).fill(0);
+        ['gonzales','valladares','diaz'].forEach(function(k){var a=d.rtcR[k]||[];for(var i=0;i<d.nMes;i++)otrD[i]+=(a[i]||0);});
+        cSt.data.labels=MESES_LBL.slice(0,d.nMes);
+        cSt.data.datasets=[
+          {label:'O. Infante',data:infD,backgroundColor:A,borderRadius:2},
+          {label:'L. Aguirre',data:aguD,backgroundColor:B,borderRadius:2},
+          {label:'O. Atalaya',data:atlD,backgroundColor:G,borderRadius:2},
+          {label:'Otros',data:otrD,backgroundColor:'#3a5a6a',borderRadius:2}
+        ];
+        cSt.options.scales.x.stacked=true;
+        cSt.options.scales.y.stacked=true;
+      } else {
+        var rv=(d.rtcR[key]||new Array(12).fill(0)).slice(0,d.nMes);
+        var pv=(d.rtcP[key]||new Array(12).fill(0)).slice(0,d.nMes);
+        cSt.data.labels=MESES_LBL.slice(0,d.nMes);
+        cSt.data.datasets=[
+          {label:'Ppto',data:pv,backgroundColor:'rgba(74,158,219,0.18)',borderColor:'rgba(74,158,219,0.4)',borderWidth:1,borderRadius:2},
+          {label:'Real 2026',data:rv,backgroundColor:A,borderRadius:2}
+        ];
+        cSt.options.scales.x.stacked=false;
+        cSt.options.scales.y.stacked=false;
+      }
+      cSt.update();
+    }
+    // cAcum
+    var cAc=Chart.getChart(document.getElementById('cAcum'));
+    if(cAc){
+      var pptoA,realA;
+      if(key==='all'){
+        pptoA=d.acumPpto; realA=d.acumReal26;
+      } else {
+        var pArr=d.rtcP[key]||new Array(12).fill(0);
+        var rArr=d.rtcR[key]||new Array(12).fill(0);
+        pptoA=pArr.reduce(function(a,v,i){a.push((a[i-1]||0)+(v||0));return a;},[]);
+        realA=[];var s=0;
+        for(var i=0;i<12;i++){if(i<d.nMes){s+=rArr[i]||0;realA.push(s);}else{realA.push(null);}}
+      }
+      cAc.data.datasets[0].data=pptoA;
+      cAc.data.datasets[1].data=realA;
+      // 2025: usar rtcR2025 si existe
+      var r25=d.rtcR2025;
+      if(r25){
+        var rArr25=key==='all'?null:(r25[key]||null);
+        if(rArr25){var s25=0,ac25=[];for(var i=0;i<12;i++){s25+=rArr25[i]||0;ac25.push(s25);}cAc.data.datasets[2].data=ac25;}
+        else if(key==='all'&&d.acumReal25){cAc.data.datasets[2].data=d.acumReal25;}
+      }
+      cAc.update();
+    }
+  };
 })();
 // ── FIN CHARTS DINÁMICOS ─────────────────────────────────────────────────────
 
@@ -859,6 +986,28 @@ new Chart(document.getElementById('cCxC'),{
       cCv.data.datasets[1].data=realAcDyn;
       cCv.update();
     }
+
+    // ── cAcum + vendor selector data refresh ─────────────────────────────────
+    var ppAcR=0,ppAcArr=[],rAcR=0,rAcArr=[];
+    for(var i=0;i<12;i++){ppAcR+=(pv.mensual_ppto[i]||0);ppAcArr.push(ppAcR);}
+    for(var i=0;i<12;i++){rAcR+=(pv.mensual_real[i]||0);rAcArr.push(i<nRealPE?rAcR:null);}
+    // Acumulado 2025 (si existe en AVBOARD)
+    var mr25=pv.mensual_real_2025||null;
+    var rAc25=mr25?[]:null;
+    if(mr25){var s25=0;for(var i=0;i<12;i++){s25+=mr25[i]||0;rAc25.push(s25>0?s25:null);}}
+    var rtcR25=pv.rtc_mensual_real_2025||null;
+    // Actualizar _peData para que peSelectVend use datos frescos
+    if(window._peData){
+      window._peData.nMes=nRealPE;
+      window._peData.rtcR=pv.rtc_mensual_real||{};
+      window._peData.rtcP=pv.rtc_mensual_ppto||{};
+      window._peData.acumPpto=ppAcArr;
+      window._peData.acumReal26=rAcArr;
+      window._peData.acumReal25=rAc25;
+      window._peData.rtcR2025=rtcR25;
+    }
+    // Re-aplicar selección activa (refresca cStack + cAcum con datos vivos)
+    if(typeof window.peSelectVend==='function') window.peSelectVend(window._peSel||'all');
 
     // ── Chart: cCxC — donut tramos ────────────────────────────────────────────
     var cCx=Chart.getChart(document.getElementById('cCxC'));

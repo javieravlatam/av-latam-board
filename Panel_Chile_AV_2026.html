@@ -228,15 +228,23 @@
     <div class="zona-title">Tendencia</div>
   </div>
 
-  <div class="av-grid-2" style="margin-bottom:15px;">
+  <div class="av-grid-2" style="margin-bottom:12px;">
     <div class="av-panel">
-      <div class="av-panel__header">VENTA MENSUAL APILADA · CHILE <span class="av-badge">CLP millones · por RTC</span></div>
+      <div class="av-panel__header">VENTA MENSUAL APILADA · CHILE <span class="av-badge">CLP millones · por RTC</span>
+        <span id="cl-vsel" style="float:right;display:inline-flex;gap:3px;flex-wrap:wrap;margin-top:-2px;"></span>
+      </div>
       <div class="ch ch-lg"><canvas id="cStack"></canvas></div>
     </div>
     <div class="av-panel">
       <div class="av-panel__header">CURVA ACUMULADA CHILE 2026 <span class="av-badge">CLP · ppto vs real · 12 meses</span></div>
       <div class="ch ch-lg"><canvas id="cCurva"></canvas></div>
     </div>
+  </div>
+
+  <!-- Curva acumulada filtrable por vendedor -->
+  <div class="av-panel" style="margin-bottom:15px;">
+    <div class="av-panel__header">CURVA ACUMULADA POR RTC <span class="av-badge">CLP millones · ppto vs real 2026 vs real 2025</span></div>
+    <div class="ch ch-lg"><canvas id="cAcumCL"></canvas></div>
   </div>
 
   <hr class="sep">
@@ -586,7 +594,7 @@
   </div>
 </div>
 
-<script src="avboard_data.js?v=202609011244"></script>
+<script src="avboard_data.js?v=202609011339"></script>
 <script>
 
 /* ── AV_CHART_COLORS — FORMATO JAVIER v1.1 ─────────────────────────────── */
@@ -688,6 +696,113 @@ new Chart(document.getElementById('cCurva'),{
     plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},
     scales:{x:{grid:{color:GD},border:{color:GD}},y:{grid:{color:GD},border:{color:GD},ticks:{callback:v=>(v/1000).toFixed(0)+'M'}}}}
 });
+
+// ── Vendor Selector Chile + cAcumCL ─────────────────────────────────────────
+(function(){
+  var MESES_CL=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var CL_VENDORS=[
+    {k:'all',n:'Todo el equipo'},
+    {k:'caroca',n:'J. Caroca'},
+    {k:'laratro',n:'P. Laratro'},
+    {k:'encina',n:'R. Encina'},
+    {k:'velasquez',n:'F. Velásquez'},
+    {k:'veverka',n:'I. Veverka'},
+    {k:'munoz',n:'V. Muñoz'}
+  ];
+  window._clSel='all';
+  window._clData={nMes:8, rtcR:{}, rtcP:{}, acumPpto:pptoAc.map(function(v){return v/1000;}), acumReal26:new Array(12).fill(null)};
+
+  // Render selector buttons
+  var vselCL=document.getElementById('cl-vsel');
+  if(vselCL){
+    vselCL.innerHTML=CL_VENDORS.map(function(v){
+      var sel=v.k==='all';
+      return '<button id="cl-vbtn-'+v.k+'" onclick="clSelectVend(\''+v.k+'\')" style="'+
+        'padding:2px 8px;font-size:9px;border-radius:3px;cursor:pointer;font-family:\'DM Mono\',monospace;'+
+        'border:1px solid rgba(27,79,138,'+(sel?'0.5':'0.2')+');'+
+        'background:'+(sel?'rgba(27,79,138,0.18)':'rgba(27,79,138,0.04)')+';'+
+        'color:'+(sel?'#1B4F8A':'#7A90AA')+';font-weight:'+(sel?'700':'400')+';'+
+        'transition:all .15s;">'+v.n+'</button>';
+    }).join('');
+  }
+
+  // cAcumCL init
+  new Chart(document.getElementById('cAcumCL'),{
+    type:'line',
+    data:{
+      labels:MESES_CL,
+      datasets:[
+        {label:'Ppto Acum',data:pptoAc.map(function(v){return v/1000;}),borderColor:'rgba(27,79,138,0.4)',borderDash:[6,4],borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(27,79,138,0.4)',tension:0.3,fill:false},
+        {label:'Real 2026 Acum',data:new Array(12).fill(null),borderColor:G,backgroundColor:'rgba(122,182,72,0.07)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:G,tension:0.3,fill:true},
+        {label:'Real 2025 Acum',data:new Array(12).fill(null),borderColor:'rgba(160,160,160,0.55)',borderDash:[3,3],borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(160,160,160,0.55)',tension:0.3,fill:false}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},
+      scales:{x:{grid:{color:GD},border:{color:GD}},y:{grid:{color:GD},border:{color:GD},ticks:{callback:function(v){return v+'M';}}}}}
+  });
+
+  window.clSelectVend=function(key){
+    window._clSel=key;
+    var d=window._clData;
+    // Botones
+    CL_VENDORS.forEach(function(v){
+      var btn=document.getElementById('cl-vbtn-'+v.k);
+      if(!btn) return;
+      var sel=v.k===key;
+      btn.style.background=sel?'rgba(27,79,138,0.18)':'rgba(27,79,138,0.04)';
+      btn.style.borderColor=sel?'rgba(27,79,138,0.5)':'rgba(27,79,138,0.2)';
+      btn.style.color=sel?'#1B4F8A':'#7A90AA';
+      btn.style.fontWeight=sel?'700':'400';
+    });
+    var toM=function(v){return Math.round((v||0)/1000)/1000;};// CLP→M con 3 decimales
+    var toMk=function(v){return Math.round((v||0)/1000);};// CLP→K (miles)
+    // cStack
+    var cSt=Chart.getChart(document.getElementById('cStack'));
+    if(cSt){
+      if(key==='all'){
+        cSt.data.labels=MESES_CL.slice(0,d.nMes);
+        var names={caroca:'J. Caroca',laratro:'P. Laratro',encina:'R. Encina',velasquez:'F. Velásquez',veverka:'I. Veverka',munoz:'V. Muñoz'};
+        var colors={caroca:G,laratro:A,encina:'#5ab648',velasquez:R,veverka:'#e74c3c55',munoz:'#3a5a3a'};
+        var keys=['caroca','laratro','encina','velasquez','veverka','munoz'];
+        cSt.data.datasets=keys.map(function(k){
+          return {label:names[k],data:(d.rtcR[k]||new Array(12).fill(0)).slice(0,d.nMes).map(function(v){return Math.round((v||0)/1000);}),backgroundColor:colors[k],borderRadius:2};
+        });
+        cSt.options.scales.x.stacked=true;
+        cSt.options.scales.y.stacked=true;
+      } else {
+        var rv=(d.rtcR[key]||new Array(12).fill(0)).slice(0,d.nMes).map(function(v){return Math.round((v||0)/1000);});
+        var pv=(d.rtcP[key]||new Array(12).fill(0)).slice(0,d.nMes).map(function(v){return Math.round((v||0)/1000);});
+        cSt.data.labels=MESES_CL.slice(0,d.nMes);
+        cSt.data.datasets=[
+          {label:'Ppto',data:pv,backgroundColor:'rgba(27,79,138,0.18)',borderColor:'rgba(27,79,138,0.4)',borderWidth:1,borderRadius:2},
+          {label:'Real 2026',data:rv,backgroundColor:G,borderRadius:2}
+        ];
+        cSt.options.scales.x.stacked=false;
+        cSt.options.scales.y.stacked=false;
+      }
+      cSt.update();
+    }
+    // cAcumCL
+    var cAc=Chart.getChart(document.getElementById('cAcumCL'));
+    if(cAc){
+      var pptoA,realA;
+      if(key==='all'){
+        pptoA=d.acumPpto; realA=d.acumReal26;
+      } else {
+        var pArr=d.rtcP[key]||new Array(12).fill(0);
+        var rArr=d.rtcR[key]||new Array(12).fill(0);
+        pptoA=pArr.reduce(function(a,v,i){a.push(Math.round(((a[i-1]||0)+(v||0))/1000));return a;},[]);
+        realA=[];var s=0;
+        for(var i=0;i<12;i++){if(i<d.nMes){s+=rArr[i]||0;realA.push(Math.round(s/1000));}else{realA.push(null);}}
+      }
+      cAc.data.datasets[0].data=pptoA;
+      cAc.data.datasets[1].data=realA;
+      if(d.acumReal25&&key==='all') cAc.data.datasets[2].data=d.acumReal25;
+      cAc.update();
+    }
+  };
+})();
 
 // CxC donut tramos
 new Chart(document.getElementById('cCxC'),{
@@ -883,6 +998,24 @@ function cerrarSesion() {
       cCurva.data.datasets[1].data = realAcum;
       cCurva.update();
     }
+
+    // ── cAcumCL + vendor selector data refresh ───────────────────────────────
+    var ppAcCLR=0, ppAcCLArr=[], rAcCLR=0, rAcCLArr=[];
+    for(var i=0;i<12;i++){ppAcCLR+=cv.mensual_ppto[i]||0; ppAcCLArr.push(Math.round(ppAcCLR/1000));}
+    var nStackCLv=Math.max(nRealCL-1,0);
+    for(var i=0;i<12;i++){rAcCLR+=cv.mensual_real[i]||0; rAcCLArr.push(i<nRealCL?Math.round(rAcCLR/1000):null);}
+    var mr25CL=cv.mensual_real_2025||null;
+    var rAcCL25=null;
+    if(mr25CL){var s25CL=0;rAcCL25=[];for(var i=0;i<12;i++){s25CL+=mr25CL[i]||0;rAcCL25.push(s25CL>0?Math.round(s25CL/1000):null);}}
+    if(window._clData){
+      window._clData.nMes=nStackCLv;
+      window._clData.rtcR=cv.rtc_mensual_real||{};
+      window._clData.rtcP=cv.rtc_mensual_ppto||{};
+      window._clData.acumPpto=ppAcCLArr;
+      window._clData.acumReal26=rAcCLArr;
+      window._clData.acumReal25=rAcCL25;
+    }
+    if(typeof window.clSelectVend==='function') window.clSelectVend(window._clSel||'all');
 
     // cCxC: donut tramos (08/05 data)
     var cCxC = Chart.getChart(document.getElementById('cCxC'));
