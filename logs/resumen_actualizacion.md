@@ -1972,3 +1972,45 @@ números (ver nota en update_avboard.py / compute_productos).
 - **Supra USD 202K**: cartera sin vendedor asignado — revisar con dirección si requiere gestión especial.
 - **PAODISA S.A.**: USD 10,874 a +90d · 4 facturas 2024 · proceso legal pendiente.
 - **AGROFER MJ E.I.R.L.**: USD 9,493 a +90d · acuerdo de pago urgente.
+
+## Actualización 2026-09-01 12:44 — Corte 27/08/2026
+
+**Chile ventas:** CLP 436,747,817 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 485,642 YTD · Cumpl 5m: 79.4%
+**CxC Chile:** CLP 113,697,828 total · +90d: CLP 23,647,064
+**IEC Chile:** 103.0% global
+
+**Alertas CxC:**
+- NIVALDO ANTONIO FLORES EGAÑA CLP 5,318,824 (597d)
+- TRANSACCIONES AGRICOLAS SPA CLP 3,856,957 (193d)
+- AGRICOLA LOS QUILLAYES SPA CLP 2,813,517 (367d)
+- AGRIC LOS SAUSALES LTDA CLP 2,523,276 (395d)
+- AGROINSUMOS KULLIN SPA CLP 1,936,809 (176d)
+- LOS PARRONALES DE CAMARICO S A CLP 1,877,820 (387d)
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (135d)
+- SOC AGRICOLA VIENTO NORTE LTDA CLP 961,996 (326d)
+- AGRICOLA HIJUELA SAN JOSE DE PIRQUE SPA CLP 948,192 (408d)
+- VICENTE ADAN LAGOS SALDANA CLP 742,655 (524d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (143d)
+- PEDRO JUAN BUGUENO TELLO CLP 304,640 (668d)
+- ROMERO Y RIQUELME SPA CLP 240,975 (493d)
+- NEWEN BOTANICUM SPA CLP 150,289 (698d)
+- GERALDINE MORILLO CLP 145,950 (698d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 154 SKU(s) Chile ·
+  37 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---

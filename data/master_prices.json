@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-08-24",
+    "version": "2026-09-01",
     "fuente": "nuevo libro base AV 2026.xlsx",
     "fecha_fuente": "2026-08-17 11:07:13",
-    "generado": "2026-08-24 16:55:34",
+    "generado": "2026-09-01 12:39:06",
     "generado_por": "build_master_dataset.py",
     "total_productos": 246,
     "total_cl": 142,
