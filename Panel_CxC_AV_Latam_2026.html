@@ -627,7 +627,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
             2. <strong style="color:var(--red);">RIBERA (104d · 1.47M)</strong> — Gestión directa. Bloqueo crédito inmediato.<br>
             3. <strong style="color:var(--red);">KULLIN (97d+ · 1.46M)</strong> — Compromiso de pago o acciones legales.<br>
             4. <strong style="color:var(--amber);">TIERRA DE BACO + ENCINA</strong> — Seguimiento 31-60d. Acuerdo de pago parcial.<br>
-            5. ✅ Goyaservice RESUELTO. Reporte de avance: <strong>lunes 18/05</strong> a GG. Corte <span id="av-cxc-alerta-corte">—</span>.
+            5. ✅ Goyaservice RESUELTO. Ver resumen activo para estado actualizado. Corte <span id="av-cxc-alerta-corte">—</span>.
           </div>
         </div>
         <div>
@@ -664,40 +664,8 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
           <div style="font-size:10px;color:var(--red);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:8px;">🔴 +90 DÍAS · CRÍTICO</div>
           <table class="tbl">
             <thead><tr><th>Cliente</th><th>Vendedor</th><th class="c">Días</th><th class="r">USD</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><strong>PAODISA S.A.</strong><br><span style="font-size:9px;color:var(--text-muted);">4 facturas · 2024</span></td><td>J. Geldres</td>
-                <td class="c"><span class="mora crit">468-628d</span></td>
-                <td class="monto danger">10,874.40</td>
-              </tr>
-              <tr>
-                <td><strong>AGROFER MJ E.I.R.L.</strong></td><td>O. Atalaya</td>
-                <td class="c"><span class="mora crit">191d</span></td>
-                <td class="monto danger">9,493.00</td>
-              </tr>
-              <tr>
-                <td>EPIC FARMS S.A.C.<br><span style="font-size:9px;color:var(--red);">Escaló desde 61-90d</span></td><td>A. Gonzalez</td>
-                <td class="c"><span class="mora crit">107d</span></td>
-                <td class="monto danger">600.00</td>
-              </tr>
-              <tr>
-                <td>INVERSIONES AJS</td><td>O. Infante</td>
-                <td class="c"><span class="mora crit">323d</span></td>
-                <td class="monto danger">304.00</td>
-              </tr>
-              <tr>
-                <td>LUNA QUINTANILLA (2 folios)</td><td>O. Infante</td>
-                <td class="c"><span class="mora crit">97-143d</span></td>
-                <td class="monto danger">2,349.05</td>
-              </tr>
-              <tr style="background:rgba(0,0,0,0.15);">
-                <td colspan="3" style="font-size:9px;color:var(--text-muted);font-style:italic;">⚫ CORP. OLMOS + AMFRESH (2) → PAGADO A SUPRA (factoring)</td>
-                <td class="r" style="font-size:9px;color:var(--text-muted);">excl.</td>
-              </tr>
-              <tr style="background:var(--surface3);">
-                <td colspan="3"><strong>Subtotal +90d activo</strong></td>
-                <td class="r" style="font-family:'DM Mono';font-weight:700;color:var(--red);">23,620.45</td>
-              </tr>
+            <tbody id="tb-pe-crit-t90">
+              <tr><td colspan="4" style="color:var(--text-muted);text-align:center;padding:12px;">Cargando...</td></tr>
             </tbody>
           </table>
         </div>
@@ -706,30 +674,10 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
           <div style="font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:8px;">🟠🟡 31–90 DÍAS · RIESGO / ALERTA</div>
           <table class="tbl">
             <thead><tr><th>Cliente</th><th>Vendedor</th><th class="c">Días</th><th class="r">USD</th></tr></thead>
-            <tbody>
-              <tr>
-                <td>SOC. AGRICOLA 3P (2 facturas)</td><td>N. Navarro</td>
-                <td class="c"><span class="mora high">63-81d</span></td>
-                <td class="monto warn">1,345.20</td>
-              </tr>
-              <tr>
-                <td>PROC. AGROINDUSTRIALES</td><td>O. Infante</td>
-                <td class="c"><span class="mora low">48d</span></td>
-                <td class="monto warn">3,149.00</td>
-              </tr>
-              <tr style="background:rgba(0,0,0,0.12);">
-                <td colspan="3" style="font-size:9px;color:var(--text-muted);font-style:italic;">Epic + Luna (folio 841) escalaron a +90d · Bioinsumos: resuelto</td>
-                <td></td>
-              </tr>
-              <tr style="background:var(--surface3);">
-                <td colspan="3"><strong>Subtotal 31-90d</strong></td>
-                <td class="r" style="font-family:'DM Mono';font-weight:700;color:var(--orange);">4,494.20</td>
-              </tr>
+            <tbody id="tb-pe-crit-t3190">
+              <tr><td colspan="4" style="color:var(--text-muted);text-align:center;padding:12px;">Cargando...</td></tr>
             </tbody>
           </table>
-          <div style="margin-top:8px;padding:8px;background:rgba(0,0,0,0.2);border-radius:4px;font-size:10px;color:var(--text-dim);">
-            <strong style="color:var(--amber);">Nota Pradenas:</strong> Guillermo Pradenas no aparece como vendedor activo del equipo actual. Verificar responsable de gestión.
-          </div>
         </div>
       </div>
 
@@ -737,12 +685,8 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
       <div style="background:var(--surface2);border-radius:8px;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
         <div>
           <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">📋 INSTRUCCIÓN JEFE PAÍS PERÚ</div>
-          <div style="font-size:11px;color:var(--text-dim);line-height:1.8;">
-            1. <strong style="color:var(--red);">PAODISA (Geldres)</strong> — 468-648 días. Proceso formal de cobranza activo. Verificar colateral.<br>
-            2. <strong style="color:var(--red);">AGROFER (Atalaya)</strong> — 211d · USD 9,493. Acuerdo de pago urgente o acciones legales.<br>
-            3. <strong style="color:var(--red);">LUNA QUINTANILLA (Infante)</strong> — 97-143d · USD 2,349. Bloqueo si no paga esta semana.<br>
-            4. <strong style="color:var(--amber);">SOC. AGRICOLA 3P (Navarro)</strong> — 63-81d. Gestión directa.<br>
-            5. ⚫ CORP. OLMOS + AMFRESH → en SUPRA (factoring). Reporte: <strong>lunes 18/05</strong> a GG. Corte 10/05.
+          <div id="pe-instruccion-criticas" style="font-size:11px;color:var(--text-dim);line-height:1.8;">
+            Cargando...
           </div>
         </div>
         <div>
@@ -1164,6 +1108,84 @@ function cerrarSesion() {
     set('av-pe-exp-t6190', 'USD '+fN(pc.tramos.t3160+pc.tramos.t6190));
     set('av-pe-exp-t030',  'USD '+fN(pc.tramos.t030));
     set('av-pe-exp-total', 'USD '+fN(pc.vencida));
+
+    // ── Tablas críticas Perú — generadas desde peruData ───────────────────
+    (function(){
+      function shortVend(s){ return (s||'').replace(/^(\w)\w+\s+/,'$1. ').replace('LISBETH','L.').replace('OSCAR','O.').replace('ANTONIO','A.').replace('SUSAN','S.').replace('JOSE','J.').replace('JULIO','J.'); }
+      function shortCli(s){ var m=(s||''); return m.length>28?m.substring(0,26)+'…':m; }
+
+      // +90d
+      var t90docs = (typeof peruData!=='undefined'?peruData:[]).filter(function(d){ return d.tramo==='+90d'; });
+      t90docs.sort(function(a,b){ return b.monto-a.monto; });
+      // agrupar por cliente
+      var t90map={};
+      t90docs.forEach(function(d){
+        var k=d.cliente; if(!t90map[k]) t90map[k]={cliente:d.cliente,vendedor:d.vendedor,monto:0,minDias:d.dias,maxDias:d.dias,n:0};
+        t90map[k].monto+=d.monto; t90map[k].n++;
+        if(d.dias>t90map[k].maxDias) t90map[k].maxDias=d.dias;
+      });
+      var t90groups=Object.values(t90map).sort(function(a,b){return b.monto-a.monto;}).slice(0,6);
+      var t90sub=t90docs.reduce(function(s,d){return s+d.monto;},0);
+      var t90html='';
+      t90groups.forEach(function(g){
+        var diasStr = g.n>1&&g.maxDias!==g.minDias ? g.minDias+'–'+g.maxDias+'d' : g.maxDias+'d';
+        var nTag = g.n>1?' <span style="font-size:9px;color:var(--text-muted);">'+g.n+' facturas</span>':'';
+        t90html+='<tr><td><strong>'+shortCli(g.cliente)+'</strong>'+nTag+'</td>'
+          +'<td>'+shortVend(g.vendedor)+'</td>'
+          +'<td class="c"><span class="mora crit">'+diasStr+'</span></td>'
+          +'<td class="monto danger">'+fP(g.monto)+'K</td></tr>';
+      });
+      t90html+='<tr style="background:var(--surface3);"><td colspan="3"><strong>Subtotal +90d activo</strong></td>'
+        +'<td class="r" style="font-family:\'DM Mono\';font-weight:700;color:var(--red);">'+fP(t90sub)+'K</td></tr>';
+      var tb90=document.getElementById('tb-pe-crit-t90');
+      if(tb90) tb90.innerHTML=t90html;
+
+      // 31-90d
+      var t3190docs=(typeof peruData!=='undefined'?peruData:[]).filter(function(d){ return d.tramo==='31-60d'||d.tramo==='61-90d'; });
+      t3190docs.sort(function(a,b){return b.monto-a.monto;});
+      var t3190map={};
+      t3190docs.forEach(function(d){
+        var k=d.cliente; if(!t3190map[k]) t3190map[k]={cliente:d.cliente,vendedor:d.vendedor,monto:0,minDias:d.dias,maxDias:d.dias,n:0,tramo:d.tramo};
+        t3190map[k].monto+=d.monto; t3190map[k].n++;
+        if(d.dias>t3190map[k].maxDias) t3190map[k].maxDias=d.dias;
+      });
+      var t3190groups=Object.values(t3190map).sort(function(a,b){return b.monto-a.monto;}).slice(0,5);
+      var t3190sub=t3190docs.reduce(function(s,d){return s+d.monto;},0);
+      var t3190html='';
+      if(t3190groups.length===0){
+        t3190html='<tr><td colspan="4" style="color:var(--green);text-align:center;padding:10px;">✅ Sin cuentas en tramo 31-90d</td></tr>';
+      } else {
+        t3190groups.forEach(function(g){
+          var diasStr=g.maxDias+'d';
+          var cls=g.maxDias>60?'mora high':'mora low';
+          t3190html+='<tr><td>'+shortCli(g.cliente)+'</td>'
+            +'<td>'+shortVend(g.vendedor)+'</td>'
+            +'<td class="c"><span class="'+cls+'">'+diasStr+'</span></td>'
+            +'<td class="monto warn">'+fP(g.monto)+'K</td></tr>';
+        });
+        t3190html+='<tr style="background:var(--surface3);"><td colspan="3"><strong>Subtotal 31-90d</strong></td>'
+          +'<td class="r" style="font-family:\'DM Mono\';font-weight:700;color:var(--orange);">'+fP(t3190sub)+'K</td></tr>';
+      }
+      var tb3190=document.getElementById('tb-pe-crit-t3190');
+      if(tb3190) tb3190.innerHTML=t3190html;
+
+      // Instrucción dinámica
+      var instr=document.getElementById('pe-instruccion-criticas');
+      if(instr){
+        var lines=[]; var idx=1;
+        t90groups.slice(0,3).forEach(function(g){
+          var diasStr=g.maxDias+'d'; var nTag=g.n>1?' ('+g.n+' fact.)':'';
+          lines.push(idx+'. <strong style="color:var(--red);">'+shortCli(g.cliente)+'</strong> — '+diasStr+nTag+' · '+shortVend(g.vendedor)+' · USD '+fP(g.monto)+'K. Gestión urgente.');
+          idx++;
+        });
+        t3190groups.slice(0,2).forEach(function(g){
+          lines.push(idx+'. <strong style="color:var(--amber);">'+shortCli(g.cliente)+'</strong> — '+g.maxDias+'d · '+shortVend(g.vendedor)+'. Contacto preventivo.');
+          idx++;
+        });
+        if(t90sub===0&&t3190sub===0) lines=['✅ Sin cuentas vencidas activas al '+pc.corte+'.'];
+        instr.innerHTML=lines.join('<br>');
+      }
+    })();
 
     // ── Donut Chile (cCH) ─────────────────────────────────────────────────────
     var cCH=Chart.getChart(document.getElementById('cCH'));
