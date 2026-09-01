@@ -68,17 +68,10 @@ git --no-optional-locks add \
 
 # ── 5. Commit ──
 FECHA=$(date '+%d/%m/%Y %H:%M')
-git --no-optional-locks commit -m "data: actualización AVBOARD $FECHA" || {
-  echo "ℹ️  Sin cambios nuevos para commitear."
-  echo ""
-  echo "=================================================="
-  echo "  ✅ Pipeline OK — datos ya estaban al día"
-  echo "=================================================="
-  echo ""
-  exit 0
-}
+git --no-optional-locks commit -m "data: actualización AVBOARD $FECHA" || \
+  echo "ℹ️  Sin cambios nuevos para commitear — se hará push de commits pendientes."
 
-# ── 6. Push ──
+# ── 6. Push (siempre — para subir commits locales aunque no haya uno nuevo) ──
 echo ""
 echo "▶ Subiendo a GitHub..."
 git --no-optional-locks push origin main
