@@ -3338,3 +3338,28 @@ ACCIONES:
   · Cache-busting ?v=202609011244 sincronizado en 16 paneles HTML
 VALIDACIÓN JS: ✅ OK
 ======================================================================
+
+======================================================================
+CORTE: 2026-09-01 14:01
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 27-08-2026 - AGLM.xlsx
+  - AGROVECA PERU -  VENTAS  AL 31.08.2026.xlsx
+  - Cuentas Cobrar  Agrocomercial 12-08.xlsx
+  - Cuentas Cobrar Agroveca 21-06.xlsx
+  - AGROVECA - CUENTAS POR COBRAR AL 01..09.2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 27/08/2026
+  · avboard_clientes.js regenerado · 171 clientes CL
+  · Panel_IEC TX_CL · 1834 transacciones
+  · Panel_IEC TX_PE · 150 transacciones
+  · sic_tx_pe.js generado · 150 tx · corte 31/08/2026
+  · IEC Chile 103.0% · BP CLP 112,453,333
+  · IEC Perú 107.2% (Fase 7)
+  · CxC Chile CLP 113,697,828 · +90d CLP 23,647,064
+  · Módulo Productos: 211 SKUs · 9 margen negativo · 68 sin costo
+  · Cache-busting ?v=202609011401 sincronizado en 16 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
