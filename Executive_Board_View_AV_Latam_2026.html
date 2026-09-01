@@ -683,18 +683,18 @@
 <div class="section-title">EFICIENCIA COMERCIAL (IEC) · GRUPO LATAM <span>Real 2026 YTD · vs precio piso propuesto</span></div>
 
 <!-- ── KPI CHILE ── -->
-<div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:10px;">🇨🇱 CHILE · IEC 2026 YTD <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;">Base 428 tx · cobertura revenue 103.0%</span></div>
+<div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:10px;">🇨🇱 CHILE · IEC 2026 YTD <span id="eb-iec3-cl-header" style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;">Base 428 tx · cobertura revenue 103.0%</span></div>
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;">
-  <div class="kpi-card red">
+  <div class="kpi-card green" id="eb-iec3-cl-card">
     <div class="kpi-label">IEC Chile</div>
-    <div class="kpi-value green">101.2%</div>
+    <div class="kpi-value green" id="eb-iec3-cl-pct">103.0%</div>
     <div class="kpi-sub">Eficiencia vs precio piso</div>
-    <span class="kpi-badge badge-green">✅ Sobre objetivo</span>
+    <span class="kpi-badge badge-green" id="eb-iec3-cl-badge">✅ Sobre objetivo</span>
   </div>
   <div class="kpi-card red">
     <div class="kpi-label">Ventas bajo piso</div>
     <div class="kpi-value red" style="font-size:28px;">CLP 73.2M</div>
-    <div class="kpi-sub">Impacto estimado: 16.3M</div>
+    <div class="kpi-sub" id="eb-iec3-cl-impacto-sub">Impacto estimado: 16.3M</div>
     <span class="kpi-badge badge-red">56.9% del revenue con piso</span>
   </div>
   <div class="kpi-card red">
@@ -714,16 +714,16 @@
 <!-- ── KPI PERÚ ── -->
 <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:10px;">🇵🇪 PERÚ · IEC 2026 YTD <span id="eb-iec-pe-base-tag">YTD</span></div>
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;">
-  <div class="kpi-card" style="border-color:var(--border);">
+  <div class="kpi-card green" id="eb-iec3-pe-card">
     <div class="kpi-label">IEC Perú</div>
-    <div class="kpi-value green">107.6%</div>
+    <div class="kpi-value green" id="eb-iec3-pe-pct">107.2%</div>
     <div class="kpi-sub">Eficiencia vs precio piso</div>
-    <span class="kpi-badge badge-green">✅ Saludable</span>
+    <span class="kpi-badge badge-green" id="eb-iec3-pe-badge">✅ Saludable</span>
   </div>
   <div class="kpi-card amber">
     <div class="kpi-label">Ventas bajo piso</div>
     <div class="kpi-value amber" style="font-size:28px;">USD 13,038</div>
-    <div class="kpi-sub">Impacto estimado: USD 1,687</div>
+    <div class="kpi-sub" id="eb-iec3-pe-impacto-sub">Impacto estimado: USD 1,687</div>
     <span class="kpi-badge badge-amber">22.4% de tx bajo piso</span>
   </div>
   <div class="kpi-card amber">
@@ -732,11 +732,11 @@
     <div class="kpi-sub">58 tx auditadas · YTD 2026</div>
     <span class="kpi-badge badge-amber">Cobertura 71.1%</span>
   </div>
-  <div class="kpi-card" style="border-color:var(--border);">
+  <div class="kpi-card" id="eb-iec3-pe-impacto-card" style="border-color:var(--border);">
     <div class="kpi-label">Impacto estimado</div>
-    <div class="kpi-value amber" style="font-size:28px;">USD 1,687</div>
+    <div class="kpi-value amber" style="font-size:28px;" id="eb-iec3-pe-impacto-val">USD 1,687</div>
     <div class="kpi-sub">Gap precio × unidades vendidas</div>
-    <span class="kpi-badge badge-amber">Valladares y Atalaya críticos</span>
+    <span class="kpi-badge badge-amber" id="eb-iec3-pe-criticos">Valladares y Atalaya críticos</span>
   </div>
 </div>
 
@@ -1182,7 +1182,7 @@
   </div>
 </div>
 
-<script src="avboard_data.js?v=202609011244"></script>
+<script src="avboard_data.js?v=202609011401"></script>
 <script>
 Chart.defaults.color = '#7A90AA';
 Chart.defaults.font.family = "'DM Mono', monospace";
@@ -1458,6 +1458,72 @@ function cerrarSesion() {
       if (cardIecPE) { cardIecPE.className = 'kpi-card '+iecPEcls; }
       var badgePE = document.getElementById('av-eb-iec-peru-badge');
       if (badgePE) { badgePE.textContent = iecPEbadge; badgePE.className = 'kpi-badge badge-'+iecPEcls; }
+    }
+
+    // ── IEC FASE 3 · CHILE detalle ──────────────────────────────────────
+    if (cv.iec && cv.iec.total != null) {
+      var i3CL = cv.iec.total;
+      var i3CLcls = i3CL >= 0.85 ? 'green' : (i3CL >= 0.70 ? 'amber' : 'red');
+      var i3CLbadge = i3CL >= 1.0 ? '✅ Sobre objetivo' : (i3CL >= 0.85 ? '✅ Saludable' : (i3CL >= 0.70 ? '⚠️ Atención' : '⚠️ Crítico'));
+      // IEC % value
+      var elI3CLpct = document.getElementById('eb-iec3-cl-pct');
+      if (elI3CLpct) { elI3CLpct.textContent = pct(i3CL); elI3CLpct.className = 'kpi-value ' + i3CLcls; }
+      // card color
+      var elI3CLcard = document.getElementById('eb-iec3-cl-card');
+      if (elI3CLcard) elI3CLcard.className = 'kpi-card ' + i3CLcls;
+      // badge
+      var elI3CLbadge = document.getElementById('eb-iec3-cl-badge');
+      if (elI3CLbadge) { elI3CLbadge.textContent = i3CLbadge; elI3CLbadge.className = 'kpi-badge badge-' + i3CLcls; }
+      // header cobertura
+      var elI3CLhdr = document.getElementById('eb-iec3-cl-header');
+      if (elI3CLhdr && cv.ytd_5m > 0) {
+        var cobCL = cv.iec.vne_total / cv.ytd_5m;
+        elI3CLhdr.textContent = 'VNE/VPT · cobertura revenue ' + pct(cobCL);
+      }
+      // impacto estimado
+      var elI3CLimp = document.getElementById('eb-iec3-cl-impacto-sub');
+      if (elI3CLimp && cv.iec.impacto_potencial_clp != null) {
+        var impCLM = (cv.iec.impacto_potencial_clp / 1000000).toFixed(1);
+        elI3CLimp.textContent = 'Impacto potencial: CLP ' + impCLM + 'M';
+      }
+    }
+
+    // ── IEC FASE 3 · PERÚ detalle ───────────────────────────────────────
+    if (pv.iec && pv.iec.total != null) {
+      var i3PE = pv.iec.total;
+      var i3PEcls = i3PE >= 0.85 ? 'green' : (i3PE >= 0.70 ? 'amber' : 'red');
+      var i3PEbadge = i3PE >= 1.0 ? '✅ Saludable' : (i3PE >= 0.85 ? '✅ En objetivo' : (i3PE >= 0.70 ? '⚠️ Atención' : '⚠️ Crítico'));
+      // IEC % value
+      var elI3PEpct = document.getElementById('eb-iec3-pe-pct');
+      if (elI3PEpct) { elI3PEpct.textContent = pct(i3PE); elI3PEpct.className = 'kpi-value ' + i3PEcls; }
+      // card color
+      var elI3PEcard = document.getElementById('eb-iec3-pe-card');
+      if (elI3PEcard) elI3PEcard.className = 'kpi-card ' + i3PEcls;
+      // badge
+      var elI3PEbadge = document.getElementById('eb-iec3-pe-badge');
+      if (elI3PEbadge) { elI3PEbadge.textContent = i3PEbadge; elI3PEbadge.className = 'kpi-badge badge-' + i3PEcls; }
+      // impacto estimado
+      var elI3PEimp = document.getElementById('eb-iec3-pe-impacto-sub');
+      var elI3PEval = document.getElementById('eb-iec3-pe-impacto-val');
+      if (pv.iec.impacto_potencial_usd != null) {
+        var impPEfmt = 'USD ' + Number(pv.iec.impacto_potencial_usd).toLocaleString('es-CL');
+        if (elI3PEimp) elI3PEimp.textContent = 'Impacto potencial: ' + impPEfmt;
+        if (elI3PEval) elI3PEval.textContent = impPEfmt;
+      }
+      // vendedores críticos (IEC < 0.90)
+      var elI3PEcrit = document.getElementById('eb-iec3-pe-criticos');
+      if (elI3PEcrit) {
+        var peVLbls = {aguirre:'Aguirre',infante:'Infante',atalaya:'Atalaya',valladares:'Valladares',gonzales:'Gonzales',navarro:'Navarro',diaz:'Díaz'};
+        var criticos3 = Object.keys(peVLbls).filter(function(k){ return pv.iec[k] != null && pv.iec[k] < 0.90; }).map(function(k){ return peVLbls[k]; });
+        if (criticos3.length > 0) {
+          elI3PEcrit.textContent = criticos3.join(' y ') + ' crítico' + (criticos3.length > 1 ? 's' : '');
+          elI3PEcrit.className = 'kpi-badge badge-red';
+        } else {
+          var atencion3 = Object.keys(peVLbls).filter(function(k){ return pv.iec[k] != null && pv.iec[k] < 1.0; }).map(function(k){ return peVLbls[k]; });
+          elI3PEcrit.textContent = atencion3.length > 0 ? atencion3.join(' · ') + ' en atención' : '✅ Todos sobre objetivo';
+          elI3PEcrit.className = atencion3.length > 0 ? 'kpi-badge badge-amber' : 'kpi-badge badge-green';
+        }
+      }
     }
 
     // ── DIAGNÓSTICO CEO PERÚ — generado dinámicamente desde AVBOARD ──
