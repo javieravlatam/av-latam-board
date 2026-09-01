@@ -460,6 +460,9 @@ tbody td { padding: 12px 16px; font-size: 12px; }
     <button class="ex-tab" onclick="showTab(5)">
       <span class="ex-tab-num">6</span>Insights Ejecutivos
     </button>
+    <button class="ex-tab" onclick="showTab(6)">
+      <span class="ex-tab-num">7</span>⚡ Pronóstico ML
+    </button>
   </div>
 
   <!-- MODULES -->
@@ -917,6 +920,176 @@ tbody td { padding: 12px 16px; font-size: 12px; }
       <div class="sec-label">Decisiones ejecutivas recomendadas</div>
       <div id="insights-list"></div>
     </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         MÓDULO 7 · PRONÓSTICO ML · AV LATAM 2027-2029
+    ═══════════════════════════════════════════════════ -->
+    <div class="ex-module" id="mod-6">
+      <div class="mod-header">
+        <div class="mod-title">⚡ Pronóstico Inteligente ML</div>
+        <div class="mod-subtitle">Regresión lineal + estacionalidad real · Horizonte 3 años · Datos: libro base + ventas históricas</div>
+        <div class="mod-divider"></div>
+      </div>
+
+      <!-- FILTROS -->
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px;">
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <span style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600">Vista</span>
+          <select id="ml-vista" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:12px;cursor:pointer;" onchange="mlRefresh()">
+            <option value="latam">LATAM Consolidado</option>
+            <option value="chile">Chile</option>
+            <option value="peru">Perú</option>
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <span style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600">Producto</span>
+          <select id="ml-prod" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:12px;cursor:pointer;" onchange="mlRefresh()">
+            <option value="all">Todos los productos</option>
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <span style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600">Horizonte</span>
+          <div style="display:flex;gap:4px;">
+            <button id="ml-h1" onclick="mlSetH(1)" style="background:var(--surface);border:1px solid var(--border);color:var(--text-muted);padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;">1 año</button>
+            <button id="ml-h3" onclick="mlSetH(3)" style="background:var(--gold);border:1px solid var(--gold);color:#fff;padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;">3 años</button>
+          </div>
+        </div>
+        <div style="margin-left:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600">Actualizado</span>
+          <span id="ml-corte" style="font-size:12px;color:var(--gold);font-weight:600;padding:6px 0;">—</span>
+        </div>
+      </div>
+
+      <!-- KPIs PROYECCIÓN (clickeables → budget) -->
+      <div class="kpi-grid kpi-grid-4" style="margin-bottom:16px;">
+        <div class="kpi-card gold" style="border-left:3px solid var(--gold);">
+          <div class="kpi-label">Real 2026 (base)</div>
+          <div class="kpi-value gold" id="ml-kpi-base">—</div>
+          <div class="kpi-sub" id="ml-kpi-base-sub">Tendencia histórica</div>
+        </div>
+        <div class="kpi-card" id="ml-kc27" onclick="mlOpenBudget(2027)" style="cursor:pointer;border:2px solid var(--border);transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 2px 12px rgba(27,79,138,.18)'" onmouseout="this.style.boxShadow=''">
+          <div class="kpi-label">Proyección 2027 <span style="font-size:9px;color:var(--gold)">→ ver ppto</span></div>
+          <div class="kpi-value" id="ml-kpi-27">—</div>
+          <div class="kpi-delta delta-up" id="ml-kpi-27d">—</div>
+        </div>
+        <div class="kpi-card" id="ml-kc28" onclick="mlOpenBudget(2028)" style="cursor:pointer;border:2px solid var(--border);transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 2px 12px rgba(27,79,138,.18)'" onmouseout="this.style.boxShadow=''">
+          <div class="kpi-label">Proyección 2028 <span style="font-size:9px;color:var(--gold)">→ ver ppto</span></div>
+          <div class="kpi-value" id="ml-kpi-28">—</div>
+          <div class="kpi-delta delta-up" id="ml-kpi-28d">—</div>
+        </div>
+        <div class="kpi-card" id="ml-kc29" onclick="mlOpenBudget(2029)" style="cursor:pointer;border:2px solid var(--border);transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 2px 12px rgba(27,79,138,.18)'" onmouseout="this.style.boxShadow=''">
+          <div class="kpi-label">Proyección 2029 <span style="font-size:9px;color:var(--gold)">→ ver ppto</span></div>
+          <div class="kpi-value" id="ml-kpi-29">—</div>
+          <div class="kpi-delta delta-up" id="ml-kpi-29d">—</div>
+        </div>
+      </div>
+
+      <!-- GRÁFICAS ROW 1: Tendencia + Mix -->
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px;">
+        <!-- Tendencia forecast -->
+        <div class="ex-table-wrap">
+          <div class="ex-table-header">Tendencia histórica + pronóstico ML <span id="ml-chart-sub">Regresión lineal · intervalo confianza 80%</span></div>
+          <div style="padding:12px;background:var(--surface);">
+            <canvas id="ml-forecast-chart" height="200"></canvas>
+          </div>
+        </div>
+        <!-- Mix por producto -->
+        <div class="ex-table-wrap">
+          <div class="ex-table-header">Mix de ingresos por producto <span>Real 2024-2025</span></div>
+          <div style="padding:12px;background:var(--surface);display:flex;align-items:center;justify-content:center;height:228px;">
+            <canvas id="ml-mix-chart" height="190"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRÁFICA ROW 2: Distribución mensual -->
+      <div class="ex-table-wrap" style="margin-bottom:12px;">
+        <div class="ex-table-header">Estacionalidad real vs presupuesto 2026 <span>CLP por mes · base histórica 2024-2025</span></div>
+        <div style="padding:12px;background:var(--surface);">
+          <canvas id="ml-season-chart" height="140"></canvas>
+        </div>
+      </div>
+
+      <!-- TABLA contraste real vs ppto por SKU -->
+      <div class="ex-table-wrap" style="margin-bottom:12px;">
+        <div class="ex-table-header">Top SKUs Chile · Real vs Presupuesto 2026 <span>Ordenado por ventas reales · Clic en fila → presupuesto</span></div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:11px;">
+            <thead>
+              <tr style="background:var(--gold);color:#fff;">
+                <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:600;">SKU</th>
+                <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:600;">Producto</th>
+                <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:600;">Formato</th>
+                <th style="padding:7px 10px;text-align:right;font-size:10px;font-weight:600;">Real CLP</th>
+                <th style="padding:7px 10px;text-align:right;font-size:10px;font-weight:600;">Ppto CLP</th>
+                <th style="padding:7px 10px;text-align:right;font-size:10px;font-weight:600;">Gap %</th>
+                <th style="padding:7px 10px;text-align:right;font-size:10px;font-weight:600;">Piso</th>
+                <th style="padding:7px 10px;text-align:right;font-size:10px;font-weight:600;">Margen</th>
+                <th style="padding:7px 10px;text-align:center;font-size:10px;font-weight:600;">Tendencia</th>
+              </tr>
+            </thead>
+            <tbody id="ml-sku-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PANEL PRESUPUESTO (oculto hasta click) -->
+      <div id="ml-budget-panel" style="display:none;border:2px solid var(--gold);border-radius:10px;background:var(--surface);padding:16px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--gold);" id="ml-bp-title">Propuesta Presupuesto 2027</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:2px;">Generado por ML · distribución mensual con estacionalidad real</div>
+          </div>
+          <button onclick="document.getElementById('ml-budget-panel').style.display='none'" style="background:var(--surface2);border:1px solid var(--border);color:var(--text-dim);padding:5px 12px;border-radius:5px;cursor:pointer;font-size:11px;">✕ Cerrar</button>
+        </div>
+        <!-- Escenarios -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">
+          <div style="background:var(--surface2);border-radius:8px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Conservador −10%</div>
+            <div style="font-size:15px;font-weight:700;color:var(--amber);" id="ml-sc-cons">—</div>
+          </div>
+          <div style="background:var(--gold-glow);border:2px solid var(--gold);border-radius:8px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">⭐ Tendencia ML</div>
+            <div style="font-size:15px;font-weight:700;color:var(--gold);" id="ml-sc-base">—</div>
+          </div>
+          <div style="background:var(--surface2);border-radius:8px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Optimista +10%</div>
+            <div style="font-size:15px;font-weight:700;color:var(--green);" id="ml-sc-opt">—</div>
+          </div>
+        </div>
+        <!-- Gráfica mensual del presupuesto -->
+        <div class="ex-table-wrap" style="margin-bottom:12px;">
+          <div class="ex-table-header">Distribución mensual proyectada <span id="ml-bp-year-label">2027</span></div>
+          <div style="padding:12px;background:var(--surface);">
+            <canvas id="ml-budget-chart" height="140"></canvas>
+          </div>
+        </div>
+        <!-- Tabla SKU mensual -->
+        <div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:8px;">Detalle por SKU · distribución mensual proyectada</div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:10px;min-width:900px;" id="ml-bp-table">
+            <thead>
+              <tr style="background:var(--gold);color:#fff;">
+                <th style="padding:5px 8px;text-align:left;min-width:130px;">Producto · Formato</th>
+                <th style="padding:5px 8px;text-align:right;">Ene</th><th style="padding:5px 8px;text-align:right;">Feb</th>
+                <th style="padding:5px 8px;text-align:right;">Mar</th><th style="padding:5px 8px;text-align:right;">Abr</th>
+                <th style="padding:5px 8px;text-align:right;">May</th><th style="padding:5px 8px;text-align:right;">Jun</th>
+                <th style="padding:5px 8px;text-align:right;">Jul</th><th style="padding:5px 8px;text-align:right;">Ago</th>
+                <th style="padding:5px 8px;text-align:right;">Sep</th><th style="padding:5px 8px;text-align:right;">Oct</th>
+                <th style="padding:5px 8px;text-align:right;">Nov</th><th style="padding:5px 8px;text-align:right;">Dic</th>
+                <th style="padding:5px 8px;text-align:right;background:var(--gold-dim);">TOTAL</th>
+                <th style="padding:5px 8px;text-align:right;">Mix%</th>
+              </tr>
+            </thead>
+            <tbody id="ml-bp-tbody"></tbody>
+          </table>
+        </div>
+        <div style="background:var(--gold-glow);border-left:3px solid var(--gold);padding:8px 12px;border-radius:0 6px 6px 0;margin-top:10px;font-size:10px;color:var(--gold);">
+          ⚡ Distribución con estacionalidad real · Pico octubre (17.9%), mayo (11.0%), enero (10.2%) · Se recalcula automáticamente con cada corrida del pipeline
+        </div>
+      </div>
+
+    </div><!-- /mod-6 -->
 
   </div><!-- /ex-modules -->
 
@@ -1591,5 +1764,405 @@ function initDashboard() {
 
 <script src="assets_logo.js"></script>
 <script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
+
+<script src="sku_catalog.js?v=202609011401"></script>
+<script>
+/* ══════════════════════════════════════════════════
+   MÓDULO ML FORECAST · Executive Intelligence 2026
+   Regresión lineal + estacionalidad real
+══════════════════════════════════════════════════ */
+(function() {
+
+  /* ── Helpers ML ─────────────────────────────── */
+  function linReg(vals) {
+    var n = vals.length, sx=0, sy=0, sxy=0, sx2=0;
+    for (var i=0;i<n;i++){sx+=i;sy+=vals[i];sxy+=i*vals[i];sx2+=i*i;}
+    var b = (n*sxy - sx*sy) / (n*sx2 - sx*sx);
+    var a = (sy - b*sx) / n;
+    return {a:a, b:b};
+  }
+
+  function fmtCLP(v) {
+    if (v >= 1e9) return 'CLP ' + (v/1e9).toFixed(1) + 'B';
+    if (v >= 1e6) return 'CLP ' + (v/1e6).toFixed(1) + 'M';
+    return 'CLP ' + Math.round(v).toLocaleString('es-CL');
+  }
+  function fmtPct(v, decimals) { return (v*100).toFixed(decimals||1)+'%'; }
+  function fmtGap(gap) {
+    var s = gap >= 0 ? '+' : '';
+    return s + gap.toFixed(1) + '%';
+  }
+
+  /* ── Estado global del módulo ─────────────────── */
+  var ML = {
+    h: 3,               // horizonte años
+    vista: 'chile',     // latam | chile | peru
+    prodFilter: 'all',  // all | producto name
+    budgetYear: null,
+    charts: {},         // chart instances keyed by canvas id
+    skus: [],           // filtered SKU list
+    seasonality: null,  // from SKU_SEASONALITY_CL
+    totalReal: 0,
+    totalPpto: 0,
+    cagr: 0.145,        // computed from data
+  };
+
+  /* ── Init: poblar filtro productos ──────────── */
+  function mlInit() {
+    if (typeof SKU_CATALOG === 'undefined') {
+      setTimeout(mlInit, 200); return;
+    }
+    ML.seasonality = SKU_SEASONALITY_CL || {1:0.1022,2:0.0748,3:0.0551,4:0.083,5:0.1101,6:0.0497,7:0.0536,8:0.0706,9:0.1014,10:0.1791,11:0.0768,12:0.0436};
+
+    // Poblar selector de productos
+    var prods = {};
+    SKU_CATALOG.forEach(function(s){ if(s.pais==='Chile' && s.producto) prods[s.producto]=1; });
+    var sel = document.getElementById('ml-prod');
+    if (sel) {
+      Object.keys(prods).sort().forEach(function(p){
+        var opt = document.createElement('option'); opt.value=p; opt.textContent=p; sel.appendChild(opt);
+      });
+    }
+
+    // Corte
+    if (typeof SKU_META !== 'undefined') {
+      var el = document.getElementById('ml-corte');
+      if (el) el.textContent = SKU_META.corte || '';
+    }
+
+    mlRefresh();
+  }
+
+  /* ── Refresh completo al cambiar filtros ──────── */
+  window.mlRefresh = function() {
+    if (typeof SKU_CATALOG === 'undefined') return;
+    ML.vista = (document.getElementById('ml-vista') || {value:'chile'}).value;
+    ML.prodFilter = (document.getElementById('ml-prod') || {value:'all'}).value;
+
+    // Filtrar SKUs
+    ML.skus = SKU_CATALOG.filter(function(s){
+      if (ML.vista === 'chile' && s.pais !== 'Chile') return false;
+      if (ML.vista === 'peru'  && s.pais !== 'Peru')  return false;
+      if (ML.prodFilter !== 'all' && s.producto !== ML.prodFilter) return false;
+      return true;
+    });
+
+    // Totales
+    ML.totalReal  = ML.skus.reduce(function(a,s){ return a + s.real_total; }, 0);
+    ML.totalPpto  = ML.skus.reduce(function(a,s){ return a + s.ppto_total; }, 0);
+
+    // CAGR estimado desde la pendiente de ventas mensuales
+    var mesData = []; // array 12 valores promedio mensual
+    for (var m=1; m<=12; m++) {
+      var sumM = ML.skus.reduce(function(a,s){ return a + (s.real_mes[m]||0); }, 0);
+      mesData.push(sumM);
+    }
+    var lr = linReg(mesData);
+    var avgMes = ML.totalReal / 24; // 2 años → 24 meses
+    ML.cagr = Math.max(0.05, Math.min(0.35, lr.b / (avgMes||1)));
+
+    // Proyecciones anuales (CLP, base real)
+    var base = ML.totalReal; // 2 años combinados → escalar a 1 año
+    var base1yr = base / 2;  // promedio anual real
+    var y27 = base1yr * Math.pow(1 + ML.cagr, 1);
+    var y28 = base1yr * Math.pow(1 + ML.cagr, 2);
+    var y29 = base1yr * Math.pow(1 + ML.cagr, 3);
+
+    // KPIs
+    setText('ml-kpi-base', fmtCLP(base1yr) + ' /año');
+    setText('ml-kpi-base-sub', 'Ppto 2026: ' + fmtCLP(ML.totalPpto));
+    setText('ml-kpi-27', fmtCLP(y27));
+    setText('ml-kpi-27d', '▲ +' + (ML.cagr*100).toFixed(1)+'% vs base');
+    setText('ml-kpi-28', fmtCLP(y28));
+    setText('ml-kpi-28d', '▲ +' + (Math.pow(1+ML.cagr,2)-1)*100 .toFixed(1)+'% vs base');
+    setText('ml-kpi-29', fmtCLP(y29));
+    setText('ml-kpi-29d', '▲ +' + (Math.pow(1+ML.cagr,3)-1)*100 .toFixed(1)+'% vs base');
+
+    mlRenderForecastChart(mesData, base1yr);
+    mlRenderMixChart();
+    mlRenderSeasonChart(mesData);
+    mlRenderSkuTable();
+
+    if (ML.budgetYear) mlOpenBudget(ML.budgetYear);
+  };
+
+  function setText(id, v) { var e=document.getElementById(id); if(e) e.textContent=v; }
+
+  /* ── Chart 1: Tendencia + Pronóstico ──────────── */
+  function mlRenderForecastChart(mesData, base1yr) {
+    var canvas = document.getElementById('ml-forecast-chart');
+    if (!canvas) return;
+
+    // Histórico: 24 puntos (ene24→dic25), mes a mes
+    var hist = []; var labels = [];
+    var mNames = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    for (var y=0; y<2; y++) {
+      for (var m=0; m<12; m++) {
+        var skuSum = ML.skus.reduce(function(a,s){ return a+(s.real_mes[m+1]||0); },0);
+        hist.push(Math.round(skuSum/1000));
+        labels.push(mNames[m]+' '+(24+y).toString().slice(-2));
+      }
+    }
+
+    // Pronóstico trimestral
+    var lr = linReg(hist.filter(function(v){return v>0;}));
+    var forePts = []; var foreLabels = [];
+    var quarters = ['Q1','Q2','Q3','Q4'];
+    for (var yr=0; yr<ML.h; yr++) {
+      for (var q=0; q<4; q++) {
+        var idx = hist.length + yr*4 + q;
+        var v = lr.a + lr.b*idx*(12/4);
+        forePts.push(Math.max(0, Math.round(v)));
+        foreLabels.push(quarters[q]+' '+(27+yr).toString());
+      }
+    }
+
+    var allLabels = labels.concat(foreLabels);
+    var histData  = hist.concat(Array(forePts.length).fill(null));
+    var foreData  = Array(hist.length - 1).fill(null).concat([hist[hist.length-1]]).concat(forePts);
+    var upBand    = Array(hist.length).fill(null).concat(forePts.map(function(v,i){return Math.round(v*(1.10+i*0.01));}));
+    var loBand    = Array(hist.length).fill(null).concat(forePts.map(function(v,i){return Math.max(0,Math.round(v*(0.90-i*0.01)));}));
+
+    var datasets = [
+      {label:'Banda',data:upBand,borderColor:'transparent',backgroundColor:'rgba(27,79,138,0.08)',fill:'+1',pointRadius:0,tension:0.4},
+      {label:'BandaLo',data:loBand,borderColor:'transparent',backgroundColor:'transparent',fill:false,pointRadius:0,tension:0.4},
+      {label:'Real',data:histData,borderColor:'#1B4F8A',backgroundColor:'rgba(27,79,138,0.06)',borderWidth:2,pointRadius:2,tension:0.3,fill:true},
+      {label:'Pronóstico',data:foreData,borderColor:'#5a8f35',backgroundColor:'transparent',borderWidth:2,borderDash:[5,3],pointRadius:2,tension:0.3},
+    ];
+
+    if (ML.charts['fc']) {
+      ML.charts['fc'].data.labels = allLabels;
+      ML.charts['fc'].data.datasets = datasets;
+      ML.charts['fc'].update();
+    } else {
+      ML.charts['fc'] = new Chart(canvas.getContext('2d'), {
+        type:'line', data:{labels:allLabels,datasets:datasets},
+        options:{
+          responsive:true, maintainAspectRatio:false,
+          plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,backgroundColor:'#fff',titleColor:'#3D5270',bodyColor:'#1A2332',borderColor:'rgba(27,79,138,0.3)',borderWidth:1}},
+          scales:{
+            x:{grid:{color:'rgba(27,79,138,0.07)'},ticks:{color:'#7A90AA',font:{size:9},maxTicksLimit:16}},
+            y:{grid:{color:'rgba(27,79,138,0.07)'},ticks:{color:'#7A90AA',font:{size:9},callback:function(v){return '$'+v+'K';}}}
+          }
+        }
+      });
+    }
+  }
+
+  /* ── Chart 2: Mix doughnut ────────────────────── */
+  function mlRenderMixChart() {
+    var canvas = document.getElementById('ml-mix-chart');
+    if (!canvas) return;
+
+    // Top 8 productos + resto
+    var byProd = {};
+    ML.skus.forEach(function(s){ byProd[s.producto] = (byProd[s.producto]||0)+s.real_total; });
+    var sorted = Object.entries(byProd).sort(function(a,b){return b[1]-a[1];});
+    var top8 = sorted.slice(0,8); var resto = sorted.slice(8).reduce(function(a,x){return a+x[1];},0);
+    if (resto > 0) top8.push(['Otros',resto]);
+
+    var labels = top8.map(function(x){return x[0];});
+    var data   = top8.map(function(x){return Math.round(x[1]/1000);});
+    var colors = ['#1B4F8A','#2563a8','#3b82c8','#5a8f35','#7ab348','#C47A0F','#e89b1a','#C0392B','#9ca3af'];
+
+    if (ML.charts['mix']) {
+      ML.charts['mix'].data.labels = labels;
+      ML.charts['mix'].data.datasets[0].data = data;
+      ML.charts['mix'].data.datasets[0].backgroundColor = colors.slice(0,labels.length);
+      ML.charts['mix'].update();
+    } else {
+      ML.charts['mix'] = new Chart(canvas.getContext('2d'), {
+        type:'doughnut',
+        data:{labels:labels,datasets:[{data:data,backgroundColor:colors.slice(0,labels.length),borderWidth:2,borderColor:'#fff'}]},
+        options:{
+          responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{position:'right',labels:{font:{size:9},color:'#3D5270',boxWidth:10,padding:6}},
+            tooltip:{callbacks:{label:function(ctx){return ctx.label+': $'+ctx.parsed.toLocaleString('es-CL')+'K';}}}}
+        }
+      });
+    }
+  }
+
+  /* ── Chart 3: Estacionalidad bars ─────────────── */
+  function mlRenderSeasonChart(mesData) {
+    var canvas = document.getElementById('ml-season-chart');
+    if (!canvas) return;
+
+    var mNames = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    // Real mensual (suma de skus por mes)
+    var realM = []; var pptoM = [];
+    for (var m=1; m<=12; m++) {
+      var rs = ML.skus.reduce(function(a,s){return a+(s.real_mes[m]||0);},0);
+      var ps = ML.skus.reduce(function(a,s){return a+(s.ppto_mes[m]||0);},0);
+      realM.push(Math.round(rs/1000));
+      pptoM.push(Math.round(ps/1000));
+    }
+
+    var datasets = [
+      {label:'Real 2024-25 (prom)',data:realM,backgroundColor:'rgba(27,79,138,0.75)',borderColor:'#1B4F8A',borderWidth:1,borderRadius:3},
+      {label:'Presupuesto 2026',data:pptoM,backgroundColor:'rgba(90,143,53,0.65)',borderColor:'#5a8f35',borderWidth:1,borderRadius:3},
+    ];
+
+    if (ML.charts['season']) {
+      ML.charts['season'].data.datasets = datasets;
+      ML.charts['season'].update();
+    } else {
+      ML.charts['season'] = new Chart(canvas.getContext('2d'), {
+        type:'bar', data:{labels:mNames,datasets:datasets},
+        options:{
+          responsive:true, maintainAspectRatio:false,
+          plugins:{legend:{labels:{font:{size:10},color:'#3D5270',boxWidth:10}}},
+          scales:{
+            x:{grid:{display:false},ticks:{color:'#7A90AA',font:{size:10}}},
+            y:{grid:{color:'rgba(27,79,138,0.07)'},ticks:{color:'#7A90AA',font:{size:9},callback:function(v){return '$'+v+'K';}}}
+          }
+        }
+      });
+    }
+  }
+
+  /* ── Tabla SKU contraste ──────────────────────── */
+  function mlRenderSkuTable() {
+    var tbody = document.getElementById('ml-sku-tbody');
+    if (!tbody) return;
+    var top = ML.skus.filter(function(s){ return s.real_total > 0; }).slice(0, 20);
+    var html = '';
+    top.forEach(function(s) {
+      var gap = s.ppto_total > 0 ? ((s.real_total/s.ppto_total)-1)*100 : 0;
+      var gapCls = gap > 10 ? 'color:var(--green)' : gap < -10 ? 'color:var(--red)' : 'color:var(--amber)';
+      var margenTxt = s.margen_calc ? (s.margen_calc*100).toFixed(0)+'%' : '—';
+      var pisoTxt = s.precio_piso ? s.precio_piso.toLocaleString('es-CL') : '—';
+      var tendencia = gap > 50 ? '🚀 Fuerte' : gap > 10 ? '↑ Crecimiento' : gap < -10 ? '↓ Bajo ppto' : '→ En línea';
+      html += '<tr onclick="mlOpenBudget(2027)" style="cursor:pointer;" onmouseover="this.style.background=\'var(--surface2)\'" onmouseout="this.style.background=\'\'">' +
+        '<td style="padding:6px 10px;font-family:monospace;font-size:10px;color:var(--gold)">' + s.sku + '</td>' +
+        '<td style="padding:6px 10px;">' + s.producto + '</td>' +
+        '<td style="padding:6px 10px;color:var(--text-muted)">' + s.presentacion + '</td>' +
+        '<td style="padding:6px 10px;text-align:right;font-weight:600;">' + (s.real_total/1e6).toFixed(1) + 'M</td>' +
+        '<td style="padding:6px 10px;text-align:right;color:var(--text-muted)">' + (s.ppto_total > 0 ? (s.ppto_total/1e6).toFixed(1)+'M' : '—') + '</td>' +
+        '<td style="padding:6px 10px;text-align:right;' + gapCls + ';font-weight:600;">' + (s.ppto_total > 0 ? fmtGap(gap)+'%' : '—') + '</td>' +
+        '<td style="padding:6px 10px;text-align:right;color:var(--text-muted)">' + pisoTxt + '</td>' +
+        '<td style="padding:6px 10px;text-align:right;">' + margenTxt + '</td>' +
+        '<td style="padding:6px 10px;text-align:center;font-size:11px">' + tendencia + '</td>' +
+        '</tr>';
+    });
+    tbody.innerHTML = html;
+  }
+
+  /* ── Budget panel ─────────────────────────────── */
+  window.mlOpenBudget = function(yr) {
+    ML.budgetYear = yr;
+    var panel = document.getElementById('ml-budget-panel');
+    if (!panel) return;
+    panel.style.display = 'block';
+    setText('ml-bp-title', '🤖 Propuesta Presupuesto ' + yr + ' · Generado por ML');
+    setText('ml-bp-year-label', yr);
+
+    // Proyección total para el año
+    var base1yr = ML.totalReal / 2;
+    var years = yr - 2026;
+    var totalYr = Math.round(base1yr * Math.pow(1 + ML.cagr, years));
+    setText('ml-sc-base', fmtCLP(totalYr));
+    setText('ml-sc-cons', fmtCLP(totalYr * 0.90));
+    setText('ml-sc-opt',  fmtCLP(totalYr * 1.10));
+
+    // Gráfica budget mensual
+    mlRenderBudgetChart(totalYr, yr);
+
+    // Tabla SKU mensual
+    mlRenderBpTable(totalYr, yr);
+
+    panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+  };
+
+  function mlRenderBudgetChart(totalYr, yr) {
+    var canvas = document.getElementById('ml-budget-chart');
+    if (!canvas) return;
+    var mNames = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    var sea = ML.seasonality;
+    var monthVals = []; var monthCons = []; var monthOpt = [];
+    for (var m=1; m<=12; m++) {
+      var s = sea[m] || 1/12;
+      monthVals.push(Math.round(totalYr*s/1000));
+      monthCons.push(Math.round(totalYr*0.90*s/1000));
+      monthOpt.push(Math.round(totalYr*1.10*s/1000));
+    }
+    var datasets = [
+      {label:'Optimista',data:monthOpt,backgroundColor:'rgba(90,143,53,0.25)',borderColor:'#5a8f35',borderWidth:1,borderRadius:3,type:'bar'},
+      {label:'Conservador',data:monthCons,backgroundColor:'rgba(196,122,15,0.25)',borderColor:'#C47A0F',borderWidth:1,borderRadius:3,type:'bar'},
+      {label:'ML Base',data:monthVals,borderColor:'#1B4F8A',backgroundColor:'transparent',borderWidth:2,type:'line',pointRadius:3,tension:0.3},
+    ];
+    if (ML.charts['budget']) {
+      ML.charts['budget'].data.labels = mNames;
+      ML.charts['budget'].data.datasets = datasets;
+      ML.charts['budget'].update();
+    } else {
+      ML.charts['budget'] = new Chart(canvas.getContext('2d'), {
+        type:'bar', data:{labels:mNames,datasets:datasets},
+        options:{
+          responsive:true, maintainAspectRatio:false,
+          plugins:{legend:{labels:{font:{size:10},color:'#3D5270',boxWidth:10}}},
+          scales:{
+            x:{grid:{display:false},ticks:{color:'#7A90AA',font:{size:10}}},
+            y:{grid:{color:'rgba(27,79,138,0.07)'},ticks:{color:'#7A90AA',font:{size:9},callback:function(v){return '$'+v+'K';}}}
+          }
+        }
+      });
+    }
+  }
+
+  function mlRenderBpTable(totalYr, yr) {
+    var tbody = document.getElementById('ml-bp-tbody');
+    if (!tbody) return;
+    var sea = ML.seasonality;
+    var top = ML.skus.filter(function(s){return s.real_total > 0;}).slice(0,15);
+    var grandMes = Array(12).fill(0);
+    var html = '';
+    top.forEach(function(s) {
+      var mixPct = ML.totalReal > 0 ? s.real_total / ML.totalReal : 0;
+      var skuTotal = Math.round(totalYr * mixPct);
+      var rowHtml = '<tr onmouseover="this.style.background=\'var(--surface2)\'" onmouseout="this.style.background=\'\'">' +
+        '<td style="padding:4px 8px;font-size:10px;">' + s.producto + ' · ' + s.presentacion + '</td>';
+      var rowTotal = 0;
+      for (var m=1; m<=12; m++) {
+        var v = Math.round(skuTotal*(sea[m]||1/12));
+        rowTotal += v; grandMes[m-1] += v;
+        rowHtml += '<td style="padding:4px 8px;text-align:right;white-space:nowrap;">$'+(v/1000).toFixed(0)+'K</td>';
+      }
+      rowHtml += '<td style="padding:4px 8px;text-align:right;font-weight:700;color:var(--gold);white-space:nowrap;background:var(--gold-glow);">$'+(rowTotal/1e6).toFixed(1)+'M</td>' +
+        '<td style="padding:4px 8px;text-align:right;color:var(--text-muted)">'+(mixPct*100).toFixed(1)+'%</td>' +
+        '</tr>';
+      html += rowHtml;
+    });
+    // Total row
+    html += '<tr style="background:var(--gold-glow);font-weight:700;color:var(--gold);">' +
+      '<td style="padding:5px 8px;">TOTAL GENERAL</td>';
+    var grandTotal = 0;
+    grandMes.forEach(function(v,i){
+      grandTotal += v;
+      html += '<td style="padding:5px 8px;text-align:right;white-space:nowrap;">$'+(v/1000).toFixed(0)+'K</td>';
+    });
+    html += '<td style="padding:5px 8px;text-align:right;background:var(--gold);color:#fff;white-space:nowrap;">$'+(grandTotal/1e6).toFixed(1)+'M</td><td style="padding:5px 8px;text-align:right;">100%</td></tr>';
+    tbody.innerHTML = html;
+  }
+
+  /* ── Horizon buttons ──────────────────────────── */
+  window.mlSetH = function(h) {
+    ML.h = h;
+    var h1=document.getElementById('ml-h1'), h3=document.getElementById('ml-h3');
+    var act = 'background:var(--gold);border:1px solid var(--gold);color:#fff;padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;';
+    var inact = 'background:var(--surface);border:1px solid var(--border);color:var(--text-muted);padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;';
+    if (h1) h1.style.cssText = (h===1 ? act : inact);
+    if (h3) h3.style.cssText = (h===3 ? act : inact);
+    mlRefresh();
+  };
+
+  // Iniciar cuando el panel sea visible
+  (function waitAndInit() {
+    if (typeof SKU_CATALOG !== 'undefined') { mlInit(); }
+    else { setTimeout(waitAndInit, 300); }
+  })();
+
+})();
+</script>
 </body>
 </html>

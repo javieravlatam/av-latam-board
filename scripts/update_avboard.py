@@ -2605,6 +2605,170 @@ def sync_cxc_panel(cl_cxc: dict, pe_cxc: dict | None = None) -> bool:
     return False
 
 
+def sync_sku_catalog() -> bool:
+    """
+    Genera sku_catalog.js a partir del libro base (inbox) + ventas históricas Chile 2024-2025.
+    Incluye: SKU, producto, presentación, costo/unidad, precio piso, margen,
+    ventas reales por mes, presupuesto 2026 por mes y estacionalidad real.
+    Retorna True si se generó correctamente.
+    """
+    import json as _json
+    from collections import defaultdict as _dd
+
+    MESES_IDX = {'enero':1,'febrero':2,'marzo':3,'abril':4,'mayo':5,'junio':6,
+                 'julio':7,'agosto':8,'septiembre':9,'octubre':10,'noviembre':11,'diciembre':12}
+
+    # Localizar libro base en inbox
+    libro_paths = sorted(INBOX.glob("*libro base*AV*2026*.xlsx"), key=lambda p: p.stat().st_mtime, reverse=True)
+    if not libro_paths:
+        print("   ⚠ sync_sku_catalog: libro base no encontrado en inbox — omitido")
+        return False
+    lb_path = libro_paths[0]
+    print(f"   Libro base: {lb_path.name}")
+
+    try:
+        import openpyxl as _xl
+        wb = _xl.load_workbook(lb_path, data_only=True)
+    except Exception as e:
+        print(f"   ⚠ sync_sku_catalog: error abriendo libro base — {e}")
+        return False
+
+    # 1. SKU master desde Listado Productos
+    sku_master = {}
+    if 'Listado Productos' in wb.sheetnames:
+        ws = wb['Listado Productos']
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            if row[1] and str(row[1]).startswith('AV-'):
+                sku_master[str(row[1]).strip()] = {
+                    'pais': str(row[0]) if row[0] else '',
+                    'producto': str(row[2]) if row[2] else '',
+                    'presentacion': str(row[3]) if row[3] else '',
+                    'moneda': str(row[4]) if row[4] else '',
+                    'precio_piso': float(row[5]) if row[5] else None,
+                }
+
+    # 2. Pricing Chile: costo + margen
+    if 'Pricing Piso Chile' in wb.sheetnames:
+        ws4 = wb['Pricing Piso Chile']
+        for row in ws4.iter_rows(min_row=6, values_only=True):
+            if row[0] and str(row[0]).startswith('AV-'):
+                sku = str(row[0]).strip()
+                if sku not in sku_master:
+                    sku_master[sku] = {'pais':'Chile','producto':str(row[1] or ''),'presentacion':str(row[2] or ''),'moneda':'CLP','precio_piso':None}
+                sku_master[sku].update({
+                    'costo_unit': float(row[5]) if row[5] else None,
+                    'precio_piso_calc': float(row[6]) if row[6] else None,
+                    'margen_calc': round(float(row[7]),4) if row[7] else None,
+                    'precio_prom_real': float(row[8]) if row[8] else None,
+                })
+
+    # 3. Pricing Peru: costo USD + margen
+    if 'Pricing Piso Peru' in wb.sheetnames:
+        ws5 = wb['Pricing Piso Peru']
+        for row in ws5.iter_rows(min_row=6, values_only=True):
+            if row[0] and str(row[0]).startswith('AV-'):
+                sku = str(row[0]).strip()
+                if sku not in sku_master:
+                    sku_master[sku] = {'pais':'Peru','producto':str(row[1] or ''),'presentacion':str(row[2] or ''),'moneda':'USD','precio_piso':None}
+                sku_master[sku].update({
+                    'costo_unit': float(row[5]) if row[5] else None,
+                    'precio_piso_calc': float(row[6]) if row[6] else None,
+                    'margen_calc': round(float(row[7]),4) if row[7] else None,
+                    'precio_prom_real': float(row[8]) if row[8] else None,
+                })
+
+    # 4. Ventas Chile 2024-2025 por SKU y mes
+    ventas_mes = _dd(lambda: {m:{'total':0,'cant':0} for m in range(1,13)})
+    ventas_total = _dd(lambda: {'total':0,'cant':0})
+    if 'ventas chile 2024 2025' in wb.sheetnames:
+        ws2 = wb['ventas chile 2024 2025']
+        for row in ws2.iter_rows(min_row=2, values_only=True):
+            if row[8] and str(row[8]).startswith('AV-') and row[14] and row[15]:
+                sku = str(row[8]).strip()
+                mes_raw = str(row[1]).strip().lower().replace(' ','') if row[1] else ''
+                mes_n = MESES_IDX.get(mes_raw, 0)
+                if mes_n == 0: continue
+                t = float(row[15]) or 0; c = float(row[14]) or 0
+                ventas_mes[sku][mes_n]['total'] += t
+                ventas_mes[sku][mes_n]['cant'] += c
+                ventas_total[sku]['total'] += t
+                ventas_total[sku]['cant'] += c
+
+    # 5. Presupuesto 2026 por SKU+mes (Chile)
+    ppto_mes = _dd(lambda: {m:{'total':0,'cant':0} for m in range(1,13)})
+    ppto_total = _dd(lambda: {'total':0,'cant':0})
+    if 'Base presupuesto  consolidada' in wb.sheetnames:
+        ws3 = wb['Base presupuesto  consolidada']
+        for row in ws3.iter_rows(min_row=2, values_only=True):
+            if row[6] and str(row[6]).startswith('AV-') and row[12]:
+                sku = str(row[6]).strip()
+                pais = str(row[0]) if row[0] else ''
+                if pais != 'Chile': continue
+                mes_raw = str(row[9]).strip().lower() if row[9] else ''
+                mes_n = MESES_IDX.get(mes_raw, 0)
+                if mes_n == 0: continue
+                t = float(row[12]) or 0; c = float(row[10]) or 0 if row[10] else 0
+                ppto_mes[sku][mes_n]['total'] += t
+                ppto_mes[sku][mes_n]['cant'] += c
+                ppto_total[sku]['total'] += t
+                ppto_total[sku]['cant'] += c
+
+    # 6. Estacionalidad real
+    total_by_mes = _dd(float)
+    for sku_k, meses in ventas_mes.items():
+        for m, v in meses.items():
+            total_by_mes[m] += v['total']
+    total_sum = sum(total_by_mes.values()) or 1
+    seasonality = {m: round(total_by_mes[m]/total_sum, 4) for m in range(1,13)}
+
+    # 7. Build catalog
+    catalog = []
+    for sku, info in sku_master.items():
+        vt = ventas_total.get(sku, {})
+        pt = ppto_total.get(sku, {})
+        vm = ventas_mes.get(sku, {})
+        pm = ppto_mes.get(sku, {})
+        catalog.append({
+            'sku': sku,
+            'pais': info.get('pais',''),
+            'producto': info.get('producto',''),
+            'presentacion': info.get('presentacion',''),
+            'moneda': info.get('moneda',''),
+            'precio_piso': info.get('precio_piso'),
+            'precio_piso_calc': info.get('precio_piso_calc'),
+            'costo_unit': info.get('costo_unit'),
+            'margen_calc': info.get('margen_calc'),
+            'precio_prom_real': info.get('precio_prom_real'),
+            'real_total': round(vt.get('total',0)),
+            'real_cant': round(vt.get('cant',0)),
+            'ppto_total': round(pt.get('total',0)),
+            'ppto_cant': round(pt.get('cant',0)),
+            'real_mes': {m: round(vm.get(m,{}).get('total',0)) for m in range(1,13)} if vm else {},
+            'ppto_mes': {m: round(pm.get(m,{}).get('total',0)) for m in range(1,13)} if pm else {},
+        })
+    catalog.sort(key=lambda x: x['real_total'], reverse=True)
+
+    # 8. Render JS
+    js = (
+        f"// sku_catalog.js — Catálogo SKU AV LATAM · Generado {NOW}\n"
+        f"// NO editar manualmente — regenerado por update_avboard.py\n\n"
+        f"const SKU_CATALOG = {_json.dumps(catalog, ensure_ascii=False)};\n\n"
+        f"const SKU_SEASONALITY_CL = {_json.dumps(seasonality, ensure_ascii=False)};\n\n"
+        f"const SKU_META = {{\n"
+        f"  corte: \"{NOW[:10]}\",\n"
+        f"  total_skus: {len(catalog)},\n"
+        f"  skus_chile: {sum(1 for s in catalog if s['pais']=='Chile')},\n"
+        f"  skus_peru: {sum(1 for s in catalog if s['pais']=='Peru')},\n"
+        f"  total_real_clp: {sum(s['real_total'] for s in catalog if s['moneda']=='CLP')},\n"
+        f"  total_ppto_clp: {sum(s['ppto_total'] for s in catalog if s['moneda']=='CLP')},\n"
+        f"}};\n"
+    )
+    out_path = REPO / "sku_catalog.js"
+    out_path.write_text(js, encoding='utf-8')
+    print(f"   ✅ sku_catalog.js · {len(catalog)} SKUs · CL:{sum(1 for s in catalog if s['pais']=='Chile')} PE:{sum(1 for s in catalog if s['pais']=='Peru')}")
+    return True
+
+
 def sync_cache_busting():
     """
     Actualiza el query param ?v= de TODOS los <script src="avboard_data.js...">
@@ -2623,6 +2787,7 @@ def sync_cache_busting():
     patterns = [
         (re.compile(r'(src=["\'])avboard_data\.js(?:\?v=[\w\d]+)?(["\'])'), 'avboard_data.js'),
         (re.compile(r'(src=["\'])avboard_clientes\.js(?:\?v=[\w\d]+)?(["\'])'), 'avboard_clientes.js'),
+        (re.compile(r'(src=["\'])sku_catalog\.js(?:\?v=[\w\d]+)?(["\'])'), 'sku_catalog.js'),
     ]
     changed = []
     for path in sorted(REPO.glob('*.html')):
@@ -3421,6 +3586,10 @@ def main():
     print(f"\n💳 Sincronizando Panel_CxC (chileData + alerta banner)...")
     _cxc_ok = sync_cxc_panel(cl_cxc, pe_cxc)
     print(f"   → {'Actualizado' if _cxc_ok else 'Sin cambios (ya al día)'}")
+
+    # 8.8 Generar sku_catalog.js
+    print("\n📦 Generando sku_catalog.js...")
+    sync_sku_catalog()
 
     # 9. Logs
     print("\n📋 Actualizando logs...")
