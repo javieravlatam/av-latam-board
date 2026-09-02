@@ -951,6 +951,7 @@ tbody td { padding: 12px 16px; font-size: 12px; }
           <span style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600">Horizonte</span>
           <div style="display:flex;gap:4px;">
             <button id="ml-h1" onclick="mlSetH(1)" style="background:var(--surface);border:1px solid var(--border);color:var(--text-muted);padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;">1 año</button>
+            <button id="ml-h2" onclick="mlSetH(2)" style="background:var(--surface);border:1px solid var(--border);color:var(--text-muted);padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;">2 años</button>
             <button id="ml-h3" onclick="mlSetH(3)" style="background:var(--gold);border:1px solid var(--gold);color:#fff;padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;">3 años</button>
           </div>
         </div>
@@ -984,31 +985,31 @@ tbody td { padding: 12px 16px; font-size: 12px; }
         </div>
       </div>
 
-      <!-- GRÁFICAS ROW 1: Tendencia + Mix -->
-      <div style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px;">
-        <!-- Tendencia forecast -->
-        <div class="ex-table-wrap">
-          <div class="ex-table-header">Tendencia histórica + pronóstico ML <span id="ml-chart-sub">Regresión lineal · intervalo confianza 80%</span></div>
-          <div style="padding:12px;background:var(--surface);">
-            <canvas id="ml-forecast-chart" height="200"></canvas>
-          </div>
-        </div>
-        <!-- Mix por producto -->
-        <div class="ex-table-wrap">
-          <div class="ex-table-header">Mix de ingresos por producto <span>Real 2024-2025</span></div>
-          <div style="padding:12px;background:var(--surface);display:flex;align-items:center;justify-content:center;height:228px;">
-            <canvas id="ml-mix-chart" height="190"></canvas>
-          </div>
+      <!-- GRÁFICA TENDENCIA: ancho completo -->
+      <div class="ex-table-wrap" style="margin-bottom:12px;">
+        <div class="ex-table-header">Tendencia histórica + pronóstico ML <span id="ml-chart-sub">Regresión lineal · intervalo confianza 80%</span></div>
+        <div style="padding:12px;background:var(--surface);">
+          <canvas id="ml-forecast-chart" height="180"></canvas>
         </div>
       </div>
 
-      <!-- GRÁFICA ROW 2: Distribución mensual -->
-      <div class="ex-table-wrap" style="margin-bottom:12px;">
-        <div class="ex-table-header">Estacionalidad real vs presupuesto 2026 <span>CLP por mes · base histórica 2024-2025</span></div>
-        <div style="padding:12px;background:var(--surface);">
-          <canvas id="ml-season-chart" height="140"></canvas>
+      <!-- GRÁFICAS ROW 2: Mix + Estacionalidad lado a lado -->
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:12px;margin-bottom:12px;">
+        <!-- Mix por producto -->
+        <div class="ex-table-wrap">
+          <div class="ex-table-header">Mix de ingresos por producto <span>Real 2024-2025</span></div>
+          <div style="padding:12px;background:var(--surface);display:flex;align-items:center;justify-content:center;height:220px;">
+            <canvas id="ml-mix-chart" height="190"></canvas>
+          </div>
         </div>
-      </div>
+        <!-- Estacionalidad: segunda columna del grid -->
+        <div class="ex-table-wrap">
+          <div class="ex-table-header">Estacionalidad real vs presupuesto 2026 <span>CLP por mes · base histórica 2024-2025</span></div>
+          <div style="padding:12px;background:var(--surface);">
+            <canvas id="ml-season-chart" height="190"></canvas>
+          </div>
+        </div>
+      </div><!-- /grid row 2 -->
 
       <!-- TABLA contraste real vs ppto por SKU -->
       <div class="ex-table-wrap" style="margin-bottom:12px;">
@@ -2148,10 +2149,11 @@ function initDashboard() {
   /* ── Horizon buttons ──────────────────────────── */
   window.mlSetH = function(h) {
     ML.h = h;
-    var h1=document.getElementById('ml-h1'), h3=document.getElementById('ml-h3');
+    var h1=document.getElementById('ml-h1'), h2=document.getElementById('ml-h2'), h3=document.getElementById('ml-h3');
     var act = 'background:var(--gold);border:1px solid var(--gold);color:#fff;padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;';
     var inact = 'background:var(--surface);border:1px solid var(--border);color:var(--text-muted);padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;';
     if (h1) h1.style.cssText = (h===1 ? act : inact);
+    if (h2) h2.style.cssText = (h===2 ? act : inact);
     if (h3) h3.style.cssText = (h===3 ? act : inact);
     mlRefresh();
   };
