@@ -771,7 +771,8 @@ const pptoAc=acum(CH_PPTO);
       } else {
         var pArr=d.rtcP[key]||new Array(12).fill(0);
         var rArr=d.rtcR[key]||new Array(12).fill(0);
-        pptoA=pArr.reduce(function(a,v,i){a.push(Math.round(((a[i-1]||0)+(v||0))/10000)/100);return a;},[]);
+        var pSum=0;
+        pptoA=pArr.map(function(v){pSum+=(v||0); return Math.round(pSum/10000)/100;});
         realA=[];var s=0;
         for(var i=0;i<12;i++){if(i<d.nMes){s+=rArr[i]||0;realA.push(Math.round(s/10000)/100);}else{realA.push(null);}}
       }

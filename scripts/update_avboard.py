@@ -403,6 +403,45 @@ def extract_chile_ventas(path):
     }
 
 
+def extract_historico_2025(lb_path):
+    """Lee ventas históricas 2025 desde el libro base.
+    Retorna {'cl': [12 CLP ints], 'pe': [12 USD floats]} o None si no disponible.
+    """
+    try:
+        import openpyxl as _opx
+        from collections import defaultdict as _dd2
+        wb = _opx.load_workbook(lb_path, data_only=True, read_only=True)
+        _MESES_ES = ['enero','febrero','marzo','abril','mayo','junio',
+                     'julio','agosto','septiembre','octubre','noviembre','diciembre']
+
+        # Chile 2025: col[0]=PERIODO(int), col[1]=MES, col[15]=Total CLP
+        cl25 = _dd2(float)
+        if 'ventas chile 2024 2025' in wb.sheetnames:
+            for row in wb['ventas chile 2024 2025'].iter_rows(min_row=2, values_only=True):
+                if row[0] == 2025 and row[1] and row[15]:
+                    m = str(row[1]).strip().lower().replace(' ', '')
+                    cl25[m] += float(row[15] or 0)
+        cl_arr = [int(cl25.get(m, 0)) for m in _MESES_ES]
+
+        # Peru 2025: col[0]=periodo str "01 ENERO 2025", col[7]=USD
+        pe25 = _dd2(float)
+        if 'ventas peru 2025' in wb.sheetnames:
+            for row in wb['ventas peru 2025'].iter_rows(min_row=2, values_only=True):
+                if row[0] and row[7]:
+                    periodo = str(row[0]).upper()
+                    for m in _MESES_ES:
+                        if m.upper() in periodo:
+                            pe25[m] += float(row[7] or 0)
+                            break
+        pe_arr = [round(pe25.get(m, 0), 2) for m in _MESES_ES]
+
+        wb.close()
+        return {'cl': cl_arr, 'pe': pe_arr}
+    except Exception as e:
+        print(f"   ⚠ extract_historico_2025: {e}")
+        return None
+
+
 def extract_peru_ventas(path):
     """Extrae ventas Perú."""
     df_raw = pd.read_excel(path, sheet_name='RESUMEN', header=None)
@@ -1646,16 +1685,31 @@ def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, pe_cxc, productos
             f"    skus_sin_costo_peru:   {r['skus_sin_costo_peru']}"
         )
 
+    # Histórico 2025 desde libro base
+    hist_2025 = None
+    if 'libro_base' in files:
+        print("\n📅 Extrayendo histórico 2025 desde libro base...")
+        hist_2025 = extract_historico_2025(files['libro_base'])
+        if hist_2025:
+            print(f"   → Chile 2025 YTD: CLP {sum(hist_2025['cl']):,} | Perú 2025 YTD: USD {sum(hist_2025['pe']):,.0f}")
+        else:
+            print("   ⚠ Histórico 2025 no disponible")
+    _zero12 = [0] * 12
+    cl_mensual_2025 = hist_2025['cl'] if hist_2025 else _zero12
+    pe_mensual_2025 = hist_2025['pe'] if hist_2025 else _zero12
+
     # Mensual arrays (12 months)
     cl_mensual = cl_v['mensual'] + [0] * (12 - len(cl_v['mensual']))
     pe_mensual = pe_v['mensual'] + [0] * (12 - len(pe_v['mensual']))
     ppto_cl    = PPTO_MENSUAL_CL
     ppto_pe    = PPTO_MENSUAL_PE
 
-    cl_mensual_str = ', '.join(str(v) for v in cl_mensual)
-    pe_mensual_str = ', '.join(str(v) for v in pe_mensual)
-    ppto_cl_str    = ', '.join(str(v) for v in ppto_cl)
-    ppto_pe_str    = ', '.join(str(v) for v in ppto_pe)
+    cl_mensual_str      = ', '.join(str(v) for v in cl_mensual)
+    pe_mensual_str      = ', '.join(str(v) for v in pe_mensual)
+    cl_mensual_2025_str = ', '.join(str(v) for v in cl_mensual_2025)
+    pe_mensual_2025_str = ', '.join(str(round(v, 2)) for v in pe_mensual_2025)
+    ppto_cl_str         = ', '.join(str(v) for v in ppto_cl)
+    ppto_pe_str         = ', '.join(str(v) for v in ppto_pe)
 
     # RTC ppto mensual (static)
     def js_rtc_ppto(d):
@@ -1727,8 +1781,9 @@ var AVBOARD = (function() {{
     cumplimiento_4m: {cl_v['cumplimiento_4m']},
     cumplimiento_5m: {cl_v['cumplimiento_5m']},
     cumplimiento_t1: {round(sum(cl_v['mensual'][:3]) / sum(PPTO_MENSUAL_CL[:3]), 4)},
-    mensual_real:  [{cl_mensual_str}],
-    mensual_ppto:  [{ppto_cl_str}],
+    mensual_real:      [{cl_mensual_str}],
+    mensual_real_2025: [{cl_mensual_2025_str}],
+    mensual_ppto:      [{ppto_cl_str}],
     rtc_real_t1:   {js_rtc_t1(cl_v['rtc_t1'])},
     rtc_ppto_t1: {{
       caroca:    {sum(PPTO_RTC_CL['caroca'][:3])},
@@ -1798,8 +1853,9 @@ var AVBOARD = (function() {{
     ppto_mes_label: '{pe_v['ppto_mes_label']}',
     cumplimiento_4m: {pe_v['cumplimiento_4m']},
     cumplimiento_5m: {pe_v['cumplimiento_5m']},
-    mensual_real: [{pe_mensual_str}],
-    mensual_ppto: [{ppto_pe_str}],
+    mensual_real:      [{pe_mensual_str}],
+    mensual_real_2025: [{pe_mensual_2025_str}],
+    mensual_ppto:      [{ppto_pe_str}],
     por_vendedor: {js_por_vendedor_pe(pe_v['por_vendedor'])},
     rtc_ppto_anual: {{
       {ppto_pe_anual_str}

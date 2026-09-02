@@ -338,28 +338,24 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     </div>
 
     <div class="panel">
-      <div class="ptitle">VENTA MENSUAL POR ZONA <span class="ptag">USD · apilado</span>
-        <span id="pe-vsel" style="float:right;display:inline-flex;gap:3px;flex-wrap:wrap;margin-top:-2px;"></span>
-      </div>
+      <div class="ptitle">VENTA MENSUAL POR ZONA <span class="ptag">USD · apilado</span></div>
       <div class="ch ch-lg"><canvas id="cStack"></canvas></div>
     </div>
 
     <!-- Curva acumulada filtrable por vendedor -->
     <div class="panel" style="margin-top:12px;">
-      <div class="ptitle">CURVA ACUMULADA POR ZONA <span class="ptag">USD · ppto vs real 2026 vs real 2025</span></div>
+      <div class="ptitle">CURVA ACUMULADA POR ZONA <span class="ptag">USD · ppto vs real 2026 vs real 2025</span>
+        <span id="pe-vsel" style="float:right;display:inline-flex;gap:3px;flex-wrap:wrap;margin-top:-2px;"></span>
+      </div>
       <div class="ch ch-lg"><canvas id="cAcum"></canvas></div>
     </div>
   </div>
 
-  <!-- CHARTS: Ppto vs Real + Curva -->
-  <div class="g2" style="margin-bottom:15px;">
+  <!-- CHARTS: Ppto vs Real -->
+  <div style="margin-bottom:15px;">
     <div class="panel">
       <div class="ptitle">PPTO ANUAL vs REAL YTD <span class="ptag">USD · por zona</span></div>
       <div class="ch ch-lg"><canvas id="cBarras"></canvas></div>
-    </div>
-    <div class="panel">
-      <div class="ptitle">CURVA ACUMULADA 2026 <span class="ptag">USD · ppto vs real · 12 meses</span></div>
-      <div class="ch ch-lg"><canvas id="cCurva"></canvas></div>
     </div>
   </div>
 
@@ -705,26 +701,6 @@ const GD='rgba(74,158,219,0.1)';
   var realAcD2=[];var s=0;
   for(var i=0;i<12;i++){if(i<nMpe_d){s+=REAL_T[i];realAcD2.push(s);}else{realAcD2.push(null);}}
 
-  new Chart(document.getElementById('cCurva'),{
-    type:'line',
-    data:{
-      labels:MESES_LBL,
-      datasets:[
-        {label:'Ppto Acumulado',data:pptoAcD,borderColor:'rgba(74,158,219,0.4)',borderDash:[6,4],borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(74,158,219,0.5)',tension:0.3,fill:false},
-        {label:'Real Acumulado',data:realAcD2,borderColor:A,backgroundColor:'rgba(245,166,35,0.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:A,tension:0.3,fill:true},
-        {type:'bar',label:'Ppto Mensual',data:PPTO_T,backgroundColor:'rgba(74,158,219,0.08)',borderColor:'rgba(74,158,219,0.15)',borderWidth:1,borderRadius:2}
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},
-      scales:{
-        x:{grid:{color:GD},border:{color:GD}},
-        y:{grid:{color:GD},border:{color:GD},ticks:{callback:function(v){return'USD '+(v/1000).toFixed(0)+'K';}}}
-      }
-    }
-  });
-
   // ── Vendor Selector + cAcum ─────────────────────────────────────────────────
   var PE_VENDORS=[
     {k:'all',n:'Todo el equipo'},
@@ -968,23 +944,6 @@ new Chart(document.getElementById('cCxC'),{
         (pve.gonzales&&pve.gonzales.ytd)||0
       ];
       cB.update();
-    }
-
-    // ── Chart: cCurva — acumulado 12 meses ───────────────────────────────────
-    var cCv=Chart.getChart(document.getElementById('cCurva'));
-    if(cCv){
-      // Ppto acumulado desde AVBOARD (reemplaza legacy hardcodeado)
-      var pptoRunning=0, pptoAcDyn=[];
-      for(var i=0;i<12;i++){pptoRunning+=(pv.mensual_ppto[i]||0);pptoAcDyn.push(pptoRunning);}
-      cCv.data.datasets[0].data=pptoAcDyn;
-      // Real acumulado hasta el último mes con datos
-      var running=0, realAcDyn=[];
-      for(var i=0;i<12;i++){
-        running+=(pv.mensual_real[i]||0);
-        realAcDyn.push(i<nRealPE?running:null);
-      }
-      cCv.data.datasets[1].data=realAcDyn;
-      cCv.update();
     }
 
     // ── cAcum + vendor selector data refresh ─────────────────────────────────
