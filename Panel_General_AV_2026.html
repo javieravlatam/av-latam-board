@@ -265,33 +265,30 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
 <!-- ═══ BLOQUE 3: GRÁFICOS PRINCIPALES ═══ -->
 <div class="slabel">Evolución Mensual Grupo · Ventas vs Presupuesto</div>
-<div class="g21">
-
-  <!-- Stacked bar + cumplimiento -->
-  <div class="card">
-    <div class="eyebrow" id="chart1-eyebrow">Consolidado Grupo 2026</div>
-    <div class="ctitle">
-      Ventas CL + PE (USD) vs Presupuesto
-      <div style="display:flex;gap:12px;flex-shrink:0;">
-        <span style="display:flex;align-items:center;gap:4px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;color:var(--muted);letter-spacing:0;"><span style="width:10px;height:10px;border-radius:2px;background:rgba(27,79,138,.55);display:inline-block;"></span>Chile</span>
-        <span style="display:flex;align-items:center;gap:4px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;color:var(--muted);letter-spacing:0;"><span style="width:10px;height:10px;border-radius:2px;background:rgba(196,122,15,.55);display:inline-block;"></span>Perú</span>
-        <span style="display:flex;align-items:center;gap:4px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;color:var(--muted);letter-spacing:0;"><span style="width:18px;height:2px;background:var(--purple);display:inline-block;"></span>Cumpl.%</span>
-      </div>
-    </div>
-    <div style="position:relative;height:240px;"><canvas id="chartGrupoMensual"></canvas></div>
-    <div style="display:grid;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border-dim);" id="monthly-summary">
-      <!-- resumen meses inyectado por JS -->
+<!-- Stacked bar + cumplimiento -->
+<div class="card" style="margin-bottom:14px">
+  <div class="eyebrow" id="chart1-eyebrow">Consolidado Grupo 2026</div>
+  <div class="ctitle">
+    Ventas CL + PE (USD) vs Presupuesto
+    <div style="display:flex;gap:12px;flex-shrink:0;">
+      <span style="display:flex;align-items:center;gap:4px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;color:var(--muted);letter-spacing:0;"><span style="width:10px;height:10px;border-radius:2px;background:rgba(27,79,138,.55);display:inline-block;"></span>Chile</span>
+      <span style="display:flex;align-items:center;gap:4px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;color:var(--muted);letter-spacing:0;"><span style="width:10px;height:10px;border-radius:2px;background:rgba(196,122,15,.55);display:inline-block;"></span>Perú</span>
+      <span style="display:flex;align-items:center;gap:4px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;color:var(--muted);letter-spacing:0;"><span style="width:18px;height:2px;background:var(--purple);display:inline-block;"></span>Cumpl.%</span>
     </div>
   </div>
+  <div style="position:relative;height:240px;"><canvas id="chartGrupoMensual"></canvas></div>
+  <div style="display:grid;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border-dim);" id="monthly-summary">
+    <!-- resumen meses inyectado por JS -->
+  </div>
+</div>
 
-  <!-- Cumplimiento % mensual por país -->
-  <div class="card">
-    <div class="eyebrow">Cumplimiento vs Presupuesto</div>
-    <div class="ctitle">% Logro Mensual · CL vs PE</div>
-    <div style="position:relative;height:200px;"><canvas id="chartCumpl"></canvas></div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border-dim);text-align:center;" id="cumpl-summary">
-      <!-- resumen inyectado por JS -->
-    </div>
+<!-- Cumplimiento % mensual por país -->
+<div class="card" style="margin-bottom:14px">
+  <div class="eyebrow">Cumplimiento vs Presupuesto</div>
+  <div class="ctitle">% Logro Mensual · CL vs PE</div>
+  <div style="position:relative;height:200px;"><canvas id="chartCumpl"></canvas></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border-dim);text-align:center;" id="cumpl-summary">
+    <!-- resumen inyectado por JS -->
   </div>
 </div>
 
