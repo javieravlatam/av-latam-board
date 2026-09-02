@@ -315,40 +315,38 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   <!-- DETALLE POR ZONA + CHART -->
   <div class="sec">Desempeño por Zona <span>YTD vs Ppto · <span id="av-pe-zona-corte">cargando…</span></span></div>
 
-  <div class="g2" style="margin-bottom:15px;align-items:start;">
-    <div class="panel">
-      <div class="ptitle">DETALLE YTD POR ZONA <span class="ptag">USD · Real vs Ppto T1 y Anual</span></div>
-      <table class="tbl">
-        <thead><tr>
-          <th style="text-align:left;">Zona</th>
-          <th>Real YTD</th><th>Ppto YTD</th><th style="text-align:center;">% YTD</th>
-          <th id="pe-th-ultmes">Mes Real</th><th>YTD</th><th>Ppto Anual</th>
-        </tr></thead>
-        <tbody id="pe-vt-body"></tbody>
-        <tfoot><tr>
-          <td>TOTAL</td>
-          <td class="mono r" style="color:var(--blue);" id="pe-tfoot-t1">—</td>
-          <td class="mono r" id="pe-tfoot-pptoytd">—</td>
-          <td class="c"><span class="pb pb-ok" id="pe-tfoot-cumpl">—</span></td>
-          <td class="mono r" style="color:var(--blue);" id="pe-tfoot-may">—</td>
-          <td class="mono r" style="color:var(--blue);" id="pe-tfoot-ytd">—</td>
-          <td class="mono r" id="pe-tfoot-pptoa">—</td>
-        </tr></tfoot>
-      </table>
-    </div>
+  <div class="panel" style="margin-bottom:12px;">
+    <div class="ptitle">DETALLE YTD POR ZONA <span class="ptag">USD · Real vs Ppto T1 y Anual</span></div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="text-align:left;">Zona</th>
+        <th>Real YTD</th><th>Ppto YTD</th><th style="text-align:center;">% YTD</th>
+        <th id="pe-th-ultmes">Mes Real</th><th>YTD</th><th>Ppto Anual</th>
+      </tr></thead>
+      <tbody id="pe-vt-body"></tbody>
+      <tfoot><tr>
+        <td>TOTAL</td>
+        <td class="mono r" style="color:var(--blue);" id="pe-tfoot-t1">—</td>
+        <td class="mono r" id="pe-tfoot-pptoytd">—</td>
+        <td class="c"><span class="pb pb-ok" id="pe-tfoot-cumpl">—</span></td>
+        <td class="mono r" style="color:var(--blue);" id="pe-tfoot-may">—</td>
+        <td class="mono r" style="color:var(--blue);" id="pe-tfoot-ytd">—</td>
+        <td class="mono r" id="pe-tfoot-pptoa">—</td>
+      </tr></tfoot>
+    </table>
+  </div>
 
-    <div class="panel">
-      <div class="ptitle">VENTA MENSUAL POR ZONA <span class="ptag">USD · apilado</span></div>
-      <div class="ch ch-lg"><canvas id="cStack"></canvas></div>
-    </div>
+  <div class="panel" style="margin-bottom:12px;">
+    <div class="ptitle">VENTA MENSUAL POR ZONA <span class="ptag">USD · apilado</span></div>
+    <div class="ch ch-lg"><canvas id="cStack"></canvas></div>
+  </div>
 
-    <!-- Curva acumulada filtrable por vendedor -->
-    <div class="panel" style="margin-top:12px;">
-      <div class="ptitle">CURVA ACUMULADA POR ZONA <span class="ptag">USD · ppto vs real 2026 vs real 2025</span>
-        <span id="pe-vsel" style="float:right;display:inline-flex;gap:3px;flex-wrap:wrap;margin-top:-2px;"></span>
-      </div>
-      <div class="ch ch-lg"><canvas id="cAcum"></canvas></div>
+  <!-- Curva acumulada filtrable por vendedor -->
+  <div class="panel" style="margin-bottom:15px;">
+    <div class="ptitle">CURVA ACUMULADA POR ZONA <span class="ptag">USD · ppto vs real 2026 vs real 2025</span>
+      <span id="pe-vsel" style="float:right;display:inline-flex;gap:3px;flex-wrap:wrap;margin-top:-2px;"></span>
     </div>
+    <div class="ch ch-lg"><canvas id="cAcum"></canvas></div>
   </div>
 
   <!-- CHARTS: Ppto vs Real -->
