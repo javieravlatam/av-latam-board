@@ -967,6 +967,7 @@ tbody td { padding: 12px 16px; font-size: 12px; }
           <div class="kpi-label">Real 2026 (base)</div>
           <div class="kpi-value gold" id="ml-kpi-base">—</div>
           <div class="kpi-sub" id="ml-kpi-base-sub">Tendencia histórica</div>
+          <div style="font-size:9px;color:var(--text-muted);margin-top:3px;" id="ml-cagr-src">—</div>
         </div>
         <div class="kpi-card" id="ml-kc27" onclick="mlOpenBudget(2027)" style="cursor:pointer;border:2px solid var(--border);transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 2px 12px rgba(27,79,138,.18)'" onmouseout="this.style.boxShadow=''">
           <div class="kpi-label">Proyección 2027 <span style="font-size:9px;color:var(--gold)">→ ver ppto</span></div>
@@ -1817,6 +1818,32 @@ function initDashboard() {
     return {a:a, b:b};
   }
 
+  // Regresión ponderada exponencialmente — meses recientes pesan más (alpha=1.15 por defecto)
+  function linRegWeighted(vals, alpha) {
+    var n = vals.length; if (n < 2) return {a: vals[0]||0, b: 0};
+    alpha = alpha || 1.15;
+    var sw=0, swx=0, swy=0, swxx=0, swxy=0;
+    for (var i=0; i<n; i++) {
+      var w = Math.pow(alpha, i);
+      sw+=w; swx+=w*i; swy+=w*vals[i]; swxx+=w*i*i; swxy+=w*i*vals[i];
+    }
+    var d = sw*swxx - swx*swx;
+    if (Math.abs(d) < 1e-9) return {a: swy/sw, b: 0};
+    var b = (sw*swxy - swx*swy) / d;
+    return {a: (swy - b*swx)/sw, b: b};
+  }
+
+  // CAGR YoY real por país: compara 2026 YTD vs mismos meses 2025
+  function computeYoYCAGR(m25arr, m26arr, scale) {
+    scale = scale || 1;
+    var n = m26arr.filter(function(v){return v>0;}).length;
+    if (n < 3) return null;
+    var ytd25 = m25arr.slice(0,n).reduce(function(a,v){return a+(v||0)*scale;},0);
+    var ytd26 = m26arr.slice(0,n).reduce(function(a,v){return a+(v||0)*scale;},0);
+    if (ytd25 <= 0) return null;
+    return ytd26/ytd25 - 1; // crecimiento YoY en los mismos meses
+  }
+
   function fmtCLP(v) {
     if (v >= 1e9) return 'CLP ' + (v/1e9).toFixed(1) + 'B';
     if (v >= 1e6) return 'CLP ' + (v/1e6).toFixed(1) + 'M';
@@ -1912,21 +1939,75 @@ function initDashboard() {
       mesData.push(sumM);
     }
 
-    // CAGR real: serie temporal AVBOARD (2025 real + 2026 YTD) → pendiente mensual → anualizar
+    // CAGR ML: YoY real ponderado por país + regresión exponencial reciente
     (function computeCAGR() {
-      if (typeof AVBOARD !== 'undefined' && AVBOARD.chile) {
-        var av = AVBOARD.chile;
-        var m25 = av.mensual_real_2025 || [];
-        var m26 = av.mensual_real || [];
-        var nReal = av.n_real || m26.filter(function(v){return v>0;}).length;
-        var series = m25.concat(m26.slice(0, nReal)).filter(function(v){return v > 0;});
-        if (series.length >= 6) {
-          var lrTs = linReg(series);
-          var avgTs = series.reduce(function(a,v){return a+v;},0) / series.length;
-          var monthlyGrowth = lrTs.b / (avgTs || 1);
-          ML.cagr = Math.max(0.03, Math.min(0.60, monthlyGrowth * 12));
-          return;
+      if (typeof AVBOARD !== 'undefined') {
+        var clv = (AVBOARD.chile && AVBOARD.chile.ventas) ? AVBOARD.chile.ventas : null;
+        var pev = (AVBOARD.peru  && AVBOARD.peru.ventas)  ? AVBOARD.peru.ventas  : null;
+
+        // 1) YoY real por país (mismos meses 2025 vs 2026)
+        var yoyCL = clv ? computeYoYCAGR(clv.mensual_real_2025||[], clv.mensual_real||[], 1) : null;
+        var yoyPE = pev ? computeYoYCAGR(pev.mensual_real_2025||[], pev.mensual_real||[], ML.tc) : null;
+
+        // 2) Regresión ponderada sobre serie completa (meses recientes pesan más)
+        var buildSeries = function(ventas, scale) {
+          var m25 = (ventas && ventas.mensual_real_2025) ? ventas.mensual_real_2025 : [];
+          var m26 = (ventas && ventas.mensual_real) ? ventas.mensual_real : [];
+          var nR  = m26.filter(function(v){return v>0;}).length;
+          return m25.concat(m26.slice(0,nR)).map(function(v){return (v||0)*(scale||1);});
+        };
+        var serCL = clv ? buildSeries(clv, 1) : [];
+        var serPE = pev ? buildSeries(pev, ML.tc) : [];
+
+        var trendCAGR = null;
+        var series, ytdCL=0, ytdPE=0;
+        if (clv) ytdCL = (clv.mensual_real||[]).reduce(function(a,v){return a+(v||0);},0);
+        if (pev) ytdPE = (pev.mensual_real||[]).reduce(function(a,v){return a+(v||0);},0) * ML.tc;
+
+        if (ML.vista === 'chile') {
+          series = serCL.filter(function(v){return v>0;});
+        } else if (ML.vista === 'peru') {
+          series = serPE.filter(function(v){return v>0;});
+        } else {
+          var len = Math.max(serCL.length, serPE.length);
+          series = [];
+          for (var i=0; i<len; i++) series.push((serCL[i]||0)+(serPE[i]||0));
+          series = series.filter(function(v){return v>0;});
         }
+
+        if (series.length >= 6) {
+          var lrW = linRegWeighted(series, 1.15);
+          var avgTs = series.reduce(function(a,v){return a+v;},0)/series.length;
+          trendCAGR = Math.max(0.03, lrW.b / (avgTs||1) * 12);
+        }
+
+        // 3) CAGR final: combinar YoY (ponderado por peso de ingresos) + tendencia ponderada
+        var finalCAGR = null;
+        if (ML.vista === 'chile' && yoyCL !== null) {
+          finalCAGR = yoyCL;
+        } else if (ML.vista === 'peru' && yoyPE !== null) {
+          finalCAGR = yoyPE;
+        } else if (yoyCL !== null && yoyPE !== null) {
+          // LATAM: promedio ponderado por YTD de cada país
+          var total = ytdCL + ytdPE || 1;
+          finalCAGR = yoyCL * (ytdCL/total) + yoyPE * (ytdPE/total);
+        } else if (yoyCL !== null) { finalCAGR = yoyCL; }
+          else if (yoyPE !== null) { finalCAGR = yoyPE; }
+
+        // Tomar el más agresivo entre YoY real y tendencia ponderada
+        if (finalCAGR !== null && trendCAGR !== null) {
+          ML.cagr = Math.max(finalCAGR, trendCAGR);
+        } else {
+          ML.cagr = finalCAGR !== null ? finalCAGR : (trendCAGR || 0.12);
+        }
+        ML.cagr = Math.max(0.03, Math.min(1.20, ML.cagr)); // cap 120%
+
+        // Mostrar fuente del CAGR en UI
+        var cagrSrc = (ML.vista==='latam')
+          ? ('CL ' + (yoyCL!==null?(yoyCL*100).toFixed(0):'—') + '% · PE ' + (yoyPE!==null?(yoyPE*100).toFixed(0):'—') + '% YoY')
+          : (ML.vista==='peru' ? (yoyPE!==null?(yoyPE*100).toFixed(1)+'% YoY real':'tendencia') : (yoyCL!==null?(yoyCL*100).toFixed(1)+'% YoY real':'tendencia'));
+        setText('ml-cagr-src', cagrSrc);
+        return;
       }
       // Fallback: pendiente sobre distribución mensual de SKUs
       var lr = linReg(mesData);
@@ -1934,21 +2015,38 @@ function initDashboard() {
       ML.cagr = Math.max(0.05, Math.min(0.35, lr.b / (avgMes||1)));
     })();
 
-    // Proyecciones anuales (CLP, base real)
-    var base = ML.totalReal; // 2 años combinados → escalar a 1 año
-    var base1yr = base / 2;  // promedio anual real
+    // Base anual desde AVBOARD YTD (no SKU_CATALOG) — refleja realidad consolidada
+    var base1yr = (function computeBase() {
+      if (typeof AVBOARD === 'undefined') return ML.totalReal / 2;
+      var ytdCL = 0, ytdPE_clp = 0, nCL = 0, nPE = 0;
+      if (AVBOARD.chile && AVBOARD.chile.ventas) {
+        var m26cl = AVBOARD.chile.ventas.mensual_real || [];
+        nCL  = m26cl.filter(function(v){return v>0;}).length || 1;
+        ytdCL = m26cl.reduce(function(a,v){return a+v;},0);
+      }
+      if (AVBOARD.peru && AVBOARD.peru.ventas) {
+        var m26pe = AVBOARD.peru.ventas.mensual_real || [];
+        nPE  = m26pe.filter(function(v){return v>0;}).length || 1;
+        ytdPE_clp = m26pe.reduce(function(a,v){return a+v;},0) * ML.tc;
+      }
+      if (ML.vista === 'chile' && nCL > 0) return (ytdCL / nCL) * 12;
+      if (ML.vista === 'peru'  && nPE > 0) return (ytdPE_clp / nPE) * 12;
+      // latam: usar mismo n de meses (el mayor con datos)
+      var n = Math.max(nCL, nPE, 1);
+      return ((ytdCL + ytdPE_clp) / n) * 12;
+    })();
     var y27 = base1yr * Math.pow(1 + ML.cagr, 1);
     var y28 = base1yr * Math.pow(1 + ML.cagr, 2);
     var y29 = base1yr * Math.pow(1 + ML.cagr, 3);
 
     // KPIs
-    setText('ml-kpi-base', fmtCLP(base1yr) + ' /año');
-    setText('ml-kpi-base-sub', 'Ppto 2026: ' + fmtCLP(ML.totalPpto));
-    setText('ml-kpi-27', fmtCLP(y27));
+    setText('ml-kpi-base', fmtVal(base1yr) + ' /año');
+    setText('ml-kpi-base-sub', 'Ppto 2026: ' + fmtVal(ML.totalPpto));
+    setText('ml-kpi-27', fmtVal(y27));
     setText('ml-kpi-27d', '▲ +' + (ML.cagr*100).toFixed(1)+'% vs base');
-    setText('ml-kpi-28', fmtCLP(y28));
+    setText('ml-kpi-28', fmtVal(y28));
     setText('ml-kpi-28d', '▲ +' + (Math.pow(1+ML.cagr,2)-1)*100 .toFixed(1)+'% vs base');
-    setText('ml-kpi-29', fmtCLP(y29));
+    setText('ml-kpi-29', fmtVal(y29));
     setText('ml-kpi-29d', '▲ +' + (Math.pow(1+ML.cagr,3)-1)*100 .toFixed(1)+'% vs base');
 
     mlRenderForecastChart(mesData, base1yr);
@@ -1968,20 +2066,25 @@ function initDashboard() {
 
     var mNames = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
     var hist = []; var labels = [];
-    var av = (typeof AVBOARD !== 'undefined' && AVBOARD.chile) ? AVBOARD.chile : null;
+    // Fuente de datos: Chile o LATAM consolidado (CLP)
+    var avV = (typeof AVBOARD !== 'undefined' && AVBOARD.chile && AVBOARD.chile.ventas) ? AVBOARD.chile.ventas : null;
+    var avPe = (typeof AVBOARD !== 'undefined' && AVBOARD.peru && AVBOARD.peru.ventas)  ? AVBOARD.peru.ventas  : null;
+    var isLatam = (ML.vista === 'latam');
 
-    // ── 1. 2025 real (12 meses desde AVBOARD, K CLP) ──────────────────
-    var m25 = (av && av.mensual_real_2025 && av.mensual_real_2025.some(function(v){return v>0;}))
-              ? av.mensual_real_2025
-              : ML.skus.reduce(function(acc, s){ for(var m=1;m<=12;m++) acc[m-1]+=(s.real_mes[m]||0); return acc; }, Array(12).fill(0));
+    // ── 1. 2025 real (12 meses, K CLP) ────────────────────────────────
+    var m25cl = (avV && avV.mensual_real_2025) ? avV.mensual_real_2025 : Array(12).fill(0);
+    var m25pe = (isLatam && avPe && avPe.mensual_real_2025) ? avPe.mensual_real_2025.map(function(v){return (v||0)*ML.tc;}) : Array(12).fill(0);
+    var m25 = m25cl.map(function(v,i){ return (v||0) + (m25pe[i]||0); });
     for (var m=0; m<12; m++) {
       hist.push(Math.round((m25[m]||0)/1000));
       labels.push(mNames[m]+' 25');
     }
 
-    // ── 2. 2026 real YTD (desde AVBOARD, K CLP) ───────────────────────
-    var m26all = (av && av.mensual_real) ? av.mensual_real : Array(12).fill(0);
-    var nReal  = av && av.n_real ? av.n_real : m26all.filter(function(v){return v>0;}).length;
+    // ── 2. 2026 real YTD (K CLP) ──────────────────────────────────────
+    var m26cl = (avV && avV.mensual_real) ? avV.mensual_real : Array(12).fill(0);
+    var m26pe = (isLatam && avPe && avPe.mensual_real) ? avPe.mensual_real.map(function(v){return (v||0)*ML.tc;}) : Array(12).fill(0);
+    var m26all = m26cl.map(function(v,i){ return (v||0) + (m26pe[i]||0); });
+    var nReal  = m26all.filter(function(v){return v>0;}).length;
     for (var m=0; m<nReal; m++) {
       hist.push(Math.round((m26all[m]||0)/1000));
       labels.push(mNames[m]+' 26');
