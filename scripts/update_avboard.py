@@ -1548,7 +1548,7 @@ def _arr(lst, per_row=12, indent=6):
     return '[\n' + ',\n'.join(pad + str(c) for c in chunks) + '\n' + ' '*(indent-2) + ']'
 
 
-def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, pe_cxc, productos_data, iec_pe=None, insights=None):
+def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, pe_cxc, productos_data, iec_pe=None, insights=None, hist_2025=None):
     """Genera el contenido completo de avboard_data.js.
 
     iec_pe: resultado de compute_iec_peru(tx_pe) — dict con {total, aguirre, ...}
@@ -1685,15 +1685,7 @@ def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, pe_cxc, productos
             f"    skus_sin_costo_peru:   {r['skus_sin_costo_peru']}"
         )
 
-    # Histórico 2025 desde libro base
-    hist_2025 = None
-    if 'libro_base' in files:
-        print("\n📅 Extrayendo histórico 2025 desde libro base...")
-        hist_2025 = extract_historico_2025(files['libro_base'])
-        if hist_2025:
-            print(f"   → Chile 2025 YTD: CLP {sum(hist_2025['cl']):,} | Perú 2025 YTD: USD {sum(hist_2025['pe']):,.0f}")
-        else:
-            print("   ⚠ Histórico 2025 no disponible")
+    # Histórico 2025 (recibido como parámetro desde main)
     _zero12 = [0] * 12
     cl_mensual_2025 = hist_2025['cl'] if hist_2025 else _zero12
     pe_mensual_2025 = hist_2025['pe'] if hist_2025 else _zero12
@@ -3573,9 +3565,18 @@ def main():
     print("\n🤖 Generando AI insights (visión CEO/GM)...")
     ai_insights = generate_ai_insights(cl_v, pe_v, cl_cxc, pe_cxc, cortes)
 
+    hist_2025 = None
+    if 'libro_base' in files:
+        print("\n📅 Extrayendo histórico 2025 desde libro base...")
+        hist_2025 = extract_historico_2025(files['libro_base'])
+        if hist_2025:
+            print(f"   → Chile 2025 YTD: CLP {sum(hist_2025['cl']):,} | Perú 2025 YTD: USD {sum(hist_2025['pe']):,.0f}")
+        else:
+            print("   ⚠ Histórico 2025 no disponible")
+
     print("\n📝 Generando avboard_data.js...")
     js_data = render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, pe_cxc, productos,
-                                     iec_pe=iec_pe_computed, insights=ai_insights)
+                                     iec_pe=iec_pe_computed, insights=ai_insights, hist_2025=hist_2025)
     with open(AVBOARD_DATA, 'w', encoding='utf-8') as f:
         f.write(js_data)
     ok, err = validate_js(AVBOARD_DATA)
