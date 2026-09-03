@@ -1966,41 +1966,86 @@ function initDashboard() {
     var canvas = document.getElementById('ml-forecast-chart');
     if (!canvas) return;
 
-    // Histórico: 24 puntos (ene24→dic25), mes a mes
-    var hist = []; var labels = [];
     var mNames = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-    for (var y=0; y<2; y++) {
-      for (var m=0; m<12; m++) {
-        var skuSum = ML.skus.reduce(function(a,s){ return a+(s.real_mes[m+1]||0); },0);
-        hist.push(Math.round(skuSum/1000));
-        labels.push(mNames[m]+' '+(24+y).toString().slice(-2));
-      }
+    var hist = []; var labels = [];
+    var av = (typeof AVBOARD !== 'undefined' && AVBOARD.chile) ? AVBOARD.chile : null;
+
+    // ── 1. 2025 real (12 meses desde AVBOARD, K CLP) ──────────────────
+    var m25 = (av && av.mensual_real_2025 && av.mensual_real_2025.some(function(v){return v>0;}))
+              ? av.mensual_real_2025
+              : ML.skus.reduce(function(acc, s){ for(var m=1;m<=12;m++) acc[m-1]+=(s.real_mes[m]||0); return acc; }, Array(12).fill(0));
+    for (var m=0; m<12; m++) {
+      hist.push(Math.round((m25[m]||0)/1000));
+      labels.push(mNames[m]+' 25');
     }
 
-    // Pronóstico trimestral
-    var lr = linReg(hist.filter(function(v){return v>0;}));
+    // ── 2. 2026 real YTD (desde AVBOARD, K CLP) ───────────────────────
+    var m26all = (av && av.mensual_real) ? av.mensual_real : Array(12).fill(0);
+    var nReal  = av && av.n_real ? av.n_real : m26all.filter(function(v){return v>0;}).length;
+    for (var m=0; m<nReal; m++) {
+      hist.push(Math.round((m26all[m]||0)/1000));
+      labels.push(mNames[m]+' 26');
+    }
+
+    // ── 3. Regresión sobre serie completa (2025 + 2026 YTD) ───────────
+    var validSeries = hist.filter(function(v){return v>0;});
+    var lr = linReg(validSeries.length >= 4 ? validSeries : hist);
+
+    // ── 4. Forecast 2026 resto del año (Sep→Dic, meses nReal a 11) ────
+    var fore26 = []; var fore26Labels = [];
+    var sea = ML.seasonality;
+    // Estimar anual 2026 desde tendencia
+    var midIdx = hist.length + (12 - nReal) / 2;
+    var estMonthly = lr.a + lr.b * midIdx;
+    var est26Annual = estMonthly * 12;
+    for (var m=nReal; m<12; m++) {
+      var v = Math.round(est26Annual * (sea[m+1]||1/12) / 1000);
+      fore26.push(Math.max(0, v));
+      fore26Labels.push(mNames[m]+' 26');
+    }
+
+    // ── 5. Forecast 2027+ trimestral ──────────────────────────────────
     var forePts = []; var foreLabels = [];
     var quarters = ['Q1','Q2','Q3','Q4'];
+    var baseIdx = hist.length + fore26.length;
     for (var yr=0; yr<ML.h; yr++) {
       for (var q=0; q<4; q++) {
-        var idx = hist.length + yr*4 + q;
-        var v = lr.a + lr.b*idx*(12/4);
+        var v = lr.a + lr.b * (baseIdx + yr*4 + q) * (12/4);
         forePts.push(Math.max(0, Math.round(v)));
         foreLabels.push(quarters[q]+' '+(27+yr).toString());
       }
     }
 
-    var allLabels = labels.concat(foreLabels);
-    var histData  = hist.concat(Array(forePts.length).fill(null));
-    var foreData  = Array(hist.length - 1).fill(null).concat([hist[hist.length-1]]).concat(forePts);
-    var upBand    = Array(hist.length).fill(null).concat(forePts.map(function(v,i){return Math.round(v*(1.10+i*0.01));}));
-    var loBand    = Array(hist.length).fill(null).concat(forePts.map(function(v,i){return Math.max(0,Math.round(v*(0.90-i*0.01)));}));
+    // ── 6. Construir arrays para la gráfica ──────────────────────────
+    var allLabels = labels.concat(fore26Labels).concat(foreLabels);
+    var totLen    = allLabels.length;
+    var hLen      = hist.length;
+    var f26Len    = fore26.length;
+
+    // Real (sólido, se corta en nReal)
+    var histData = hist.concat(Array(f26Len + forePts.length).fill(null));
+    // 2026 forecast (naranja punteado): empalma con último real
+    var fore26Data = Array(hLen-1).fill(null)
+                     .concat([hist[hLen-1]])
+                     .concat(fore26)
+                     .concat(Array(forePts.length).fill(null));
+    // 2027+ forecast (verde punteado): empalma con último punto 2026
+    var lastFore26 = fore26.length > 0 ? fore26[fore26.length-1] : hist[hLen-1];
+    var foreData = Array(hLen + f26Len - 1).fill(null)
+                   .concat([lastFore26])
+                   .concat(forePts);
+    // Banda de confianza (solo 2027+)
+    var upBand = Array(hLen + f26Len).fill(null)
+                 .concat(forePts.map(function(v,i){return Math.round(v*(1.10+i*0.01));}));
+    var loBand = Array(hLen + f26Len).fill(null)
+                 .concat(forePts.map(function(v,i){return Math.max(0,Math.round(v*(0.90-i*0.01)));}));
 
     var datasets = [
-      {label:'Banda',data:upBand,borderColor:'transparent',backgroundColor:'rgba(27,79,138,0.08)',fill:'+1',pointRadius:0,tension:0.4},
-      {label:'BandaLo',data:loBand,borderColor:'transparent',backgroundColor:'transparent',fill:false,pointRadius:0,tension:0.4},
-      {label:'Real',data:histData,borderColor:'#1B4F8A',backgroundColor:'rgba(27,79,138,0.06)',borderWidth:2,pointRadius:2,tension:0.3,fill:true},
-      {label:'Pronóstico',data:foreData,borderColor:'#5a8f35',backgroundColor:'transparent',borderWidth:2,borderDash:[5,3],pointRadius:2,tension:0.3},
+      {label:'Banda sup',data:upBand,borderColor:'transparent',backgroundColor:'rgba(27,79,138,0.08)',fill:'+1',pointRadius:0,tension:0.4},
+      {label:'Banda inf',data:loBand,borderColor:'transparent',backgroundColor:'transparent',fill:false,pointRadius:0,tension:0.4},
+      {label:'Real 2025-26',data:histData,borderColor:'#1B4F8A',backgroundColor:'rgba(27,79,138,0.06)',borderWidth:2,pointRadius:2,tension:0.3,fill:true},
+      {label:'Cierre 2026 ML',data:fore26Data,borderColor:'#C47A0F',backgroundColor:'transparent',borderWidth:2,borderDash:[4,3],pointRadius:2,tension:0.3},
+      {label:'Pronóstico ML',data:foreData,borderColor:'#5a8f35',backgroundColor:'transparent',borderWidth:2,borderDash:[5,3],pointRadius:2,tension:0.3},
     ];
 
     if (ML.charts['fc']) {
@@ -2012,9 +2057,12 @@ function initDashboard() {
         type:'line', data:{labels:allLabels,datasets:datasets},
         options:{
           responsive:true, maintainAspectRatio:false,
-          plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,backgroundColor:'#fff',titleColor:'#3D5270',bodyColor:'#1A2332',borderColor:'rgba(27,79,138,0.3)',borderWidth:1}},
+          plugins:{
+            legend:{display:true,labels:{font:{size:9},color:'#3D5270',boxWidth:12,padding:10,filter:function(item){return item.text!=='Banda sup'&&item.text!=='Banda inf';}}},
+            tooltip:{mode:'index',intersect:false,backgroundColor:'#fff',titleColor:'#3D5270',bodyColor:'#1A2332',borderColor:'rgba(27,79,138,0.3)',borderWidth:1}
+          },
           scales:{
-            x:{grid:{color:'rgba(27,79,138,0.07)'},ticks:{color:'#7A90AA',font:{size:9},maxTicksLimit:16}},
+            x:{grid:{color:'rgba(27,79,138,0.07)'},ticks:{color:'#7A90AA',font:{size:9},maxTicksLimit:20}},
             y:{grid:{color:'rgba(27,79,138,0.07)'},ticks:{color:'#7A90AA',font:{size:9},callback:function(v){return '$'+v+'K';}}}
           }
         }
