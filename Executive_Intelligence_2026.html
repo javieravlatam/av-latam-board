@@ -1041,7 +1041,13 @@ tbody td { padding: 12px 16px; font-size: 12px; }
             <div style="font-size:14px;font-weight:700;color:var(--gold);" id="ml-bp-title">Propuesta Presupuesto 2027</div>
             <div style="font-size:10px;color:var(--text-muted);margin-top:2px;">Generado por ML · distribución mensual con estacionalidad real</div>
           </div>
-          <button onclick="document.getElementById('ml-budget-panel').style.display='none'" style="background:var(--surface2);border:1px solid var(--border);color:var(--text-dim);padding:5px 12px;border-radius:5px;cursor:pointer;font-size:11px;">✕ Cerrar</button>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <div style="display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;font-size:11px;">
+              <button id="ml-cur-clp" onclick="mlSetCurrency('CLP')" style="padding:5px 12px;background:var(--gold);color:#fff;border:none;cursor:pointer;font-weight:600;">CLP</button>
+              <button id="ml-cur-usd" onclick="mlSetCurrency('USD')" style="padding:5px 12px;background:var(--surface);color:var(--text-muted);border:none;cursor:pointer;">USD</button>
+            </div>
+            <button onclick="document.getElementById('ml-budget-panel').style.display='none'" style="background:var(--surface2);border:1px solid var(--border);color:var(--text-dim);padding:5px 12px;border-radius:5px;cursor:pointer;font-size:11px;">✕ Cerrar</button>
+          </div>
         </div>
         <!-- Escenarios -->
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">
@@ -1088,6 +1094,34 @@ tbody td { padding: 12px 16px; font-size: 12px; }
         <div style="background:var(--gold-glow);border-left:3px solid var(--gold);padding:8px 12px;border-radius:0 6px 6px 0;margin-top:10px;font-size:10px;color:var(--gold);">
           ⚡ Distribución con estacionalidad real · Pico octubre (17.9%), mayo (11.0%), enero (10.2%) · Se recalcula automáticamente con cada corrida del pipeline
         </div>
+
+        <!-- Presupuesto completo por producto -->
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="font-size:12px;font-weight:700;color:var(--gold);">📊 Presupuesto <span id="ml-pp-year">2027</span> · Todos los Productos</div>
+            <div style="display:flex;gap:8px;">
+              <button onclick="mlToggleProdTable()" id="ml-pp-toggle-btn" style="background:var(--gold);border:none;color:#fff;padding:5px 14px;border-radius:5px;cursor:pointer;font-size:11px;font-weight:600;">Ver tabla completa</button>
+              <button onclick="mlExportCSV()" style="background:var(--surface);border:1px solid var(--border);color:var(--text-dim);padding:5px 12px;border-radius:5px;cursor:pointer;font-size:11px;">⬇ Exportar CSV</button>
+            </div>
+          </div>
+          <div id="ml-prod-table-wrap" style="display:none;overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:10px;min-width:700px;" id="ml-prod-full-table">
+              <thead>
+                <tr style="background:var(--surface2);">
+                  <th style="padding:5px 8px;text-align:left;border-bottom:2px solid var(--gold);">Producto</th>
+                  <th style="padding:5px 8px;text-align:left;border-bottom:2px solid var(--gold);">País</th>
+                  <th style="padding:5px 8px;text-align:right;border-bottom:2px solid var(--gold);">Real 2025</th>
+                  <th style="padding:5px 8px;text-align:right;border-bottom:2px solid var(--gold);">Ppto 2026</th>
+                  <th style="padding:5px 8px;text-align:right;border-bottom:2px solid var(--gold);color:var(--gold);">Ppto ML <span id="ml-pp-yr-col">2027</span></th>
+                  <th style="padding:5px 8px;text-align:right;border-bottom:2px solid var(--gold);">CAGR</th>
+                  <th style="padding:5px 8px;text-align:right;border-bottom:2px solid var(--gold);">Mix%</th>
+                  <th style="padding:5px 8px;text-align:center;border-bottom:2px solid var(--gold);">Tendencia</th>
+                </tr>
+              </thead>
+              <tbody id="ml-prod-full-tbody"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
     </div><!-- /mod-6 -->
@@ -1105,8 +1139,8 @@ tbody td { padding: 12px 16px; font-size: 12px; }
 <!-- ═══════════════════════════════════════════════
      DATA LAYERS
 ═══════════════════════════════════════════════ -->
-<script src="avboard_data.js?v=202609011401"></script>
-<script src="avboard_clientes.js?v=202609011401"></script>
+<script src="avboard_data.js?v=202609030959"></script>
+<script src="avboard_clientes.js?v=202609030959"></script>
 
 <!-- ═══════════════════════════════════════════════
      AUTH LOGIC
@@ -1766,7 +1800,7 @@ function initDashboard() {
 <script src="assets_logo.js"></script>
 <script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 
-<script src="sku_catalog.js?v=202609011401"></script>
+<script src="sku_catalog.js?v=202609030959"></script>
 <script>
 /* ══════════════════════════════════════════════════
    MÓDULO ML FORECAST · Executive Intelligence 2026
@@ -1788,6 +1822,18 @@ function initDashboard() {
     if (v >= 1e6) return 'CLP ' + (v/1e6).toFixed(1) + 'M';
     return 'CLP ' + Math.round(v).toLocaleString('es-CL');
   }
+  function fmtUSD(v) {
+    var u = v / ML.tc;
+    if (u >= 1e6) return 'USD ' + (u/1e6).toFixed(2) + 'M';
+    if (u >= 1e3) return 'USD ' + (u/1e3).toFixed(0) + 'K';
+    return 'USD ' + Math.round(u).toLocaleString('en-US');
+  }
+  function fmtVal(v) { return ML.currency === 'USD' ? fmtUSD(v) : fmtCLP(v); }
+  function fmtMes(v) {
+    // compact for table cells
+    if (ML.currency === 'USD') { var u=v/ML.tc; return '$'+(u/1000).toFixed(0)+'K'; }
+    return '$'+(v/1000).toFixed(0)+'K';
+  }
   function fmtPct(v, decimals) { return (v*100).toFixed(decimals||1)+'%'; }
   function fmtGap(gap) {
     var s = gap >= 0 ? '+' : '';
@@ -1806,6 +1852,8 @@ function initDashboard() {
     totalReal: 0,
     totalPpto: 0,
     cagr: 0.145,        // computed from data
+    currency: 'CLP',    // CLP | USD
+    tc: 950,            // CLP/USD exchange rate from AVBOARD
   };
 
   /* ── Init: poblar filtro productos ──────────── */
@@ -1814,6 +1862,11 @@ function initDashboard() {
       setTimeout(mlInit, 200); return;
     }
     ML.seasonality = SKU_SEASONALITY_CL || {1:0.1022,2:0.0748,3:0.0551,4:0.083,5:0.1101,6:0.0497,7:0.0536,8:0.0706,9:0.1014,10:0.1791,11:0.0768,12:0.0436};
+
+    // Leer TC desde AVBOARD
+    if (typeof AVBOARD !== 'undefined' && AVBOARD.chile) {
+      ML.tc = AVBOARD.chile.tc_clp_usd || 950;
+    }
 
     // Poblar selector de productos
     var prods = {};
@@ -1852,15 +1905,34 @@ function initDashboard() {
     ML.totalReal  = ML.skus.reduce(function(a,s){ return a + s.real_total; }, 0);
     ML.totalPpto  = ML.skus.reduce(function(a,s){ return a + s.ppto_total; }, 0);
 
-    // CAGR estimado desde la pendiente de ventas mensuales
-    var mesData = []; // array 12 valores promedio mensual
+    // Distribución mensual (para gráficas)
+    var mesData = [];
     for (var m=1; m<=12; m++) {
       var sumM = ML.skus.reduce(function(a,s){ return a + (s.real_mes[m]||0); }, 0);
       mesData.push(sumM);
     }
-    var lr = linReg(mesData);
-    var avgMes = ML.totalReal / 24; // 2 años → 24 meses
-    ML.cagr = Math.max(0.05, Math.min(0.35, lr.b / (avgMes||1)));
+
+    // CAGR real: serie temporal AVBOARD (2025 real + 2026 YTD) → pendiente mensual → anualizar
+    (function computeCAGR() {
+      if (typeof AVBOARD !== 'undefined' && AVBOARD.chile) {
+        var av = AVBOARD.chile;
+        var m25 = av.mensual_real_2025 || [];
+        var m26 = av.mensual_real || [];
+        var nReal = av.n_real || m26.filter(function(v){return v>0;}).length;
+        var series = m25.concat(m26.slice(0, nReal)).filter(function(v){return v > 0;});
+        if (series.length >= 6) {
+          var lrTs = linReg(series);
+          var avgTs = series.reduce(function(a,v){return a+v;},0) / series.length;
+          var monthlyGrowth = lrTs.b / (avgTs || 1);
+          ML.cagr = Math.max(0.03, Math.min(0.60, monthlyGrowth * 12));
+          return;
+        }
+      }
+      // Fallback: pendiente sobre distribución mensual de SKUs
+      var lr = linReg(mesData);
+      var avgMes = ML.totalReal / 24;
+      ML.cagr = Math.max(0.05, Math.min(0.35, lr.b / (avgMes||1)));
+    })();
 
     // Proyecciones anuales (CLP, base real)
     var base = ML.totalReal; // 2 años combinados → escalar a 1 año
@@ -2062,9 +2134,9 @@ function initDashboard() {
     var base1yr = ML.totalReal / 2;
     var years = yr - 2026;
     var totalYr = Math.round(base1yr * Math.pow(1 + ML.cagr, years));
-    setText('ml-sc-base', fmtCLP(totalYr));
-    setText('ml-sc-cons', fmtCLP(totalYr * 0.90));
-    setText('ml-sc-opt',  fmtCLP(totalYr * 1.10));
+    setText('ml-sc-base', fmtVal(totalYr));
+    setText('ml-sc-cons', fmtVal(totalYr * 0.90));
+    setText('ml-sc-opt',  fmtVal(totalYr * 1.10));
 
     // Gráfica budget mensual
     mlRenderBudgetChart(totalYr, yr);
@@ -2127,9 +2199,9 @@ function initDashboard() {
       for (var m=1; m<=12; m++) {
         var v = Math.round(skuTotal*(sea[m]||1/12));
         rowTotal += v; grandMes[m-1] += v;
-        rowHtml += '<td style="padding:4px 8px;text-align:right;white-space:nowrap;">$'+(v/1000).toFixed(0)+'K</td>';
+        rowHtml += '<td style="padding:4px 8px;text-align:right;white-space:nowrap;">' + fmtMes(v) + '</td>';
       }
-      rowHtml += '<td style="padding:4px 8px;text-align:right;font-weight:700;color:var(--gold);white-space:nowrap;background:var(--gold-glow);">$'+(rowTotal/1e6).toFixed(1)+'M</td>' +
+      rowHtml += '<td style="padding:4px 8px;text-align:right;font-weight:700;color:var(--gold);white-space:nowrap;background:var(--gold-glow);">' + fmtVal(rowTotal) + '</td>' +
         '<td style="padding:4px 8px;text-align:right;color:var(--text-muted)">'+(mixPct*100).toFixed(1)+'%</td>' +
         '</tr>';
       html += rowHtml;
@@ -2140,11 +2212,138 @@ function initDashboard() {
     var grandTotal = 0;
     grandMes.forEach(function(v,i){
       grandTotal += v;
-      html += '<td style="padding:5px 8px;text-align:right;white-space:nowrap;">$'+(v/1000).toFixed(0)+'K</td>';
+      html += '<td style="padding:5px 8px;text-align:right;white-space:nowrap;">' + fmtMes(v) + '</td>';
     });
-    html += '<td style="padding:5px 8px;text-align:right;background:var(--gold);color:#fff;white-space:nowrap;">$'+(grandTotal/1e6).toFixed(1)+'M</td><td style="padding:5px 8px;text-align:right;">100%</td></tr>';
+    html += '<td style="padding:5px 8px;text-align:right;background:var(--gold);color:#fff;white-space:nowrap;">' + fmtVal(grandTotal) + '</td><td style="padding:5px 8px;text-align:right;">100%</td></tr>';
     tbody.innerHTML = html;
   }
+
+  /* ── Currency toggle ─────────────────────────── */
+  window.mlSetCurrency = function(cur) {
+    ML.currency = cur;
+    var actS = 'padding:5px 12px;background:var(--gold);color:#fff;border:none;cursor:pointer;font-weight:600;';
+    var inactS = 'padding:5px 12px;background:var(--surface);color:var(--text-muted);border:none;cursor:pointer;';
+    var bc = document.getElementById('ml-cur-clp'), bu = document.getElementById('ml-cur-usd');
+    if (bc) bc.style.cssText = (cur==='CLP' ? actS : inactS);
+    if (bu) bu.style.cssText = (cur==='USD' ? actS : inactS);
+    if (ML.budgetYear) mlOpenBudget(ML.budgetYear);
+    // Rebuild prod table if open
+    var wrap = document.getElementById('ml-prod-table-wrap');
+    if (wrap && wrap.style.display !== 'none') mlRenderProdFullTable(ML.budgetYear || 2027);
+  };
+
+  /* ── Presupuesto por producto completo ─────────── */
+  window.mlToggleProdTable = function() {
+    var wrap = document.getElementById('ml-prod-table-wrap');
+    var btn = document.getElementById('ml-pp-toggle-btn');
+    if (!wrap) return;
+    if (wrap.style.display === 'none') {
+      wrap.style.display = 'block';
+      if (btn) btn.textContent = 'Ocultar tabla';
+      mlRenderProdFullTable(ML.budgetYear || 2027);
+    } else {
+      wrap.style.display = 'none';
+      if (btn) btn.textContent = 'Ver tabla completa';
+    }
+  };
+
+  function mlRenderProdFullTable(yr) {
+    var tbody = document.getElementById('ml-prod-full-tbody');
+    if (!tbody) return;
+    var years = yr - 2026;
+    var base1yr = ML.totalReal / 2;
+    var totalYr = base1yr * Math.pow(1 + ML.cagr, years);
+    var isCLP = ML.currency === 'CLP';
+
+    // Agrupar por producto (sumando todos los SKUs del producto)
+    var byProd = {};
+    ML.skus.forEach(function(s) {
+      var key = s.producto + '|' + (s.pais||'Chile');
+      if (!byProd[key]) byProd[key] = {producto:s.producto, pais:s.pais||'Chile', real:0, ppto:0};
+      byProd[key].real += s.real_total;
+      byProd[key].ppto += s.ppto_total;
+    });
+
+    var rows = Object.values(byProd).sort(function(a,b){return b.real-a.real;});
+    var html = '';
+    rows.forEach(function(r) {
+      var mixPct = ML.totalReal > 0 ? r.real / ML.totalReal : 0;
+      var pptoML = totalYr * mixPct;
+      var cagr = r.ppto > 0 ? ((r.real/r.ppto)-1)*100 : 0;
+      var tend = pptoML > r.ppto*1.1 ? '🚀 Fuerte' : pptoML > r.ppto ? '↑ Crecimiento' : pptoML < r.ppto*0.9 ? '↓ Bajo' : '→ Estable';
+      var fmtR  = isCLP ? fmtCLP(r.real)    : fmtUSD(r.real);
+      var fmtP  = r.ppto > 0 ? (isCLP ? fmtCLP(r.ppto) : fmtUSD(r.ppto)) : '—';
+      var fmtML = isCLP ? fmtCLP(pptoML) : fmtUSD(pptoML);
+      html += '<tr onmouseover="this.style.background=\'var(--surface2)\'" onmouseout="this.style.background=\'\'">' +
+        '<td style="padding:5px 8px;font-weight:600;">' + r.producto + '</td>' +
+        '<td style="padding:5px 8px;color:var(--text-muted)">' + r.pais + '</td>' +
+        '<td style="padding:5px 8px;text-align:right">' + fmtR + '</td>' +
+        '<td style="padding:5px 8px;text-align:right;color:var(--text-muted)">' + fmtP + '</td>' +
+        '<td style="padding:5px 8px;text-align:right;font-weight:700;color:var(--gold)">' + fmtML + '</td>' +
+        '<td style="padding:5px 8px;text-align:right;color:' + (cagr>=0?'var(--green)':'var(--red)') + '">' + (cagr>=0?'+':'') + cagr.toFixed(1) + '%</td>' +
+        '<td style="padding:5px 8px;text-align:right">' + (mixPct*100).toFixed(1) + '%</td>' +
+        '<td style="padding:5px 8px;text-align:center;font-size:11px">' + tend + '</td>' +
+        '</tr>';
+    });
+    // Total row
+    var totalReal = rows.reduce(function(a,r){return a+r.real;},0);
+    var totalPpto = rows.reduce(function(a,r){return a+r.ppto;},0);
+    html += '<tr style="background:var(--gold-glow);font-weight:700;color:var(--gold);">' +
+      '<td style="padding:6px 8px" colspan="2">TOTAL GENERAL</td>' +
+      '<td style="padding:6px 8px;text-align:right">' + (isCLP?fmtCLP(totalReal):fmtUSD(totalReal)) + '</td>' +
+      '<td style="padding:6px 8px;text-align:right">' + (totalPpto>0?(isCLP?fmtCLP(totalPpto):fmtUSD(totalPpto)):'—') + '</td>' +
+      '<td style="padding:6px 8px;text-align:right;background:var(--gold);color:#fff">' + (isCLP?fmtCLP(totalYr):fmtUSD(totalYr)) + '</td>' +
+      '<td colspan="3" style="padding:6px 8px;text-align:center;font-size:10px">CAGR proyectado: +' + (ML.cagr*100).toFixed(1) + '%</td>' +
+      '</tr>';
+    tbody.innerHTML = html;
+
+    // Actualizar labels del año
+    ['ml-pp-year','ml-pp-yr-col'].forEach(function(id){setText(id,yr.toString());});
+  }
+
+  /* ── Exportar CSV ─────────────────────────────── */
+  window.mlExportCSV = function() {
+    var yr = ML.budgetYear || 2027;
+    var years = yr - 2026;
+    var base1yr = ML.totalReal / 2;
+    var totalYr = base1yr * Math.pow(1 + ML.cagr, years);
+    var sea = ML.seasonality;
+    var mNames = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    var cur = ML.currency;
+    var tc = ML.tc;
+
+    var header = ['Producto','País','Real 2025 (' + cur + ')','Ppto 2026 (' + cur + ')','Ppto ML ' + yr + ' (' + cur + ')'].concat(mNames).concat(['TOTAL','Mix%']);
+    var rows = [header];
+
+    var byProd = {};
+    ML.skus.forEach(function(s) {
+      var key = s.producto + '|' + (s.pais||'Chile');
+      if (!byProd[key]) byProd[key] = {producto:s.producto, pais:s.pais||'Chile', real:0, ppto:0};
+      byProd[key].real += s.real_total;
+      byProd[key].ppto += s.ppto_total;
+    });
+
+    function cv(v) { return cur==='USD' ? Math.round(v/tc) : Math.round(v); }
+
+    Object.values(byProd).sort(function(a,b){return b.real-a.real;}).forEach(function(r) {
+      var mixPct = ML.totalReal > 0 ? r.real / ML.totalReal : 0;
+      var pptoML = totalYr * mixPct;
+      var row = [r.producto, r.pais, cv(r.real), cv(r.ppto), cv(pptoML)];
+      var rowTotal = 0;
+      for (var m=1; m<=12; m++) {
+        var v = Math.round(pptoML * (sea[m]||1/12));
+        row.push(cv(v)); rowTotal += v;
+      }
+      row.push(cv(rowTotal)); row.push((mixPct*100).toFixed(2) + '%');
+      rows.push(row);
+    });
+
+    var csv = rows.map(function(r){return r.join(',');}).join('\n');
+    var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'Presupuesto_ML_' + yr + '_' + cur + '.csv';
+    a.click();
+  };
 
   /* ── Horizon buttons ──────────────────────────── */
   window.mlSetH = function(h) {
