@@ -513,6 +513,21 @@ tbody td { padding: 12px 16px; font-size: 12px; }
         </div>
       </div>
 
+      <!-- Acumulado YTD chart -->
+      <div class="chart-wrap" style="margin-top:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div class="chart-title" style="margin:0;">Acumulado YTD · Real vs Presupuesto (USD)</div>
+          <div style="display:flex;gap:4px;">
+            <button id="acum-btn-latam" onclick="renderAcumChart('latam')" style="padding:4px 10px;font-size:10px;background:var(--gold);color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:700;">LATAM</button>
+            <button id="acum-btn-chile" onclick="renderAcumChart('chile')" style="padding:4px 10px;font-size:10px;background:var(--surface2);color:var(--text-muted);border:1px solid var(--border);border-radius:4px;cursor:pointer;">🇨🇱 Chile</button>
+            <button id="acum-btn-peru" onclick="renderAcumChart('peru')" style="padding:4px 10px;font-size:10px;background:var(--surface2);color:var(--text-muted);border:1px solid var(--border);border-radius:4px;cursor:pointer;">🇵🇪 Perú</button>
+          </div>
+        </div>
+        <div class="chart-canvas-wrap" style="height:220px">
+          <canvas id="chart-acum"></canvas>
+        </div>
+      </div>
+
       <!-- KPIs secundarios -->
       <div class="kpi-grid kpi-grid-3">
         <div class="kpi-card">
@@ -1324,7 +1339,104 @@ function renderEvolChart(cv) {
   } else {
     evolChart = new Chart(ctx, cfg);
   }
+
+  // Iniciar gráfica acumulada en vista LATAM por defecto
+  renderAcumChart('latam');
 }
+
+/* ── Gráfica acumulado YTD (Situación Ejecutiva) ── */
+var acumChart = null;
+window.renderAcumChart = function(vista) {
+  var canvas = document.getElementById('chart-acum');
+  if (!canvas || typeof AVBOARD === 'undefined') return;
+
+  var TC = AVBOARD.meta.tc_clp_usd || 950;
+  var cv = AVBOARD.chile.ventas;
+  var pv = AVBOARD.peru.ventas;
+  var mNames = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+  // Activar botón seleccionado
+  var actS  = 'padding:4px 10px;font-size:10px;background:var(--gold);color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:700;';
+  var inactS= 'padding:4px 10px;font-size:10px;background:var(--surface2);color:var(--text-muted);border:1px solid var(--border);border-radius:4px;cursor:pointer;';
+  ['latam','chile','peru'].forEach(function(v){
+    var btn = document.getElementById('acum-btn-'+v);
+    if (btn) btn.style.cssText = (v === vista ? actS : inactS);
+  });
+
+  // Construir arrays mensuales en USD
+  var real12, ppto12;
+  if (vista === 'chile') {
+    real12 = (cv.mensual_real||[]).map(function(v){return (v||0)/TC;});
+    ppto12 = (cv.mensual_ppto||[]).map(function(v){return (v||0)/TC;});
+  } else if (vista === 'peru') {
+    real12 = (pv.mensual_real||[]).slice();
+    ppto12 = (pv.mensual_ppto||[]).slice();
+  } else { // latam
+    var clR = (cv.mensual_real||[]);
+    var clP = (cv.mensual_ppto||[]);
+    var peR = (pv.mensual_real||[]);
+    var peP = (pv.mensual_ppto||[]);
+    real12 = clR.map(function(v,i){return (v||0)/TC + (peR[i]||0);});
+    ppto12 = clP.map(function(v,i){return (v||0)/TC + (peP[i]||0);});
+  }
+
+  // Acumular
+  var nReal = real12.filter(function(v){return v>0;}).length;
+  var acumReal = [], acumPpto = [], acumLabels = [];
+  var sumR = 0, sumP = 0;
+  for (var m=0; m<12; m++) {
+    sumR += real12[m]||0;
+    sumP += ppto12[m]||0;
+    // Real solo hasta el mes con datos; resto = null
+    acumReal.push(m < nReal ? Math.round(sumR) : null);
+    acumPpto.push(Math.round(sumP));
+    acumLabels.push(mNames[m]);
+  }
+
+  var fmtK = function(v){ if(!v&&v!==0) return ''; if(v>=1e6) return '$'+(v/1e6).toFixed(2)+'M'; return '$'+(v/1e3).toFixed(0)+'K'; };
+
+  var datasets = [
+    {
+      label:'Real Acum. USD',
+      data: acumReal,
+      borderColor:'#1B4F8A',
+      backgroundColor:'rgba(27,79,138,0.10)',
+      borderWidth:2.5, pointRadius:3, tension:0.3, fill:true
+    },
+    {
+      label:'Ppto Acum. USD',
+      data: acumPpto,
+      borderColor:'#C47A0F',
+      backgroundColor:'transparent',
+      borderWidth:1.5, borderDash:[5,3], pointRadius:2, tension:0.3
+    }
+  ];
+
+  if (acumChart) {
+    acumChart.data.labels   = acumLabels;
+    acumChart.data.datasets = datasets;
+    acumChart.options.plugins.title.text = (vista==='latam'?'LATAM Consolidado':vista==='chile'?'🇨🇱 Chile (USD equiv.)':'🇵🇪 Perú (USD)') + ' · Acumulado YTD 2026';
+    acumChart.update();
+  } else {
+    acumChart = new Chart(canvas.getContext('2d'), {
+      type: 'line',
+      data: {labels: acumLabels, datasets: datasets},
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: {labels:{color:'#7A90AA',font:{size:10},boxWidth:12}},
+          title:  {display:true, text:(vista==='latam'?'LATAM Consolidado':'')+ ' · Acumulado YTD 2026', color:'#3D5270', font:{size:11}},
+          tooltip:{mode:'index',intersect:false,backgroundColor:'#fff',titleColor:'#3D5270',bodyColor:'#1A2332',borderColor:'rgba(27,79,138,0.3)',borderWidth:1,
+            callbacks:{label:function(ctx){return ctx.dataset.label+': '+fmtK(ctx.parsed.y);}}}
+        },
+        scales: {
+          x: {grid:{display:false},ticks:{color:'#7A90AA',font:{size:10}}},
+          y: {grid:{color:'rgba(27,79,138,0.07)'},ticks:{color:'#7A90AA',font:{size:10},callback:fmtK}}
+        }
+      }
+    });
+  }
+};
 
 /* ── INIT ────────────────────────────────────────── */
 function initDashboard() {
