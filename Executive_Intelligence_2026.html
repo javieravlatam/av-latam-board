@@ -1091,7 +1091,14 @@ tbody td { padding: 12px 16px; font-size: 12px; }
           </div>
         </div>
         <!-- Tabla SKU mensual -->
-        <div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:8px;">Detalle por SKU · distribución mensual proyectada</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div style="font-size:11px;font-weight:700;color:var(--gold);">Detalle por SKU · distribución mensual proyectada</div>
+          <div style="display:flex;gap:3px;" id="ml-dim-toggle">
+            <button id="ml-dim-usd"   onclick="mlSetDimension('usd')"   style="padding:3px 9px;font-size:10px;background:var(--gold);color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:700;">💵 USD</button>
+            <button id="ml-dim-units" onclick="mlSetDimension('units')" style="padding:3px 9px;font-size:10px;background:var(--surface2);color:var(--text-muted);border:1px solid var(--border);border-radius:4px;cursor:pointer;">📦 Unid.</button>
+            <button id="ml-dim-kglt"  onclick="mlSetDimension('kglt')"  style="padding:3px 9px;font-size:10px;background:var(--surface2);color:var(--text-muted);border:1px solid var(--border);border-radius:4px;cursor:pointer;">⚖️ Kg/Lt</button>
+          </div>
+        </div>
         <div style="overflow-x:auto;">
           <table style="width:100%;border-collapse:collapse;font-size:10px;min-width:900px;" id="ml-bp-table">
             <thead>
@@ -1989,6 +1996,7 @@ function initDashboard() {
     prodFilter: 'all',  // all | producto name
     budgetYear: null,
     rtcFilter: 'all',  // 'all' | 'cl_NAME' | 'pe_NAME'
+    dimension: 'usd',  // 'usd' | 'units' | 'kglt'
     charts: {},         // chart instances keyed by canvas id
     skus: [],           // filtered SKU list
     seasonality: null,  // from SKU_SEASONALITY_CL
@@ -2535,36 +2543,101 @@ function initDashboard() {
     var tbody = document.getElementById('ml-bp-tbody');
     if (!tbody) return;
     var sea = ML.seasonality;
-    var top = ML.skus.filter(function(s){return s.real_total > 0;}).slice(0,15);
+    var dim = ML.dimension || 'usd';
+    var top = ML.skus.filter(function(s){return s.real_total > 0;}).slice(0,20);
     var grandMes = Array(12).fill(0);
     var html = '';
+
     top.forEach(function(s) {
+      var pu = parsePresUnit(s.presentacion);
       var mixPct = ML.totalReal > 0 ? s.real_total / ML.totalReal : 0;
-      var skuTotal = Math.round(totalYr * mixPct);
+      var skuTotalUsd = totalYr * mixPct; // in CLP (or USD depending on currency)
+
+      // Calcular cantidad anual proyectada (proporcional al real_cant)
+      var years = (yr||2027) - 2026;
+      var qtyAnual = Math.round((s.ppto_cant||s.real_cant||0) * Math.pow(1+ML.cagr, years));
+      var kgltAnual = qtyAnual * pu.factor;
+
       var rowHtml = '<tr onmouseover="this.style.background=\'var(--surface2)\'" onmouseout="this.style.background=\'\'">' +
-        '<td style="padding:4px 8px;font-size:10px;">' + s.producto + ' · ' + s.presentacion + '</td>';
+        '<td style="padding:4px 8px;font-size:10px;">' + s.producto + '<br><span style="color:var(--text-muted);font-size:9px;">' + s.presentacion + (s.pais?' · '+s.pais:'') + '</span></td>';
+
       var rowTotal = 0;
       for (var m=1; m<=12; m++) {
-        var v = Math.round(skuTotal*(sea[m]||1/12));
-        rowTotal += v; grandMes[m-1] += v;
-        rowHtml += '<td style="padding:4px 8px;text-align:right;white-space:nowrap;">' + fmtMes(v) + '</td>';
+        var seaW = sea[m]||1/12;
+        var v, label;
+        if (dim === 'usd') {
+          v = Math.round(skuTotalUsd * seaW);
+          label = fmtMes(v);
+        } else if (dim === 'units') {
+          v = Math.round(qtyAnual * seaW);
+          label = v.toLocaleString('es-CL')+' u';
+        } else { // kglt
+          v = Math.round(kgltAnual * seaW * 10)/10;
+          label = fmtQty(v, pu.unit);
+        }
+        rowTotal += (dim==='usd' ? v : (dim==='units' ? v : v));
+        grandMes[m-1] += v;
+        rowHtml += '<td style="padding:4px 6px;text-align:right;white-space:nowrap;font-size:10px;">' + label + '</td>';
       }
-      rowHtml += '<td style="padding:4px 8px;text-align:right;font-weight:700;color:var(--gold);white-space:nowrap;background:var(--gold-glow);">' + fmtVal(rowTotal) + '</td>' +
-        '<td style="padding:4px 8px;text-align:right;color:var(--text-muted)">'+(mixPct*100).toFixed(1)+'%</td>' +
-        '</tr>';
+
+      var totalLabel = dim === 'usd' ? fmtVal(rowTotal) : (dim === 'units' ? Math.round(rowTotal).toLocaleString('es-CL')+' u' : fmtQty(rowTotal, pu.unit));
+      rowHtml += '<td style="padding:4px 8px;text-align:right;font-weight:700;color:var(--gold);white-space:nowrap;background:var(--gold-glow);">' + totalLabel + '</td>' +
+        '<td style="padding:4px 8px;text-align:right;color:var(--text-muted)">'+(mixPct*100).toFixed(1)+'%</td></tr>';
       html += rowHtml;
     });
-    // Total row
+
+    // Fila total — solo para USD tiene sentido sumar entre SKUs (distinta unidad si kglt)
     html += '<tr style="background:var(--gold-glow);font-weight:700;color:var(--gold);">' +
-      '<td style="padding:5px 8px;">TOTAL GENERAL</td>';
+      '<td style="padding:5px 8px;">TOTAL</td>';
     var grandTotal = 0;
-    grandMes.forEach(function(v,i){
+    grandMes.forEach(function(v){
       grandTotal += v;
-      html += '<td style="padding:5px 8px;text-align:right;white-space:nowrap;">' + fmtMes(v) + '</td>';
+      var label = dim==='usd' ? fmtMes(v) : (dim==='units' ? Math.round(v).toLocaleString('es-CL')+' u' : '—');
+      html += '<td style="padding:5px 8px;text-align:right;white-space:nowrap;">' + label + '</td>';
     });
-    html += '<td style="padding:5px 8px;text-align:right;background:var(--gold);color:#fff;white-space:nowrap;">' + fmtVal(grandTotal) + '</td><td style="padding:5px 8px;text-align:right;">100%</td></tr>';
+    var gtLabel = dim==='usd' ? fmtVal(grandTotal) : (dim==='units' ? Math.round(grandTotal).toLocaleString('es-CL')+' u' : '—');
+    html += '<td style="padding:5px 8px;text-align:right;background:var(--gold);color:#fff;white-space:nowrap;">' + gtLabel + '</td><td style="padding:5px 8px;text-align:right;">100%</td></tr>';
     tbody.innerHTML = html;
   }
+
+  /* ── Dimensión: parsear presentación → factor Kg/Lt ─ */
+  function parsePresUnit(pres) {
+    if (!pres) return {factor:1, unit:'un'};
+    var s = pres.toUpperCase().trim();
+    var m;
+    // Kg → kg
+    m = s.match(/(\d+\.?\d*)\s*KG/); if(m) return {factor:parseFloat(m[1]), unit:'kg'};
+    // g → kg
+    m = s.match(/(\d+\.?\d*)\s*G(?:R|S)?(?:\s|$)/); if(m) return {factor:parseFloat(m[1])/1000, unit:'kg'};
+    // Lt / L
+    m = s.match(/(\d+\.?\d*)\s*L(?:T|IT)?(?:\s|$)/); if(m) return {factor:parseFloat(m[1]), unit:'lt'};
+    // ML → L
+    m = s.match(/(\d+\.?\d*)\s*ML/); if(m) return {factor:parseFloat(m[1])/1000, unit:'lt'};
+    // CC → L
+    m = s.match(/(\d+\.?\d*)\s*CC/); if(m) return {factor:parseFloat(m[1])/1000, unit:'lt'};
+    // Si todo falla: tratar como unidades
+    return {factor:1, unit:'un'};
+  }
+
+  function fmtQty(v, unit) {
+    if (!v && v !== 0) return '—';
+    if (unit === 'kg' || unit === 'lt') {
+      if (v >= 1000) return (v/1000).toFixed(1)+(unit==='kg'?'t':'kL');
+      return v.toFixed(0)+(unit==='kg'?'kg':'L');
+    }
+    return Math.round(v).toLocaleString('es-CL')+' un';
+  }
+
+  window.mlSetDimension = function(dim) {
+    ML.dimension = dim;
+    var actS  = 'padding:3px 9px;font-size:10px;background:var(--gold);color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:700;';
+    var inactS= 'padding:3px 9px;font-size:10px;background:var(--surface2);color:var(--text-muted);border:1px solid var(--border);border-radius:4px;cursor:pointer;';
+    ['usd','units','kglt'].forEach(function(d){
+      var b = document.getElementById('ml-dim-'+d);
+      if(b) b.style.cssText = (d===dim ? actS : inactS);
+    });
+    if (ML.budgetYear) mlDispatchBudgetRender(ML.budgetYear);
+  };
 
   /* ── RTC chart + table ──────────────────────── */
   function mlRenderRtcChart(real12, ppto12, totalYr, yr, scale) {
