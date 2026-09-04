@@ -1044,8 +1044,8 @@ tbody td { padding: 12px 16px; font-size: 12px; }
           </div>
           <div style="display:flex;gap:6px;align-items:center;">
             <div style="display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;font-size:11px;">
-              <button id="ml-cur-clp" onclick="mlSetCurrency('CLP')" style="padding:5px 12px;background:var(--gold);color:#fff;border:none;cursor:pointer;font-weight:600;">CLP</button>
-              <button id="ml-cur-usd" onclick="mlSetCurrency('USD')" style="padding:5px 12px;background:var(--surface);color:var(--text-muted);border:none;cursor:pointer;">USD</button>
+              <button id="ml-cur-clp" onclick="mlSetCurrency('CLP')" style="padding:5px 12px;background:var(--surface);color:var(--text-muted);border:none;cursor:pointer;">CLP</button>
+              <button id="ml-cur-usd" onclick="mlSetCurrency('USD')" style="padding:5px 12px;background:var(--gold);color:#fff;border:none;cursor:pointer;font-weight:600;">USD</button>
             </div>
             <button onclick="document.getElementById('ml-budget-panel').style.display='none'" style="background:var(--surface2);border:1px solid var(--border);color:var(--text-dim);padding:5px 12px;border-radius:5px;cursor:pointer;font-size:11px;">✕ Cerrar</button>
           </div>
@@ -1065,9 +1065,12 @@ tbody td { padding: 12px 16px; font-size: 12px; }
             <div style="font-size:15px;font-weight:700;color:var(--green);" id="ml-sc-opt">—</div>
           </div>
         </div>
+        <!-- Tabs RTC/Vendedor -->
+        <div id="ml-rtc-tabs" style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);"></div>
+
         <!-- Gráfica mensual del presupuesto -->
         <div class="ex-table-wrap" style="margin-bottom:12px;">
-          <div class="ex-table-header">Distribución mensual proyectada <span id="ml-bp-year-label">2027</span></div>
+          <div class="ex-table-header">Distribución mensual proyectada <span id="ml-bp-year-label">2027</span> · <span id="ml-rtc-label" style="color:var(--gold);">LATAM Consolidado</span></div>
           <div style="padding:12px;background:var(--surface);">
             <canvas id="ml-budget-chart" height="140"></canvas>
           </div>
@@ -1140,8 +1143,8 @@ tbody td { padding: 12px 16px; font-size: 12px; }
 <!-- ═══════════════════════════════════════════════
      DATA LAYERS
 ═══════════════════════════════════════════════ -->
-<script src="avboard_data.js?v=202609030959"></script>
-<script src="avboard_clientes.js?v=202609030959"></script>
+<script src="avboard_data.js?v=202609040959"></script>
+<script src="avboard_clientes.js?v=202609040959"></script>
 
 <!-- ═══════════════════════════════════════════════
      AUTH LOGIC
@@ -1801,7 +1804,7 @@ function initDashboard() {
 <script src="assets_logo.js"></script>
 <script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 
-<script src="sku_catalog.js?v=202609030959"></script>
+<script src="sku_catalog.js?v=202609040959"></script>
 <script>
 /* ══════════════════════════════════════════════════
    MÓDULO ML FORECAST · Executive Intelligence 2026
@@ -1873,13 +1876,14 @@ function initDashboard() {
     vista: 'chile',     // latam | chile | peru
     prodFilter: 'all',  // all | producto name
     budgetYear: null,
+    rtcFilter: 'all',  // 'all' | 'cl_NAME' | 'pe_NAME'
     charts: {},         // chart instances keyed by canvas id
     skus: [],           // filtered SKU list
     seasonality: null,  // from SKU_SEASONALITY_CL
     totalReal: 0,
     totalPpto: 0,
     cagr: 0.145,        // computed from data
-    currency: 'CLP',    // CLP | USD
+    currency: 'USD',    // CLP | USD
     tc: 950,            // CLP/USD exchange rate from AVBOARD
   };
 
@@ -2064,87 +2068,88 @@ function initDashboard() {
     var canvas = document.getElementById('ml-forecast-chart');
     if (!canvas) return;
 
+    var TC = ML.tc || 950;
     var mNames = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
     var hist = []; var labels = [];
-    // Fuente de datos: Chile o LATAM consolidado (CLP)
-    var avV = (typeof AVBOARD !== 'undefined' && AVBOARD.chile && AVBOARD.chile.ventas) ? AVBOARD.chile.ventas : null;
-    var avPe = (typeof AVBOARD !== 'undefined' && AVBOARD.peru && AVBOARD.peru.ventas)  ? AVBOARD.peru.ventas  : null;
-    var isLatam = (ML.vista === 'latam');
 
-    // ── 1. 2025 real (12 meses, K CLP) ────────────────────────────────
-    var m25cl = (avV && avV.mensual_real_2025) ? avV.mensual_real_2025 : Array(12).fill(0);
-    var m25pe = (isLatam && avPe && avPe.mensual_real_2025) ? avPe.mensual_real_2025.map(function(v){return (v||0)*ML.tc;}) : Array(12).fill(0);
-    var m25 = m25cl.map(function(v,i){ return (v||0) + (m25pe[i]||0); });
+    var avV  = (typeof AVBOARD !== 'undefined' && AVBOARD.chile && AVBOARD.chile.ventas) ? AVBOARD.chile.ventas : null;
+    var avPe = (typeof AVBOARD !== 'undefined' && AVBOARD.peru  && AVBOARD.peru.ventas)  ? AVBOARD.peru.ventas  : null;
+    var inclPe = (ML.vista === 'latam' || ML.vista === 'peru');
+    var inclCl = (ML.vista === 'latam' || ML.vista === 'chile');
+
+    // Convertir a USD: Chile CLP÷TC, Peru ya en USD
+    var toUSD_cl = function(clp){ return (clp||0)/TC; };
+    var toUSD_pe = function(usd){ return (usd||0); };
+
+    // ── 1. 2025 real mensual en USD ──────────────────────────────────
+    var m25cl = (inclCl && avV  && avV.mensual_real_2025)  ? avV.mensual_real_2025  : Array(12).fill(0);
+    var m25pe = (inclPe && avPe && avPe.mensual_real_2025) ? avPe.mensual_real_2025 : Array(12).fill(0);
     for (var m=0; m<12; m++) {
-      hist.push(Math.round((m25[m]||0)/1000));
+      hist.push(Math.round(toUSD_cl(m25cl[m]) + toUSD_pe(m25pe[m])));
       labels.push(mNames[m]+' 25');
     }
 
-    // ── 2. 2026 real YTD (K CLP) ──────────────────────────────────────
-    var m26cl = (avV && avV.mensual_real) ? avV.mensual_real : Array(12).fill(0);
-    var m26pe = (isLatam && avPe && avPe.mensual_real) ? avPe.mensual_real.map(function(v){return (v||0)*ML.tc;}) : Array(12).fill(0);
-    var m26all = m26cl.map(function(v,i){ return (v||0) + (m26pe[i]||0); });
-    var nReal  = m26all.filter(function(v){return v>0;}).length;
+    // ── 2. 2026 real YTD en USD ──────────────────────────────────────
+    var m26cl = (inclCl && avV  && avV.mensual_real)  ? avV.mensual_real  : Array(12).fill(0);
+    var m26pe = (inclPe && avPe && avPe.mensual_real) ? avPe.mensual_real : Array(12).fill(0);
+    var m26usd = m26cl.map(function(v,i){ return Math.round(toUSD_cl(v) + toUSD_pe(m26pe[i])); });
+    var nReal  = m26usd.filter(function(v){return v>0;}).length;
     for (var m=0; m<nReal; m++) {
-      hist.push(Math.round((m26all[m]||0)/1000));
+      hist.push(m26usd[m]);
       labels.push(mNames[m]+' 26');
     }
 
-    // ── 3. Regresión sobre serie completa (2025 + 2026 YTD) ───────────
-    var validSeries = hist.filter(function(v){return v>0;});
-    var lr = linReg(validSeries.length >= 4 ? validSeries : hist);
-
-    // ── 4. Forecast 2026 resto del año (Sep→Dic, meses nReal a 11) ────
+    // ── 3. Cierre 2026 (Sep→Dic): desde base1yr USD con estacionalidad ─
+    // Usar base1yr (YTD anualizado) como estimado anual — más robusto que linReg para meses futuros
+    var base1yr_usd = base1yr / TC;
+    var sea = ML.seasonality || {};
     var fore26 = []; var fore26Labels = [];
-    var sea = ML.seasonality;
-    // Estimar anual 2026 desde tendencia
-    var midIdx = hist.length + (12 - nReal) / 2;
-    var estMonthly = lr.a + lr.b * midIdx;
-    var est26Annual = estMonthly * 12;
+    // Ajustar annual por lo ya realizado en YTD
+    var ytdReal_usd = hist.slice(12).reduce(function(a,v){return a+v;},0); // YTD 2026 en USD
+    var seaSumRest = 0;
+    for (var m=nReal; m<12; m++) seaSumRest += (sea[m+1]||1/12);
+    var seaSumYtd  = 0;
+    for (var m=0; m<nReal; m++) seaSumYtd += (sea[m+1]||1/12);
+    // Escalar annual para que YTD cuadre, si los pesos de estacionalidad son razonables
+    var est26Annual_usd = seaSumYtd > 0 ? ytdReal_usd / seaSumYtd : base1yr_usd;
+    // Usar el mayor entre el estimado desde YTD y base1yr_usd (coherencia)
+    est26Annual_usd = Math.max(est26Annual_usd, base1yr_usd);
     for (var m=nReal; m<12; m++) {
-      var v = Math.round(est26Annual * (sea[m+1]||1/12) / 1000);
+      var v = Math.round(est26Annual_usd * (sea[m+1]||1/12));
       fore26.push(Math.max(0, v));
       fore26Labels.push(mNames[m]+' 26');
     }
 
-    // ── 5. Forecast 2027+ trimestral ──────────────────────────────────
+    // ── 4. Forecast 2027+ trimestral en USD (valor MENSUAL para escala consistente) ─
     var forePts = []; var foreLabels = [];
     var quarters = ['Q1','Q2','Q3','Q4'];
-    var baseIdx = hist.length + fore26.length;
+    // Valor = promedio mensual dentro del año (mismo unit que histórico mensual)
     for (var yr=0; yr<ML.h; yr++) {
+      var annualUSD = base1yr_usd * Math.pow(1 + ML.cagr, yr + 1);
+      var monthlyAvgUSD = annualUSD / 12; // ← mismo eje que histórico mensual
       for (var q=0; q<4; q++) {
-        var v = lr.a + lr.b * (baseIdx + yr*4 + q) * (12/4);
-        forePts.push(Math.max(0, Math.round(v)));
+        // Pequeño gradiente intra-año (aceleración leve)
+        var qv = Math.round(monthlyAvgUSD * (1 + (yr*4+q) * 0.008));
+        forePts.push(Math.max(0, qv));
         foreLabels.push(quarters[q]+' '+(27+yr).toString());
       }
     }
 
-    // ── 6. Construir arrays para la gráfica ──────────────────────────
+    // ── 5. Construir arrays para la gráfica ─────────────────────────
     var allLabels = labels.concat(fore26Labels).concat(foreLabels);
-    var totLen    = allLabels.length;
-    var hLen      = hist.length;
-    var f26Len    = fore26.length;
+    var hLen = hist.length, f26Len = fore26.length;
 
-    // Real (sólido, se corta en nReal)
-    var histData = hist.concat(Array(f26Len + forePts.length).fill(null));
-    // 2026 forecast (naranja punteado): empalma con último real
-    var fore26Data = Array(hLen-1).fill(null)
-                     .concat([hist[hLen-1]])
-                     .concat(fore26)
-                     .concat(Array(forePts.length).fill(null));
-    // 2027+ forecast (verde punteado): empalma con último punto 2026
+    var histData   = hist.concat(Array(f26Len + forePts.length).fill(null));
+    var fore26Data = Array(hLen-1).fill(null).concat([hist[hLen-1]]).concat(fore26).concat(Array(forePts.length).fill(null));
     var lastFore26 = fore26.length > 0 ? fore26[fore26.length-1] : hist[hLen-1];
-    var foreData = Array(hLen + f26Len - 1).fill(null)
-                   .concat([lastFore26])
-                   .concat(forePts);
-    // Banda de confianza (solo 2027+)
-    var upBand = Array(hLen + f26Len).fill(null)
-                 .concat(forePts.map(function(v,i){return Math.round(v*(1.10+i*0.01));}));
-    var loBand = Array(hLen + f26Len).fill(null)
-                 .concat(forePts.map(function(v,i){return Math.max(0,Math.round(v*(0.90-i*0.01)));}));
+    var foreData   = Array(hLen + f26Len - 1).fill(null).concat([lastFore26]).concat(forePts);
+    var upBand     = Array(hLen + f26Len).fill(null).concat(forePts.map(function(v,i){return Math.round(v*(1.10+i*0.015));}));
+    var loBand     = Array(hLen + f26Len).fill(null).concat(forePts.map(function(v,i){return Math.max(0,Math.round(v*(0.90-i*0.015)));}));
+
+    var fmtAxis = function(v){ if(v>=1e6) return '$'+(v/1e6).toFixed(1)+'M'; if(v>=1e3) return '$'+(v/1e3).toFixed(0)+'K'; return '$'+v; };
 
     var datasets = [
-      {label:'Banda sup',data:upBand,borderColor:'transparent',backgroundColor:'rgba(27,79,138,0.08)',fill:'+1',pointRadius:0,tension:0.4},
+      {label:'Banda sup',data:upBand,borderColor:'transparent',backgroundColor:'rgba(27,79,138,0.07)',fill:'+1',pointRadius:0,tension:0.4},
       {label:'Banda inf',data:loBand,borderColor:'transparent',backgroundColor:'transparent',fill:false,pointRadius:0,tension:0.4},
       {label:'Real 2025-26',data:histData,borderColor:'#1B4F8A',backgroundColor:'rgba(27,79,138,0.06)',borderWidth:2,pointRadius:2,tension:0.3,fill:true},
       {label:'Cierre 2026 ML',data:fore26Data,borderColor:'#C47A0F',backgroundColor:'transparent',borderWidth:2,borderDash:[4,3],pointRadius:2,tension:0.3},
@@ -2162,11 +2167,12 @@ function initDashboard() {
           responsive:true, maintainAspectRatio:false,
           plugins:{
             legend:{display:true,labels:{font:{size:9},color:'#3D5270',boxWidth:12,padding:10,filter:function(item){return item.text!=='Banda sup'&&item.text!=='Banda inf';}}},
-            tooltip:{mode:'index',intersect:false,backgroundColor:'#fff',titleColor:'#3D5270',bodyColor:'#1A2332',borderColor:'rgba(27,79,138,0.3)',borderWidth:1}
+            tooltip:{mode:'index',intersect:false,backgroundColor:'#fff',titleColor:'#3D5270',bodyColor:'#1A2332',borderColor:'rgba(27,79,138,0.3)',borderWidth:1,
+              callbacks:{label:function(ctx){return ctx.dataset.label+': '+fmtAxis(ctx.parsed.y);}}}
           },
           scales:{
             x:{grid:{color:'rgba(27,79,138,0.07)'},ticks:{color:'#7A90AA',font:{size:9},maxTicksLimit:20}},
-            y:{grid:{color:'rgba(27,79,138,0.07)'},ticks:{color:'#7A90AA',font:{size:9},callback:function(v){return '$'+v+'K';}}}
+            y:{grid:{color:'rgba(27,79,138,0.07)'},ticks:{color:'#7A90AA',font:{size:9},callback:fmtAxis}}
           }
         }
       });
@@ -2273,6 +2279,98 @@ function initDashboard() {
   }
 
   /* ── Budget panel ─────────────────────────────── */
+  // ── Genera/actualiza los tabs de RTC ──────────────────────────────
+  function mlBuildRtcTabs(yr) {
+    var container = document.getElementById('ml-rtc-tabs');
+    if (!container) return;
+    var tabs = [{key:'all', label:'🌎 LATAM'}];
+    if (typeof AVBOARD !== 'undefined') {
+      if (AVBOARD.chile && AVBOARD.chile.rtc_mensual_real) {
+        Object.keys(AVBOARD.chile.rtc_mensual_real).forEach(function(k) {
+          tabs.push({key:'cl_'+k, label:'🇨🇱 '+k.charAt(0).toUpperCase()+k.slice(1)});
+        });
+      }
+      if (AVBOARD.peru && AVBOARD.peru.rtc_mensual_real) {
+        Object.keys(AVBOARD.peru.rtc_mensual_real).forEach(function(k) {
+          tabs.push({key:'pe_'+k, label:'🇵🇪 '+k.charAt(0).toUpperCase()+k.slice(1)});
+        });
+      }
+    }
+    var html = '';
+    tabs.forEach(function(t) {
+      var isActive = (ML.rtcFilter === t.key);
+      var s = isActive
+        ? 'padding:5px 11px;background:var(--gold);color:#fff;border:1px solid var(--gold);border-radius:5px;cursor:pointer;font-size:10px;font-weight:700;'
+        : 'padding:5px 11px;background:var(--surface2);color:var(--text-muted);border:1px solid var(--border);border-radius:5px;cursor:pointer;font-size:10px;';
+      html += '<button style="'+s+'" onclick="mlSetRtc(\''+t.key+'\','+yr+')">'+t.label+'</button>';
+    });
+    container.innerHTML = html;
+  }
+
+  window.mlSetRtc = function(key, yr) {
+    ML.rtcFilter = key;
+    yr = yr || ML.budgetYear || 2027;
+    mlBuildRtcTabs(yr);
+    mlDispatchBudgetRender(yr);
+  };
+
+  function mlDispatchBudgetRender(yr) {
+    var TC = ML.tc || 950;
+    var years = yr - 2026;
+
+    if (ML.rtcFilter === 'all') {
+      // Vista consolidada LATAM
+      setText('ml-rtc-label', 'LATAM Consolidado');
+      var base1yr_clp = (function(){
+        var ytdCL=0, ytdPE_clp=0, nCL=0, nPE=0;
+        if (typeof AVBOARD !== 'undefined') {
+          if (AVBOARD.chile && AVBOARD.chile.ventas) {
+            var m26cl = AVBOARD.chile.ventas.mensual_real||[];
+            nCL = m26cl.filter(function(v){return v>0;}).length||1;
+            ytdCL = m26cl.reduce(function(a,v){return a+(v||0);},0);
+          }
+          if (AVBOARD.peru && AVBOARD.peru.ventas) {
+            var m26pe = AVBOARD.peru.ventas.mensual_real||[];
+            nPE = m26pe.filter(function(v){return v>0;}).length||1;
+            ytdPE_clp = m26pe.reduce(function(a,v){return a+(v||0);},0)*TC;
+          }
+        }
+        var n = Math.max(nCL,nPE,1);
+        return ((ytdCL+ytdPE_clp)/n)*12;
+      })();
+      var totalYr = Math.round(base1yr_clp * Math.pow(1+ML.cagr, years));
+      setText('ml-sc-base', fmtVal(totalYr));
+      setText('ml-sc-cons', fmtVal(totalYr*0.90));
+      setText('ml-sc-opt',  fmtVal(totalYr*1.10));
+      mlRenderBudgetChart(totalYr, yr);
+      mlRenderBpTable(totalYr, yr);
+
+    } else {
+      // Vista por RTC individual
+      var parts = ML.rtcFilter.split('_');
+      var pais  = parts[0]; // 'cl' | 'pe'
+      var rtcName = parts.slice(1).join('_');
+      setText('ml-rtc-label', (pais==='cl'?'🇨🇱 Chile':'🇵🇪 Perú') + ' · ' + rtcName.charAt(0).toUpperCase()+rtcName.slice(1));
+
+      var av = (pais==='cl') ? (AVBOARD && AVBOARD.chile) : (AVBOARD && AVBOARD.peru);
+      var real12  = (av && av.rtc_mensual_real  && av.rtc_mensual_real[rtcName])  ? av.rtc_mensual_real[rtcName]  : Array(12).fill(0);
+      var ppto12  = (av && av.rtc_mensual_ppto  && av.rtc_mensual_ppto[rtcName])  ? av.rtc_mensual_ppto[rtcName]  : null;
+
+      // Convertir a CLP (Peru viene en USD)
+      var scale = (pais==='pe') ? TC : 1;
+      var ytdRtc = real12.reduce(function(a,v){return a+(v||0)*scale;},0);
+      var nRtc   = real12.filter(function(v){return v>0;}).length || 1;
+      var baseRtc = (ytdRtc/nRtc)*12;
+      var totalYr = Math.round(baseRtc * Math.pow(1+ML.cagr, years));
+
+      setText('ml-sc-base', fmtVal(totalYr));
+      setText('ml-sc-cons', fmtVal(totalYr*0.90));
+      setText('ml-sc-opt',  fmtVal(totalYr*1.10));
+      mlRenderRtcChart(real12, ppto12, totalYr, yr, scale);
+      mlRenderRtcTable(real12, ppto12, totalYr, yr, scale, rtcName);
+    }
+  }
+
   window.mlOpenBudget = function(yr) {
     ML.budgetYear = yr;
     var panel = document.getElementById('ml-budget-panel');
@@ -2280,21 +2378,8 @@ function initDashboard() {
     panel.style.display = 'block';
     setText('ml-bp-title', '🤖 Propuesta Presupuesto ' + yr + ' · Generado por ML');
     setText('ml-bp-year-label', yr);
-
-    // Proyección total para el año
-    var base1yr = ML.totalReal / 2;
-    var years = yr - 2026;
-    var totalYr = Math.round(base1yr * Math.pow(1 + ML.cagr, years));
-    setText('ml-sc-base', fmtVal(totalYr));
-    setText('ml-sc-cons', fmtVal(totalYr * 0.90));
-    setText('ml-sc-opt',  fmtVal(totalYr * 1.10));
-
-    // Gráfica budget mensual
-    mlRenderBudgetChart(totalYr, yr);
-
-    // Tabla SKU mensual
-    mlRenderBpTable(totalYr, yr);
-
+    mlBuildRtcTabs(yr);
+    mlDispatchBudgetRender(yr);
     panel.scrollIntoView({behavior:'smooth', block:'nearest'});
   };
 
@@ -2366,6 +2451,81 @@ function initDashboard() {
       html += '<td style="padding:5px 8px;text-align:right;white-space:nowrap;">' + fmtMes(v) + '</td>';
     });
     html += '<td style="padding:5px 8px;text-align:right;background:var(--gold);color:#fff;white-space:nowrap;">' + fmtVal(grandTotal) + '</td><td style="padding:5px 8px;text-align:right;">100%</td></tr>';
+    tbody.innerHTML = html;
+  }
+
+  /* ── RTC chart + table ──────────────────────── */
+  function mlRenderRtcChart(real12, ppto12, totalYr, yr, scale) {
+    var canvas = document.getElementById('ml-budget-chart');
+    if (!canvas) return;
+    var mNames = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    var sea = ML.seasonality;
+    var realVals=[], pptoVals=[], mlVals=[], mlCons=[], mlOpt=[];
+    for (var m=0; m<12; m++) {
+      var rv = Math.round((real12[m]||0)*scale);
+      realVals.push(rv);
+      var pv = ppto12 ? Math.round((ppto12[m]||0)*scale) : null;
+      pptoVals.push(pv);
+      var s = sea[m+1]||1/12;
+      mlVals.push(Math.round(totalYr*s));
+      mlCons.push(Math.round(totalYr*0.90*s));
+      mlOpt.push(Math.round(totalYr*1.10*s));
+    }
+    var fmtA = function(v){ if(v>=1e6) return '$'+(v/1e6).toFixed(1)+'M'; if(v>=1e3) return '$'+(v/1e3).toFixed(0)+'K'; return v?'$'+v:''; };
+    var datasets = [
+      {label:'Real 2026',data:realVals,backgroundColor:'rgba(27,79,138,0.25)',borderColor:'#1B4F8A',borderWidth:1,borderRadius:3,type:'bar'},
+      {label:'ML '+yr,data:mlVals,borderColor:'#5a8f35',backgroundColor:'transparent',borderWidth:2,type:'line',pointRadius:3,tension:0.3},
+      {label:'ML Opt',data:mlOpt,borderColor:'rgba(90,143,53,0.4)',backgroundColor:'transparent',borderWidth:1,borderDash:[3,2],type:'line',pointRadius:0,tension:0.3},
+      {label:'ML Cons',data:mlCons,borderColor:'rgba(196,122,15,0.4)',backgroundColor:'transparent',borderWidth:1,borderDash:[3,2],type:'line',pointRadius:0,tension:0.3},
+    ];
+    if (ppto12) datasets.splice(1,0,{label:'Ppto 2026',data:pptoVals,backgroundColor:'rgba(196,122,15,0.2)',borderColor:'#C47A0F',borderWidth:1,borderRadius:3,type:'bar'});
+    if (ML.charts['budget']) {
+      ML.charts['budget'].data.labels = mNames;
+      ML.charts['budget'].data.datasets = datasets;
+      ML.charts['budget'].update();
+    } else {
+      ML.charts['budget'] = new Chart(canvas.getContext('2d'), {
+        type:'bar', data:{labels:mNames,datasets:datasets},
+        options:{responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{labels:{font:{size:9},color:'#3D5270',boxWidth:10}}},
+          scales:{x:{grid:{display:false},ticks:{color:'#7A90AA',font:{size:10}}},
+            y:{grid:{color:'rgba(27,79,138,0.07)'},ticks:{color:'#7A90AA',font:{size:9},callback:fmtA}}}}
+      });
+    }
+  }
+
+  function mlRenderRtcTable(real12, ppto12, totalYr, yr, scale, rtcName) {
+    var tbody = document.getElementById('ml-bp-tbody');
+    if (!tbody) return;
+    var sea = ML.seasonality;
+    var mNames = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    var grandTotal=0, realTotal=0, pptoTotal=0;
+    var html = '<tr style="background:var(--surface2);font-size:10px;color:var(--text-muted);">' +
+      '<td style="padding:4px 8px;font-weight:600;">'+rtcName.charAt(0).toUpperCase()+rtcName.slice(1)+'</td>';
+    for (var m=0; m<12; m++) html += '<td style="padding:4px 8px;text-align:right;">'+mNames[m]+'</td>';
+    html += '<td style="padding:4px 8px;text-align:right;">Total</td><td style="padding:4px 8px;text-align:right;">%</td></tr>';
+
+    // Real 2026
+    html += '<tr onmouseover="this.style.background=\'var(--surface2)\'" onmouseout="this.style.background=\'\'">' +
+      '<td style="padding:4px 8px;font-size:10px;color:var(--gold)">Real 2026</td>';
+    real12.forEach(function(v){ var rv=(v||0)*scale; realTotal+=rv; html+='<td style="padding:4px 8px;text-align:right;font-size:10px;">'+fmtMes(rv)+'</td>'; });
+    html+='<td style="padding:4px 8px;text-align:right;font-weight:700;">'+fmtVal(realTotal)+'</td><td style="padding:4px 8px;text-align:right;color:var(--green)">YTD</td></tr>';
+
+    // Presupuesto 2026 (si existe)
+    if (ppto12) {
+      html += '<tr onmouseover="this.style.background=\'var(--surface2)\'" onmouseout="this.style.background=\'\'">' +
+        '<td style="padding:4px 8px;font-size:10px;color:var(--amber)">Ppto 2026</td>';
+      ppto12.forEach(function(v){ var pv=(v||0)*scale; pptoTotal+=pv; html+='<td style="padding:4px 8px;text-align:right;font-size:10px;">'+fmtMes(pv)+'</td>'; });
+      var cumpl = realTotal>0&&pptoTotal>0?((realTotal/pptoTotal-1)*100).toFixed(1):'—';
+      html+='<td style="padding:4px 8px;text-align:right;font-weight:700;">'+fmtVal(pptoTotal)+'</td><td style="padding:4px 8px;text-align:right;color:var(--text-muted)">Ppto</td></tr>';
+    }
+
+    // ML proyectado
+    html += '<tr style="background:var(--gold-glow);" onmouseover="this.style.background=\'var(--surface2)\'" onmouseout="this.style.background=\'var(--gold-glow)\'">' +
+      '<td style="padding:4px 8px;font-size:10px;font-weight:700;color:var(--green)">ML '+yr+'</td>';
+    for (var m2=0; m2<12; m2++) { var mv=Math.round(totalYr*(sea[m2+1]||1/12)); grandTotal+=mv; html+='<td style="padding:4px 8px;text-align:right;font-size:10px;font-weight:600;">'+fmtMes(mv)+'</td>'; }
+    html+='<td style="padding:4px 8px;text-align:right;font-weight:700;color:var(--gold);">'+fmtVal(grandTotal)+'</td><td style="padding:4px 8px;text-align:right;color:var(--text-muted)">CAGR +'+( ML.cagr*100).toFixed(1)+'%</td></tr>';
+
     tbody.innerHTML = html;
   }
 
