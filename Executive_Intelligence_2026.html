@@ -1165,8 +1165,8 @@ tbody td { padding: 12px 16px; font-size: 12px; }
 <!-- ═══════════════════════════════════════════════
      DATA LAYERS
 ═══════════════════════════════════════════════ -->
-<script src="avboard_data.js?v=202609040959"></script>
-<script src="avboard_clientes.js?v=202609040959"></script>
+<script src="avboard_data.js?v=202609041059"></script>
+<script src="avboard_clientes.js?v=202609041059"></script>
 
 <!-- ═══════════════════════════════════════════════
      AUTH LOGIC
@@ -1923,7 +1923,7 @@ function initDashboard() {
 <script src="assets_logo.js"></script>
 <script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 
-<script src="sku_catalog.js?v=202609040959"></script>
+<script src="sku_catalog.js?v=202609041059"></script>
 <script>
 /* ══════════════════════════════════════════════════
    MÓDULO ML FORECAST · Executive Intelligence 2026
@@ -2002,7 +2002,11 @@ function initDashboard() {
     seasonality: null,  // from SKU_SEASONALITY_CL
     totalReal: 0,
     totalPpto: 0,
-    cagr: 0.145,        // computed from data
+    cagr: 0.145,        // computed from data (blended LATAM)
+    _cagrCL: 0.05,      // Chile country CAGR (para proyección aditiva)
+    _cagrPE: 0.12,      // Peru country CAGR (para proyección aditiva)
+    _baseCL: 0,         // Chile annual base CLP
+    _basePE: 0,         // Peru annual base CLP
     currency: 'USD',    // CLP | USD
     tc: 950,            // CLP/USD exchange rate from AVBOARD
   };
@@ -2126,6 +2130,10 @@ function initDashboard() {
         }
         ML.cagr = Math.max(0.03, Math.min(1.20, ML.cagr)); // cap 120%
 
+        // Per-country CAGRs para proyección LATAM aditiva (CL + PE independientes)
+        ML._cagrCL = yoyCL !== null ? Math.max(0.03, Math.min(1.20, Math.max(yoyCL, trendCAGR||0))) : ML.cagr;
+        ML._cagrPE = yoyPE !== null ? Math.max(0.03, Math.min(1.20, Math.max(yoyPE, trendCAGR||0))) : ML.cagr;
+
         // Mostrar fuente del CAGR en UI
         var cagrSrc = (ML.vista==='latam')
           ? ('CL ' + (yoyCL!==null?(yoyCL*100).toFixed(0):'—') + '% · PE ' + (yoyPE!==null?(yoyPE*100).toFixed(0):'—') + '% YoY')
@@ -2153,15 +2161,27 @@ function initDashboard() {
         nPE  = m26pe.filter(function(v){return v>0;}).length || 1;
         ytdPE_clp = m26pe.reduce(function(a,v){return a+v;},0) * ML.tc;
       }
+      // Guardar bases por país para proyección LATAM aditiva
+      ML._baseCL = nCL > 0 ? (ytdCL / nCL) * 12 : 0;
+      ML._basePE = nPE > 0 ? (ytdPE_clp / nPE) * 12 : 0;
       if (ML.vista === 'chile' && nCL > 0) return (ytdCL / nCL) * 12;
       if (ML.vista === 'peru'  && nPE > 0) return (ytdPE_clp / nPE) * 12;
       // latam: usar mismo n de meses (el mayor con datos)
       var n = Math.max(nCL, nPE, 1);
       return ((ytdCL + ytdPE_clp) / n) * 12;
     })();
-    var y27 = base1yr * Math.pow(1 + ML.cagr, 1);
-    var y28 = base1yr * Math.pow(1 + ML.cagr, 2);
-    var y29 = base1yr * Math.pow(1 + ML.cagr, 3);
+    // LATAM KPI: suma aditiva Chile + Perú (cada país con su base y CAGR propio)
+    // Esto garantiza: KPI LATAM = Chile individual + Perú individual
+    var y27, y28, y29;
+    if (ML.vista === 'latam' && ML._baseCL > 0 && ML._basePE > 0) {
+      y27 = ML._baseCL*Math.pow(1+ML._cagrCL,1) + ML._basePE*Math.pow(1+ML._cagrPE,1);
+      y28 = ML._baseCL*Math.pow(1+ML._cagrCL,2) + ML._basePE*Math.pow(1+ML._cagrPE,2);
+      y29 = ML._baseCL*Math.pow(1+ML._cagrCL,3) + ML._basePE*Math.pow(1+ML._cagrPE,3);
+    } else {
+      y27 = base1yr * Math.pow(1 + ML.cagr, 1);
+      y28 = base1yr * Math.pow(1 + ML.cagr, 2);
+      y29 = base1yr * Math.pow(1 + ML.cagr, 3);
+    }
 
     // KPIs
     setText('ml-kpi-base', fmtVal(base1yr) + ' /año');
@@ -2458,7 +2478,13 @@ function initDashboard() {
         var n = Math.max(nCL,nPE,1);
         return ((ytdCL+ytdPE_clp)/n)*12;
       })();
-      var totalYr = Math.round(base1yr_clp * Math.pow(1+ML.cagr, years));
+      // Aditivo: Chile + Perú independientes → coherente con KPI cards y vistas individuales
+      var totalYr;
+      if (ML._baseCL > 0 && ML._basePE > 0) {
+        totalYr = Math.round(ML._baseCL*Math.pow(1+ML._cagrCL,years) + ML._basePE*Math.pow(1+ML._cagrPE,years));
+      } else {
+        totalYr = Math.round(base1yr_clp * Math.pow(1+ML.cagr, years));
+      }
       setText('ml-sc-base', fmtVal(totalYr));
       setText('ml-sc-cons', fmtVal(totalYr*0.90));
       setText('ml-sc-opt',  fmtVal(totalYr*1.10));
