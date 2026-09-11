@@ -1165,8 +1165,8 @@ tbody td { padding: 12px 16px; font-size: 12px; }
 <!-- ═══════════════════════════════════════════════
      DATA LAYERS
 ═══════════════════════════════════════════════ -->
-<script src="avboard_data.js?v=202609041059"></script>
-<script src="avboard_clientes.js?v=202609041059"></script>
+<script src="avboard_data.js?v=202609110949"></script>
+<script src="avboard_clientes.js?v=202609110949"></script>
 
 <!-- ═══════════════════════════════════════════════
      AUTH LOGIC
@@ -1923,7 +1923,7 @@ function initDashboard() {
 <script src="assets_logo.js"></script>
 <script>(function(){var el=document.querySelector('.av-logo-img');if(el)el.src=AV_LOGO_DATA_URL;})()</script>
 
-<script src="sku_catalog.js?v=202609041059"></script>
+<script src="sku_catalog.js?v=202609110949"></script>
 <script>
 /* ══════════════════════════════════════════════════
    MÓDULO ML FORECAST · Executive Intelligence 2026
@@ -2459,31 +2459,20 @@ function initDashboard() {
     var years = yr - 2026;
 
     if (ML.rtcFilter === 'all') {
-      // Vista consolidada LATAM
-      setText('ml-rtc-label', 'LATAM Consolidado');
-      var base1yr_clp = (function(){
-        var ytdCL=0, ytdPE_clp=0, nCL=0, nPE=0;
-        if (typeof AVBOARD !== 'undefined') {
-          if (AVBOARD.chile && AVBOARD.chile.ventas) {
-            var m26cl = AVBOARD.chile.ventas.mensual_real||[];
-            nCL = m26cl.filter(function(v){return v>0;}).length||1;
-            ytdCL = m26cl.reduce(function(a,v){return a+(v||0);},0);
-          }
-          if (AVBOARD.peru && AVBOARD.peru.ventas) {
-            var m26pe = AVBOARD.peru.ventas.mensual_real||[];
-            nPE = m26pe.filter(function(v){return v>0;}).length||1;
-            ytdPE_clp = m26pe.reduce(function(a,v){return a+(v||0);},0)*TC;
-          }
-        }
-        var n = Math.max(nCL,nPE,1);
-        return ((ytdCL+ytdPE_clp)/n)*12;
-      })();
-      // Aditivo: Chile + Perú independientes → coherente con KPI cards y vistas individuales
+      // totalYr según vista activa → KPI país = Budget país; KPI LATAM = CL + PE
       var totalYr;
-      if (ML._baseCL > 0 && ML._basePE > 0) {
-        totalYr = Math.round(ML._baseCL*Math.pow(1+ML._cagrCL,years) + ML._basePE*Math.pow(1+ML._cagrPE,years));
+      if (ML.vista === 'chile' && ML._baseCL > 0) {
+        setText('ml-rtc-label', '🇨🇱 Chile · Proyección ML');
+        totalYr = Math.round(ML._baseCL * Math.pow(1+ML._cagrCL, years));
+      } else if (ML.vista === 'peru' && ML._basePE > 0) {
+        setText('ml-rtc-label', '🇵🇪 Perú · Proyección ML');
+        totalYr = Math.round(ML._basePE * Math.pow(1+ML._cagrPE, years));
       } else {
-        totalYr = Math.round(base1yr_clp * Math.pow(1+ML.cagr, years));
+        // LATAM: suma aditiva CL + PE
+        setText('ml-rtc-label', 'LATAM Consolidado');
+        totalYr = (ML._baseCL > 0 && ML._basePE > 0)
+          ? Math.round(ML._baseCL*Math.pow(1+ML._cagrCL,years) + ML._basePE*Math.pow(1+ML._cagrPE,years))
+          : Math.round(ML.totalReal * Math.pow(1+ML.cagr, years));
       }
       setText('ml-sc-base', fmtVal(totalYr));
       setText('ml-sc-cons', fmtVal(totalYr*0.90));
