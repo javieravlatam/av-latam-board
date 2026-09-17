@@ -3488,3 +3488,25 @@ ACCIONES:
   · Cache-busting ?v=202609171026 sincronizado en 16 paneles HTML
 VALIDACIÓN JS: ✅ OK
 ======================================================================
+
+=== 17/09/2026 - FIX: Peru Real USD = 0 en seguimiento mes a mes ===
+Archivos modificados:
+- Panel_Presupuesto_AV_2026.html
+- Panel_Jefes_Peru_2026.html
+
+Causa raíz: mesActualDeCorte('15/09/2026') retorna índice 8 (Sep). 
+mensual_real[8]=0 porque el Excel no tiene columna "Septiembre".
+pintarMesAMes rellenaba pe-real-8 con "0" mostrando Sep=0%.
+
+Fix aplicado:
+- _lastNonZeroIdx() detecta el último mes con dato real (Agosto=índice 7)
+- peMesActual se limita al último mes con dato en lugar del mes del corte
+- peTotalReal = suma de meses 0..peMesActual (consistente con tabla)
+- Sep queda como "–" (pendiente) en lugar de "0" (sin dato)
+
+Panel_Jefes_Peru: igual fix para nM = tope de meses a mostrar.
+
+Discrepancia conocida: ytd_5m=500432 vs sum(mensual_real)=485641.
+Diferencia=14791 USD = datos Sep parcial en "Total" del Excel pero
+sin columna mensual propia. Se muestra ytd_5m en KPI banner,
+suma mensual en tabla (correcto e intencional).

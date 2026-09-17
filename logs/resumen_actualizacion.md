@@ -2311,3 +2311,22 @@ validar con Javier antes de tomar decisiones de pricing basadas solo en esos
 números (ver nota en update_avboard.py / compute_productos).
 
 ---
+
+---
+
+## Fix Panel Perú · Real USD = 0 · 17/09/2026
+
+**Problema resuelto:** "Real USD sigue en cero" en seguimiento mes a mes Perú.
+
+**Causa raíz identificada:** La fecha de corte `15/09/2026` hacía que los paneles intentaran mostrar Septiembre (sin datos todavía). La celda `pe-real-8` se rellenaba con 0 en lugar de "—".
+
+**Archivos corregidos:**
+- `Panel_Presupuesto_AV_2026.html` (funciones `pintarMesAMes` + `setPeruMesVendor`)
+- `Panel_Jefes_Peru_2026.html` (variable `nM` en tabla vendedores)
+
+**Lógica nueva:** El panel detecta automáticamente el último mes con dato real (Agosto = índice 7) y lo usa como mes actual, independientemente de la fecha de corte. Septiembre queda como "pendiente" hasta que el Excel tenga columna de Septiembre.
+
+**KPIs actuales (datos al 15/09/2026):**
+- Perú YTD Real: USD 500,432 (incluye Sep parcial en total Excel)
+- Perú mensual Ago: USD 63,646 (último mes cerrado por columna)
+- Diferencia Sep parcial: USD 14,791 (en total, sin desglose mensual)

@@ -394,23 +394,38 @@ function setChileMesVendor(key, btn) {
 }
 
 // ── Perú Seguimiento mes a mes — selector de vendor ──────────────────────────
+// Helper: último índice con valor > 0 en un array mensual (evita mostrar "0" en mes sin datos)
+function _lastNonZeroIdx(arr) {
+  var last = -1;
+  for (var _i = 0; _i < (arr||[]).length; _i++) { if ((arr[_i]||0) > 0) last = _i; }
+  return last;
+}
 function setPeruMesVendor(key, btn) {
   document.querySelectorAll('#selectorPeruMes .sel-btn').forEach(function(b){ b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
   if (typeof AVBOARD === 'undefined') return;
   var pv = AVBOARD.peru.ventas;
-  var peMesActual = mesActualDeCorte(AVBOARD.meta.cortes.peru_ventas);
+  var peMesCorte = mesActualDeCorte(AVBOARD.meta.cortes.peru_ventas);
   var Kk = function(n){ return (n/1000).toFixed(1)+'K'; };
   if (key === 'equipo') {
+    // Usar último mes con dato para no mostrar "0" en mes en curso sin datos
+    var peMesActual = peMesCorte;
+    var _lr = _lastNonZeroIdx(pv.mensual_real);
+    if (_lr >= 0 && _lr < peMesActual) peMesActual = _lr;
+    var peTotalReal = (pv.mensual_real||[]).slice(0,peMesActual+1).reduce(function(s,v){return s+(v||0);},0);
     pintarMesAMes({
       prefix:'pe', mensualReal:pv.mensual_real, mensualPpto:pv.mensual_ppto,
       mesActualIdx:peMesActual, divisor:1, locale:'es-CL', currency:'USD',
-      totalReal:pv.ytd_5m, pendienteAnual:(pv.ppto_anual||0)-pv.ytd_5m, fmtPend:Kk
+      totalReal:peTotalReal, pendienteAnual:(pv.ppto_anual||0)-peTotalReal, fmtPend:Kk
     });
   } else {
     var rmp = pv.rtc_mensual_real || {};
     var real = (rmp[key] || []).slice(0,12);
     var ppto = (PE_MES_DATA[key] && PE_MES_DATA[key].ppto) || Array(12).fill(0);
+    // Para vendedores individuales: usar último mes con dato real del equipo como tope
+    var peMesActual = peMesCorte;
+    var _lr2 = _lastNonZeroIdx(pv.mensual_real);
+    if (_lr2 >= 0 && _lr2 < peMesActual) peMesActual = _lr2;
     var totReal = 0;
     for (var i = 0; i <= peMesActual; i++) totReal += (real[i]||0);
     var pptoAnual = ppto.reduce(function(a,b){ return a+b; }, 0);
@@ -1311,10 +1326,21 @@ new Chart(document.getElementById('cGrupo'),{
     set('av-ppto-pe-pend',Kk(pePptoA-peYTD));
     // ── Perú tabla mes a mes (todos los meses, dinámico) ────────────────────────
     var peMesActual = mesActualDeCorte(cortesPE);
+    // Fix: si el mes del corte no tiene dato real (mes en curso sin datos todavía),
+    // retroceder al último mes con dato para no mostrar "0" en lugar de "–"
+    if (pv.mensual_real) {
+      var _lastRealPe = -1;
+      for (var _ri = 0; _ri < pv.mensual_real.length; _ri++) {
+        if ((pv.mensual_real[_ri]||0) > 0) _lastRealPe = _ri;
+      }
+      if (_lastRealPe >= 0 && _lastRealPe < peMesActual) peMesActual = _lastRealPe;
+    }
+    // totalReal: usar suma de meses reales para consistencia con la tabla
+    var peTotalReal = (pv.mensual_real||[]).slice(0, peMesActual+1).reduce(function(s,v){return s+(v||0);},0);
     pintarMesAMes({
       prefix:'pe', mensualReal:pv.mensual_real, mensualPpto:pv.mensual_ppto,
       mesActualIdx:peMesActual, divisor:1, locale:'es-CL', currency:'USD',
-      totalReal:peYTD, pendienteAnual:(pePptoA-peYTD), fmtPend:Kk
+      totalReal:peTotalReal, pendienteAnual:(pePptoA-peTotalReal), fmtPend:Kk
     });
     set('pe-footnote-txt','* '+MESES_LARGO[peMesActual]+' parcial al '+cortesPE+' · '+MESES_LARGO[Math.max(0,peMesActual-1)]+' definitivo');
     // ── Hcorte ─────────────────────────────────────────────────────────────────

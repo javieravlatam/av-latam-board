@@ -1036,7 +1036,11 @@ const vendedoresData=(function(){
   var rtcP=pv.rtc_mensual_ppto||{};
   var pvnd=pv.por_vendedor||{};
   var corteStr=(AVBOARD.meta&&AVBOARD.meta.cortes&&AVBOARD.meta.cortes.peru_ventas)||'31/07/2026';
-  var nM=parseInt(corteStr.split('/')[1],10);
+  // nM: usar último mes con dato real (no el mes del corte si aún no tiene datos)
+  var nMCorte=parseInt(corteStr.split('/')[1],10);
+  var _nMlast=0;
+  if(pv.mensual_real){for(var _nmi=0;_nmi<pv.mensual_real.length;_nmi++){if((pv.mensual_real[_nmi]||0)>0)_nMlast=_nmi+1;}}
+  var nM=(_nMlast>0&&_nMlast<nMCorte)?_nMlast:nMCorte;
   var toK=function(v){return parseFloat((v/1000).toFixed(1));};
   var dinamicos=CFG.map(function(cfg){
     var mR=rtcR[cfg.key]||new Array(12).fill(0);
