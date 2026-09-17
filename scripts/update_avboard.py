@@ -193,6 +193,8 @@ PPTO_RTC_ANUAL_PE = {k: sum(v) for k, v in PPTO_RTC_MENSUAL_PE.items()}
 MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
 MESES_FULL = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO',
               'JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE']
+# Ortografías alternativas usadas en archivos Excel de algunos países (ej. Perú usa SETIEMBRE)
+MESES_ALIAS = {'SETIEMBRE': 8}  # índice 0-based dentro de MESES_FULL
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -487,10 +489,17 @@ def extract_peru_ventas(path):
     available_cols = {}
     for col in df.columns:
         col_up = str(col).upper()
+        matched = False
         for i, m_name in enumerate(MESES_FULL):
             if m_name in col_up:
                 available_cols[i] = col
+                matched = True
                 break
+        if not matched:
+            for alias_name, alias_idx in MESES_ALIAS.items():
+                if alias_name in col_up:
+                    available_cols[alias_idx] = col
+                    break
 
     # Mismo principio que arriba: el índice del "mes actual/parcial" (antes
     # fijo en 4 = Mayo) ahora sigue dinámicamente al último mes con columna

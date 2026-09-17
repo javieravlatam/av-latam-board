@@ -353,31 +353,31 @@ var AVBOARD = (function() {
   var peru_ventas = {
     ytd_5m:       500432,
     ytd_4m:       259793,
-    mayo_parcial: 63646,
+    mayo_parcial: 14790,
     ppto_anual:   1210600.0,
     ppto_4m:      247291,
-    ppto_5m:      611600,
-    ppto_mes_label: 'Ago',
+    ppto_5m:      789600,
+    ppto_mes_label: 'Sep',
     cumplimiento_4m: 1.0506,
-    cumplimiento_5m: 0.8182,
-    mensual_real:      [70232, 38180, 87967, 63414, 84159, 46084, 31959, 63646, 0, 0, 0, 0],
+    cumplimiento_5m: 0.6338,
+    mensual_real:      [70232, 38180, 87967, 63414, 84159, 46084, 31959, 63646, 14790, 0, 0, 0],
     mensual_real_2025: [59128.76, 36687.0, 70947.9, 42486.1, 24250.0, 27780.4, 48123.4, 52993.1, 0, 120639.3, 82518.95, 54009.38],
     mensual_ppto:      [51668.700000000004, 60148.1, 27946.4, 107527.90000000001, 78466.7, 103475.7, 98366.5, 84000.0, 178000.0, 153000.0, 158000.0, 110000.0],
     por_vendedor: {
       aguirre: {
         nombre: "Lizbeth Aguirre",
         ytd:    182482,
-        mayo:   53346
+        mayo:   5650
       },
       atalaya: {
         nombre: "Omar Atalaya",
         ytd:    89789,
-        mayo:   4200
+        mayo:   0
       },
       diaz: {
         nombre: "Susan Diaz",
         ytd:    26800,
-        mayo:   4400
+        mayo:   4940
       },
       gonzales: {
         nombre: "Antonio Gonzales",
@@ -392,12 +392,12 @@ var AVBOARD = (function() {
       martha: {
         nombre: "Martha Hidalgo",
         ytd:    4200,
-        mayo:   0
+        mayo:   4200
       },
       valladares: {
         nombre: "Patricia Valladares",
         ytd:    22435,
-        mayo:   1700
+        mayo:   0
       }
     },
     rtc_ppto_anual: {
@@ -419,12 +419,12 @@ var AVBOARD = (function() {
       valladares: [0.0, 220.8, 5309.8, 4823.0, 5153.0, 10319.4, 10000.0, 10000.0, 10000.0, 15000.0, 10000.0, 10000.0]
     },
     rtc_mensual_real: {
-      aguirre: [0, 13884, 28681, 13447, 49431, 11404, 6638, 53346, 0, 0, 0, 0],
+      aguirre: [0, 13884, 28681, 13447, 49431, 11404, 6638, 53346, 5650, 0, 0, 0],
       atalaya: [29881, 8108, 20000, 6600, 8400, 12600, 0, 4200, 0, 0, 0, 0],
-      diaz: [0, 0, 0, 6300, 2600, 8320, 240, 4400, 0, 0, 0, 0],
+      diaz: [0, 0, 0, 6300, 2600, 8320, 240, 4400, 4940, 0, 0, 0],
       gonzales: [600, 0, 96, 0, 0, 6720, 8146, 0, 0, 0, 0, 0],
       infante: [39751, 16188, 38190, 36867, 22328, 0, 5840, 0, 0, 0, 0, 0],
-      martha: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      martha: [0, 0, 0, 0, 0, 0, 0, 0, 4200, 0, 0, 0],
       valladares: [0, 0, 1000, 200, 1400, 7040, 11095, 1700, 0, 0, 0, 0]
     },
     iec: {
