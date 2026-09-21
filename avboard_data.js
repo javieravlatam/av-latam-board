@@ -9,56 +9,56 @@
  * ╚══════════════════════════════════════════════════════════════════╝
  *
  * Cortes:
- *   Chile ventas → 10/09/2026
+ *   Chile ventas → 16/09/2026
  *   Chile CxC    → 12/08/2026 (2 entidades)
- *   Perú ventas  → 15/09/2026
+ *   Perú ventas  → 18/09/2026
  *   Perú CxC     → 01/09/2026
  *
- * Actualizado: 2026-09-17
+ * Actualizado: 2026-09-21
  */
 
 var AVBOARD = (function() {
 
   var meta = {
-    version:      '2026-09-17',
+    version:      '2026-09-21',
     tc_clp_usd:   950.0,
     meta_mn:      0.25,
     cortes: {
-      chile_ventas: '10/09/2026',
+      chile_ventas: '16/09/2026',
       chile_cxc:    '12/08/2026',
-      peru_ventas:  '15/09/2026',
+      peru_ventas:  '18/09/2026',
       peru_cxc:     '01/09/2026'
     },
     meses: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
   };
 
   var grupo = {
-    ytd_usd:      1077060,
-    ytd_clp:      1023207078,
-    chile_ytd_usd: 576628,
-    peru_ytd_usd:  500432,
+    ytd_usd:      1134567,
+    ytd_clp:      1077839048,
+    chile_ytd_usd: 633535,
+    peru_ytd_usd:  501032,
     rtc_activos:  12,
     mn_chile:     0.179,
     mn_peru:      null,
     // IEC Grupo ponderado (Fase 7): Σvne/Σvpt across countries con datos de piso.
     // Peru excluido hasta tener precio_piso por transacción. Nota: valor < 1.0 = bajo piso.
-    iec_grupo: 1.0734,
+    iec_grupo: 1.0593,
     iec_grupo_nota: 'Chile solamente — Perú sin precio piso por transacción',
-    iec_grupo_vne: 363193186,
-    iec_grupo_vpt: 338347900
+    iec_grupo_vne: 416160156,
+    iec_grupo_vpt: 392874900
   };
 
   var chile_ventas = {
-    ytd_5m:          547796678,
+    ytd_5m:          601858648,
     ytd_4m:          269373745,
-    mayo_parcial:    88698079,
+    mayo_parcial:    142760049,
     ppto_anual:      846050400.0,
     ppto_4m:         228338100,
     ppto_5m:         596163800,
     cumplimiento_4m: 1.1797,
-    cumplimiento_5m: 0.9189,
+    cumplimiento_5m: 1.0096,
     cumplimiento_t1: 0.9979,
-    mensual_real:      [88231364, 35651978, 52370709, 93119694, 60181659, 40410263, 36680202, 52452730, 88698079, 0, 0, 0],
+    mensual_real:      [88231364, 35651978, 52370709, 93119694, 60181659, 40410263, 36680202, 52452730, 142760049, 0, 0, 0],
     mensual_real_2025: [61542300, 57866927, 38859549, 44207090, 131497893, 36794291, 33920027, 75002645, 101082901, 134545170, 43630394, 6994835],
     mensual_ppto:      [82144800.0, 46296700.0, 48185000.0, 51711600.0, 62175700.0, 59298800.0, 77599900.0, 60797000.0, 107954300.0, 100848100.0, 83299300.0, 65739200.0],
     rtc_real_t1:   {
@@ -78,11 +78,11 @@ var AVBOARD = (function() {
     },
     rtc_mensual_real: {
       almeida: [0, 0, 0, 0, 210000, 330000, 0, 0, 0, 0, 0, 0],
-      caroca: [14820273, 6389076, 31913309, 10171393, 9822200, 23594020, 8223602, 26156190, 39605584, 0, 0, 0],
+      caroca: [14820273, 6389076, 31913309, 10171393, 9822200, 23594020, 8223602, 26156190, 44180084, 0, 0, 0],
       encina: [13510783, 7262717, 6819022, 5495612, 8815784, 486243, 0, 151120, 0, 0, 0, 0],
-      laratro: [37027580, 10378585, 5487150, 62830189, 18073675, 5077000, 10867000, 15784570, 2851600, 0, 0, 0],
+      laratro: [37027580, 10378585, 5487150, 62830189, 18073675, 5077000, 10867000, 15784570, 42879070, 0, 0, 0],
       munoz: [2195728, 765600, 1274728, 0, 0, 0, 0, 24000, 257079, 0, 0, 0],
-      velasquez: [14491000, 9912000, 5196500, 14622500, 23260000, 10923000, 17296000, 10336850, 45983816, 0, 0, 0],
+      velasquez: [14491000, 9912000, 5196500, 14622500, 23260000, 10923000, 17296000, 10336850, 55443816, 0, 0, 0],
       veverka: [6186000, 944000, 1680000, 0, 0, 0, 293600, 0, 0, 0, 0, 0]
     },
     rtc_mensual_ppto: {
@@ -95,21 +95,21 @@ var AVBOARD = (function() {
       veverka: [5999100.0, 5999100.0, 5999100.0, 5999100.0, 5999100.0, 5999100.0, 14332400.0, 14332400.0, 14332400.0, 14332400.0, 14332400.0, 14332600.0]
     },
     iec: {
-      total: 1.073,
-      velasquez: 1.014,
-      laratro: 1.045,
-      caroca: 1.322,
+      total: 1.059,
+      velasquez: 1.031,
+      laratro: 1.013,
+      caroca: 1.304,
       encina: 1.034,
       veverka: 1.305,
       munoz: 1.086,
-      impacto_potencial_clp: 117014192,
-      vne_total: 363193186,
-      vpt_total: 338347900,
+      impacto_potencial_clp: 144646662,
+      vne_total: 416160156,
+      vpt_total: 392874900,
       iec_mensual: {
-        total:     [1.0868, 1.0062, 1.1115, 0.9178, 0.8784, 1.1987, 1.1132, 1.3472, 1.2946, null, null, null],
-        velasquez: [0.9482, 0.9433, 1.1398, 0.8487, 0.8697, 1.1360, 1.0581, 1.0529, 1.2058, null, null, null],
-        laratro:   [1.1355, 1.0202, 1.0745, 0.9276, 0.8693, 1.3136, 1.1982, 1.5852, 1.2502, null, null, null],
-        caroca:    [1.1291, 1.0259, 1.1120, 1.3000, 1.1515, 1.2322, 1.1146, 1.4065, 1.4721, null, null, null],
+        total:     [1.0868, 1.0062, 1.1115, 0.9178, 0.8784, 1.1987, 1.1132, 1.3472, 1.1024, null, null, null],
+        velasquez: [0.9482, 0.9433, 1.1398, 0.8487, 0.8697, 1.1360, 1.0581, 1.0529, 1.2261, null, null, null],
+        laratro:   [1.1355, 1.0202, 1.0745, 0.9276, 0.8693, 1.3136, 1.1982, 1.5852, 0.9278, null, null, null],
+        caroca:    [1.1291, 1.0259, 1.1120, 1.3000, 1.1515, 1.2322, 1.1146, 1.4065, 1.3863, null, null, null],
         encina:    [0.9874, 1.0384, 1.2057, 0.9826, 0.9946, 0.9606, null, 1.0642, null, null, null, null],
         veverka:   [1.3988, 1.1238, 1.1200, null, null, null, 1.6561, null, null, null, null, null],
         munoz:     [1.1782, 1.3671, 0.8877, null, null, null, null, 1.2000, null, null, null, null]
@@ -351,23 +351,23 @@ var AVBOARD = (function() {
   };
 
   var peru_ventas = {
-    ytd_5m:       500432,
+    ytd_5m:       501032,
     ytd_4m:       259793,
-    mayo_parcial: 14790,
+    mayo_parcial: 15390,
     ppto_anual:   1210600.0,
     ppto_4m:      247291,
     ppto_5m:      789600,
     ppto_mes_label: 'Sep',
     cumplimiento_4m: 1.0506,
-    cumplimiento_5m: 0.6338,
-    mensual_real:      [70232, 38180, 87967, 63414, 84159, 46084, 31959, 63646, 14790, 0, 0, 0],
+    cumplimiento_5m: 0.6345,
+    mensual_real:      [70232, 38180, 87967, 63414, 84159, 46084, 31959, 63646, 15390, 0, 0, 0],
     mensual_real_2025: [59128.76, 36687.0, 70947.9, 42486.1, 24250.0, 27780.4, 48123.4, 52993.1, 0, 120639.3, 82518.95, 54009.38],
     mensual_ppto:      [51668.700000000004, 60148.1, 27946.4, 107527.90000000001, 78466.7, 103475.7, 98366.5, 84000.0, 178000.0, 153000.0, 158000.0, 110000.0],
     por_vendedor: {
       aguirre: {
         nombre: "Lizbeth Aguirre",
-        ytd:    182482,
-        mayo:   5650
+        ytd:    183082,
+        mayo:   6250
       },
       atalaya: {
         nombre: "Omar Atalaya",
@@ -419,7 +419,7 @@ var AVBOARD = (function() {
       valladares: [0.0, 220.8, 5309.8, 4823.0, 5153.0, 10319.4, 10000.0, 10000.0, 10000.0, 15000.0, 10000.0, 10000.0]
     },
     rtc_mensual_real: {
-      aguirre: [0, 13884, 28681, 13447, 49431, 11404, 6638, 53346, 5650, 0, 0, 0],
+      aguirre: [0, 13884, 28681, 13447, 49431, 11404, 6638, 53346, 6250, 0, 0, 0],
       atalaya: [29881, 8108, 20000, 6600, 8400, 12600, 0, 4200, 0, 0, 0, 0],
       diaz: [0, 0, 0, 6300, 2600, 8320, 240, 4400, 4940, 0, 0, 0],
       gonzales: [600, 0, 96, 0, 0, 6720, 8146, 0, 0, 0, 0, 0],
@@ -1508,57 +1508,57 @@ var AVBOARD = (function() {
   };
 
   var productos = [
-    { pais:"CL", producto:"AV MOVE", formato:"20 L", ventas:43263409, cantidad:9140.0, precio_uni_prom:4733.41, costo_unidad:3014.95, costo_total:27556643, margen_total:15706766, margen_pct:0.363, piso:7500, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV ROOT MAX", formato:"20 L", ventas:22935302, cantidad:3695.0, precio_uni_prom:6207.12, costo_unidad:2569.2, costo_total:9493194, margen_total:13442108, margen_pct:0.5861, piso:7000, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV SILFORTE", formato:"20 L", ventas:19066572, cantidad:3030.0, precio_uni_prom:6292.6, costo_unidad:2212.85, costo_total:6704936, margen_total:12361636, margen_pct:0.6483, piso:8000, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV HUMIC ROOT", formato:"20 L", ventas:6089520, cantidad:3340.0, precio_uni_prom:1823.21, costo_unidad:1434.05, costo_total:4789727, margen_total:1299793, margen_pct:0.2134, piso:3000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV MOVE", formato:"20 L", ventas:44703409, cantidad:9340.0, precio_uni_prom:4786.23, costo_unidad:3014.95, costo_total:28159633, margen_total:16543776, margen_pct:0.3701, piso:7500, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV ROOT MAX", formato:"20 L", ventas:27993302, cantidad:4335.0, precio_uni_prom:6457.51, costo_unidad:2569.2, costo_total:11137482, margen_total:16855820, margen_pct:0.6021, piso:7000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV SILFORTE", formato:"20 L", ventas:25866572, cantidad:3890.0, precio_uni_prom:6649.5, costo_unidad:2212.85, costo_total:8607986, margen_total:17258586, margen_pct:0.6672, piso:8000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV HUMIC ROOT", formato:"20 L", ventas:6089520, cantidad:3540.0, precio_uni_prom:1720.2, costo_unidad:1434.05, costo_total:5076537, margen_total:1012983, margen_pct:0.1663, piso:3000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV CYTO PRIME", formato:"?", ventas:209000, cantidad:22.0, precio_uni_prom:9500.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"FORMATO_NO_IDENTIFICADO" },
-    { pais:"CL", producto:"AV PLUS POTASIO", formato:"20 L", ventas:21824052, cantidad:9060.0, precio_uni_prom:2408.84, costo_unidad:1197.0, costo_total:10844820, margen_total:10979232, margen_pct:0.5031, piso:2700, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV PLUS MAGNESIO", formato:"20 L", ventas:10882569, cantidad:5780.0, precio_uni_prom:1882.8, costo_unidad:1422.1, costo_total:8219738, margen_total:2662831, margen_pct:0.2447, piso:3000, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV PLUS MICRO MIX", formato:"20 L", ventas:4976470, cantidad:1920.0, precio_uni_prom:2591.91, costo_unidad:1575.8, costo_total:3025536, margen_total:1950934, margen_pct:0.392, piso:3500, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV ALGAP 30", formato:"20 L", ventas:15476855, cantidad:4440.0, precio_uni_prom:3485.78, costo_unidad:1770.55, costo_total:7861242, margen_total:7615613, margen_pct:0.4921, piso:4000, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"BIOAV FOLIAR", formato:"250 GR", ventas:7954000, cantidad:515.0, precio_uni_prom:15444.66, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
-    { pais:"CL", producto:"AV MAX FULVIC 45%", formato:"20 L", ventas:7262457, cantidad:4160.0, precio_uni_prom:1745.78, costo_unidad:1434.05, costo_total:5965648, margen_total:1296809, margen_pct:0.1786, piso:3000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS POTASIO", formato:"20 L", ventas:23866052, cantidad:9780.0, precio_uni_prom:2440.29, costo_unidad:1197.0, costo_total:11706660, margen_total:12159392, margen_pct:0.5095, piso:2700, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS MAGNESIO", formato:"20 L", ventas:12823569, cantidad:6500.0, precio_uni_prom:1972.86, costo_unidad:1422.1, costo_total:9243650, margen_total:3579919, margen_pct:0.2792, piso:3000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS MICRO MIX", formato:"20 L", ventas:6676470, cantidad:2420.0, precio_uni_prom:2758.87, costo_unidad:1575.8, costo_total:3813436, margen_total:2863034, margen_pct:0.4288, piso:3500, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV ALGAP 30", formato:"20 L", ventas:24688855, cantidad:6840.0, precio_uni_prom:3609.48, costo_unidad:1770.55, costo_total:12110562, margen_total:12578293, margen_pct:0.5095, piso:4000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"BIOAV FOLIAR", formato:"250 GR", ventas:8216500, cantidad:525.0, precio_uni_prom:15650.48, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
+    { pais:"CL", producto:"AV MAX FULVIC 45%", formato:"20 L", ventas:7622457, cantidad:4260.0, precio_uni_prom:1789.31, costo_unidad:1434.05, costo_total:6109053, margen_total:1513404, margen_pct:0.1985, piso:3000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"PK-DEFEND MAX", formato:"20 L", ventas:560000, cantidad:140.0, precio_uni_prom:4000.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"PK-DEFEND MAX", formato:"5 L", ventas:67150, cantidad:15.0, precio_uni_prom:4476.67, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"AV BIOSOLARIS", formato:"20 L", ventas:772000, cantidad:280.0, precio_uni_prom:2757.14, costo_unidad:2020.2, costo_total:565656, margen_total:206344, margen_pct:0.2673, piso:12000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV BIOSOLARIS", formato:"5 L", ventas:194000, cantidad:20.0, precio_uni_prom:9700.0, costo_unidad:2602.6, costo_total:52052, margen_total:141948, margen_pct:0.7317, piso:13000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV BIOSOLARIS", formato:"1 L", ventas:171200, cantidad:62.0, precio_uni_prom:2761.29, costo_unidad:4063.0, costo_total:251906, margen_total:-80706, margen_pct:-0.4714, piso:14000, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV AMIN SUGAR", formato:"20 L", ventas:10688599, cantidad:5140.0, precio_uni_prom:2079.49, costo_unidad:1423.45, costo_total:7316533, margen_total:3372066, margen_pct:0.3155, piso:5000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV AMIN SUGAR", formato:"20 L", ventas:12608599, cantidad:5620.0, precio_uni_prom:2243.52, costo_unidad:1423.45, costo_total:7999789, margen_total:4608810, margen_pct:0.3655, piso:5000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV AMIN SUGAR", formato:"1 L", ventas:16757, cantidad:14.0, precio_uni_prom:1196.93, costo_unidad:3466.0, costo_total:48524, margen_total:-31767, margen_pct:-1.8957, piso:7500, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV AMIN", formato:"5 L", ventas:569216, cantidad:120.0, precio_uni_prom:4743.47, costo_unidad:2193.6, costo_total:263232, margen_total:305984, margen_pct:0.5376, piso:5500, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"ANALISIS FOLIAR CEREZO", formato:"?", ventas:0, cantidad:2.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"NO_CLASIFICABLE" },
-    { pais:"CL", producto:"AV AMIN", formato:"20 L", ventas:3104120, cantidad:1180.0, precio_uni_prom:2630.61, costo_unidad:1611.15, costo_total:1901157, margen_total:1202963, margen_pct:0.3875, piso:4500, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV PLUS CALCIO", formato:"20 L", ventas:4778760, cantidad:2340.0, precio_uni_prom:2042.21, costo_unidad:1653.7, costo_total:3869658, margen_total:909102, margen_pct:0.1902, piso:2900, clasif:"🟡 EN PISO", estado:"OK" },
-    { pais:"CL", producto:"BIOAV RAIZ", formato:"500 GR", ventas:6124473, cantidad:512.0, precio_uni_prom:11961.86, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
+    { pais:"CL", producto:"AV AMIN", formato:"20 L", ventas:5790120, cantidad:1940.0, precio_uni_prom:2984.6, costo_unidad:1611.15, costo_total:3125631, margen_total:2664489, margen_pct:0.4602, piso:4500, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS CALCIO", formato:"20 L", ventas:6352760, cantidad:2840.0, precio_uni_prom:2236.89, costo_unidad:1653.7, costo_total:4696508, margen_total:1656252, margen_pct:0.2607, piso:2900, clasif:"🟡 EN PISO", estado:"OK" },
+    { pais:"CL", producto:"BIOAV RAIZ", formato:"500 GR", ventas:6694473, cantidad:532.0, precio_uni_prom:12583.6, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"ODIN TEBUCONAZOLE 43% LT", formato:"?", ventas:0, cantidad:5.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"FORMATO_NO_IDENTIFICADO" },
-    { pais:"CL", producto:"AV ROOT MAX", formato:"5 L", ventas:948139, cantidad:140.0, precio_uni_prom:6772.42, costo_unidad:3151.6, costo_total:441224, margen_total:506915, margen_pct:0.5346, piso:9000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV ROOT MAX", formato:"5 L", ventas:992639, cantidad:145.0, precio_uni_prom:6845.79, costo_unidad:3151.6, costo_total:456982, margen_total:535657, margen_pct:0.5396, piso:9000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"BIOAV NEMA OFF", formato:"500 GR", ventas:1281420, cantidad:43.0, precio_uni_prom:29800.47, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
-    { pais:"CL", producto:"AV PLUS MAGNESIO", formato:"5 L", ventas:562178, cantidad:175.0, precio_uni_prom:3212.45, costo_unidad:1815.2, costo_total:317660, margen_total:244518, margen_pct:0.4349, piso:4000, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV PLUS POTASIO", formato:"5 L", ventas:1891545, cantidad:635.0, precio_uni_prom:2978.81, costo_unidad:2355.8, costo_total:1495933, margen_total:395612, margen_pct:0.2091, piso:4500, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV BALANCE", formato:"5 L", ventas:4718285, cantidad:406.0, precio_uni_prom:11621.39, costo_unidad:1920.0, costo_total:779520, margen_total:3938765, margen_pct:0.8348, piso:14000, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV CYTO PRIME", formato:"1 L", ventas:364524, cantidad:26.0, precio_uni_prom:14020.15, costo_unidad:8500.0, costo_total:221000, margen_total:143524, margen_pct:0.3937, piso:18000, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV PLUS CALCIO", formato:"5 L", ventas:1142023, cantidad:350.0, precio_uni_prom:3262.92, costo_unidad:2236.2, costo_total:782670, margen_total:359353, margen_pct:0.3147, piso:4000, clasif:"🟡 EN PISO", estado:"OK" },
-    { pais:"CL", producto:"AV PLUS BORO", formato:"5 L", ventas:420268, cantidad:165.0, precio_uni_prom:2547.08, costo_unidad:2070.6, costo_total:341649, margen_total:78619, margen_pct:0.1871, piso:4000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS MAGNESIO", formato:"5 L", ventas:574928, cantidad:180.0, precio_uni_prom:3194.04, costo_unidad:1815.2, costo_total:326736, margen_total:248192, margen_pct:0.4317, piso:4000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS POTASIO", formato:"5 L", ventas:1917045, cantidad:645.0, precio_uni_prom:2972.16, costo_unidad:2355.8, costo_total:1519491, margen_total:397554, margen_pct:0.2074, piso:4500, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV BALANCE", formato:"5 L", ventas:5540285, cantidad:481.0, precio_uni_prom:11518.26, costo_unidad:1920.0, costo_total:923520, margen_total:4616765, margen_pct:0.8333, piso:14000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV CYTO PRIME", formato:"1 L", ventas:409524, cantidad:29.0, precio_uni_prom:14121.52, costo_unidad:8500.0, costo_total:246500, margen_total:163024, margen_pct:0.3981, piso:18000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS CALCIO", formato:"5 L", ventas:1190023, cantidad:365.0, precio_uni_prom:3260.34, costo_unidad:2236.2, costo_total:816213, margen_total:373810, margen_pct:0.3141, piso:4000, clasif:"🟡 EN PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS BORO", formato:"5 L", ventas:465268, cantidad:175.0, precio_uni_prom:2658.67, costo_unidad:2070.6, costo_total:362355, margen_total:102913, margen_pct:0.2212, piso:4000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV PLUS ZINC", formato:"5 L", ventas:517683, cantidad:160.0, precio_uni_prom:3235.52, costo_unidad:2431.6, costo_total:389056, margen_total:128627, margen_pct:0.2485, piso:4500, clasif:"🟡 EN PISO", estado:"OK" },
-    { pais:"CL", producto:"AV PLUS CALCIO BORO", formato:"20 L", ventas:591315, cantidad:260.0, precio_uni_prom:2274.29, costo_unidad:1703.15, costo_total:442819, margen_total:148496, margen_pct:0.2511, piso:3500, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV PLUS BORO", formato:"20 L", ventas:2945960, cantidad:1220.0, precio_uni_prom:2414.72, costo_unidad:1488.1, costo_total:1815482, margen_total:1130478, margen_pct:0.3837, piso:2900, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS CALCIO BORO", formato:"20 L", ventas:819315, cantidad:320.0, precio_uni_prom:2560.36, costo_unidad:1703.15, costo_total:545008, margen_total:274307, margen_pct:0.3348, piso:3500, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS BORO", formato:"20 L", ventas:3694280, cantidad:1460.0, precio_uni_prom:2530.33, costo_unidad:1488.1, costo_total:2172626, margen_total:1521654, margen_pct:0.4119, piso:2900, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV AMIN", formato:"1 L", ventas:660774, cantidad:136.0, precio_uni_prom:4858.63, costo_unidad:2467.0, costo_total:335512, margen_total:325262, margen_pct:0.4922, piso:6800, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV PLUS ZINC", formato:"1 L", ventas:301890, cantidad:60.0, precio_uni_prom:5031.5, costo_unidad:2627.0, costo_total:157620, margen_total:144270, margen_pct:0.4779, piso:6000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV PLUS MAGNESIO", formato:"1 L", ventas:458529, cantidad:112.0, precio_uni_prom:4094.01, costo_unidad:2801.0, costo_total:313712, margen_total:144817, margen_pct:0.3158, piso:6000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV PLUS NUTRI MIX", formato:"1 L", ventas:666120, cantidad:152.0, precio_uni_prom:4382.37, costo_unidad:3026.0, costo_total:459952, margen_total:206168, margen_pct:0.3095, piso:6000, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV PLUS NUTRI MIX", formato:"20 L", ventas:2462400, cantidad:980.0, precio_uni_prom:2512.65, costo_unidad:1646.5, costo_total:1613570, margen_total:848830, margen_pct:0.3447, piso:3500, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV ALGAP 30", formato:"5 L", ventas:624117, cantidad:170.0, precio_uni_prom:3671.28, costo_unidad:2353.0, costo_total:400010, margen_total:224107, margen_pct:0.3591, piso:5000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS NUTRI MIX", formato:"20 L", ventas:4229400, cantidad:1600.0, precio_uni_prom:2643.38, costo_unidad:1646.5, costo_total:2634400, margen_total:1595000, margen_pct:0.3771, piso:3500, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV ALGAP 30", formato:"5 L", ventas:640117, cantidad:175.0, precio_uni_prom:3657.81, costo_unidad:2353.0, costo_total:411775, margen_total:228342, margen_pct:0.3567, piso:5000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV N-P MIX", formato:"20 L", ventas:0, cantidad:20.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
-    { pais:"CL", producto:"AV CYTO PRIME", formato:"5 L", ventas:2045387, cantidad:160.0, precio_uni_prom:12783.67, costo_unidad:7500.0, costo_total:1200000, margen_total:845387, margen_pct:0.4133, piso:17000, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV BLOOM", formato:"5 L", ventas:2111402, cantidad:355.0, precio_uni_prom:5947.61, costo_unidad:2891.2, costo_total:1026376, margen_total:1085026, margen_pct:0.5139, piso:9500, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV PLUS ZINC MANGANESO", formato:"20 L", ventas:2336925, cantidad:1560.0, precio_uni_prom:1498.03, costo_unidad:1465.55, costo_total:2286258, margen_total:50667, margen_pct:0.0217, piso:2800, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV CYTO PRIME", formato:"5 L", ventas:2585387, cantidad:195.0, precio_uni_prom:13258.39, costo_unidad:7500.0, costo_total:1462500, margen_total:1122887, margen_pct:0.4343, piso:17000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV BLOOM", formato:"5 L", ventas:2421402, cantidad:385.0, precio_uni_prom:6289.36, costo_unidad:2891.2, costo_total:1113112, margen_total:1308290, margen_pct:0.5403, piso:9500, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS ZINC MANGANESO", formato:"20 L", ventas:2648925, cantidad:1680.0, precio_uni_prom:1576.74, costo_unidad:1465.55, costo_total:2462124, margen_total:186801, margen_pct:0.0705, piso:2800, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV AMIN SUGAR", formato:"200 L", ventas:1700000, cantidad:600.0, precio_uni_prom:2833.33, costo_unidad:1414.56, costo_total:848736, margen_total:851264, margen_pct:0.5007, piso:4000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"ANÁLISIS FOLIAR - CAMPO LOS LIRIOS", formato:"?", ventas:0, cantidad:9.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"NO_CLASIFICABLE" },
     { pais:"CL", producto:"ANÁLISIS FOLIAR - CAMPO LA MONTAÑA", formato:"?", ventas:0, cantidad:4.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"NO_CLASIFICABLE" },
     { pais:"CL", producto:"ANÁLISIS FOLIAR - CAMPO SANTA LUISA", formato:"?", ventas:0, cantidad:8.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"NO_CLASIFICABLE" },
-    { pais:"CL", producto:"AV PLUS NUTRI MIX", formato:"5 L", ventas:389770, cantidad:90.0, precio_uni_prom:4330.78, costo_unidad:2039.6, costo_total:183564, margen_total:206206, margen_pct:0.529, piso:4500, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV BALANCE", formato:"1 L", ventas:1023958, cantidad:134.0, precio_uni_prom:7641.48, costo_unidad:3380.0, costo_total:452920, margen_total:571038, margen_pct:0.5577, piso:15000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS NUTRI MIX", formato:"5 L", ventas:599770, cantidad:130.0, precio_uni_prom:4613.62, costo_unidad:2039.6, costo_total:265148, margen_total:334622, margen_pct:0.5579, piso:4500, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV BALANCE", formato:"1 L", ventas:1203958, cantidad:146.0, precio_uni_prom:8246.29, costo_unidad:3380.0, costo_total:493480, margen_total:710478, margen_pct:0.5901, piso:15000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV PLUS CALCIO", formato:"1 L", ventas:508342, cantidad:100.0, precio_uni_prom:5083.42, costo_unidad:3697.0, costo_total:369700, margen_total:138642, margen_pct:0.2727, piso:6500, clasif:"🟡 EN PISO", estado:"OK" },
     { pais:"CL", producto:"AV PLUS POTASIO", formato:"1 L", ventas:1516890, cantidad:351.0, precio_uni_prom:4321.62, costo_unidad:2576.0, costo_total:904176, margen_total:612714, margen_pct:0.4039, piso:6000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV PLUS CALCIO BORO", formato:"1 L", ventas:529081, cantidad:119.0, precio_uni_prom:4446.06, costo_unidad:3746.0, costo_total:445774, margen_total:83307, margen_pct:0.1575, piso:7500, clasif:"🟢 SOBRE PISO", estado:"OK" },
@@ -1569,22 +1569,22 @@ var AVBOARD = (function() {
     { pais:"CL", producto:"AV SILFORTE", formato:"200 L", ventas:1515000, cantidad:800.0, precio_uni_prom:1893.75, costo_unidad:2203.92, costo_total:1763136, margen_total:-248136, margen_pct:-0.1638, piso:7000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV MOVE", formato:"5 L", ventas:2738950, cantidad:445.0, precio_uni_prom:6154.94, costo_unidad:3408.2, costo_total:1516649, margen_total:1222301, margen_pct:0.4463, piso:7800, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"BIOAV FOLIAR", formato:"?", ventas:32707, cantidad:2.0, precio_uni_prom:16353.5, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"FORMATO_NO_IDENTIFICADO" },
-    { pais:"CL", producto:"AV PLUS MICRO MIX", formato:"5 L", ventas:813400, cantidad:190.0, precio_uni_prom:4281.05, costo_unidad:1969.0, costo_total:374110, margen_total:439290, margen_pct:0.5401, piso:6500, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV BALANCE", formato:"20 L", ventas:20553260, cantidad:2430.0, precio_uni_prom:8458.13, costo_unidad:1337.5, costo_total:3250125, margen_total:17303135, margen_pct:0.8419, piso:13500, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS MICRO MIX", formato:"5 L", ventas:906900, cantidad:210.0, precio_uni_prom:4318.57, costo_unidad:1969.0, costo_total:413490, margen_total:493410, margen_pct:0.5441, piso:6500, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV BALANCE", formato:"20 L", ventas:24663260, cantidad:2770.0, precio_uni_prom:8903.7, costo_unidad:1337.5, costo_total:3704875, margen_total:20958385, margen_pct:0.8498, piso:13500, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV MOVE", formato:"1 L", ventas:440960, cantidad:49.0, precio_uni_prom:8999.18, costo_unidad:4394.0, costo_total:215306, margen_total:225654, margen_pct:0.5117, piso:8800, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV MAX FULVIC 45%", formato:"5 L", ventas:152650, cantidad:50.0, precio_uni_prom:3053.0, costo_unidad:1361.2, costo_total:68060, margen_total:84590, margen_pct:0.5541, piso:4000, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV SILFORTE", formato:"5 L", ventas:1820750, cantidad:255.0, precio_uni_prom:7140.2, costo_unidad:2795.4, costo_total:712827, margen_total:1107923, margen_pct:0.6085, piso:11000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV SILFORTE", formato:"5 L", ventas:1905750, cantidad:265.0, precio_uni_prom:7191.51, costo_unidad:2795.4, costo_total:740781, margen_total:1164969, margen_pct:0.6113, piso:11000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV PLUS ZINC MANGANESO", formato:"5 L", ventas:212300, cantidad:70.0, precio_uni_prom:3032.86, costo_unidad:1858.8, costo_total:130116, margen_total:82184, margen_pct:0.3871, piso:4000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV PLUS HIERRO", formato:"5 L", ventas:35400, cantidad:35.0, precio_uni_prom:1011.43, costo_unidad:2085.6, costo_total:72996, margen_total:-37596, margen_pct:-1.062, piso:4000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"K-DEFEND MAX", formato:"20 L", ventas:0, cantidad:200.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"AV ALGAP 30", formato:"1 L", ventas:308190, cantidad:54.0, precio_uni_prom:5707.22, costo_unidad:2574.0, costo_total:138996, margen_total:169194, margen_pct:0.549, piso:6800, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV PLUS CALCIO BORO", formato:"5 L", ventas:329603, cantidad:80.0, precio_uni_prom:4120.04, costo_unidad:2285.6, costo_total:182848, margen_total:146755, margen_pct:0.4452, piso:5000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV ROOT MAX", formato:"1 L", ventas:384156, cantidad:113.0, precio_uni_prom:3399.61, costo_unidad:4612.0, costo_total:521156, margen_total:-137000, margen_pct:-0.3566, piso:10000, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV AMIN SUGAR", formato:"5 L", ventas:1240832, cantidad:240.0, precio_uni_prom:5170.13, costo_unidad:2006.0, costo_total:481440, margen_total:759392, margen_pct:0.612, piso:6000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV AMIN SUGAR", formato:"5 L", ventas:1365832, cantidad:260.0, precio_uni_prom:5253.2, costo_unidad:2006.0, costo_total:521560, margen_total:844272, margen_pct:0.6181, piso:6000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV PLUS BORO", formato:"1 L", ventas:309062, cantidad:65.0, precio_uni_prom:4754.8, costo_unidad:3531.0, costo_total:229515, margen_total:79547, margen_pct:0.2574, piso:6500, clasif:"🟡 EN PISO", estado:"OK" },
     { pais:"CL", producto:"AV DEFENDER MAX", formato:"1 L", ventas:0, cantidad:15.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"AV DEFENDER MAX", formato:"5 L", ventas:0, cantidad:50.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
-    { pais:"CL", producto:"AV SILFORTE", formato:"1 L", ventas:240715, cantidad:26.0, precio_uni_prom:9258.27, costo_unidad:4256.0, costo_total:110656, margen_total:130059, margen_pct:0.5403, piso:12500, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV SILFORTE", formato:"1 L", ventas:912715, cantidad:90.0, precio_uni_prom:10141.28, costo_unidad:4256.0, costo_total:383040, margen_total:529675, margen_pct:0.5803, piso:12500, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV15 40-20", formato:"20 L", ventas:3348040, cantidad:1020.0, precio_uni_prom:3282.39, costo_unidad:2123.8, costo_total:2166276, margen_total:1181764, margen_pct:0.353, piso:5000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"BIOPOTASICO", formato:"500 ML", ventas:26888, cantidad:42.0, precio_uni_prom:640.19, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"FUNGISTOP", formato:"500 ML", ventas:40332, cantidad:69.0, precio_uni_prom:584.52, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
@@ -1600,19 +1600,19 @@ var AVBOARD = (function() {
     { pais:"CL", producto:"BALANCE CONC.", formato:"200 ML", ventas:0, cantidad:53.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"NUTRAMIX CONC.", formato:"200 ML", ventas:0, cantidad:36.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"SILFORTEM CONC.", formato:"200 ML", ventas:0, cantidad:24.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
-    { pais:"CL", producto:"AV MAX FULVIC 45%", formato:"200 L", ventas:5742000, cantidad:3360.0, precio_uni_prom:1708.93, costo_unidad:961.97, costo_total:3232219, margen_total:2509781, margen_pct:0.4371, piso:2500, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV MAX FULVIC 45%", formato:"200 L", ventas:7622000, cantidad:4360.0, precio_uni_prom:1748.17, costo_unidad:961.97, costo_total:4194189, margen_total:3427811, margen_pct:0.4497, piso:2500, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV15 40-20", formato:"1 L", ventas:458859, cantidad:66.0, precio_uni_prom:6952.41, costo_unidad:3503.0, costo_total:231198, margen_total:227661, margen_pct:0.4961, piso:7500, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV15 40-20", formato:"5 L", ventas:896253, cantidad:170.0, precio_uni_prom:5272.08, costo_unidad:2517.0, costo_total:427890, margen_total:468363, margen_pct:0.5226, piso:6500, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV HUMIC ROOT", formato:"1000 L", ventas:28200000, cantidad:16000.0, precio_uni_prom:1762.5, costo_unidad:1227.8, costo_total:19644800, margen_total:8555200, margen_pct:0.3034, piso:2200, clasif:"🟡 EN PISO", estado:"OK" },
+    { pais:"CL", producto:"AV HUMIC ROOT", formato:"1000 L", ventas:30000000, cantidad:17000.0, precio_uni_prom:1764.71, costo_unidad:1227.8, costo_total:20872600, margen_total:9127400, margen_pct:0.3042, piso:2200, clasif:"🟡 EN PISO", estado:"OK" },
     { pais:"CL", producto:"AV HUMIC ROOT", formato:"200 L", ventas:9810000, cantidad:5850.0, precio_uni_prom:1676.92, costo_unidad:961.97, costo_total:5627524, margen_total:4182476, margen_pct:0.4263, piso:2500, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV ROOT MAX", formato:"200 L", ventas:4916000, cantidad:1160.0, precio_uni_prom:4237.93, costo_unidad:2560.3, costo_total:2969948, margen_total:1946052, margen_pct:0.3959, piso:5400, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV PLUS MICRO MIX", formato:"1 L", ventas:177168, cantidad:41.0, precio_uni_prom:4321.17, costo_unidad:2955.0, costo_total:121155, margen_total:56013, margen_pct:0.3162, piso:8000, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"BIOAV PRADERAS", formato:"250 GR", ventas:3240908, cantidad:228.0, precio_uni_prom:14214.51, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
+    { pais:"CL", producto:"BIOAV PRADERAS", formato:"250 GR", ventas:3503408, cantidad:238.0, precio_uni_prom:14720.2, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"BODENPRO POTASIO", formato:"20 L", ventas:3780000, cantidad:2000.0, precio_uni_prom:1890.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
-    { pais:"CL", producto:"AV PLUS ZINC", formato:"20 L", ventas:5023000, cantidad:2120.0, precio_uni_prom:2369.34, costo_unidad:1248.2, costo_total:2646184, margen_total:2376816, margen_pct:0.4732, piso:2700, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS ZINC", formato:"20 L", ventas:5313000, cantidad:2200.0, precio_uni_prom:2415.0, costo_unidad:1248.2, costo_total:2746040, margen_total:2566960, margen_pct:0.4831, piso:2700, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"BALANCE CONC.", formato:"500 ML", ventas:0, cantidad:13.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"K-DEFEND MAX", formato:"5 L", ventas:0, cantidad:10.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
-    { pais:"CL", producto:"AV BLOOM", formato:"20 L", ventas:7910700, cantidad:1720.0, precio_uni_prom:4599.24, costo_unidad:2308.75, costo_total:3971050, margen_total:3939650, margen_pct:0.498, piso:7500, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV BLOOM", formato:"20 L", ventas:9390700, cantidad:1860.0, precio_uni_prom:5048.76, costo_unidad:2308.75, costo_total:4294275, margen_total:5096425, margen_pct:0.5427, piso:7500, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"ANALISIS V-CO", formato:"0000 HOJAS", ventas:0, cantidad:2.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"NO_CLASIFICABLE" },
     { pais:"CL", producto:"ANALISIS V-C0", formato:"0000 HOJAS", ventas:0, cantidad:2.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"NO_CLASIFICABLE" },
     { pais:"CL", producto:"AV ALGAP 30", formato:"200 L", ventas:1400000, cantidad:1000.0, precio_uni_prom:1400.0, costo_unidad:1761.63, costo_total:1761630, margen_total:-361630, margen_pct:-0.2583, piso:3500, clasif:"🟢 SOBRE PISO", estado:"OK" },
@@ -1627,7 +1627,7 @@ var AVBOARD = (function() {
     { pais:"CL", producto:"TERRAPULSE CONC.", formato:"500 ML", ventas:0, cantidad:3.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"PRODRUCTOS DE", formato:"1 L", ventas:96000, cantidad:9.0, precio_uni_prom:10666.67, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"NO_CLASIFICABLE" },
     { pais:"CL", producto:"ANALSIS FOLIAR", formato:"?", ventas:0, cantidad:2.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"NO_CLASIFICABLE" },
-    { pais:"CL", producto:"AV CYTO PRIME", formato:"20 L", ventas:10788400, cantidad:1290.0, precio_uni_prom:8363.1, costo_unidad:6500.0, costo_total:8385000, margen_total:2403400, margen_pct:0.2228, piso:14500, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV CYTO PRIME", formato:"20 L", ventas:12368400, cantidad:1370.0, precio_uni_prom:9028.03, costo_unidad:6500.0, costo_total:8905000, margen_total:3463400, margen_pct:0.28, piso:14500, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"ANÁLSIS FOLIAR", formato:"?", ventas:0, cantidad:2.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"NO_CLASIFICABLE" },
     { pais:"CL", producto:"ANÁLISIS SUELO EPS", formato:"?", ventas:0, cantidad:2.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"NO_CLASIFICABLE" },
     { pais:"CL", producto:"ANÁLISIS SUELO BÁSICO", formato:"?", ventas:0, cantidad:2.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"NO_CLASIFICABLE" },
@@ -1638,7 +1638,7 @@ var AVBOARD = (function() {
     { pais:"CL", producto:"FOLIBAC BIO INVIERNO", formato:"250 GR", ventas:15900000, cantidad:600.0, precio_uni_prom:26500.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"AV PLUS NP-MIX", formato:"20 L", ventas:0, cantidad:160.0, precio_uni_prom:0.0, costo_unidad:2317.75, costo_total:370840, margen_total:-370840, margen_pct:null, piso:6000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"GREEN GUARDIAN MAX", formato:"20 L", ventas:450000, cantidad:200.0, precio_uni_prom:2250.0, costo_unidad:2223.65, costo_total:444730, margen_total:5270, margen_pct:0.0117, piso:5000, clasif:"🟢 SOBRE PISO", estado:"OK" },
-    { pais:"CL", producto:"AV PLUS MACRO FRUIT", formato:"20 L", ventas:5456000, cantidad:3200.0, precio_uni_prom:1705.0, costo_unidad:1896.1, costo_total:6067520, margen_total:-611520, margen_pct:-0.1121, piso:5500, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS MACRO FRUIT", formato:"20 L", ventas:6128000, cantidad:3420.0, precio_uni_prom:1791.81, costo_unidad:1896.1, costo_total:6484662, margen_total:-356662, margen_pct:-0.0582, piso:5500, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"PRODUCTOS VARIOS", formato:"?", ventas:3243095, cantidad:0.0, precio_uni_prom:null, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"NO_CLASIFICABLE" },
     { pais:"CL", producto:"BIOAV FOLIAR", formato:"20 GR", ventas:0, cantidad:1.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"AV HUMIC ROOT", formato:"5 L", ventas:60000, cantidad:15.0, precio_uni_prom:4000.0, costo_unidad:1361.2, costo_total:20418, margen_total:39582, margen_pct:0.6597, piso:4000, clasif:"🟢 SOBRE PISO", estado:"OK" },
@@ -1674,7 +1674,7 @@ var AVBOARD = (function() {
     { pais:"CL", producto:"GATILLO PARA PLANTAS VERDES DE", formato:"500 ML", ventas:0, cantidad:15.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"GATILLO NUTRAMIX", formato:"500 ML", ventas:0, cantidad:8.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"GATILLO SILFORTEM", formato:"500 ML", ventas:0, cantidad:5.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
-    { pais:"CL", producto:"AV PLUS MACRO FRUIT", formato:"1 L", ventas:72000, cantidad:14.0, precio_uni_prom:5142.86, costo_unidad:2659.0, costo_total:37226, margen_total:34774, margen_pct:0.483, piso:8000, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS MACRO FRUIT", formato:"1 L", ventas:80400, cantidad:16.0, precio_uni_prom:5025.0, costo_unidad:2659.0, costo_total:42544, margen_total:37856, margen_pct:0.4708, piso:8000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV AMIN SUGAR", formato:"1000 L", ventas:3700000, cantidad:1000.0, precio_uni_prom:3700.0, costo_unidad:1217.22, costo_total:1217220, margen_total:2482780, margen_pct:0.671, piso:3500, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"RAÍZ DE AV BIOVECA", formato:"500 GR", ventas:0, cantidad:3.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"CONCENTRADO PARA RAÍCES", formato:"250 ML", ventas:0, cantidad:2.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
@@ -1683,7 +1683,7 @@ var AVBOARD = (function() {
     { pais:"CL", producto:"SILFORTEM CONC.", formato:"500 ML", ventas:0, cantidad:2.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"CL", producto:"AV PLUS NP-MIX", formato:"5 L", ventas:42500, cantidad:5.0, precio_uni_prom:8500.0, costo_unidad:2710.8, costo_total:13554, margen_total:28946, margen_pct:0.6811, piso:7000, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"A5", formato:"5 L", ventas:1760000, cantidad:160.0, precio_uni_prom:11000.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
-    { pais:"CL", producto:"AV PLUS MACRO FRUIT", formato:"5 L", ventas:27000, cantidad:5.0, precio_uni_prom:5400.0, costo_unidad:2478.6, costo_total:12393, margen_total:14607, margen_pct:0.541, piso:6800, clasif:"🟢 SOBRE PISO", estado:"OK" },
+    { pais:"CL", producto:"AV PLUS MACRO FRUIT", formato:"5 L", ventas:111000, cantidad:30.0, precio_uni_prom:3700.0, costo_unidad:2478.6, costo_total:74358, margen_total:36642, margen_pct:0.3301, piso:6800, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"CL", producto:"AV BALANCE", formato:"?", ventas:0, cantidad:55.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"FORMATO_NO_IDENTIFICADO" },
     { pais:"CL", producto:"PLUS POTASIO", formato:"?", ventas:0, cantidad:40.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"FORMATO_NO_IDENTIFICADO" },
     { pais:"CL", producto:"AV PLUS NUTRI MIX", formato:"?", ventas:0, cantidad:30.0, precio_uni_prom:0.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"FORMATO_NO_IDENTIFICADO" },
@@ -1737,17 +1737,18 @@ var AVBOARD = (function() {
     { pais:"PE", producto:"AV PLUS HIERRO", formato:"20 L (tier)", ventas:375.0, cantidad:50.0, precio_uni_prom:7.5, costo_unidad:1.35, costo_total:67.5, margen_total:307.5, margen_pct:0.82, piso:5.0, clasif:"🟢 SOBRE PISO", estado:"OK" },
     { pais:"PE", producto:"AV ZINC", formato:"?", ventas:2250.0, cantidad:300.0, precio_uni_prom:7.5, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
     { pais:"PE", producto:"LST AV AMIN", formato:"?", ventas:500.0, cantidad:100.0, precio_uni_prom:5.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
-    { pais:"PE", producto:"SILFORTE", formato:"?", ventas:4200.0, cantidad:400.0, precio_uni_prom:10.5, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" }
+    { pais:"PE", producto:"SILFORTE", formato:"?", ventas:4200.0, cantidad:400.0, precio_uni_prom:10.5, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" },
+    { pais:"PE", producto:"TS AV MAX FULVIC", formato:"?", ventas:600.0, cantidad:200.0, precio_uni_prom:3.0, costo_unidad:null, costo_total:null, margen_total:null, margen_pct:null, piso:null, clasif:null, estado:"SIN_COSTO" }
   ];
 
   var rentabilidad = {
-    alertas_nivel1: [{ pais:"CL", sku:"AV PLUS MACRO FRUIT 20 L", margen:-0.1121, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV ALGAP 30 200 L", margen:-0.2583, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV SILFORTE 200 L", margen:-0.1638, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV PLUS HIERRO 200 L", margen:-0.3184, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV PLUS MAGNESIO 200 L", margen:-0.2495, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV ROOT MAX 1 L", margen:-0.3566, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV BIOSOLARIS 1 L", margen:-0.4714, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV PLUS HIERRO 5 L", margen:-1.062, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV AMIN SUGAR 1 L", margen:-1.8957, accion:"REVISAR_O_DESCONTINUAR" }],
-    alertas_nivel2: [{ pais:"CL", sku:"GREEN GUARDIAN MAX 20 L", margen:0.0117 }, { pais:"CL", sku:"AV PLUS ZINC MANGANESO 20 L", margen:0.0217 }, { pais:"CL", sku:"AV PLUS ZINC 200 L", margen:0.0257 }],
-    impacto_clp:    -1894487,
-    skus_bajo_piso_chile: 87,
+    alertas_nivel1: [{ pais:"CL", sku:"AV ALGAP 30 200 L", margen:-0.2583, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV PLUS MACRO FRUIT 20 L", margen:-0.0582, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV SILFORTE 200 L", margen:-0.1638, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV PLUS HIERRO 200 L", margen:-0.3184, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV PLUS MAGNESIO 200 L", margen:-0.2495, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV ROOT MAX 1 L", margen:-0.3566, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV BIOSOLARIS 1 L", margen:-0.4714, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV PLUS HIERRO 5 L", margen:-1.062, accion:"REVISAR_O_DESCONTINUAR" }, { pais:"CL", sku:"AV AMIN SUGAR 1 L", margen:-1.8957, accion:"REVISAR_O_DESCONTINUAR" }],
+    alertas_nivel2: [{ pais:"CL", sku:"GREEN GUARDIAN MAX 20 L", margen:0.0117 }, { pais:"CL", sku:"AV PLUS ZINC 200 L", margen:0.0257 }, { pais:"CL", sku:"AV PLUS ZINC MANGANESO 20 L", margen:0.0705 }],
+    impacto_clp:    -1639629,
+    skus_bajo_piso_chile: 86,
     skus_bajo_piso_peru:   7,
     skus_sin_costo_chile: 73,
-    skus_sin_costo_peru:   8
+    skus_sin_costo_peru:   9
   };
 
   return {
