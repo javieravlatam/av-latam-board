@@ -486,15 +486,30 @@ def extract_peru_ventas(path):
     # (antes esto estaba fijo a 5 meses Ene-May vía mes_cols_pe/range(5) — cuando
     #  el corte avanzó a Junio, "Total general" ya incluía Junio pero el desglose
     #  mensual_pe no, y quedaba desincronizado del ytd_5m real. Ver MESES_FULL global.)
+    # Detección inteligente de columnas de mes — 3 niveles de fallback:
+    # Nivel 1: nombre canónico (ENERO, FEBRERO … SEPTIEMBRE)
+    # Nivel 2: prefijo numérico (01, 02 … 12) — inmune a cualquier ortografía
+    # Nivel 3: alias conocidos (SETIEMBRE, etc.) — por si no hay prefijo numérico
+    _re_mes_num = re.compile(r'^\s*0?(\d{1,2})\s*[\.\s\-]')
     available_cols = {}
     for col in df.columns:
         col_up = str(col).upper()
         matched = False
+        # Nivel 1: nombre canónico
         for i, m_name in enumerate(MESES_FULL):
             if m_name in col_up:
                 available_cols[i] = col
                 matched = True
                 break
+        # Nivel 2: prefijo numérico (ej. "09. SETIEMBRE 2026" → mes 9 → índice 8)
+        if not matched:
+            m_num = _re_mes_num.match(col_up)
+            if m_num:
+                num = int(m_num.group(1))
+                if 1 <= num <= 12:
+                    available_cols[num - 1] = col
+                    matched = True
+        # Nivel 3: alias de ortografía alternativa
         if not matched:
             for alias_name, alias_idx in MESES_ALIAS.items():
                 if alias_name in col_up:
