@@ -13,7 +13,12 @@ REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$REPO_DIR"
 
 # ── Limpiar locks de git (evita fallos silenciosos en commit) ──
-rm -f .git/HEAD.lock .git/index.lock 2>/dev/null || true
+# Mata cualquier proceso git colgado antes de limpiar los locks
+pkill -f "git commit" 2>/dev/null || true
+pkill -f "git push" 2>/dev/null || true
+sleep 2
+find .git -name "*.lock" -delete 2>/dev/null || true
+rm -f .git/HEAD.lock .git/index.lock .git/refs/heads/main.lock 2>/dev/null || true
 
 echo ""
 echo "=================================================="
@@ -60,17 +65,7 @@ git --no-optional-locks status --short
 echo ""
 
 # ── 4. Staging ──
-git --no-optional-locks add \
-  avboard_data.js \
-  avboard_clientes.js \
-  Panel_*.html \
-  apps/sic_av/sic_tx_pe.js \
-  apps/sic_av/sic_tx_cl.js \
-  apps/sic_av/js/sic_data_adapter.js \
-  logs/update_log.txt \
-  logs/resumen_actualizacion.md \
-  logs/alertas.md \
-  scripts/ppto_libro_base.py 2>/dev/null || true
+git --no-optional-locks add -A
 
 # ── 5. Commit ──
 FECHA=$(date '+%d/%m/%Y %H:%M')
