@@ -36,7 +36,13 @@ echo "🐍 Python: $(python3 --version)"
 echo "📁 Repo:   $REPO_DIR"
 echo ""
 
-# ── 1. Pipeline principal ──
+# ── 1. Espera de seguridad (60s) ──
+# Permite que los archivos del inbox terminen de copiarse antes de procesar
+echo "⏳ Esperando 60 segundos para que los archivos del inbox estén completos..."
+sleep 60
+echo ""
+
+# ── 2. Pipeline principal ──
 echo "▶ Ejecutando pipeline AVBOARD..."
 python3 scripts/update_avboard.py
 echo ""
