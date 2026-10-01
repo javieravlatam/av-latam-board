@@ -1,6 +1,6 @@
 /**
  * SIC-AV — sic_tx_pe.js  (datos históricos Perú)
- * Auto-generado — 2026-10-01 13:21 | NO EDITAR MANUALMENTE
+ * Auto-generado — 2026-10-01 13:41 | NO EDITAR MANUALMENTE
  * Fuente: update_avboard.py | corte 30/09/2026
  */
 (function(global){
