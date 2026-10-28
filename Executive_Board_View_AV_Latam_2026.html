@@ -497,36 +497,7 @@
             <th class="right">Estado</th>
           </tr>
         </thead>
-        <tbody>
-          <tr data-vendor="infante">
-            <td><span class="sema sema-green"></span><span class="rtc-name">O. Infante</span></td>
-            <td class="rtc-val">121,072</td>
-            <td><div class="rtc-pct" style="color:var(--green);">96.1%</div><div class="prog-wrap"><div class="prog-fill" style="width:96.1%;background:var(--green);"></div></div></td>
-            <td class="rtc-val" style="color:var(--green);">13,296</td>
-            <td style="text-align:right;">✅</td>
-          </tr>
-          <tr data-vendor="aguirre">
-            <td><span class="sema sema-green"></span><span class="rtc-name">L. Aguirre</span></td>
-            <td class="rtc-val">97,107</td>
-            <td><div class="rtc-pct" style="color:var(--green);">–</div><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
-            <td class="rtc-val" style="color:var(--green);">48,495</td>
-            <td style="text-align:right;">✅</td>
-          </tr>
-          <tr data-vendor="atalaya">
-            <td><span class="sema sema-green"></span><span class="rtc-name">O. Atalaya</span></td>
-            <td class="rtc-val">64,589</td>
-            <td><div class="rtc-pct" style="color:var(--green);">120.7%</div><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
-            <td class="rtc-val" style="color:var(--text-muted);">–</td>
-            <td style="text-align:right;">✅</td>
-          </tr>
-          <tr data-vendor="gonzales">
-            <td><span class="sema sema-red"></span><span class="rtc-name">A. Gonzales</span></td>
-            <td class="rtc-val">696</td>
-            <td><div class="rtc-pct" style="color:var(--red);">17.4%</div><div class="prog-wrap"><div class="prog-fill" style="width:17.4%;background:var(--red);"></div></div></td>
-            <td class="rtc-val" style="color:var(--text-muted);">–</td>
-            <td style="text-align:right;">🔴</td>
-          </tr>
-        </tbody>
+        <tbody id="eb-pe-rtc-tbody"><!-- generado dinámicamente por JS desde avboard_data.js --></tbody>
       </table>
       <div style="margin-top:12px;padding:10px 12px;background:var(--surface3);border-radius:6px;font-size:11px;color:var(--text-dim);" id="eb-pe-mesbox">
         🚀 <strong style="color:var(--green);">L. Aguirre</strong> lidera Mayo con USD 48.5K · Mayo total al 11/05: USD 65.0K · YTD Perú 5m: USD 360,500
@@ -1671,21 +1642,34 @@ function cerrarSesion() {
     set('eb-cl-mesbox-tag', 'Corte '+sHV+' · '+prevMesCL_EB+' definitivo + '+curMesCL_EB+' parcial');
     set('eb-cl-mesbox-body', prevMesCL_EB+' completo <span style="color:var(--green);font-family:\'DM Mono\',monospace;">'+M(cv.mensual_real[prevIdxCL_EB]||0)+'M CLP</span> · '+curMesCL_EB+' al '+sHV+' <span style="color:var(--green);font-family:\'DM Mono\',monospace;">'+M(cv.mensual_real[curIdxCL_EB]||0)+'M</span> · YTD '+nRealCL_EB+'m <span style="color:var(--green);font-family:\'DM Mono\',monospace;">'+M(D.chile_ytd())+'M CLP</span>');
 
-    // ── Vendedores Perú YTD table + caja de mes ──
+    // ── Vendedores Perú YTD table + caja de mes — 100% dinámico desde AVBOARD ──
     var curIdxPE_EB = nRealPE_EB - 1;
     var curMesPE_EB = mesesFullEBLong[curIdxPE_EB];
     set('eb-pe-rtc-tag', 'USD · incl. '+curMesPE_EB+' parcial al '+sPV);
-    // eb-pe-th-mes ahora dice "IEC YTD" — no sobreescribir con mes (IEC Peru por vendedor pendiente)
-    var ebVendNames = {infante:'O. Infante',aguirre:'L. Aguirre',atalaya:'O. Atalaya',gonzales:'A. Gonzales'};
+    var _DISP_EBV={aguirre:'L. Aguirre',infante:'O. Infante',atalaya:'O. Atalaya',gonzales:'A. Gonzales',valladares:'P. Valladares',diaz:'S. Díaz',martha:'M. Hidalgo',caroca:'J. Caroca',geldres:'J. Geldres'};
+    var ebVendNames = {};
     var ebTopVend = null, ebTopVal = -1;
     var ebRtcR = pv.rtc_mensual_real || {};
     var ebMPP  = pv.rtc_mensual_ppto || {};
+    // Generar filas dinámicamente ordenadas por ytd desc
+    var _ebTbody = document.getElementById('eb-pe-rtc-tbody');
+    if (_ebTbody) {
+      var _sortedPE = Object.keys(pv.por_vendedor||{})
+        .filter(function(k){return k!=='navarro';})
+        .sort(function(a,b){return ((pv.por_vendedor[b]&&pv.por_vendedor[b].ytd)||0)-((pv.por_vendedor[a]&&pv.por_vendedor[a].ytd)||0);});
+      var _ebHtml = '';
+      _sortedPE.forEach(function(k){
+        var dn = _DISP_EBV[k]||(pv.por_vendedor[k]&&pv.por_vendedor[k].nombre)||k;
+        ebVendNames[k] = dn;
+        _ebHtml+='<tr data-vendor="'+k+'"><td><span class="sema sema-green"></span><span class="rtc-name">'+dn+'</span></td><td class="rtc-val">–</td><td><div class="rtc-pct">–</div><div class="prog-wrap"><div class="prog-fill" style="width:0%;"></div></div></td><td class="rtc-val" style="color:var(--text-muted);">–</td><td style="text-align:right;">⚪</td></tr>';
+      });
+      _ebTbody.innerHTML = _ebHtml;
+    }
     Object.keys(ebVendNames).forEach(function(k){
       var row = document.querySelector('tr[data-vendor="'+k+'"]');
       var v = pv.por_vendedor && pv.por_vendedor[k];
       if (!v) return;
       var mesVal = ebRtcR[k] ? (ebRtcR[k][curIdxPE_EB] || 0) : 0;
-      // Ppto YTD = suma de targets mensuales reales (igual que Panel_Presupuesto)
       var _mpp = ebMPP[k];
       var ytdPpto = _mpp ? _mpp.slice(0, nRealPE_EB).reduce(function(s,v){return s+(v||0);},0) : 0;
       var cumpl   = ytdPpto > 0 ? v.ytd / ytdPpto : null;
@@ -1694,14 +1678,13 @@ function cerrarSesion() {
         var semaEl = row.querySelector('.sema');
         var pctEl  = row.querySelector('.rtc-pct');
         var fillEl = row.querySelector('.prog-fill');
-        if (cumpl !== null) {
-          var clrC = cumpl >= 1 ? 'var(--green)' : (cumpl >= 0.8 ? 'var(--amber)' : 'var(--red)');
-          if (semaEl) semaEl.className = 'sema ' + (cumpl >= 1 ? 'sema-green' : (cumpl >= 0.8 ? 'sema-amber' : 'sema-red'));
-          if (pctEl)  { pctEl.textContent = (cumpl*100).toFixed(1)+'%'; pctEl.style.color = clrC; }
-          if (fillEl) { fillEl.style.width = Math.min(100,cumpl*100).toFixed(1)+'%'; fillEl.style.background = clrC; }
-        }
-        // IEC YTD Peru por vendedor — pendiente de datos por transacción. Mostrar '–' hasta disponibilidad.
-        row.children[3].textContent = '–';
+        var clrC = cumpl === null ? 'var(--text-dim)' : (cumpl >= 1 ? 'var(--green)' : (cumpl >= 0.8 ? 'var(--amber)' : 'var(--red)'));
+        var icon  = cumpl === null ? '⚪' : (cumpl >= 1 ? '✅' : (cumpl >= 0.8 ? '⚠️' : '🔴'));
+        if (semaEl) semaEl.className = 'sema ' + (cumpl === null ? 'sema-green' : (cumpl >= 1 ? 'sema-green' : (cumpl >= 0.8 ? 'sema-amber' : 'sema-red')));
+        if (pctEl)  { pctEl.textContent = cumpl !== null ? (cumpl*100).toFixed(1)+'%' : '–'; pctEl.style.color = clrC; }
+        if (fillEl) { fillEl.style.width = cumpl !== null ? Math.min(100,cumpl*100).toFixed(1)+'%' : '0%'; fillEl.style.background = clrC; }
+        row.children[3].textContent = '–'; // IEC PE por vendedor pendiente
+        row.children[4].textContent = icon;
       }
       if (mesVal > ebTopVal) { ebTopVal = mesVal; ebTopVend = k; }
     });

@@ -699,15 +699,14 @@ const GD='rgba(74,158,219,0.1)';
   var realAcD2=[];var s=0;
   for(var i=0;i<12;i++){if(i<nMpe_d){s+=REAL_T[i];realAcD2.push(s);}else{realAcD2.push(null);}}
 
-  // ── Vendor Selector + cAcum ─────────────────────────────────────────────────
-  var PE_VENDORS=[
-    {k:'all',n:'Todo el equipo'},
-    {k:'infante',n:'O. Infante'},
-    {k:'aguirre',n:'L. Aguirre'},
-    {k:'atalaya',n:'O. Atalaya'},
-    {k:'valladares',n:'P. Valladares'},
-    {k:'gonzales',n:'A. Gonzales'}
-  ];
+  // ── Vendor Selector + cAcum — 100% dinámico desde AVBOARD ──────────────────
+  var _DISP_PE={aguirre:'L. Aguirre',infante:'O. Infante',atalaya:'O. Atalaya',gonzales:'A. Gonzales',valladares:'P. Valladares',diaz:'S. Díaz',martha:'M. Hidalgo',caroca:'J. Caroca',geldres:'J. Geldres'};
+  var PE_VENDORS=[{k:'all',n:'Todo el equipo'}].concat(
+    Object.keys(rtcR_d)
+      .filter(function(k){return k!=='navarro';})
+      .sort(function(a,b){var sa=(rtcR_d[a]||[]).reduce(function(x,v){return x+(v||0);},0),sb=(rtcR_d[b]||[]).reduce(function(x,v){return x+(v||0);},0);return sb-sa;})
+      .map(function(k){return {k:k,n:(_DISP_PE[k]||k)};})
+  );
   // Shared state (on window so AVBOARD populate block puede actualizarlo)
   window._peSel='all';
   window._peData={nMes:nMpe_d, rtcR:rtcR_d, rtcP:rtcP_d, acumPpto:pptoAcD.slice(), acumReal26:realAcD2.slice()};
@@ -1055,15 +1054,11 @@ new Chart(document.getElementById('cCxC'),{
     function _acumYtd(k){var a=_rtcMPP[k];return a?a.slice(0,nRealPE).reduce(function(s,v){return s+(v||0);},0):0;}
     var peVBody=document.getElementById('pe-vt-body');
     if(peVBody){
-      var peVRows=[
-        {k:'aguirre',   n:'L. Aguirre'},
-        {k:'infante',   n:'O. Infante'},
-        {k:'atalaya',   n:'O. Atalaya'},
-        {k:'gonzales',  n:'A. Gonzales'},
-        {k:'valladares',n:'P. Valladares'},
-        {k:'diaz',      n:'S. Díaz'},
-        {k:'martha',    n:'M. Hidalgo'},
-      ];
+      // Dinámico — cualquier vendor en por_vendedor aparece automáticamente
+      var peVRows=Object.keys(pve)
+        .filter(function(k){return k!=='navarro';})
+        .sort(function(a,b){return ((pve[b]&&pve[b].ytd)||0)-((pve[a]&&pve[a].ytd)||0);})
+        .map(function(k){return {k:k,n:(_DISP_PE[k]||(pve[k]&&pve[k].nombre)||k)};});
       var peVHtml='',totPptoYtd=0,totPptoA=0;
       peVRows.forEach(function(vr){
         var v=pve[vr.k]; if(!v) return;
