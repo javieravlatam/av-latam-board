@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-08-24",
+  "last_updated": "2026-10-28",
   "note": "Catálogo canónico de vendedores AV LATAM. Editar aquí para agregar/retirar vendedores sin modificar código fuente. Los aliases deben estar en MAYÚSCULAS para comparación case-insensitive.",
   "vendors": [
     {
@@ -271,6 +271,21 @@
       "en_ppto_pe": false,
       "en_rtc_ventas": true,
       "nota": "Agregado 2026-08-25 — aparece en CxC PE corte 24/08/2026."
+    },
+    {
+      "vendor_id": "caroca",
+      "nombre_canonico": "Jorge Caroca",
+      "aliases": [
+        "JORGE CAROCA"
+      ],
+      "pais": "PE",
+      "empresa": "AGROVECA_PE",
+      "estado": "activo",
+      "rol_comercial": "RTC",
+      "orden_visual": 9,
+      "en_ppto_pe": false,
+      "en_rtc_ventas": true,
+      "nota": "Agregado 2026-10-28 — vendedor incorporado en reporte ventas PE Oct 2026. USD 148,418 YTD."
     }
   ]
 }
