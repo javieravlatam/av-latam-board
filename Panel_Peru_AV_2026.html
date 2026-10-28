@@ -553,13 +553,20 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   var aguNavReal=aguReal+navReal;
   var aguNavPpto=acum('aguirre'); // Navarro sin ppto formal
 
-  var VEND=[
-    {star:'⭐',nombre:'L. Aguirre',extra:'',real:aguNavReal,ppto:aguNavPpto},
-    {star:'✅',nombre:'O. Atalaya',   real:pve.atalaya?pve.atalaya.ytd:0,     ppto:acum('atalaya')},
-    {star:'⚠️',nombre:'O. Infante',   real:pve.infante?pve.infante.ytd:0,     ppto:acum('infante')},
-    {star:'🔴',nombre:'A. Gonzales',  real:pve.gonzales?pve.gonzales.ytd:0,   ppto:acum('gonzales')},
-    {star:'🔴',nombre:'P. Valladares',real:pve.valladares?pve.valladares.ytd:0,ppto:acum('valladares')},
-  ];
+  // Semáforo dinámico — cualquier vendor en por_vendedor aparece automáticamente
+  var _DISP_SEMA={aguirre:'L. Aguirre',infante:'O. Infante',atalaya:'O. Atalaya',gonzales:'A. Gonzales',valladares:'P. Valladares',diaz:'S. Díaz',martha:'M. Hidalgo',caroca:'J. Caroca',geldres:'J. Geldres'};
+  var _pveKeys=Object.keys(pve).filter(function(k){return k!=='navarro';});
+  _pveKeys.sort(function(a,b){
+    var ra=a==='aguirre'?aguNavReal:(pve[a]?pve[a].ytd:0);
+    var rb=b==='aguirre'?aguNavReal:(pve[b]?pve[b].ytd:0);
+    return rb-ra;
+  });
+  function _starPE(cumpl){if(cumpl===null)return '⚪';if(cumpl>=100)return '✅';if(cumpl>=80)return '⚠️';return '🔴';}
+  var VEND=_pveKeys.map(function(k){
+    var real=k==='aguirre'?aguNavReal:(pve[k]?pve[k].ytd:0);
+    var pp=acum(k);
+    return {star:_starPE(pp>0?real/pp*100:null),nombre:(_DISP_SEMA[k]||(pve[k]&&pve[k].nombre)||k),extra:'',real:real,ppto:pp};
+  });
 
   var html='';
   VEND.forEach(function(v){
@@ -1099,13 +1106,10 @@ new Chart(document.getElementById('cCxC'),{
     (function(){
       var rtcP=pv.rtc_mensual_ppto||{};
       var toK=function(v){return parseFloat((v/1000).toFixed(1));};
-      var VEND=[
-        {k:'aguirre',  n:'L. AGUIRRE'},
-        {k:'infante',  n:'O. INFANTE'},
-        {k:'atalaya',  n:'O. ATALAYA'},
-        {k:'gonzales', n:'A. GONZALES'},
-        {k:'valladares',n:'P. VALLADARES'},
-      ];
+      // Alertas dinámicas — cualquier vendor en por_vendedor
+      var _DISP_ALT={aguirre:'L. AGUIRRE',infante:'O. INFANTE',atalaya:'O. ATALAYA',gonzales:'A. GONZALES',valladares:'P. VALLADARES',diaz:'S. DÍAZ',martha:'M. HIDALGO',caroca:'J. CAROCA',geldres:'J. GELDRES'};
+      var VEND=Object.keys(pve).filter(function(k){return k!=='navarro';})
+        .map(function(k){return {k:k,n:_DISP_ALT[k]||(pve[k]&&pve[k].nombre)||k};});
       var alertas=VEND.map(function(v){
         var real=pve[v.k]?pve[v.k].ytd:0;
         var mP=rtcP[v.k];
