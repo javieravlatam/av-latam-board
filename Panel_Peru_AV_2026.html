@@ -480,6 +480,36 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
 <!-- AI insights movido a sección principal de Diagnóstico AI arriba -->
 
+<!-- ── MIX DE VENTAS · PERÚ ──────────────────────────────────────────────── -->
+<div style="margin:0 16px 20px;">
+  <div class="sec">MIX DE VENTAS · PERÚ</div>
+  <div id="mix-sel-pe" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px;"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 14px;">
+      <div style="font-family:'DM Mono';font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Participación Vendedor <span id="mix-pe-vper" style="color:var(--domain-accent);"></span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="position:relative;width:150px;height:150px;flex-shrink:0;">
+          <canvas id="cMixVendPE" width="150" height="150"></canvas>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
+            <div id="mix-pe-vtot" style="font-family:'Bebas Neue';font-size:18px;line-height:1;"></div>
+            <div style="font-size:8px;color:var(--text-muted);">Total USD</div>
+          </div>
+        </div>
+        <div id="mix-pe-vleg" style="flex:1;display:flex;flex-direction:column;gap:5px;padding-top:4px;"></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 14px;">
+      <div style="font-family:'DM Mono';font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Participación Producto · YTD</div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="position:relative;width:150px;height:150px;flex-shrink:0;">
+          <canvas id="cMixProdPE" width="150" height="150"></canvas>
+        </div>
+        <div id="mix-pe-pleg" style="flex:1;display:flex;flex-direction:column;gap:5px;padding-top:4px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="ftr">
   <div id="av-pe-footer-txt">AV Latam BI Platform · Panel Perú · Corte ventas 15/05 · CxC 10/05/2026 · Ppto oficial USD 1,137,034</div>
   <div class="npills">
@@ -1129,6 +1159,106 @@ new Chart(document.getElementById('cCxC'),{
       if(c1) c1.innerHTML=alertas.slice(0,3).join('');
       if(c2) c2.innerHTML=alertas.slice(3).join('');
     })();
+    // ── MIX DE VENTAS · PERÚ ─────────────────────────────────────────────────
+    (function(){
+      var PAL=['#1B4F8A','#5a8f35','#E67E22','#9B59B6','#E74C3C','#1ABC9C','#F5A623','#2C3E50','#27AE60','#8E44AD','#D35400','#16A085'];
+      var MESL=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+      var DISPV={aguirre:'L. Aguirre',infante:'O. Infante',atalaya:'O. Atalaya',gonzales:'A. Gonzales',valladares:'P. Valladares',diaz:'S. Díaz',martha:'M. Hidalgo',caroca:'J. Caroca',geldres:'J. Geldres'};
+      var rtcRPE=pv.rtc_mensual_real||{};
+      var nMPE=nRealPE||5;
+
+      function getVendData(m){
+        return Object.keys(rtcRPE)
+          .filter(function(k){return k!=='navarro';})
+          .map(function(k){
+            var arr=rtcRPE[k]||[];
+            var v=m<0?arr.slice(0,nMPE).reduce(function(a,b){return a+(b||0);},0):(arr[m]||0);
+            return {k:k,n:DISPV[k]||k,v:v};
+          })
+          .filter(function(d){return d.v>0;})
+          .sort(function(a,b){return b.v-a.v;});
+      }
+
+      function getProdData(){
+        var prods=(D.productos||[]).filter(function(p){return p.pais==='PE'&&p.ventas>0;});
+        var grp={};
+        prods.forEach(function(p){grp[p.producto]=(grp[p.producto]||0)+p.ventas;});
+        var arr=Object.keys(grp).map(function(k){return {n:k,v:grp[k]};}).sort(function(a,b){return b.v-a.v;});
+        if(arr.length>10){
+          var otros=arr.slice(10).reduce(function(s,d){return s+d.v;},0);
+          arr=arr.slice(0,10);
+          if(otros>0) arr.push({n:'Otros',v:otros});
+        }
+        return arr;
+      }
+
+      function fmtV(v){return v>=1000?(v/1000).toFixed(1)+'K':Math.round(v);}
+
+      function renderLegend(elId,data,total){
+        var el=document.getElementById(elId); if(!el) return;
+        el.innerHTML=data.map(function(d,i){
+          var pct=total>0?Math.round(d.v/total*100):0;
+          return '<div style="display:flex;align-items:center;gap:5px;font-size:9px;">'
+            +'<span style="width:8px;height:8px;border-radius:50%;background:'+PAL[i%PAL.length]+';flex-shrink:0;"></span>'
+            +'<span style="flex:1;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="'+d.n+'">'+d.n+'</span>'
+            +'<span style="color:var(--domain-accent);font-weight:700;flex-shrink:0;">'+pct+'%</span>'
+            +'</div>';
+        }).join('');
+      }
+
+      // Crear donut vendedor
+      var dVPE=getVendData(-1);
+      var totVPE=dVPE.reduce(function(s,d){return s+d.v;},0);
+      var chVPE=new Chart(document.getElementById('cMixVendPE'),{
+        type:'doughnut',
+        data:{labels:dVPE.map(function(d){return d.n;}),datasets:[{data:dVPE.map(function(d){return d.v;}),backgroundColor:PAL.slice(0,dVPE.length),borderWidth:2,borderColor:'#fff',hoverOffset:4}]},
+        options:{cutout:'62%',animation:{duration:300},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var t=ctx.dataset.data.reduce(function(a,b){return a+b;},0);return ' '+ctx.label+': USD '+Math.round(ctx.raw).toLocaleString()+' ('+(t>0?(ctx.raw/t*100).toFixed(1):0)+'%)';}}}}
+      }});
+      var elVTPE=document.getElementById('mix-pe-vtot');
+      if(elVTPE) elVTPE.textContent='$'+fmtV(totVPE);
+      var elVPrPE=document.getElementById('mix-pe-vper');
+      if(elVPrPE) elVPrPE.textContent='· YTD';
+      renderLegend('mix-pe-vleg',dVPE,totVPE);
+
+      // Crear donut producto
+      var dPPE=getProdData();
+      var totPPE=dPPE.reduce(function(s,d){return s+d.v;},0);
+      new Chart(document.getElementById('cMixProdPE'),{
+        type:'doughnut',
+        data:{labels:dPPE.map(function(d){return d.n;}),datasets:[{data:dPPE.map(function(d){return d.v;}),backgroundColor:PAL.slice(0,dPPE.length),borderWidth:2,borderColor:'#fff',hoverOffset:4}]},
+        options:{cutout:'62%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var t=ctx.dataset.data.reduce(function(a,b){return a+b;},0);return ' '+ctx.label+': USD '+Math.round(ctx.raw).toLocaleString()+' ('+(t>0?(ctx.raw/t*100).toFixed(1):0)+'%)';}}}}
+      }});
+      renderLegend('mix-pe-pleg',dPPE,totPPE);
+
+      // Selector de mes
+      var selEl=document.getElementById('mix-sel-pe');
+      if(selEl){
+        var btns=[{i:-1,n:'YTD'}].concat(MESL.slice(0,nMPE).map(function(n,i){return {i:i,n:n};}));
+        function renderSel(active){
+          selEl.innerHTML=btns.map(function(b){
+            var isA=b.i===active;
+            return '<button onclick="window._mixSelPE('+b.i+')" style="padding:3px 9px;font-size:9px;font-family:\'DM Mono\',monospace;border-radius:4px;border:1px solid '+(isA?'var(--domain-accent)':'var(--border)')+';background:'+(isA?'var(--domain-accent)':'transparent')+';color:'+(isA?'#fff':'var(--text-muted)')+';cursor:pointer;transition:all .15s;">'+b.n+'</button>';
+          }).join('');
+        }
+        renderSel(-1);
+        window._mixSelPE=function(idx){
+          renderSel(idx);
+          var data=getVendData(idx);
+          var tot=data.reduce(function(s,d){return s+d.v;},0);
+          var ch=Chart.getChart(document.getElementById('cMixVendPE'));
+          if(ch){
+            ch.data.labels=data.map(function(d){return d.n;});
+            ch.data.datasets[0].data=data.map(function(d){return d.v;});
+            ch.data.datasets[0].backgroundColor=PAL.slice(0,data.length);
+            ch.update();
+          }
+          if(elVTPE) elVTPE.textContent='$'+fmtV(tot);
+          if(elVPrPE) elVPrPE.textContent=idx<0?'· YTD':'· '+MESL[idx];
+          renderLegend('mix-pe-vleg',data,tot);
+        };
+      }
+    })();
+
     // Footer
     set('av-pe-footer-txt','AV Latam BI Platform · Panel Perú · Corte ventas '+corteVtas+
       ' · CxC '+D.meta.cortes.peru_cxc+' · Ppto oficial USD '+pptoA.toLocaleString('en-US'));

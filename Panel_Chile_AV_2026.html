@@ -553,6 +553,36 @@
 
 </div>
 
+<!-- ── MIX DE VENTAS · CHILE ──────────────────────────────────────────────── -->
+<div style="margin:0 16px 20px;">
+  <div class="sec">MIX DE VENTAS · CHILE</div>
+  <div id="mix-sel-cl" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px;"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 14px;">
+      <div style="font-family:'DM Mono';font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Participación Vendedor <span id="mix-cl-vper" style="color:var(--domain-accent);"></span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="position:relative;width:150px;height:150px;flex-shrink:0;">
+          <canvas id="cMixVendCL" width="150" height="150"></canvas>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
+            <div id="mix-cl-vtot" style="font-family:'Bebas Neue';font-size:18px;line-height:1;"></div>
+            <div style="font-size:8px;color:var(--text-muted);">Total CLP</div>
+          </div>
+        </div>
+        <div id="mix-cl-vleg" style="flex:1;display:flex;flex-direction:column;gap:5px;padding-top:4px;"></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 14px;">
+      <div style="font-family:'DM Mono';font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Participación Producto · YTD</div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="position:relative;width:150px;height:150px;flex-shrink:0;">
+          <canvas id="cMixProdCL" width="150" height="150"></canvas>
+        </div>
+        <div id="mix-cl-pleg" style="flex:1;display:flex;flex-direction:column;gap:5px;padding-top:4px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ── AI INSIGHT CEO ────────────────────────────────────────────────────── -->
 <div id="ai-insight-cl" style="display:none;margin:0 16px 20px;background:linear-gradient(135deg,rgba(27,79,138,.04),rgba(90,143,53,.04));border:1px solid rgba(27,79,138,.18);border-left:3px solid #1B4F8A;border-radius:10px;padding:18px 20px;">
   <div style="font-size:10px;font-weight:700;color:#1B4F8A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;">🤖 Diagnóstico Ejecutivo · Visión CEO — Chile</div>
@@ -572,7 +602,7 @@
   </div>
 </div>
 
-<script src="avboard_data.js?v=202610280911"></script>
+<script src="avboard_data.js?v=202610281652"></script>
 <script>
 (function(){
   if(typeof AVBOARD==='undefined'||!AVBOARD.insights||!AVBOARD.insights.chile) return;
@@ -999,6 +1029,108 @@ function cerrarSesion() {
       ];
       cCxC.update();
     }
+
+    // ── MIX DE VENTAS · CHILE ───────────────────────────────────────────────
+    (function(){
+      var PAL=['#1B4F8A','#5a8f35','#E67E22','#9B59B6','#E74C3C','#1ABC9C','#F5A623','#2C3E50','#27AE60','#8E44AD','#D35400','#16A085'];
+      var MESL=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+      var DISPV={laratro:'P. Laratro',velasquez:'F. Velásquez',caroca:'J. Caroca',encina:'R. Encina',veverka:'I. Veverka',munoz:'V. Muñoz',bernazar:'R. Bernazar',almeida:'J. Almeida'};
+      var rtcRCL=cv.rtc_mensual_real||{};
+      var nMCL=nRealCL||10;
+      var _selMixCL=-1; // -1=YTD
+
+      function getVendData(m){
+        return Object.keys(rtcRCL)
+          .map(function(k){
+            var arr=rtcRCL[k]||[];
+            var v=m<0?arr.slice(0,nMCL).reduce(function(a,b){return a+(b||0);},0):(arr[m]||0);
+            return {k:k,n:DISPV[k]||k,v:v};
+          })
+          .filter(function(d){return d.v>0;})
+          .sort(function(a,b){return b.v-a.v;});
+      }
+
+      function getProdData(){
+        var prods=(D.productos||[]).filter(function(p){return p.pais==='CL'&&p.ventas>0;});
+        var grp={};
+        prods.forEach(function(p){grp[p.producto]=(grp[p.producto]||0)+p.ventas;});
+        var arr=Object.keys(grp).map(function(k){return {n:k,v:grp[k]};}).sort(function(a,b){return b.v-a.v;});
+        if(arr.length>10){
+          var otros=arr.slice(10).reduce(function(s,d){return s+d.v;},0);
+          arr=arr.slice(0,10);
+          if(otros>0) arr.push({n:'Otros',v:otros});
+        }
+        return arr;
+      }
+
+      function fmtM(v){return (v/1e6).toFixed(1)+'M';}
+
+      function renderLegend(elId,data,total,isCLP){
+        var el=document.getElementById(elId); if(!el) return;
+        el.innerHTML=data.map(function(d,i){
+          var pct=total>0?Math.round(d.v/total*100):0;
+          var amt=isCLP?('$'+fmtM(d.v)):('$'+fmtM(d.v));
+          return '<div style="display:flex;align-items:center;gap:5px;font-size:9px;">'
+            +'<span style="width:8px;height:8px;border-radius:50%;background:'+PAL[i%PAL.length]+';flex-shrink:0;"></span>'
+            +'<span style="flex:1;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="'+d.n+'">'+d.n+'</span>'
+            +'<span style="color:var(--domain-accent);font-weight:700;flex-shrink:0;">'+pct+'%</span>'
+            +'</div>';
+        }).join('');
+      }
+
+      // Crear donut vendedor
+      var dVCL=getVendData(-1);
+      var totVCL=dVCL.reduce(function(s,d){return s+d.v;},0);
+      var chVCL=new Chart(document.getElementById('cMixVendCL'),{
+        type:'doughnut',
+        data:{labels:dVCL.map(function(d){return d.n;}),datasets:[{data:dVCL.map(function(d){return d.v;}),backgroundColor:PAL.slice(0,dVCL.length),borderWidth:2,borderColor:'#fff',hoverOffset:4}]},
+        options:{cutout:'62%',animation:{duration:300},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var t=ctx.dataset.data.reduce(function(a,b){return a+b;},0);return ' '+ctx.label+': $'+(ctx.raw/1e6).toFixed(1)+'M ('+(t>0?(ctx.raw/t*100).toFixed(1):0)+'%)';}}}}
+      }});
+      var elVTot=document.getElementById('mix-cl-vtot');
+      if(elVTot) elVTot.textContent='$'+fmtM(totVCL);
+      var elVPer=document.getElementById('mix-cl-vper');
+      if(elVPer) elVPer.textContent='· YTD';
+      renderLegend('mix-cl-vleg',dVCL,totVCL,true);
+
+      // Crear donut producto
+      var dPCL=getProdData();
+      var totPCL=dPCL.reduce(function(s,d){return s+d.v;},0);
+      new Chart(document.getElementById('cMixProdCL'),{
+        type:'doughnut',
+        data:{labels:dPCL.map(function(d){return d.n;}),datasets:[{data:dPCL.map(function(d){return d.v;}),backgroundColor:PAL.slice(0,dPCL.length),borderWidth:2,borderColor:'#fff',hoverOffset:4}]},
+        options:{cutout:'62%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var t=ctx.dataset.data.reduce(function(a,b){return a+b;},0);return ' '+ctx.label+': $'+(ctx.raw/1e6).toFixed(1)+'M ('+(t>0?(ctx.raw/t*100).toFixed(1):0)+'%)';}}}}
+      }});
+      renderLegend('mix-cl-pleg',dPCL,totPCL,true);
+
+      // Selector de mes
+      var selEl=document.getElementById('mix-sel-cl');
+      if(selEl){
+        var btns=[{i:-1,n:'YTD'}].concat(MESL.slice(0,nMCL).map(function(n,i){return {i:i,n:n};}));
+        function renderSel(active){
+          selEl.innerHTML=btns.map(function(b){
+            var isA=b.i===active;
+            return '<button onclick="window._mixSelCL('+b.i+')" style="padding:3px 9px;font-size:9px;font-family:\'DM Mono\',monospace;border-radius:4px;border:1px solid '+(isA?'var(--domain-accent)':'var(--border)')+';background:'+(isA?'var(--domain-accent)':'transparent')+';color:'+(isA?'#fff':'var(--text-muted)')+';cursor:pointer;transition:all .15s;">'+b.n+'</button>';
+          }).join('');
+        }
+        renderSel(-1);
+        window._mixSelCL=function(idx){
+          _selMixCL=idx;
+          renderSel(idx);
+          var data=getVendData(idx);
+          var tot=data.reduce(function(s,d){return s+d.v;},0);
+          var ch=Chart.getChart(document.getElementById('cMixVendCL'));
+          if(ch){
+            ch.data.labels=data.map(function(d){return d.n;});
+            ch.data.datasets[0].data=data.map(function(d){return d.v;});
+            ch.data.datasets[0].backgroundColor=PAL.slice(0,data.length);
+            ch.update();
+          }
+          if(elVTot) elVTot.textContent='$'+fmtM(tot);
+          if(elVPer) elVPer.textContent=idx<0?'· YTD':'· '+MESL[idx];
+          renderLegend('mix-cl-vleg',data,tot,true);
+        };
+      }
+    })();
 
     console.log('[AVBOARD] ✅ Panel_Chile actualizado · ' + D.meta.version);
   } catch(e) {
