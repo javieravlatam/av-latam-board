@@ -1136,6 +1136,51 @@
   </div>
 </div>
 
+<!-- ── MIX DE VENTAS · GRUPO LATAM ──────────────────────────────────── -->
+<div style="margin:0 16px 24px;">
+  <div style="font-size:10px;font-weight:700;color:var(--domain-accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;padding-bottom:6px;border-bottom:1px solid var(--border-dim);">🥧 MIX DE VENTAS · GRUPO LATAM</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+    <div style="background:var(--surface2);border:1px solid var(--border-dim);border-radius:10px;padding:14px;">
+      <div style="font-size:9px;font-weight:700;color:var(--domain-accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">🇨🇱 CHILE — Por Vendedor</div>
+      <div id="mix-sel-cl-eb" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;"></div>
+      <div style="position:relative;height:140px;">
+        <canvas id="cMixVendCL_EB"></canvas>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
+          <div id="mix-eb-cl-vtot" style="font-family:'DM Mono',monospace;font-size:12px;font-weight:700;color:var(--domain-accent);">—</div>
+          <div id="mix-eb-cl-vper" style="font-size:8px;color:var(--text-muted);">YTD</div>
+        </div>
+      </div>
+      <div id="mix-eb-cl-vleg" style="margin-top:8px;display:flex;flex-direction:column;gap:3px;"></div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border-dim);border-radius:10px;padding:14px;">
+      <div id="mix-eb-cl-plbl" style="font-size:9px;font-weight:700;color:var(--domain-accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">🇨🇱 CHILE — Por Producto</div>
+      <div style="position:relative;height:140px;margin-top:32px;">
+        <canvas id="cMixProdCL_EB"></canvas>
+      </div>
+      <div id="mix-eb-cl-pleg" style="margin-top:8px;display:flex;flex-direction:column;gap:3px;"></div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border-dim);border-radius:10px;padding:14px;">
+      <div style="font-size:9px;font-weight:700;color:#5a8f35;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">🇵🇪 PERÚ — Por Vendedor</div>
+      <div id="mix-sel-pe-eb" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;"></div>
+      <div style="position:relative;height:140px;">
+        <canvas id="cMixVendPE_EB"></canvas>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
+          <div id="mix-eb-pe-vtot" style="font-family:'DM Mono',monospace;font-size:12px;font-weight:700;color:#5a8f35;">—</div>
+          <div id="mix-eb-pe-vper" style="font-size:8px;color:var(--text-muted);">YTD</div>
+        </div>
+      </div>
+      <div id="mix-eb-pe-vleg" style="margin-top:8px;display:flex;flex-direction:column;gap:3px;"></div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border-dim);border-radius:10px;padding:14px;">
+      <div id="mix-eb-pe-plbl" style="font-size:9px;font-weight:700;color:#5a8f35;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">🇵🇪 PERÚ — Por Producto</div>
+      <div style="position:relative;height:140px;margin-top:32px;">
+        <canvas id="cMixProdPE_EB"></canvas>
+      </div>
+      <div id="mix-eb-pe-pleg" style="margin-top:8px;display:flex;flex-direction:column;gap:3px;"></div>
+    </div>
+  </div>
+</div>
+
 </div><!-- /page -->
 
 <!-- FOOTER NAV -->
@@ -1153,7 +1198,7 @@
   </div>
 </div>
 
-<script src="avboard_data.js?v=202610280911"></script>
+<script src="avboard_data.js?v=202610291246"></script>
 <script>
 Chart.defaults.color = '#7A90AA';
 Chart.defaults.font.family = "'DM Mono', monospace";
@@ -1807,6 +1852,145 @@ function cerrarSesion() {
       tsDiv.textContent = AVBOARD.insights.label + ' · ' + AVBOARD.insights.generated_at;
       elPe.appendChild(tsDiv);
     })();
+
+    // ── MIX DE VENTAS GRUPO ───────────────────────────────────────────
+    (function(){
+      var PAL_MIX=['#1B4F8A','#5a8f35','#E67E22','#9B59B6','#E74C3C','#1ABC9C','#F5A623','#2C3E50','#27AE60','#8E44AD','#D35400','#16A085'];
+      var MES_MIX=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+      function fmtCL(v){return '$'+(v/1e6).toFixed(1)+'M';}
+      function fmtPE(v){return '$'+(v>=1000?(v/1000).toFixed(1)+'K':Math.round(v));}
+      function rLeg(elId,data,total,isCL){
+        var el=document.getElementById(elId); if(!el) return;
+        el.innerHTML=data.map(function(d,i){
+          var pct=total>0?Math.round(d.v/total*100):0;
+          var amt=isCL?fmtCL(d.v):fmtPE(d.v);
+          return '<div style="display:flex;align-items:center;gap:5px;font-size:9px;">'
+            +'<span style="width:8px;height:8px;border-radius:50%;background:'+PAL_MIX[i%PAL_MIX.length]+';flex-shrink:0;"></span>'
+            +'<span style="flex:1;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:8px;" title="'+d.n+'">'+d.n+'</span>'
+            +'<span style="font-family:\'DM Mono\',monospace;font-size:8px;color:#3D5270;flex-shrink:0;margin-right:4px;">'+amt+'</span>'
+            +'<span style="color:var(--domain-accent);font-weight:700;font-size:9px;flex-shrink:0;min-width:26px;text-align:right;">'+pct+'%</span>'
+            +'</div>';
+        }).join('');
+      }
+      var xTabCL_EB=cv.rtc_prod_vendedor||{};
+      var xTabPE_EB=pv.rtc_prod_vendedor||{};
+      var _filtVCL_EB=null, _filtVPE_EB=null;
+      function getCLVend(m){
+        var rtcR=cv.rtc_mensual_real||{};
+        return Object.keys(rtcR).map(function(k){
+          var arr=rtcR[k]||[];
+          var v=m<0?arr.slice(0,nRealCL_EB).reduce(function(s,x){return s+(x||0);},0):(arr[m]||0);
+          return {k:k,n:cv.por_vendedor&&cv.por_vendedor[k]?cv.por_vendedor[k].nombre:k,v:v};
+        }).filter(function(d){return d.v>0;}).sort(function(a,b){return b.v-a.v;});
+      }
+      function getCLProd(){
+        var grp={};
+        (D.productos||[]).filter(function(p){return p.pais==='CL';}).forEach(function(p){grp[p.producto]=(grp[p.producto]||0)+p.ventas;});
+        var arr=Object.keys(grp).map(function(k){return {n:k,v:grp[k]};}).sort(function(a,b){return b.v-a.v;});
+        if(arr.length>10){var ot=arr.slice(10).reduce(function(s,d){return s+d.v;},0);arr=arr.slice(0,10);if(ot>0)arr.push({n:'Otros',v:ot});}
+        return arr;
+      }
+      function getCLProdFilt(vk){
+        if(!vk||!xTabCL_EB[vk])return getCLProd();
+        var raw=xTabCL_EB[vk];
+        var arr=Object.keys(raw).map(function(k){return {n:k,v:raw[k]};}).filter(function(d){return d.v>0;}).sort(function(a,b){return b.v-a.v;});
+        if(arr.length>10){var ot=arr.slice(10).reduce(function(s,d){return s+d.v;},0);arr=arr.slice(0,10);if(ot>0)arr.push({n:'Otros',v:ot});}
+        return arr;
+      }
+      function getPEVend(m){
+        var rtcR=pv.rtc_mensual_real||{};
+        return Object.keys(rtcR).map(function(k){
+          var arr=rtcR[k]||[];
+          var v=m<0?arr.slice(0,nRealPE_EB).reduce(function(s,x){return s+(x||0);},0):(arr[m]||0);
+          return {k:k,n:pv.por_vendedor&&pv.por_vendedor[k]?pv.por_vendedor[k].nombre:k,v:v};
+        }).filter(function(d){return d.v>0;}).sort(function(a,b){return b.v-a.v;});
+      }
+      function getPEProd(){
+        var grp={};
+        (D.productos||[]).filter(function(p){return p.pais==='PE';}).forEach(function(p){grp[p.producto]=(grp[p.producto]||0)+p.ventas;});
+        var arr=Object.keys(grp).map(function(k){return {n:k,v:grp[k]};}).sort(function(a,b){return b.v-a.v;});
+        if(arr.length>10){var ot=arr.slice(10).reduce(function(s,d){return s+d.v;},0);arr=arr.slice(0,10);if(ot>0)arr.push({n:'Otros',v:ot});}
+        return arr;
+      }
+      function getPEProdFilt(vk){
+        if(!vk||!xTabPE_EB[vk])return getPEProd();
+        var raw=xTabPE_EB[vk];
+        var arr=Object.keys(raw).map(function(k){return {n:k,v:raw[k]};}).filter(function(d){return d.v>0;}).sort(function(a,b){return b.v-a.v;});
+        if(arr.length>10){var ot=arr.slice(10).reduce(function(s,d){return s+d.v;},0);arr=arr.slice(0,10);if(ot>0)arr.push({n:'Otros',v:ot});}
+        return arr;
+      }
+      function updProdCL_EB(vk){
+        var data=getCLProdFilt(vk),tot=data.reduce(function(s,d){return s+d.v;},0);
+        var ch=Chart.getChart(document.getElementById('cMixProdCL_EB'));
+        if(ch){ch.data.labels=data.map(function(d){return d.n;});ch.data.datasets[0].data=data.map(function(d){return d.v;});ch.data.datasets[0].backgroundColor=PAL_MIX.slice(0,data.length);ch.update();}
+        rLeg('mix-eb-cl-pleg',data,tot,true);
+        var lbl=document.getElementById('mix-eb-cl-plbl');if(lbl)lbl.textContent=vk?'▶ '+(cv.por_vendedor&&cv.por_vendedor[vk]?cv.por_vendedor[vk].nombre:vk):'Producto CL · YTD';
+      }
+      function updProdPE_EB(vk){
+        var data=getPEProdFilt(vk),tot=data.reduce(function(s,d){return s+d.v;},0);
+        var ch=Chart.getChart(document.getElementById('cMixProdPE_EB'));
+        if(ch){ch.data.labels=data.map(function(d){return d.n;});ch.data.datasets[0].data=data.map(function(d){return d.v;});ch.data.datasets[0].backgroundColor=PAL_MIX.slice(0,data.length);ch.update();}
+        rLeg('mix-eb-pe-pleg',data,tot,false);
+        var lbl=document.getElementById('mix-eb-pe-plbl');if(lbl)lbl.textContent=vk?'▶ '+(pv.por_vendedor&&pv.por_vendedor[vk]?pv.por_vendedor[vk].nombre:vk):'Producto PE · YTD';
+      }
+      // CL Vendor donut
+      var dVC=getCLVend(-1), tVC=dVC.reduce(function(s,d){return s+d.v;},0);
+      var _dVC_cur=dVC;
+      var chVC=new Chart(document.getElementById('cMixVendCL_EB'),{type:'doughnut',
+        data:{labels:dVC.map(function(d){return d.n;}),datasets:[{data:dVC.map(function(d){return d.v;}),backgroundColor:PAL_MIX.slice(0,dVC.length),borderWidth:2,borderColor:'#fff',hoverOffset:4}]},
+        options:{cutout:'62%',animation:{duration:300},onClick:function(evt,els){
+          if(!els||!els.length){_filtVCL_EB=null;updProdCL_EB(null);return;}
+          var vk=_dVC_cur[els[0].index]&&_dVC_cur[els[0].index].k;
+          if(vk===_filtVCL_EB){_filtVCL_EB=null;}else{_filtVCL_EB=vk||null;}
+          updProdCL_EB(_filtVCL_EB);
+        },
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var t=ctx.dataset.data.reduce(function(a,b){return a+b;},0);return ' '+ctx.label+': '+fmtCL(ctx.raw)+' ('+(t>0?(ctx.raw/t*100).toFixed(1):0)+'%)';}}}}}});
+      var eVtCL=document.getElementById('mix-eb-cl-vtot'),eVpCL=document.getElementById('mix-eb-cl-vper');
+      if(eVtCL)eVtCL.textContent=fmtCL(tVC); rLeg('mix-eb-cl-vleg',dVC,tVC,true);
+      // CL Product donut
+      var dPC=getCLProd(), tPC=dPC.reduce(function(s,d){return s+d.v;},0);
+      new Chart(document.getElementById('cMixProdCL_EB'),{type:'doughnut',
+        data:{labels:dPC.map(function(d){return d.n;}),datasets:[{data:dPC.map(function(d){return d.v;}),backgroundColor:PAL_MIX.slice(0,dPC.length),borderWidth:2,borderColor:'#fff',hoverOffset:4}]},
+        options:{cutout:'62%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var t=ctx.dataset.data.reduce(function(a,b){return a+b;},0);return ' '+ctx.label+': '+fmtCL(ctx.raw)+' ('+(t>0?(ctx.raw/t*100).toFixed(1):0)+'%)';}}}}}});
+      rLeg('mix-eb-cl-pleg',dPC,tPC,true);
+      // PE Vendor donut
+      var dVP=getPEVend(-1), tVP=dVP.reduce(function(s,d){return s+d.v;},0);
+      var _dVP_cur=dVP;
+      var chVP=new Chart(document.getElementById('cMixVendPE_EB'),{type:'doughnut',
+        data:{labels:dVP.map(function(d){return d.n;}),datasets:[{data:dVP.map(function(d){return d.v;}),backgroundColor:PAL_MIX.slice(0,dVP.length),borderWidth:2,borderColor:'#fff',hoverOffset:4}]},
+        options:{cutout:'62%',animation:{duration:300},onClick:function(evt,els){
+          if(!els||!els.length){_filtVPE_EB=null;updProdPE_EB(null);return;}
+          var vk=_dVP_cur[els[0].index]&&_dVP_cur[els[0].index].k;
+          if(vk===_filtVPE_EB){_filtVPE_EB=null;}else{_filtVPE_EB=vk||null;}
+          updProdPE_EB(_filtVPE_EB);
+        },
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var t=ctx.dataset.data.reduce(function(a,b){return a+b;},0);return ' '+ctx.label+': '+fmtPE(ctx.raw)+' ('+(t>0?(ctx.raw/t*100).toFixed(1):0)+'%)';}}}}}});
+      var eVtPE=document.getElementById('mix-eb-pe-vtot'),eVpPE=document.getElementById('mix-eb-pe-vper');
+      if(eVtPE)eVtPE.textContent=fmtPE(tVP); rLeg('mix-eb-pe-vleg',dVP,tVP,false);
+      // PE Product donut
+      var dPP=getPEProd(), tPP=dPP.reduce(function(s,d){return s+d.v;},0);
+      new Chart(document.getElementById('cMixProdPE_EB'),{type:'doughnut',
+        data:{labels:dPP.map(function(d){return d.n;}),datasets:[{data:dPP.map(function(d){return d.v;}),backgroundColor:PAL_MIX.slice(0,dPP.length),borderWidth:2,borderColor:'#fff',hoverOffset:4}]},
+        options:{cutout:'62%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var t=ctx.dataset.data.reduce(function(a,b){return a+b;},0);return ' '+ctx.label+': '+fmtPE(ctx.raw)+' ('+(t>0?(ctx.raw/t*100).toFixed(1):0)+'%)';}}}}}});
+      rLeg('mix-eb-pe-pleg',dPP,tPP,false);
+      // CL selector
+      var sCL=document.getElementById('mix-sel-cl-eb');
+      if(sCL){
+        var bCL=[{i:-1,n:'YTD'}].concat(MES_MIX.slice(0,nRealCL_EB).map(function(n,i){return {i:i,n:n};}));
+        function rsCL(a){sCL.innerHTML=bCL.map(function(b){var isA=b.i===a;return '<button onclick="window._mxCLEB('+b.i+')" style="padding:2px 7px;font-size:8px;font-family:\'DM Mono\',monospace;border-radius:3px;border:1px solid '+(isA?'var(--domain-accent)':'var(--border)')+';background:'+(isA?'var(--domain-accent)':'transparent')+';color:'+(isA?'#fff':'var(--text-muted)')+';cursor:pointer;">'+b.n+'</button>';}).join('');}
+        rsCL(-1);
+        window._mxCLEB=function(idx){rsCL(idx);var d=getCLVend(idx),t=d.reduce(function(s,x){return s+x.v;},0);_dVC_cur=d;var ch=Chart.getChart(document.getElementById('cMixVendCL_EB'));if(ch){ch.data.labels=d.map(function(x){return x.n;});ch.data.datasets[0].data=d.map(function(x){return x.v;});ch.data.datasets[0].backgroundColor=PAL_MIX.slice(0,d.length);ch.update();}if(eVtCL)eVtCL.textContent=fmtCL(t);if(eVpCL)eVpCL.textContent=idx<0?'YTD':MES_MIX[idx];rLeg('mix-eb-cl-vleg',d,t,true);};
+      }
+      // PE selector
+      var sPE=document.getElementById('mix-sel-pe-eb');
+      if(sPE){
+        var bPE=[{i:-1,n:'YTD'}].concat(MES_MIX.slice(0,nRealPE_EB).map(function(n,i){return {i:i,n:n};}));
+        function rsPE(a){sPE.innerHTML=bPE.map(function(b){var isA=b.i===a;return '<button onclick="window._mxPEEB('+b.i+')" style="padding:2px 7px;font-size:8px;font-family:\'DM Mono\',monospace;border-radius:3px;border:1px solid '+(isA?'#5a8f35':'var(--border)')+';background:'+(isA?'#5a8f35':'transparent')+';color:'+(isA?'#fff':'var(--text-muted)')+';cursor:pointer;">'+b.n+'</button>';}).join('');}
+        rsPE(-1);
+        window._mxPEEB=function(idx){rsPE(idx);var d=getPEVend(idx),t=d.reduce(function(s,x){return s+x.v;},0);_dVP_cur=d;var ch=Chart.getChart(document.getElementById('cMixVendPE_EB'));if(ch){ch.data.labels=d.map(function(x){return x.n;});ch.data.datasets[0].data=d.map(function(x){return x.v;});ch.data.datasets[0].backgroundColor=PAL_MIX.slice(0,d.length);ch.update();}if(eVtPE)eVtPE.textContent=fmtPE(t);if(eVpPE)eVpPE.textContent=idx<0?'YTD':MES_MIX[idx];rLeg('mix-eb-pe-vleg',d,t,false);};
+      }
+    })();
+    // ── FIN MIX DE VENTAS GRUPO ───────────────────────────────────────
 
     console.log('[AVBOARD] ✅ Executive_Board actualizado · '+D.meta.version);
   } catch(e) {

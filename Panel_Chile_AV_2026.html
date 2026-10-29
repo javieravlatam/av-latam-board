@@ -328,80 +328,30 @@
   </div>
 
   <!-- Desempeño por RTC -->
-  <div class="sec">Desempeño por RTC <span>YTD vs Ppto · Margen Neto Real</span></div>
+  <div class="sec">Desempeño por RTC <span id="cl-rtc-sec-sub">YTD vs Ppto · % Cumplimiento</span></div>
 
   <div class="av-grid-2" style="margin-bottom:15px;align-items:start;">
     <div class="av-panel">
-      <div class="av-panel__header">DETALLE YTD POR RTC <span class="av-badge">CLP · Real vs Ppto T1 y Anual</span></div>
+      <div class="av-panel__header">DETALLE YTD POR RTC <span class="av-badge" id="cl-rtc-badge">CLP · Real vs Ppto</span></div>
       <table class="av-table">
         <thead><tr>
           <th scope="col" style="text-align:left;">RTC</th>
-          <th scope="col">Real T1</th><th scope="col">Ppto T1</th><th scope="col" style="text-align:center;">%</th>
-          <th scope="col">Abr Real</th><th scope="col">MN Real</th>
+          <th scope="col">YTD Real</th><th scope="col">Ppto YTD</th><th scope="col" style="text-align:center;">% Cumpl</th>
         </tr></thead>
-        <tbody>
-          <tr>
-            <td>⭐ <strong style="color:var(--positive);">J. Caroca</strong></td>
-            <td class="av-mono-sm av-text-right" style="color:var(--positive);">53,123K</td>
-            <td class="av-mono-sm av-text-right">33,000K</td>
-            <td class="av-text-center"><span class="pb pb-ok">161.0%</span><div class="mb"><div class="mbf" style="width:100%;background:var(--positive);"></div></div></td>
-            <td class="av-mono-sm av-text-right" style="color:var(--positive);">10,171K</td>
-            <td class="av-mono-sm av-text-right" style="color:var(--positive);">39.2%</td>
-          </tr>
-          <tr>
-            <td><i class="ph-warning" style="color:var(--warning)" aria-hidden="true"></i> P. Laratro</td>
-            <td class="av-mono-sm av-text-right" style="color:var(--warning);">52,893K</td>
-            <td class="av-mono-sm av-text-right">54,100K</td>
-            <td class="av-text-center"><span class="pb pb-am">97.8%</span><div class="mb"><div class="mbf" style="width:97.8%;background:var(--warning);"></div></div></td>
-            <td class="av-mono-sm av-text-right" style="color:var(--positive);">8,305K</td>
-            <td class="av-mono-sm av-text-right" style="color:var(--warning);">19.6%</td>
-          </tr>
-          <tr>
-            <td><i class="ph-warning" style="color:var(--warning)" aria-hidden="true"></i> R. Encina</td>
-            <td class="av-mono-sm av-text-right" style="color:var(--warning);">27,593K</td>
-            <td class="av-mono-sm av-text-right">29,200K</td>
-            <td class="av-text-center"><span class="pb pb-am">94.5%</span><div class="mb"><div class="mbf" style="width:94.5%;background:var(--warning);"></div></div></td>
-            <td class="av-mono-sm av-text-right" style="color:var(--warning);">1,763K</td>
-            <td class="av-mono-sm av-text-right" style="color:var(--warning);">21.9%</td>
-          </tr>
-          <tr>
-            <td><i class="ph-circle ph-fill" style="color:var(--danger);font-size:10px" aria-hidden="true"></i> F. Velásquez</td>
-            <td class="av-mono-sm av-text-right" style="color:var(--danger);">29,600K</td>
-            <td class="av-mono-sm av-text-right">32,860K</td>
-            <td class="av-text-center"><span class="pb pb-am">90.1%</span><div class="mb"><div class="mbf" style="width:90.1%;background:var(--danger);"></div></div></td>
-            <td class="av-mono-sm av-text-right" style="color:var(--warning);">3,113K</td>
-            <td class="av-mono-sm av-text-right" style="color:var(--danger);">2.8%</td>
-          </tr>
-          <tr>
-            <td><i class="ph-x-circle" style="color:var(--danger)" aria-hidden="true"></i> I. Veverka</td>
-            <td class="av-mono-sm av-text-right" style="color:var(--red2);">8,810K</td>
-            <td class="av-mono-sm av-text-right">18,000K</td>
-            <td class="av-text-center"><span class="pb pb-rd">48.9%</span><div class="mb"><div class="mbf" style="width:48.9%;background:var(--red2);"></div></div></td>
-            <td class="av-mono-sm av-text-right">–</td>
-            <td class="av-mono-sm av-text-right" style="color:var(--red2);">–28.7%</td>
-          </tr>
-          <tr>
-            <td><i class="ph-check-circle" style="color:var(--positive)" aria-hidden="true"></i> V. Muñoz</td>
-            <td class="av-mono-sm av-text-right" style="color:var(--positive);">4,236K</td>
-            <td class="av-mono-sm av-text-right">3,600K</td>
-            <td class="av-text-center"><span class="pb pb-ok">117.7%</span><div class="mb"><div class="mbf" style="width:100%;background:var(--positive);"></div></div></td>
-            <td class="av-mono-sm av-text-right">–</td>
-            <td class="av-mono-sm av-text-right">S/D</td>
-          </tr>
+        <tbody id="cl-rtc-tbody">
+          <tr><td colspan="4" style="text-align:center;color:var(--text-dim);font-size:11px;">Cargando…</td></tr>
         </tbody>
-        <tfoot><tr>
-          <td>TOTAL T1</td>
-          <td class="av-mono-sm av-text-right" style="color:var(--positive);">176,254K</td>
-          <td class="av-mono-sm av-text-right">170,760K</td>
-          <td class="av-text-center"><span class="pb pb-ok">103.2%</span></td>
-          <td class="av-mono-sm av-text-right" style="color:var(--warning);">23,392K</td>
-          <td class="av-mono-sm av-text-right" style="color:var(--warning);">17.9%</td>
+        <tfoot><tr id="cl-rtc-tfoot">
+          <td><strong>TOTAL YTD</strong></td>
+          <td class="av-mono-sm av-text-right" id="cl-rtc-tot-real">—</td>
+          <td class="av-mono-sm av-text-right" id="cl-rtc-tot-ppto">—</td>
+          <td class="av-text-center" id="cl-rtc-tot-pct"><span class="pb">—</span></td>
         </tr></tfoot>
       </table>
     </div>
 
     <div class="av-panel">
-      <div class="av-panel__header">PPTO vs REAL POR RTC · T1 <span class="av-badge">CLP millones</span></div>
+      <div class="av-panel__header">PPTO vs REAL POR RTC · YTD <span class="av-badge" id="cl-rtc-chart-badge">CLP millones</span></div>
       <div class="ch ch-lg"><canvas id="cRTC"></canvas></div>
     </div>
   </div>
@@ -572,7 +522,7 @@
       </div>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 14px;">
-      <div style="font-family:'DM Mono';font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Participación Producto · YTD</div>
+      <div style="font-family:'DM Mono';font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;" id="mix-cl-prod-filtlbl">Por Producto · YTD</div>
       <div style="display:flex;gap:12px;align-items:flex-start;">
         <div style="position:relative;width:150px;height:150px;flex-shrink:0;">
           <canvas id="cMixProdCL" width="150" height="150"></canvas>
@@ -602,7 +552,7 @@
   </div>
 </div>
 
-<script src="avboard_data.js?v=202610281652"></script>
+<script src="avboard_data.js?v=202610291246"></script>
 <script>
 (function(){
   if(typeof AVBOARD==='undefined'||!AVBOARD.insights||!AVBOARD.insights.chile) return;
@@ -662,20 +612,76 @@ Chart.defaults.font.size = 10;
 const G2=GD, A=W, RD='#C0392B', O=W;
 GD = 'rgba(27,79,138,0.07)';  // grid dim — blue light mode
 
-// RTC barras T1
-new Chart(document.getElementById('cRTC'),{
-  type:'bar',
-  data:{
-    labels:['Caroca','Laratro','Encina','Velásquez','Veverka','Muñoz'],
-    datasets:[
-      {label:'Ppto T1',data:[33000,54100,29200,32860,18000,3600],backgroundColor:'rgba(27,79,138,0.07)',borderColor:'rgba(27,79,138,0.18)',borderWidth:1,borderRadius:3},
-      {label:'Real T1',data:[53123,52893,27593,29600,8810,4236],backgroundColor:[G,A,A,R,RD,G],borderRadius:3}
-    ]
-  },
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},
-    scales:{x:{grid:{color:GD},border:{color:GD}},y:{grid:{color:GD},border:{color:GD},ticks:{callback:v=>(v/1000).toFixed(0)+'M'}}}}
-});
+// RTC barras YTD — dinámico desde avboard_data.js
+(function(){
+  var _cv = (typeof AVBOARD!=='undefined' && AVBOARD.chile && AVBOARD.chile.ventas) ? AVBOARD.chile.ventas : null;
+  var _nCL = _cv ? (_cv.mensual_real.filter(function(v){return v>0;}).length || 5) : 5;
+  var _DISP = {caroca:'Caroca',laratro:'Laratro',encina:'Encina',velasquez:'Velásquez',veverka:'Veverka',munoz:'Muñoz'};
+  var _KEYS = ['caroca','laratro','encina','velasquez','veverka','munoz'];
+  var _COLS = [G,A,'rgba(27,79,138,0.55)',R,RD,'#3a5a3a'];
+
+  var _labRTC=[], _realRTC=[], _pptoRTC=[], _colsR=[];
+  _KEYS.forEach(function(k,i){
+    var arrR = _cv ? (_cv.rtc_mensual_real[k]||[]) : [];
+    var arrP = _cv ? (_cv.rtc_mensual_ppto[k]||[]) : [];
+    var ytdR = arrR.slice(0,_nCL).reduce(function(s,v){return s+(v||0);},0);
+    var ytdP = arrP.slice(0,_nCL).reduce(function(s,v){return s+(v||0);},0);
+    if(ytdR>0||ytdP>0){_labRTC.push(_DISP[k]);_realRTC.push(Math.round(ytdR/1000));_pptoRTC.push(Math.round(ytdP/1000));_colsR.push(_COLS[i]);}
+  });
+
+  // Llenar badge
+  var badge = document.getElementById('cl-rtc-chart-badge');
+  if(badge) badge.textContent = 'YTD ' + _nCL + 'm · CLP millones';
+  var secBadge = document.getElementById('cl-rtc-badge');
+  if(secBadge) secBadge.textContent = 'CLP · YTD ' + _nCL + 'm · Real vs Ppto';
+
+  // Llenar tabla
+  var tbody = document.getElementById('cl-rtc-tbody');
+  if(tbody && _cv){
+    var rows='', totR=0, totP=0;
+    _KEYS.forEach(function(k,i){
+      var arrR = _cv.rtc_mensual_real[k]||[];
+      var arrP = _cv.rtc_mensual_ppto[k]||[];
+      var ytdR = arrR.slice(0,_nCL).reduce(function(s,v){return s+(v||0);},0);
+      var ytdP = arrP.slice(0,_nCL).reduce(function(s,v){return s+(v||0);},0);
+      if(ytdR===0&&ytdP===0) return;
+      totR+=ytdR; totP+=ytdP;
+      var cumpl = ytdP>0?ytdR/ytdP:null;
+      var pctStr = cumpl!==null?(cumpl*100).toFixed(1)+'%':'–';
+      var clr = cumpl===null?'var(--text-dim)':cumpl>=1?'var(--positive)':cumpl>=0.85?'var(--warning)':'var(--danger)';
+      var pbCls = cumpl===null?'pb':cumpl>=1?'pb pb-ok':cumpl>=0.85?'pb pb-am':'pb pb-rd';
+      var barW = cumpl!==null?Math.min(cumpl*100,100).toFixed(1)+'%':'0%';
+      rows+='<tr>'+
+        '<td><strong>'+(_DISP[k]||k)+'</strong></td>'+
+        '<td class="av-mono-sm av-text-right" style="color:'+clr+';">'+(ytdR?Math.round(ytdR/1000).toLocaleString('es-CL')+'K':'–')+'</td>'+
+        '<td class="av-mono-sm av-text-right">'+(ytdP?Math.round(ytdP/1000).toLocaleString('es-CL')+'K':'–')+'</td>'+
+        '<td class="av-text-center"><span class="'+pbCls+'" style="color:'+clr+';">'+pctStr+'</span>'+
+        '<div class="mb"><div class="mbf" style="width:'+barW+';background:'+clr+';"></div></div></td>'+
+        '</tr>';
+    });
+    tbody.innerHTML = rows;
+    var totCumpl = totP>0?totR/totP:null;
+    var totPctStr = totCumpl!==null?(totCumpl*100).toFixed(1)+'%':'–';
+    var totClr = totCumpl===null?'':totCumpl>=1?'var(--positive)':totCumpl>=0.85?'var(--warning)':'var(--danger)';
+    var totEl = document.getElementById('cl-rtc-tot-real'); if(totEl) totEl.innerHTML='<strong>'+Math.round(totR/1000).toLocaleString('es-CL')+'K</strong>';
+    var pptoEl = document.getElementById('cl-rtc-tot-ppto'); if(pptoEl) pptoEl.innerHTML='<strong>'+(totP?Math.round(totP/1000).toLocaleString('es-CL')+'K':'–')+'</strong>';
+    var pctEl = document.getElementById('cl-rtc-tot-pct'); if(pctEl) pctEl.innerHTML='<span class="pb" style="color:'+totClr+';"><strong>'+totPctStr+'</strong></span>';
+  }
+
+  new Chart(document.getElementById('cRTC'),{
+    type:'bar',
+    data:{
+      labels:_labRTC,
+      datasets:[
+        {label:'Ppto YTD',data:_pptoRTC,backgroundColor:'rgba(27,79,138,0.07)',borderColor:'rgba(27,79,138,0.18)',borderWidth:1,borderRadius:3},
+        {label:'Real YTD',data:_realRTC,backgroundColor:_colsR,borderRadius:3}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},
+      scales:{x:{grid:{color:GD},border:{color:GD}},y:{grid:{color:GD},border:{color:GD},ticks:{callback:function(v){return (v/1000).toFixed(0)+'M';}}}}}
+  });
+})();
 
 // Stacked mensual
 new Chart(document.getElementById('cStack'),{
@@ -1069,13 +1075,44 @@ function cerrarSesion() {
         var el=document.getElementById(elId); if(!el) return;
         el.innerHTML=data.map(function(d,i){
           var pct=total>0?Math.round(d.v/total*100):0;
-          var amt=isCLP?('$'+fmtM(d.v)):('$'+fmtM(d.v));
+          var amt='$'+fmtM(d.v);
           return '<div style="display:flex;align-items:center;gap:5px;font-size:9px;">'
             +'<span style="width:8px;height:8px;border-radius:50%;background:'+PAL[i%PAL.length]+';flex-shrink:0;"></span>'
-            +'<span style="flex:1;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="'+d.n+'">'+d.n+'</span>'
-            +'<span style="color:var(--domain-accent);font-weight:700;flex-shrink:0;">'+pct+'%</span>'
+            +'<span style="flex:1;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:8px;" title="'+d.n+'">'+d.n+'</span>'
+            +'<span style="font-family:\'DM Mono\',monospace;font-size:8px;color:#3D5270;flex-shrink:0;margin-right:4px;">'+amt+'</span>'
+            +'<span style="color:var(--domain-accent);font-weight:700;font-size:9px;flex-shrink:0;min-width:26px;text-align:right;">'+pct+'%</span>'
             +'</div>';
         }).join('');
+      }
+
+      // Cross-tab vendedor×producto (para cross-filter)
+      var xTabCL = cv.rtc_prod_vendedor || {};
+      var _filtVendCL = null; // vendor key activo (null=todos)
+
+      function getProdDataFiltered(vendKey){
+        if(!vendKey || !xTabCL[vendKey]){
+          return getProdData();
+        }
+        var raw=xTabCL[vendKey];
+        var arr=Object.keys(raw).map(function(k){return {n:k,v:raw[k]};}).filter(function(d){return d.v>0;}).sort(function(a,b){return b.v-a.v;});
+        if(arr.length>10){var otros=arr.slice(10).reduce(function(s,d){return s+d.v;},0);arr=arr.slice(0,10);if(otros>0)arr.push({n:'Otros',v:otros});}
+        return arr;
+      }
+
+      function updateProdDonutCL(vendKey){
+        var data=getProdDataFiltered(vendKey);
+        var tot=data.reduce(function(s,d){return s+d.v;},0);
+        var ch=Chart.getChart(document.getElementById('cMixProdCL'));
+        if(ch){
+          ch.data.labels=data.map(function(d){return d.n;});
+          ch.data.datasets[0].data=data.map(function(d){return d.v;});
+          ch.data.datasets[0].backgroundColor=PAL.slice(0,data.length);
+          ch.update();
+        }
+        renderLegend('mix-cl-pleg',data,tot,true);
+        // Label de filtro activo
+        var lbl=document.getElementById('mix-cl-prod-filtlbl');
+        if(lbl) lbl.textContent=vendKey?'▶ '+( DISPV[vendKey]||vendKey):'Por Producto · YTD';
       }
 
       // Crear donut vendedor
@@ -1084,8 +1121,20 @@ function cerrarSesion() {
       var chVCL=new Chart(document.getElementById('cMixVendCL'),{
         type:'doughnut',
         data:{labels:dVCL.map(function(d){return d.n;}),datasets:[{data:dVCL.map(function(d){return d.v;}),backgroundColor:PAL.slice(0,dVCL.length),borderWidth:2,borderColor:'#fff',hoverOffset:4}]},
-        options:{cutout:'62%',animation:{duration:300},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var t=ctx.dataset.data.reduce(function(a,b){return a+b;},0);return ' '+ctx.label+': $'+(ctx.raw/1e6).toFixed(1)+'M ('+(t>0?(ctx.raw/t*100).toFixed(1):0)+'%)';}}}}
-      }});
+        options:{cutout:'62%',animation:{duration:300},onClick:function(evt,els){
+          if(!els||!els.length){_filtVendCL=null;updateProdDonutCL(null);return;}
+          var idx=els[0].index;
+          var curData=Chart.getChart(document.getElementById('cMixVendCL')).data;
+          var label=curData.labels[idx];
+          // Mapear display name → vendor key
+          var found=null;
+          Object.keys(DISPV).forEach(function(k){if(DISPV[k]===label)found=k;});
+          if(!found)Object.keys(DISPV).forEach(function(k){if(k===label)found=k;});
+          if(found===_filtVendCL){_filtVendCL=null;}else{_filtVendCL=found||null;}
+          updateProdDonutCL(_filtVendCL);
+        },
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var t=ctx.dataset.data.reduce(function(a,b){return a+b;},0);return ' '+ctx.label+': $'+(ctx.raw/1e6).toFixed(1)+'M ('+(t>0?(ctx.raw/t*100).toFixed(1):0)+'%)';}}}}}
+      });
       var elVTot=document.getElementById('mix-cl-vtot');
       if(elVTot) elVTot.textContent='$'+fmtM(totVCL);
       var elVPer=document.getElementById('mix-cl-vper');

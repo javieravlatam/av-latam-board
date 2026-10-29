@@ -385,6 +385,19 @@ def extract_chile_ventas(path):
         if t1 > 0:
             rtc_t1[key] = int(t1)
 
+    # Cross-tab vendedor × producto YTD (para cross-filter en Mix de Ventas)
+    rtc_prod_vendedor = {}
+    if 'Producto' in df.columns:
+        for vend_upper, key in rtc_map.items():
+            df_v = df[df['_vend_upper'] == vend_upper]
+            if df_v.empty:
+                continue
+            prod_grp = df_v.groupby('Producto')['total_n'].sum()
+            prods = {str(prod): int(val) for prod, val in prod_grp.items()
+                     if val > 0 and str(prod).upper() not in ('NAN', '', 'NONE')}
+            if prods:
+                rtc_prod_vendedor[key] = prods
+
     # Ppto cumplimiento
     n_ppto = min(4, n_months)
     ppto_4m = sum(PPTO_MENSUAL_CL[:4])
@@ -410,7 +423,8 @@ def extract_chile_ventas(path):
         'rtc_mensual':  rtc_mensual,
         'n_months':     n_months,
         'df':           df,
-        'rtc_map':      rtc_map,
+        'rtc_map':              rtc_map,
+        'rtc_prod_vendedor':    rtc_prod_vendedor,
     }
 
 
@@ -1440,16 +1454,49 @@ def load_piso_peru(piso_path):
     return {'entries': entries, 'tiers': tiers_by_prod}
 
 
-def extract_peru_ventas_sku(path):
+def extract_peru_ventas_sku(path, vend_map_pe=None):
     """Extrae el detalle de ventas Perú por transacción (CONCEPTO) desde la
-    hoja 'VENTAS ACUMULADAS 2026' — usado solo por el módulo Productos
-    (extract_peru_ventas() sigue siendo la fuente de los KPIs agregados por
-    vendedor/mes que consume el resto del pipeline)."""
+    hoja 'VENTAS ACUMULADAS 2026' — usado por el módulo Productos y por el
+    cross-tab vendedor×producto para el Mix de Ventas.
+    Retorna (df, rtc_prod_vendedor_pe) donde rtc_prod_vendedor_pe es un dict
+    {vendor_key: {product_name: ytd_usd}}."""
     df = pd.read_excel(path, sheet_name='VENTAS ACUMULADAS 2026', header=5)
     df.columns = [str(c).strip() for c in df.columns]
     df = df[df['PERIODO'].notna()].copy()
     df['DOLARES'] = pd.to_numeric(df['DOLARES'], errors='coerce').fillna(0)
-    return df
+
+    # Cross-tab vendedor × producto para cross-filter en Mix de Ventas
+    if vend_map_pe is None:
+        if _VC_AVAILABLE:
+            vend_map_pe, _ = _vc.get_rtc_map_safe("PE")
+        else:
+            vend_map_pe = {
+                'OSCAR INFANTE': 'infante', 'NICOLL NAVARRO': 'navarro',
+                'OMAR ATALAYA': 'atalaya', 'ANTONIO GONZALES': 'gonzales',
+                'LISBETH AGUIRRE': 'aguirre', 'LIZBETH AGUIRRE': 'aguirre',
+                'PATRICIA VALLADARES': 'valladares', 'SUSAN DIAZ': 'diaz',
+                'SUSAN DÍAZ': 'diaz',
+            }
+    rtc_prod_pe = {}
+    if vend_map_pe and 'VENDEDOR' in df.columns and 'CONCEPTO' in df.columns:
+        vend_map_upper = {k.upper(): v for k, v in vend_map_pe.items()}
+        df['_vend_upper_sku'] = df['VENDEDOR'].astype(str).str.strip().str.upper()
+        for vend_upper, key in vend_map_upper.items():
+            df_v = df[df['_vend_upper_sku'].str.contains(vend_upper.split()[0], na=False)]
+            if df_v.empty:
+                continue
+            prods = {}
+            for _, row in df_v.iterrows():
+                parsed = parse_concepto_pe(str(row.get('CONCEPTO', '')))
+                if parsed is None:
+                    continue
+                _, name_raw = parsed
+                prod_name = normalize_prod_name(name_raw)
+                prods[prod_name] = round(prods.get(prod_name, 0) + float(row['DOLARES']), 2)
+            prods = {k: v for k, v in prods.items() if v > 0}
+            if prods:
+                rtc_prod_pe[key] = prods
+    return df, rtc_prod_pe
 
 
 def buscar_piso_peru(piso_pe, prod_raw, qty):
@@ -1581,7 +1628,7 @@ def _arr(lst, per_row=12, indent=6):
     return '[\n' + ',\n'.join(pad + str(c) for c in chunks) + '\n' + ' '*(indent-2) + ']'
 
 
-def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, pe_cxc, productos_data, iec_pe=None, insights=None, hist_2025=None):
+def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, pe_cxc, productos_data, iec_pe=None, insights=None, hist_2025=None, rtc_prod_pe=None):
     """Genera el contenido completo de avboard_data.js.
 
     iec_pe: resultado de compute_iec_peru(tx_pe) — dict con {total, aguirre, ...}
@@ -1746,6 +1793,10 @@ def render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, pe_cxc, productos
     # Peru ppto anual por vendedor
     ppto_pe_anual_str = ',\n      '.join(f"{k}: {v}" for k, v in PPTO_RTC_ANUAL_PE.items())
 
+    # Cross-tabs vendedor×producto (para cross-filter Mix de Ventas)
+    _rtc_prod_cl_json = _jdumps(cl_v.get('rtc_prod_vendedor') or {})
+    _rtc_prod_pe_json = _jdumps(rtc_prod_pe or {})
+
     js = f"""/**
  * ╔══════════════════════════════════════════════════════════════════╗
  * ║  AVBOARD · Capa de datos global · Agroveca Grupo LATAM 2026     ║
@@ -1821,7 +1872,8 @@ var AVBOARD = (function() {{
     rtc_mensual_ppto: {js_rtc_ppto(PPTO_RTC_CL)},
     iec: {js_iec(iec_cl)},
     mn_real:  0.179,
-    mn_meta:  0.250
+    mn_meta:  0.250,
+    rtc_prod_vendedor: {_rtc_prod_cl_json}
   }};
 
   var chile_cxc = {{
@@ -1901,7 +1953,8 @@ var AVBOARD = (function() {{
       impacto_potencial_usd: {iec_pe.get('impacto_potencial_usd', 4000) if iec_pe else 4000}
     }},
     mn_real:  null,
-    mn_meta:  0.250
+    mn_meta:  0.250,
+    rtc_prod_vendedor: {_rtc_prod_pe_json}
   }};
 
   var peru_cxc = {_jdumps({k: v for k, v in pe_cxc.items() if k != 'documentos'}, indent=2).replace(chr(10), chr(10)+'  ')};
@@ -3559,10 +3612,11 @@ def main():
     print("\n💰 Calculando módulo Productos...")
     if 'piso_peru' in files:
         piso_pe_dict = load_piso_peru(files['piso_peru'])
-        pe_sku_df    = extract_peru_ventas_sku(files['peru_ventas'])
+        pe_sku_df, rtc_prod_pe = extract_peru_ventas_sku(files['peru_ventas'])
     else:
         piso_pe_dict = {'entries': {}, 'tiers': {}}
         pe_sku_df    = pd.DataFrame(columns=['CONCEPTO', 'DOLARES'])
+        rtc_prod_pe  = {}
         print("   ⚠ Libro Base no encontrado — módulo Productos Perú omitido (best-effort)")
     productos = compute_productos(cl_v['df'], piso_dict, pe_sku_df, piso_pe_dict)
     n_neg = len(productos['resumen']['alertas_nivel1'])
@@ -3572,7 +3626,7 @@ def main():
     # 4.6 Calcular IEC Perú (Fase 7) — requiere TX_PE construido desde ventas Perú
     print("\n⚡ Calculando IEC Perú (Fase 7)...")
     if 'peru_ventas' in files and piso_pe_dict.get('entries'):
-        _pe_sku_pre = extract_peru_ventas_sku(files['peru_ventas'])
+        _pe_sku_pre, _ = extract_peru_ventas_sku(files['peru_ventas'])
         _tx_pe_pre  = build_tx_pe(_pe_sku_pre, piso_pe_dict)
         iec_pe_computed = compute_iec_peru(_tx_pe_pre)
         print(f"   → IEC Perú total: {iec_pe_computed['total']:.1%}" if iec_pe_computed.get('total') else "   → IEC Perú: null (sin elegibles)")
@@ -3609,7 +3663,8 @@ def main():
 
     print("\n📝 Generando avboard_data.js...")
     js_data = render_avboard_data_js(cl_v, pe_v, cl_cxc, iec_cl, cortes, pe_cxc, productos,
-                                     iec_pe=iec_pe_computed, insights=ai_insights, hist_2025=hist_2025)
+                                     iec_pe=iec_pe_computed, insights=ai_insights, hist_2025=hist_2025,
+                                     rtc_prod_pe=rtc_prod_pe)
     with open(AVBOARD_DATA, 'w', encoding='utf-8') as f:
         f.write(js_data)
     ok, err = validate_js(AVBOARD_DATA)

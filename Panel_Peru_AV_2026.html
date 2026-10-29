@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel Comercial · Perú · AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=202610281652"></script>
+<script src="avboard_data.js?v=202610291246"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -499,7 +499,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       </div>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 14px;">
-      <div style="font-family:'DM Mono';font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Participación Producto · YTD</div>
+      <div style="font-family:'DM Mono';font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;" id="mix-pe-prod-filtlbl">Por Producto · YTD</div>
       <div style="display:flex;gap:12px;align-items:flex-start;">
         <div style="position:relative;width:150px;height:150px;flex-shrink:0;">
           <canvas id="cMixProdPE" width="150" height="150"></canvas>
@@ -1198,12 +1198,41 @@ new Chart(document.getElementById('cCxC'),{
         var el=document.getElementById(elId); if(!el) return;
         el.innerHTML=data.map(function(d,i){
           var pct=total>0?Math.round(d.v/total*100):0;
+          var amt='$'+fmtV(d.v);
           return '<div style="display:flex;align-items:center;gap:5px;font-size:9px;">'
             +'<span style="width:8px;height:8px;border-radius:50%;background:'+PAL[i%PAL.length]+';flex-shrink:0;"></span>'
-            +'<span style="flex:1;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="'+d.n+'">'+d.n+'</span>'
-            +'<span style="color:var(--domain-accent);font-weight:700;flex-shrink:0;">'+pct+'%</span>'
+            +'<span style="flex:1;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:8px;" title="'+d.n+'">'+d.n+'</span>'
+            +'<span style="font-family:\'DM Mono\',monospace;font-size:8px;color:#3D5270;flex-shrink:0;margin-right:4px;">'+amt+'</span>'
+            +'<span style="color:var(--domain-accent);font-weight:700;font-size:9px;flex-shrink:0;min-width:26px;text-align:right;">'+pct+'%</span>'
             +'</div>';
         }).join('');
+      }
+
+      // Cross-tab vendedor×producto (para cross-filter)
+      var xTabPE = pv.rtc_prod_vendedor || {};
+      var _filtVendPE = null;
+
+      function getProdDataFiltered(vendKey){
+        if(!vendKey || !xTabPE[vendKey]) return getProdData();
+        var raw=xTabPE[vendKey];
+        var arr=Object.keys(raw).map(function(k){return {n:k,v:raw[k]};}).filter(function(d){return d.v>0;}).sort(function(a,b){return b.v-a.v;});
+        if(arr.length>10){var otros=arr.slice(10).reduce(function(s,d){return s+d.v;},0);arr=arr.slice(0,10);if(otros>0)arr.push({n:'Otros',v:otros});}
+        return arr;
+      }
+
+      function updateProdDonutPE(vendKey){
+        var data=getProdDataFiltered(vendKey);
+        var tot=data.reduce(function(s,d){return s+d.v;},0);
+        var ch=Chart.getChart(document.getElementById('cMixProdPE'));
+        if(ch){
+          ch.data.labels=data.map(function(d){return d.n;});
+          ch.data.datasets[0].data=data.map(function(d){return d.v;});
+          ch.data.datasets[0].backgroundColor=PAL.slice(0,data.length);
+          ch.update();
+        }
+        renderLegend('mix-pe-pleg',data,tot);
+        var lbl=document.getElementById('mix-pe-prod-filtlbl');
+        if(lbl) lbl.textContent=vendKey?'▶ '+(DISPV[vendKey]||vendKey):'Por Producto · YTD';
       }
 
       // Crear donut vendedor
@@ -1212,8 +1241,18 @@ new Chart(document.getElementById('cCxC'),{
       var chVPE=new Chart(document.getElementById('cMixVendPE'),{
         type:'doughnut',
         data:{labels:dVPE.map(function(d){return d.n;}),datasets:[{data:dVPE.map(function(d){return d.v;}),backgroundColor:PAL.slice(0,dVPE.length),borderWidth:2,borderColor:'#fff',hoverOffset:4}]},
-        options:{cutout:'62%',animation:{duration:300},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var t=ctx.dataset.data.reduce(function(a,b){return a+b;},0);return ' '+ctx.label+': USD '+Math.round(ctx.raw).toLocaleString()+' ('+(t>0?(ctx.raw/t*100).toFixed(1):0)+'%)';}}}}
-      }});
+        options:{cutout:'62%',animation:{duration:300},onClick:function(evt,els){
+          if(!els||!els.length){_filtVendPE=null;updateProdDonutPE(null);return;}
+          var idx=els[0].index;
+          var label=Chart.getChart(document.getElementById('cMixVendPE')).data.labels[idx];
+          var found=null;
+          Object.keys(DISPV).forEach(function(k){if(DISPV[k]===label)found=k;});
+          if(!found)Object.keys(DISPV).forEach(function(k){if(k===label)found=k;});
+          if(found===_filtVendPE){_filtVendPE=null;}else{_filtVendPE=found||null;}
+          updateProdDonutPE(_filtVendPE);
+        },
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var t=ctx.dataset.data.reduce(function(a,b){return a+b;},0);return ' '+ctx.label+': USD '+Math.round(ctx.raw).toLocaleString()+' ('+(t>0?(ctx.raw/t*100).toFixed(1):0)+'%)';}}}}}
+      });
       var elVTPE=document.getElementById('mix-pe-vtot');
       if(elVTPE) elVTPE.textContent='$'+fmtV(totVPE);
       var elVPrPE=document.getElementById('mix-pe-vper');
