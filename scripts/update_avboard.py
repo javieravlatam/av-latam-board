@@ -181,7 +181,16 @@ except Exception as _rtc_err:
         'valladares': [    0,   221,  5310,  4823,  5153, 10319, 10000,  10000,  10000,  15000,  10000,  10000],
         'diaz':       [    0,     0,     0,     0,     0, 22300, 15000,  15000,  30000,  30000,  20000,  35000],
         'martha':     [    0,     0,     0,     0,     0,     0,     0,  10000,  10000,  15000,  15000,  15000],
+        'caroca':     [    0,     0,     0,     0,     0,     0,     0,      0,      0,      0,      0,      0],
+        'geldres':    [    0,     0,     0,     0,     0,     0,     0,      0,      0,      0,      0,      0],
     }
+
+# Vendedores con ventas reales PE pero sin presupuesto formal — se agregan con
+# ceros para que aparezcan en todos los selectores y gráficos de los paneles.
+_VENDORS_SIN_PPTO_PE = ['caroca', 'geldres']
+for _vk in _VENDORS_SIN_PPTO_PE:
+    if _vk not in PPTO_RTC_MENSUAL_PE:
+        PPTO_RTC_MENSUAL_PE[_vk] = [0] * 12
 
 PPTO_RTC_ANUAL_PE = {k: sum(v) for k, v in PPTO_RTC_MENSUAL_PE.items()}
 
