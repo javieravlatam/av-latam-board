@@ -164,7 +164,7 @@
   .btn-logout:hover { background:rgba(231,76,60,0.10); }
 .logo-mark-img{display:flex;align-items:center;}.logo-mark-img img{height:28px;width:auto;display:block;}
 </style>
-  <script src="avboard_data.js?v=202610280911"></script>
+  <script src="avboard_data.js?v=202610291246"></script>
 </head>
 <body>
 
@@ -305,74 +305,58 @@
 
     <div class="grid-2" style="margin-bottom:16px;">
       <div class="panel">
-        <div class="panel-title">RTC CHILE · DETALLE <span class="tag">YTD + Margen Neto Real</span></div>
+        <div class="panel-title">RTC CHILE · DESEMPEÑO YTD <span class="tag" id="dc-cl-rtc-tag">Real vs Ppto</span></div>
         <table class="data-table">
           <thead>
             <tr>
               <th>RTC</th>
-              <th class="r">YTD CLP</th>
-              <th class="r">% Ppto T1</th>
-              <th class="r" id="dc-cl-th-mes">Abril</th>
-              <th class="r">MN Real</th>
-              <th class="r">Estado</th>
+              <th class="r">YTD Real CLP</th>
+              <th class="r">Ppto YTD</th>
+              <th class="r">% Cumpl</th>
             </tr>
           </thead>
           <tbody>
             <tr data-rtc="caroca">
               <td><span class="sema sg"></span><strong>J. Caroca</strong></td>
-              <td class="mono right">63,294,051</td>
-              <td><span class="green mono">191.8%</span><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
-              <td class="mono right green">10,171,393</td>
-              <td class="mono right green">39.2%</td>
-              <td class="right">✅</td>
+              <td class="mono right" id="dc-cl-ytd-caroca">—</td>
+              <td class="mono right muted" id="dc-cl-ppto-caroca">—</td>
+              <td id="dc-cl-pct-caroca"><span class="green mono">—</span><div class="prog-wrap"><div class="prog-fill" style="width:0%;background:var(--green);"></div></div></td>
             </tr>
             <tr data-rtc="laratro">
               <td><span class="sema sa"></span><strong>P. Laratro</strong></td>
-              <td class="mono right">54,594,210</td>
-              <td><span class="amber mono">100.9%</span><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--amber);"></div></div></td>
-              <td class="mono right amber">1,700,895</td>
-              <td class="mono right amber">19.6%</td>
-              <td class="right">⚠️</td>
+              <td class="mono right" id="dc-cl-ytd-laratro">—</td>
+              <td class="mono right muted" id="dc-cl-ppto-laratro">—</td>
+              <td id="dc-cl-pct-laratro"><span class="amber mono">—</span><div class="prog-wrap"><div class="prog-fill" style="width:0%;background:var(--amber);"></div></div></td>
             </tr>
             <tr data-rtc="encina">
               <td><span class="sema sa"></span><strong>R. Encina</strong></td>
-              <td class="mono right">28,395,622</td>
-              <td><span class="amber mono">97.2%</span><div class="prog-wrap"><div class="prog-fill" style="width:97.2%;background:var(--amber);"></div></div></td>
-              <td class="mono right amber">803,100</td>
-              <td class="mono right amber">21.9%</td>
-              <td class="right">⚠️</td>
+              <td class="mono right" id="dc-cl-ytd-encina">—</td>
+              <td class="mono right muted" id="dc-cl-ppto-encina">—</td>
+              <td id="dc-cl-pct-encina"><span class="amber mono">—</span><div class="prog-wrap"><div class="prog-fill" style="width:0%;background:var(--amber);"></div></div></td>
             </tr>
             <tr data-rtc="velasquez">
               <td><span class="sema sr"></span><strong>F. Velásquez</strong></td>
-              <td class="mono right">31,489,500</td>
-              <td><span class="amber mono">95.8%</span><div class="prog-wrap"><div class="prog-fill" style="width:95.8%;background:var(--red);"></div></div></td>
-              <td class="mono right amber">1,890,000</td>
-              <td class="mono right red">2.8%</td>
-              <td class="right">🔴</td>
+              <td class="mono right" id="dc-cl-ytd-velasquez">—</td>
+              <td class="mono right muted" id="dc-cl-ppto-velasquez">—</td>
+              <td id="dc-cl-pct-velasquez"><span class="red mono">—</span><div class="prog-wrap"><div class="prog-fill" style="width:0%;background:var(--red);"></div></div></td>
             </tr>
             <tr data-rtc="veverka">
               <td><span class="sema sd"></span><strong>I. Veverka</strong></td>
-              <td class="mono right">8,810,000</td>
-              <td><span class="red mono">48.9%</span><div class="prog-wrap"><div class="prog-fill" style="width:48.9%;background:var(--red-dark);"></div></div></td>
-              <td class="mono right muted">–</td>
-              <td class="mono right red">–28.7%</td>
-              <td class="right">❌</td>
+              <td class="mono right" id="dc-cl-ytd-veverka">—</td>
+              <td class="mono right muted" id="dc-cl-ppto-veverka">—</td>
+              <td id="dc-cl-pct-veverka"><span class="red mono">—</span><div class="prog-wrap"><div class="prog-fill" style="width:0%;background:var(--red-dark);"></div></div></td>
             </tr>
             <tr data-rtc="munoz">
               <td><span class="sema sg"></span>V. Muñoz</td>
-              <td class="mono right">4,236,056</td>
-              <td><span class="green mono">117.7%</span><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:var(--green);"></div></div></td>
-              <td class="mono right muted">–</td>
-              <td class="mono right muted">S/D</td>
-              <td class="right">✅</td>
+              <td class="mono right" id="dc-cl-ytd-munoz">—</td>
+              <td class="mono right muted" id="dc-cl-ppto-munoz">—</td>
+              <td id="dc-cl-pct-munoz"><span class="green mono">—</span><div class="prog-wrap"><div class="prog-fill" style="width:0%;background:var(--green);"></div></div></td>
             </tr>
             <tr data-rtc="total" style="background:var(--surface3);">
               <td><strong>TOTAL</strong></td>
-              <td class="mono right"><strong>190,852,906</strong></td>
-              <td><span class="green mono"><strong>105.4%</strong></span></td>
-              <td class="mono right green">14,598,855</td>
-              <td class="mono right amber"><strong>17.9%</strong></td>
-              <td class="right">⚠️</td>
+              <td class="mono right" id="dc-cl-ytd-total"><strong>—</strong></td>
+              <td class="mono right muted" id="dc-cl-ppto-total"><strong>—</strong></td>
+              <td id="dc-cl-pct-total"><span class="mono"><strong>—</strong></span></td>
             </tr>
           </tbody>
         </table>
@@ -801,36 +785,39 @@ dcSet('dc-cl-prevmes-sub', '+ ' + curMesCL + ' al ' + cHV + ': ' + dcM(cv.mensua
 dcSet('dc-cl-mn-val', dcPct(cv.mn_real));
 dcSet('dc-cl-mn-sub', 'Gap vs meta: ' + (gapMnG >= 0 ? '+' : '–') + Math.abs(gapMnG).toFixed(1) + ' pp');
 
-// RTC Chile detail table — wire columnas computables (YTD, %PptoT1, mes actual); MN Real/Estado quedan
-// como último valor reportado (no disponible por RTC en AVBOARD, ver Panel_Rentabilidad / alertas.md)
-dcSet('dc-cl-th-mes', curMesCL);
+// RTC Chile detail table — YTD Real vs Ppto YTD, % Cumplimiento
+dcSet('dc-cl-rtc-tag', nCL + 'm · Real vs Ppto');
 ['caroca','laratro','encina','velasquez','veverka','munoz'].forEach(function(k){
-  var row = document.querySelector('tr[data-rtc="' + k + '"]');
-  if (!row) return;
-  var arr = cv.rtc_mensual_real[k] || [];
-  var ytd = arr.slice(0, nCL).reduce(function(a,b){ return a+b; }, 0);
-  var t1r = (cv.rtc_real_t1 && cv.rtc_real_t1[k]) || 0;
-  var t1p = (cv.rtc_ppto_t1 && cv.rtc_ppto_t1[k]) || 0;
-  var mesVal = arr[curIdxCL] || 0;
-  row.children[1].textContent = D.fmt_clp(ytd);
-  if (t1p) {
-    // sólo se actualiza si AVBOARD tiene ppto T1 para este RTC; si no, se deja el último valor reportado
-    var pctT1 = t1r/t1p*100;
-    var pctSpan = row.children[2].querySelector('.mono');
-    if (pctSpan) pctSpan.textContent = pctT1.toFixed(1) + '%';
-    var bar = row.children[2].querySelector('.prog-fill');
-    if (bar) bar.style.width = Math.min(pctT1, 100) + '%';
+  var arrR = cv.rtc_mensual_real[k] || [];
+  var arrP = cv.rtc_mensual_ppto[k] || [];
+  var ytdR = arrR.slice(0, nCL).reduce(function(a,b){ return a+(b||0); }, 0);
+  var ytdP = arrP.slice(0, nCL).reduce(function(a,b){ return a+(b||0); }, 0);
+  var pct = ytdP > 0 ? ytdR / ytdP * 100 : null;
+  var clr = pct === null ? 'muted' : pct >= 100 ? 'green' : pct >= 80 ? 'amber' : 'red';
+  var barBg = pct === null ? 'var(--border)' : pct >= 100 ? 'var(--green)' : pct >= 80 ? 'var(--amber)' : 'var(--red)';
+  var eYtd = document.getElementById('dc-cl-ytd-' + k);
+  var ePpto = document.getElementById('dc-cl-ppto-' + k);
+  var ePct = document.getElementById('dc-cl-pct-' + k);
+  if (eYtd) eYtd.textContent = ytdR ? D.fmt_clp(ytdR) : '–';
+  if (ePpto) ePpto.textContent = ytdP ? D.fmt_clp(ytdP) : '–';
+  if (ePct) {
+    var sp = ePct.querySelector('.mono');
+    var bar = ePct.querySelector('.prog-fill');
+    if (sp) { sp.className = clr + ' mono'; sp.textContent = pct !== null ? pct.toFixed(1) + '%' : '–'; }
+    if (bar) { bar.style.width = Math.min(pct||0, 100) + '%'; bar.style.background = barBg; }
   }
-  row.children[3].textContent = mesVal ? D.fmt_clp(mesVal) : '–';
 });
-var totRowCL = document.querySelector('tr[data-rtc="total"]');
-if (totRowCL) {
-  totRowCL.children[1].innerHTML = '<strong>' + D.fmt_clp(cv.ytd_5m) + '</strong>';
-  var totPctSpan = totRowCL.children[2].querySelector('.mono');
-  if (totPctSpan) totPctSpan.innerHTML = '<strong>' + dcPct(cv.cumplimiento_t1) + '</strong>';
-  totRowCL.children[3].innerHTML = D.fmt_clp(cv.mensual_real[curIdxCL]);
-  totRowCL.children[4].innerHTML = '<strong>' + dcPct(cv.mn_real) + '</strong>';
-}
+// Total row
+var totYtdR = cv.ytd_5m || 0;
+var totYtdP = (cv.mensual_ppto||[]).slice(0, nCL).reduce(function(a,b){return a+(b||0);},0);
+var totPct = totYtdP > 0 ? totYtdR / totYtdP * 100 : null;
+var totClr = totPct === null ? '' : totPct >= 100 ? 'green' : totPct >= 80 ? 'amber' : 'red';
+var eYtdTot = document.getElementById('dc-cl-ytd-total');
+var ePptoTot = document.getElementById('dc-cl-ppto-total');
+var ePctTot = document.getElementById('dc-cl-pct-total');
+if (eYtdTot) eYtdTot.innerHTML = '<strong>' + D.fmt_clp(totYtdR) + '</strong>';
+if (ePptoTot) ePptoTot.innerHTML = '<strong>' + (totYtdP ? D.fmt_clp(totYtdP) : '—') + '</strong>';
+if (ePctTot) { var sp2 = ePctTot.querySelector('.mono'); if(sp2){sp2.className=totClr+' mono';sp2.innerHTML='<strong>'+(totPct!==null?totPct.toFixed(1)+'%':'—')+'</strong>';} }
 
 // --- TAB PERÚ ---
 dcSet('dc-pe-ytd-label', 'YTD Perú ' + nPE + 'm');
