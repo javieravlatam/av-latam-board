@@ -3484,3 +3484,15 @@ CxC +90d total: CLP 3,650,208
 
 CxC +90d total: CLP 3,650,208
 ---
+
+## ⚠ Alertas Activas — 2026-11-02 11:40
+
+| Cliente | Monto CLP | Días | RTC |
+|---------|-----------|------|-----|
+| COMERCIAL COPELEC S.A. | 1,307,077 | 121d | VALENTINA MUÑOZ |
+| RAMADA DE CAMPOS SPA | 1,286,093 | 106d | JORGE CAROCA |
+| AGROINSUMOS KULLIN SPA | 538,951 | 140d | PABLO LARATRO |
+| MAGALY DEL CARMEN ORELLANA PINO | 518,087 | 129d | JORGE CAROCA |
+
+CxC +90d total: CLP 3,650,208
+---

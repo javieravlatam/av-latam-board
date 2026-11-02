@@ -2906,3 +2906,34 @@ validar con Javier antes de tomar decisiones de pricing basadas solo en esos
 números (ver nota en update_avboard.py / compute_productos).
 
 ---
+
+## Actualización 2026-11-02 11:40 — Corte 31/10/2026
+
+**Chile ventas:** CLP 801,481,538 YTD · Cumpl 4m: 124.2%
+**Perú ventas:** USD 717,027 YTD · Cumpl 5m: 76.1%
+**CxC Chile:** CLP 103,782,926 total · +90d: CLP 3,650,208
+**IEC Chile:** 106.7% global
+
+**Alertas CxC:**
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (121d)
+- RAMADA DE CAMPOS SPA CLP 1,286,093 (106d)
+- AGROINSUMOS KULLIN SPA CLP 538,951 (140d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (129d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 189 SKU(s) Chile ·
+  50 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---

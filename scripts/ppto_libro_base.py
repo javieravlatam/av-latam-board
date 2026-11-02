@@ -604,7 +604,12 @@ def es_en_universo_sic(pais: str, nombre_vendedor: str,
 
 def get_ppto_rtc(pais: str, libro_base_path: Optional[str] = None) -> Dict[str, List[float]]:
     """
-    Lee el presupuesto mensual por RTC desde la hoja "Presupuesto Pais" del Libro Base.
+    Lee el presupuesto mensual por RTC desde el Libro Base.
+
+    Fuente primaria : hoja "Base presupuesto  consolidada" (granular por SKU/mes)
+                      — agrega Total Venta por RTC+Mes para cada país.
+    Fuente fallback : hoja "Presupuesto Pais" (agregado mensual)
+                      — usada solo si la hoja granular no existe o está vacía.
 
     Retorna dict {clave_sic: [12 valores mensuales]} listo para usar como
     PPTO_RTC_CL o PPTO_RTC_MENSUAL_PE en update_avboard.py.
@@ -625,6 +630,107 @@ def get_ppto_rtc(pais: str, libro_base_path: Optional[str] = None) -> Dict[str, 
     except Exception:
         return {}
 
+    pais_up = pais.upper()
+    mapa_sic = NOMBRE_A_CLAVE_SIC.get(pais_up, {})
+    # mapa: norm_rtc → clave_sic
+    mapa_norm: Dict[str, str] = {_norm_rtc(k): v for k, v in mapa_sic.items()}
+    # aliases (ej. LISBETH AGUIRRE → LIZBETH AGUIRRE → aguirre)
+    for alias, canon in ALIASES_NOMBRES.items():
+        canon_n = _norm_rtc(canon)
+        if canon_n in mapa_norm:
+            mapa_norm[_norm_rtc(alias)] = mapa_norm[canon_n]
+
+    # ── FUENTE PRIMARIA: "Base presupuesto  consolidada" ─────────────────────
+    # Header esperado: PAÍS | MONEDA | RTC | Zona | Cliente | Cultivo | SKU |
+    #                  Producto | Presentación | Mes | Cantidad | Precio Piso | Total Venta
+    # Agregamos Total Venta por RTC+Mes filtrando por país.
+    # ─────────────────────────────────────────────────────────────────────────
+    sheet_base: Optional[str] = None
+    for name in wb.sheetnames:
+        n = _norm(name)
+        if "base" in n and "presupuesto" in n and "consolidad" in n:
+            sheet_base = name
+            break
+
+    if sheet_base:
+        try:
+            base_rows = list(wb[sheet_base].iter_rows(values_only=True))
+        except Exception:
+            base_rows = []
+
+        if len(base_rows) > 1:
+            header = [str(v or "").strip().upper() for v in base_rows[0]]
+            # Detectar columnas por nombre (robusto a reordenamientos)
+            try:
+                col_pais  = header.index("PAÍS")
+            except ValueError:
+                col_pais  = 0
+            try:
+                col_rtc   = header.index("RTC")
+            except ValueError:
+                col_rtc   = 2
+            try:
+                col_mes   = header.index("MES")
+            except ValueError:
+                col_mes   = 9
+            try:
+                col_total = header.index("TOTAL VENTA")
+            except ValueError:
+                col_total = 12
+
+            # Palabras clave país
+            if pais_up == "CL":
+                pais_kw = {"chile", "cl"}
+            else:
+                pais_kw = {"peru", "perú", "pe"}
+
+            result_base: Dict[str, List[float]] = {}
+            for row in base_rows[1:]:
+                if not row or row[col_pais] is None:
+                    continue
+                pais_val = _norm(str(row[col_pais] or ""))
+                if pais_val not in pais_kw:
+                    continue
+                rtc_raw = str(row[col_rtc] or "").strip()
+                mes_raw = str(row[col_mes] or "").strip()
+                total   = row[col_total] if col_total < len(row) else None
+                if not rtc_raw or total is None:
+                    continue
+
+                clave = mapa_norm.get(_norm_rtc(rtc_raw))
+                if clave is None:
+                    if _norm_rtc(rtc_raw) in {_norm_rtc(e) for e in ENTIDADES_NO_PERSONA}:
+                        continue
+                    clave = _auto_clave_sic(rtc_raw)
+
+                mes_idx = None
+                mes_n = _norm(mes_raw)
+                for idx, variants in enumerate(MONTH_VARIANTS):
+                    if any(mes_n == v or mes_n.startswith(v) for v in variants):
+                        mes_idx = idx
+                        break
+                if mes_idx is None:
+                    continue
+
+                try:
+                    v = float(total)
+                except (ValueError, TypeError):
+                    continue
+                if v <= 0:
+                    continue
+
+                if clave not in result_base:
+                    result_base[clave] = [0.0] * 12
+                result_base[clave][mes_idx] += v
+
+            wb.close()
+            if result_base:
+                return result_base
+            # Si no hubo datos para este país, caer a fuente fallback
+
+    # ── FUENTE FALLBACK: "Presupuesto Pais" (agregado mensual) ───────────────
+    # Usada cuando la hoja granular no existe o no tiene datos para el país.
+    # ─────────────────────────────────────────────────────────────────────────
     sheet_name = _find_sheet(wb)
     if not sheet_name:
         wb.close()
@@ -636,16 +742,6 @@ def get_ppto_rtc(pais: str, libro_base_path: Optional[str] = None) -> Dict[str, 
         wb.close()
         return {}
     wb.close()
-
-    pais_up = pais.upper()
-    mapa_sic = NOMBRE_A_CLAVE_SIC.get(pais_up, {})
-    # mapa: norm_rtc → clave_sic
-    mapa_norm: Dict[str, str] = {_norm_rtc(k): v for k, v in mapa_sic.items()}
-    # aliases (ej. LISBETH AGUIRRE → LIZBETH AGUIRRE → aguirre)
-    for alias, canon in ALIASES_NOMBRES.items():
-        canon_n = _norm_rtc(canon)
-        if canon_n in mapa_norm:
-            mapa_norm[_norm_rtc(alias)] = mapa_norm[canon_n]
 
     # Palabras clave para localizar el bloque del país correcto
     if pais_up == "CL":
