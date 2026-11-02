@@ -3735,3 +3735,111 @@ ACCIONES:
   · Cache-busting ?v=202610291246 sincronizado en 16 paneles HTML
 VALIDACIÓN JS: ✅ OK
 ======================================================================
+
+======================================================================
+CORTE: 2026-11-02 09:13
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 26-10-2026 - AGLM.xlsx
+  - AGROVECA PERU -  VENTAS  AL 26.10.2026 copia.xlsx
+  - Cuentas Cobrar  Agrocomercial 12-08.xlsx
+  - Cuentas Cobrar Agroveca 07-06.xlsx
+  - AGROVECA - CUENTAS POR COBRAR AL 19..10.2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 26/10/2026
+  · avboard_clientes.js regenerado · 206 clientes CL
+  · Panel_IEC TX_CL · 2536 transacciones
+  · Panel_IEC TX_PE · 211 transacciones
+  · sic_tx_pe.js generado · 211 tx · corte 26/10/2026
+  · IEC Chile 106.7% · BP CLP 177,725,682
+  · IEC Perú 103.3% (Fase 7)
+  · CxC Chile CLP 103,782,926 · +90d CLP 3,650,208
+  · Módulo Productos: 271 SKUs · 0 margen negativo · 237 sin costo
+  · Cache-busting ?v=202611020913 sincronizado en 16 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
+
+======================================================================
+CORTE: 2026-11-02 09:14
+ARCHIVOS PROCESADOS:
+  - Libro de Ventas 26-10-2026 - AGLM.xlsx
+  - AGROVECA PERU -  VENTAS  AL 26.10.2026 copia.xlsx
+  - Cuentas Cobrar  Agrocomercial 12-08.xlsx
+  - Cuentas Cobrar Agroveca 07-06.xlsx
+  - AGROVECA - CUENTAS POR COBRAR AL 19..10.2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 26/10/2026
+  · avboard_clientes.js regenerado · 206 clientes CL
+  · Panel_IEC TX_CL · 2536 transacciones
+  · Panel_IEC TX_PE · 211 transacciones
+  · sic_tx_pe.js generado · 211 tx · corte 26/10/2026
+  · IEC Chile 106.7% · BP CLP 177,725,682
+  · IEC Perú 103.3% (Fase 7)
+  · CxC Chile CLP 103,782,926 · +90d CLP 3,650,208
+  · Módulo Productos: 271 SKUs · 0 margen negativo · 237 sin costo
+  · Cache-busting ?v=202611020914 sincronizado en 16 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
+
+======================================================================
+CORTE: 2026-11-02 09:15
+ARCHIVOS PROCESADOS:
+  - Libro Ventas AGLM AL 31-10 - A.xlsx
+  - AGROVECA PERU -  VENTAS  AL 26.10.2026 copia.xlsx
+  - Cuentas Cobrar  Agrocomercial 12-08.xlsx
+  - Cuentas Cobrar Agroveca 07-06.xlsx
+  - AGROVECA PERU- AV LATAM - CUENTAS POR COBRAR AL 27..10.2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 31/10/2026
+  · avboard_clientes.js regenerado · 217 clientes CL
+  · Panel_IEC TX_CL · 2603 transacciones
+  · Panel_IEC TX_PE · 211 transacciones
+  · sic_tx_pe.js generado · 211 tx · corte 26/10/2026
+  · IEC Chile 106.7% · BP CLP 179,525,052
+  · IEC Perú 103.3% (Fase 7)
+  · CxC Chile CLP 103,782,926 · +90d CLP 3,650,208
+  · Módulo Productos: 272 SKUs · 0 margen negativo · 239 sin costo
+  · Cache-busting ?v=202611020915 sincronizado en 16 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
+
+══════════════════════════════════════════════════════════════════
+ACTUALIZACIÓN: 2026-11-02 09:20
+══════════════════════════════════════════════════════════════════
+
+ARCHIVOS PROCESADOS:
+  [VENTAS_CL]  Libro Ventas AGLM AL 31-10 - A.xlsx         ← NUEVO (oct 31, supersede oct 27)
+  [CXC_PE]     AGROVECA PERU- AV LATAM - CUENTAS POR COBRAR AL 27..10.2026.xlsx ← NUEVO
+  [VENTAS_PE]  AGROVECA PERU -  VENTAS  AL 26.10.2026 copia.xlsx (mismo corte 26/10)
+  [PDF]        Informe Consolidado Peru Directorio Oct-2026.pdf ← LEÍDO, data incorporada en panel
+
+ARCHIVOS IGNORADOS (sin parser aún):
+  AGROVECA - CUENTAS POR PAGAR AL 23.10.2026 (1).xlsx  ← CXP_PE, nuevo tipo no parseado por pipeline
+
+CAMBIOS EN inbox_detector.py:
+  + Patrón "Libro Ventas AGLM AL" → VENTAS_CL (nuevo formato nombre)
+  + Patrón "AGROVECA PERU.*CUENTAS POR COBRAR" → CXC_PE (antes no detectaba nuevo nombre)
+
+RESULTADOS DEL PIPELINE:
+  Chile YTD:  CLP 801,481,538  (anterior: 796,023,833 · +5.5M por 4 días extra oct)
+  Perú YTD:   USD 717,027      (sin cambio, mismo corte ventas 26/10)
+  CxC Perú:   USD 173,463 · 55 docs · corte 27/10/2026  (anterior: 131,002 · 49 docs)
+  IEC Chile:  106.7% · IEC Perú: 103.3%
+
+NUEVO ARCHIVO CREADO:
+  Panel_Peru_Oct2026.html — 4 cuadros nuevos:
+    1. Resumen posición financiera consolidada (datos PDF Directorio)
+    2. Análisis ventas Perú octubre 2026 (vendedores + clientes)
+    3. Cuentas por pagar Perú (CxP datos PDF: US$449,980)
+    4. Comparativo mensual grupo Chile vs Perú con % cumplimiento
+
+ACCIÓN PENDIENTE:
+  Javier debe correr: git add -A && git commit -m "pipeline oct-31 + panel Peru Oct 2026" && git push origin main

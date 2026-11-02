@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<script>
+  (function(){
+    if(sessionStorage.getItem('av_auth')!=='7cd4374e16e78510de24a08115c3b44f6d0d72762d41054e6ef8fa0cb5e0c45b')
+      window.location.replace('index.html');
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Situación Perú · Octubre 2026 · AV Latam</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="avboard_data.js?v=202611020916"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F4F6F9;--s1:#FFFFFF;--s2:#EDF1F7;--s3:#E2E8F0;
+  --blue:#1B4F8A;--blue2:#0d3b66;--blue-dim:rgba(27,79,138,0.07);--blue-bdr:rgba(27,79,138,0.20);
+  --green:#5a8f35;--amber:#C47A0F;--red:#C0392B;--red2:#8B1F14;
+  --text:#1A2332;--dim:#3D5270;--muted:#7A90AA;
+  --bdr:rgba(27,79,138,0.18);--bdim:rgba(27,79,138,0.08);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh}
+.hdr{background:linear-gradient(180deg,rgba(27,79,138,0.06),var(--bg));border-bottom:1px solid var(--bdr);
+  padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.hdr-l{display:flex;align-items:center;gap:13px}
+.logo{width:38px;height:38px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue';font-size:17px;color:#fff}
+.htitle{font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;color:var(--blue)}
+.hsub{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.hcorte{font-family:'DM Mono';font-size:10px;color:var(--dim);text-align:right}
+.hcorte b{color:var(--red)}
+.hnav{display:flex;gap:6px;flex-wrap:wrap}
+.hnav a{background:var(--s2);border:1px solid var(--bdim);border-radius:6px;padding:4px 12px;font-size:10px;color:var(--dim);text-decoration:none;transition:all .2s}
+.hnav a:hover,.hnav a.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.page{max-width:1440px;margin:0 auto;padding:20px 28px 60px}
+.sec-title{font-family:'Bebas Neue';font-size:14px;letter-spacing:2.5px;color:var(--muted);
+  text-transform:uppercase;margin:28px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--bdr)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.g23{display:grid;grid-template-columns:2fr 3fr;gap:15px}
+.kpi{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;padding:14px 16px;position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--blue)}
+.kpi.ok::after{background:var(--green)}.kpi.am::after{background:var(--amber)}.kpi.rd::after{background:var(--red)}.kpi.nt::after{background:var(--muted)}
+.klbl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px}
+.kval{font-family:'Bebas Neue';font-size:26px;line-height:1}
+.kval.blue{color:var(--blue)}.kval.ok{color:var(--green)}.kval.am{color:var(--amber)}.kval.rd{color:var(--red)}
+.ksub{font-family:'DM Mono';font-size:9px;color:var(--muted);margin-top:3px}
+.kbadge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:8px;font-weight:700;margin-top:5px}
+.kb-ok{background:rgba(90,143,53,0.15);color:var(--green)}.kb-am{background:rgba(196,122,15,0.15);color:var(--amber)}
+.kb-rd{background:rgba(192,57,43,0.15);color:var(--red)}.kb-bl{background:rgba(27,79,138,0.12);color:var(--blue)}
+.panel{background:var(--s1);border:1px solid var(--bdr);border-radius:11px;padding:16px 18px}
+.ptitle{font-family:'Bebas Neue';font-size:12px;letter-spacing:2px;color:var(--blue);
+  margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.ptag{font-family:'DM Mono';font-size:9px;color:var(--muted);font-weight:400;letter-spacing:1px}
+.alert-box{border:1px solid;border-radius:8px;padding:10px 14px;font-size:11px;margin-bottom:8px;line-height:1.5}
+.alert-rd{background:rgba(192,57,43,0.07);border-color:rgba(192,57,43,0.25);color:var(--red2)}
+.alert-am{background:rgba(196,122,15,0.07);border-color:rgba(196,122,15,0.25);color:#7a4d00}
+.alert-bl{background:rgba(27,79,138,0.06);border-color:var(--bdr);color:var(--dim)}
+.tbl{width:100%;border-collapse:collapse;font-size:10px}
+.tbl thead th{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;
+  padding:0 7px 8px;border-bottom:1px solid var(--bdim);font-weight:500;text-align:right}
+.tbl thead th:first-child{text-align:left}
+.tbl tbody tr{border-bottom:1px solid var(--bdim)}
+.tbl tbody tr:last-child{border-bottom:none}
+.tbl tbody tr:hover{background:var(--s2)}
+.tbl td{padding:8px 7px;vertical-align:middle}
+.tbl .n{font-family:'DM Mono';font-size:10px;text-align:right}
+.tbl .rd{color:var(--red)}.tbl .ok{color:var(--green)}.tbl .am{color:var(--amber)}
+.progress-bar{height:5px;background:var(--s3);border-radius:3px;overflow:hidden;margin-top:3px}
+.progress-fill{height:100%;border-radius:3px}
+.chart-wrap{position:relative;height:220px}
+.chart-wrap-lg{position:relative;height:260px}
+.brecha-box{background:linear-gradient(135deg,rgba(192,57,43,0.08),rgba(192,57,43,0.02));
+  border:1px solid rgba(192,57,43,0.25);border-radius:10px;padding:16px 18px;text-align:center}
+.brecha-val{font-family:'Bebas Neue';font-size:40px;color:var(--red);line-height:1}
+.brecha-lbl{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}
+.brecha-sub{font-size:10px;color:var(--muted);margin-top:6px}
+.ratio-box{background:linear-gradient(135deg,rgba(196,122,15,0.08),rgba(196,122,15,0.02));
+  border:1px solid rgba(196,122,15,0.25);border-radius:10px;padding:16px 18px;text-align:center}
+.ratio-val{font-family:'Bebas Neue';font-size:40px;color:var(--amber);line-height:1}
+.ratio-lbl{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}
+.vend-row{display:flex;align-items:center;gap:10px;padding:9px 10px;border-bottom:1px solid var(--bdim)}
+.vend-row:last-child{border-bottom:none}
+.vend-row:hover{background:var(--s2)}
+.vend-rank{font-family:'Bebas Neue';font-size:18px;color:var(--blue);width:22px;flex-shrink:0}
+.vend-info{flex:1;min-width:0}
+.vend-name{font-weight:600;font-size:12px}
+.vend-sub{font-size:9px;color:var(--muted);margin-top:1px}
+.vend-bar{flex:1.5;min-width:0}
+.vend-pct{font-family:'Bebas Neue';font-size:18px;width:40px;text-align:right;flex-shrink:0}
+.chip{display:inline-block;padding:1px 7px;border-radius:3px;font-size:8px;font-weight:600;
+  background:rgba(27,79,138,0.10);color:var(--blue);margin-left:4px;vertical-align:middle}
+.chip.rd{background:rgba(192,57,43,0.10);color:var(--red)}
+.chip.am{background:rgba(196,122,15,0.10);color:var(--amber)}
+.chip.ok{background:rgba(90,143,53,0.10);color:var(--green)}
+.divider{border:none;border-top:1px solid var(--bdim);margin:10px 0}
+.empresa-bar{background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:8px}
+.emp-name{font-size:10px;font-weight:600;color:var(--dim);margin-bottom:4px}
+.emp-vals{display:flex;justify-content:space-between;margin-bottom:4px}
+.emp-val{font-family:'Bebas Neue';font-size:20px}
+.emp-pct{font-family:'DM Mono';font-size:10px;color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="hdr-l">
+    <div class="logo">AV</div>
+    <div>
+      <div class="htitle">SITUACIÓN PERÚ · OCTUBRE 2026</div>
+      <div class="hsub">Informe Consolidado · Directorio · AgroVeca Perú + AV Latam Perú</div>
+    </div>
+  </div>
+  <div class="hnav">
+    <a href="Panel_Peru_AV_2026.html">Panel Perú</a>
+    <a href="Dashboard_Comercial_AV_Latam_2026.html">Dashboard</a>
+    <a href="Executive_Board_View_AV_Latam_2026.html">Board</a>
+  </div>
+  <div class="hcorte">
+    <div>Ventas al <b>26/10/2026</b> · CxC al <b>27/10/2026</b></div>
+    <div>CxP al <b>23/10/2026</b> · Cifras en US$</div>
+  </div>
+</header>
+
+<div class="page">
+
+<!-- ═══════════════════════════════════════════════════════════
+     CUADRO 1: RESUMEN INFORME PDF — POSICIÓN FINANCIERA CONSOLIDADA
+═══════════════════════════════════════════════════════════ -->
+<div class="sec-title">Posición Financiera Consolidada · Informe Directorio Oct 2026</div>
+
+<div class="g5" style="margin-bottom:15px">
+  <div class="kpi nt">
+    <div class="klbl">Ventas YTD 2026</div>
+    <div class="kval blue">$711,926</div>
+    <div class="ksub">~US$ 70,923 / mes</div>
+    <span class="kbadge kb-bl">10 meses</span>
+  </div>
+  <div class="kpi am">
+    <div class="klbl">Cuentas por Cobrar</div>
+    <div class="kval am">$188,444</div>
+    <div class="ksub">62 documentos · 23 clientes</div>
+    <span class="kbadge kb-am">46% vencida</span>
+  </div>
+  <div class="kpi rd">
+    <div class="klbl">Cuentas por Pagar</div>
+    <div class="kval rd">$449,980</div>
+    <div class="ksub">Incluye $150K adicionales</div>
+    <span class="kbadge kb-rd">&gt;99% vencido</span>
+  </div>
+  <div class="kpi rd">
+    <div class="klbl">Brecha Deuda – Cartera</div>
+    <div class="kval rd">$261,536</div>
+    <div class="ksub">Deuda no cubierta por cartera</div>
+    <span class="kbadge kb-rd">Requiere financiamiento</span>
+  </div>
+  <div class="kpi rd">
+    <div class="klbl">Deuda / Venta Mensual</div>
+    <div class="kval rd">6.3</div>
+    <div class="ksub">Meses de venta para pagar deuda</div>
+    <span class="kbadge kb-rd">Cartera = 2.7 meses</span>
+  </div>
+</div>
+
+<div class="g3" style="margin-bottom:15px">
+  <div class="panel">
+    <div class="ptitle">ALERTAS CRÍTICAS</div>
+    <div class="alert-box alert-rd">
+      <strong>Brecha estructural:</strong> Aun cobrando el 100% de la cartera, quedan US$ 261,536 por financiar. Se requiere aporte del grupo, capital o crédito puente.
+    </div>
+    <div class="alert-box alert-rd">
+      <strong>Deuda con Marrone Bio (ProFarm) y Rizobacter:</strong> US$ 264,945 — 59% de la deuda total. Origen: desde abr-2025 y ene-2026 respectivamente.
+    </div>
+    <div class="alert-box alert-am">
+      <strong>AFP y EPS sin pagar:</strong> Rímac (2025) + Sanitas (jun–ago 2026) = S/ 18,259. La AFP está pendiente de cuantificación. Obligaciones laborales sensibles.
+    </div>
+    <div class="alert-box alert-am">
+      <strong>Clientes que compran y deben:</strong> Mabu + Terra Moon = US$ 94,712 ventas y US$ 48,666 vencidos. Suspender crédito hasta regularizar.
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ptitle">CARTERA CRÍTICA <span class="ptag">MÁS DE 180 DÍAS</span></div>
+    <div class="alert-box alert-bl" style="margin-bottom:12px">
+      US$ <strong>28,212</strong> con antigüedad superior a 180 días. 4 clientes activos en cartera crítica.
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Cliente</th><th>Situación</th><th>Saldo</th><th>Observación</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Paodisa S.A.</strong></td><td><span class="chip rd">+360 días</span></td><td class="n rd">$10,874</td><td style="font-size:9px;color:var(--muted)">Judicial en preparación</td></tr>
+        <tr><td><strong>Agrofer MJ E.I.R.L.</strong></td><td><span class="chip rd">+360 días</span></td><td class="n rd">$9,493</td><td style="font-size:9px;color:var(--muted)">+1 año vencida</td></tr>
+        <tr><td><strong>Bioinsumos Perú</strong></td><td><span class="chip am">181–360</span></td><td class="n am">$5,495</td><td style="font-size:9px;color:var(--muted)">Sin vendedor asignado</td></tr>
+        <tr><td><strong>Luna Quintanilla</strong></td><td><span class="chip am">181–360</span></td><td class="n am">$2,349</td><td style="font-size:9px;color:var(--muted)">Persona natural</td></tr>
+        <tr style="background:var(--s2)"><td colspan="2"><strong>TOTAL CRÍTICA</strong></td><td class="n rd"><strong>$28,212</strong></td><td></td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:12px">
+      <div class="ptitle" style="margin-top:4px;margin-bottom:8px">PROPUESTAS DIRECTORIO</div>
+      <div style="font-size:10px;line-height:1.7;color:var(--dim)">
+        1. <strong>Financiamiento:</strong> Definir mecanismo brecha (monto + plazo)<br>
+        2. <strong>Deudas adicionales:</strong> Recibir detalle de John Rubiños (Chile, AFP, aduanero)<br>
+        3. <strong>Proveedores extranjeros:</strong> Conciliar Marrone Bio + Rizobacter, calendar dic 2026<br>
+        4. <strong>Cobranza:</strong> Plan Mabu + Terra Moon; continuar judicial Paodisa<br>
+        5. <strong>Gestión comercial:</strong> O. Infante sin ventas desde jul · Atalaya desde ago
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ptitle">ANTIGÜEDAD CARTERA <span class="ptag">US$ 188,444</span></div>
+    <div class="chart-wrap-lg"><canvas id="cCxCAge"></canvas></div>
+    <div style="margin-top:10px">
+      <div style="display:flex;justify-content:space-between;font-size:10px;padding:5px 0;border-bottom:1px solid var(--bdim)">
+        <span>Por vencer (Nov–Feb)</span><span class="n ok"><strong>$101,576</strong></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;padding:5px 0;border-bottom:1px solid var(--bdim)">
+        <span>Vencida reciente (1–90 días)</span><span class="n am">$36,798</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;padding:5px 0;border-bottom:1px solid var(--bdim)">
+        <span>Vencida crítica (91–180 días)</span><span class="n am">$21,858</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;padding:5px 0">
+        <span>Pérdida potencial (+180 días)</span><span class="n rd">$28,212</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CUADRO 2: ANÁLISIS VENTAS PERÚ OCTUBRE 2026
+═══════════════════════════════════════════════════════════ -->
+<div class="sec-title">Análisis Ventas Perú · Octubre 2026</div>
+
+<div class="g3" style="margin-bottom:15px">
+  <div class="panel">
+    <div class="ptitle">VENTA POR EMPRESA <span class="ptag">OCT 2026 vs YTD</span></div>
+    <div class="empresa-bar">
+      <div class="emp-name">AgroVeca Perú S.A.C.</div>
+      <div class="emp-vals">
+        <span class="emp-val" style="color:var(--blue)">$27,350</span>
+        <span class="emp-pct">YTD $631,385</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:37%;background:var(--blue)"></div></div>
+      <div style="font-size:9px;color:var(--muted);margin-top:3px">37% de oct · 89% del YTD</div>
+    </div>
+    <div class="empresa-bar">
+      <div class="emp-name">AV Latam Perú S.A.C. <span class="chip ok">Sep–Oct</span></div>
+      <div class="emp-vals">
+        <span class="emp-val" style="color:var(--green)">$46,264</span>
+        <span class="emp-pct">YTD $80,541</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:63%;background:var(--green)"></div></div>
+      <div style="font-size:9px;color:var(--muted);margin-top:3px">63% de oct · Supera AgroVeca en oct</div>
+    </div>
+    <div class="empresa-bar" style="background:var(--s3)">
+      <div class="emp-name"><strong>TOTAL PERÚ</strong></div>
+      <div class="emp-vals">
+        <span class="emp-val" style="color:var(--amber)">$73,614</span>
+        <span class="emp-pct">YTD $711,926</span>
+      </div>
+      <div style="font-size:9px;color:var(--muted);margin-top:3px">Ppto oct: $153,000 · Cumpl: <span style="color:var(--red);font-weight:700">48%</span></div>
+    </div>
+    <div style="margin-top:10px">
+      <div class="chart-wrap"><canvas id="cEmpresa"></canvas></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ptitle">TOP VENDEDORES YTD <span class="ptag">US$</span></div>
+    <div id="vendList"></div>
+  </div>
+
+  <div class="panel">
+    <div class="ptitle">TOP 10 CLIENTES YTD <span class="ptag">US$</span></div>
+    <table class="tbl">
+      <thead><tr><th>Cliente</th><th>Vendedor</th><th>Venta</th><th>%</th></tr></thead>
+      <tbody>
+        <tr><td>Soc. Agric. Don Luis</td><td style="color:var(--muted);font-size:9px">Caroca</td><td class="n">$68,334</td><td class="n">9.6%</td></tr>
+        <tr><td>IQF Del Perú</td><td style="color:var(--muted);font-size:9px">Infante</td><td class="n">$65,459</td><td class="n">9.2%</td></tr>
+        <tr><td>Agrocomercial Mabu <span class="chip rd">deuda</span></td><td style="color:var(--muted);font-size:9px">Caroca</td><td class="n">$53,589</td><td class="n">7.5%</td></tr>
+        <tr><td>Family Farms Perú</td><td style="color:var(--muted);font-size:9px">Aguirre</td><td class="n">$51,892</td><td class="n">7.3%</td></tr>
+        <tr><td>Bomarea S.R.L.</td><td style="color:var(--muted);font-size:9px">Atalaya</td><td class="n">$44,500</td><td class="n">6.3%</td></tr>
+        <tr><td>Terra Moon <span class="chip rd">deuda</span></td><td style="color:var(--muted);font-size:9px">Caroca</td><td class="n">$41,123</td><td class="n">5.8%</td></tr>
+        <tr><td>Agricola Guili</td><td style="color:var(--muted);font-size:9px">Aguirre</td><td class="n">$37,250</td><td class="n">5.2%</td></tr>
+        <tr><td>Uvica S.A.C.</td><td style="color:var(--muted);font-size:9px">Aguirre</td><td class="n">$33,017</td><td class="n">4.6%</td></tr>
+        <tr><td>Corp. Agrolatina</td><td style="color:var(--muted);font-size:9px">Aguirre</td><td class="n">$31,400</td><td class="n">4.4%</td></tr>
+        <tr><td>Amfresh Peru</td><td style="color:var(--muted);font-size:9px">Infante</td><td class="n">$25,673</td><td class="n">3.6%</td></tr>
+        <tr style="background:var(--s2)"><td colspan="2"><strong>TOP 10</strong></td><td class="n"><strong>$452,237</strong></td><td class="n"><strong>64%</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="alert-box alert-am" style="margin-top:10px;font-size:9px">
+      <span style="color:var(--red)">⚠</span> Mabu (US$28,145 vencido) y Terra Moon (US$20,521 vencido) figuran entre los top compradores del año.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CUADRO 3: CUENTAS POR PAGAR PERÚ
+═══════════════════════════════════════════════════════════ -->
+<div class="sec-title">Cuentas por Pagar Perú · Al 23/10/2026</div>
+
+<div class="g2" style="margin-bottom:15px">
+  <div>
+    <div class="g2" style="margin-bottom:12px">
+      <div class="brecha-box">
+        <div class="brecha-val">$449,980</div>
+        <div class="brecha-lbl">Total Cuentas por Pagar</div>
+        <div class="brecha-sub">$299,980 informe + $150K adicionales</div>
+      </div>
+      <div class="ratio-box">
+        <div class="ratio-val">6.3</div>
+        <div class="ratio-lbl">Meses de venta = deuda total</div>
+        <div class="brecha-sub" style="color:var(--muted)">Cartera cubre solo 2.7 meses</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="ptitle">DEUDA EN DÓLARES <span class="ptag">US$ 285,117</span></div>
+      <table class="tbl">
+        <thead><tr><th>Proveedor</th><th>Docs</th><th>Saldo</th><th>Desde</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Marrone Bio (ProFarm)</strong></td><td class="n">3</td><td class="n rd"><strong>$191,760</strong></td><td style="font-size:9px;color:var(--muted)">Abr-2025</td></tr>
+          <tr><td><strong>Rizobacter Argentina</strong></td><td class="n">1</td><td class="n rd"><strong>$73,185</strong></td><td style="font-size:9px;color:var(--muted)">Ene-2026</td></tr>
+          <tr><td>ALD Automotive Perú</td><td class="n">4</td><td class="n am">$9,278</td><td style="font-size:9px;color:var(--muted)">Jul-2026</td></tr>
+          <tr><td>Fat Motors</td><td class="n">4</td><td class="n am">$4,400</td><td style="font-size:9px;color:var(--muted)">Ene-2026</td></tr>
+          <tr><td>BBConsulting Perú</td><td class="n">5</td><td class="n">$3,595</td><td style="font-size:9px;color:var(--muted)">Mar-2026</td></tr>
+          <tr><td>Grupo Mundoagro</td><td class="n">3</td><td class="n">$2,899</td><td style="font-size:9px;color:var(--muted)">May-2025</td></tr>
+          <tr style="background:var(--s2)"><td colspan="2"><strong>Total USD</strong></td><td class="n rd"><strong>$285,117</strong></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel" style="margin-top:12px">
+      <div class="ptitle">DEUDA EN SOLES <span class="ptag">S/ 50,533 = US$ 14,863</span></div>
+      <table class="tbl">
+        <thead><tr><th>Proveedor</th><th>Saldo S/</th><th>Equiv. US$</th></tr></thead>
+        <tbody>
+          <tr><td>Banco Santander (leasing)</td><td class="n">S/ 13,395</td><td class="n am">$3,940</td></tr>
+          <tr><td>Hoteles Estelar</td><td class="n">S/ 10,518</td><td class="n">$3,093</td></tr>
+          <tr><td>Rímac EPS <span class="chip rd">laboral</span></td><td class="n">S/ 9,475</td><td class="n rd">$2,787</td></tr>
+          <tr><td>Sanitas EPS <span class="chip rd">laboral</span></td><td class="n">S/ 8,784</td><td class="n rd">$2,584</td></tr>
+          <tr><td>Flores Quispe (fletes)</td><td class="n">S/ 4,572</td><td class="n">$1,345</td></tr>
+          <tr><td>SGS del Perú</td><td class="n">S/ 2,266</td><td class="n">$666</td></tr>
+          <tr><td>Otros (Entel, oficina, Equifax)</td><td class="n">S/ 1,523</td><td class="n">$448</td></tr>
+          <tr style="background:var(--s2)"><td><strong>Total Soles</strong></td><td class="n"><strong>S/ 50,533</strong></td><td class="n"><strong>$14,863</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel" style="margin-bottom:12px">
+      <div class="ptitle">COMPOSICIÓN DEUDA <span class="ptag">US$ 449,980 TOTAL</span></div>
+      <div class="chart-wrap-lg"><canvas id="cCxP"></canvas></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+        <div style="background:var(--s2);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Marrone + Rizobacter</div>
+          <div style="font-family:'Bebas Neue';font-size:24px;color:var(--red)">$264,945</div>
+          <div style="font-size:9px;color:var(--muted)">59% de la deuda total</div>
+        </div>
+        <div style="background:var(--s2);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Deudas Adicionales</div>
+          <div style="font-family:'Bebas Neue';font-size:24px;color:var(--amber)">$150,000</div>
+          <div style="font-size:9px;color:var(--muted)">Chile · AFP · Aduanero</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="ptitle">DEUDAS ADICIONALES NO DOCUMENTADAS <span class="ptag">US$ 150,000</span></div>
+      <div class="alert-box alert-am" style="margin-bottom:10px">
+        Pendiente detalle de <strong>John Rubiños</strong>. Total estimado US$ 150,000 entre tres conceptos.
+      </div>
+      <table class="tbl">
+        <thead><tr><th>Concepto</th><th>Monto</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td>Deuda con Chile (grupo)</td><td class="n am">Por asignar</td><td style="font-size:9px;color:var(--muted)">Pendiente Rubiños</td></tr>
+          <tr><td>AFP (aportes previsionales) <span class="chip rd">laboral</span></td><td class="n am">Por asignar</td><td style="font-size:9px;color:var(--muted)">Períodos a confirmar</td></tr>
+          <tr><td>Agente aduanero</td><td class="n am">Por asignar</td><td style="font-size:9px;color:var(--muted)">Documentos pendientes</td></tr>
+          <tr style="background:var(--s2)"><td><strong>TOTAL ADICIONAL</strong></td><td class="n am"><strong>$150,000</strong></td><td style="font-size:9px;color:var(--amber)"><strong>Sin desglose</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CUADRO 4: COMPARATIVO MENSUAL GRUPO — CHILE vs PERÚ
+═══════════════════════════════════════════════════════════ -->
+<div class="sec-title">Comparativo Mensual Grupo · Chile vs Perú · % Cumplimiento vs Ppto</div>
+
+<div class="g2" style="margin-bottom:15px">
+  <div class="panel">
+    <div class="ptitle">CUMPLIMIENTO MENSUAL CHILE <span class="ptag" id="clytd-lbl">CLP</span></div>
+    <div class="chart-wrap-lg"><canvas id="cGrupoCL"></canvas></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px">
+      <div style="text-align:center;background:var(--s2);border-radius:7px;padding:8px">
+        <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">YTD Real</div>
+        <div style="font-family:'Bebas Neue';font-size:20px;color:var(--blue)" id="cl-ytd-real">—</div>
+      </div>
+      <div style="text-align:center;background:var(--s2);border-radius:7px;padding:8px">
+        <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Ppto YTD</div>
+        <div style="font-family:'Bebas Neue';font-size:20px;color:var(--dim)" id="cl-ytd-ppto">—</div>
+      </div>
+      <div style="text-align:center;background:var(--s2);border-radius:7px;padding:8px">
+        <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">% Cumpl YTD</div>
+        <div style="font-family:'Bebas Neue';font-size:20px" id="cl-ytd-pct">—</div>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="ptitle">CUMPLIMIENTO MENSUAL PERÚ <span class="ptag" id="peytd-lbl">USD</span></div>
+    <div class="chart-wrap-lg"><canvas id="cGrupoPE"></canvas></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px">
+      <div style="text-align:center;background:var(--s2);border-radius:7px;padding:8px">
+        <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">YTD Real</div>
+        <div style="font-family:'Bebas Neue';font-size:20px;color:var(--blue)" id="pe-ytd-real">—</div>
+      </div>
+      <div style="text-align:center;background:var(--s2);border-radius:7px;padding:8px">
+        <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Ppto YTD</div>
+        <div style="font-family:'Bebas Neue';font-size:20px;color:var(--dim)" id="pe-ytd-ppto">—</div>
+      </div>
+      <div style="text-align:center;background:var(--s2);border-radius:7px;padding:8px">
+        <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">% Cumpl YTD</div>
+        <div style="font-family:'Bebas Neue';font-size:20px" id="pe-ytd-pct">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Comparativo de porcentajes lado a lado -->
+<div class="panel" style="margin-bottom:15px">
+  <div class="ptitle">% CUMPLIMIENTO MENSUAL GRUPO <span class="ptag">CHILE vs PERÚ</span></div>
+  <div style="position:relative;height:250px"><canvas id="cGrupoComp"></canvas></div>
+</div>
+
+</div><!-- /page -->
+
+<script>
+(function(){
+  var AVBOARD = window.AVBOARD || {};
+  var cv = (AVBOARD.chile && AVBOARD.chile.ventas) ? AVBOARD.chile.ventas : null;
+  var pv = (AVBOARD.peru && AVBOARD.peru.ventas) ? AVBOARD.peru.ventas : null;
+
+  var MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var G = '#5a8f35', A = '#C47A0F', R = '#C0392B', B = '#1B4F8A', M = '#7A90AA';
+
+  // ── CUADRO 1: Antigüedad CxC ──
+  new Chart('cCxCAge', {type:'doughnut', data:{
+    labels:['Por vencer','1–30 días','31–60 días','91–180 días','181–360 días','+360 días'],
+    datasets:[{data:[101576,6413,30385,21858,7844,20367],
+      backgroundColor:[G,'#88BB5A',A,'rgba(196,122,15,0.6)',R,'rgba(192,57,43,0.6)'],
+      borderWidth:0, hoverOffset:6}]
+  }, options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+    plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:10,color:'#3D5270'}},
+    tooltip:{callbacks:{label:function(c){return c.label+': US$ '+c.parsed.toLocaleString('en-US');}}}}
+  }});
+
+  // ── CUADRO 2: Empresa mensual ──
+  new Chart('cEmpresa', {type:'bar', data:{
+    labels:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct'],
+    datasets:[
+      {label:'AgroVeca Perú',data:[90672,43016,87967,85815,96473,51180,34646,65806,48460,27350],backgroundColor:'rgba(27,79,138,0.75)',borderRadius:3},
+      {label:'AV Latam Perú',data:[0,0,0,0,0,0,0,0,34276,46264],backgroundColor:'rgba(90,143,53,0.75)',borderRadius:3}
+    ]
+  }, options:{responsive:true,maintainAspectRatio:false,
+    scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:9},color:M}},
+      y:{stacked:true,grid:{color:'rgba(27,79,138,0.07)'},ticks:{font:{size:9},color:M,callback:function(v){return '$'+(v/1000).toFixed(0)+'K';}}}},
+    plugins:{legend:{labels:{font:{size:9},boxWidth:10,color:'#3D5270'}},
+      tooltip:{callbacks:{label:function(c){return c.dataset.label+': US$ '+c.parsed.y.toLocaleString('en-US');}}}}}
+  });
+
+  // ── CUADRO 2: Vendedores ──
+  var vendPDF=[
+    {n:'Lisbeth Aguirre',v:242959,pct:34,ult:'Oct',cls:'ok'},
+    {n:'Oscar Infante',v:152244,pct:21,ult:'Jul',cls:'rd'},
+    {n:'Jorge Caroca',v:143318,pct:20,ult:'Oct',cls:'ok'},
+    {n:'Omar Atalaya',v:89789,pct:13,ult:'Ago',cls:'am'},
+    {n:'Susan Diaz',v:26800,pct:4,ult:'Sep',cls:'ok'},
+    {n:'Patricia Valladares',v:22435,pct:3,ult:'Ago',cls:'am'},
+    {n:'Antonio Gonzales',v:15562,pct:2,ult:'Jul',cls:'am'},
+    {n:'Nicoll Navarro',v:14620,pct:2,ult:'Feb',cls:'rd'},
+    {n:'Martha Hidalgo',v:4200,pct:1,ult:'Sep',cls:'ok'}
+  ];
+  var vdiv = document.getElementById('vendList');
+  vendPDF.forEach(function(v,i){
+    var col = v.cls==='ok'?G:v.cls==='rd'?R:A;
+    var chip = v.cls==='rd'?'<span class="chip rd">'+v.ult+'</span>':v.cls==='am'?'<span class="chip am">'+v.ult+'</span>':'<span class="chip ok">'+v.ult+'</span>';
+    vdiv.innerHTML += '<div class="vend-row">'+
+      '<div class="vend-rank">'+(i+1)+'</div>'+
+      '<div class="vend-info"><div class="vend-name">'+v.n+' '+chip+'</div>'+
+        '<div class="vend-sub">US$ '+v.v.toLocaleString('en-US')+'</div></div>'+
+      '<div class="vend-bar"><div class="progress-bar"><div class="progress-fill" style="width:'+v.pct+'%;background:'+col+'"></div></div></div>'+
+      '<div class="vend-pct" style="color:'+col+'">'+v.pct+'%</div>'+
+    '</div>';
+  });
+
+  // ── CUADRO 3: CxP donut ──
+  new Chart('cCxP', {type:'doughnut', data:{
+    labels:['Marrone Bio (ProFarm)','Rizobacter Argentina','Deuda adicional (Chile/AFP/Aduanero)','ALD + Fat Motors','Soles + otros'],
+    datasets:[{data:[191760,73185,150000,13678,21357],
+      backgroundColor:['rgba(192,57,43,0.85)','rgba(192,57,43,0.6)','rgba(196,122,15,0.85)','rgba(27,79,138,0.6)','rgba(122,144,170,0.6)'],
+      borderWidth:0,hoverOffset:6}]
+  }, options:{responsive:true,maintainAspectRatio:false,cutout:'55%',
+    plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,color:'#3D5270',padding:8}},
+    tooltip:{callbacks:{label:function(c){return c.label+': US$ '+c.parsed.toLocaleString('en-US');}}}}}
+  });
+
+  // ── CUADRO 4: Chile mensual ──
+  if(cv){
+    var nCL = cv.mensual_real.filter(function(v){return v>0;}).length;
+    var labCL = MESES.slice(0,nCL);
+    var realCL = cv.mensual_real.slice(0,nCL);
+    var ppCL = cv.mensual_ppto.slice(0,nCL);
+    var ytdR_CL = realCL.reduce(function(a,b){return a+b;},0);
+    var ytdP_CL = ppCL.reduce(function(a,b){return a+b;},0);
+    var pctCL = ytdR_CL/ytdP_CL;
+
+    function fmCLP(v){return (v/1e6).toFixed(1)+'M';}
+    document.getElementById('cl-ytd-real').textContent = fmCLP(ytdR_CL);
+    document.getElementById('cl-ytd-ppto').textContent = fmCLP(ytdP_CL);
+    var pctCLEl = document.getElementById('cl-ytd-pct');
+    pctCLEl.textContent = Math.round(pctCL*100)+'%';
+    pctCLEl.style.color = pctCL>=1?G:pctCL>=0.85?A:R;
+
+    new Chart('cGrupoCL', {type:'bar', data:{
+      labels:labCL,
+      datasets:[
+        {type:'bar',label:'Real CLP',data:realCL,backgroundColor:'rgba(27,79,138,0.75)',borderRadius:3,yAxisID:'y'},
+        {type:'line',label:'Ppto CLP',data:ppCL,borderColor:A,borderDash:[5,3],borderWidth:2,pointRadius:3,tension:0.3,fill:false,yAxisID:'y'}
+      ]
+    }, options:{responsive:true,maintainAspectRatio:false,
+      scales:{x:{grid:{display:false},ticks:{font:{size:9},color:M}},
+        y:{grid:{color:'rgba(27,79,138,0.07)'},ticks:{font:{size:9},color:M,callback:function(v){return fmCLP(v);}}}},
+      plugins:{legend:{labels:{font:{size:9},boxWidth:10,color:'#3D5270'}},
+        tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+fmCLP(c.parsed.y);}}}}
+    }});
+  }
+
+  // ── CUADRO 4: Perú mensual ──
+  if(pv){
+    var nPE = pv.mensual_real.filter(function(v){return v>0;}).length;
+    var labPE = MESES.slice(0,nPE);
+    var realPE = pv.mensual_real.slice(0,nPE);
+    var ppPE = pv.mensual_ppto.slice(0,nPE);
+    var ytdR_PE = realPE.reduce(function(a,b){return a+b;},0);
+    var ytdP_PE = ppPE.reduce(function(a,b){return a+b;},0);
+    var pctPE = ytdR_PE/ytdP_PE;
+
+    function fmUSD(v){return '$'+(v/1000).toFixed(0)+'K';}
+    document.getElementById('pe-ytd-real').textContent = fmUSD(ytdR_PE);
+    document.getElementById('pe-ytd-ppto').textContent = fmUSD(ytdP_PE);
+    var pctPEEl = document.getElementById('pe-ytd-pct');
+    pctPEEl.textContent = Math.round(pctPE*100)+'%';
+    pctPEEl.style.color = pctPE>=1?G:pctPE>=0.85?A:R;
+
+    new Chart('cGrupoPE', {type:'bar', data:{
+      labels:labPE,
+      datasets:[
+        {type:'bar',label:'Real USD',data:realPE,backgroundColor:'rgba(90,143,53,0.75)',borderRadius:3,yAxisID:'y'},
+        {type:'line',label:'Ppto USD',data:ppPE,borderColor:A,borderDash:[5,3],borderWidth:2,pointRadius:3,tension:0.3,fill:false,yAxisID:'y'}
+      ]
+    }, options:{responsive:true,maintainAspectRatio:false,
+      scales:{x:{grid:{display:false},ticks:{font:{size:9},color:M}},
+        y:{grid:{color:'rgba(27,79,138,0.07)'},ticks:{font:{size:9},color:M,callback:function(v){return fmUSD(v);}}}},
+      plugins:{legend:{labels:{font:{size:9},boxWidth:10,color:'#3D5270'}},
+        tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+fmUSD(c.parsed.y);}}}}
+    }});
+  }
+
+  // ── CUADRO 4: Comparativo % cumplimiento ──
+  if(cv && pv){
+    var nC = cv.mensual_real.filter(function(v){return v>0;}).length;
+    var nP = pv.mensual_real.filter(function(v){return v>0;}).length;
+    var n = Math.max(nC,nP);
+    var labComp = MESES.slice(0,n);
+
+    var pctCLArr = [], pctPEArr = [];
+    for(var i=0;i<n;i++){
+      var rCL=cv.mensual_real[i]||0, pCL=cv.mensual_ppto[i]||1;
+      var rPE=pv.mensual_real[i]||0, pPE=pv.mensual_ppto[i]||1;
+      pctCLArr.push(pCL>0?Math.round(rCL/pCL*100):null);
+      pctPEArr.push(pPE>0?Math.round(rPE/pPE*100):null);
+    }
+
+    new Chart('cGrupoComp', {type:'line', data:{
+      labels:labComp,
+      datasets:[
+        {label:'Chile % Cumpl',data:pctCLArr,borderColor:B,backgroundColor:'rgba(27,79,138,0.12)',
+          pointBackgroundColor:B,pointRadius:5,borderWidth:2.5,tension:0.3,fill:true},
+        {label:'Perú % Cumpl',data:pctPEArr,borderColor:G,backgroundColor:'rgba(90,143,53,0.08)',
+          pointBackgroundColor:G,pointRadius:5,borderWidth:2.5,tension:0.3,fill:true}
+      ]
+    }, options:{responsive:true,maintainAspectRatio:false,
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:10},color:M}},
+        y:{min:0,grid:{color:'rgba(27,79,138,0.07)'},ticks:{font:{size:10},color:M,
+          callback:function(v){return v+'%';}},
+          afterDataLimits:function(scale){scale.max=Math.max(scale.max||200,200);}
+        }
+      },
+      plugins:{
+        annotation:{annotations:{line100:{type:'line',yMin:100,yMax:100,borderColor:'rgba(192,57,43,0.5)',borderDash:[6,4],borderWidth:1.5}}},
+        legend:{labels:{font:{size:10},boxWidth:12,color:'#3D5270'}},
+        tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.parsed.y+'%';}}}
+      }
+    }});
+  }
+})();
+</script>
+</body>
+</html>

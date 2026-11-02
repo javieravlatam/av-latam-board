@@ -128,9 +128,19 @@ def clasificar(filename: str) -> dict:
 
     # ------------------------------------------------------------------
     # 3. CXC PERÚ
+    #    "AGROVECA PERU- AV LATAM - CUENTAS POR COBRAR AL DD..MM.YYYY.xlsx"  (nuevo formato)
     #    "AGROVECA - CUENTAS POR COBRAR AL DD..MM.YYYY.xlsx"
     #    "AGROVECA - CUENTAS POR COBRAR AL- DD..MM.YYYY .xlsx"
     # ------------------------------------------------------------------
+    if re.search(r"AGROVECA\s+PERU.*CUENTAS POR COBRAR", fn_upper):
+        result.update(TIPOS["CXC_PE"])
+        result["tipo_archivo"] = "CXC_PE"
+        m = re.search(r"(\d{1,2})\.\.?(\d{2})\.(\d{4})", fn)
+        if m:
+            result["fecha_corte"] = _fecha(m.group(3), m.group(2), m.group(1))
+        result["variante"] = "AV_LATAM_PE"
+        return result
+
     if re.search(r"AGROVECA\s*-\s*CUENTAS POR COBRAR", fn_upper):
         result.update(TIPOS["CXC_PE"])
         result["tipo_archivo"] = "CXC_PE"
@@ -243,6 +253,16 @@ def clasificar(filename: str) -> dict:
     # ------------------------------------------------------------------
     # 9. VENTAS CHILE — Libro de Ventas (AGLM)
     # ------------------------------------------------------------------
+
+    # 9a-NEW. "Libro Ventas AGLM AL DD-MM - A.xlsx" (nuevo formato desde oct 2026)
+    if re.search(r"libro\s+ventas\s+aglm\s+al", fn, re.IGNORECASE):
+        result.update(TIPOS["VENTAS_CL"])
+        result["tipo_archivo"] = "VENTAS_CL"
+        m = re.search(r"(\d{1,2})-(\d{2})", fn)
+        if m:
+            result["fecha_corte"] = _fecha(str(AÑO_DEFAULT), m.group(2), m.group(1))
+        result["variante"] = "AGLM"
+        return result
 
     # 9a. "Libro de Ventas DD-MM-YYYY.xlsx" y variantes
     if re.search(r"libro\s+de\s+ventas", fn, re.IGNORECASE):

@@ -3398,3 +3398,77 @@ CxC +90d total: CLP 23,647,064
 
 CxC +90d total: CLP 23,647,064
 ---
+
+## ⚠ Alertas Activas — 2026-11-02 09:13
+
+| Cliente | Monto CLP | Días | RTC |
+|---------|-----------|------|-----|
+| COMERCIAL COPELEC S.A. | 1,307,077 | 121d | VALENTINA MUÑOZ |
+| RAMADA DE CAMPOS SPA | 1,286,093 | 106d | JORGE CAROCA |
+| AGROINSUMOS KULLIN SPA | 538,951 | 140d | PABLO LARATRO |
+| MAGALY DEL CARMEN ORELLANA PINO | 518,087 | 129d | JORGE CAROCA |
+
+CxC +90d total: CLP 3,650,208
+---
+
+## ⚠ Alertas Activas — 2026-11-02 09:14
+
+| Cliente | Monto CLP | Días | RTC |
+|---------|-----------|------|-----|
+| COMERCIAL COPELEC S.A. | 1,307,077 | 121d | VALENTINA MUÑOZ |
+| RAMADA DE CAMPOS SPA | 1,286,093 | 106d | JORGE CAROCA |
+| AGROINSUMOS KULLIN SPA | 538,951 | 140d | PABLO LARATRO |
+| MAGALY DEL CARMEN ORELLANA PINO | 518,087 | 129d | JORGE CAROCA |
+
+CxC +90d total: CLP 3,650,208
+---
+
+## ⚠ Alertas Activas — 2026-11-02 09:15
+
+| Cliente | Monto CLP | Días | RTC |
+|---------|-----------|------|-----|
+| COMERCIAL COPELEC S.A. | 1,307,077 | 121d | VALENTINA MUÑOZ |
+| RAMADA DE CAMPOS SPA | 1,286,093 | 106d | JORGE CAROCA |
+| AGROINSUMOS KULLIN SPA | 538,951 | 140d | PABLO LARATRO |
+| MAGALY DEL CARMEN ORELLANA PINO | 518,087 | 129d | JORGE CAROCA |
+
+CxC +90d total: CLP 3,650,208
+---
+
+---
+
+## ALERTAS NUEVAS · 2026-11-02
+
+### 🔴 CRÍTICO — Perú: Deuda estructural no cubierta por cartera
+- **CxP total: US$ 449,980** (informe US$299,980 + adicionales US$150,000)
+- **CxC total: US$ 188,444** (46% vencida)
+- **Brecha: US$ 261,536** que no se cubre ni con cobro total de cartera
+- Ratio deuda/venta: **6.3 meses** vs cartera/venta: 2.7 meses
+- Acción requerida: decisión de financiamiento en directorio
+
+### 🔴 CRÍTICO — Perú: Proveedores extranjeros sin pagar desde 2025
+- Marrone Bio (ProFarm): **US$ 191,760** desde abril 2025
+- Rizobacter Argentina: **US$ 73,185** desde enero 2026
+- Ambos concentran **59% de la deuda total**
+
+### 🟡 IMPORTANTE — Perú: Obligaciones laborales vencidas
+- AFP aportes previsionales: monto por confirmar (John Rubiños)
+- Rímac EPS: meses impagos 2025 | Sanitas EPS: jun–ago 2026
+- Total EPS: **S/ 18,259** vencido
+
+### 🟡 IMPORTANTE — Perú: Cartera crítica >180 días
+- US$ 28,212 con antigüedad >180 días (4 clientes)
+- Paodisa S.A. +360 días (judicial en preparación)
+- Agrofer MJ E.I.R.L. +360 días
+
+### 🟡 IMPORTANTE — Perú: Vendedores sin actividad reciente
+- Oscar Infante: sin ventas desde **julio 2026**
+- Omar Atalaya: sin ventas desde **agosto 2026**
+
+### 🟡 IMPORTANTE — Perú: Cumplimiento ventas octubre muy bajo
+- Real oct: US$73,614 vs ppto US$153,000 = **48% cumplimiento**
+- AV Latam Perú ya supera a AgroVeca Perú en facturación mensual (oct)
+
+### 🟢 POSITIVO — Chile: YTD sube a CLP 801.5M
+- Procesado Libro Ventas oct 31 (4 días adicionales vs oct 27)
+- +5.5M CLP adicionales · Cumplimiento YTD: **124.2%**

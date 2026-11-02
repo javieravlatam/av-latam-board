@@ -2758,3 +2758,120 @@ validar con Javier antes de tomar decisiones de pricing basadas solo en esos
 números (ver nota en update_avboard.py / compute_productos).
 
 ---
+
+## Actualización 2026-11-02 09:13 — Corte 26/10/2026
+
+**Chile ventas:** CLP 796,023,833 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 717,027 YTD · Cumpl 5m: 76.1%
+**CxC Chile:** CLP 103,782,926 total · +90d: CLP 3,650,208
+**IEC Chile:** 106.7% global
+
+**Alertas CxC:**
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (121d)
+- RAMADA DE CAMPOS SPA CLP 1,286,093 (106d)
+- AGROINSUMOS KULLIN SPA CLP 538,951 (140d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (129d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 187 SKU(s) Chile ·
+  50 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-11-02 09:14 — Corte 26/10/2026
+
+**Chile ventas:** CLP 796,023,833 YTD · Cumpl 4m: 126.1%
+**Perú ventas:** USD 717,027 YTD · Cumpl 5m: 76.1%
+**CxC Chile:** CLP 103,782,926 total · +90d: CLP 3,650,208
+**IEC Chile:** 106.7% global
+
+**Alertas CxC:**
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (121d)
+- RAMADA DE CAMPOS SPA CLP 1,286,093 (106d)
+- AGROINSUMOS KULLIN SPA CLP 538,951 (140d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (129d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 187 SKU(s) Chile ·
+  50 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+## Actualización 2026-11-02 09:15 — Corte 31/10/2026
+
+**Chile ventas:** CLP 801,481,538 YTD · Cumpl 4m: 124.2%
+**Perú ventas:** USD 717,027 YTD · Cumpl 5m: 76.1%
+**CxC Chile:** CLP 103,782,926 total · +90d: CLP 3,650,208
+**IEC Chile:** 106.7% global
+
+**Alertas CxC:**
+- COMERCIAL COPELEC S.A. CLP 1,307,077 (121d)
+- RAMADA DE CAMPOS SPA CLP 1,286,093 (106d)
+- AGROINSUMOS KULLIN SPA CLP 538,951 (140d)
+- MAGALY DEL CARMEN ORELLANA PINO CLP 518,087 (129d)
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 189 SKU(s) Chile ·
+  50 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---
+
+---
+
+## Actualización 2026-11-02 · Pipeline Oct 31 + Panel Perú Octubre
+
+### KPIs actualizados
+| Indicador | Anterior | Actual | Δ |
+|-----------|----------|--------|---|
+| Chile YTD | CLP 796.0M | CLP 801.5M | +5.5M (oct 31 vs oct 27) |
+| Chile % ppto | 118.4% | 124.2% | +5.8pp |
+| Perú YTD | USD 717K | USD 717K | sin cambio |
+| CxC Perú | USD 131K · 49 docs | USD 173K · 55 docs | +USD 42K docs adicionales |
+| CxC corte | 19/10 | 27/10 | actualizado |
+
+### Nuevo panel creado: Panel_Peru_Oct2026.html
+4 cuadros ejecutivos para directorio basados en Informe Consolidado Perú Directorio Oct-2026.pdf:
+1. **Posición financiera consolidada**: CxC $188K, CxP $450K, brecha $262K, ratio 6.3 meses
+2. **Análisis ventas oct 2026**: AgroVeca $27K vs AV Latam $46K; top vendedores y clientes
+3. **Cuentas por pagar**: Marrone Bio $192K + Rizobacter $73K + adicionales $150K
+4. **Comparativo mensual grupo**: Chile vs Perú % cumplimiento mes a mes
+
+### Correcciones técnicas inbox_detector.py
+- Se agrega detección de "Libro Ventas AGLM AL DD-MM" (nuevo formato oct 2026)
+- Se agrega detección de "AGROVECA PERU- AV LATAM - CUENTAS POR COBRAR" (nuevo formato CxC Perú)
