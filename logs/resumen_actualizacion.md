@@ -2937,3 +2937,31 @@ validar con Javier antes de tomar decisiones de pricing basadas solo en esos
 números (ver nota en update_avboard.py / compute_productos).
 
 ---
+
+## Actualización 2026-11-18 10:39 — Corte 11/11/2026
+
+**Chile ventas:** CLP 841,523,647 YTD · Cumpl 4m: 124.2%
+**Perú ventas:** USD 757,408 YTD · Cumpl 5m: 68.8%
+**CxC Chile:** CLP 80,041,022 total · +90d: CLP 0
+**IEC Chile:** 107.1% global
+
+**Alertas CxC:**
+
+
+**Módulo Productos (rentabilidad real por SKU):**
+- 0 SKU(s) con margen NEGATIVO (destruyen margen) ·
+  impacto estimado CLP 0
+- 0 SKU(s) en zona de riesgo (margen 0-10%, subvaluados)
+- Sin costo cargado en tabla piso: 190 SKU(s) Chile ·
+  53 SKU(s) Perú (no se puede calcular margen real — completar piso)
+- Bajo precio piso propuesto: 0 SKU(s) Chile ·
+  0 SKU(s) Perú
+
+
+**Decisión sugerida:** priorizar revisión de precio/costo en los SKU con margen
+negativo listados arriba; completar costo en tabla piso para los SKU sin costo
+cargado (hoy no se puede saber si son rentables). Perú es best-effort —
+validar con Javier antes de tomar decisiones de pricing basadas solo en esos
+números (ver nota en update_avboard.py / compute_productos).
+
+---

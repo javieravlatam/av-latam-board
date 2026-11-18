@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel CxC · Cobranza AV Latam 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="avboard_data.js?v=202611021140"></script>
+<script src="avboard_data.js?v=202611181039"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -215,9 +215,9 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
 
   <!-- ALERTA BANNER -->
   <div class="alerta-banner" id="av-cxc-alerta-banner">
-    <div class="alerta-icon" id="av-cxc-alerta-icon">🚨</div>
+    <div class="alerta-icon" id="av-cxc-alerta-icon">✅</div>
     <div class="alerta-text" id="av-cxc-alerta-text">
-      <strong>ALERTA — MORA +90 DÍAS ACTIVA.</strong> Chile +90d: <strong>CLP 3.7M CRÍTICO</strong> — COMERCIAL COPELEC S.A. <strong style="color:var(--red)">CLP 1.3M (121d)</strong> y 3 cuentas más. Cartera total Chile (2 entidades): <strong>CLP 103.8M</strong>. Perú +90d: <strong>USD 59.6K vencidos</strong>.
+      <strong>✅ SIN MORA CRÍTICA (+90d) en Agrocomercial.</strong> Cartera total Chile (2 entidades): <strong>CLP 80.0M</strong>. Perú +90d: <strong>USD 59.6K vencidos</strong>.
     </div>
   </div>
 
@@ -794,10 +794,6 @@ new Chart(document.getElementById('cPE'), {
 // ── DATOS CHILE
 const chileData = [
   // Corte — · generado por update_avboard.py
-  {rtc:'VALENTINA MUÑOZ',cliente:'COMERCIAL COPELEC S.A.',folio:'',emision:'',vencimiento:'',dias:121,tramo:'+90d',monto:1307077,estado:'Crítico',condicion:'Crédito'},
-  {rtc:'JORGE CAROCA',cliente:'RAMADA DE CAMPOS SPA',folio:'',emision:'',vencimiento:'',dias:106,tramo:'+90d',monto:1286093,estado:'Crítico',condicion:'Crédito'},
-  {rtc:'PABLO LARATRO',cliente:'AGROINSUMOS KULLIN SPA',folio:'',emision:'',vencimiento:'',dias:140,tramo:'+90d',monto:538951,estado:'Crítico',condicion:'Crédito'},
-  {rtc:'JORGE CAROCA',cliente:'MAGALY DEL CARMEN ORELLANA PINO',folio:'',emision:'',vencimiento:'',dias:129,tramo:'+90d',monto:518087,estado:'Crítico',condicion:'Crédito'},
   {rtc:'Jorge Caroca',cliente:'GOYASERVICE SPA',folio:'',emision:'',vencimiento:'',dias:0,tramo:'0-30d',monto:4194750,estado:'Monitoreo',condicion:'Crédito'}
 ];
 

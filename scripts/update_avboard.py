@@ -740,14 +740,23 @@ def extract_cxc_chile(agro_path, avch_path):
         return df[df['Total Doc'] != 0]
 
     df_agro = read_mora(agro_path)
-    df_avch = read_mora(avch_path)
+    # avch_path es opcional — si no existe o no se puede leer, cartera vacía
+    df_avch = None
+    if avch_path is not None:
+        try:
+            df_avch = read_mora(avch_path)
+        except Exception as _e:
+            print(f"      ⚠ No se pudo leer cxc_avch ({Path(avch_path).name}): {_e} — se omite")
+    if df_avch is None:
+        import pandas as _pd
+        df_avch = _pd.DataFrame(columns=['Total Doc', 'Días Mora', 'Tramo', 'Rut'])
 
     def tramos(df):
         return {
-            't90':   int(df[df['Tramo'] == '+90']['Total Doc'].sum()),
-            't6190': int(df[df['Tramo'] == '61-90']['Total Doc'].sum()),
-            't3160': int(df[df['Tramo'] == '31-60']['Total Doc'].sum()),
-            't030':  int(df[df['Tramo'] == '0-30']['Total Doc'].sum()),
+            't90':   int(df[df['Tramo'] == '+90']['Total Doc'].sum()) if 'Tramo' in df.columns else 0,
+            't6190': int(df[df['Tramo'] == '61-90']['Total Doc'].sum()) if 'Tramo' in df.columns else 0,
+            't3160': int(df[df['Tramo'] == '31-60']['Total Doc'].sum()) if 'Tramo' in df.columns else 0,
+            't030':  int(df[df['Tramo'] == '0-30']['Total Doc'].sum()) if 'Tramo' in df.columns else 0,
         }
 
     tr_agro = tramos(df_agro)
@@ -3519,7 +3528,19 @@ def main():
     for k, v in files.items():
         print(f"   {k}: {v.name}")
 
-    required = ['chile_ventas', 'peru_ventas', 'cxc_agro', 'cxc_avch', 'piso_chile']
+    # cxc_avch es opcional: si no hay vigente, usar el más reciente del inbox como fallback
+    if 'cxc_avch' not in files:
+        _avch_candidates = sorted(
+            [f for f in INBOX.glob("Cuentas Cobrar Agroveca*.xlsx")],
+            key=lambda p: p.stat().st_mtime, reverse=True
+        )
+        if _avch_candidates:
+            files['cxc_avch'] = _avch_candidates[0]
+            print(f"   ⚠ cxc_avch no vigente — usando último disponible: {_avch_candidates[0].name}")
+        else:
+            print("   ⚠ cxc_avch no encontrado — CxC Chile Agroveca se omitirá")
+
+    required = ['chile_ventas', 'peru_ventas', 'cxc_agro', 'piso_chile']
     missing  = [r for r in required if r not in files]
     if missing:
         print(f"\n❌ Faltan archivos: {missing}")
@@ -3599,7 +3620,8 @@ def main():
     print(f"   → YTD post-GG: USD {pe_v['ytd_5m']:,}")
 
     print("   CxC Chile (2 entidades)...")
-    cl_cxc = extract_cxc_chile(files['cxc_agro'], files['cxc_avch'])
+    _avch_path = files.get('cxc_avch')
+    cl_cxc = extract_cxc_chile(files['cxc_agro'], _avch_path)
     print(f"   → Total: CLP {cl_cxc['total']:,} | +90d: CLP {cl_cxc['tramos']['t90']:,}")
 
     # 4. Calcular IEC
