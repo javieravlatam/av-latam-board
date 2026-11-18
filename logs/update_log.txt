@@ -3918,3 +3918,53 @@ ACCIONES:
   · Cache-busting ?v=202611181039 sincronizado en 17 paneles HTML
 VALIDACIÓN JS: ✅ OK
 ======================================================================
+
+======================================================================
+CORTE: 2026-11-18 10:46
+ARCHIVOS PROCESADOS:
+  - Libro Ventas AGLM AL 11-11-2026.xlsx
+  - AGROVECA PERU -  VENTAS  AL 17.11.2026.xlsx
+  - Cuentas Cobrar  Agrocomercial 12-08.xlsx
+  - AGROVECA - AV LATAM - CUENTAS POR COBRAR AL 20..10.2026.xlsx
+  - AGROVECA PERU- AV LATAM - CUENTAS POR COBRAR AL 27..10.2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 11/11/2026
+  · avboard_clientes.js regenerado · 217 clientes CL
+  · Panel_IEC TX_CL · 2718 transacciones
+  · Panel_IEC TX_PE · 228 transacciones
+  · sic_tx_pe.js generado · 228 tx · corte 17/11/2026
+  · IEC Chile 107.1% · BP CLP 186,916,755
+  · IEC Perú 101.3% (Fase 7)
+  · CxC Chile CLP 80,041,022 · +90d CLP 0
+  · Módulo Productos: 276 SKUs · 0 margen negativo · 243 sin costo
+  · Cache-busting ?v=202611181046 sincronizado en 17 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================
+
+======================================================================
+CORTE: 2026-11-18 10:46
+ARCHIVOS PROCESADOS:
+  - Libro Ventas AGLM AL 11-11-2026.xlsx
+  - AGROVECA PERU -  VENTAS  AL 17.11.2026.xlsx
+  - Cuentas Cobrar  Agrocomercial 12-08.xlsx
+  - AGROVECA - AV LATAM - CUENTAS POR COBRAR AL 20..10.2026.xlsx
+  - AGROVECA PERU- AV LATAM - CUENTAS POR COBRAR AL 27..10.2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+  - nuevo libro base AV 2026.xlsx
+ACCIONES:
+  · avboard_data.js generado · corte 11/11/2026
+  · avboard_clientes.js regenerado · 217 clientes CL
+  · Panel_IEC TX_CL · 2718 transacciones
+  · Panel_IEC TX_PE · 228 transacciones
+  · sic_tx_pe.js generado · 228 tx · corte 17/11/2026
+  · IEC Chile 107.1% · BP CLP 186,916,755
+  · IEC Perú 101.3% (Fase 7)
+  · CxC Chile CLP 80,041,022 · +90d CLP 0
+  · Módulo Productos: 276 SKUs · 0 margen negativo · 243 sin costo
+  · Cache-busting ?v=202611181046 sincronizado en 0 paneles HTML
+VALIDACIÓN JS: ✅ OK
+======================================================================

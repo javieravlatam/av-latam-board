@@ -3531,7 +3531,8 @@ def main():
     # cxc_avch es opcional: si no hay vigente, usar el más reciente del inbox como fallback
     if 'cxc_avch' not in files:
         _avch_candidates = sorted(
-            [f for f in INBOX.glob("Cuentas Cobrar Agroveca*.xlsx")],
+            [f for f in INBOX.glob("Cuentas Cobrar Agroveca*.xlsx")]
+            + [f for f in INBOX.glob("AGROVECA - AV LATAM - CUENTAS POR COBRAR*.xlsx")],
             key=lambda p: p.stat().st_mtime, reverse=True
         )
         if _avch_candidates:

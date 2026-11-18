@@ -141,6 +141,19 @@ def clasificar(filename: str) -> dict:
         result["variante"] = "AV_LATAM_PE"
         return result
 
+    # ------------------------------------------------------------------
+    # 3b. CXC CHILE — AGROVECA (nuevo formato con "AV LATAM")
+    #     "AGROVECA - AV LATAM - CUENTAS POR COBRAR AL DD..MM.YYYY.xlsx"
+    # ------------------------------------------------------------------
+    if re.search(r"AGROVECA\s*-\s*AV\s+LATAM.*CUENTAS POR COBRAR", fn_upper):
+        result.update(TIPOS["CXC_CL_AGROVECA"])
+        result["tipo_archivo"] = "CXC_CL_AGROVECA"
+        result["variante"] = "AV_LATAM_CL"
+        m = re.search(r"(\d{1,2})\.\.?(\d{2})\.(\d{4})", fn)
+        if m:
+            result["fecha_corte"] = _fecha(m.group(3), m.group(2), m.group(1))
+        return result
+
     if re.search(r"AGROVECA\s*-\s*CUENTAS POR COBRAR", fn_upper):
         result.update(TIPOS["CXC_PE"])
         result["tipo_archivo"] = "CXC_PE"
